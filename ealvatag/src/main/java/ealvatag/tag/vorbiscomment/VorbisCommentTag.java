@@ -18,6 +18,8 @@
  */
 package ealvatag.tag.vorbiscomment;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.generic.AbstractTag;
 import ealvatag.audio.ogg.util.VorbisHeader;
@@ -33,197 +35,176 @@ import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
 
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
+import static ealvatag.utils.Check.checkArgNotNull;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-
-import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 
 /**
  * This is the logical representation of  Vorbis Comment Data
  */
-public class VorbisCommentTag
-        extends AbstractTag
-        implements ContainsVorbisCommentField {
-    private static EnumMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = new EnumMap<>(FieldKey.class);
+public class VorbisCommentTag extends AbstractTag implements ContainsVorbisCommentField {
+    private static final ImmutableMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = makeFieldMap();
 
-    static {
-        tagFieldToOggField.put(FieldKey.ACOUSTID_FINGERPRINT, VorbisCommentFieldKey.ACOUSTID_FINGERPRINT);
-        tagFieldToOggField.put(FieldKey.ACOUSTID_ID, VorbisCommentFieldKey.ACOUSTID_ID);
-        tagFieldToOggField.put(FieldKey.ALBUM, VorbisCommentFieldKey.ALBUM);
-        tagFieldToOggField.put(FieldKey.ALBUM_ARTIST, VorbisCommentFieldKey.ALBUMARTIST);
-        tagFieldToOggField.put(FieldKey.ALBUM_ARTISTS, VorbisCommentFieldKey.ALBUMARTISTS);
-        tagFieldToOggField.put(FieldKey.ALBUM_ARTISTS_SORT, VorbisCommentFieldKey.ALBUMARTISTSSORT);
-        tagFieldToOggField.put(FieldKey.ALBUM_ARTIST_SORT, VorbisCommentFieldKey.ALBUMARTISTSORT);
-        tagFieldToOggField.put(FieldKey.ALBUM_SORT, VorbisCommentFieldKey.ALBUMSORT);
-        tagFieldToOggField.put(FieldKey.AMAZON_ID, VorbisCommentFieldKey.ASIN);
-        tagFieldToOggField.put(FieldKey.ARRANGER, VorbisCommentFieldKey.ARRANGER);
-        tagFieldToOggField.put(FieldKey.ARRANGER_SORT, VorbisCommentFieldKey.ARRANGER_SORT);
-        tagFieldToOggField.put(FieldKey.ARTIST, VorbisCommentFieldKey.ARTIST);
-        tagFieldToOggField.put(FieldKey.ARTISTS, VorbisCommentFieldKey.ARTISTS);
-        tagFieldToOggField.put(FieldKey.ARTISTS_SORT, VorbisCommentFieldKey.ARTISTS_SORT);
-        tagFieldToOggField.put(FieldKey.ARTIST_SORT, VorbisCommentFieldKey.ARTISTSORT);
-        tagFieldToOggField.put(FieldKey.BARCODE, VorbisCommentFieldKey.BARCODE);
-        tagFieldToOggField.put(FieldKey.BPM, VorbisCommentFieldKey.BPM);
-        tagFieldToOggField.put(FieldKey.CATALOG_NO, VorbisCommentFieldKey.CATALOGNUMBER);
-        tagFieldToOggField.put(FieldKey.CHOIR, VorbisCommentFieldKey.CHOIR);
-        tagFieldToOggField.put(FieldKey.CHOIR_SORT, VorbisCommentFieldKey.CHOIR_SORT);
-        tagFieldToOggField.put(FieldKey.CLASSICAL_CATALOG, VorbisCommentFieldKey.CLASSICAL_CATALOG);
-        tagFieldToOggField.put(FieldKey.CLASSICAL_NICKNAME, VorbisCommentFieldKey.CLASSICAL_NICKNAME);
-        tagFieldToOggField.put(FieldKey.COMMENT, VorbisCommentFieldKey.COMMENT);
-        tagFieldToOggField.put(FieldKey.COMPOSER, VorbisCommentFieldKey.COMPOSER);
-        tagFieldToOggField.put(FieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT);
-        tagFieldToOggField.put(FieldKey.CONDUCTOR, VorbisCommentFieldKey.CONDUCTOR);
-        tagFieldToOggField.put(FieldKey.CONDUCTOR_SORT, VorbisCommentFieldKey.CONDUCTOR_SORT);
-        tagFieldToOggField.put(FieldKey.COUNTRY, VorbisCommentFieldKey.COUNTRY);
-        tagFieldToOggField.put(FieldKey.COVER_ART, VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
-        tagFieldToOggField.put(FieldKey.CUSTOM1, VorbisCommentFieldKey.CUSTOM1);
-        tagFieldToOggField.put(FieldKey.CUSTOM2, VorbisCommentFieldKey.CUSTOM2);
-        tagFieldToOggField.put(FieldKey.CUSTOM3, VorbisCommentFieldKey.CUSTOM3);
-        tagFieldToOggField.put(FieldKey.CUSTOM4, VorbisCommentFieldKey.CUSTOM4);
-        tagFieldToOggField.put(FieldKey.CUSTOM5, VorbisCommentFieldKey.CUSTOM5);
-        tagFieldToOggField.put(FieldKey.DISC_NO, VorbisCommentFieldKey.DISCNUMBER);
-        tagFieldToOggField.put(FieldKey.DISC_SUBTITLE, VorbisCommentFieldKey.DISCSUBTITLE);
-        tagFieldToOggField.put(FieldKey.DISC_TOTAL, VorbisCommentFieldKey.DISCTOTAL);
-        tagFieldToOggField.put(FieldKey.DJMIXER, VorbisCommentFieldKey.DJMIXER);
-        tagFieldToOggField.put(FieldKey.ENCODER, VorbisCommentFieldKey.VENDOR);     //Known as vendor in VorbisComment
-        tagFieldToOggField.put(FieldKey.ENGINEER, VorbisCommentFieldKey.ENGINEER);
-        tagFieldToOggField.put(FieldKey.ENSEMBLE, VorbisCommentFieldKey.ENSEMBLE);
-        tagFieldToOggField.put(FieldKey.ENSEMBLE_SORT, VorbisCommentFieldKey.ENSEMBLE_SORT);
-        tagFieldToOggField.put(FieldKey.FBPM, VorbisCommentFieldKey.FBPM);
-        tagFieldToOggField.put(FieldKey.GENRE, VorbisCommentFieldKey.GENRE);
-        tagFieldToOggField.put(FieldKey.GROUPING, VorbisCommentFieldKey.GROUPING);
-        tagFieldToOggField.put(FieldKey.INVOLVED_PERSON, VorbisCommentFieldKey.INVOLVED_PERSON);
-        tagFieldToOggField.put(FieldKey.ISRC, VorbisCommentFieldKey.ISRC);
-        tagFieldToOggField.put(FieldKey.IS_CLASSICAL, VorbisCommentFieldKey.IS_CLASSICAL);
-        tagFieldToOggField.put(FieldKey.IS_COMPILATION, VorbisCommentFieldKey.COMPILATION);
-        tagFieldToOggField.put(FieldKey.IS_SOUNDTRACK, VorbisCommentFieldKey.IS_SOUNDTRACK);
-        tagFieldToOggField.put(FieldKey.KEY, VorbisCommentFieldKey.KEY);
-        tagFieldToOggField.put(FieldKey.LANGUAGE, VorbisCommentFieldKey.LANGUAGE);
-        tagFieldToOggField.put(FieldKey.LYRICIST, VorbisCommentFieldKey.LYRICIST);
-        tagFieldToOggField.put(FieldKey.LYRICS, VorbisCommentFieldKey.LYRICS);
-        tagFieldToOggField.put(FieldKey.MEDIA, VorbisCommentFieldKey.MEDIA);
-        tagFieldToOggField.put(FieldKey.MIXER, VorbisCommentFieldKey.MIXER);
-        tagFieldToOggField.put(FieldKey.MOOD, VorbisCommentFieldKey.MOOD);
-        tagFieldToOggField.put(FieldKey.MOOD_ACOUSTIC, VorbisCommentFieldKey.MOOD_ACOUSTIC);
-        tagFieldToOggField.put(FieldKey.MOOD_AGGRESSIVE, VorbisCommentFieldKey.MOOD_AGGRESSIVE);
-        tagFieldToOggField.put(FieldKey.MOOD_AROUSAL, VorbisCommentFieldKey.MOOD_AROUSAL);
-        tagFieldToOggField.put(FieldKey.MOOD_DANCEABILITY, VorbisCommentFieldKey.MOOD_DANCEABILITY);
-        tagFieldToOggField.put(FieldKey.MOOD_ELECTRONIC, VorbisCommentFieldKey.MOOD_ELECTRONIC);
-        tagFieldToOggField.put(FieldKey.MOOD_HAPPY, VorbisCommentFieldKey.MOOD_HAPPY);
-        tagFieldToOggField.put(FieldKey.MOOD_INSTRUMENTAL, VorbisCommentFieldKey.MOOD_INSTRUMENTAL);
-        tagFieldToOggField.put(FieldKey.MOOD_PARTY, VorbisCommentFieldKey.MOOD_PARTY);
-        tagFieldToOggField.put(FieldKey.MOOD_RELAXED, VorbisCommentFieldKey.MOOD_RELAXED);
-        tagFieldToOggField.put(FieldKey.MOOD_SAD, VorbisCommentFieldKey.MOOD_SAD);
-        tagFieldToOggField.put(FieldKey.MOOD_VALENCE, VorbisCommentFieldKey.MOOD_VALENCE);
-        tagFieldToOggField.put(FieldKey.MOVEMENT, VorbisCommentFieldKey.MOVEMENT);
-        tagFieldToOggField.put(FieldKey.MOVEMENT_NO, VorbisCommentFieldKey.MOVEMENT_NO);
-        tagFieldToOggField.put(FieldKey.MOVEMENT_TOTAL, VorbisCommentFieldKey.MOVEMENT_TOTAL);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_ARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_DISC_ID, VorbisCommentFieldKey.MUSICBRAINZ_DISCID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_ORIGINAL_ALBUMID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, VorbisCommentFieldKey.RELEASECOUNTRY);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID, VorbisCommentFieldKey.MUSICBRAINZ_RELEASEGROUPID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_STATUS, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMSTATUS);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_RELEASETRACKID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMTYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK, VorbisCommentFieldKey.MUSICBRAINZ_WORK);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORKID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID);
-        tagFieldToOggField.put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE,
-                               VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE);
-        tagFieldToOggField.put(FieldKey.MUSICIP_ID, VorbisCommentFieldKey.MUSICIP_PUID);
-        tagFieldToOggField.put(FieldKey.OCCASION, VorbisCommentFieldKey.OCCASION);
-        tagFieldToOggField.put(FieldKey.OPUS, VorbisCommentFieldKey.OPUS);
-        tagFieldToOggField.put(FieldKey.ORCHESTRA, VorbisCommentFieldKey.ORCHESTRA);
-        tagFieldToOggField.put(FieldKey.ORCHESTRA_SORT, VorbisCommentFieldKey.ORCHESTRA_SORT);
-        tagFieldToOggField.put(FieldKey.ORIGINAL_ALBUM, VorbisCommentFieldKey.ORIGINAL_ALBUM);
-        tagFieldToOggField.put(FieldKey.ORIGINAL_ARTIST, VorbisCommentFieldKey.ORIGINAL_ARTIST);
-        tagFieldToOggField.put(FieldKey.ORIGINAL_LYRICIST, VorbisCommentFieldKey.ORIGINAL_LYRICIST);
-        tagFieldToOggField.put(FieldKey.ORIGINAL_YEAR, VorbisCommentFieldKey.ORIGINAL_YEAR);
-        tagFieldToOggField.put(FieldKey.PART, VorbisCommentFieldKey.PART);
-        tagFieldToOggField.put(FieldKey.PART_NUMBER, VorbisCommentFieldKey.PART_NUMBER);
-        tagFieldToOggField.put(FieldKey.PART_TYPE, VorbisCommentFieldKey.PART_TYPE);
-        tagFieldToOggField.put(FieldKey.PERFORMER, VorbisCommentFieldKey.PERFORMER);
-        tagFieldToOggField.put(FieldKey.PERFORMER_NAME, VorbisCommentFieldKey.PERFORMER_NAME);
-        tagFieldToOggField.put(FieldKey.PERFORMER_NAME_SORT, VorbisCommentFieldKey.PERFORMER_NAME_SORT);
-        tagFieldToOggField.put(FieldKey.PERIOD, VorbisCommentFieldKey.PERIOD);
-        tagFieldToOggField.put(FieldKey.PRODUCER, VorbisCommentFieldKey.PRODUCER);
-        tagFieldToOggField.put(FieldKey.QUALITY, VorbisCommentFieldKey.QUALITY);
-        tagFieldToOggField.put(FieldKey.RANKING, VorbisCommentFieldKey.RANKING);
-        tagFieldToOggField.put(FieldKey.RATING, VorbisCommentFieldKey.RATING);
-        tagFieldToOggField.put(FieldKey.RECORD_LABEL, VorbisCommentFieldKey.LABEL);
-        tagFieldToOggField.put(FieldKey.REMIXER, VorbisCommentFieldKey.REMIXER);
-        tagFieldToOggField.put(FieldKey.SCRIPT, VorbisCommentFieldKey.SCRIPT);
-        tagFieldToOggField.put(FieldKey.SINGLE_DISC_TRACK_NO, VorbisCommentFieldKey.SINGLE_DISC_TRACK_NO);
-        tagFieldToOggField.put(FieldKey.SUBTITLE, VorbisCommentFieldKey.SUBTITLE);
-        tagFieldToOggField.put(FieldKey.TAGS, VorbisCommentFieldKey.TAGS);
-        tagFieldToOggField.put(FieldKey.TEMPO, VorbisCommentFieldKey.TEMPO);
-        tagFieldToOggField.put(FieldKey.TIMBRE, VorbisCommentFieldKey.TIMBRE);
-        tagFieldToOggField.put(FieldKey.TITLE, VorbisCommentFieldKey.TITLE);
-        tagFieldToOggField.put(FieldKey.TITLE_MOVEMENT, VorbisCommentFieldKey.TITLE_MOVEMENT);
-        tagFieldToOggField.put(FieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT);
-        tagFieldToOggField.put(FieldKey.TONALITY, VorbisCommentFieldKey.TONALITY);
-        tagFieldToOggField.put(FieldKey.TRACK, VorbisCommentFieldKey.TRACKNUMBER);
-        tagFieldToOggField.put(FieldKey.TRACK_TOTAL, VorbisCommentFieldKey.TRACKTOTAL);
-        tagFieldToOggField.put(FieldKey.URL_DISCOGS_ARTIST_SITE, VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE);
-        tagFieldToOggField.put(FieldKey.URL_DISCOGS_RELEASE_SITE, VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE);
-        tagFieldToOggField.put(FieldKey.URL_LYRICS_SITE, VorbisCommentFieldKey.URL_LYRICS_SITE);
-        tagFieldToOggField.put(FieldKey.URL_OFFICIAL_ARTIST_SITE, VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE);
-        tagFieldToOggField.put(FieldKey.URL_OFFICIAL_RELEASE_SITE, VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE);
-        tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-        tagFieldToOggField.put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-        tagFieldToOggField.put(FieldKey.WORK, VorbisCommentFieldKey.WORK);
-        tagFieldToOggField.put(FieldKey.WORK_TYPE, VorbisCommentFieldKey.WORK_TYPE);
-        tagFieldToOggField.put(FieldKey.YEAR, VorbisCommentFieldKey.DATE);
+    private static ImmutableMap<FieldKey, VorbisCommentFieldKey> makeFieldMap() {
+        final ImmutableMap.Builder<FieldKey, VorbisCommentFieldKey> builder = ImmutableMap.builder();
+        builder.put(FieldKey.ACOUSTID_FINGERPRINT, VorbisCommentFieldKey.ACOUSTID_FINGERPRINT)
+               .put(FieldKey.ACOUSTID_ID, VorbisCommentFieldKey.ACOUSTID_ID)
+               .put(FieldKey.ALBUM, VorbisCommentFieldKey.ALBUM)
+               .put(FieldKey.ALBUM_ARTIST, VorbisCommentFieldKey.ALBUMARTIST)
+               .put(FieldKey.ALBUM_ARTISTS, VorbisCommentFieldKey.ALBUMARTISTS)
+               .put(FieldKey.ALBUM_ARTISTS_SORT, VorbisCommentFieldKey.ALBUMARTISTSSORT)
+               .put(FieldKey.ALBUM_ARTIST_SORT, VorbisCommentFieldKey.ALBUMARTISTSORT)
+               .put(FieldKey.ALBUM_SORT, VorbisCommentFieldKey.ALBUMSORT)
+               .put(FieldKey.AMAZON_ID, VorbisCommentFieldKey.ASIN)
+               .put(FieldKey.ARRANGER, VorbisCommentFieldKey.ARRANGER)
+               .put(FieldKey.ARRANGER_SORT, VorbisCommentFieldKey.ARRANGER_SORT)
+               .put(FieldKey.ARTIST, VorbisCommentFieldKey.ARTIST)
+               .put(FieldKey.ARTISTS, VorbisCommentFieldKey.ARTISTS)
+               .put(FieldKey.ARTISTS_SORT, VorbisCommentFieldKey.ARTISTS_SORT)
+               .put(FieldKey.ARTIST_SORT, VorbisCommentFieldKey.ARTISTSORT)
+               .put(FieldKey.BARCODE, VorbisCommentFieldKey.BARCODE)
+               .put(FieldKey.BPM, VorbisCommentFieldKey.BPM)
+               .put(FieldKey.CATALOG_NO, VorbisCommentFieldKey.CATALOGNUMBER)
+               .put(FieldKey.CHOIR, VorbisCommentFieldKey.CHOIR)
+               .put(FieldKey.CHOIR_SORT, VorbisCommentFieldKey.CHOIR_SORT)
+               .put(FieldKey.CLASSICAL_CATALOG, VorbisCommentFieldKey.CLASSICAL_CATALOG)
+               .put(FieldKey.CLASSICAL_NICKNAME, VorbisCommentFieldKey.CLASSICAL_NICKNAME)
+               .put(FieldKey.COMMENT, VorbisCommentFieldKey.COMMENT)
+               .put(FieldKey.COMPOSER, VorbisCommentFieldKey.COMPOSER)
+               .put(FieldKey.COMPOSER_SORT, VorbisCommentFieldKey.COMPOSERSORT)
+               .put(FieldKey.CONDUCTOR, VorbisCommentFieldKey.CONDUCTOR)
+               .put(FieldKey.CONDUCTOR_SORT, VorbisCommentFieldKey.CONDUCTOR_SORT)
+               .put(FieldKey.COUNTRY, VorbisCommentFieldKey.COUNTRY)
+               .put(FieldKey.COVER_ART, VorbisCommentFieldKey.METADATA_BLOCK_PICTURE)
+               .put(FieldKey.CUSTOM1, VorbisCommentFieldKey.CUSTOM1)
+               .put(FieldKey.CUSTOM2, VorbisCommentFieldKey.CUSTOM2)
+               .put(FieldKey.CUSTOM3, VorbisCommentFieldKey.CUSTOM3)
+               .put(FieldKey.CUSTOM4, VorbisCommentFieldKey.CUSTOM4)
+               .put(FieldKey.CUSTOM5, VorbisCommentFieldKey.CUSTOM5)
+               .put(FieldKey.DISC_NO, VorbisCommentFieldKey.DISCNUMBER)
+               .put(FieldKey.DISC_SUBTITLE, VorbisCommentFieldKey.DISCSUBTITLE)
+               .put(FieldKey.DISC_TOTAL, VorbisCommentFieldKey.DISCTOTAL)
+               .put(FieldKey.DJMIXER, VorbisCommentFieldKey.DJMIXER)
+               .put(FieldKey.ENCODER, VorbisCommentFieldKey.VENDOR)     //Known as vendor in VorbisComment
+               .put(FieldKey.ENGINEER, VorbisCommentFieldKey.ENGINEER)
+               .put(FieldKey.ENSEMBLE, VorbisCommentFieldKey.ENSEMBLE)
+               .put(FieldKey.ENSEMBLE_SORT, VorbisCommentFieldKey.ENSEMBLE_SORT)
+               .put(FieldKey.FBPM, VorbisCommentFieldKey.FBPM)
+               .put(FieldKey.GENRE, VorbisCommentFieldKey.GENRE)
+               .put(FieldKey.GROUPING, VorbisCommentFieldKey.GROUPING)
+               .put(FieldKey.INVOLVED_PERSON, VorbisCommentFieldKey.INVOLVED_PERSON)
+               .put(FieldKey.ISRC, VorbisCommentFieldKey.ISRC)
+               .put(FieldKey.IS_CLASSICAL, VorbisCommentFieldKey.IS_CLASSICAL)
+               .put(FieldKey.IS_COMPILATION, VorbisCommentFieldKey.COMPILATION)
+               .put(FieldKey.IS_SOUNDTRACK, VorbisCommentFieldKey.IS_SOUNDTRACK)
+               .put(FieldKey.KEY, VorbisCommentFieldKey.KEY)
+               .put(FieldKey.LANGUAGE, VorbisCommentFieldKey.LANGUAGE)
+               .put(FieldKey.LYRICIST, VorbisCommentFieldKey.LYRICIST)
+               .put(FieldKey.LYRICS, VorbisCommentFieldKey.LYRICS)
+               .put(FieldKey.MEDIA, VorbisCommentFieldKey.MEDIA)
+               .put(FieldKey.MIXER, VorbisCommentFieldKey.MIXER)
+               .put(FieldKey.MOOD, VorbisCommentFieldKey.MOOD)
+               .put(FieldKey.MOOD_ACOUSTIC, VorbisCommentFieldKey.MOOD_ACOUSTIC)
+               .put(FieldKey.MOOD_AGGRESSIVE, VorbisCommentFieldKey.MOOD_AGGRESSIVE)
+               .put(FieldKey.MOOD_AROUSAL, VorbisCommentFieldKey.MOOD_AROUSAL)
+               .put(FieldKey.MOOD_DANCEABILITY, VorbisCommentFieldKey.MOOD_DANCEABILITY)
+               .put(FieldKey.MOOD_ELECTRONIC, VorbisCommentFieldKey.MOOD_ELECTRONIC)
+               .put(FieldKey.MOOD_HAPPY, VorbisCommentFieldKey.MOOD_HAPPY)
+               .put(FieldKey.MOOD_INSTRUMENTAL, VorbisCommentFieldKey.MOOD_INSTRUMENTAL)
+               .put(FieldKey.MOOD_PARTY, VorbisCommentFieldKey.MOOD_PARTY)
+               .put(FieldKey.MOOD_RELAXED, VorbisCommentFieldKey.MOOD_RELAXED)
+               .put(FieldKey.MOOD_SAD, VorbisCommentFieldKey.MOOD_SAD)
+               .put(FieldKey.MOOD_VALENCE, VorbisCommentFieldKey.MOOD_VALENCE)
+               .put(FieldKey.MOVEMENT, VorbisCommentFieldKey.MOVEMENT)
+               .put(FieldKey.MOVEMENT_NO, VorbisCommentFieldKey.MOVEMENT_NO)
+               .put(FieldKey.MOVEMENT_TOTAL, VorbisCommentFieldKey.MOVEMENT_TOTAL)
+               .put(FieldKey.MUSICBRAINZ_ARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID)
+               .put(FieldKey.MUSICBRAINZ_DISC_ID, VorbisCommentFieldKey.MUSICBRAINZ_DISCID)
+               .put(FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID,
+                    VorbisCommentFieldKey.MUSICBRAINZ_ORIGINAL_ALBUMID)
+               .put(FieldKey.MUSICBRAINZ_RELEASEARTISTID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID)
+               .put(FieldKey.MUSICBRAINZ_RELEASEID, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID)
+               .put(FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, VorbisCommentFieldKey.RELEASECOUNTRY)
+               .put(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID, VorbisCommentFieldKey.MUSICBRAINZ_RELEASEGROUPID)
+               .put(FieldKey.MUSICBRAINZ_RELEASE_STATUS, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMSTATUS)
+               .put(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_RELEASETRACKID)
+               .put(FieldKey.MUSICBRAINZ_RELEASE_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_ALBUMTYPE)
+               .put(FieldKey.MUSICBRAINZ_TRACK_ID, VorbisCommentFieldKey.MUSICBRAINZ_TRACKID)
+               .put(FieldKey.MUSICBRAINZ_WORK, VorbisCommentFieldKey.MUSICBRAINZ_WORK)
+               .put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION)
+               .put(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORKID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID)
+               .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, VorbisCommentFieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE)
+               .put(FieldKey.MUSICIP_ID, VorbisCommentFieldKey.MUSICIP_PUID)
+               .put(FieldKey.OCCASION, VorbisCommentFieldKey.OCCASION)
+               .put(FieldKey.OPUS, VorbisCommentFieldKey.OPUS)
+               .put(FieldKey.ORCHESTRA, VorbisCommentFieldKey.ORCHESTRA)
+               .put(FieldKey.ORCHESTRA_SORT, VorbisCommentFieldKey.ORCHESTRA_SORT)
+               .put(FieldKey.ORIGINAL_ALBUM, VorbisCommentFieldKey.ORIGINAL_ALBUM)
+               .put(FieldKey.ORIGINAL_ARTIST, VorbisCommentFieldKey.ORIGINAL_ARTIST)
+               .put(FieldKey.ORIGINAL_LYRICIST, VorbisCommentFieldKey.ORIGINAL_LYRICIST)
+               .put(FieldKey.ORIGINAL_YEAR, VorbisCommentFieldKey.ORIGINAL_YEAR)
+               .put(FieldKey.PART, VorbisCommentFieldKey.PART)
+               .put(FieldKey.PART_NUMBER, VorbisCommentFieldKey.PART_NUMBER)
+               .put(FieldKey.PART_TYPE, VorbisCommentFieldKey.PART_TYPE)
+               .put(FieldKey.PERFORMER, VorbisCommentFieldKey.PERFORMER)
+               .put(FieldKey.PERFORMER_NAME, VorbisCommentFieldKey.PERFORMER_NAME)
+               .put(FieldKey.PERFORMER_NAME_SORT, VorbisCommentFieldKey.PERFORMER_NAME_SORT)
+               .put(FieldKey.PERIOD, VorbisCommentFieldKey.PERIOD)
+               .put(FieldKey.PRODUCER, VorbisCommentFieldKey.PRODUCER)
+               .put(FieldKey.QUALITY, VorbisCommentFieldKey.QUALITY)
+               .put(FieldKey.RANKING, VorbisCommentFieldKey.RANKING)
+               .put(FieldKey.RATING, VorbisCommentFieldKey.RATING)
+               .put(FieldKey.RECORD_LABEL, VorbisCommentFieldKey.LABEL)
+               .put(FieldKey.REMIXER, VorbisCommentFieldKey.REMIXER)
+               .put(FieldKey.SCRIPT, VorbisCommentFieldKey.SCRIPT)
+               .put(FieldKey.SINGLE_DISC_TRACK_NO, VorbisCommentFieldKey.SINGLE_DISC_TRACK_NO)
+               .put(FieldKey.SUBTITLE, VorbisCommentFieldKey.SUBTITLE)
+               .put(FieldKey.TAGS, VorbisCommentFieldKey.TAGS)
+               .put(FieldKey.TEMPO, VorbisCommentFieldKey.TEMPO)
+               .put(FieldKey.TIMBRE, VorbisCommentFieldKey.TIMBRE)
+               .put(FieldKey.TITLE, VorbisCommentFieldKey.TITLE)
+               .put(FieldKey.TITLE_MOVEMENT, VorbisCommentFieldKey.TITLE_MOVEMENT)
+               .put(FieldKey.TITLE_SORT, VorbisCommentFieldKey.TITLESORT)
+               .put(FieldKey.TONALITY, VorbisCommentFieldKey.TONALITY)
+               .put(FieldKey.TRACK, VorbisCommentFieldKey.TRACKNUMBER)
+               .put(FieldKey.TRACK_TOTAL, VorbisCommentFieldKey.TRACKTOTAL)
+               .put(FieldKey.URL_DISCOGS_ARTIST_SITE, VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE)
+               .put(FieldKey.URL_DISCOGS_RELEASE_SITE, VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE)
+               .put(FieldKey.URL_LYRICS_SITE, VorbisCommentFieldKey.URL_LYRICS_SITE)
+               .put(FieldKey.URL_OFFICIAL_ARTIST_SITE, VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE)
+               .put(FieldKey.URL_OFFICIAL_RELEASE_SITE, VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE)
+               .put(FieldKey.URL_WIKIPEDIA_ARTIST_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE)
+               .put(FieldKey.URL_WIKIPEDIA_RELEASE_SITE, VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE)
+               .put(FieldKey.WORK, VorbisCommentFieldKey.WORK)
+               .put(FieldKey.WORK_TYPE, VorbisCommentFieldKey.WORK_TYPE)
+               .put(FieldKey.YEAR, VorbisCommentFieldKey.DATE);
+        return builder.build();
     }
-
 
     //This is the vendor string that will be written if no other is supplied. Should be the name of the software
     //that actually encoded the file in the first place.
@@ -312,6 +293,7 @@ public class VorbisCommentTag
      *
      * @param vorbisCommentFieldKey
      * @param value
+     *
      * @return
      */
     public TagField createField(String vorbisCommentFieldKey, String value) {
@@ -339,7 +321,9 @@ public class VorbisCommentTag
      * Maps the generic key to the ogg key and return the list of values for this field as strings
      *
      * @param genericKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
@@ -354,7 +338,9 @@ public class VorbisCommentTag
      * Retrieve the first value that exists for this vorbis comment key
      *
      * @param vorbisCommentKey
+     *
      * @return
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      */
     public List<TagField> get(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException {
@@ -369,7 +355,9 @@ public class VorbisCommentTag
      * Retrieve the first value that exists for this vorbis comment key
      *
      * @param vorbisCommentKey
+     *
      * @return
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      */
     public String getFirst(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException {
@@ -381,6 +369,7 @@ public class VorbisCommentTag
 
     /**
      * @param genericKey
+     *
      * @return
      */
     public boolean hasField(FieldKey genericKey) {
@@ -390,6 +379,7 @@ public class VorbisCommentTag
 
     /**
      * @param vorbisFieldKey
+     *
      * @return
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
@@ -420,6 +410,7 @@ public class VorbisCommentTag
      * Delete fields with this vorbisCommentFieldKey
      *
      * @param vorbisCommentFieldKey
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      */
     public void deleteField(VorbisCommentFieldKey vorbisCommentFieldKey) throws KeyNotFoundException {
@@ -553,7 +544,9 @@ public class VorbisCommentTag
      * Create Artwork field
      *
      * @param artwork
+     *
      * @return
+     *
      * @throws FieldDataInvalidException
      */
     public TagField createField(Artwork artwork) throws FieldDataInvalidException {
@@ -589,6 +582,7 @@ public class VorbisCommentTag
      * Add artwork field
      *
      * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
     public void addField(Artwork artwork) throws FieldDataInvalidException {
@@ -604,6 +598,7 @@ public class VorbisCommentTag
      *
      * @param data     raw image data
      * @param mimeType mimeType of data
+     *
      * @return
      */
     @Deprecated
@@ -625,6 +620,7 @@ public class VorbisCommentTag
      *
      * @param vorbisCommentKey
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -638,6 +634,7 @@ public class VorbisCommentTag
      *
      * @param vorbisCommentKey
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -664,6 +661,10 @@ public class VorbisCommentTag
         return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
     }
 
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tagFieldToOggField.keySet();
+    }
+
     @Override
     public void setField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
         if (values == null || values[0] == null) {
@@ -684,6 +685,7 @@ public class VorbisCommentTag
      *
      * @param genericKey
      * @param values
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */

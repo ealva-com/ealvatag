@@ -18,15 +18,19 @@
  */
 package ealvatag.audio.generic;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.*;
+import ealvatag.tag.FieldDataInvalidException;
+import ealvatag.tag.FieldKey;
+import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagTextField;
 import ealvatag.tag.images.Artwork;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -34,19 +38,18 @@ import java.util.List;
  *
  * @author Raphaël Slinckx
  */
-public abstract class GenericTag extends AbstractTag
-{
+public abstract class GenericTag extends AbstractTag {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[]{};
-    protected static EnumSet<FieldKey> supportedKeys;
+    final private static ImmutableSet<FieldKey> supportedKeys = ImmutableSet.of(FieldKey.ALBUM,
+                                                                                FieldKey.ARTIST,
+                                                                                FieldKey.TITLE,
+                                                                                FieldKey.TRACK,
+                                                                                FieldKey.GENRE,
+                                                                                FieldKey.COMMENT,
+                                                                                FieldKey.YEAR);
 
-    static
-    {
-        supportedKeys = EnumSet.of(FieldKey.ALBUM,FieldKey.ARTIST,FieldKey.TITLE,FieldKey.TRACK,FieldKey.GENRE,FieldKey.COMMENT,FieldKey.YEAR);
-    }
 
-
-    public static  EnumSet<FieldKey>  getSupportedKeys()
-    {
+    public static ImmutableSet<FieldKey> getSupportedTagKeys() {
         return supportedKeys;
     }
 
@@ -56,8 +59,7 @@ public abstract class GenericTag extends AbstractTag
      *
      * @author Raphaël Slinckx
      */
-    protected class GenericTagTextField implements TagTextField
-    {
+    protected class GenericTagTextField implements TagTextField {
 
         /**
          * Stores the string.
@@ -75,182 +77,148 @@ public abstract class GenericTag extends AbstractTag
          * @param fieldId        The identifier.
          * @param initialContent The string.
          */
-        public GenericTagTextField(final String fieldId, final String initialContent)
-        {
+        public GenericTagTextField(final String fieldId, final String initialContent) {
             this.id = fieldId;
             this.content = initialContent;
         }
 
         @Override
-        public void copyContent(final TagField field)
-        {
-            if (field instanceof TagTextField)
-            {
-                this.content = ((TagTextField) field).getContent();
+        public void copyContent(final TagField field) {
+            if (field instanceof TagTextField) {
+                this.content = ((TagTextField)field).getContent();
             }
         }
 
         @Override
-        public String getContent()
-        {
+        public String getContent() {
             return this.content;
         }
 
         @Override
-        public Charset getEncoding()
-        {
+        public Charset getEncoding() {
             return StandardCharsets.ISO_8859_1;
         }
 
         @Override
-        public String getId()
-        {
+        public String getId() {
             return id;
         }
 
         @Override
-        public byte[] getRawContent()
-        {
+        public byte[] getRawContent() {
             return this.content == null ? EMPTY_BYTE_ARRAY : this.content.getBytes(getEncoding());
         }
 
         @Override
-        public boolean isBinary()
-        {
+        public boolean isBinary() {
             return false;
         }
 
         @Override
-        public void isBinary(boolean b)
-        {
+        public void isBinary(boolean b) {
             /* not supported */
         }
 
         @Override
-        public boolean isCommon()
-        {
+        public boolean isCommon() {
             return true;
         }
 
         @Override
-        public boolean isEmpty()
-        {
+        public boolean isEmpty() {
             return "".equals(this.content);
         }
 
         @Override
-        public void setContent(final String s)
-        {
+        public void setContent(final String s) {
             this.content = s;
         }
 
         @Override
-        public void setEncoding(final Charset s)
-        {
+        public void setEncoding(final Charset s) {
             /* Not allowed */
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return getContent();
         }
     }
 
     @Override
-    protected boolean isAllowedEncoding(final Charset enc)
-    {
+    protected boolean isAllowedEncoding(final Charset enc) {
         return true;
     }
 
     @Override
-    public TagField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        if(supportedKeys.contains(genericKey))
-        {
-            if (values == null || values[0] == null)
-            {
+    public TagField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException {
+        if (getSupportedFields().contains(genericKey)) {
+            if (values == null || values[0] == null) {
                 throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
             }
-            return new GenericTagTextField(genericKey.name(),values[0]);
-        }
-        else
-        {
+            return new GenericTagTextField(genericKey.name(), values[0]);
+        } else {
             throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
     @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException
-    {
+    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException {
         return getValue(genericKey, 0);
     }
 
     @Override
-    public String getValue(final FieldKey genericKey, final int index) throws KeyNotFoundException
-    {
-        if(supportedKeys.contains(genericKey))
-        {
-            return getItem(genericKey.name(),index);
-        }
-        else
-        {
+    public String getValue(final FieldKey genericKey, final int index) throws KeyNotFoundException {
+        if (getSupportedFields().contains(genericKey)) {
+            return getItem(genericKey.name(), index);
+        } else {
             throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
     @Override
-    public List<TagField> getFields(final FieldKey genericKey) throws KeyNotFoundException
-    {
+    public List<TagField> getFields(final FieldKey genericKey) throws KeyNotFoundException {
         List<TagField> list = fields.get(genericKey.name());
-        if (list == null)
-        {
-            return new ArrayList<TagField>();
+        if (list == null) {
+            return new ArrayList<>();
         }
         return list;
     }
 
     @Override
-    public List<String> getAll(final FieldKey genericKey) throws KeyNotFoundException
-    {
+    public List<String> getAll(final FieldKey genericKey) throws KeyNotFoundException {
         return super.getAll(genericKey.name());
     }
 
     @Override
-    public void deleteField(final FieldKey genericKey) throws KeyNotFoundException
-    {
-        if(supportedKeys.contains(genericKey))
-        {
+    public void deleteField(final FieldKey genericKey) throws KeyNotFoundException {
+        if (getSupportedFields().contains(genericKey)) {
             deleteField(genericKey.name());
-        }
-        else
-        {
+        } else {
             throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
     @Override
-    public TagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException
-    {
-        if(supportedKeys.contains(genericKey))
-        {
+    public TagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+        if (getSupportedFields().contains(genericKey)) {
             return getFirstField(genericKey.name());
-        }
-        else
-        {
+        } else {
             throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
         }
     }
 
     @Override
-    public List<Artwork> getArtworkList()
-    {
+    public List<Artwork> getArtworkList() {
         return Collections.emptyList();
     }
 
     @Override
-    public TagField createField(final Artwork artwork) throws FieldDataInvalidException
-    {
+    public TagField createField(final Artwork artwork) throws FieldDataInvalidException {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return supportedKeys;
     }
 }

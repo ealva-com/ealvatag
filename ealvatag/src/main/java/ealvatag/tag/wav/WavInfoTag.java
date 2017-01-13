@@ -18,25 +18,30 @@
  */
 package ealvatag.tag.wav;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.generic.GenericTag;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.logging.Hex;
-import ealvatag.tag.*;
+import ealvatag.tag.FieldDataInvalidException;
+import ealvatag.tag.FieldKey;
+import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagTextField;
+
+import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
  * Represent wav metadata found in the LISTINFO Chunk
- *
+ * <p>
  * An LIST INFO chunk was the original way to store metadata but simailr to ID3v1 it suffers from a limited
  * set of fields, although non-standard extra field cannot be added, notably there is no support for images.
- *
+ * <p>
  * Any Wavc editors now instead/addtionally add data with an ID3tag
  */
-public class WavInfoTag extends GenericTag
-{
+public class WavInfoTag extends GenericTag {
     //We dont use these fields but we need to read them so they can be written back if user modifies
     private List<TagTextField> unrecognisedFields = new ArrayList<>();
 
@@ -45,91 +50,79 @@ public class WavInfoTag extends GenericTag
     //End location of this chunk
     private Long endLocationInFile = null;
 
+    final private static ImmutableSet<FieldKey> supportedKeys = ImmutableSet.of(FieldKey.ALBUM,
+                                                                                FieldKey.ARTIST,
+                                                                                FieldKey.ALBUM_ARTIST,
+                                                                                FieldKey.TITLE,
+                                                                                FieldKey.TRACK,
+                                                                                FieldKey.GENRE,
+                                                                                FieldKey.COMMENT,
+                                                                                FieldKey.YEAR,
+                                                                                FieldKey.RECORD_LABEL,
+                                                                                FieldKey.ISRC,
+                                                                                FieldKey.COMPOSER,
+                                                                                FieldKey.LYRICIST,
+                                                                                FieldKey.ENCODER,
+                                                                                FieldKey.CONDUCTOR,
+                                                                                FieldKey.RATING);
 
-    static
-    {
-        supportedKeys = EnumSet.of(
 
-                FieldKey.ALBUM,
-                FieldKey.ARTIST,
-                FieldKey.ALBUM_ARTIST,
-                FieldKey.TITLE,
-                FieldKey.TRACK,
-                FieldKey.GENRE,
-                FieldKey.COMMENT,
-                FieldKey.YEAR,
-                FieldKey.RECORD_LABEL,
-                FieldKey.ISRC,
-                FieldKey.COMPOSER,
-                FieldKey.LYRICIST,
-                FieldKey.ENCODER,
-                FieldKey.CONDUCTOR,
-                FieldKey.RATING);
-    }
-    public String toString()
-    {
-        StringBuilder  output = new StringBuilder("Wav Info Tag:\n");
-        if(getStartLocationInFile()!=null)
-        {
-            output.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFile()) + "\n");
+    public String toString() {
+        StringBuilder output = new StringBuilder("Wav Info Tag:\n");
+        if (getStartLocationInFile() != null) {
+            output.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFile())).append("\n");
         }
-        if(getEndLocationInFile()!=null)
-        {
-            output.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFile()) + "\n");
+        if (getEndLocationInFile() != null) {
+            output.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFile())).append("\n");
         }
         output.append(super.toString());
-        if(unrecognisedFields.size()>0)
-        {
+        if (unrecognisedFields.size() > 0) {
             output.append("\nUnrecognized Tags:\n");
-            for(TagTextField next:unrecognisedFields)
-            {
-                output.append("\t"+next.getId()+":"+next.getContent()+"\n");
+            for (TagTextField next : unrecognisedFields) {
+                output.append("\t").append(next.getId()).append(":").append(next.getContent()).append("\n");
             }
         }
         return output.toString();
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        return createField(FieldKey.IS_COMPILATION,String.valueOf(value));
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
+        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
     }
 
-    public Long getStartLocationInFile()
-    {
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return supportedKeys;
+    }
+
+    public Long getStartLocationInFile() {
         return startLocationInFile;
     }
 
-    public void setStartLocationInFile(long startLocationInFile)
-    {
+    public void setStartLocationInFile(long startLocationInFile) {
         this.startLocationInFile = startLocationInFile;
     }
 
-    public Long getEndLocationInFile()
-    {
+    public Long getEndLocationInFile() {
         return endLocationInFile;
     }
 
-    public void setEndLocationInFile(long endLocationInFile)
-    {
+    public void setEndLocationInFile(long endLocationInFile) {
         this.endLocationInFile = endLocationInFile;
     }
 
-    public long getSizeOfTag()
-    {
-        if(endLocationInFile==null || startLocationInFile==null)
-        {
+    public long getSizeOfTag() {
+        if (endLocationInFile == null || startLocationInFile == null) {
             return 0;
         }
         return (endLocationInFile - startLocationInFile) - ChunkHeader.CHUNK_HEADER_SIZE;
     }
 
-    public void addUnRecognizedField(String code, String contents)
-    {;
+    public void addUnRecognizedField(String code, String contents) {
         unrecognisedFields.add(new GenericTagTextField(code, contents));
     }
 
-    public List<TagTextField> getUnrecognisedFields()
-    {
+    public List<TagTextField> getUnrecognisedFields() {
         return unrecognisedFields;
     }
+
+
 }

@@ -41,6 +41,10 @@ import ealvatag.tag.reference.PictureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -146,7 +150,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * True if files has a ID3v2 header
      *
      * @param raf
+     *
      * @return
+     *
      * @throws IOException
      */
     private static boolean isID3V2Header(RandomAccessFile raf) throws IOException {
@@ -176,7 +182,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * This method is used by non mp3s (such as .ogg and .flac) to determine if they contain an id3 tag
      *
      * @param raf
+     *
      * @return
+     *
      * @throws IOException
      */
     public static boolean isId3Tag(RandomAccessFile raf) throws IOException {
@@ -199,7 +207,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Is ID3 tag
      *
      * @param fc
+     *
      * @return
+     *
      * @throws IOException
      */
     public static boolean isId3Tag(FileChannel fc) throws IOException {
@@ -290,7 +300,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Convert the frame to the correct frame(s)
      *
      * @param frame
+     *
      * @return
+     *
      * @throws InvalidFrameException
      */
     protected abstract List<AbstractID3v2Frame> convertFrame(AbstractID3v2Frame frame) throws InvalidFrameException;
@@ -348,6 +360,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * but happens to have an identifier that is valid for another version of the tag it will return true
      *
      * @param identifier frameId to lookup
+     *
      * @return true if tag has frame with this identifier
      */
     public boolean hasFrame(String identifier) {
@@ -366,6 +379,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * TDRC frame.
      *
      * @param identifier frameId to lookup
+     *
      * @return true if tag has frame with this identifier
      */
     public boolean hasFrameAndBody(String identifier) {
@@ -386,6 +400,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * but happens to have an identifier that is valid for another version of the tag it will return true
      *
      * @param identifier start of frameId to lookup
+     *
      * @return tag has frame starting with this identifier
      */
     public boolean hasFrameOfType(String identifier) {
@@ -410,6 +425,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
      * @param identifier is an ID3Frame identifier
+     *
      * @return matching frame, or list of matching frames
      */
     //TODO:This method is problematic because sometimes it returns a list and sometimes a frame, we need to
@@ -425,6 +441,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * exist with the same identifier it will return a list containing all the frames with this identifier
      *
      * @param identifier
+     *
      * @return
      */
     public Object getEncryptedFrame(String identifier) {
@@ -437,6 +454,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * If the value is a String it returns that, otherwise returns a summary of the fields information
      *
      * @param identifier
+     *
      * @return
      */
     public String getFirst(String identifier) {
@@ -449,6 +467,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
 
     /**
      * @param frame
+     *
      * @return
      */
     private String getTextValueForFrame(AbstractID3v2Frame frame) {
@@ -468,6 +487,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Retrieve the first tag field that exists for this identifier
      *
      * @param identifier
+     *
      * @return tag field or null if doesn't exist
      */
     public AbstractID3v2Frame getFirstField(String identifier) {
@@ -711,6 +731,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Set Field
      *
      * @param field
+     *
      * @throws FieldDataInvalidException
      */
     public void setField(TagField field) throws FieldDataInvalidException {
@@ -754,6 +775,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * be appended to the existing field, separated by the null character.
      *
      * @param field
+     *
      * @throws FieldDataInvalidException
      */
     public void addField(TagField field) throws FieldDataInvalidException {
@@ -836,6 +858,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * but happens to have an identifier that is valid for another version of the tag it will be returned.
      *
      * @param identifier
+     *
      * @return an iterator of all the frames starting with a particular identifier
      */
     public Iterator getFrameOfType(String identifier) {
@@ -863,6 +886,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Delete Tag
      *
      * @param file to delete the tag from
+     *
      * @throws IOException if problem accessing the file
      */
     //TODO should clear all data and preferably recover lost space and go upto end of mp3s
@@ -886,6 +910,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Is this tag equivalent to another
      *
      * @param obj to test for equivalence
+     *
      * @return true if they are equivalent
      */
     public boolean equals(Object obj) {
@@ -961,7 +986,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param file
      * @param audioStartByte
+     *
      * @return new audioStartByte - different only if the audio content had to be moved
+     *
      * @throws IOException
      */
     public abstract long write(File file, long audioStartByte) throws IOException;
@@ -973,12 +1000,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param fileChannel
      * @param filePath
+     *
      * @return lock or null if locking is not supported
-     * @throws IOException                                    if unable to get lock because already locked by another
-     *                                                        program
-     * @throws java.nio.channels.OverlappingFileLockException if already locked by another thread in the same VM, we
-     *                                                        dont catch this
-     *                                                        because indicates a programming error
+     *
+     * @throws IOException                                    if unable to get lock because already locked by another program
+     * @throws java.nio.channels.OverlappingFileLockException if already locked by another thread in the same VM, we dont catch this because
+     *                                                        indicates a programming error
      */
     protected FileLock getFileLockForWriting(FileChannel fileChannel, String filePath) throws IOException {
         LOG.trace("locking fileChannel for " + filePath);
@@ -1006,6 +1033,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Write tag to file.
      *
      * @param file
+     *
      * @throws IOException TODO should be abstract
      */
     public void write(RandomAccessFile file) throws IOException {
@@ -1015,6 +1043,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Write tag to channel.
      *
      * @param channel
+     *
      * @throws IOException TODO should be abstract
      */
     public void write(WritableByteChannel channel, int currentTagSize) throws IOException {
@@ -1024,6 +1053,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Write tag to output stream
      *
      * @param outputStream
+     *
      * @throws IOException
      */
     public void write(OutputStream outputStream) throws IOException {
@@ -1034,6 +1064,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Write tag to output stream
      *
      * @param outputStream
+     *
      * @throws IOException
      */
     public void write(OutputStream outputStream, int currentTagSize) throws IOException {
@@ -1046,6 +1077,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param channel
      * @param padding
+     *
      * @throws IOException
      */
     protected void writePadding(WritableByteChannel channel, int padding) throws IOException {
@@ -1060,7 +1092,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * zero.
      *
      * @param file
+     *
      * @return the end of the tag in the file or zero if no tag exists.
+     *
      * @throws java.io.IOException
      */
     public static long getV2TagSizeIfExists(File file) throws IOException {
@@ -1121,6 +1155,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Does a tag of the correct version exist in this file.
      *
      * @param byteBuffer to search through
+     *
      * @return true if tag exists.
      */
     public boolean seek(ByteBuffer byteBuffer) {
@@ -1150,6 +1185,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param tagSize
      * @param preferredSize
+     *
      * @return
      */
     protected int calculateTagSize(int tagSize, int preferredSize) {
@@ -1173,8 +1209,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * @param paddingSize This is total size required to store tag before audio
      * @param audioStart
      * @param file        The file to adjust the padding length of
-     * @throws FileNotFoundException if the file exists but is a directory
-     *                               rather than a regular file or cannot be opened for any other
+     *
+     * @throws FileNotFoundException if the file exists but is a directory rather than a regular file or cannot be opened for any other
      *                               reason
      * @throws IOException           on any I/O error
      */
@@ -1321,6 +1357,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * @param padding
      * @param sizeIncPadding
      * @param audioStartLocation
+     *
      * @throws IOException
      */
     protected void writeBufferToFile(File file,
@@ -1386,6 +1423,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param newFile
      * @param originalFile
+     *
      * @throws IOException
      */
     private void replaceFile(File originalFile, File newFile) throws IOException {
@@ -1593,6 +1631,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * created frames will be at end of tag.
      *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
+     *
      * @throws IOException
      */
     protected ByteArrayOutputStream writeFramesToBuffer() throws IOException {
@@ -1607,6 +1646,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param map
      * @param bodyBuffer
+     *
      * @throws IOException
      */
     private void writeFramesToBufferStream(Map map, ByteArrayOutputStream bodyBuffer) throws IOException {
@@ -1638,8 +1678,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
     }
 
     /**
-     * @return comparator used to order frames in preferred order for writing to file
-     * so that most important frames are written first.
+     * @return comparator used to order frames in preferred order for writing to file so that most important frames are written first.
      */
     public abstract Comparator getPreferredFrameOrderComparator();
 
@@ -1679,7 +1718,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Maps the generic key to the id3 key and return the list of values for this field as strings
      *
      * @param genericKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
@@ -1735,6 +1776,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Create Frame of correct ID3 version with the specified id
      *
      * @param id
+     *
      * @return
      */
     public abstract AbstractID3v2Frame createFrame(String id);
@@ -1749,6 +1791,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Does this tag contain a field with the specified key
      *
      * @param key The field id to look for.
+     *
      * @return true if has field , false if does not or if no mapping for key exists
      */
     public boolean hasField(FieldKey key) {
@@ -1783,8 +1826,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
     }
 
     /**
-     * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as separate
-     * fields
+     * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as separate fields
      */
     public Iterator<TagField> getFields() {
         //Iterator of each different frameId in this tag
@@ -1938,6 +1980,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Retrieve the first value that exists for this generic key
      *
      * @param genericKey
+     *
      * @return
      */
     public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
@@ -1951,6 +1994,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * with another generic key.
      *
      * @param genericKey
+     *
      * @return
      */
     public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
@@ -1991,28 +2035,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
         return doGetValueAtIndex(frameAndSubId, index);
     }
 
-    /**
-     * Create a new field
-     * <p>
-     * Only MUSICIAN field make use of Varargs values field
-     *
-     * @param genericKey is the generic key
-     * @param values
-     * @return
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public TagField createField(FieldKey genericKey, String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,
+                                                                              FieldDataInvalidException,
+                                                                              IllegalArgumentException {
+        checkArgument(genericKey != null, ErrorMessage.CANNOT_BE_NULL, "genericKey");
+        String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value");
 
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-
-        String value = values[0];
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
         //FrameAndSubId does not contain enough info for these fields to be able to work out what to update
@@ -2040,7 +2068,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param formatKey
      * @param values
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -2116,7 +2146,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * This method  does all the complex stuff of splitting multiple values in one frame into separate values.
      *
      * @param formatKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     protected List<String> doGetValues(FrameAndSubId formatKey) throws KeyNotFoundException {
@@ -2210,7 +2242,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      *
      * @param formatKey
      * @param index     the index specified by the user
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     protected String doGetValueAtIndex(FrameAndSubId formatKey, int index) throws KeyNotFoundException {
@@ -2226,6 +2260,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * file is moved
      *
      * @param url specifies the link, it could be a local file or could be a full url
+     *
      * @return
      */
     public TagField createLinkedArtworkField(String url) {
@@ -2327,6 +2362,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Internal delete method, for deleting/modifying an individual ID3 frame
      *
      * @param formatKey
+     *
      * @throws KeyNotFoundException
      */
     protected void doDeleteTagField(FrameAndSubId formatKey) throws KeyNotFoundException {
@@ -2445,7 +2481,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * confusing because getValues() would return two values.
      *
      * @param genericKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
@@ -2566,6 +2604,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Create field and then set within tag itself
      *
      * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
     public void setField(Artwork artwork) throws FieldDataInvalidException {
@@ -2576,6 +2615,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
      * Create field and then set within tag itself
      *
      * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
     public void addField(Artwork artwork) throws FieldDataInvalidException {

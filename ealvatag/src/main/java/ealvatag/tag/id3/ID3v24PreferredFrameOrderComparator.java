@@ -7,12 +7,12 @@ import java.util.List;
 import static ealvatag.tag.id3.ID3v24Frames.*;
 
 /**
- * Orders frame Ids so that the most important frames are writtne first
+ * Orders frame Ids so that the most important frames are written first
  */
 public class ID3v24PreferredFrameOrderComparator implements Comparator<String>
 {
     private static ID3v24PreferredFrameOrderComparator comparator;
-    private static List frameIdsInPreferredOrder = new ArrayList<String>();
+    private static List<String> frameIdsInPreferredOrder = new ArrayList<>();
 
     static
     {

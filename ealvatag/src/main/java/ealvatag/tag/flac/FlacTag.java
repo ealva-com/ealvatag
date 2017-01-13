@@ -1,5 +1,6 @@
 package ealvatag.tag.flac;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -27,8 +28,7 @@ import java.util.List;
  * <p>
  * This class enscapulates the items into a single tag
  */
-public class FlacTag
-        implements Tag, ContainsVorbisCommentField {
+public class FlacTag implements Tag, ContainsVorbisCommentField {
     private VorbisCommentTag tag = null;
     private List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
 
@@ -79,7 +79,9 @@ public class FlacTag
      * Maps the generic key to the specific key and return the list of values for this field as strings
      *
      * @param genericKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
@@ -126,6 +128,7 @@ public class FlacTag
      *
      * @param genericKey
      * @param values
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -148,6 +151,7 @@ public class FlacTag
      *
      * @param vorbisCommentKey
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -161,6 +165,7 @@ public class FlacTag
      *
      * @param vorbisCommentKey
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -171,6 +176,7 @@ public class FlacTag
 
     /**
      * @param field
+     *
      * @throws FieldDataInvalidException
      */
     public void setField(TagField field) throws FieldDataInvalidException {
@@ -199,7 +205,9 @@ public class FlacTag
      *
      * @param vorbisCommentFieldKey
      * @param value
+     *
      * @return
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      * @throws ealvatag.tag.FieldDataInvalidException
      */
@@ -219,6 +227,7 @@ public class FlacTag
      *
      * @param vorbisCommentFieldKey
      * @param value
+     *
      * @return
      */
     public TagField createField(String vorbisCommentFieldKey, String value) {
@@ -350,6 +359,7 @@ public class FlacTag
      * will be broken.
      *
      * @param url
+     *
      * @return
      */
     public TagField createLinkedArtworkField(String url) {
@@ -433,6 +443,7 @@ public class FlacTag
 
     /**
      * @param genericKey
+     *
      * @return
      */
     public boolean hasField(FieldKey genericKey) {
@@ -445,6 +456,7 @@ public class FlacTag
 
     /**
      * @param vorbisFieldKey
+     *
      * @return
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
@@ -461,6 +473,10 @@ public class FlacTag
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
         return tag.createCompilationField(value);
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tag.getSupportedFields();
     }
 
     public String toString() {

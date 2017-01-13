@@ -18,6 +18,7 @@
  */
 package ealvatag.tag;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.images.Artwork;
 
 import java.nio.charset.Charset;
@@ -27,17 +28,17 @@ import java.util.List;
 /**
  * This interface represents the basic data structure for the default
  * audio library functionality.<br>
- *
+ * <p>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
  * tag without making one long text string.<br>
- *
+ * <p>
  * The addField() method can be used for this but it is possible the underlying implementation
  * does not support that kind of storing multiple values and will just overwrite the existing value<br>
  * <br>
  * <b>Code Examples:</b><br>
- *
+ * <p>
  * <pre>
  * <code>
  * AudioFile file = AudioFileIO.read(new File(&quot;C:\\test.mp3&quot;));
@@ -54,8 +55,9 @@ public interface Tag {
     /**
      * Create the field based on the generic key and set it in the tag
      *
-     * @param genericKey
+     * @param genericKey THE FIELD TO SET
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -63,11 +65,12 @@ public interface Tag {
 
     /**
      * Create the field based on the generic key and add it to the tag
-     *
+     * <p>
      * This is handled differently by different formats
      *
      * @param genericKey
      * @param value
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -77,6 +80,7 @@ public interface Tag {
      * Delete any fields with this key
      *
      * @param fieldKey
+     *
      * @throws KeyNotFoundException
      */
     void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
@@ -85,17 +89,19 @@ public interface Tag {
      * Delete any fields with this Flac (Vorbis Comment) id
      *
      * @param key
+     *
      * @throws KeyNotFoundException
      */
-    void deleteField(String key)throws KeyNotFoundException;
+    void deleteField(String key) throws KeyNotFoundException;
 
     /**
      * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
-     *
+     * <p>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id The field id.
+     *
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
     List<TagField> getFields(String id);
@@ -105,7 +111,9 @@ public interface Tag {
      * is the specified one.<br>
      *
      * @param id The field id.
+     *
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     *
      * @throws KeyNotFoundException
      */
     List<TagField> getFields(FieldKey id) throws KeyNotFoundException;
@@ -121,10 +129,11 @@ public interface Tag {
 
     /**
      * Retrieve String value of the first value that exists for this format specific key
-     *
+     * <p>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id
+     *
      * @return
      */
     String getFirst(String id);
@@ -133,7 +142,9 @@ public interface Tag {
      * Retrieve String value of the first tag field that exists for this generic key
      *
      * @param id
+     *
      * @return String value or empty string
+     *
      * @throws KeyNotFoundException
      */
     String getFirst(FieldKey id) throws KeyNotFoundException;
@@ -142,7 +153,9 @@ public interface Tag {
      * Retrieve all String values that exist for this generic key
      *
      * @param id
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     List<String> getAll(FieldKey id) throws KeyNotFoundException;
@@ -152,22 +165,25 @@ public interface Tag {
      *
      * @param id
      * @param n
+     *
      * @return
      */
     String getValue(FieldKey id, int n);
 
     /**
      * Retrieve the first field that exists for this format specific key
-     *
+     * <p>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
+     *
      * @return tag field or null if doesn't exist
      */
     TagField getFirstField(String id);
 
     /**
      * @param id
+     *
      * @return the first field that matches this generic key
      */
     TagField getFirstField(FieldKey id);
@@ -176,8 +192,7 @@ public interface Tag {
      * Returns <code>true</code>, if at least one of the contained
      * {@linkplain TagField fields} is a common field ({@link TagField#isCommon()}).
      *
-     * @return <code>true</code> if a {@linkplain TagField#isCommon() common}
-     *         field is present.
+     * @return <code>true</code> if a {@linkplain TagField#isCommon() common} field is present.
      */
     boolean hasCommonFields();
 
@@ -185,6 +200,7 @@ public interface Tag {
      * Determines whether the tag has at least one field with the specified field key.
      *
      * @param fieldKey
+     *
      * @return
      */
     boolean hasField(FieldKey fieldKey);
@@ -194,8 +210,8 @@ public interface Tag {
      * &quot;id&quot;.
      *
      * @param id The field id to look for.
-     * @return <code>true</code> if tag contains a {@link TagField} with the
-     *         given {@linkplain TagField#getId() id}.
+     *
+     * @return <code>true</code> if tag contains a {@link TagField} with the given {@linkplain TagField#getId() id}.
      */
     boolean hasField(String id);
 
@@ -212,9 +228,9 @@ public interface Tag {
 
     /**
      * Return the number of fields
-     *
+     * <p>
      * <p>Fields with the same identifiers are counted separately
-     *
+     * <p>
      * i.e two TITLE fields in a Vorbis Comment file would count as two
      *
      * @return total number of fields
@@ -224,9 +240,9 @@ public interface Tag {
 
     /**
      * Return the number of fields taking multiple value fields into consideration
-     *
+     * <p>
      * Fields that actually contain multiple values are counted seperately
-     *
+     * <p>
      * i.e. a TCON frame in ID3v24 frame containing multiple genres would add to count for each genre.
      *
      * @return total number of fields taking multiple value fields into consideration
@@ -250,7 +266,7 @@ public interface Tag {
 
     /**
      * Delete any instance of tag fields used to store artwork
-     *
+     * <p>
      * <p>We need this additional deleteField method because in some formats artwork can be stored
      * in multiple fields
      *
@@ -263,7 +279,9 @@ public interface Tag {
      * Create artwork field based on the data in artwork
      *
      * @param artwork
+     *
      * @return suitable tagfield for this format that represents the artwork data
+     *
      * @throws FieldDataInvalidException
      */
     TagField createField(Artwork artwork) throws FieldDataInvalidException;
@@ -271,8 +289,8 @@ public interface Tag {
     /**
      * Create artwork field based on the data in artwork and then set it in the tag itself
      *
-     *
      * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
     void setField(Artwork artwork) throws FieldDataInvalidException;
@@ -280,8 +298,8 @@ public interface Tag {
     /**
      * Create artwork field based on the data in artwork and then add it to the tag itself
      *
-     *
      * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
     void addField(Artwork artwork) throws FieldDataInvalidException;
@@ -289,8 +307,8 @@ public interface Tag {
     /**
      * Sets a field in the structure, used internally by the library<br>
      *
-     *
      * @param field The field to add.
+     *
      * @throws FieldDataInvalidException
      */
     void setField(TagField field) throws FieldDataInvalidException;
@@ -298,41 +316,47 @@ public interface Tag {
     /**
      * Adds a field to the structure, used internally by the library<br>
      *
-     *
      * @param field The field to add.
+     *
      * @throws FieldDataInvalidException
      */
     void addField(TagField field) throws FieldDataInvalidException;
 
     /**
-     * Create a new field based on generic key, used internally by the library
+     * Create a new field
      *
-     * <p>Only textual data supported at the moment. The genericKey will be mapped
-     * to the correct implementation key and return a TagField.
+     * @param genericKey create field for this key
+     * @param value     the value(s) for the created {@link TagField}. Only {@link FieldKey#PERFORMER} supports more than 1 value.
      *
-     * Usually the value field should only be one value, but certain fields may require more than one value
-     * currently the only field to require this is the MUSICIAN field, it should contain instrument and then
-     * performer name
+     * @return {@link TagField} for {@code genericKey}
      *
-     * @param genericKey is the generic key
-     * @param value      to store
-     * @return
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * @throws KeyNotFoundException      if the generic key us unsupported by this tag
+     * @throws FieldDataInvalidException data could is not valid for this field type
+     * @throws IllegalArgumentException  if {@code genericKey} is null or at least 1 values is not passed
      */
-    TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
+    TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException,
+                                                                      FieldDataInvalidException,
+                                                                      IllegalArgumentException;
 
     /**
      * Creates isCompilation field
-     *
+     * <p>
      * It is useful to have this method because it handles ensuring that the correct value to represent a boolean
      * is stored in the underlying field format.
      *
      * @param value
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
     TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException;
+
+    /**
+     * Get all the {@link FieldKey}s this tag supports
+     * @return set of supported keys. Guaranteed non-null
+     */
+    ImmutableSet<FieldKey> getSupportedFields();
 
 }

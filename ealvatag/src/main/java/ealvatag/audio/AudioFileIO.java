@@ -266,37 +266,37 @@ public class AudioFileIO {
     private void prepareReadersAndWriters() {
 
         // Tag Readers
-        readers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileReader());
-        readers.put(SupportedFileFormat.FLAC.getFilesuffix(), new FlacFileReader());
-        readers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileReader());
-        readers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileReader());
-        readers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileReader());
-        readers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileReader());
+        readers.put(SupportedFileFormat.OGG.getFileSuffix(), new OggFileReader());
+        readers.put(SupportedFileFormat.FLAC.getFileSuffix(), new FlacFileReader());
+        readers.put(SupportedFileFormat.MP3.getFileSuffix(), new MP3FileReader());
+        readers.put(SupportedFileFormat.MP4.getFileSuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4A.getFileSuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4P.getFileSuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.M4B.getFileSuffix(), new Mp4FileReader());
+        readers.put(SupportedFileFormat.WAV.getFileSuffix(), new WavFileReader());
+        readers.put(SupportedFileFormat.WMA.getFileSuffix(), new AsfFileReader());
+        readers.put(SupportedFileFormat.AIF.getFileSuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.AIFC.getFileSuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.AIFF.getFileSuffix(), new AiffFileReader());
+        readers.put(SupportedFileFormat.DSF.getFileSuffix(), new DsfFileReader());
         final RealFileReader realReader = new RealFileReader();
-        readers.put(SupportedFileFormat.RA.getFilesuffix(), realReader);
-        readers.put(SupportedFileFormat.RM.getFilesuffix(), realReader);
+        readers.put(SupportedFileFormat.RA.getFileSuffix(), realReader);
+        readers.put(SupportedFileFormat.RM.getFileSuffix(), realReader);
 
         // Tag Writers
-        writers.put(SupportedFileFormat.OGG.getFilesuffix(), new OggFileWriter());
-        writers.put(SupportedFileFormat.FLAC.getFilesuffix(), new FlacFileWriter());
-        writers.put(SupportedFileFormat.MP3.getFilesuffix(), new MP3FileWriter());
-        writers.put(SupportedFileFormat.MP4.getFilesuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4A.getFilesuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4P.getFilesuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4B.getFilesuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.WAV.getFilesuffix(), new WavFileWriter());
-        writers.put(SupportedFileFormat.WMA.getFilesuffix(), new AsfFileWriter());
-        writers.put(SupportedFileFormat.AIF.getFilesuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.AIFC.getFilesuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.AIFF.getFilesuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.DSF.getFilesuffix(), new DsfFileWriter());
+        writers.put(SupportedFileFormat.OGG.getFileSuffix(), new OggFileWriter());
+        writers.put(SupportedFileFormat.FLAC.getFileSuffix(), new FlacFileWriter());
+        writers.put(SupportedFileFormat.MP3.getFileSuffix(), new MP3FileWriter());
+        writers.put(SupportedFileFormat.MP4.getFileSuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.M4A.getFileSuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.M4P.getFileSuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.M4B.getFileSuffix(), new Mp4FileWriter());
+        writers.put(SupportedFileFormat.WAV.getFileSuffix(), new WavFileWriter());
+        writers.put(SupportedFileFormat.WMA.getFileSuffix(), new AsfFileWriter());
+        writers.put(SupportedFileFormat.AIF.getFileSuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFC.getFileSuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.AIFF.getFileSuffix(), new AiffFileWriter());
+        writers.put(SupportedFileFormat.DSF.getFileSuffix(), new DsfFileWriter());
 
         // Register modificationHandler
         for (AudioFileWriter curr : writers.values()) {

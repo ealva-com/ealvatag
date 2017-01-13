@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 
 /**
  * Reverb frame.
- *
- *
+ * <p>
+ * <p>
  * Yet another subjective one. You may here adjust echoes of different
  * kinds. Reverb left/right is the delay between every bounce in ms.
  * Reverb bounces left/right is the number of bounces that should be
@@ -56,7 +56,7 @@ import java.nio.ByteBuffer;
  * <tr><td>Premix left to right            </td><td>$xx      </td></tr>
  * <tr><td>Premix right to left            </td><td>$xx      </td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -66,13 +66,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyRVRB datatype.
      */
-    public FrameBodyRVRB()
-    {
+    public FrameBodyRVRB() {
         //        this.setObject("Reverb Left", new Short((short) 0));
         //        this.setObject("Reverb Right", new Short((short) 0));
         //        this.setObject("Reverb Bounces Left", new Byte((byte) 0));
@@ -85,8 +83,7 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
         //        this.setObject("Premix Right To Left", new Byte((byte) 0));
     }
 
-    public FrameBodyRVRB(FrameBodyRVRB body)
-    {
+    public FrameBodyRVRB(FrameBodyRVRB body) {
         super(body);
     }
 
@@ -104,8 +101,16 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param premixLeftToRight
      * @param premixRightToLeft
      */
-    public FrameBodyRVRB(short reverbLeft, short reverbRight, byte reverbBouncesLeft, byte reverbBouncesRight, byte reverbFeedbackLeftToLeft, byte reverbFeedbackLeftToRight, byte reverbFeedbackRightToRight, byte reverbFeedbackRightToLeft, byte premixLeftToRight, byte premixRightToLeft)
-    {
+    public FrameBodyRVRB(short reverbLeft,
+                         short reverbRight,
+                         byte reverbBouncesLeft,
+                         byte reverbBouncesRight,
+                         byte reverbFeedbackLeftToLeft,
+                         byte reverbFeedbackLeftToRight,
+                         byte reverbFeedbackRightToRight,
+                         byte reverbFeedbackRightToLeft,
+                         byte premixLeftToRight,
+                         byte premixRightToLeft) {
         this.setObjectValue(DataTypes.OBJ_REVERB_LEFT, reverbLeft);
         this.setObjectValue(DataTypes.OBJ_REVERB_RIGHT, reverbRight);
         this.setObjectValue(DataTypes.OBJ_REVERB_BOUNCE_LEFT, reverbBouncesLeft);
@@ -123,10 +128,10 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyRVRB(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyRVRB(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -135,8 +140,7 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_REVERB;
     }
 
@@ -144,8 +148,7 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      *
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new NumberFixedLength(DataTypes.OBJ_REVERB_LEFT, this, 2));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_REVERB_RIGHT, this, 2));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_REVERB_BOUNCE_LEFT, this, 1));

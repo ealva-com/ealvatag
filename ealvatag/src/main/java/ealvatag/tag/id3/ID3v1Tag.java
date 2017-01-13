@@ -22,6 +22,8 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -45,7 +47,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -59,16 +60,18 @@ import java.util.regex.Matcher;
 public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v1Tag.class);
 
-    static EnumMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field = new EnumMap<FieldKey, ID3v1FieldKey>(FieldKey.class);
+    private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
 
     static {
-        tagFieldToID3v1Field.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST);
-        tagFieldToID3v1Field.put(FieldKey.ALBUM, ID3v1FieldKey.ALBUM);
-        tagFieldToID3v1Field.put(FieldKey.TITLE, ID3v1FieldKey.TITLE);
-        tagFieldToID3v1Field.put(FieldKey.TRACK, ID3v1FieldKey.TRACK);
-        tagFieldToID3v1Field.put(FieldKey.YEAR, ID3v1FieldKey.YEAR);
-        tagFieldToID3v1Field.put(FieldKey.GENRE, ID3v1FieldKey.GENRE);
-        tagFieldToID3v1Field.put(FieldKey.COMMENT, ID3v1FieldKey.COMMENT);
+        final ImmutableMap.Builder<FieldKey, ID3v1FieldKey> builder = ImmutableMap.builder();
+        builder.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST)
+               .put(FieldKey.ALBUM, ID3v1FieldKey.ALBUM)
+               .put(FieldKey.TITLE, ID3v1FieldKey.TITLE)
+               .put(FieldKey.TRACK, ID3v1FieldKey.TRACK)
+               .put(FieldKey.YEAR, ID3v1FieldKey.YEAR)
+               .put(FieldKey.GENRE, ID3v1FieldKey.GENRE)
+               .put(FieldKey.COMMENT, ID3v1FieldKey.COMMENT);
+        tagFieldToID3v1Field = builder.build();
     }
 
     //For writing output
@@ -181,6 +184,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @param file
      * @param loggingFilename
+     *
      * @throws TagNotFoundException
      * @throws IOException
      */
@@ -201,6 +205,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Creates a new ID3v1 datatype.
      *
      * @param file
+     *
      * @throws TagNotFoundException
      * @throws IOException
      * @deprecated use {@link #ID3v1Tag(RandomAccessFile, String)} instead
@@ -217,7 +222,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Maps the generic key to the ogg key and return the list of values for this field as strings
      *
      * @param genericKey
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
@@ -329,6 +336,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Set Comment
      *
      * @param comment
+     *
      * @throws IllegalArgumentException if comment null
      */
     public void setComment(String comment) {
@@ -361,7 +369,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * Sets the genreID,
-     *
+     * <p>
      * <p>ID3v1 only supports genres defined in a predefined list
      * so if unable to find value in list set 255, which seems to be the value
      * winamp uses for undefined.
@@ -397,7 +405,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * Get Genre field
-     *
+     * <p>
      * <p>Only a single genre is available in ID3v1
      *
      * @return
@@ -434,7 +442,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * Get title field
-     *
+     * <p>
      * <p>Only a single title is available in ID3v1
      *
      * @return
@@ -468,7 +476,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * Get year field
-     *
+     * <p>
      * <p>Only a single year is available in ID3v1
      *
      * @return
@@ -619,6 +627,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * is the specified one.<br>
      *
      * @param genericKey The generic field key
+     *
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
     public List<TagField> getFields(FieldKey genericKey) {
@@ -651,6 +660,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Retrieve the first value that exists for this key id
      *
      * @param genericKey
+     *
      * @return
      */
     public String getFirst(String genericKey) {
@@ -667,6 +677,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Retrieve the first value that exists for this generic key
      *
      * @param genericKey
+     *
      * @return
      */
     public String getFirst(FieldKey genericKey) {
@@ -700,6 +711,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * @param id
      * @param n
      * @param m
+     *
      * @return
      */
     public String getSubValue(FieldKey id, int n, int m) {
@@ -752,6 +764,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * @param obj
+     *
      * @return true if this and obj are equivalent
      */
     public boolean equals(Object obj) {
@@ -787,6 +800,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     /**
      * @param byteBuffer
+     *
      * @throws TagNotFoundException
      */
     public void read(ByteBuffer byteBuffer) throws TagNotFoundException {
@@ -847,6 +861,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      * Write this tag to the file, replacing any tag previously existing
      *
      * @param file
+     *
      * @throws IOException
      */
     public void write(RandomAccessFile file) throws IOException {
@@ -947,5 +962,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
 
     public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
         throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tagFieldToID3v1Field.keySet();
     }
 }

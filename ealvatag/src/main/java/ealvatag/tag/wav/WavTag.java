@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.wav;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
@@ -346,6 +347,10 @@ public class WavTag implements Tag, Id3SupportingTag {
         return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
     }
 
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return getActiveTag().getSupportedFields();
+    }
+
     public List<Artwork> getArtworkList() {
         return getActiveTag().getArtworkList();
     }
@@ -418,7 +423,7 @@ public class WavTag implements Tag, Id3SupportingTag {
     public void syncToId3FromInfoIfEmpty() {
 
         try {
-            for (FieldKey fieldKey : WavInfoTag.getSupportedKeys()) {
+            for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
                 if (id3Tag.getFirst(fieldKey).isEmpty()) {
                     String first = infoTag.getFirst(fieldKey);
                     if (!first.isEmpty()) {
@@ -437,7 +442,7 @@ public class WavTag implements Tag, Id3SupportingTag {
     public void syncToInfoFromId3IfEmpty() {
 
         try {
-            for (FieldKey fieldKey : WavInfoTag.getSupportedKeys()) {
+            for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
                 if (infoTag.getFirst(fieldKey).isEmpty()) {
                     if (!id3Tag.getFirst(fieldKey).isEmpty()) {
                         infoTag.setField(fieldKey, addNullTerminatorIfNone(id3Tag.getFirst(fieldKey)));
@@ -455,7 +460,7 @@ public class WavTag implements Tag, Id3SupportingTag {
      */
     public void syncToId3FromInfoOverwrite() {
         try {
-            for (FieldKey fieldKey : WavInfoTag.getSupportedKeys()) {
+            for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
                 if (!infoTag.getFirst(fieldKey).isEmpty()) {
                     id3Tag.setField(fieldKey, stripNullTerminator(infoTag.getFirst(fieldKey)));
                 } else {
@@ -473,7 +478,7 @@ public class WavTag implements Tag, Id3SupportingTag {
     public void syncToInfoFromId3Overwrite() {
 
         try {
-            for (FieldKey fieldKey : WavInfoTag.getSupportedKeys()) {
+            for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
                 if (!id3Tag.getFirst(fieldKey).isEmpty()) {
                     infoTag.setField(fieldKey, addNullTerminatorIfNone(id3Tag.getFirst(fieldKey)));
                 } else {

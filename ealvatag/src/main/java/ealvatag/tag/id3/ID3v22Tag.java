@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.collect.ImmutableSet;
 import ealvatag.FileConstants;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
@@ -617,6 +618,10 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         } else {
             return super.createField(genericKey, values);
         }
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return ID3v22Frames.getInstanceOf().getSupportedFields();
     }
 
     /**

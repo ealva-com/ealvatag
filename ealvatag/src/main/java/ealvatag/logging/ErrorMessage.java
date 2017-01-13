@@ -120,9 +120,10 @@ public enum ErrorMessage
     INVALID_FIELD_FOR_ID3V1TAG("Invalid field {0} for ID3v1 tag"),
     NO_AUDIO_HEADER_FOUND("No audio header found within {0}"),
     NOT_STANDARD_MP$_GENRE("This is not a standard genre value, use custom genre field instead"),
-    FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}"),
-    ;
+    FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}");
 
+    public static final String CANNOT_BE_NULL = "%s cannot be null";
+    public static final String AT_LEAST_ONE_REQUIRED = "At least one %s required";
 
     String msg;
 
@@ -140,5 +141,6 @@ public enum ErrorMessage
     {
         return MessageFormat.format(getMsg(), args);
     }
+
 
 }

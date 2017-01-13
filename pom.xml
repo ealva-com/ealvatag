@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -25,12 +27,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <java.version>1.7</java.version>
-
         <!-- Dependencies -->
         <animal.sniffer.version>1.10</animal.sniffer.version>
         <jmh.version>1.4.1</jmh.version>
         <okio.version>1.11.0</okio.version>
-
+        <guava.version>20.0</guava.version>
         <!-- Test Dependencies -->
         <junit.version>4.11</junit.version>
     </properties>
@@ -81,6 +82,12 @@
                 <version>${okio.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            
         </dependencies>
 
     </dependencyManagement>
@@ -91,7 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.6.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>${java.version}</source>

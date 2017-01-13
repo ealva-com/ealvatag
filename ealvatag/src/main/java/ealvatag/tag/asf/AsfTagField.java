@@ -135,8 +135,7 @@ public class AsfTagField implements TagField, Cloneable {
      */
     public boolean isCommon() {
         // HashSet is safe against null comparison
-        return AsfTag.COMMON_FIELDS.contains(AsfFieldKey
-                .getAsfFieldKey(getId()));
+        return AsfTag.COMMON_FIELDS.contains(AsfFieldKey.getAsfFieldKey(getId()));
     }
 
     /**
