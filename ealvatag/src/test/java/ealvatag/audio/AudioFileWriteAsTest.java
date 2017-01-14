@@ -3,23 +3,24 @@ package ealvatag.audio;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.FieldKey;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Able to write language ensures writes it as iso code for mp3s
  */
-public class AudioFileWriteAsTest extends AbstractTestCase {
+public class AudioFileWriteAsTest {
 
-    public static final String EXPECTED_EXTENSION = ".mp3";
-    public static final String LANGUAGE = "English";
+    private static final String EXPECTED_EXTENSION = ".mp3";
+    private static final String LANGUAGE = "English";
     private static final String DESTINATION_FILE_NAME = "writeastest";
     private AudioFile af;
     private File sourceFile;
 
-    @Override
-    public void setUp() {
-        super.setUp();
+    @Before public void setUp() throws Exception {
         File orig = new File("testdata", "01.mp3");
         try {
             sourceFile = AbstractTestCase.copyAudioToTmp(orig.getName());
@@ -29,8 +30,7 @@ public class AudioFileWriteAsTest extends AbstractTestCase {
         }
     }
 
-    public void testWriteAs() throws Exception
-    {
+    @Test public void testWriteAs() throws Exception {
         af.getTagOrCreateAndSetDefault().setField(FieldKey.LANGUAGE, LANGUAGE);
         af.commit();
 
@@ -38,18 +38,13 @@ public class AudioFileWriteAsTest extends AbstractTestCase {
         File destinationNoExtension = new File(parent, DESTINATION_FILE_NAME);
         AudioFileIO.writeAs(af, destinationNoExtension.getPath());
 
-        assertEquals(destinationNoExtension + EXPECTED_EXTENSION, af.getFile().getPath());
-        assertEquals(LANGUAGE, af.getTag().getFirst(FieldKey.LANGUAGE));
+        Assert.assertEquals(destinationNoExtension + EXPECTED_EXTENSION, af.getFile().getPath());
+        Assert.assertEquals(LANGUAGE, af.getTag().getFirst(FieldKey.LANGUAGE));
     }
 
-    public void testWriteAsWithNull() throws Exception
-    {
-        try {
-            AudioFileIO.writeAs(af, null);
-        } catch (CannotWriteException e) {
-            // expected
-            return;
-        }
-        fail("Didn't get expected exception " + CannotWriteException.class);
+    @Test(expected = CannotWriteException.class)
+    public void testWriteAsWithNull() throws Exception {
+        //noinspection ConstantConditions
+        AudioFileIO.writeAs(af, null);
     }
 }

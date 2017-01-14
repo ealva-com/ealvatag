@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>
@@ -6,17 +6,15 @@
  * <p>
  * MusicTag Copyright (C)2003,2004
  * <p>
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- * or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
  * <p>
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
  * <p>
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
  * <p>
  * Description:
  */
@@ -36,14 +34,12 @@ import ealvatag.tag.reference.GenreTypes;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.EqualsUtil;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeSet;
 
 /**
  * Represents a number thats acts as a key into an enumeration of values
  */
-public class NumberHashMap extends NumberFixedLength implements HashMapInterface<Integer, String> {
+public class NumberHashMap extends NumberFixedLength {
 
     /**
      * key to value map
@@ -67,46 +63,57 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
      * @param identifier
      * @param frameBody
      * @param size
+     *
      * @throws IllegalArgumentException
      */
     public NumberHashMap(String identifier, AbstractTagFrameBody frameBody, int size) {
         super(identifier, frameBody, size);
 
-        if (identifier.equals(DataTypes.OBJ_GENRE)) {
-            valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
+        switch (identifier) {
+            case DataTypes.OBJ_GENRE:
+                valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
 
-            //genres can be an id or literal value
-            hasEmptyValue = true;
-        } else if (identifier.equals(DataTypes.OBJ_TEXT_ENCODING)) {
-            valueToKey = TextEncoding.getInstanceOf().getValueToIdMap();
-            keyToValue = TextEncoding.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_INTERPOLATION_METHOD)) {
-            valueToKey = InterpolationTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = InterpolationTypes.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_PICTURE_TYPE)) {
-            valueToKey = PictureTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = PictureTypes.getInstanceOf().getIdToValueMap();
+                //genres can be an id or literal value
+                hasEmptyValue = true;
+                break;
+            case DataTypes.OBJ_TEXT_ENCODING:
+                valueToKey = TextEncoding.getInstanceOf().getValueToIdMap();
+                keyToValue = TextEncoding.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_INTERPOLATION_METHOD:
+                valueToKey = InterpolationTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = InterpolationTypes.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_PICTURE_TYPE:
+                valueToKey = PictureTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = PictureTypes.getInstanceOf().getIdToValueMap();
 
-            //Issue #224 Values should map, but have examples where they dont, this is a workaround
-            hasEmptyValue = true;
-        } else if (identifier.equals(DataTypes.OBJ_TYPE_OF_EVENT)) {
-            valueToKey = EventTimingTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = EventTimingTypes.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_TIME_STAMP_FORMAT)) {
-            valueToKey = EventTimingTimestampTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = EventTimingTimestampTypes.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_TYPE_OF_CHANNEL)) {
-            valueToKey = ChannelTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = ChannelTypes.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_RECIEVED_AS)) {
-            valueToKey = ReceivedAsTypes.getInstanceOf().getValueToIdMap();
-            keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
-        } else if (identifier.equals(DataTypes.OBJ_CONTENT_TYPE)) {
-            valueToKey = SynchronisedLyricsContentType.getInstanceOf().getValueToIdMap();
-            keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
-        } else {
-            throw new IllegalArgumentException("Hashmap identifier not defined in this class: " + identifier);
+                //Issue #224 Values should map, but have examples where they dont, this is a workaround
+                hasEmptyValue = true;
+                break;
+            case DataTypes.OBJ_TYPE_OF_EVENT:
+                valueToKey = EventTimingTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = EventTimingTypes.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_TIME_STAMP_FORMAT:
+                valueToKey = EventTimingTimestampTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = EventTimingTimestampTypes.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_TYPE_OF_CHANNEL:
+                valueToKey = ChannelTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = ChannelTypes.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_RECIEVED_AS:
+                valueToKey = ReceivedAsTypes.getInstanceOf().getValueToIdMap();
+                keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
+                break;
+            case DataTypes.OBJ_CONTENT_TYPE:
+                valueToKey = SynchronisedLyricsContentType.getInstanceOf().getValueToIdMap();
+                keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
+                break;
+            default:
+                throw new IllegalArgumentException("Hashmap identifier not defined in this class: " + identifier);
         }
     }
 
@@ -120,39 +127,18 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         this.valueToKey = copyObject.valueToKey;
     }
 
-    /**
-     * @return the key to value map
-     */
-    public Map<Integer, String> getKeyToValue() {
-        return keyToValue;
-    }
-
-    /**
-     * @return the value to key map
-     */
-    public Map<String, Integer> getValueToKey() {
-        return valueToKey;
-    }
-
-    /**
-     * @param value
-     */
     public void setValue(Object value) {
         if (value instanceof Byte) {
-            this.value = (long)((Byte)value).byteValue();
+            this.value = (long)(Byte)value;
         } else if (value instanceof Short) {
-            this.value = (long)((Short)value).shortValue();
+            this.value = (long)(Short)value;
         } else if (value instanceof Integer) {
-            this.value = (long)((Integer)value).intValue();
+            this.value = (long)(Integer)value;
         } else {
             this.value = value;
         }
     }
 
-    /**
-     * @param obj
-     * @return
-     */
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
@@ -172,32 +158,15 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
     }
 
     /**
-     * @return
-     */
-    public Iterator<String> iterator() {
-        if (keyToValue == null) {
-            return null;
-        } else {
-            // put them in a treeset first to sort them
-            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
-
-            if (hasEmptyValue) {
-                treeSet.add("");
-            }
-
-            return treeSet.iterator();
-        }
-    }
-
-    /**
      * Read the key from the buffer.
      *
-     * @param arr
+     * @param array
      * @param offset
+     *
      * @throws InvalidDataTypeException if emptyValues are not allowed and the eky was invalid.
      */
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        super.readByteArray(arr, offset);
+    public void readByteArray(byte[] array, int offset) throws InvalidDataTypeException {
+        super.readByteArray(array, offset);
 
         //Mismatch:Superclass uses Long, but maps expect Integer
         Integer intValue = ((Long)value).intValue();
@@ -210,9 +179,6 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
         }
     }
 
-    /**
-     * @return
-     */
     public String toString() {
         if (value == null) {
             return "";

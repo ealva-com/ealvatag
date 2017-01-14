@@ -140,7 +140,11 @@ public class ID3v23Frames extends ID3Frames {
 
     public static ID3v23Frames getInstanceOf() {
         if (id3v23Frames == null) {
-            id3v23Frames = new ID3v23Frames();
+            synchronized (ID3v23Frames.class) {
+                if (id3v23Frames == null) {
+                    id3v23Frames = new ID3v23Frames();
+                }
+            }
         }
         return id3v23Frames;
     }
@@ -546,11 +550,6 @@ public class ID3v23Frames extends ID3Frames {
      */
     public FieldKey getGenericKeyFromId3(ID3v23FieldKey fieldKey) {
         return id3ToTagField.get(fieldKey);
-    }
-
-    boolean supportsField(final FieldKey fieldKey) throws IllegalArgumentException {
-        checkArgNotNull(fieldKey, "FieldKey cannot be null");
-        return tagFieldToId3.containsKey(fieldKey);
     }
 
     ImmutableSet<FieldKey> getSupportedFields() {

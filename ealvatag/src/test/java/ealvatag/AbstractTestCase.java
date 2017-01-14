@@ -15,11 +15,16 @@
  */
 package ealvatag;
 
-import junit.framework.TestCase;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagOptionSingleton;
+import junit.framework.TestCase;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.regex.Pattern;
 
@@ -29,10 +34,11 @@ import java.util.regex.Pattern;
 public abstract class AbstractTestCase extends TestCase {
 
     @Override
-    public void setUp()
-    {
+    public void setUp() throws Exception {
+        super.setUp();
         TagOptionSingleton.getInstance().setToDefault();
     }
+
     /**
      * Stores a {@link Pattern} for each {@link ErrorMessage}.<br>
      * Place holders like &quot;{&lt;number&gt;}&quot; will be replaced with
@@ -41,11 +47,10 @@ public abstract class AbstractTestCase extends TestCase {
     private final static EnumMap<ErrorMessage, Pattern> ERROR_PATTERNS;
 
     static {
-        ERROR_PATTERNS = new EnumMap<ErrorMessage, Pattern>(ErrorMessage.class);
+        ERROR_PATTERNS = new EnumMap<>(ErrorMessage.class);
         for (ErrorMessage curr : ErrorMessage.values()) {
             final String regex = curr.getMsg().replaceAll("\\{\\d+\\}", ".*");
-            ERROR_PATTERNS.put(curr, Pattern.compile(regex,
-                    Pattern.CASE_INSENSITIVE | Pattern.DOTALL));
+            ERROR_PATTERNS.put(curr, Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL));
         }
     }
 
@@ -77,6 +82,7 @@ public abstract class AbstractTestCase extends TestCase {
 
             // cleanupif files are not the same length
             if ((fromFile1.length() + fromFile2.length()) != toFile.length()) {
+                //noinspection ResultOfMethodCallIgnored
                 toFile.delete();
 
                 return false;
@@ -92,12 +98,10 @@ public abstract class AbstractTestCase extends TestCase {
     /**
      * Copy a File
      *
-     * @param fromFile
-     *            The existing File
-     * @param toFile
-     *            The new File
-     * @return <code>true</code> if and only if the renaming succeeded;
-     *         <code>false</code> otherwise
+     * @param fromFile The existing File
+     * @param toFile   The new File
+     *
+     * @return <code>true</code> if and only if the renaming succeeded; <code>false</code> otherwise
      */
     public static boolean copy(File fromFile, File toFile) {
         try {
@@ -116,6 +120,7 @@ public abstract class AbstractTestCase extends TestCase {
 
             // cleanupif files are not the same length
             if (fromFile.length() != toFile.length()) {
+                //noinspection ResultOfMethodCallIgnored
                 toFile.delete();
 
                 return false;
@@ -132,13 +137,15 @@ public abstract class AbstractTestCase extends TestCase {
     /**
      * Copy audiofile to processing dir ready for use in test
      *
-     * @param fileName
-     * @return
+     * @param fileName name of the file to copy
+     *
+     * @return the new file to use
      */
     public static File copyAudioToTmp(String fileName) {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
         if (!outputFile.getParentFile().exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outputFile.getParentFile().mkdirs();
         }
         boolean result = copy(inputFile, outputFile);
@@ -151,13 +158,15 @@ public abstract class AbstractTestCase extends TestCase {
      * same file in multiple tests because with junit multithreading can have
      * problems otherwise
      *
-     * @param fileName
-     * @return
+     * @param fileName file name to copy
+     *
+     * @return new file to use
      */
     public static File copyAudioToTmp(String fileName, File newFileName) {
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", newFileName.getName());
         if (!outputFile.getParentFile().exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outputFile.getParentFile().mkdirs();
         }
         boolean result = copy(inputFile, outputFile);
@@ -168,15 +177,17 @@ public abstract class AbstractTestCase extends TestCase {
     /**
      * Prepends file with tag file in order to create an mp3 with a valid id3
      *
-     * @param tagfile
-     * @param fileName
-     * @return
+     * @param tagFile   tag to prepend to the file
+     * @param fileName the filename to copy
+     *
+     * @return new file to use
      */
-    public static File copyAudioToTmp(String tagfile, String fileName) {
-        File inputTagFile = new File("testtagdata", tagfile);
+    public static File copyAudioToTmp(String tagFile, String fileName) {
+        File inputTagFile = new File("testtagdata", tagFile);
         File inputFile = new File("testdata", fileName);
         File outputFile = new File("testdatatmp", fileName);
         if (!outputFile.getParentFile().exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outputFile.getParentFile().mkdirs();
         }
         boolean result = append(inputTagFile, inputFile, outputFile);
@@ -189,14 +200,10 @@ public abstract class AbstractTestCase extends TestCase {
      * constructed with the <code>expected</code> message string.<br>
      * <br>
      *
-     * @param expected
-     *            the expected message source.
-     * @param actual
-     *            the message to compare against.
+     * @param expected the expected message source.
+     * @param actual   the message to compare against.
      */
-    public void assertErrorMessage(final ErrorMessage expected,
-            final String actual) {
-        assertTrue("Message not correctly constructed.", ERROR_PATTERNS.get(
-                expected).matcher(actual).matches());
+    protected static void assertErrorMessage(final ErrorMessage expected, final String actual) {
+        assertTrue("Message not correctly constructed.", ERROR_PATTERNS.get(expected).matcher(actual).matches());
     }
 }

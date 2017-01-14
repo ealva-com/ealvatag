@@ -35,9 +35,6 @@ import java.util.LinkedList;
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
 public abstract class AbstractDataType {
-    protected static final String TYPE_ELEMENT = "element";
-
-    //Logger
     public static Logger LOG = LoggerFactory.getLogger(AbstractDataType.class);
 
     /**
@@ -92,7 +89,7 @@ public abstract class AbstractDataType {
      * <p>
      * TODO:It seems to be missing some of the more complex value types.
      *
-     * @param copyObject
+     * @param copyObject clone type assistance
      */
     public AbstractDataType(AbstractDataType copyObject) {
         // no copy constructor in super class
@@ -152,8 +149,6 @@ public abstract class AbstractDataType {
 
     /**
      * Set the framebody that this datatype is associated with
-     *
-     * @param frameBody
      */
     public void setBody(AbstractTagFrameBody frameBody) {
         this.frameBody = frameBody;
@@ -180,8 +175,6 @@ public abstract class AbstractDataType {
     /**
      * Set the value held by this datatype, this is used typically used when the
      * user wants to modify the value in an existing frame.
-     *
-     * @param value
      */
     public void setValue(Object value) {
         this.value = value;
@@ -201,11 +194,12 @@ public abstract class AbstractDataType {
      * Used for reading Strings, this class should be overridden
      * for non String Objects
      *
-     * @param arr
-     * @throws ealvatag.tag.InvalidDataTypeException
+     * @param array byte array to read from
+     *
+     * @throws InvalidDataTypeException of the data cannot be parsed
      */
-    final public void readByteArray(byte[] arr) throws InvalidDataTypeException {
-        readByteArray(arr, 0);
+    final public void readByteArray(byte[] array) throws InvalidDataTypeException {
+        readByteArray(array, 0);
     }
 
     /**
@@ -216,10 +210,6 @@ public abstract class AbstractDataType {
      */
     abstract public int getSize();
 
-    /**
-     * @param obj
-     * @return whether this and obj are deemed equivalent
-     */
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -291,13 +281,14 @@ public abstract class AbstractDataType {
     /**
      * This is the starting point for reading bytes from the file into the ID3 datatype
      * starting at offset.
-     * This class must be overridden
      *
-     * @param arr
-     * @param offset
-     * @throws ealvatag.tag.InvalidDataTypeException
+     * @param array  array to read from
+     * @param offset offset to start from
+     *
+     * @throws InvalidDataTypeException if can't be parsed
+     * @throws IllegalArgumentException if array is null or offset is not inside the bounds of the array
      */
-    public abstract void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException;
+    public abstract void readByteArray(byte[] array, int offset) throws InvalidDataTypeException, IllegalArgumentException;
 
 
     /**

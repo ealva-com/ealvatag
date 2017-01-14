@@ -1,10 +1,15 @@
 package ealvatag.audio.aiff;
 
-import junit.framework.TestCase;
-import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.generic.GenericAudioHeader;
+import org.junit.Assert;
+import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
@@ -13,48 +18,52 @@ import java.nio.charset.StandardCharsets;
  *
  * @author <a href="mailto:hs@tagtraum.com">Hendrik Schreiber</a>
  */
-public class AiffInfoReaderTest extends TestCase {
+public class AiffInfoReaderTest {
 
-    public void testWithSomeLocalChunks() throws IOException, CannotReadException {
+    @Test public void testWithSomeLocalChunks() throws Exception {
 
         final String author = "AUTH4567";
         final String copyright = "(c) 4567";
         final String annotation1 = "ANNO1_67890123456789";
         final String annotation2 = "ANNO2_67890123456789";
         final String name = "NAME456789";
-        final PseudoChunk[] pseudoChunks = {new PseudoChunk("NAME", name),
+        final PseudoChunk[] pseudoChunks = {
+                new PseudoChunk("NAME", name),
                 new PseudoChunk("ANNO", annotation1),
                 new PseudoChunk("ANNO", annotation2),
                 new PseudoChunk("(c) ", copyright),
-                new PseudoChunk("AUTH", author)};
+                new PseudoChunk("AUTH", author)
+        };
         final File aiff = createAIFF("FORM", "AIFF", pseudoChunks);
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try(FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
+        try (FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
             final GenericAudioHeader audioHeader = aiffInfoReader.read(fc, aiff.getAbsolutePath());
-            assertTrue(audioHeader instanceof AiffAudioHeader);
-            final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
-            assertEquals(author, aiffAudioHeader.getAuthor());
-            assertEquals(name, aiffAudioHeader.getName());
-            assertEquals(copyright, aiffAudioHeader.getCopyright());
-            assertEquals(annotation1, aiffAudioHeader.getAnnotations().get(0));
-            assertEquals(annotation2, aiffAudioHeader.getAnnotations().get(1));
+            Assert.assertTrue(audioHeader instanceof AiffAudioHeader);
+            final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader)audioHeader;
+            Assert.assertEquals(author, aiffAudioHeader.getAuthor());
+            Assert.assertEquals(name, aiffAudioHeader.getName());
+            Assert.assertEquals(copyright, aiffAudioHeader.getCopyright());
+            Assert.assertEquals(annotation1, aiffAudioHeader.getAnnotations().get(0));
+            Assert.assertEquals(annotation2, aiffAudioHeader.getAnnotations().get(1));
         }
+        //noinspection ResultOfMethodCallIgnored
         aiff.delete();
     }
 
-    public void testWithUnknownChunk() throws IOException, CannotReadException {
+    @Test public void testWithUnknownChunk() throws Exception {
 
         final String author = "AUTH4567";
         final File aiff = createAIFF("FORM", "AIFF", new PseudoChunk("XYZ0", "SOME_STUFF"), new PseudoChunk("AUTH", author));
 
         final AiffInfoReader aiffInfoReader = new AiffInfoReader();
-        try(FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
+        try (FileChannel fc = new RandomAccessFile(aiff, "rw").getChannel()) {
             final GenericAudioHeader audioHeader = aiffInfoReader.read(fc, aiff.getAbsolutePath());
-            assertTrue(audioHeader instanceof AiffAudioHeader);
-            final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader) audioHeader;
-            assertEquals(author, aiffAudioHeader.getAuthor());
+            Assert.assertTrue(audioHeader instanceof AiffAudioHeader);
+            final AiffAudioHeader aiffAudioHeader = (AiffAudioHeader)audioHeader;
+            Assert.assertEquals(author, aiffAudioHeader.getAuthor());
         }
+        //noinspection ResultOfMethodCallIgnored
         aiff.delete();
     }
 
@@ -63,12 +72,12 @@ public class AiffInfoReaderTest extends TestCase {
         private String chunkType;
         private String text;
 
-        public PseudoChunk(final String chunkType, final String text) {
+        PseudoChunk(final String chunkType, final String text) {
             this.chunkType = chunkType;
             this.text = text;
         }
 
-        public String getChunkType() {
+        String getChunkType() {
             return chunkType;
         }
 
@@ -77,6 +86,7 @@ public class AiffInfoReaderTest extends TestCase {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static File createAIFF(final String form, final String formType, final PseudoChunk... chunks) throws IOException {
         final File tempFile = File.createTempFile(AiffFileHeaderTest.class.getSimpleName(), ".aif");
         tempFile.deleteOnExit();

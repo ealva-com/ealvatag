@@ -27,9 +27,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.reference.Languages;
 
 import java.nio.charset.Charset;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeSet;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
@@ -38,8 +36,7 @@ import static java.nio.charset.StandardCharsets.ISO_8859_1;
  * Represents a String thats acts as a key into an enumeration of values. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
-public class StringHashMap extends StringFixedLength implements HashMapInterface<String, String>
-{
+public class StringHashMap extends StringFixedLength {
 
     /**
      *
@@ -86,22 +83,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         this.hasEmptyValue = copyObject.hasEmptyValue;
         this.keyToValue = copyObject.keyToValue;
         this.valueToKey = copyObject.valueToKey;
-    }
-
-    /**
-     * @return
-     */
-    public Map<String, String> getKeyToValue()
-    {
-        return keyToValue;
-    }
-
-    /**
-     * @return
-     */
-    public Map<String, String> getValueToKey()
-    {
-        return valueToKey;
     }
 
     /**
@@ -176,29 +157,6 @@ public class StringHashMap extends StringFixedLength implements HashMapInterface
         }
 
         return super.equals(obj);
-    }
-
-    /**
-     * @return
-     */
-    public Iterator<String> iterator()
-    {
-        if (keyToValue == null)
-        {
-            return null;
-        }
-        else
-        {
-            // put them in a treeset first to sort them
-            TreeSet<String> treeSet = new TreeSet<String>(keyToValue.values());
-
-            if (hasEmptyValue)
-            {
-                treeSet.add("");
-            }
-
-            return treeSet.iterator();
-        }
     }
 
     /**

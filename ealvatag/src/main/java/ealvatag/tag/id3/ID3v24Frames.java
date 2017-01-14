@@ -542,11 +542,6 @@ public class ID3v24Frames extends ID3Frames {
         return id3ToTagField.get(fieldKey);
     }
 
-    boolean supportsField(final FieldKey fieldKey) {
-        checkArgNotNull(fieldKey, "FieldKey cannot be null");
-        return tagFieldToId3.containsKey(fieldKey);
-    }
-
     ImmutableSet<FieldKey> getSupportedFields() {
         return tagFieldToId3.keySet();
     }

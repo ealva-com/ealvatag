@@ -1,6 +1,5 @@
 package ealvatag.audio;
 
-import junit.framework.TestCase;
 import ealvatag.audio.real.RealTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
@@ -10,22 +9,22 @@ import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.mp4.Mp4Tag;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 import ealvatag.tag.wav.WavTag;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static ealvatag.audio.SupportedFileFormat.*;
 
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ealvatag.audio.SupportedFileFormat.*;
-
 /**
  * Test for {@link SupportedFileFormat} as it adds functionality
- *
+ * <p>
  * Created by eric on 1/7/17.
  */
-public class SupportedFileFormatTest extends TestCase
-{
-    public void testFromExtension() throws Exception
-    {
+public class SupportedFileFormatTest {
+    @Test public void testFromExtension() throws Exception {
         Map<String, SupportedFileFormat> expectedMap = new HashMap<>();
         expectedMap.put("ogg", OGG);
         expectedMap.put("mp3", MP3);
@@ -58,14 +57,12 @@ public class SupportedFileFormatTest extends TestCase
         expectedMap.put("AIFC", AIFC);
         expectedMap.put("DSF", DSF);
         expectedMap.put("", UNKNOWN);
-        for (String extension : expectedMap.keySet())
-        {
-            assertSame(expectedMap.get(extension), SupportedFileFormat.fromExtension(extension));
+        for (String extension : expectedMap.keySet()) {
+            Assert.assertSame(expectedMap.get(extension), SupportedFileFormat.fromExtension(extension));
         }
     }
 
-    public void testCreateDefaultTag()
-    {
+    @Test public void testCreateDefaultTag() {
         EnumSet<SupportedFileFormat> formatSet = EnumSet.allOf(SupportedFileFormat.class); // ensure we test all
         defaultTagIsInstanceOf(formatSet, OGG, VorbisCommentTag.class);
         defaultTagIsInstanceOf(formatSet, MP3, TagOptionSingleton.createDefaultID3Tag().getClass());
@@ -84,24 +81,19 @@ public class SupportedFileFormatTest extends TestCase
         defaultTagIsInstanceOf(formatSet, DSF, TagOptionSingleton.createDefaultID3Tag().getClass());
 
         formatSet.remove(UNKNOWN);
-        try
-        {
-            UNKNOWN.createDefaultTag();
-            fail("UNKNOWN format can't create a tag");
-        }
-        catch (RuntimeException ignored)
-        {
-            // expected
-        }
-
-        assertTrue("Did not test all formats. " + formatSet, formatSet.isEmpty());
+        Assert.assertTrue("Did not test all formats. " + formatSet, formatSet.isEmpty());
     }
 
-    private void defaultTagIsInstanceOf(EnumSet<SupportedFileFormat> formatSet, SupportedFileFormat format, Class<?> tagClass)
-    {
+    @Test(expected = RuntimeException.class)
+    public void unknownCannotCreateDefault() {
+        UNKNOWN.createDefaultTag();
+        Assert.fail("UNKNOWN format can't create a tag");
+    }
+
+    private void defaultTagIsInstanceOf(EnumSet<SupportedFileFormat> formatSet, SupportedFileFormat format, Class<?> tagClass) {
         formatSet.remove(format);
         final Tag defaultTag = format.createDefaultTag();
-        assertTrue("Expected:" + tagClass + " Actual:" + defaultTag.getClass(), tagClass.isInstance(defaultTag));
+        Assert.assertTrue("Expected:" + tagClass + " Actual:" + defaultTag.getClass(), tagClass.isInstance(defaultTag));
     }
 
 }

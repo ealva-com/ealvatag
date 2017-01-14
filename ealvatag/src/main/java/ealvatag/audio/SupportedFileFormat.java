@@ -112,6 +112,9 @@ public enum SupportedFileFormat {
             return Dsf.createDefaultTag();
         }
     },
+    /**
+     * This type is used when the format cannot be determined. Such as via file extension.
+     */
     UNKNOWN("") {
         @Override
         public Tag createDefaultTag() {
