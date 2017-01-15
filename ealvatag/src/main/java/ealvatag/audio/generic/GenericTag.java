@@ -18,6 +18,7 @@
  */
 package ealvatag.audio.generic;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -25,11 +26,15 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
+import ealvatag.utils.Check;
+
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -169,6 +174,7 @@ public abstract class GenericTag extends AbstractTag {
 
     @Override
     public String getValue(final FieldKey genericKey, final int index) throws KeyNotFoundException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             return getItem(genericKey.name(), index);
         } else {
@@ -177,16 +183,22 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public List<TagField> getFields(final FieldKey genericKey) throws KeyNotFoundException {
-        List<TagField> list = fields.get(genericKey.name());
-        if (list == null) {
-            return new ArrayList<>();
+    public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        final List<TagField> tagFields = fields.get(genericKey.name());
+        if (tagFields == null) {
+            return ImmutableList.of();
+        } else {
+            return ImmutableList.copyOf(tagFields);
         }
-        return list;
     }
 
     @Override
-    public List<String> getAll(final FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        if (!getSupportedFields().contains(genericKey)) {
+            throw new UnsupportedFieldException(genericKey.name());
+        }
         return super.getAll(genericKey.name());
     }
 

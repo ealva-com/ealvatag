@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.mp4;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.generic.AbstractTag;
@@ -27,6 +28,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.mp4.field.Mp4DiscNoField;
@@ -38,12 +40,15 @@ import ealvatag.tag.mp4.field.Mp4TagTextField;
 import ealvatag.tag.mp4.field.Mp4TagTextNumberField;
 import ealvatag.tag.mp4.field.Mp4TrackField;
 
+import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.tag.mp4.Mp4FieldKey.DISCNUMBER;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE_CUSTOM;
 import static ealvatag.tag.mp4.Mp4FieldKey.KEY_OLD;
 import static ealvatag.tag.mp4.Mp4FieldKey.TRACK;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -268,19 +273,11 @@ public class Mp4Tag extends AbstractTag {
         return getFields(mp4FieldKey.getFieldName()).size() != 0;
     }
 
-    /**
-     * Maps the generic key to the mp4 key and return the list of values for this field
-     *
-     * @param genericKey
-     */
-    @SuppressWarnings({"JavaDoc"})
-    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-        Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
-        List<TagField> list = getFields(mp4FieldKey.getFieldName());
-        List<TagField> filteredList = new ArrayList<TagField>();
+    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        Mp4FieldKey mp4FieldKey = getMp4FieldKey(genericKey);
+        ImmutableList<TagField> list = getFields(mp4FieldKey.getFieldName());
+        ImmutableList.Builder<TagField> filteredList = ImmutableList.builder();
 
         if (genericKey == FieldKey.KEY) {
             if (list.size() == 0) {
@@ -299,7 +296,7 @@ public class Mp4Tag extends AbstractTag {
                     filteredList.add(next);
                 }
             }
-            return filteredList;
+            return filteredList.build();
         } else if (genericKey == FieldKey.TRACK_TOTAL) {
             for (TagField next : list) {
                 Mp4TrackField trackField = (Mp4TrackField)next;
@@ -307,7 +304,7 @@ public class Mp4Tag extends AbstractTag {
                     filteredList.add(next);
                 }
             }
-            return filteredList;
+            return filteredList.build();
         } else if (genericKey == FieldKey.DISC_NO) {
             for (TagField next : list) {
                 Mp4DiscNoField discNoField = (Mp4DiscNoField)next;
@@ -315,7 +312,7 @@ public class Mp4Tag extends AbstractTag {
                     filteredList.add(next);
                 }
             }
-            return filteredList;
+            return filteredList.build();
         } else if (genericKey == FieldKey.DISC_TOTAL) {
             for (TagField next : list) {
                 Mp4DiscNoField discNoField = (Mp4DiscNoField)next;
@@ -323,10 +320,18 @@ public class Mp4Tag extends AbstractTag {
                     filteredList.add(next);
                 }
             }
-            return filteredList;
+            return filteredList.build();
         } else {
             return list;
         }
+    }
+
+    private Mp4FieldKey getMp4FieldKey(final FieldKey genericKey) throws UnsupportedFieldException {
+        final Mp4FieldKey mp4FieldKey = tagFieldToMp4Field.get(genericKey);
+        if (mp4FieldKey == null) {
+            throw new UnsupportedFieldException(genericKey.name());
+        }
+        return mp4FieldKey;
     }
 
     /**
@@ -357,29 +362,11 @@ public class Mp4Tag extends AbstractTag {
         return values;
     }
 
-    /**
-     * Retrieve the  values that exists for this mp4keyId (this is the internalid actually used)
-     *
-     * @param mp4FieldKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public List<TagField> get(Mp4FieldKey mp4FieldKey) throws KeyNotFoundException {
-        if (mp4FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public List<TagField> get(Mp4FieldKey mp4FieldKey) throws IllegalArgumentException {
+        checkArgNotNull(mp4FieldKey, CANNOT_BE_NULL, "mp4FieldKey");
         return super.getFields(mp4FieldKey.getFieldName());
     }
 
-    /**
-     * Retrieve the indexed value that exists for this generic key
-     *
-     * @param genericKey
-     *
-     * @return
-     */
     public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
         List<TagField> fields = getFields(genericKey);
         if (fields.size() > index) {
@@ -435,12 +422,9 @@ public class Mp4Tag extends AbstractTag {
      *
      * @param genericKey
      */
-    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        String mp4FieldName = tagFieldToMp4Field.get(genericKey).getFieldName();
+    public void deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        String mp4FieldName = getMp4FieldKey(genericKey).getFieldName();
         if (genericKey == FieldKey.KEY) {
             deleteField(Mp4FieldKey.KEY_OLD);
             deleteField(mp4FieldName);
@@ -568,15 +552,8 @@ public class Mp4Tag extends AbstractTag {
      */
     @Override
     public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        String value = values[0];
-
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        String value = checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values");
         //Special handling for these number fields because multiple generic keys map to a single mp4 field
         if (
                 (genericKey == FieldKey.TRACK) ||
@@ -598,7 +575,7 @@ public class Mp4Tag extends AbstractTag {
             } catch (NumberFormatException nfe) {
                 //If not number we want to convert to an expected exception (which is not a RuntimeException)
                 //so can be handled properly by calling program
-                throw new FieldDataInvalidException("Value " + value + " is not a number as required", nfe);
+                throw new FieldDataInvalidException("Value " + value + " is not a number as required");
             }
         } else if (genericKey == FieldKey.GENRE) {
             //Always write as text
@@ -613,7 +590,7 @@ public class Mp4Tag extends AbstractTag {
             }
         }
         //Default for all other fields
-        return createField(tagFieldToMp4Field.get(genericKey), value);
+        return createField(getMp4FieldKey(genericKey), value);
     }
 
     /**

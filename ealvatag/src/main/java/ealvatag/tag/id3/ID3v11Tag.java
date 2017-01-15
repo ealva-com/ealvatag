@@ -23,6 +23,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.collect.ImmutableList;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldKey;
@@ -296,12 +297,12 @@ public class ID3v11Tag extends ID3v1Tag {
         setTrack(track);
     }
 
-    public List<TagField> getTrack() {
-        if (getFirst(FieldKey.TRACK).length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TRACK.name(), getFirst(FieldKey.TRACK));
-            return returnFieldToList(field);
+    public ImmutableList<TagField> getTrack() {
+        final String firstTrack = getFirst(FieldKey.TRACK);
+        if (firstTrack.length() > 0) {
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.TRACK.name(), firstTrack));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -315,7 +316,7 @@ public class ID3v11Tag extends ID3v1Tag {
     }
 
 
-    public List<TagField> getFields(FieldKey genericKey) {
+    public ImmutableList<TagField> getFields(FieldKey genericKey) {
         if (genericKey == FieldKey.TRACK) {
             return getTrack();
         } else {

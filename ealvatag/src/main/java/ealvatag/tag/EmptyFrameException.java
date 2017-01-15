@@ -26,43 +26,13 @@ package ealvatag.tag;
  *
  * @version $Revision$
  */
-public class EmptyFrameException extends InvalidFrameException
-{
-    /**
-     * Creates a new EmptyFrameException datatype.
-     */
-    public EmptyFrameException()
-    {
-    }
-
-    /**
-     * Creates a new EmptyFrameException datatype.
-     *
-     * @param ex the cause.
-     */
-    public EmptyFrameException(Throwable ex)
-    {
-        super(ex);
-    }
-
+public class EmptyFrameException extends InvalidFrameException {
     /**
      * Creates a new EmptyFrameException datatype.
      *
      * @param msg the detail message.
      */
-    public EmptyFrameException(String msg)
-    {
+    public EmptyFrameException(String msg) {
         super(msg);
-    }
-
-    /**
-     * Creates a new EmptyFrameException datatype.
-     *
-     * @param msg the detail message.
-     * @param ex  the cause.
-     */
-    public EmptyFrameException(String msg, Throwable ex)
-    {
-        super(msg, ex);
     }
 }

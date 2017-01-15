@@ -1,40 +1,30 @@
 package ealvatag.audio.asf.tag;
 
-import junit.framework.TestCase;
+import com.google.common.collect.Sets;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
 import ealvatag.tag.asf.AsfTag;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
 
 /**
  * @author Christian Laireiter
- *
  */
-public class AsfKeyMappingTest extends TestCase
-{
+public class AsfKeyMappingTest {
 
     /**
      * This method tests whether each {@link ealvatag.tag.FieldKey} is mapped
      * to an {@link ealvatag.tag.asf.AsfFieldKey}.<br>
      */
-    public void testTagFieldKeyMappingComplete()
-    {
-        Exception exceptionCaught=null;
+    @Test public void testTagFieldKeyMappingComplete() throws Exception {
         Tag tag = new AsfTag();
-        try
-        {
-            for (FieldKey curr : FieldKey.values())
-            {
-                if(curr != FieldKey.ITUNES_GROUPING)
-                {
-                    tag.getFields(curr);
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            exceptionCaught=e;
-        }
-        assertNull(exceptionCaught);
+        final HashSet<FieldKey> fieldKeys = Sets.newHashSet(FieldKey.values());
+        fieldKeys.remove(FieldKey.ITUNES_GROUPING);
+        fieldKeys.removeAll(tag.getSupportedFields());
+        System.out.println(fieldKeys.toString());
+        assertTrue(fieldKeys.isEmpty());
     }
 }

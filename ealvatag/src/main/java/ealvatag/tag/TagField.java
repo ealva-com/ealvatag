@@ -27,15 +27,14 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Rapha�l Slinckx
  */
-public interface TagField
-{
+public interface TagField {
 
     /**
      * This method copies the data of the given field to the current data.<br>
      *
      * @param field The field containing the data to be taken.
      */
-    public void copyContent(TagField field);
+    void copyContent(TagField field);
 
     /**
      * Returns the Id of the represented tag field.<br>
@@ -45,19 +44,19 @@ public interface TagField
      *
      * @return Unique identifier for the fields type. (title, artist...)
      */
-    public String getId();
+    String getId();
 
     /**
      * This method delivers the binary representation of the fields data in
      * order to be directly written to the file.<br>
      *
      * @return Binary data representing the current tag field.<br>
-     * @throws UnsupportedEncodingException Most tag data represents text. In some cases the underlying
-     *                                      implementation will need to convert the text data in java to
-     *                                      a specific charset encoding. In these cases an
-     *                                      {@link UnsupportedEncodingException} may occur.
+     *
+     * @throws UnsupportedEncodingException Most tag data represents text. In some cases the underlying implementation will need to convert
+     *                                      the text data in java to a specific charset encoding. In these cases an {@link
+     *                                      UnsupportedEncodingException} may occur.
      */
-    public byte[] getRawContent() throws UnsupportedEncodingException;
+    byte[] getRawContent() throws UnsupportedEncodingException;
 
     /**
      * Determines whether the represented field contains (is made up of) binary
@@ -65,27 +64,25 @@ public interface TagField
      * Software can identify fields to be displayed because they are human
      * readable if this method returns <code>false</code>.
      *
-     * @return <code>true</code> if field represents binary data (not human
-     *         readable).
+     * @return <code>true</code> if field represents binary data (not human readable).
      */
-    public boolean isBinary();
+    boolean isBinary();
 
     /**
      * This method will set the field to represent binary data.<br>
-     *
+     * <p>
      * Some implementations may support conversions.<br>
      * As of now (Octobre 2005) there is no implementation really using this
      * method to perform useful operations.
      *
-     * @param b <code>true</code>, if the field contains binary data.
-     *          //@deprecated As for now is of no use. Implementations should use another
-     *          //            way of setting this property.
+     * @param b <code>true</code>, if the field contains binary data. //@deprecated As for now is of no use. Implementations should use
+     *          another //            way of setting this property.
      */
-    public void isBinary(boolean b);
+    void isBinary(boolean b);
 
     /**
      * Identifies a field to be of common use.<br>
-     *
+     * <p>
      * Some software may differ between common and not common fields. A common
      * one is for sure the title field. A web link may not be of common use for
      * tagging. However some file formats, or future development of users
@@ -93,14 +90,14 @@ public interface TagField
      *
      * @return <code>true</code> if the field is of common use.
      */
-    public boolean isCommon();
+    boolean isCommon();
 
     /**
      * Determines whether the content of the field is empty.<br>
      *
      * @return <code>true</code> if no data is stored (or empty String).
      */
-    public boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * This method returns a human readable description of the fields contents.<br>
@@ -110,5 +107,5 @@ public interface TagField
      *
      * @return Description of the fields content.
      */
-    public String toString();
+    String toString();
 }

@@ -35,6 +35,7 @@ import ealvatag.tag.reference.PictureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
@@ -481,8 +482,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      */
     public ID3v24Tag(AbstractTag mp3tag) {
         LOG.debug("Creating tag from a tag of a different version");
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<>();
+        encryptedFrameMap = new LinkedHashMap<>();
 
         if (mp3tag != null) {
             //Should use simpler copy constructor
@@ -588,8 +589,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      * @throws TagException
      */
     public ID3v24Tag(ByteBuffer buffer, String loggingFilename) throws TagException {
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<>();
+        encryptedFrameMap = new LinkedHashMap<>();
 
         setLoggingFilename(loggingFilename);
         this.read(buffer);
@@ -824,8 +825,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         LOG.trace(getLoggingFilename() + ":" + "Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
         ID3v24Frame next;
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<>();
+        encryptedFrameMap = new LinkedHashMap<>();
 
         //Read the size from the Tag Header
         this.fileReadSize = size;
@@ -1167,13 +1168,10 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
     }
 
-    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey) {
-        if (genericKey == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey) throws UnsupportedFieldException {
         ID3v24FieldKey id3v24FieldKey = ID3v24Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
         if (id3v24FieldKey == null) {
-            throw new KeyNotFoundException(genericKey.name());
+            throw new UnsupportedFieldException(genericKey.name());
         }
         return new FrameAndSubId(genericKey, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
     }
@@ -1259,8 +1257,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
     public TagField createField(final FieldKey genericKey, String... values) throws KeyNotFoundException,
                                                                                     FieldDataInvalidException,
                                                                                     IllegalArgumentException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
-            checkArgNotNull(genericKey, ErrorMessage.CANNOT_BE_NULL, "genericKey");
             String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value");
 
             FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
@@ -1309,22 +1307,9 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         }
     }
 
-    /**
-     * Retrieve the value that exists for this generic key and this index
-     * <p>
-     * Have to do some special mapping for certain generic keys because they share frame
-     * with another generic key.
-     *
-     * @param genericKey
-     *
-     * @return
-     */
     @Override
     public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
             if (fields != null && fields.size() > 0) {

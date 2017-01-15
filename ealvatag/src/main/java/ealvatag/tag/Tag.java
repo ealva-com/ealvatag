@@ -18,6 +18,8 @@
  */
 package ealvatag.tag;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.images.Artwork;
 
@@ -26,6 +28,16 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Temporary notes - Switching from Jaudiotagger to ealvatag
+ * <list>
+ * <li>Changes will be incompatible to Jaudiotagger users that depend particular types of exceptions thrown under certain
+ * conditions</li>
+ * <li>Some general concepts will be refined or redefined</li>
+ * <li>Illegal arguments will throw IllegalArgumentException, not throw KeyNotFoundException</li>
+ * <li>Unsupported keys for a type of tag will throw UnsupportedKeyException not throw KeyNotFoundException</li>
+ * </list>
+ * <p>
+ * <p>
  * This interface represents the basic data structure for the default
  * audio library functionality.<br>
  * <p>
@@ -79,44 +91,56 @@ public interface Tag {
     /**
      * Delete any fields with this key
      *
-     * @param fieldKey
+     * @param genericKey key of field to delete
      *
-     * @throws KeyNotFoundException
+     * @throws IllegalArgumentException  if {@code genericKey} is null
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
-    void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
+    void deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
-     * Delete any fields with this Flac (Vorbis Comment) id
+     * Delete any fields with this id
      *
-     * @param key
-     *
-     * @throws KeyNotFoundException
+     * @param id field id
      */
-    void deleteField(String key) throws KeyNotFoundException;
+    void deleteField(String id);
 
     /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * Returns a {@link ImmutableList} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
      * is the specified one.<br>
      * <p>
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id The field id.
      *
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     * @return A list of {@link TagField} objects with the given &quot;id&quot;. List is empty if none found
      */
-    List<TagField> getFields(String id);
+    ImmutableList<TagField> getFields(String id);
 
     /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * Returns a {@link List} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() genericKey}&quot;
      * is the specified one.<br>
      *
-     * @param id The field id.
+     * @param genericKey The field genericKey.
      *
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+     * @return A list of {@link TagField} objects with the given &quot;genericKey&quot;.
      *
-     * @throws KeyNotFoundException
+     * @throws IllegalArgumentException  if {@code genericKey} is null
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
-    List<TagField> getFields(FieldKey id) throws KeyNotFoundException;
+    ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Retrieve all String values that exist for this generic key
+     *
+     * @param genericKey The field genericKey.
+     *
+     * @return A list of values with the given &quot;genericKey&quot;.
+     *
+     * @throws IllegalArgumentException  if {@code genericKey} is null
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
+     */
+    List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
 
     /**
@@ -147,28 +171,20 @@ public interface Tag {
      *
      * @throws KeyNotFoundException
      */
-    String getFirst(FieldKey id) throws KeyNotFoundException;
-
-    /**
-     * Retrieve all String values that exist for this generic key
-     *
-     * @param id
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    List<String> getAll(FieldKey id) throws KeyNotFoundException;
+    String getFirst(FieldKey id) throws IllegalArgumentException, KeyNotFoundException;
 
     /**
      * Retrieve String value of the nth tag field that exists for this generic key
      *
-     * @param id
-     * @param n
+     * @param genericKey field to query
+     * @param index index to query
      *
-     * @return
+     * @return the value of the {@link FieldKey} at the given {@code index}
+     *
+     * @throws IllegalArgumentException  if {@code genericKey} is null
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
-    String getValue(FieldKey id, int n);
+    String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Retrieve the first field that exists for this format specific key
@@ -182,11 +198,14 @@ public interface Tag {
     TagField getFirstField(String id);
 
     /**
-     * @param id
+     * @param genericKey field to search for
      *
      * @return the first field that matches this generic key
+     *
+     * @throws IllegalArgumentException if {@code fieldKey} is null
+     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
      */
-    TagField getFirstField(FieldKey id);
+    TagField getFirstField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Returns <code>true</code>, if at least one of the contained
@@ -199,11 +218,14 @@ public interface Tag {
     /**
      * Determines whether the tag has at least one field with the specified field key.
      *
-     * @param fieldKey
+     * @param fieldKey the key to search for
      *
-     * @return
+     * @return true if this tag instance contains the {@link FieldKey}
+     *
+     * @throws IllegalArgumentException if {@code fieldKey} is null
+     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
      */
-    boolean hasField(FieldKey fieldKey);
+    boolean hasField(FieldKey fieldKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Determines whether the tag has at least one field with the specified
@@ -326,7 +348,7 @@ public interface Tag {
      * Create a new field
      *
      * @param genericKey create field for this key
-     * @param value     the value(s) for the created {@link TagField}. Only {@link FieldKey#PERFORMER} supports more than 1 value.
+     * @param value      the value(s) for the created {@link TagField}. Only {@link FieldKey#PERFORMER} supports more than 1 value.
      *
      * @return {@link TagField} for {@code genericKey}
      *
@@ -355,6 +377,7 @@ public interface Tag {
 
     /**
      * Get all the {@link FieldKey}s this tag supports
+     *
      * @return set of supported keys. Guaranteed non-null
      */
     ImmutableSet<FieldKey> getSupportedFields();

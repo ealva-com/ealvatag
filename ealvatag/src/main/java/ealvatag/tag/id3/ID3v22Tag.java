@@ -33,6 +33,11 @@ import ealvatag.tag.reference.PictureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -51,88 +56,37 @@ import java.util.List;
  * @version $Id$
  */
 public class ID3v22Tag extends AbstractID3v2Tag {
-    private static final Logger LOG = LoggerFactory.getLogger(ID3v22Tag.class);
-
-    protected static final String TYPE_COMPRESSION = "compression";
-    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-
     /**
      * Bit mask to indicate tag is Unsychronization
      */
     public static final int MASK_V22_UNSYNCHRONIZATION = FileConstants.BIT7;
-
     /**
      * Bit mask to indicate tag is compressed, although compression is not
      * actually defined in v22 so just ignored
      */
     public static final int MASK_V22_COMPRESSION = FileConstants.BIT6;
-
+    public static final byte RELEASE = 2;
+    public static final byte MAJOR_VERSION = 2;
+    public static final byte REVISION = 0;
+    protected static final String TYPE_COMPRESSION = "compression";
+    protected static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
+    private static final Logger LOG = LoggerFactory.getLogger(ID3v22Tag.class);
     /**
      * The tag is compressed, although no compression scheme is defined in ID3v22
      */
     protected boolean compression = false;
-
     /**
      * If set all frames in the tag uses unsynchronisation
      */
     protected boolean unsynchronization = false;
 
-    public static final byte RELEASE = 2;
-    public static final byte MAJOR_VERSION = 2;
-    public static final byte REVISION = 0;
-
-    /**
-     * Retrieve the Release
-     */
-    public byte getRelease() {
-        return RELEASE;
-    }
-
-    /**
-     * Retrieve the Major Version
-     */
-    public byte getMajorVersion() {
-        return MAJOR_VERSION;
-    }
-
-    /**
-     * Retrieve the Revision
-     */
-    public byte getRevision() {
-        return REVISION;
-    }
-
     /**
      * Creates a new empty ID3v2_2 tag.
      */
     public ID3v22Tag() {
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<>();
+        encryptedFrameMap = new LinkedHashMap<>();
     }
-
-    /**
-     * Copy primitives applicable to v2.2
-     */
-    protected void copyPrimitives(AbstractID3v2Tag copyObj) {
-        LOG.debug("Copying primitives");
-        super.copyPrimitives(copyObj);
-
-        //Set the primitive types specific to v2_2.
-        if (copyObj instanceof ID3v22Tag) {
-            ID3v22Tag copyObject = (ID3v22Tag)copyObj;
-            this.compression = copyObject.compression;
-            this.unsynchronization = copyObject.unsynchronization;
-        } else if (copyObj instanceof ID3v23Tag) {
-            ID3v23Tag copyObject = (ID3v23Tag)copyObj;
-            this.compression = copyObject.compression;
-            this.unsynchronization = copyObject.unsynchronization;
-        } else if (copyObj instanceof ID3v24Tag) {
-            ID3v24Tag copyObject = (ID3v24Tag)copyObj;
-            this.compression = false;
-            this.unsynchronization = copyObject.unsynchronization;
-        }
-    }
-
 
     /**
      * Copy Constructor, creates a new ID3v2_2 Tag based on another ID3v2_2 Tag
@@ -153,8 +107,8 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * @param mp3tag
      */
     public ID3v22Tag(AbstractTag mp3tag) {
-        frameMap = new LinkedHashMap();
-        encryptedFrameMap = new LinkedHashMap();
+        frameMap = new LinkedHashMap<>();
+        encryptedFrameMap = new LinkedHashMap<>();
         LOG.debug("Creating tag from a tag of a different version");
         //Default Superclass constructor does nothing
         if (mp3tag != null) {
@@ -186,6 +140,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      *
      * @param buffer
      * @param loggingFilename
+     *
      * @throws TagException
      */
     public ID3v22Tag(ByteBuffer buffer, String loggingFilename) throws TagException {
@@ -193,11 +148,11 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         this.read(buffer);
     }
 
-
     /**
      * Creates a new ID3v2_2 datatype.
      *
      * @param buffer
+     *
      * @throws TagException
      * @deprecated use {@link #ID3v22Tag(ByteBuffer, String)} instead
      */
@@ -206,38 +161,42 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     }
 
     /**
-     * @return an indentifier of the tag type
+     * Copy primitives applicable to v2.2
      */
-    public String getIdentifier() {
-        return "ID3v2_2.20";
+    protected void copyPrimitives(AbstractID3v2Tag copyObj) {
+        LOG.debug("Copying primitives");
+        super.copyPrimitives(copyObj);
+
+        //Set the primitive types specific to v2_2.
+        if (copyObj instanceof ID3v22Tag) {
+            ID3v22Tag copyObject = (ID3v22Tag)copyObj;
+            this.compression = copyObject.compression;
+            this.unsynchronization = copyObject.unsynchronization;
+        } else if (copyObj instanceof ID3v23Tag) {
+            ID3v23Tag copyObject = (ID3v23Tag)copyObj;
+            this.compression = copyObject.compression;
+            this.unsynchronization = copyObject.unsynchronization;
+        } else if (copyObj instanceof ID3v24Tag) {
+            ID3v24Tag copyObject = (ID3v24Tag)copyObj;
+            this.compression = false;
+            this.unsynchronization = copyObject.unsynchronization;
+        }
     }
 
-    /**
-     * Return frame size based upon the sizes of the frames rather than the size
-     * including padding recorded in the tag header
-     *
-     * @return size
-     */
-    public int getSize() {
-        int size = TAG_HEADER_LENGTH;
-        size += super.getSize();
-        return size;
-    }
-
-
-    /**
-     * @param obj
-     * @return equality
-     */
-    public boolean equals(Object obj) {
-        if (!(obj instanceof ID3v22Tag)) {
-            return false;
+    @Override
+    public void addFrame(AbstractID3v2Frame frame) {
+        try {
+            if (frame instanceof ID3v22Frame) {
+                copyFrameIntoMap(frame.getIdentifier(), frame);
+            } else {
+                List<AbstractID3v2Frame> frames = convertFrame(frame);
+                for (AbstractID3v2Frame next : frames) {
+                    copyFrameIntoMap(next.getIdentifier(), next);
+                }
+            }
+        } catch (InvalidFrameException ife) {
+            LOG.error("Unable to convert frame:" + frame.getIdentifier());
         }
-        ID3v22Tag object = (ID3v22Tag)obj;
-        if (this.compression != object.compression) {
-            return false;
-        }
-        return this.unsynchronization == object.unsynchronization && super.equals(obj);
     }
 
     @Override
@@ -264,26 +223,240 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         return frames;
     }
 
-    @Override
-    public void addFrame(AbstractID3v2Frame frame) {
-        try {
-            if (frame instanceof ID3v22Frame) {
-                copyFrameIntoMap(frame.getIdentifier(), frame);
-            } else {
-                List<AbstractID3v2Frame> frames = convertFrame(frame);
-                for (AbstractID3v2Frame next : frames) {
-                    copyFrameIntoMap(next.getIdentifier(), next);
+    protected ID3Frames getID3Frames() {
+        return ID3v22Frames.getInstanceOf();
+    }
+
+    /**
+     * Maps the generic key to the id3 key and return the list of values for this field as strings
+     *
+     * @param genericKey
+     *
+     * @return
+     *
+     * @throws KeyNotFoundException
+     */
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == FieldKey.GENRE) {
+            List<TagField> fields = getFields(genericKey);
+            List<String> convertedGenres = new ArrayList<String>();
+            if (fields != null && fields.size() > 0) {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+
+                for (String next : body.getValues()) {
+                    convertedGenres.add(FrameBodyTCON.convertID3v22GenreToGeneric(next));
                 }
             }
-        } catch (InvalidFrameException ife) {
-            LOG.error("Unable to convert frame:" + frame.getIdentifier());
+            return convertedGenres;
+        } else {
+            return super.getAll(genericKey);
         }
+    }
+
+    @Override
+    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        if (genericKey == FieldKey.GENRE) {
+            List<TagField> fields = getFields(genericKey);
+            if (fields != null && fields.size() > 0) {
+                AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
+                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
+                return FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index));
+            }
+            return "";
+        } else {
+            return super.getValue(genericKey, index);
+        }
+    }
+
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,
+                                                                              FieldDataInvalidException,
+                                                                              IllegalArgumentException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "generickey");
+        if (genericKey == FieldKey.GENRE) {
+            String value = checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values");
+            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
+            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
+            FrameBodyTCON framebody = (FrameBodyTCON)frame.getBody();
+            framebody.setV23Format();
+            framebody.setText(FrameBodyTCON.convertGenericToID3v22Genre(value));
+            return frame;
+        } else {
+            return super.createField(genericKey, values);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long write(File file, long audioStartLocation) throws IOException {
+        setLoggingFilename(file.getName());
+        LOG.debug("Writing tag to file:" + getLoggingFilename());
+
+        // Write Body Buffer
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+
+        // Unsynchronize if option enabled and unsync required
+        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
+                ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
+        if (isUnsynchronization()) {
+            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
+        }
+
+        int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)audioStartLocation);
+        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+        LOG.debug(getLoggingFilename() + ":Current audiostart:" + audioStartLocation);
+        LOG.debug(getLoggingFilename() + ":Size including padding:" + sizeIncPadding);
+        LOG.debug(getLoggingFilename() + ":Padding:" + padding);
+
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
+        writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
+        return sizeIncPadding;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void write(WritableByteChannel channel, int currentTagSize) throws IOException {
+        LOG.debug(getLoggingFilename() + ":Writing tag to channel");
+
+        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
+        LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizebeforeunsynchronisation:" + bodyByteBuffer.length);
+
+        //Unsynchronize if option enabled and unsync required
+        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
+                ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
+        if (isUnsynchronization()) {
+            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
+            LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
+        }
+
+        int padding = 0;
+        if (currentTagSize > 0) {
+            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)currentTagSize);
+            padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
+        }
+        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
+
+        channel.write(headerBuffer);
+        channel.write(ByteBuffer.wrap(bodyByteBuffer));
+        writePadding(channel, padding);
+    }
+
+    /**
+     * @param obj
+     *
+     * @return equality
+     */
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ID3v22Tag)) {
+            return false;
+        }
+        ID3v22Tag object = (ID3v22Tag)obj;
+        if (this.compression != object.compression) {
+            return false;
+        }
+        return this.unsynchronization == object.unsynchronization && super.equals(obj);
+    }
+
+    protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next) {
+        if (next.getBody() instanceof FrameBodyTCON) {
+            ((FrameBodyTCON)next.getBody()).setV23Format();
+        }
+        super.loadFrameIntoMap(frameId, next);
+    }
+
+    /**
+     * Return frame size based upon the sizes of the frames rather than the size
+     * including padding recorded in the tag header
+     *
+     * @return size
+     */
+    public int getSize() {
+        int size = TAG_HEADER_LENGTH;
+        size += super.getSize();
+        return size;
+    }
+
+    /**
+     * @return comparator used to order frames in preffrred order for writing to file so that most important frames are written first.
+     */
+    public Comparator getPreferredFrameOrderComparator() {
+        return ID3v22PreferredFrameOrderComparator.getInstanceof();
+    }
+
+    public void createStructure() {
+        MP3File.getStructureFormatter().openHeadingElement(TYPE_TAG, getIdentifier());
+
+        super.createStructureHeader();
+
+        //Header
+        MP3File.getStructureFormatter().openHeadingElement(TYPE_HEADER, "");
+        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.compression);
+        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.unsynchronization);
+        MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
+        //Body
+        super.createStructureBody();
+
+        MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+    }
+
+    /**
+     * Create Frame
+     *
+     * @param id frameid
+     *
+     * @return
+     */
+    public ID3v22Frame createFrame(String id) {
+        return new ID3v22Frame(id);
+    }
+
+    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey) throws UnsupportedFieldException {
+        ID3v22FieldKey id3v22FieldKey = ID3v22Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
+        if (id3v22FieldKey == null) {
+            throw new UnsupportedFieldException(genericKey.name());
+        }
+        return new FrameAndSubId(genericKey, id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
+    }
+
+    /**
+     * @return an indentifier of the tag type
+     */
+    public String getIdentifier() {
+        return "ID3v2_2.20";
+    }
+
+    /**
+     * Retrieve the Release
+     */
+    public byte getRelease() {
+        return RELEASE;
+    }
+
+    /**
+     * Retrieve the Major Version
+     */
+    public byte getMajorVersion() {
+        return MAJOR_VERSION;
+    }
+
+    /**
+     * Retrieve the Revision
+     */
+    public byte getRevision() {
+        return REVISION;
     }
 
     /**
      * Read tag Header Flags
      *
      * @param byteBuffer
+     *
      * @throws TagException
      */
     private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException {
@@ -434,13 +607,14 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         }
     }
 
-
     /**
      * Write the ID3 header to the ByteBuffer.
      *
      * @param padding
      * @param size
+     *
      * @return ByteBuffer
+     *
      * @throws IOException
      */
     private ByteBuffer writeHeaderToBuffer(int padding, int size) throws IOException {
@@ -474,83 +648,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long write(File file, long audioStartLocation) throws IOException {
-        setLoggingFilename(file.getName());
-        LOG.debug("Writing tag to file:" + getLoggingFilename());
-
-        // Write Body Buffer
-        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-
-        // Unsynchronize if option enabled and unsync required
-        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
-                ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
-        if (isUnsynchronization()) {
-            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-            LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
-        }
-
-        int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)audioStartLocation);
-        int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
-        LOG.debug(getLoggingFilename() + ":Current audiostart:" + audioStartLocation);
-        LOG.debug(getLoggingFilename() + ":Size including padding:" + sizeIncPadding);
-        LOG.debug(getLoggingFilename() + ":Padding:" + padding);
-
-        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
-        writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
-        return sizeIncPadding;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void write(WritableByteChannel channel, int currentTagSize) throws IOException {
-        LOG.debug(getLoggingFilename() + ":Writing tag to channel");
-
-        byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-        LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizebeforeunsynchronisation:" + bodyByteBuffer.length);
-
-        //Unsynchronize if option enabled and unsync required
-        unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
-                ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
-        if (isUnsynchronization()) {
-            bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-            LOG.debug(getLoggingFilename() + ":bodybytebuffer:sizeafterunsynchronisation:" + bodyByteBuffer.length);
-        }
-
-        int padding = 0;
-        if (currentTagSize > 0) {
-            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)currentTagSize);
-            padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
-        }
-        ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
-
-        channel.write(headerBuffer);
-        channel.write(ByteBuffer.wrap(bodyByteBuffer));
-        writePadding(channel, padding);
-    }
-
-    public void createStructure() {
-        MP3File.getStructureFormatter().openHeadingElement(TYPE_TAG, getIdentifier());
-
-        super.createStructureHeader();
-
-        //Header
-        MP3File.getStructureFormatter().openHeadingElement(TYPE_HEADER, "");
-        MP3File.getStructureFormatter().addElement(TYPE_COMPRESSION, this.compression);
-        MP3File.getStructureFormatter().addElement(TYPE_UNSYNCHRONISATION, this.unsynchronization);
-        MP3File.getStructureFormatter().closeHeadingElement(TYPE_HEADER);
-        //Body
-        super.createStructureBody();
-
-        MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
-    }
-
-    /**
      * @return is tag unsynchronized
      */
     public boolean isUnsynchronization() {
@@ -565,17 +662,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     }
 
     /**
-     * Create Frame
-     *
-     * @param id frameid
-     * @return
-     */
-    public ID3v22Frame createFrame(String id) {
-        return new ID3v22Frame(id);
-    }
-
-
-    /**
      * Create Frame for Id3 Key
      * <p>
      * Only textual data supported at the moment, should only be used with frames that
@@ -583,7 +669,9 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      *
      * @param id3Key
      * @param value
+     *
      * @return
+     *
      * @throws KeyNotFoundException
      * @throws FieldDataInvalidException
      */
@@ -595,40 +683,13 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         return doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
-    public TagField createField(FieldKey genericKey, String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        if (values == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        String value = values[0];
-        if (genericKey == FieldKey.GENRE) {
-            if (value == null) {
-                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-            }
-            FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
-            AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
-            FrameBodyTCON framebody = (FrameBodyTCON)frame.getBody();
-            framebody.setV23Format();
-            framebody.setText(FrameBodyTCON.convertGenericToID3v22Genre(value));
-            return frame;
-        } else {
-            return super.createField(genericKey, values);
-        }
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return ID3v22Frames.getInstanceOf().getSupportedFields();
-    }
-
     /**
      * Retrieve the first value that exists for this id3v22key
      *
      * @param id3v22FieldKey
+     *
      * @return
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      */
     public String getFirst(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException {
@@ -650,6 +711,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * Delete fields with this id3v22FieldKey
      *
      * @param id3v22FieldKey
+     *
      * @throws ealvatag.tag.KeyNotFoundException
      */
     public void deleteField(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException {
@@ -666,29 +728,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      */
     public void deleteField(String id) {
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
-    }
-
-    protected FrameAndSubId getFrameAndSubIdFromGenericKey(FieldKey genericKey) {
-        if (genericKey == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        ID3v22FieldKey id3v22FieldKey = ID3v22Frames.getInstanceOf().getId3KeyFromGenericKey(genericKey);
-        if (id3v22FieldKey == null) {
-            throw new KeyNotFoundException(genericKey.name());
-        }
-        return new FrameAndSubId(genericKey, id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
-    }
-
-    protected ID3Frames getID3Frames() {
-        return ID3v22Frames.getInstanceOf();
-    }
-
-    /**
-     * @return comparator used to order frames in preffrred order for writing to file
-     * so that most important frames are written first.
-     */
-    public Comparator getPreferredFrameOrderComparator() {
-        return ID3v22PreferredFrameOrderComparator.getInstanceof();
     }
 
     /**
@@ -739,6 +778,10 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         }
     }
 
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return ID3v22Frames.getInstanceOf().getSupportedFields();
+    }
+
     public TagField createArtworkField(byte[] data, String mimeType) {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
@@ -747,57 +790,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(mimeType));
         body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
         return frame;
-    }
-
-    /**
-     * Maps the generic key to the id3 key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     * @return
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == FieldKey.GENRE) {
-            List<TagField> fields = getFields(genericKey);
-            List<String> convertedGenres = new ArrayList<String>();
-            if (fields != null && fields.size() > 0) {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
-                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-
-                for (String next : body.getValues()) {
-                    convertedGenres.add(FrameBodyTCON.convertID3v22GenreToGeneric(next));
-                }
-            }
-            return convertedGenres;
-        } else {
-            return super.getAll(genericKey);
-        }
-    }
-
-    @Override
-    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        if (genericKey == FieldKey.GENRE) {
-            List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0) {
-                AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
-                FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-                return FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index));
-            }
-            return "";
-        } else {
-            return super.getValue(genericKey, index);
-        }
-    }
-
-    protected void loadFrameIntoMap(String frameId, AbstractID3v2Frame next) {
-        if (next.getBody() instanceof FrameBodyTCON) {
-            ((FrameBodyTCON)next.getBody()).setV23Format();
-        }
-        super.loadFrameIntoMap(frameId, next);
     }
 
 

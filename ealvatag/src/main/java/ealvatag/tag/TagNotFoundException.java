@@ -32,43 +32,15 @@ package ealvatag.tag;
  * @author Eric Farng
  * @version $Revision$
  */
-public class TagNotFoundException extends TagException
-{
-    /**
-     * Creates a new TagNotFoundException datatype.
-     */
-    public TagNotFoundException()
-    {
-    }
-
-    /**
-     * Creates a new TagNotFoundException datatype.
-     *
-     * @param ex the cause.
-     */
-    public TagNotFoundException(Throwable ex)
-    {
-        super(ex);
-    }
+public class TagNotFoundException extends TagException {
 
     /**
      * Creates a new TagNotFoundException datatype.
      *
      * @param msg the detail message.
      */
-    public TagNotFoundException(String msg)
-    {
+    public TagNotFoundException(String msg) {
         super(msg);
     }
 
-    /**
-     * Creates a new TagNotFoundException datatype.
-     *
-     * @param msg the detail message.
-     * @param ex  the cause.
-     */
-    public TagNotFoundException(String msg, Throwable ex)
-    {
-        super(msg, ex);
-    }
 }

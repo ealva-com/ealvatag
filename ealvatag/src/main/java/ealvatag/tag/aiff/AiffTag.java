@@ -1,5 +1,6 @@
 package ealvatag.tag.aiff;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
@@ -9,6 +10,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.Id3SupportingTag;
 import ealvatag.tag.images.Artwork;
@@ -76,21 +78,12 @@ public class AiffTag implements Tag, Id3SupportingTag {
     }
 
     @Override
-    public List<TagField> getFields(String id) {
-        return id3Tag.getFields(id);
+    public ImmutableList<TagField> getFields(String id) {
+        return ImmutableList.copyOf(id3Tag.getFields(id));
     }
 
-    /**
-     * Maps the generic key to the specific key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
     @Override
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getAll(genericKey);
     }
 
@@ -145,8 +138,8 @@ public class AiffTag implements Tag, Id3SupportingTag {
     }
 
     @Override
-    public String getValue(FieldKey id, int index) throws KeyNotFoundException {
-        return id3Tag.getValue(id, index);
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
+        return id3Tag.getValue(genericKey, index);
     }
 
     @Override
@@ -171,11 +164,11 @@ public class AiffTag implements Tag, Id3SupportingTag {
     /**
      * Delete any instance of tag fields with this key
      *
-     * @param fieldKey
+     * @param genericKey
      */
     @Override
-    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException {
-        id3Tag.deleteField(fieldKey);
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
+        id3Tag.deleteField(genericKey);
     }
 
     @Override
@@ -227,8 +220,8 @@ public class AiffTag implements Tag, Id3SupportingTag {
     }
 
     @Override
-    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException {
-        return id3Tag.getFields(id);
+    public ImmutableList<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
+        return id3Tag.getFields(genericKey);
     }
 
     @Override

@@ -28,8 +28,6 @@ import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 
-import static ealvatag.utils.Check.checkArgNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +40,6 @@ import java.util.List;
  * Any Wavc editors now instead/addtionally add data with an ID3tag
  */
 public class WavInfoTag extends GenericTag {
-    //We dont use these fields but we need to read them so they can be written back if user modifies
-    private List<TagTextField> unrecognisedFields = new ArrayList<>();
-
-    private Long startLocationInFile = null;
-
-    //End location of this chunk
-    private Long endLocationInFile = null;
-
     final private static ImmutableSet<FieldKey> supportedKeys = ImmutableSet.of(FieldKey.ALBUM,
                                                                                 FieldKey.ARTIST,
                                                                                 FieldKey.ALBUM_ARTIST,
@@ -65,7 +55,11 @@ public class WavInfoTag extends GenericTag {
                                                                                 FieldKey.ENCODER,
                                                                                 FieldKey.CONDUCTOR,
                                                                                 FieldKey.RATING);
-
+    //We dont use these fields but we need to read them so they can be written back if user modifies
+    private List<TagTextField> unrecognisedFields = new ArrayList<>();
+    private Long startLocationInFile = null;
+    //End location of this chunk
+    private Long endLocationInFile = null;
 
     public String toString() {
         StringBuilder output = new StringBuilder("Wav Info Tag:\n");

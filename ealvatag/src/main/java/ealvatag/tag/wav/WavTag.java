@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.wav;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
@@ -29,6 +30,7 @@ import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.Id3SupportingTag;
 import ealvatag.tag.images.Artwork;
@@ -53,7 +55,7 @@ public class WavTag implements Tag, Id3SupportingTag {
 
     private static final String NULL = "\0";
 
-    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
+    private List<ChunkSummary> chunkSummaryList = new ArrayList<>();
 
     public void addChunkSummary(ChunkSummary cs) {
         chunkSummaryList.add(cs);
@@ -139,19 +141,19 @@ public class WavTag implements Tag, Id3SupportingTag {
         StringBuilder sb = new StringBuilder();
 
         for (ChunkSummary cs : chunkSummaryList) {
-            sb.append(cs.toString() + "\n");
+            sb.append(cs.toString()).append("\n");
         }
 
         if (id3Tag != null) {
             sb.append("Wav ID3 Tag:\n");
             if (isExistingId3Tag()) {
-                sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
-                sb.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
+                sb.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFileOfId3Chunk())).append("\n");
+                sb.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFileOfId3Chunk())).append("\n");
             }
-            sb.append(id3Tag.toString() + "\n");
+            sb.append(id3Tag.toString()).append("\n");
         }
         if (infoTag != null) {
-            sb.append(infoTag.toString() + "\n");
+            sb.append(infoTag.toString()).append("\n");
         }
         return sb.toString();
     }
@@ -197,17 +199,10 @@ public class WavTag implements Tag, Id3SupportingTag {
         getActiveTag().addField(field);
     }
 
-    public List<TagField> getFields(String id) {
+    public ImmutableList<TagField> getFields(String id) {
         return getActiveTag().getFields(id);
     }
 
-    /**
-     * Maps the generic key to the specific key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     * @return
-     * @throws KeyNotFoundException
-     */
     public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
         return getActiveTag().getAll(genericKey);
     }
@@ -257,8 +252,8 @@ public class WavTag implements Tag, Id3SupportingTag {
         return getActiveTag().getFirst(id);
     }
 
-    public String getValue(FieldKey id, int index) throws KeyNotFoundException {
-        return getActiveTag().getValue(id, index);
+    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
+        return getActiveTag().getValue(genericKey, index);
     }
 
     public String getFirst(FieldKey id) throws KeyNotFoundException {
@@ -280,10 +275,10 @@ public class WavTag implements Tag, Id3SupportingTag {
     /**
      * Delete any instance of tag fields with this key
      *
-     * @param fieldKey
+     * @param genericKey
      */
-    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException {
-        getActiveTag().deleteField(fieldKey);
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
+        getActiveTag().deleteField(genericKey);
     }
 
     public void deleteField(String id) throws KeyNotFoundException {
@@ -313,8 +308,8 @@ public class WavTag implements Tag, Id3SupportingTag {
         return getActiveTag().createField(artwork);
     }
 
-    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException {
-        return getActiveTag().getFields(id);
+    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getActiveTag().getFields(genericKey);
     }
 
     public Artwork getFirstArtwork() {

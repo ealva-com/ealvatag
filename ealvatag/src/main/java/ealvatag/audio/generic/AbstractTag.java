@@ -17,11 +17,22 @@
  */
 package ealvatag.audio.generic;
 
-import ealvatag.tag.*;
+import com.google.common.collect.ImmutableList;
+import ealvatag.tag.FieldDataInvalidException;
+import ealvatag.tag.FieldKey;
+import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.Tag;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is the default implementation for
@@ -30,8 +41,7 @@ import java.util.*;
  *
  * @author Raphaël Slinckx
  */
-public abstract class AbstractTag implements Tag
-{
+public abstract class AbstractTag implements Tag {
     /**
      * Stores the amount of {@link TagField} with {@link TagField#isCommon()}
      * <code>true</code>.
@@ -44,137 +54,101 @@ public abstract class AbstractTag implements Tag
      * that they are added in is preserved, the only exception to this rule is when two fields of the same id
      * exist, both will be returned according to when the first item was added to the file. <br>
      */
-    protected Map<String, List<TagField>> fields = new LinkedHashMap<String, List<TagField>>();
+    protected Map<String, List<TagField>> fields = new LinkedHashMap<>();
 
-    /**
-     * Add field
-     *
-     * @see ealvatag.tag.Tag#addField(ealvatag.tag.TagField)
-     *
-     *      Changed so add empty fields
-     */
-    @Override
-    public void addField(TagField field)
-    {
-        if (field == null)
-        {
-            return;
-        }
-        List<TagField> list = fields.get(field.getId());
-
-        // There was no previous item
-        if (list == null)
-        {
-            list = new ArrayList<TagField>();
-            list.add(field);
-            fields.put(field.getId(), list);
-            if (field.isCommon())
-            {
-                commonNumber++;
-            }
-        }
-        else
-        {
-            // We append to existing list
-            list.add(field);
-        }
-    }
-
-
-    /**
-     * Get list of fields within this tag with the specified id
-     *
-     * @see ealvatag.tag.Tag#getFields(java.lang.String)
-     */
-    @Override
-    public List<TagField> getFields(String id)
-    {
-        List<TagField> list = fields.get(id);
-
-        if (list == null)
-        {
-            return new ArrayList<TagField>();
-        }
-
-        return list;
-    }
-
-
-
-    public List<String> getAll(String id) throws KeyNotFoundException
-    {
-        List<String>   fields = new ArrayList<String>();
+    public List<String> getAll(String id) {
+        List<String> fields = new ArrayList<>();
         List<TagField> tagFields = getFields(id);
-        for(TagField tagField:tagFields)
-        {
-            fields.add(tagField.toString());
+        for (int i = 0, size = tagFields.size(); i < size; i++) {
+            fields.add(tagFields.get(i).toString());
         }
         return fields;
     }
 
-    /**
-     *
-     * @param id
-     * @param index
-     * @return
-     */
-    public String getItem(String id,int index)
-    {
+    public String getItem(String id, int index) {
         List<TagField> l = getFields(id);
-        return (l.size()>index) ? l.get(index).toString() : "";
+        return (l.size() > index) ? l.get(index).toString() : "";
     }
 
-    /**
-     * Retrieve the first value that exists for this generic key
-     *
-     * @param genericKey
-     * @return
-     */
-    @Override
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException
-    {
-        return getValue(genericKey,0);
-    }
-
-    @Override
-    public String getFirst(String id)
-    {
-        List<TagField> l = getFields(id);
-        return (l.size() != 0) ? l.get(0).toString() : "";
-    }
-
-    @Override
-    public TagField getFirstField(String id)
-    {
-        List<TagField> l = getFields(id);
-        return (l.size() != 0) ? l.get(0) : null;
-    }
-
-    public List<TagField> getAll()
-    {
-        List<TagField> fieldList = new ArrayList<TagField>();
-        for(List<TagField> listOfFields : fields.values())
-        {
-            for(TagField next:listOfFields)
-            {
+    public List<TagField> getAll() {
+        List<TagField> fieldList = new ArrayList<>();
+        for (List<TagField> listOfFields : fields.values()) {
+            for (TagField next : listOfFields) {
                 fieldList.add(next);
             }
         }
         return fieldList;
     }
 
+    /**
+     * Determines whether the given charset encoding may be used for the
+     * represented tagging system.
+     *
+     * @param enc charset encoding.
+     *
+     * @return <code>true</code> if the given encoding can be used.
+     */
+    protected abstract boolean isAllowedEncoding(Charset enc);
+
+    /**
+     * Create new field and set it in the tag
+     *
+     * @param genericKey
+     * @param value
+     *
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
     @Override
-    public Iterator<TagField> getFields()
-    {
+    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, value);
+        setField(tagfield);
+    }
+
+    /**
+     * Create new field and add it to the tag
+     *
+     * @param genericKey
+     * @param value
+     *
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, value);
+        addField(tagfield);
+    }
+
+    /**
+     * @param genericKey the field to delete
+     *
+     * @throws IllegalArgumentException if {@code fieldKey} is null
+     * @throws UnsupportedFieldException if the tag instance does not support the type of {@link FieldKey}
+     */
+    public abstract void deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    public void deleteField(String id) {
+        fields.remove(id);
+    }
+
+    @Override
+    public ImmutableList<TagField> getFields(String id) {
+        final List<TagField> tagFields = fields.get(id);
+        if (tagFields == null) {
+            return ImmutableList.of();
+        }
+        return ImmutableList.copyOf(tagFields);
+    }
+
+    @Override
+    public Iterator<TagField> getFields() {
         final Iterator<Map.Entry<String, List<TagField>>> it = this.fields.entrySet().iterator();
-        return new Iterator<TagField>()
-        {
+        return new Iterator<TagField>() {
             private Iterator<TagField> fieldsIt;
 
-            private void changeIt()
-            {
-                if (!it.hasNext())
-                {
+            private void changeIt() {
+                if (!it.hasNext()) {
                     return;
                 }
 
@@ -184,20 +158,16 @@ public abstract class AbstractTag implements Tag
             }
 
             @Override
-            public boolean hasNext()
-            {
-                if (fieldsIt == null)
-                {
+            public boolean hasNext() {
+                if (fieldsIt == null) {
                     changeIt();
                 }
                 return it.hasNext() || (fieldsIt != null && fieldsIt.hasNext());
             }
 
             @Override
-            public TagField next()
-            {
-                if (!fieldsIt.hasNext())
-                {
+            public TagField next() {
+                if (!fieldsIt.hasNext()) {
                     changeIt();
                 }
 
@@ -205,38 +175,44 @@ public abstract class AbstractTag implements Tag
             }
 
             @Override
-            public void remove()
-            {
+            public void remove() {
                 fieldsIt.remove();
             }
         };
     }
 
+    @Override
+    public String getFirst(String id) {
+        List<TagField> l = getFields(id);
+        return (l.size() != 0) ? l.get(0).toString() : "";
+    }
+
     /**
-     * Return field count
+     * Retrieve the first value that exists for this generic key
      *
-     * TODO:There must be a more efficient way to do this.
+     * @param genericKey
      *
-     * @return field count
+     * @return
      */
     @Override
-    public int getFieldCount()
-    {
-        Iterator it = getFields();
-        int count = 0;
-        while (it.hasNext())
-        {
-            count++;
-            it.next();
-        }
-        return count;
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+        return getValue(genericKey, 0);
     }
 
     @Override
-    public int getFieldCountIncludingSubValues()
-    {
-        return getFieldCount();
+    public TagField getFirstField(String id) {
+        List<TagField> l = getFields(id);
+        return (l.size() != 0) ? l.get(0) : null;
     }
+
+    /**
+     * @param genericKey
+     *
+     * @return
+     *
+     * @throws KeyNotFoundException
+     */
+    public abstract TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException;
 
     /**
      * Does this tag contain any comon fields
@@ -244,9 +220,13 @@ public abstract class AbstractTag implements Tag
      * @see ealvatag.tag.Tag#hasCommonFields()
      */
     @Override
-    public boolean hasCommonFields()
-    {
+    public boolean hasCommonFields() {
         return commonNumber != 0;
+    }
+
+    @Override
+    public boolean hasField(FieldKey fieldKey) {
+        return hasField(fieldKey.name());
     }
 
     /**
@@ -255,25 +235,9 @@ public abstract class AbstractTag implements Tag
      * @see ealvatag.tag.Tag#hasField(java.lang.String)
      */
     @Override
-    public boolean hasField(String id)
-    {
+    public boolean hasField(String id) {
         return getFields(id).size() != 0;
     }
-
-    @Override
-    public boolean hasField(FieldKey fieldKey)
-    {
-        return hasField(fieldKey.name());
-    }
-
-    /**
-     * Determines whether the given charset encoding may be used for the
-     * represented tagging system.
-     *
-     * @param enc charset encoding.
-     * @return <code>true</code> if the given encoding can be used.
-     */
-    protected abstract boolean isAllowedEncoding(Charset enc);
 
     /**
      * Is this tag empty
@@ -281,113 +245,176 @@ public abstract class AbstractTag implements Tag
      * @see ealvatag.tag.Tag#isEmpty()
      */
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return fields.size() == 0;
     }
 
     /**
-     * Create new field and set it in the tag
+     * Return field count
+     * <p>
+     * TODO:There must be a more efficient way to do this.
      *
-     * @param genericKey
-     * @param value
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * @return field count
      */
     @Override
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        TagField tagfield = createField(genericKey,value);
-        setField(tagfield);
+    public int getFieldCount() {
+        getAll().size();
+        Iterator it = getFields();
+        int count = 0;
+        while (it.hasNext()) {
+            count++;
+            it.next();
+        }
+        return count;
     }
 
-     /**
-     * Create new field and add it to the tag
-     *
-     * @param genericKey
-     * @param value
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-     @Override
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException
-    {
-        TagField tagfield = createField(genericKey,value);
-        addField(tagfield);
-    }
-
-    /**
-     * Set field
-     *
-     * Changed:Just because field is empty it doesn't mean it should be deleted. That should be the choice
-     * of the developer. (Or does this break things)
-     *
-     * @see ealvatag.tag.Tag#setField(ealvatag.tag.TagField)
-     */
     @Override
-    public void setField(TagField field)
-    {
-        if (field == null)
-        {
-            return;
-        }
-
-        // If there is already an existing field with same id
-        // and both are TextFields, we replace the first element
-        List<TagField> list = fields.get(field.getId());
-        if (list != null)
-        {
-            list.set(0, field);
-            return;
-        }
-
-        // Else we put the new field in the fields.
-        list = new ArrayList<TagField>();
-        list.add(field);
-        fields.put(field.getId(), list);
-        if (field.isCommon())
-        {
-            commonNumber++;
-        }
+    public int getFieldCountIncludingSubValues() {
+        return getFieldCount();
     }
 
     /**
      * Set or add encoding
-     *
      */
-    public boolean setEncoding(final Charset enc)
-    {
-        if (!isAllowedEncoding(enc))
-        {
+    public boolean setEncoding(final Charset enc) {
+        if (!isAllowedEncoding(enc)) {
             return false;
         }
 
         Iterator it = getFields();
-        while (it.hasNext())
-        {
-            TagField field = (TagField) it.next();
-            if (field instanceof TagTextField)
-            {
-                ((TagTextField) field).setEncoding(enc);
+        while (it.hasNext()) {
+            TagField field = (TagField)it.next();
+            if (field instanceof TagTextField) {
+                ((TagTextField)field).setEncoding(enc);
             }
         }
 
         return true;
     }
 
+    public Artwork getFirstArtwork() {
+        List<Artwork> artwork = getArtworkList();
+        if (artwork.size() > 0) {
+            return artwork.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException {
+        this.deleteField(FieldKey.COVER_ART);
+    }
+
+    /**
+     * Create field and then set within tag itself
+     *
+     * @param artwork
+     *
+     * @throws FieldDataInvalidException
+     */
+    public void setField(Artwork artwork) throws FieldDataInvalidException {
+        this.setField(createField(artwork));
+    }
+
+    /**
+     * Create field and then add within tag itself
+     *
+     * @param artwork
+     *
+     * @throws FieldDataInvalidException
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException {
+        this.addField(createField(artwork));
+    }
+
+    /**
+     * Set field
+     * <p>
+     * Changed:Just because field is empty it doesn't mean it should be deleted. That should be the choice
+     * of the developer. (Or does this break things)
+     *
+     * @see ealvatag.tag.Tag#setField(ealvatag.tag.TagField)
+     */
+    @Override
+    public void setField(TagField field) {
+        if (field == null) {
+            return;
+        }
+
+        // If there is already an existing field with same id
+        // and both are TextFields, we replace the first element
+        List<TagField> list = fields.get(field.getId());
+        if (list != null) {
+            list.set(0, field);
+            return;
+        }
+
+        // Else we put the new field in the fields.
+        list = new ArrayList<>();
+        list.add(field);
+        fields.put(field.getId(), list);
+        if (field.isCommon()) {
+            commonNumber++;
+        }
+    }
+
+    /**
+     * Add field
+     *
+     * @see ealvatag.tag.Tag#addField(ealvatag.tag.TagField)
+     * <p>
+     * Changed so add empty fields
+     */
+    @Override
+    public void addField(TagField field) {
+        if (field == null) {
+            return;
+        }
+        List<TagField> list = fields.get(field.getId());
+
+        // There was no previous item
+        if (list == null) {
+            list = new ArrayList<TagField>();
+            list.add(field);
+            fields.put(field.getId(), list);
+            if (field.isCommon()) {
+                commonNumber++;
+            }
+        } else {
+            // We append to existing list
+            list.add(field);
+        }
+    }
+
+    /**
+     * @param genericKey the field to create
+     * @param value      the value of the the newly created field
+     *
+     * @return tag field of the type {@code genericKey} containing the given {@code value}
+     *
+     * @throws IllegalArgumentException  if genericKey is null or if no value is passed
+     * @throws FieldDataInvalidException if the value is incorrect for the given field
+     * @throws UnsupportedFieldException if the {@link FieldKey} is not supported
+     */
+    public abstract TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                                      FieldDataInvalidException,
+                                                                                      UnsupportedFieldException;
+
     /**
      * (overridden)
      *
      * @see java.lang.Object#toString()
      */
-    public String toString()
-    {
+    public String toString() {
         StringBuffer out = new StringBuffer();
         out.append("Tag content:\n");
         Iterator it = getFields();
-        while (it.hasNext())
-        {
-            TagField field = (TagField) it.next();
+        while (it.hasNext()) {
+            TagField field = (TagField)it.next();
             out.append("\t");
             out.append(field.getId());
             out.append(":");
@@ -396,86 +423,6 @@ public abstract class AbstractTag implements Tag
         }
         return out.toString().substring(0, out.length() - 1);
     }
-
-    /**
-     *
-     * @param genericKey
-     * @param value
-     * @return
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public abstract TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
-
-    /**
-     *
-     * @param genericKey
-     * @return
-     * @throws KeyNotFoundException
-     */
-    public abstract TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException;
-
-    /**
-     *
-     * @param fieldKey
-     * @throws KeyNotFoundException
-     */
-    public abstract void deleteField(FieldKey fieldKey) throws KeyNotFoundException;
-
-
-    /**
-     * Delete all occurrences of field with this id.
-     *
-     * @param key
-     */
-    public void deleteField(String key)
-    {
-        fields.remove(key);
-    }
-
-    public Artwork getFirstArtwork()
-    {
-        List<Artwork> artwork = getArtworkList();
-        if(artwork.size()>0)
-        {
-            return artwork.get(0);
-        }
-        return null;
-    }
-
-     /**
-     * Create field and then set within tag itself
-     *
-     * @param artwork
-     * @throws FieldDataInvalidException
-     */
-    public void setField(Artwork artwork) throws FieldDataInvalidException
-    {
-        this.setField(createField(artwork));
-    }
-
-     /**
-     * Create field and then add within tag itself
-     *
-     * @param artwork
-     * @throws FieldDataInvalidException
-     */
-    public void addField(Artwork artwork) throws FieldDataInvalidException
-    {
-       this.addField(createField(artwork));
-    }
-
-
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public void deleteArtworkField() throws KeyNotFoundException
-    {
-        this.deleteField(FieldKey.COVER_ART);
-    }
-
 
 
 }

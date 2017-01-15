@@ -23,13 +23,6 @@ public class InvalidDataTypeException extends InvalidTagException
 {
     /**
      * Creates a new InvalidDataTypeException datatype.
-     */
-    public InvalidDataTypeException()
-    {
-    }
-
-    /**
-     * Creates a new InvalidDataTypeException datatype.
      *
      * @param ex the cause.
      */
@@ -48,14 +41,4 @@ public class InvalidDataTypeException extends InvalidTagException
         super(msg);
     }
 
-    /**
-     * Creates a new InvalidDataTypeException datatype.
-     *
-     * @param msg the detail message.
-     * @param ex  the cause.
-     */
-    public InvalidDataTypeException(String msg, Throwable ex)
-    {
-        super(msg, ex);
-    }
 }

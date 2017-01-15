@@ -1,5 +1,6 @@
 package ealvatag.tag.asf;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.asf.data.AsfHeader;
@@ -11,11 +12,14 @@ import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.PictureTypes;
 
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -30,55 +34,49 @@ import java.util.List;
  */
 public final class AsfTag extends AbstractTag {
     /**
-     * This iterator is used to iterator an {@link Iterator} with
-     * {@link TagField} objects and returns them by casting to
-     * {@link AsfTagField}.<br>
-     *
-     * @author Christian Laireiter
-     */
-    private static class AsfFieldIterator implements Iterator<AsfTagField> {
-
-        /**
-         * source iterator.
-         */
-        private final Iterator<TagField> fieldIterator;
-
-        /**
-         * Creates an isntance.
-         *
-         * @param iterator iterator to read from.
-         */
-        public AsfFieldIterator(final Iterator<TagField> iterator) {
-            assert iterator != null;
-            this.fieldIterator = iterator;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean hasNext() {
-            return this.fieldIterator.hasNext();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public AsfTagField next() {
-            return (AsfTagField)this.fieldIterator.next();
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public void remove() {
-            this.fieldIterator.remove();
-        }
-    }
-
-    /**
      * Stores a list of field keys, which identify common fields.<br>
      */
     final static ImmutableSet<AsfFieldKey> COMMON_FIELDS = makeCommonFieldsSet();
+    /**
+     * This map contains the mapping from {@link ealvatag.tag.FieldKey} to
+     * {@link AsfFieldKey}.
+     */
+    private static final ImmutableMap<FieldKey, AsfFieldKey> tagFieldToAsfField = makeTagFieldMap();
+    /**
+     * @see #isCopyingFields()
+     */
+    private final boolean copyFields;
+
+    /**
+     * Creates an empty instance.
+     */
+    public AsfTag() {
+        this(false);
+    }
+
+    /**
+     * Creates an instance and sets the field conversion property.<br>
+     *
+     * @param copy look at {@link #isCopyingFields()}.
+     */
+    public AsfTag(final boolean copy) {
+        super();
+        this.copyFields = copy;
+    }
+
+    /**
+     * Creates an instance and copies the fields of the source into the own
+     * structure.<br>
+     *
+     * @param source source to read tag fields from.
+     * @param copy   look at {@link #isCopyingFields()}.
+     *
+     * @throws UnsupportedEncodingException {@link TagField#getRawContent()} which may be called
+     */
+    public AsfTag(final Tag source, final boolean copy) throws UnsupportedEncodingException {
+        this(copy);
+        copyFrom(source);
+    }
 
     private static ImmutableSet<AsfFieldKey> makeCommonFieldsSet() {
         ImmutableSet.Builder<AsfFieldKey> builder = ImmutableSet.builder();
@@ -91,12 +89,6 @@ public final class AsfTag extends AbstractTag {
                .add(AsfFieldKey.YEAR);
         return builder.build();
     }
-
-    /**
-     * This map contains the mapping from {@link ealvatag.tag.FieldKey} to
-     * {@link AsfFieldKey}.
-     */
-    private static final ImmutableMap<FieldKey, AsfFieldKey> tagFieldToAsfField = makeTagFieldMap();
 
     private static ImmutableMap<FieldKey, AsfFieldKey> makeTagFieldMap() {
         ImmutableMap.Builder<FieldKey, AsfFieldKey> builder = ImmutableMap.builder();
@@ -253,57 +245,6 @@ public final class AsfTag extends AbstractTag {
     }
 
     /**
-     * @see #isCopyingFields()
-     */
-    private final boolean copyFields;
-
-    /**
-     * Creates an empty instance.
-     */
-    public AsfTag() {
-        this(false);
-    }
-
-    /**
-     * Creates an instance and sets the field conversion property.<br>
-     *
-     * @param copy look at {@link #isCopyingFields()}.
-     */
-    public AsfTag(final boolean copy) {
-        super();
-        this.copyFields = copy;
-    }
-
-    /**
-     * Creates an instance and copies the fields of the source into the own
-     * structure.<br>
-     *
-     * @param source source to read tag fields from.
-     * @param copy   look at {@link #isCopyingFields()}.
-     *
-     * @throws UnsupportedEncodingException {@link TagField#getRawContent()} which may be called
-     */
-    public AsfTag(final Tag source, final boolean copy) throws UnsupportedEncodingException {
-        this(copy);
-        copyFrom(source);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    // TODO introduce copy idea to all formats
-    public void addField(final TagField field) {
-        if (isValidField(field)) {
-            if (AsfFieldKey.isMultiValued(field.getId())) {
-                super.addField(copyFrom(field));
-            } else {
-                super.setField(copyFrom(field));
-            }
-        }
-    }
-
-    /**
      * Creates a field for copyright and adds it.<br>
      *
      * @param copyRight copyright content
@@ -377,18 +318,6 @@ public final class AsfTag extends AbstractTag {
         return result;
     }
 
-
-    /**
-     * Creates an {@link AsfTagCoverField} from given artwork
-     *
-     * @param artwork artwork to create a ASF field from.
-     *
-     * @return ASF field capable of storing artwork.
-     */
-    public AsfTagCoverField createField(final Artwork artwork) {
-        return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(), artwork.getMimeType());
-    }
-
     /**
      * Create artwork field
      *
@@ -431,14 +360,12 @@ public final class AsfTag extends AbstractTag {
      * @param value       string value for the created field.
      *
      * @return text field with given content.
+     *
+     * @throws IllegalArgumentException if {@code asfFieldKey} or {@code value} are null
      */
     public AsfTagTextField createField(final AsfFieldKey asfFieldKey, final String value) {
-        if (value == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (asfFieldKey == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
+        checkArgNotNull(asfFieldKey, CANNOT_BE_NULL, "asfFieldKey");
+        checkArgNotNull(value, CANNOT_BE_NULL, "value");
         switch (asfFieldKey) {
             case COVER_ART:
                 throw new UnsupportedOperationException("Cover Art cannot be created using this method");
@@ -449,23 +376,12 @@ public final class AsfTag extends AbstractTag {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AsfTagTextField createField(final FieldKey genericKey, final String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (genericKey == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        final AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
+    private AsfFieldKey getAsfFieldKey(final FieldKey fieldKey) throws UnsupportedFieldException {
+        final AsfFieldKey asfFieldKey = tagFieldToAsfField.get(fieldKey);
         if (asfFieldKey == null) {
-            throw new KeyNotFoundException(genericKey.toString());
+            throw new UnsupportedFieldException(fieldKey.name());
         }
-        return createField(asfFieldKey, values[0]);
+        return asfFieldKey;
     }
 
     /**
@@ -477,47 +393,18 @@ public final class AsfTag extends AbstractTag {
         super.deleteField(fieldKey.getFieldName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteField(final FieldKey fieldKey) throws KeyNotFoundException {
-        if (fieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-        super.deleteField(tagFieldToAsfField.get(fieldKey).getFieldName());
+    public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return super.getFields(getAsfFieldKey(checkArgNotNull(genericKey)).getFieldName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<TagField> getFields(final FieldKey fieldKey) throws KeyNotFoundException {
-        if (fieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getFields(tagFieldToAsfField.get(fieldKey).getFieldName());
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return super.getAll(getAsfFieldKey(checkArgNotNull(genericKey)).getFieldName());
     }
 
-    /**
-     * Maps the generic key to the ogg key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        AsfFieldKey asfFieldKey = tagFieldToAsfField.get(genericKey);
-        if (asfFieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getAll(asfFieldKey.getFieldName());
+    public String getValue(final FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return super.getItem(getAsfFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")).getFieldName(), index);
     }
 
-    /**
-     * @return
-     */
     public List<Artwork> getArtworkList() {
         final List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         final List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
@@ -532,6 +419,25 @@ public final class AsfTag extends AbstractTag {
             artworkList.add(artwork);
         }
         return artworkList;
+    }
+
+    /**
+     * Creates an {@link AsfTagCoverField} from given artwork
+     *
+     * @param artwork artwork to create a ASF field from.
+     *
+     * @return ASF field capable of storing artwork.
+     */
+    public AsfTagCoverField createField(final Artwork artwork) {
+        return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(), artwork.getMimeType());
+    }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
+        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tagFieldToAsfField.keySet();
     }
 
     /**
@@ -558,11 +464,12 @@ public final class AsfTag extends AbstractTag {
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the copyright.<br>
+     *
+     * @param Copyright the copyright to set.
      */
-    @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException {
-        return getValue(genericKey, 0);
+    public void setCopyright(final String Copyright) {
+        setField(createCopyrightField(Copyright));
     }
 
     /**
@@ -582,33 +489,12 @@ public final class AsfTag extends AbstractTag {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public String getValue(final FieldKey genericKey, int index) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getItem(tagFieldToAsfField.get(genericKey).getFieldName(), index);
-    }
-
-    /**
      * Returns the Copyright.
      *
      * @return the Copyright.
      */
     public String getFirstCopyright() {
         return getFirst(AsfFieldKey.COPYRIGHT.getFieldName());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AsfTagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return (AsfTagField)super.getFirstField(tagFieldToAsfField.get(genericKey).getFieldName());
     }
 
     /**
@@ -630,6 +516,15 @@ public final class AsfTag extends AbstractTag {
     }
 
     /**
+     * Sets the Rating.<br>
+     *
+     * @param rating the rating to set.
+     */
+    public void setRating(final String rating) {
+        setField(createRatingField(rating));
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param enc
@@ -637,6 +532,76 @@ public final class AsfTag extends AbstractTag {
     @Override
     protected boolean isAllowedEncoding(final Charset enc) {
         return AsfHeader.ASF_CHARSET.name().equals(enc);
+    }
+
+    @Override
+    public void deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "fieldKey");
+        super.deleteField(getAsfFieldKey(genericKey).getFieldName());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFirst(final FieldKey fieldKey) throws KeyNotFoundException {
+        return getValue(fieldKey, 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AsfTagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == null) {
+            throw new KeyNotFoundException();
+        }
+        return (AsfTagField)super.getFirstField(getAsfFieldKey(genericKey).getFieldName());
+    }
+
+    /**
+     * @param fieldKey
+     *
+     * @return
+     */
+    public boolean hasField(FieldKey fieldKey) {
+        AsfFieldKey mp4FieldKey = getAsfFieldKey(fieldKey);
+        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    // TODO introduce copy idea to all formats
+    public void setField(final TagField field) {
+        if (isValidField(field)) {
+            // Copy only occurs if flag setField
+            super.setField(copyFrom(field));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    // TODO introduce copy idea to all formats
+    public void addField(final TagField field) {
+        if (isValidField(field)) {
+            if (AsfFieldKey.isMultiValued(field.getId())) {
+                super.addField(copyFrom(field));
+            } else {
+                super.setField(copyFrom(field));
+            }
+        }
+    }
+
+    @Override
+    public AsfTagTextField createField(final FieldKey fieldKey, final String... values) throws IllegalArgumentException,
+                                                                                                 FieldDataInvalidException,
+                                                                                                 UnsupportedFieldException {
+        return createField(getAsfFieldKey(checkArgNotNull(fieldKey, CANNOT_BE_NULL, "fieldKey")),
+                           checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value"));
     }
 
     /**
@@ -678,46 +643,6 @@ public final class AsfTag extends AbstractTag {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    // TODO introduce copy idea to all formats
-    public void setField(final TagField field) {
-        if (isValidField(field)) {
-            // Copy only occurs if flag setField
-            super.setField(copyFrom(field));
-        }
-    }
-
-    /**
-     * Sets the copyright.<br>
-     *
-     * @param Copyright the copyright to set.
-     */
-    public void setCopyright(final String Copyright) {
-        setField(createCopyrightField(Copyright));
-    }
-
-    /**
-     * Sets the Rating.<br>
-     *
-     * @param rating the rating to set.
-     */
-    public void setRating(final String rating) {
-        setField(createRatingField(rating));
-    }
-
-    /**
-     * @param genericKey
-     *
-     * @return
-     */
-    public boolean hasField(FieldKey genericKey) {
-        AsfFieldKey mp4FieldKey = tagFieldToAsfField.get(genericKey);
-        return getFields(mp4FieldKey.getFieldName()).size() != 0;
-    }
-
-    /**
      * @param asfFieldKey
      *
      * @return
@@ -726,11 +651,49 @@ public final class AsfTag extends AbstractTag {
         return getFields(asfFieldKey.getFieldName()).size() != 0;
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
-    }
+    /**
+     * This iterator is used to iterator an {@link Iterator} with
+     * {@link TagField} objects and returns them by casting to
+     * {@link AsfTagField}.<br>
+     *
+     * @author Christian Laireiter
+     */
+    private static class AsfFieldIterator implements Iterator<AsfTagField> {
 
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return tagFieldToAsfField.keySet();
+        /**
+         * source iterator.
+         */
+        private final Iterator<TagField> fieldIterator;
+
+        /**
+         * Creates an isntance.
+         *
+         * @param iterator iterator to read from.
+         */
+        public AsfFieldIterator(final Iterator<TagField> iterator) {
+            assert iterator != null;
+            this.fieldIterator = iterator;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean hasNext() {
+            return this.fieldIterator.hasNext();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public AsfTagField next() {
+            return (AsfTagField)this.fieldIterator.next();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void remove() {
+            this.fieldIterator.remove();
+        }
     }
 }

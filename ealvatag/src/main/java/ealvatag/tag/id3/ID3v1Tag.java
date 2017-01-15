@@ -22,8 +22,10 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -33,6 +35,7 @@ import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.reference.GenreTypes;
 import org.slf4j.Logger;
@@ -218,37 +221,16 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
         //TODO
     }
 
-    /**
-     * Maps the generic key to the ogg key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        List<String> list = new ArrayList<String>();
-        list.add(getFirst(genericKey.name()));
-        return list;
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return Collections.singletonList(getFirst(genericKey.name()));
     }
 
-    public List<TagField> getFields(String id) {
-
-        if (FieldKey.ARTIST.name().equals(id)) {
-            return getArtist();
-        } else if (FieldKey.ALBUM.name().equals(id)) {
-            return getAlbum();
-        } else if (FieldKey.TITLE.name().equals(id)) {
-            return getTitle();
-        } else if (FieldKey.GENRE.name().equals(id)) {
-            return getGenre();
-        } else if (FieldKey.YEAR.name().equals(id)) {
-            return getYear();
-        } else if (FieldKey.COMMENT.name().equals(id)) {
-            return getComment();
+    public ImmutableList<TagField> getFields(String id) {
+        try {
+            return getFields(FieldKey.valueOf(id));
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
-        return new ArrayList<TagField>();
+        return ImmutableList.of();
     }
 
     public int getFieldCount() {
@@ -289,12 +271,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     /**
      * @return album within list or empty if does not exist
      */
-    public List<TagField> getAlbum() {
-        if (getFirstAlbum().length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), getFirstAlbum());
-            return returnFieldToList(field);
+    public ImmutableList<TagField> getAlbum() {
+        final String firstAlbum = getFirstAlbum();
+        if (firstAlbum.length() > 0) {
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), firstAlbum));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -323,12 +305,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     /**
      * @return Artist within list or empty if does not exist
      */
-    public List<TagField> getArtist() {
-        if (getFirstArtist().length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), getFirstArtist());
-            return returnFieldToList(field);
+    public ImmutableList<TagField> getArtist() {
+        final String firstArtist = getFirstArtist();
+        if (firstArtist.length() > 0) {
+           return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), firstArtist));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -349,12 +331,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     /**
      * @return comment within list or empty if does not exist
      */
-    public List<TagField> getComment() {
+    public ImmutableList<TagField> getComment() {
         if (getFirstComment().length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment());
-            return returnFieldToList(field);
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment()));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -410,12 +391,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @return
      */
-    public List<TagField> getGenre() {
-        if (getFirst(FieldKey.GENRE).length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.GENRE.name(), getFirst(FieldKey.GENRE));
-            return returnFieldToList(field);
+    public ImmutableList<TagField> getGenre() {
+        final String firstGenre = getFirst(FieldKey.GENRE);
+        if (firstGenre.length() > 0) {
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.GENRE.name(), firstGenre));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -447,12 +428,12 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @return
      */
-    public List<TagField> getTitle() {
-        if (getFirst(FieldKey.TITLE).length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.TITLE.name(), getFirst(FieldKey.TITLE));
-            return returnFieldToList(field);
+    public ImmutableList<TagField> getTitle() {
+        final String firstTitle = getFirst(FieldKey.TITLE);
+        if (firstTitle.length() > 0) {
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.TITLE.name(), firstTitle));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
@@ -481,21 +462,20 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @return
      */
-    public List<TagField> getYear() {
+    public ImmutableList<TagField> getYear() {
         if (getFirst(FieldKey.YEAR).length() > 0) {
-            ID3v1TagField field = new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR));
-            return returnFieldToList(field);
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR)));
         } else {
-            return new ArrayList<TagField>();
+            return ImmutableList.of();
         }
     }
 
     public String getFirstTrack() {
-        throw new UnsupportedOperationException("ID3v10 cannot store track numbers");
+        throw new UnsupportedFieldException(FieldKey.TRACK.name());
     }
 
-    public List<TagField> getTrack() {
-        throw new UnsupportedOperationException("ID3v10 cannot store track numbers");
+    public ImmutableList<TagField> getTrack() {
+        throw new UnsupportedFieldException(FieldKey.TRACK.name());
     }
 
     public TagField getFirstField(String id) {
@@ -630,7 +610,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public List<TagField> getFields(FieldKey genericKey) {
+    public ImmutableList<TagField> getFields(FieldKey genericKey) {
         switch (genericKey) {
             case ARTIST:
                 return getArtist();
@@ -651,7 +631,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
                 return getComment();
 
             default:
-                return new ArrayList<TagField>();
+                return ImmutableList.of();
         }
     }
 
@@ -680,7 +660,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      *
      * @return
      */
-    public String getFirst(FieldKey genericKey) {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         switch (genericKey) {
             case ARTIST:
                 return getFirstArtist();
@@ -718,7 +698,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
         return getValue(id, n);
     }
 
-    public String getValue(FieldKey genericKey, int index) {
+    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException  {
         return getFirst(genericKey);
     }
 

@@ -487,11 +487,6 @@ public class ID3v22Frames extends ID3Frames {
         return id3ToTagField.get(fieldKey);
     }
 
-    boolean supportsGenericKey(final FieldKey fieldKey) throws IllegalArgumentException {
-        checkArgNotNull(fieldKey, "FieldKey cannot be null");
-        return tagFieldToId3.containsKey(fieldKey);
-    }
-
     ImmutableSet<FieldKey> getSupportedFields() {
         return tagFieldToId3.keySet();
     }

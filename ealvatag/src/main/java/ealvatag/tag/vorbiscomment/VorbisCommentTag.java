@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.vorbiscomment;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
@@ -31,12 +32,16 @@ import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
 
+import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -50,7 +55,29 @@ import java.util.List;
  * This is the logical representation of  Vorbis Comment Data
  */
 public class VorbisCommentTag extends AbstractTag implements ContainsVorbisCommentField {
+    //This is the vendor string that will be written if no other is supplied. Should be the name of the software
+    //that actually encoded the file in the first place.
+    public static final String DEFAULT_VENDOR = "ealvatag";
     private static final ImmutableMap<FieldKey, VorbisCommentFieldKey> tagFieldToOggField = makeFieldMap();
+
+    /**
+     * Use to construct a new tag properly initialized
+     *
+     * @return
+     */
+    public static VorbisCommentTag createNewTag() {
+        VorbisCommentTag tag = new VorbisCommentTag();
+        tag.setVendor(DEFAULT_VENDOR);
+        return tag;
+    }
+
+    /**
+     * Only used within Package, hidden because it doesnt set Vendor
+     * which should be done when created by end user
+     */
+    public VorbisCommentTag() {
+
+    }
 
     private static ImmutableMap<FieldKey, VorbisCommentFieldKey> makeFieldMap() {
         final ImmutableMap.Builder<FieldKey, VorbisCommentFieldKey> builder = ImmutableMap.builder();
@@ -206,29 +233,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return builder.build();
     }
 
-    //This is the vendor string that will be written if no other is supplied. Should be the name of the software
-    //that actually encoded the file in the first place.
-    public static final String DEFAULT_VENDOR = "ealvatag";
-
-    /**
-     * Only used within Package, hidden because it doesnt set Vendor
-     * which should be done when created by end user
-     */
-    public VorbisCommentTag() {
-
-    }
-
-    /**
-     * Use to construct a new tag properly initialized
-     *
-     * @return
-     */
-    public static VorbisCommentTag createNewTag() {
-        VorbisCommentTag tag = new VorbisCommentTag();
-        tag.setVendor(DEFAULT_VENDOR);
-        return tag;
-    }
-
     /**
      * @return the vendor, generically known as the encoder
      */
@@ -251,37 +255,9 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         super.setField(new VorbisCommentTagField(VENDOR.getFieldName(), vendor));
     }
 
-    protected boolean isAllowedEncoding(Charset enc) {
-        return enc.equals(VorbisHeader.CHARSET_UTF_8);
-    }
-
-    public String toString() {
-        return "OGG " + super.toString();
-    }
-
-    /**
-     * Create Tag Field using generic key
-     */
     @Override
-    public TagField createField(FieldKey genericKey, String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        return createField(tagFieldToOggField.get(genericKey), values[0]);
-    }
-
-    @Override
-    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (value == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (vorbisCommentFieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-
+    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,
+                                                                                                  FieldDataInvalidException {
         return new VorbisCommentTagField(vorbisCommentFieldKey.getFieldName(), value);
     }
 
@@ -303,35 +279,126 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return new VorbisCommentTagField(vorbisCommentFieldKey, value);
     }
 
-    /**
-     * Maps the generic key to the ogg key and return the list of values for this field
-     *
-     * @param genericKey
-     */
-    public List<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
-        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if (vorbisCommentFieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getFields(vorbisCommentFieldKey.getFieldName());
+    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return super.getFields(getVorbisCommentFieldKey(genericKey).getFieldName());
     }
 
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return super.getAll(getVorbisCommentFieldKey(genericKey).getFieldName());
+    }
+
+    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        if (genericKey == FieldKey.ALBUM_ARTIST) {
+            switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
+                case READ_ALBUMARTIST: {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
+                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                }
+
+                case READ_JRIVER_ALBUMARTIST: {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                }
+
+                case READ_ALBUMARTIST_THEN_JRIVER: {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
+                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    if (value.isEmpty()) {
+                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    } else {
+                        return value;
+                    }
+                }
+
+                case READ_JRIVER_THEN_ALBUMARTIST: {
+                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
+                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    if (value.isEmpty()) {
+                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
+                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    } else {
+                        return value;
+                    }
+                }
+
+                default:
+                    return super.getItem(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
+            }
+        } else {
+            return super.getItem(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
+        }
+    }
 
     /**
-     * Maps the generic key to the ogg key and return the list of values for this field as strings
+     * @return list of artwork images
+     */
+    public List<Artwork> getArtworkList() {
+        List<Artwork> artworkList = new ArrayList<Artwork>(1);
+
+        //Read Old Format
+        if (getArtworkBinaryData() != null & getArtworkBinaryData().length > 0) {
+            Artwork artwork = ArtworkFactory.getNew();
+            artwork.setMimeType(getArtworkMimeType());
+            artwork.setBinaryData(getArtworkBinaryData());
+            artworkList.add(artwork);
+        }
+
+        //New Format (Supports Multiple Images)
+        List<TagField> metadataBlockPics = this.get(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
+        for (TagField tagField : metadataBlockPics) {
+
+            try {
+                byte[] imageBinaryData = Base64Coder.decode(((TagTextField)tagField).getContent());
+                MetadataBlockDataPicture coverArt = new MetadataBlockDataPicture(ByteBuffer.wrap(imageBinaryData));
+                Artwork artwork = ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
+                artworkList.add(artwork);
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            } catch (InvalidFrameException ife) {
+                throw new RuntimeException(ife);
+            }
+        }
+        return artworkList;
+    }
+
+    /**
+     * Create Artwork field
      *
-     * @param genericKey
+     * @param artwork
      *
      * @return
      *
-     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
      */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-        if (vorbisCommentFieldKey == null) {
-            throw new KeyNotFoundException();
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
+        try {
+            char[] testdata = Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent());
+            String base64image = new String(testdata);
+            TagField imageTagField = createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE, base64image);
+            return imageTagField;
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
         }
-        return super.getAll(vorbisCommentFieldKey.getFieldName());
+    }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
+        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tagFieldToOggField.keySet();
+    }
+
+    private VorbisCommentFieldKey getVorbisCommentFieldKey(final FieldKey genericKey) throws IllegalArgumentException,
+                                                                                             UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        final VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
+        if (vorbisCommentFieldKey == null) {
+            throw new UnsupportedFieldException(genericKey.name());
+        }
+        return vorbisCommentFieldKey;
     }
 
     /**
@@ -350,7 +417,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return super.getFields(vorbisCommentKey.getFieldName());
     }
 
-
     /**
      * Retrieve the first value that exists for this vorbis comment key
      *
@@ -368,42 +434,12 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     /**
-     * @param genericKey
-     *
-     * @return
-     */
-    public boolean hasField(FieldKey genericKey) {
-        VorbisCommentFieldKey vorbisFieldKey = tagFieldToOggField.get(genericKey);
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
-    }
-
-    /**
      * @param vorbisFieldKey
      *
      * @return
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
         return getFields(vorbisFieldKey.getFieldName()).size() != 0;
-    }
-
-    /**
-     * Delete fields with this generic key
-     *
-     * @param genericKey
-     */
-    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        if (genericKey == FieldKey.ALBUM_ARTIST) {
-            TagOptionSingleton.getInstance()
-                              .getVorbisAlbumArtistSaveOptions()
-                              .deleteField(this, tagFieldToOggField.get(genericKey));
-        } else {
-            VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-            deleteField(vorbisCommentFieldKey);
-        }
     }
 
     /**
@@ -441,6 +477,79 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return this.getFirst(VorbisCommentFieldKey.COVERARTMIME);
     }
 
+    protected boolean isAllowedEncoding(Charset enc) {
+        return enc.equals(VorbisHeader.CHARSET_UTF_8);
+    }
+
+    @Override
+    public void setField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
+        if (values == null || values[0] == null) {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+
+        String value = values[0];
+        if (genericKey == FieldKey.ALBUM_ARTIST) {
+            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().setField(this, genericKey, value);
+        } else {
+            TagField tagfield = createField(genericKey, value);
+            setField(tagfield);
+        }
+    }
+
+    /**
+     * Create new field and add it to the tag
+     *
+     * @param genericKey
+     * @param values
+     *
+     * @throws KeyNotFoundException
+     * @throws FieldDataInvalidException
+     */
+    @Override
+    public void addField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
+        if (values == null || values[0] == null) {
+            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
+        }
+        String value = values[0];
+        if (genericKey == FieldKey.ALBUM_ARTIST) {
+            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().addField(this, genericKey, value);
+        } else {
+            TagField tagfield = createField(genericKey, value);
+            addField(tagfield);
+        }
+    }
+
+    /**
+     * Delete fields with this generic key
+     *
+     * @param genericKey
+     */
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == null) {
+            throw new KeyNotFoundException();
+        }
+
+        if (genericKey == FieldKey.ALBUM_ARTIST) {
+            TagOptionSingleton.getInstance()
+                              .getVorbisAlbumArtistSaveOptions()
+                              .deleteField(this, getVorbisCommentFieldKey(genericKey));
+        } else {
+            VorbisCommentFieldKey vorbisCommentFieldKey = getVorbisCommentFieldKey(genericKey);
+            deleteField(vorbisCommentFieldKey);
+        }
+    }
+
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == null) {
+            throw new KeyNotFoundException();
+        }
+        return getFirstField(getVorbisCommentFieldKey(genericKey).getFieldName());
+    }
+
+    public boolean hasField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(getVorbisCommentFieldKey(genericKey).getFieldName()).size() != 0;
+    }
+
     /**
      * Is this tag empty
      * <p>
@@ -451,6 +560,49 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
      */
     public boolean isEmpty() {
         return fields.size() <= 1;
+    }
+
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException {
+        //New Method
+        this.deleteField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
+
+        //Old Method
+        this.deleteField(VorbisCommentFieldKey.COVERART);
+        this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
+    }
+
+    /**
+     * Create and set artwork field
+     *
+     * @return
+     */
+    @Override
+    public void setField(Artwork artwork) throws FieldDataInvalidException {
+        //Set field
+        this.setField(createField(artwork));
+
+        //If worked okay above then that should be first artwork and if we still had old coverart format
+        //that should be removed
+        if (this.getFirst(VorbisCommentFieldKey.COVERART).length() > 0) {
+            this.deleteField(VorbisCommentFieldKey.COVERART);
+            this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
+        }
+    }
+
+    /**
+     * Add artwork field
+     *
+     * @param artwork
+     *
+     * @throws FieldDataInvalidException
+     */
+    public void addField(Artwork artwork) throws FieldDataInvalidException {
+        this.addField(createField(artwork));
     }
 
     /**
@@ -468,45 +620,20 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         }
     }
 
-    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return getFirstField(tagFieldToOggField.get(genericKey).getFieldName());
-    }
-
     /**
-     * @return list of artwork images
+     * Create Tag Field using generic key
      */
-    public List<Artwork> getArtworkList() {
-        List<Artwork> artworkList = new ArrayList<Artwork>(1);
-
-        //Read Old Format
-        if (getArtworkBinaryData() != null & getArtworkBinaryData().length > 0) {
-            Artwork artwork = ArtworkFactory.getNew();
-            artwork.setMimeType(getArtworkMimeType());
-            artwork.setBinaryData(getArtworkBinaryData());
-            artworkList.add(artwork);
-        }
-
-        //New Format (Supports Multiple Images)
-        List<TagField> metadataBlockPics = this.get(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
-        for (TagField tagField : metadataBlockPics) {
-
-            try {
-                byte[] imageBinaryData = Base64Coder.decode(((TagTextField)tagField).getContent());
-                MetadataBlockDataPicture coverArt = new MetadataBlockDataPicture(ByteBuffer.wrap(imageBinaryData));
-                Artwork artwork = ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
-                artworkList.add(artwork);
-            } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-            } catch (InvalidFrameException ife) {
-                throw new RuntimeException(ife);
-            }
-        }
-        return artworkList;
+    @Override
+    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,
+                                                                              FieldDataInvalidException,
+                                                                              IllegalArgumentException {
+        return createField(getVorbisCommentFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")),
+                           checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values"));
     }
 
+    public String toString() {
+        return "OGG " + super.toString();
+    }
 
     /**
      * Create MetadataBlockPicture field, this is the preferred way of storing artwork in VorbisComment tag now but
@@ -538,55 +665,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
                                                 0,
                                                 0);
         }
-    }
-
-    /**
-     * Create Artwork field
-     *
-     * @param artwork
-     *
-     * @return
-     *
-     * @throws FieldDataInvalidException
-     */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
-        try {
-            char[] testdata = Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent());
-            String base64image = new String(testdata);
-            TagField imageTagField = createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE, base64image);
-            return imageTagField;
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
-        }
-    }
-
-    /**
-     * Create and set artwork field
-     *
-     * @return
-     */
-    @Override
-    public void setField(Artwork artwork) throws FieldDataInvalidException {
-        //Set field
-        this.setField(createField(artwork));
-
-        //If worked okay above then that should be first artwork and if we still had old coverart format
-        //that should be removed
-        if (this.getFirst(VorbisCommentFieldKey.COVERART).length() > 0) {
-            this.deleteField(VorbisCommentFieldKey.COVERART);
-            this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
-        }
-    }
-
-    /**
-     * Add artwork field
-     *
-     * @param artwork
-     *
-     * @throws FieldDataInvalidException
-     */
-    public void addField(Artwork artwork) throws FieldDataInvalidException {
-        this.addField(createField(artwork));
     }
 
     /**
@@ -641,117 +719,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
         TagField tagfield = createField(vorbisCommentKey, value);
         addField(tagfield);
-    }
-
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public void deleteArtworkField() throws KeyNotFoundException {
-        //New Method
-        this.deleteField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
-
-        //Old Method
-        this.deleteField(VorbisCommentFieldKey.COVERART);
-        this.deleteField(VorbisCommentFieldKey.COVERARTMIME);
-    }
-
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return tagFieldToOggField.keySet();
-    }
-
-    @Override
-    public void setField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-
-        String value = values[0];
-        if (genericKey == FieldKey.ALBUM_ARTIST) {
-            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().setField(this, genericKey, value);
-        } else {
-            TagField tagfield = createField(genericKey, value);
-            setField(tagfield);
-        }
-    }
-
-    /**
-     * Create new field and add it to the tag
-     *
-     * @param genericKey
-     * @param values
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    @Override
-    public void addField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        String value = values[0];
-        if (genericKey == FieldKey.ALBUM_ARTIST) {
-            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().addField(this, genericKey, value);
-        } else {
-            TagField tagfield = createField(genericKey, value);
-            addField(tagfield);
-        }
-    }
-
-    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
-        if (genericKey == FieldKey.ALBUM_ARTIST) {
-            switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
-                case READ_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                }
-
-                case READ_JRIVER_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                }
-
-                case READ_ALBUMARTIST_THEN_JRIVER: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    if (value.isEmpty()) {
-                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    } else {
-                        return value;
-                    }
-                }
-
-                case READ_JRIVER_THEN_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    if (value.isEmpty()) {
-                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    } else {
-                        return value;
-                    }
-                }
-
-                default:
-                    VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-                    if (vorbisCommentFieldKey == null) {
-                        throw new KeyNotFoundException();
-                    }
-                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-            }
-        } else {
-            VorbisCommentFieldKey vorbisCommentFieldKey = tagFieldToOggField.get(genericKey);
-            if (vorbisCommentFieldKey == null) {
-                throw new KeyNotFoundException();
-            }
-            return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-        }
     }
 }
 

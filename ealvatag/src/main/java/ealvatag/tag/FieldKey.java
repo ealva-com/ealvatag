@@ -1,15 +1,11 @@
 package ealvatag.tag;
 
 /**
- * This is an enumeration of fields implemented by all major formats
- *
- *
- *
- * This enumeration is used by subclasses to map from the common key to their implementation key, the keys
- * are grouped within EnumSets within Tag class.
+ * This is an enumeration of all possible fields. Some tag types do not support all these fields
+ * <p>
+ * This enumeration is used by subclasses to map from the common key to their implementation key
  */
-public enum FieldKey
-{
+public enum FieldKey {
     ACOUSTID_FINGERPRINT,
     ACOUSTID_ID,
     ALBUM,
@@ -158,6 +154,5 @@ public enum FieldKey
     URL_WIKIPEDIA_RELEASE_SITE,
     WORK,
     WORK_TYPE,
-    YEAR,
-    ;
+    YEAR;
 }

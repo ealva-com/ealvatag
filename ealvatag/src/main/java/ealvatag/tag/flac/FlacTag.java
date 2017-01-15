@@ -1,5 +1,6 @@
 package ealvatag.tag.flac;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.logging.ErrorMessage;
@@ -9,6 +10,7 @@ import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.PictureTypes;
@@ -30,7 +32,7 @@ import java.util.List;
  */
 public class FlacTag implements Tag, ContainsVorbisCommentField {
     private VorbisCommentTag tag = null;
-    private List<MetadataBlockDataPicture> images = new ArrayList<MetadataBlockDataPicture>();
+    private List<MetadataBlockDataPicture> images = new ArrayList<>();
 
     public FlacTag() {
         this(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>());
@@ -53,60 +55,6 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
      */
     public VorbisCommentTag getVorbisCommentTag() {
         return tag;
-    }
-
-    public void addField(TagField field) throws FieldDataInvalidException {
-        if (field instanceof MetadataBlockDataPicture) {
-            images.add((MetadataBlockDataPicture)field);
-        } else {
-            tag.addField(field);
-        }
-    }
-
-    public List<TagField> getFields(String id) {
-        if (id.equals(FieldKey.COVER_ART.name())) {
-            List<TagField> castImages = new ArrayList<TagField>();
-            for (MetadataBlockDataPicture image : images) {
-                castImages.add(image);
-            }
-            return castImages;
-        } else {
-            return tag.getFields(id);
-        }
-    }
-
-    /**
-     * Maps the generic key to the specific key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == FieldKey.COVER_ART) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
-        } else {
-            return tag.getAll(genericKey);
-        }
-    }
-
-    public boolean hasCommonFields() {
-        return tag.hasCommonFields();
-    }
-
-
-    /**
-     * Determines whether the tag has no fields specified.<br>
-     * <p>
-     * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
-     * VorbisTag but it is empty
-     *
-     * @return <code>true</code> if tag contains no field.
-     */
-    public boolean isEmpty() {
-        return (tag == null || tag.isEmpty()) && images.size() == 0;
     }
 
     @Override
@@ -147,6 +95,269 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
     }
 
     /**
+     * Delete any instance of tag fields with this key
+     *
+     * @param genericKey
+     */
+    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey.equals(FieldKey.COVER_ART)) {
+            images.clear();
+        } else {
+            tag.deleteField(genericKey);
+        }
+    }
+
+    public void deleteField(String id) throws KeyNotFoundException {
+        if (id.equals(FieldKey.COVER_ART.name())) {
+            images.clear();
+        } else {
+            tag.deleteField(id);
+        }
+    }
+
+    public ImmutableList<TagField> getFields(String id) {
+        if (id.equals(FieldKey.COVER_ART.name())) {
+            ImmutableList.Builder<TagField> builder = ImmutableList.builder();
+            builder.addAll(images);
+            return builder.build();
+        } else {
+            return tag.getFields(id);
+        }
+    }
+
+    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        if (genericKey.equals(FieldKey.COVER_ART)) {
+            ImmutableList.Builder<TagField> builder = ImmutableList.builder();
+            builder.addAll(images);
+            return builder.build();
+        } else {
+            return tag.getFields(genericKey);
+        }
+    }
+
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == FieldKey.COVER_ART) {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        } else {
+            return tag.getAll(genericKey);
+        }
+    }
+
+    //TODO addField images to iterator
+    public Iterator<TagField> getFields() {
+        return tag.getFields();
+    }
+
+    public String getFirst(String id) {
+        if (id.equals(FieldKey.COVER_ART.name())) {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        } else {
+            return tag.getFirst(id);
+        }
+    }
+
+    public String getFirst(FieldKey id) throws KeyNotFoundException {
+        return getValue(id, 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException if the {@link FieldKey} is {@link FieldKey#COVER_ART}
+     */
+    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException,
+                                                                  UnsupportedFieldException,
+                                                                  UnsupportedOperationException {
+        if (genericKey.equals(FieldKey.COVER_ART)) {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD.getMsg());
+        } else {
+            return tag.getValue(genericKey, index);
+        }
+    }
+
+    public TagField getFirstField(String id) {
+        if (id.equals(FieldKey.COVER_ART.name())) {
+            if (images.size() > 0) {
+                return images.get(0);
+            } else {
+                return null;
+            }
+        } else {
+            return tag.getFirstField(id);
+        }
+    }
+
+    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
+        if (genericKey == null) {
+            throw new KeyNotFoundException();
+        }
+
+        if (genericKey == FieldKey.COVER_ART) {
+            return getFirstField(FieldKey.COVER_ART.name());
+        } else {
+            return tag.getFirstField(genericKey);
+        }
+    }
+
+    public boolean hasCommonFields() {
+        return tag.hasCommonFields();
+    }
+
+    /**
+     * @param genericKey
+     *
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey) {
+        if (genericKey == FieldKey.COVER_ART) {
+            return images.size() > 0;
+        } else {
+            return tag.hasField(genericKey);
+        }
+    }
+
+    public boolean hasField(String id) {
+        if (id.equals(FieldKey.COVER_ART.name())) {
+            return images.size() > 0;
+        } else {
+            return tag.hasField(id);
+        }
+    }
+
+    /**
+     * Determines whether the tag has no fields specified.<br>
+     * <p>
+     * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
+     * VorbisTag but it is empty
+     *
+     * @return <code>true</code> if tag contains no field.
+     */
+    public boolean isEmpty() {
+        return (tag == null || tag.isEmpty()) && images.size() == 0;
+    }
+
+    public int getFieldCount() {
+        return tag.getFieldCount() + images.size();
+    }
+
+    public int getFieldCountIncludingSubValues() {
+        return getFieldCount();
+    }
+
+    @Override
+    public boolean setEncoding(Charset enc) throws FieldDataInvalidException {
+        return tag.setEncoding(enc);
+    }
+
+    public List<Artwork> getArtworkList() {
+        List<Artwork> artworkList = new ArrayList<Artwork>(images.size());
+
+        for (MetadataBlockDataPicture coverArt : images) {
+            Artwork artwork = ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+    public Artwork getFirstArtwork() {
+        List<Artwork> artwork = getArtworkList();
+        if (artwork.size() > 0) {
+            return artwork.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * Delete all instance of artwork Field
+     *
+     * @throws KeyNotFoundException
+     */
+    public void deleteArtworkField() throws KeyNotFoundException {
+        this.deleteField(FieldKey.COVER_ART);
+    }
+
+    /**
+     * Create artwork field
+     *
+     * @return
+     */
+    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
+        if (artwork.isLinked()) {
+            return new MetadataBlockDataPicture(
+                    artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1),
+                    artwork.getPictureType(),
+                    MetadataBlockDataPicture.IMAGE_IS_URL,
+                    "",
+                    0,
+                    0,
+                    0,
+                    0);
+        } else {
+            if (!artwork.setImageFromData()) {
+                throw new FieldDataInvalidException("Unable to createField buffered image from the image");
+            }
+
+            return new MetadataBlockDataPicture(artwork.getBinaryData(),
+                                                artwork.getPictureType(),
+                                                artwork.getMimeType(),
+                                                artwork.getDescription(),
+                                                artwork.getWidth(),
+                                                artwork.getHeight(),
+                                                0,
+                                                0);
+        }
+    }
+
+    public void setField(Artwork artwork) throws FieldDataInvalidException {
+        this.setField(createField(artwork));
+    }
+
+    public void addField(Artwork artwork) throws FieldDataInvalidException {
+        this.addField(createField(artwork));
+    }
+
+    /**
+     * @param field
+     *
+     * @throws FieldDataInvalidException
+     */
+    public void setField(TagField field) throws FieldDataInvalidException {
+        if (field instanceof MetadataBlockDataPicture) {
+            if (images.size() == 0) {
+                images.add(0, (MetadataBlockDataPicture)field);
+            } else {
+                images.set(0, (MetadataBlockDataPicture)field);
+            }
+        } else {
+            tag.setField(field);
+        }
+    }
+
+    public void addField(TagField field) throws FieldDataInvalidException {
+        if (field instanceof MetadataBlockDataPicture) {
+            images.add((MetadataBlockDataPicture)field);
+        } else {
+            tag.addField(field);
+        }
+    }
+
+    public TagField createField(FieldKey genericKey, String... value)
+            throws KeyNotFoundException, FieldDataInvalidException {
+        if (genericKey.equals(FieldKey.COVER_ART)) {
+            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+        } else {
+            return tag.createField(genericKey, value);
+        }
+    }
+
+    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
+        return tag.createCompilationField(value);
+    }
+
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tag.getSupportedFields();
+    }
+
+    /**
      * Create and set field with name of vorbisCommentkey
      *
      * @param vorbisCommentKey
@@ -172,32 +383,6 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
     public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
         TagField tagfield = createField(vorbisCommentKey, value);
         addField(tagfield);
-    }
-
-    /**
-     * @param field
-     *
-     * @throws FieldDataInvalidException
-     */
-    public void setField(TagField field) throws FieldDataInvalidException {
-        if (field instanceof MetadataBlockDataPicture) {
-            if (images.size() == 0) {
-                images.add(0, (MetadataBlockDataPicture)field);
-            } else {
-                images.set(0, (MetadataBlockDataPicture)field);
-            }
-        } else {
-            tag.setField(field);
-        }
-    }
-
-    public TagField createField(FieldKey genericKey, String... value)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey.equals(FieldKey.COVER_ART)) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
-        } else {
-            return tag.createField(genericKey, value);
-        }
     }
 
     /**
@@ -235,102 +420,6 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
             throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
         return tag.createField(vorbisCommentFieldKey, value);
-    }
-
-    public String getFirst(String id) {
-        if (id.equals(FieldKey.COVER_ART.name())) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
-        } else {
-            return tag.getFirst(id);
-        }
-    }
-
-    public String getValue(FieldKey id, int index) throws KeyNotFoundException {
-        if (id.equals(FieldKey.COVER_ART)) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_RETRIEVED_WITH_THIS_METHOD.getMsg());
-        } else {
-            return tag.getValue(id, index);
-        }
-    }
-
-    public String getFirst(FieldKey id) throws KeyNotFoundException {
-        return getValue(id, 0);
-    }
-
-    public TagField getFirstField(String id) {
-        if (id.equals(FieldKey.COVER_ART.name())) {
-            if (images.size() > 0) {
-                return images.get(0);
-            } else {
-                return null;
-            }
-        } else {
-            return tag.getFirstField(id);
-        }
-    }
-
-    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        if (genericKey == FieldKey.COVER_ART) {
-            return getFirstField(FieldKey.COVER_ART.name());
-        } else {
-            return tag.getFirstField(genericKey);
-        }
-    }
-
-    /**
-     * Delete any instance of tag fields with this key
-     *
-     * @param fieldKey
-     */
-    public void deleteField(FieldKey fieldKey) throws KeyNotFoundException {
-        if (fieldKey.equals(FieldKey.COVER_ART)) {
-            images.clear();
-        } else {
-            tag.deleteField(fieldKey);
-        }
-    }
-
-    public void deleteField(String id) throws KeyNotFoundException {
-        if (id.equals(FieldKey.COVER_ART.name())) {
-            images.clear();
-        } else {
-            tag.deleteField(id);
-        }
-    }
-
-
-    //TODO addField images to iterator
-    public Iterator<TagField> getFields() {
-        return tag.getFields();
-    }
-
-    public int getFieldCount() {
-        return tag.getFieldCount() + images.size();
-    }
-
-    public int getFieldCountIncludingSubValues() {
-        return getFieldCount();
-    }
-
-    @Override
-    public boolean setEncoding(Charset enc) throws FieldDataInvalidException {
-        return tag.setEncoding(enc);
-    }
-
-    public List<TagField> getFields(FieldKey id) throws KeyNotFoundException {
-        if (id.equals(FieldKey.COVER_ART)) {
-            List<TagField> castImages = new ArrayList<TagField>();
-            for (MetadataBlockDataPicture image : images) {
-                castImages.add(image);
-            }
-            return castImages;
-        } else {
-            return tag.getFields(id);
-        }
     }
 
     public TagField createArtworkField(byte[] imageData,
@@ -375,108 +464,12 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
     }
 
     /**
-     * Create artwork field
-     *
-     * @return
-     */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
-        if (artwork.isLinked()) {
-            return new MetadataBlockDataPicture(
-                    artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1),
-                    artwork.getPictureType(),
-                    MetadataBlockDataPicture.IMAGE_IS_URL,
-                    "",
-                    0,
-                    0,
-                    0,
-                    0);
-        } else {
-            if (!artwork.setImageFromData()) {
-                throw new FieldDataInvalidException("Unable to createField buffered image from the image");
-            }
-
-            return new MetadataBlockDataPicture(artwork.getBinaryData(),
-                                                artwork.getPictureType(),
-                                                artwork.getMimeType(),
-                                                artwork.getDescription(),
-                                                artwork.getWidth(),
-                                                artwork.getHeight(),
-                                                0,
-                                                0);
-        }
-    }
-
-    public void setField(Artwork artwork) throws FieldDataInvalidException {
-        this.setField(createField(artwork));
-    }
-
-    public void addField(Artwork artwork) throws FieldDataInvalidException {
-        this.addField(createField(artwork));
-    }
-
-    public List<Artwork> getArtworkList() {
-        List<Artwork> artworkList = new ArrayList<Artwork>(images.size());
-
-        for (MetadataBlockDataPicture coverArt : images) {
-            Artwork artwork = ArtworkFactory.createArtworkFromMetadataBlockDataPicture(coverArt);
-            artworkList.add(artwork);
-        }
-        return artworkList;
-    }
-
-    public Artwork getFirstArtwork() {
-        List<Artwork> artwork = getArtworkList();
-        if (artwork.size() > 0) {
-            return artwork.get(0);
-        }
-        return null;
-    }
-
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public void deleteArtworkField() throws KeyNotFoundException {
-        this.deleteField(FieldKey.COVER_ART);
-    }
-
-    /**
-     * @param genericKey
-     *
-     * @return
-     */
-    public boolean hasField(FieldKey genericKey) {
-        if (genericKey == FieldKey.COVER_ART) {
-            return images.size() > 0;
-        } else {
-            return tag.hasField(genericKey);
-        }
-    }
-
-    /**
      * @param vorbisFieldKey
      *
      * @return
      */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
         return tag.hasField(vorbisFieldKey);
-    }
-
-    public boolean hasField(String id) {
-        if (id.equals(FieldKey.COVER_ART.name())) {
-            return images.size() > 0;
-        } else {
-            return tag.hasField(id);
-        }
-    }
-
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return tag.createCompilationField(value);
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return tag.getSupportedFields();
     }
 
     public String toString() {
