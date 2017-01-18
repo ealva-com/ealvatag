@@ -1,65 +1,48 @@
-/**
+/*
  * @author : Paul Taylor
- *
+ * <p>
  * Version @version:$Id$
- *
+ * <p>
  * Jaudiotagger Copyright (C)2004,2005
- *
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- * or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
+ * <p>
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ * <p>
  * Description:
  */
 package ealvatag.tag.datatype;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A two way mapping between an id and a value
+ * <p>
+ * TODO: 1/17/17 Nuke this and all it's ilk.
  */
-public abstract class AbstractValuePair<I, V>
-{
-    protected final Map<I, V> idToValue = new LinkedHashMap<I, V>();
-    protected final Map<V, I> valueToId = new LinkedHashMap<V, I>();
-    protected final List<V> valueList = new ArrayList<V>();
+public abstract class AbstractValuePair<I, V> {
+    protected final Map<I, V> idToValue = new LinkedHashMap<>(); // some subclasses don't care about ordering!!!
+    protected final Map<V, I> valueToId = new LinkedHashMap<>(); // why am I paying the price when I don't need too
 
-    protected Iterator<I> iterator = idToValue.keySet().iterator();
-
-    protected String value;
-
-    /**
-     * Get list in alphabetical order
-     * @return
-     */
-    public List<V> getAlphabeticalValueList()
-    {
-        return valueList;
-    }
-
-    public Map<I, V> getIdToValueMap()
-    {
+    public Map<I, V> getIdToValueMap() {
         return idToValue;
     }
 
-    public Map<V, I> getValueToIdMap()
-    {
+    public Map<V, I> getValueToIdMap() {
         return valueToId;
     }
 
     /**
      * @return the number of elements in the mapping
      */
-    public int getSize()
-    {
-        return valueList.size();
+    public int getSize() {
+        return valueToId.size();
     }
 }

@@ -19,8 +19,6 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldKey;
 
-import static ealvatag.utils.Check.checkArgNotNull;
-
 /**
  * Defines ID3v22 frames and collections that categorise frames within an ID3v22 tag.
  * <p>
@@ -30,6 +28,7 @@ import static ealvatag.utils.Check.checkArgNotNull;
  * @author Paul Taylor
  * @version $Id$
  */
+@SuppressWarnings("WeakerAccess")
 public class ID3v22Frames extends ID3Frames {
     //V2 Frames (only 3 chars)
     public static final String FRAME_ID_V2_ACCOMPANIMENT = "TP2";
@@ -109,16 +108,20 @@ public class ID3v22Frames extends ID3Frames {
     public static final String FRAME_ID_V2_ALBUM_ARTIST_SORT_ORDER_ITUNES = "TS2";
     public static final String FRAME_ID_V2_COMPOSER_SORT_ORDER_ITUNES = "TSC";
 
-    private static ID3v22Frames id3v22Frames;
+    private static volatile ID3v22Frames instance;
 
     private final ImmutableBiMap<ID3v22FieldKey, FieldKey> id3ToTagField;
     private final ImmutableBiMap<FieldKey, ID3v22FieldKey> tagFieldToId3;
 
     public static ID3v22Frames getInstanceOf() {
-        if (id3v22Frames == null) {
-            id3v22Frames = new ID3v22Frames();
+        if (instance == null) {
+            synchronized (ID3v22Frames.class) {
+                if (instance == null) {
+                    instance = new ID3v22Frames();
+                }
+            }
         }
-        return id3v22Frames;
+        return instance;
     }
 
     private ID3v22Frames() {
@@ -467,22 +470,10 @@ public class ID3v22Frames extends ID3Frames {
         id3ToTagField = tagFieldToId3.inverse();
     }
 
-    /**
-     * @param genericKey
-     *
-     * @return id3 key for generic key
-     */
     public ID3v22FieldKey getId3KeyFromGenericKey(FieldKey genericKey) {
         return tagFieldToId3.get(genericKey);
     }
 
-    /**
-     * Get generic key for ID3 field key
-     *
-     * @param fieldKey
-     *
-     * @return
-     */
     public FieldKey getGenericKeyFromId3(ID3v22FieldKey fieldKey) {
         return id3ToTagField.get(fieldKey);
     }

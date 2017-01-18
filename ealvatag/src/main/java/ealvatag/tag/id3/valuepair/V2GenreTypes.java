@@ -1,44 +1,37 @@
 package ealvatag.tag.id3.valuepair;
 
+import com.google.common.collect.ImmutableSortedSet;
 import ealvatag.tag.reference.GenreTypes;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * ID3V2 Genre list
- *
+ * <p>
  * <p>Merging of Id3v2 genres and the extended ID3v2 genres
  */
-public class V2GenreTypes
-{
-    private static V2GenreTypes v2GenresTypes;
+public class V2GenreTypes {
+    private static volatile V2GenreTypes instance;
+    private final ImmutableSortedSet<String> genres;
 
-    private V2GenreTypes()
-    {
-
+    private V2GenreTypes() {
+        ImmutableSortedSet.Builder<String> builder = ImmutableSortedSet.naturalOrder();
+        builder.addAll(GenreTypes.getInstanceOf().getSortedValueSet());
+        builder.add(ID3V2ExtendedGenreTypes.CR.getDescription());
+        builder.add(ID3V2ExtendedGenreTypes.RX.getDescription());
+        genres = builder.build();
     }
 
-    public static V2GenreTypes getInstanceOf()
-    {
-        if (v2GenresTypes == null)
-        {
-            v2GenresTypes = new V2GenreTypes();
+    public static V2GenreTypes getInstanceOf() {
+        if (instance == null) {
+            synchronized (V2GenreTypes.class) {
+                if (instance == null) {
+                    instance = new V2GenreTypes();
+                }
+            }
         }
-        return v2GenresTypes;
+        return instance;
     }
 
-    /**
-     * @return list of all valid v2 genres in alphabetical order
-     */
-    public List<String> getAlphabeticalValueList()
-    {
-        List<String> genres = GenreTypes.getInstanceOf().getAlphabeticalValueList();
-        genres.add(ID3V2ExtendedGenreTypes.CR.getDescription());
-        genres.add(ID3V2ExtendedGenreTypes.RX.getDescription());
-
-        //Sort
-        Collections.sort(genres);
+    public ImmutableSortedSet<String> getSortedValueSet() {
         return genres;
     }
 }

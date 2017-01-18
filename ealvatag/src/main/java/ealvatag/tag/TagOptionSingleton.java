@@ -20,14 +20,10 @@
  */
 package ealvatag.tag;
 
-import com.google.common.base.Preconditions;
 import ealvatag.audio.wav.WavOptions;
 import ealvatag.audio.wav.WavSaveOptions;
 import ealvatag.audio.wav.WavSaveOrder;
 import ealvatag.tag.id3.AbstractID3v2Tag;
-import ealvatag.tag.id3.ID3v22Tag;
-import ealvatag.tag.id3.ID3v23Tag;
-import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
 import ealvatag.tag.id3.framebody.FrameBodyTIPL;
@@ -685,13 +681,10 @@ public class TagOptionSingleton {
         id3v2Version = ID3V2Version.ID3_V23;
         checkIsWritable = false;
         preserveFileIdentity = false;
+
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
-        Iterator<String> iterator = Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet().iterator();
-        String fieldId;
-
-        while (iterator.hasNext()) {
-            fieldId = iterator.next();
+        for (String fieldId : Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet()) {
             lyrics3SaveFieldMap.put(fieldId, true);
         }
 
@@ -734,10 +727,8 @@ public class TagOptionSingleton {
             addKeyword(FrameBodyTIPL.class, "ft.");
             addKeyword(FrameBodyTIPL.class, "ft");
 
-            iterator = GenreTypes.getInstanceOf().getValueToIdMap().keySet().iterator();
-
-            while (iterator.hasNext()) {
-                addKeyword(FrameBodyCOMM.class, iterator.next());
+            for (String genreValue : GenreTypes.getInstanceOf().getValueSet()) {
+                addKeyword(FrameBodyCOMM.class, genreValue);
             }
         } catch (TagException ex) {
             // this shouldn't happen, indicates coding error
@@ -756,8 +747,8 @@ public class TagOptionSingleton {
         addReplaceWord("ft.", "feat.");
         addReplaceWord("ft", "feat.");
 
-
-        iterator = this.getKeywordListIterator(FrameBodyTIPL.class);
+        // TODO: 1/17/17 iterator not used, why was this here? I see no side effects from the call
+//        iterator = this.getKeywordListIterator(FrameBodyTIPL.class);
 
 
         addParenthesis("(", ")");

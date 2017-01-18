@@ -30,26 +30,19 @@ import ealvatag.tag.id3.valuepair.InterpolationTypes;
 import ealvatag.tag.id3.valuepair.ReceivedAsTypes;
 import ealvatag.tag.id3.valuepair.SynchronisedLyricsContentType;
 import ealvatag.tag.id3.valuepair.TextEncoding;
-import ealvatag.tag.reference.GenreTypes;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.EqualsUtil;
 
 import java.util.Map;
 
 /**
- * Represents a number thats acts as a key into an enumeration of values
+ * Represents a number that acts as a key into an enumeration of values
  */
 public class NumberHashMap extends NumberFixedLength {
 
-    /**
-     * key to value map
-     */
+    // TODO: 1/18/17 Change this to an interface. This depends on an implementation a lookup
     private Map<Integer, String> keyToValue = null;
 
-    /**
-     * value to key map
-     */
-    private Map<String, Integer> valueToKey = null;
 
     /**
      *
@@ -70,46 +63,39 @@ public class NumberHashMap extends NumberFixedLength {
         super(identifier, frameBody, size);
 
         switch (identifier) {
-            case DataTypes.OBJ_GENRE:
-                valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
-                keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
-
-                //genres can be an id or literal value
-                hasEmptyValue = true;
-                break;
+            // OBJ_GENRE never used!
+//            case DataTypes.OBJ_GENRE:
+//                valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
+//                keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
+//
+//                //genres can be an id or literal value
+//                hasEmptyValue = true;
+//                break;
             case DataTypes.OBJ_TEXT_ENCODING:
-                valueToKey = TextEncoding.getInstanceOf().getValueToIdMap();
                 keyToValue = TextEncoding.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_INTERPOLATION_METHOD:
-                valueToKey = InterpolationTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = InterpolationTypes.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_PICTURE_TYPE:
-                valueToKey = PictureTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = PictureTypes.getInstanceOf().getIdToValueMap();
 
                 //Issue #224 Values should map, but have examples where they dont, this is a workaround
                 hasEmptyValue = true;
                 break;
             case DataTypes.OBJ_TYPE_OF_EVENT:
-                valueToKey = EventTimingTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = EventTimingTypes.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_TIME_STAMP_FORMAT:
-                valueToKey = EventTimingTimestampTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = EventTimingTimestampTypes.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_TYPE_OF_CHANNEL:
-                valueToKey = ChannelTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = ChannelTypes.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_RECIEVED_AS:
-                valueToKey = ReceivedAsTypes.getInstanceOf().getValueToIdMap();
                 keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
                 break;
             case DataTypes.OBJ_CONTENT_TYPE:
-                valueToKey = SynchronisedLyricsContentType.getInstanceOf().getValueToIdMap();
                 keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
                 break;
             default:
@@ -124,7 +110,6 @@ public class NumberHashMap extends NumberFixedLength {
 
         // we don't need to clone/copy the maps here because they are static
         this.keyToValue = copyObject.keyToValue;
-        this.valueToKey = copyObject.valueToKey;
     }
 
     public void setValue(Object value) {
@@ -153,7 +138,6 @@ public class NumberHashMap extends NumberFixedLength {
         return
                 EqualsUtil.areEqual(hasEmptyValue, that.hasEmptyValue) &&
                         EqualsUtil.areEqual(keyToValue, that.keyToValue) &&
-                        EqualsUtil.areEqual(valueToKey, that.valueToKey) &&
                         super.equals(that);
     }
 

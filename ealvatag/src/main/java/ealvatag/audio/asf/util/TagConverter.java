@@ -18,10 +18,19 @@
  */
 package ealvatag.audio.asf.util;
 
-import ealvatag.audio.asf.data.*;
+import ealvatag.audio.asf.data.AsfHeader;
+import ealvatag.audio.asf.data.ContainerType;
+import ealvatag.audio.asf.data.MetadataContainer;
+import ealvatag.audio.asf.data.MetadataContainerFactory;
+import ealvatag.audio.asf.data.MetadataDescriptor;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
-import ealvatag.tag.asf.*;
+import ealvatag.tag.asf.AsfFieldKey;
+import ealvatag.tag.asf.AsfTag;
+import ealvatag.tag.asf.AsfTagBannerField;
+import ealvatag.tag.asf.AsfTagCoverField;
+import ealvatag.tag.asf.AsfTagField;
+import ealvatag.tag.asf.AsfTagTextField;
 import ealvatag.tag.reference.GenreTypes;
 
 import java.util.Iterator;
@@ -34,80 +43,64 @@ import java.util.List;
  *
  * @author Christian Laireiter (liree)
  */
-public final class TagConverter
-{
+public final class TagConverter {
 
     /**
      * This method assigns those tags of <code>tag</code> which are defined to
      * be common by ealvatag. <br>
      *
-     * @param tag         The tag from which the values are gathered. <br>
-     *                    Assigned values are: <br>
-     * @param description The extended content description which should receive the
-     *                    values. <br>
-     *                    <b>Warning: </b> the common values will be replaced.
+     * @param tag         The tag from which the values are gathered. <br> Assigned values are: <br>
+     * @param description The extended content description which should receive the values. <br> <b>Warning: </b> the common values will be
+     *                    replaced.
      */
-    public static void assignCommonTagValues(Tag tag, MetadataContainer description)
-    {
+    public static void assignCommonTagValues(Tag tag, MetadataContainer description) {
         assert description.getContainerType() == ContainerType.EXTENDED_CONTENT;
         MetadataDescriptor tmp;
-        if (!Utils.isBlank(tag.getFirst(FieldKey.ALBUM)))
-        {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.ALBUM))) {
             tmp = new MetadataDescriptor(description.getContainerType(), AsfFieldKey.ALBUM.getFieldName(), MetadataDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirst(FieldKey.ALBUM));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
-        }
-        else
-        {
+        } else {
             description.removeDescriptorsByName(AsfFieldKey.ALBUM.getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirst(FieldKey.TRACK)))
-        {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.TRACK))) {
             tmp = new MetadataDescriptor(description.getContainerType(), AsfFieldKey.TRACK.getFieldName(), MetadataDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirst(FieldKey.TRACK));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
-        }
-        else
-        {
+        } else {
             description.removeDescriptorsByName(AsfFieldKey.TRACK.getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirst(FieldKey.YEAR)))
-        {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.YEAR))) {
             tmp = new MetadataDescriptor(description.getContainerType(), AsfFieldKey.YEAR.getFieldName(), MetadataDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirst(FieldKey.YEAR));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
-        }
-        else
-        {
+        } else {
             description.removeDescriptorsByName(AsfFieldKey.YEAR.getFieldName());
         }
-        if (!Utils.isBlank(tag.getFirst(FieldKey.GENRE)))
-        {
+        if (!Utils.isBlank(tag.getFirst(FieldKey.GENRE))) {
             // Write Genre String value
             tmp = new MetadataDescriptor(description.getContainerType(), AsfFieldKey.GENRE.getFieldName(), MetadataDescriptor.TYPE_STRING);
             tmp.setStringValue(tag.getFirst(FieldKey.GENRE));
             description.removeDescriptorsByName(tmp.getName());
             description.addDescriptor(tmp);
-            Integer genreNum = GenreTypes.getInstanceOf().getIdForName(tag.getFirst(FieldKey.GENRE));
+            Integer genreNum = GenreTypes.getInstanceOf().getIdForValue(tag.getFirst(FieldKey.GENRE));
             // ..and if it is one of the standard genre types used the id as
             // well
-            if (genreNum != null)
-            {
-                tmp = new MetadataDescriptor(description.getContainerType(), AsfFieldKey.GENRE_ID.getFieldName(), MetadataDescriptor.TYPE_STRING);
+            if (genreNum != null) {
+                tmp =
+                        new MetadataDescriptor(description.getContainerType(),
+                                               AsfFieldKey.GENRE_ID.getFieldName(),
+                                               MetadataDescriptor.TYPE_STRING);
                 tmp.setStringValue("(" + genreNum + ")");
                 description.removeDescriptorsByName(tmp.getName());
                 description.addDescriptor(tmp);
-            }
-            else
-            {
+            } else {
                 description.removeDescriptorsByName(AsfFieldKey.GENRE_ID.getFieldName());
             }
-        }
-        else
-        {
+        } else {
             description.removeDescriptorsByName(AsfFieldKey.GENRE.getFieldName());
             description.removeDescriptorsByName(AsfFieldKey.GENRE_ID.getFieldName());
         }
@@ -118,38 +111,27 @@ public final class TagConverter
      * given {@link AsfHeader}.<br>
      *
      * @param source The ASF header which contains the information. <br>
+     *
      * @return A Tag with all its values.
      */
-    public static AsfTag createTagOf(AsfHeader source)
-    {
+    public static AsfTag createTagOf(AsfHeader source) {
         // TODO do we need to copy here.
         AsfTag result = new AsfTag(true);
-        for (int i = 0; i < ContainerType.values().length; i++)
-        {
+        for (int i = 0; i < ContainerType.values().length; i++) {
             MetadataContainer current = source.findMetadataContainer(ContainerType.values()[i]);
-            if (current != null)
-            {
+            if (current != null) {
                 List<MetadataDescriptor> descriptors = current.getDescriptors();
-                for (MetadataDescriptor descriptor : descriptors)
-                {
+                for (MetadataDescriptor descriptor : descriptors) {
                     AsfTagField toAdd;
-                    if (descriptor.getType() == MetadataDescriptor.TYPE_BINARY)
-                    {
-                        if (descriptor.getName().equals(AsfFieldKey.COVER_ART.getFieldName()))
-                        {
+                    if (descriptor.getType() == MetadataDescriptor.TYPE_BINARY) {
+                        if (descriptor.getName().equals(AsfFieldKey.COVER_ART.getFieldName())) {
                             toAdd = new AsfTagCoverField(descriptor);
-                        }
-                        else if (descriptor.getName().equals(AsfFieldKey.BANNER_IMAGE.getFieldName()))
-                        {
+                        } else if (descriptor.getName().equals(AsfFieldKey.BANNER_IMAGE.getFieldName())) {
                             toAdd = new AsfTagBannerField(descriptor);
-                        }
-                        else
-                        {
+                        } else {
                             toAdd = new AsfTagField(descriptor);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         toAdd = new AsfTagTextField(descriptor);
                     }
                     result.addField(toAdd);
@@ -165,24 +147,21 @@ public final class TagConverter
      * containers}.
      *
      * @param tag the tag with the fields to distribute.
+     *
      * @return distribution
      */
-    public static MetadataContainer[] distributeMetadata(final AsfTag tag)
-    {
+    public static MetadataContainer[] distributeMetadata(final AsfTag tag) {
         final Iterator<AsfTagField> asfFields = tag.getAsfFields();
         final MetadataContainer[] createContainers = MetadataContainerFactory.getInstance().createContainers(ContainerType.getOrdered());
         boolean assigned;
         AsfTagField current;
-        while (asfFields.hasNext())
-        {
+        while (asfFields.hasNext()) {
             current = asfFields.next();
             assigned = false;
-            for (int i = 0; !assigned && i < createContainers.length; i++)
-            {
-                if (ContainerType.areInCorrectOrder(createContainers[i].getContainerType(), AsfFieldKey.getAsfFieldKey(current.getId()).getHighestContainer()))
-                {
-                    if (createContainers[i].isAddSupported(current.getDescriptor()))
-                    {
+            for (int i = 0; !assigned && i < createContainers.length; i++) {
+                if (ContainerType.areInCorrectOrder(createContainers[i].getContainerType(),
+                                                    AsfFieldKey.getAsfFieldKey(current.getId()).getHighestContainer())) {
+                    if (createContainers[i].isAddSupported(current.getDescriptor())) {
                         createContainers[i].addDescriptor(current.getDescriptor());
                         assigned = true;
                     }
@@ -196,8 +175,7 @@ public final class TagConverter
     /**
      * Hidden utility class constructor.
      */
-    private TagConverter()
-    {
+    private TagConverter() {
         // Nothing to do.
     }
 

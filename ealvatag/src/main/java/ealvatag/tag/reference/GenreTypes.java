@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -19,24 +19,27 @@
  */
 package ealvatag.tag.reference;
 
-import ealvatag.tag.datatype.AbstractIntStringValuePair;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSortedSet;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Genre list
- *
+ * <p>
  * <p>This is the IDv1 list with additional values as defined by Winamp, this list is also used in Mp4
  * files, note iTunes doesn't understand genres above MAX_STANDARD_GENRE_ID, Winamp does.
  */
-public class GenreTypes extends AbstractIntStringValuePair {
+public class GenreTypes {
     private static final int MAX_STANDARD_GENRE_ID = 125;
     private static final int MAX_GENRE_ID = 191;
 
+    private final String[] values;  // ids are contiguous, so we'll just keep them in an array
+    private final TreeMap<String, Integer> valueToId; // one TreeMap with case insensitive ordering so we don't need another map
+
     /**
-     * @return the maximum genreId that is part of the official Standard, genres above this were added by
-     *         Winamp later.
+     * @return the maximum genreId that is part of the official Standard, genres above this were added by Winamp later.
      */
     public static int getMaxStandardGenreId() {
         return MAX_STANDARD_GENRE_ID;
@@ -46,237 +49,259 @@ public class GenreTypes extends AbstractIntStringValuePair {
         return MAX_GENRE_ID;
     }
 
-    private static GenreTypes genreTypes;
+    private static GenreTypes instance;
 
     public static GenreTypes getInstanceOf() {
-        if (genreTypes == null) {
+        if (instance == null) {
             synchronized (GenreTypes.class) {
-                if (genreTypes == null) {
-                    genreTypes = new GenreTypes();
+                if (instance == null) {
+                    instance = new GenreTypes();
                 }
             }
         }
-        return genreTypes;
+        return instance;
     }
-
-    //This maps the lowercase version to the id, so applications can map from the lowercase value to the id
-    private Map<String, Integer> nameToIdMap;
 
 
     private GenreTypes() {
-        idToValue.put(0, "Blues");
-        idToValue.put(1, "Classic Rock");
-        idToValue.put(2, "Country");
-        idToValue.put(3, "Dance");
-        idToValue.put(4, "Disco");
-        idToValue.put(5, "Funk");
-        idToValue.put(6, "Grunge");
-        idToValue.put(7, "Hip-Hop");
-        idToValue.put(8, "Jazz");
-        idToValue.put(9, "Metal");
-        idToValue.put(10, "New Age");
-        idToValue.put(11, "Oldies");
-        idToValue.put(12, "Other");
-        idToValue.put(13, "Pop");
-        idToValue.put(14, "R&B");
-        idToValue.put(15, "Rap");
-        idToValue.put(16, "Reggae");
-        idToValue.put(17, "Rock");
-        idToValue.put(18, "Techno");
-        idToValue.put(19, "Industrial");
-        idToValue.put(20, "Alternative");
-        idToValue.put(21, "Ska");
-        idToValue.put(22, "Death Metal");
-        idToValue.put(23, "Pranks");
-        idToValue.put(24, "Soundtrack");
-        idToValue.put(25, "Euro-Techno");
-        idToValue.put(26, "Ambient");
-        idToValue.put(27, "Trip-Hop");
-        idToValue.put(28, "Vocal");
-        idToValue.put(29, "Jazz+Funk");
-        idToValue.put(30, "Fusion");
-        idToValue.put(31, "Trance");
-        idToValue.put(32, "Classical");
-        idToValue.put(33, "Instrumental");
-        idToValue.put(34, "Acid");
-        idToValue.put(35, "House");
-        idToValue.put(36, "Game");
-        idToValue.put(37, "Sound Clip");
-        idToValue.put(38, "Gospel");
-        idToValue.put(39, "Noise");
-        idToValue.put(40, "AlternRock");
-        idToValue.put(41, "Bass");
-        idToValue.put(42, "Soul");
-        idToValue.put(43, "Punk");
-        idToValue.put(44, "Space");
-        idToValue.put(45, "Meditative");
-        idToValue.put(46, "Instrumental Pop");
-        idToValue.put(47, "Instrumental Rock");
-        idToValue.put(48, "Ethnic");
-        idToValue.put(49, "Gothic");
-        idToValue.put(50, "Darkwave");
-        idToValue.put(51, "Techno-Industrial");
-        idToValue.put(52, "Electronic");
-        idToValue.put(53, "Pop-Folk");
-        idToValue.put(54, "Eurodance");
-        idToValue.put(55, "Dream");
-        idToValue.put(56, "Southern Rock");
-        idToValue.put(57, "Comedy");
-        idToValue.put(58, "Cult");
-        idToValue.put(59, "Gangsta");
-        idToValue.put(60, "Top 40");
-        idToValue.put(61, "Christian Rap");
-        idToValue.put(62, "Pop/Funk");
-        idToValue.put(63, "Jungle");
-        idToValue.put(64, "Native American");
-        idToValue.put(65, "Cabaret");
-        idToValue.put(66, "New Wave");
-        idToValue.put(67, "Psychadelic");
-        idToValue.put(68, "Rave");
-        idToValue.put(69, "Showtunes");
-        idToValue.put(70, "Trailer");
-        idToValue.put(71, "Lo-Fi");
-        idToValue.put(72, "Tribal");
-        idToValue.put(73, "Acid Punk");
-        idToValue.put(74, "Acid Jazz");
-        idToValue.put(75, "Polka");
-        idToValue.put(76, "Retro");
-        idToValue.put(77, "Musical");
-        idToValue.put(78, "Rock & Roll");
-        idToValue.put(79, "Hard Rock");
-        idToValue.put(80, "Folk");
-        idToValue.put(81, "Folk-Rock");
-        idToValue.put(82, "National Folk");
-        idToValue.put(83, "Swing");
-        idToValue.put(84, "Fast Fusion");
-        idToValue.put(85, "Bebob");
-        idToValue.put(86, "Latin");
-        idToValue.put(87, "Revival");
-        idToValue.put(88, "Celtic");
-        idToValue.put(89, "Bluegrass");
-        idToValue.put(90, "Avantgarde");
-        idToValue.put(91, "Gothic Rock");
-        idToValue.put(92, "Progressive Rock");
-        idToValue.put(93, "Psychedelic Rock");
-        idToValue.put(94, "Symphonic Rock");
-        idToValue.put(95, "Slow Rock");
-        idToValue.put(96, "Big Band");
-        idToValue.put(97, "Chorus");
-        idToValue.put(98, "Easy Listening");
-        idToValue.put(99, "Acoustic");
-        idToValue.put(100, "Humour");
-        idToValue.put(101, "Speech");
-        idToValue.put(102, "Chanson");
-        idToValue.put(103, "Opera");
-        idToValue.put(104, "Chamber Music");
-        idToValue.put(105, "Sonata");
-        idToValue.put(106, "Symphony");
-        idToValue.put(107, "Booty Bass");
-        idToValue.put(108, "Primus");
-        idToValue.put(109, "Porn Groove");
-        idToValue.put(110, "Satire");
-        idToValue.put(111, "Slow Jam");
-        idToValue.put(112, "Club");
-        idToValue.put(113, "Tango");
-        idToValue.put(114, "Samba");
-        idToValue.put(115, "Folklore");
-        idToValue.put(116, "Ballad");
-        idToValue.put(117, "Power Ballad");
-        idToValue.put(118, "Rhythmic Soul");
-        idToValue.put(119, "Freestyle");
-        idToValue.put(120, "Duet");
-        idToValue.put(121, "Punk Rock");
-        idToValue.put(122, "Drum Solo");
-        idToValue.put(123, "Acapella");
-        idToValue.put(124, "Euro-House");
-        idToValue.put(125, "Dance Hall");
-        idToValue.put(126, "Goa");
-        idToValue.put(127, "Drum & Bass");
-        idToValue.put(128, "Club-House");
-        idToValue.put(129, "Hardcore");
-        idToValue.put(130, "Terror");
-        idToValue.put(131, "Indie");
-        idToValue.put(132, "BritPop");
-        idToValue.put(133, "Negerpunk"); // to say the least - this name is problematic
-        idToValue.put(134, "Polsk Punk");
-        idToValue.put(135, "Beat");
-        idToValue.put(136, "Christian Gangsta Rap");
-        idToValue.put(137, "Heavy Metal");
-        idToValue.put(138, "Black Metal");
-        idToValue.put(139, "Crossover");
-        idToValue.put(140, "Contemporary Christian");
-        idToValue.put(141, "Christian Rock");
-        idToValue.put(142, "Merengue");
-        idToValue.put(143, "Salsa");
-        idToValue.put(144, "Thrash Metal");
-        idToValue.put(145, "Anime");
-        idToValue.put(146, "JPop");
-        idToValue.put(147, "SynthPop");
+        values = new String[MAX_GENRE_ID + 1];
+        values[0] = "Blues";
+        values[1] = "Classic Rock";
+        values[2] = "Country";
+        values[3] = "Dance";
+        values[4] = "Disco";
+        values[5] = "Funk";
+        values[6] = "Grunge";
+        values[7] = "Hip-Hop";
+        values[8] = "Jazz";
+        values[9] = "Metal";
+        values[10] = "New Age";
+        values[11] = "Oldies";
+        values[12] = "Other";
+        values[13] = "Pop";
+        values[14] = "R&B";
+        values[15] = "Rap";
+        values[16] = "Reggae";
+        values[17] = "Rock";
+        values[18] = "Techno";
+        values[19] = "Industrial";
+        values[20] = "Alternative";
+        values[21] = "Ska";
+        values[22] = "Death Metal";
+        values[23] = "Pranks";
+        values[24] = "Soundtrack";
+        values[25] = "Euro-Techno";
+        values[26] = "Ambient";
+        values[27] = "Trip-Hop";
+        values[28] = "Vocal";
+        values[29] = "Jazz+Funk";
+        values[30] = "Fusion";
+        values[31] = "Trance";
+        values[32] = "Classical";
+        values[33] = "Instrumental";
+        values[34] = "Acid";
+        values[35] = "House";
+        values[36] = "Game";
+        values[37] = "Sound Clip";
+        values[38] = "Gospel";
+        values[39] = "Noise";
+        values[40] = "AlternRock";
+        values[41] = "Bass";
+        values[42] = "Soul";
+        values[43] = "Punk";
+        values[44] = "Space";
+        values[45] = "Meditative";
+        values[46] = "Instrumental Pop";
+        values[47] = "Instrumental Rock";
+        values[48] = "Ethnic";
+        values[49] = "Gothic";
+        values[50] = "Darkwave";
+        values[51] = "Techno-Industrial";
+        values[52] = "Electronic";
+        values[53] = "Pop-Folk";
+        values[54] = "Eurodance";
+        values[55] = "Dream";
+        values[56] = "Southern Rock";
+        values[57] = "Comedy";
+        values[58] = "Cult";
+        values[59] = "Gangsta";
+        values[60] = "Top 40";
+        values[61] = "Christian Rap";
+        values[62] = "Pop/Funk";
+        values[63] = "Jungle";
+        values[64] = "Native American";
+        values[65] = "Cabaret";
+        values[66] = "New Wave";
+        values[67] = "Psychadelic";
+        values[68] = "Rave";
+        values[69] = "Showtunes";
+        values[70] = "Trailer";
+        values[71] = "Lo-Fi";
+        values[72] = "Tribal";
+        values[73] = "Acid Punk";
+        values[74] = "Acid Jazz";
+        values[75] = "Polka";
+        values[76] = "Retro";
+        values[77] = "Musical";
+        values[78] = "Rock & Roll";
+        values[79] = "Hard Rock";
+        values[80] = "Folk";
+        values[81] = "Folk-Rock";
+        values[82] = "National Folk";
+        values[83] = "Swing";
+        values[84] = "Fast Fusion";
+        values[85] = "Bebob";
+        values[86] = "Latin";
+        values[87] = "Revival";
+        values[88] = "Celtic";
+        values[89] = "Bluegrass";
+        values[90] = "Avantgarde";
+        values[91] = "Gothic Rock";
+        values[92] = "Progressive Rock";
+        values[93] = "Psychedelic Rock";
+        values[94] = "Symphonic Rock";
+        values[95] = "Slow Rock";
+        values[96] = "Big Band";
+        values[97] = "Chorus";
+        values[98] = "Easy Listening";
+        values[99] = "Acoustic";
+        values[100] = "Humour";
+        values[101] = "Speech";
+        values[102] = "Chanson";
+        values[103] = "Opera";
+        values[104] = "Chamber Music";
+        values[105] = "Sonata";
+        values[106] = "Symphony";
+        values[107] = "Booty Bass";
+        values[108] = "Primus";
+        values[109] = "Porn Groove";
+        values[110] = "Satire";
+        values[111] = "Slow Jam";
+        values[112] = "Club";
+        values[113] = "Tango";
+        values[114] = "Samba";
+        values[115] = "Folklore";
+        values[116] = "Ballad";
+        values[117] = "Power Ballad";
+        values[118] = "Rhythmic Soul";
+        values[119] = "Freestyle";
+        values[120] = "Duet";
+        values[121] = "Punk Rock";
+        values[122] = "Drum Solo";
+        values[123] = "Acapella";
+        values[124] = "Euro-House";
+        values[125] = "Dance Hall";
+        values[126] = "Goa";
+        values[127] = "Drum & Bass";
+        values[128] = "Club-House";
+        values[129] = "Hardcore";
+        values[130] = "Terror";
+        values[131] = "Indie";
+        values[132] = "BritPop";
+        values[133] = "Negerpunk"; // to say the least - this name is problematic
+        values[134] = "Polsk Punk";
+        values[135] = "Beat";
+        values[136] = "Christian Gangsta Rap";
+        values[137] = "Heavy Metal";
+        values[138] = "Black Metal";
+        values[139] = "Crossover";
+        values[140] = "Contemporary Christian";
+        values[141] = "Christian Rock";
+        values[142] = "Merengue";
+        values[143] = "Salsa";
+        values[144] = "Thrash Metal";
+        values[145] = "Anime";
+        values[146] = "JPop";
+        values[147] = "SynthPop";
 
         // additional Winamp 5.6 values taken from http://en.wikipedia.org/wiki/ID3#Winamp_Extensions
-        idToValue.put(148, "Abstract");
-        idToValue.put(149, "Art Rock");
-        idToValue.put(150, "Baroque");
-        idToValue.put(151, "Bhangra");
-        idToValue.put(152, "Big Beat");
-        idToValue.put(153, "Breakbeat");
-        idToValue.put(154, "Chillout");
-        idToValue.put(155, "Downtempo");
-        idToValue.put(156, "Dub");
-        idToValue.put(157, "EBM");
-        idToValue.put(158, "Eclectic");
-        idToValue.put(159, "Electro");
-        idToValue.put(160, "Electroclash");
-        idToValue.put(161, "Emo");
-        idToValue.put(162, "Experimental");
-        idToValue.put(163, "Garage");
-        idToValue.put(164, "Global");
-        idToValue.put(165, "IDM");
-        idToValue.put(166, "Illbient");
-        idToValue.put(167, "Industro-Goth");
-        idToValue.put(168, "Jam Band");
-        idToValue.put(169, "Krautrock");
-        idToValue.put(170, "Leftfield");
-        idToValue.put(171, "Lounge");
-        idToValue.put(172, "Math Rock");
-        idToValue.put(173, "New Romantic");
-        idToValue.put(174, "Nu-Breakz");
-        idToValue.put(175, "Post-Punk");
-        idToValue.put(176, "Post-Rock");
-        idToValue.put(177, "Psytrance");
-        idToValue.put(178, "Shoegaze");
-        idToValue.put(179, "Space Rock");
-        idToValue.put(180, "Trop Rock");
-        idToValue.put(181, "World Music");
-        idToValue.put(182, "Neoclassical");
-        idToValue.put(183, "Audiobook");
-        idToValue.put(184, "Audio Theatre");
-        idToValue.put(185, "Neue Deutsche Welle");
-        idToValue.put(186, "Podcast");
-        idToValue.put(187, "Indie Rock");
-        idToValue.put(188, "G-Funk");
-        idToValue.put(189, "Dubstep");
-        idToValue.put(190, "Garage Rock");
-        idToValue.put(191, "Psybient");
+        values[148] = "Abstract";
+        values[149] = "Art Rock";
+        values[150] = "Baroque";
+        values[151] = "Bhangra";
+        values[152] = "Big Beat";
+        values[153] = "Breakbeat";
+        values[154] = "Chillout";
+        values[155] = "Downtempo";
+        values[156] = "Dub";
+        values[157] = "EBM";
+        values[158] = "Eclectic";
+        values[159] = "Electro";
+        values[160] = "Electroclash";
+        values[161] = "Emo";
+        values[162] = "Experimental";
+        values[163] = "Garage";
+        values[164] = "Global";
+        values[165] = "IDM";
+        values[166] = "Illbient";
+        values[167] = "Industro-Goth";
+        values[168] = "Jam Band";
+        values[169] = "Krautrock";
+        values[170] = "Leftfield";
+        values[171] = "Lounge";
+        values[172] = "Math Rock";
+        values[173] = "New Romantic";
+        values[174] = "Nu-Breakz";
+        values[175] = "Post-Punk";
+        values[176] = "Post-Rock";
+        values[177] = "Psytrance";
+        values[178] = "Shoegaze";
+        values[179] = "Space Rock";
+        values[180] = "Trop Rock";
+        values[181] = "World Music";
+        values[182] = "Neoclassical";
+        values[183] = "Audiobook";
+        values[184] = "Audio Theatre";
+        values[185] = "Neue Deutsche Welle";
+        values[186] = "Podcast";
+        values[187] = "Indie Rock";
+        values[188] = "G-Funk";
+        values[189] = "Dubstep";
+        values[190] = "Garage Rock";
+        values[191] = "Psybient";
 
-        createMaps();
-
-        //We now need to map from lowercase version to Id
-        nameToIdMap = new LinkedHashMap<>(idToValue.size());
-        for (Map.Entry<Integer, String> entry : idToValue.entrySet()) {
-            nameToIdMap.put(entry.getValue().toLowerCase(), entry.getKey());
+        valueToId = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        for (int i = 0, size = values.length; i < size; i++) {
+            final String value = Strings.nullToEmpty(values[i]);
+            valueToId.put(value, i);
         }
     }
 
-    /**
-     * Get Id for name, match is not case sensitive
-     *
-     * @param name genre name
-     * @return id or {@code null}, if not found
-     */
-    public Integer getIdForName(String name) {
-        return nameToIdMap.get(name.toLowerCase());
+    public Set<String> getValueSet() {
+        return valueToId.keySet();
     }
 
+    /**
+     * Get Id for Value. This is not case sensitive. Value may be exactly the value or the value in any character case.
+     *
+     * @param value genre value
+     *
+     * @return the id for the genre value
+     */
+    public Integer getIdForValue(String value) {
+        return valueToId.get(value);
+    }
 
+    /**
+     * Get value for Id
+     *
+     * @param id the genre id
+     *
+     * @return the associated value or the empty string if there is no such id. Note: this used to return null but I prefer to avoid null.
+     */
+    public String getValueForId(int id) {
+        if (id < 0 || id > values.length) {
+            return "";
+        }
+        return Strings.nullToEmpty(values[id]);
+    }
+
+    /**
+     * Currently this is only used for testing and in another unused class. We'll construct a set on the fly
+     *
+     * @return the set of all genre values
+     */
+    public ImmutableSortedSet<String> getSortedValueSet() {
+        return ImmutableSortedSet.copyOf(values);
+    }
 }
