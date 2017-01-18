@@ -1,7 +1,6 @@
 package ealvatag.audio;
 
 import ealvatag.AbstractTestCase;
-import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.FieldKey;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,9 +41,8 @@ public class AudioFileWriteAsTest {
         Assert.assertEquals(LANGUAGE, af.getTag().getFirst(FieldKey.LANGUAGE));
     }
 
-    @Test(expected = CannotWriteException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testWriteAsWithNull() throws Exception {
-        //noinspection ConstantConditions
         AudioFileIO.writeAs(af, null);
     }
 }

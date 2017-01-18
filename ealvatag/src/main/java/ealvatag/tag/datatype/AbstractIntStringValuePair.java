@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -25,20 +25,11 @@ import java.util.Map;
  * A two way mapping between an Integral Id and a String value
  */
 public class AbstractIntStringValuePair extends AbstractValuePair<Integer, String> {
-    protected Integer key = null;
-
-    /**
-     * Get Id for Value
-     * @param value
-     * @return
-     */
-    public Integer getIdForValue(String value) {
-        return valueToId.get(value);
-    }
-
     /**
      * Get value for Id
+     *
      * @param id
+     *
      * @return
      */
     public String getValueForId(int id) {

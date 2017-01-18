@@ -21,6 +21,7 @@ package ealvatag.tag.reference;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSortedSet;
+import ealvatag.tag.id3.valuepair.SimpleIntStringMap;
 
 import java.util.Set;
 import java.util.TreeMap;
@@ -31,9 +32,9 @@ import java.util.TreeMap;
  * <p>This is the IDv1 list with additional values as defined by Winamp, this list is also used in Mp4
  * files, note iTunes doesn't understand genres above MAX_STANDARD_GENRE_ID, Winamp does.
  */
-public class GenreTypes {
-    private static final int MAX_STANDARD_GENRE_ID = 125;
-    private static final int MAX_GENRE_ID = 191;
+public class GenreTypes implements SimpleIntStringMap {
+    @SuppressWarnings("WeakerAccess") public static final int MAX_STANDARD_GENRE_ID = 125;
+    @SuppressWarnings("WeakerAccess") public static final int MAX_GENRE_ID = 191;
 
     private final String[] values;  // ids are contiguous, so we'll just keep them in an array
     private final TreeMap<String, Integer> valueToId; // one TreeMap with case insensitive ordering so we don't need another map
@@ -283,20 +284,6 @@ public class GenreTypes {
     }
 
     /**
-     * Get value for Id
-     *
-     * @param id the genre id
-     *
-     * @return the associated value or the empty string if there is no such id. Note: this used to return null but I prefer to avoid null.
-     */
-    public String getValueForId(int id) {
-        if (id < 0 || id > values.length) {
-            return "";
-        }
-        return Strings.nullToEmpty(values[id]);
-    }
-
-    /**
      * Currently this is only used for testing and in another unused class. We'll construct a set on the fly
      *
      * @return the set of all genre values
@@ -304,4 +291,16 @@ public class GenreTypes {
     public ImmutableSortedSet<String> getSortedValueSet() {
         return ImmutableSortedSet.copyOf(values);
     }
+
+    @Override public boolean containsKey(final int key) {
+        return key >= 0 && key < values.length;
+    }
+
+    @Override public String getValue(int id) {
+        if (id < 0 || id > values.length) {
+            return "";
+        }
+        return Strings.nullToEmpty(values[id]);
+    }
+
 }

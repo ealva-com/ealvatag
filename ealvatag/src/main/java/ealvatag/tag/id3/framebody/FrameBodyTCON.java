@@ -209,7 +209,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
         try {
             int genreId = Integer.parseInt(value);
             if (genreId <= GenreTypes.getMaxGenreId()) {
-                return GenreTypes.getInstanceOf().getValueForId(genreId);
+                return GenreTypes.getInstanceOf().getValue(genreId);
             } else {
                 return value;
             }
@@ -231,7 +231,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
         try {
             int genreId = Integer.parseInt(value);
             if (genreId <= GenreTypes.getMaxGenreId()) {
-                return GenreTypes.getInstanceOf().getValueForId(genreId);
+                return GenreTypes.getInstanceOf().getValue(genreId);
             } else {
                 return value;
             }

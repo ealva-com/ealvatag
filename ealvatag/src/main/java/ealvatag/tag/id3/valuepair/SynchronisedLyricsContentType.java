@@ -1,11 +1,12 @@
 package ealvatag.tag.id3.valuepair;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.datatype.AbstractIntStringValuePair;
 
 /**
  * Content Type used by Sysnchronised Lyrics Frame (SYLT)
  */
-public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
+public class SynchronisedLyricsContentType extends AbstractIntStringValuePair implements SimpleIntStringMap
 {
     private static SynchronisedLyricsContentType eventTimingTypes;
 
@@ -32,5 +33,13 @@ public class SynchronisedLyricsContentType extends AbstractIntStringValuePair
         idToValue.put(0x07, "URLs to webpages");
         idToValue.put(0x08, "URLs to images");
         createMaps();
+    }
+
+    @Override public boolean containsKey(final int key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(final int key) {
+        return Strings.nullToEmpty(idToValue.get(key));
     }
 }

@@ -34,6 +34,7 @@
         <guava.version>20.0</guava.version>
         <!-- Test Dependencies -->
         <junit.version>4.11</junit.version>
+        <hamcrest.version>2.0.0.0</hamcrest.version>
     </properties>
 
     <scm>
@@ -63,6 +64,12 @@
                 <version>${junit.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-junit</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.openjdk.jmh</groupId>
                 <artifactId>jmh-core</artifactId>

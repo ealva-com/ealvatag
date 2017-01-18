@@ -26,6 +26,7 @@ import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.utils.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +47,7 @@ import java.nio.channels.FileLock;
  * implemented in the subclass.
  *
  * @author Raphael Slinckx
- * @version $Id: AudioFileWriter.java,v 1.21 2009/05/05 15:59:14 paultaylor Exp
- *          $
+ * @version $Id: AudioFileWriter.java,v 1.21 2009/05/05 15:59:14 paultaylor Exp $
  * @since v0.02
  */
 public abstract class AudioFileWriter {
@@ -75,6 +75,7 @@ public abstract class AudioFileWriter {
      * Delete the tag (if any) present in the given file
      *
      * @param af The file to process
+     *
      * @throws CannotWriteException                          if anything went wrong
      * @throws ealvatag.audio.exceptions.CannotReadException
      */
@@ -190,6 +191,7 @@ public abstract class AudioFileWriter {
      * @param tag
      * @param raf     The source file, already opened in r-write mode
      * @param tempRaf The temporary file opened in r-write mode
+     *
      * @throws CannotWriteException                          if anything went wrong
      * @throws ealvatag.audio.exceptions.CannotReadException
      * @throws java.io.IOException
@@ -207,9 +209,9 @@ public abstract class AudioFileWriter {
      * @param tag
      * @param raf
      * @param tempRaf
-     * @throws IOException                                   is thrown when the RandomAccessFile operations throw it
-     *                                                       (you
-     *                                                       should never throw them manually)
+     *
+     * @throws IOException                                   is thrown when the RandomAccessFile operations throw it (you should never throw
+     *                                                       them manually)
      * @throws CannotWriteException                          when an error occured during the deletion of the tag
      * @throws ealvatag.audio.exceptions.CannotReadException
      */
@@ -239,6 +241,7 @@ public abstract class AudioFileWriter {
      * </ul>
      *
      * @param af
+     *
      * @throws CannotWriteException
      */
     private void precheckWrite(AudioFile af) throws CannotWriteException {
@@ -268,20 +271,22 @@ public abstract class AudioFileWriter {
      * Write the tag (if not empty) present in the AudioFile in the associated
      * File
      *
-     * @param af The file we want to process
+     * @param audioFile The file we want to process
+     *
      * @throws CannotWriteException if anything went wrong
      */
     // TODO Creates temp file in same folder as the original file, this is safe
     // but would impose a performance overhead if the original file is on a networked drive
-    public void write(AudioFile af) throws CannotWriteException {
-        LOG.trace("Started writing tag data for file:" + af.getFile().getName());
+    public void write(AudioFile audioFile) throws CannotWriteException {
+        Check.checkArgNotNull(audioFile, ErrorMessage.CANNOT_BE_NULL, "audioFile");
+        LOG.trace("Started writing tag data for file:" + audioFile.getFile().getName());
 
         // Prechecks
-        precheckWrite(af);
+        precheckWrite(audioFile);
 
         //mp3's use a different mechanism to the other formats
-        if (af instanceof MP3File) {
-            af.commit();
+        if (audioFile instanceof MP3File) {
+            audioFile.commit();
             return;
         }
 
@@ -292,63 +297,63 @@ public abstract class AudioFileWriter {
 
         // Create temporary File
         try {
-            newFile = File.createTempFile(af.getFile().getName().replace('.', '_'),
+            newFile = File.createTempFile(audioFile.getFile().getName().replace('.', '_'),
                                           TEMP_FILENAME_SUFFIX,
-                                          af.getFile().getParentFile());
+                                          audioFile.getFile().getParentFile());
         }
         // Unable to create temporary file, can happen in Vista if have Create
         // Files/Write Data set to Deny
         catch (IOException ioe) {
             if (ioe.getMessage().equals(FILE_NAME_TOO_LONG) &&
-                    (af.getFile().getName().length() > FILE_NAME_TOO_LONG_SAFE_LIMIT)) {
+                    (audioFile.getFile().getName().length() > FILE_NAME_TOO_LONG_SAFE_LIMIT)) {
                 try {
 
-                    newFile = File.createTempFile(af.getFile()
-                                                    .getName()
-                                                    .substring(0, FILE_NAME_TOO_LONG_SAFE_LIMIT)
-                                                    .replace('.', '_'),
+                    newFile = File.createTempFile(audioFile.getFile()
+                                                           .getName()
+                                                           .substring(0, FILE_NAME_TOO_LONG_SAFE_LIMIT)
+                                                           .replace('.', '_'),
                                                   TEMP_FILENAME_SUFFIX,
-                                                  af.getFile().getParentFile());
+                                                  audioFile.getFile().getParentFile());
 
                 } catch (IOException ioe2) {
                     LOG.error(ErrorMessage.
-                                      GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(af.getFile()
-                                                                                                       .getName(),
-                                                                                                     af.getFile()
-                                                                                                       .getParentFile()
-                                                                                                       .getAbsolutePath()),
+                                      GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(audioFile.getFile()
+                                                                                                              .getName(),
+                                                                                                     audioFile.getFile()
+                                                                                                              .getParentFile()
+                                                                                                              .getAbsolutePath()),
                               ioe2);
                     throw new CannotWriteException(ErrorMessage
                                                            .GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
                                                            .getMsg(
-                                                                   af.getFile().getName(),
-                                                                   af.getFile().getParentFile().getAbsolutePath()));
+                                                                   audioFile.getFile().getName(),
+                                                                   audioFile.getFile().getParentFile().getAbsolutePath()));
                 }
             } else {
-                LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(af.getFile()
-                                                                                                        .getName(),
-                                                                                                      af.getFile()
-                                                                                                        .getParentFile()
-                                                                                                        .getAbsolutePath()),
+                LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER.getMsg(audioFile.getFile()
+                                                                                                               .getName(),
+                                                                                                      audioFile.getFile()
+                                                                                                               .getParentFile()
+                                                                                                               .getAbsolutePath()),
                           ioe);
                 throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER
                                                        .getMsg(
-                                                               af.getFile().getName(),
-                                                               af.getFile().getParentFile().getAbsolutePath()));
+                                                               audioFile.getFile().getName(),
+                                                               audioFile.getFile().getParentFile().getAbsolutePath()));
             }
         }
 
         // Open temporary file and actual file for editing
         try {
             rafTemp = new RandomAccessFile(newFile, WRITE_MODE);
-            raf = new RandomAccessFile(af.getFile(), WRITE_MODE);
+            raf = new RandomAccessFile(audioFile.getFile(), WRITE_MODE);
 
         }
         // Unable to write to writable file, can happen in Vista if have Create
         // Folders/Append Data set to Deny
         catch (IOException ioe) {
-            LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(af.getFile()
-                                                                                          .getAbsolutePath()),
+            LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(audioFile.getFile()
+                                                                                                 .getAbsolutePath()),
                       ioe);
 
             // If we managed to open either file, delete it.
@@ -361,7 +366,7 @@ public abstract class AudioFileWriter {
                 }
             } catch (IOException ioe2) {
                 // Warn but assume has worked okay
-                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile(),
+                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(audioFile.getFile(),
                                                                                        ioe.getMessage()),
                          ioe2);
             }
@@ -373,8 +378,8 @@ public abstract class AudioFileWriter {
                 LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getAbsolutePath()));
             }
 
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(af.getFile()
-                                                                                                               .getAbsolutePath()));
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(audioFile.getFile()
+                                                                                                                      .getAbsolutePath()));
         }
 
         // Write data to File
@@ -384,17 +389,17 @@ public abstract class AudioFileWriter {
             rafTemp.seek(0);
             try {
                 if (this.modificationListener != null) {
-                    this.modificationListener.fileWillBeModified(af, false);
+                    this.modificationListener.fileWillBeModified(audioFile, false);
                 }
-                writeTag(af, af.getTag(), raf, rafTemp);
+                writeTag(audioFile, audioFile.getTag(), raf, rafTemp);
                 if (this.modificationListener != null) {
-                    this.modificationListener.fileModified(af, newFile);
+                    this.modificationListener.fileModified(audioFile, newFile);
                 }
             } catch (ModifyVetoException veto) {
                 throw new CannotWriteException(veto);
             }
         } catch (Exception e) {
-            LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(), e.getMessage()), e);
+            LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(audioFile.getFile(), e.getMessage()), e);
 
             try {
                 if (raf != null) {
@@ -405,7 +410,7 @@ public abstract class AudioFileWriter {
                 }
             } catch (IOException ioe) {
                 // Warn but assume has worked okay
-                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile().getAbsolutePath(),
+                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(audioFile.getFile().getAbsolutePath(),
                                                                                        ioe.getMessage()),
                          ioe);
             }
@@ -418,7 +423,7 @@ public abstract class AudioFileWriter {
                 // Non critical failed deletion
                 LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE.getMsg(newFile.getAbsolutePath()));
             }
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(af.getFile(),
+            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE.getMsg(audioFile.getFile(),
                                                                                             e.getMessage()));
         } finally {
             try {
@@ -430,19 +435,19 @@ public abstract class AudioFileWriter {
                 }
             } catch (IOException ioe) {
                 // Warn but assume has worked okay
-                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(af.getFile().getAbsolutePath(),
+                LOG.warn(ErrorMessage.GENERAL_WRITE_PROBLEM_CLOSING_FILE_HANDLE.getMsg(audioFile.getFile().getAbsolutePath(),
                                                                                        ioe.getMessage()),
                          ioe);
             }
         }
 
         // Result held in this file
-        result = af.getFile();
+        result = audioFile.getFile();
 
         // If the temporary file was used
         if (newFile.length() > 0) {
             transferNewFileToOriginalFile(newFile,
-                                          af.getFile(),
+                                          audioFile.getFile(),
                                           TagOptionSingleton.getInstance().isPreserveFileIdentity());
         } else {
             // Delete the temporary file that wasn't ever used
@@ -475,6 +480,7 @@ public abstract class AudioFileWriter {
      * @param newFile                   new file
      * @param originalFile              original file
      * @param reuseExistingOriginalFile {@code true} or {@code false}
+     *
      * @throws CannotWriteException If the file cannot be written
      */
     private void transferNewFileToOriginalFile(final File newFile,
@@ -507,9 +513,9 @@ public abstract class AudioFileWriter {
      * </ol>
      *
      * @param newFile      File containing the data we want in the {@code originalFile}
-     * @param originalFile Before execution this denotes the original, unmodified file.
-     *                     After execution it denotes the name of the file with the modified content and new
-     *                     inode/fileIndex.
+     * @param originalFile Before execution this denotes the original, unmodified file. After execution it denotes the name of the file with
+     *                     the modified content and new inode/fileIndex.
+     *
      * @throws CannotWriteException if the file cannot be written
      */
     private void transferNewFileContentToOriginalFile(final File newFile, final File originalFile)
@@ -612,9 +618,9 @@ public abstract class AudioFileWriter {
      * </ol>
      *
      * @param newFile      File containing the data we want in the {@code originalFile}
-     * @param originalFile Before execution this denotes the original, unmodified file.
-     *                     After execution it denotes the name of the file with the modified content and new
-     *                     inode/fileIndex.
+     * @param originalFile Before execution this denotes the original, unmodified file. After execution it denotes the name of the file with
+     *                     the modified content and new inode/fileIndex.
+     *
      * @throws CannotWriteException if the file cannot be written
      */
     private void transferNewFileToNewOriginalFile(final File newFile, final File originalFile)
@@ -771,9 +777,9 @@ public abstract class AudioFileWriter {
      * @param tag
      * @param raf
      * @param rafTemp
-     * @throws IOException                                   is thrown when the RandomAccessFile operations throw it
-     *                                                       (you
-     *                                                       should never throw them manually)
+     *
+     * @throws IOException                                   is thrown when the RandomAccessFile operations throw it (you should never throw
+     *                                                       them manually)
      * @throws CannotWriteException                          when an error occured during the generation of the tag
      * @throws ealvatag.audio.exceptions.CannotReadException
      */

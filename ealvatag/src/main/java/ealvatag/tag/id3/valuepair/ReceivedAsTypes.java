@@ -22,13 +22,14 @@
  */
 package ealvatag.tag.id3.valuepair;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.datatype.AbstractIntStringValuePair;
 
 /**
  * Defines how song was purchased used by the COMR frame
  *
  */
-public class ReceivedAsTypes extends AbstractIntStringValuePair
+public class ReceivedAsTypes extends AbstractIntStringValuePair implements SimpleIntStringMap
 {
     //The number of bytes used to hold the text encoding field size
     public static final int RECEIVED_AS_FIELD_SIZE = 1;
@@ -56,5 +57,13 @@ public class ReceivedAsTypes extends AbstractIntStringValuePair
         idToValue.put(0x07, "Music on other media");
         idToValue.put(0x08, "Non-musical merchandise");
         createMaps();
+    }
+
+    @Override public boolean containsKey(final int key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(final int key) {
+        return Strings.nullToEmpty(idToValue.get(key));
     }
 }

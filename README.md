@@ -17,6 +17,26 @@ Until the version of this library reaches 1.0, you should consider the API to
 be very unstable. Currently there is no downloadable jar. Pull requests 
 welcome.
 
+Android
+-------
+
+ProGuard
+
+    -keep class ealvatag.tag.id3.framebody.** { *; }
+    -keep class ealvatag.tag.datatype.** { *; }
+    -dontwarn java.awt.geom.AffineTransform
+    -dontwarn java.awt.Graphics2D
+    -dontwarn java.awt.Image
+    -dontwarn java.awt.image.BufferedImage
+    -dontwarn javax.imageio.ImageIO
+    -dontwarn javax.imageio.ImageWriter
+    -dontwarn javax.imageio.stream.ImageInputStream
+    -dontwarn javax.swing.filechooser.FileFilter
+    -dontwarn sun.security.action.GetPropertyAction
+    -dontwarn java.nio.file.Paths
+    -dontwarn java.nio.file.OpenOption
+    -dontwarn java.nio.file.Files
+
 
 License
 -------

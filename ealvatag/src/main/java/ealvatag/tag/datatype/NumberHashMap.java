@@ -28,36 +28,29 @@ import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
 import ealvatag.tag.id3.valuepair.InterpolationTypes;
 import ealvatag.tag.id3.valuepair.ReceivedAsTypes;
+import ealvatag.tag.id3.valuepair.SimpleIntStringMap;
 import ealvatag.tag.id3.valuepair.SynchronisedLyricsContentType;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.EqualsUtil;
-
-import java.util.Map;
 
 /**
  * Represents a number that acts as a key into an enumeration of values
  */
 public class NumberHashMap extends NumberFixedLength {
 
-    // TODO: 1/18/17 Change this to an interface. This depends on an implementation a lookup
-    private Map<Integer, String> keyToValue = null;
-
-
-    /**
-     *
-     */
+    private final SimpleIntStringMap simpleIntStringMap;
     private boolean hasEmptyValue = false;
 
 
     /**
-     * Creates a new ObjectNumberHashMap datatype.
+     * Creates a new NumberHashMap based on the data type identifier
      *
-     * @param identifier
-     * @param frameBody
-     * @param size
+     * @param identifier to allow retrieval of this datatype by name from framebody
+     * @param frameBody  that the dataype is associated with
+     * @param size       the number of significant places that the number is held to
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if size < 0
      */
     public NumberHashMap(String identifier, AbstractTagFrameBody frameBody, int size) {
         super(identifier, frameBody, size);
@@ -65,38 +58,37 @@ public class NumberHashMap extends NumberFixedLength {
         switch (identifier) {
             // OBJ_GENRE never used!
 //            case DataTypes.OBJ_GENRE:
-//                valueToKey = GenreTypes.getInstanceOf().getValueToIdMap();
-//                keyToValue = GenreTypes.getInstanceOf().getIdToValueMap();
+//                simpleIntStringMap = GenreTypes.getInstanceOf();
 //
 //                //genres can be an id or literal value
 //                hasEmptyValue = true;
 //                break;
             case DataTypes.OBJ_TEXT_ENCODING:
-                keyToValue = TextEncoding.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = TextEncoding.getInstanceOf();
                 break;
             case DataTypes.OBJ_INTERPOLATION_METHOD:
-                keyToValue = InterpolationTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = InterpolationTypes.getInstanceOf();
                 break;
             case DataTypes.OBJ_PICTURE_TYPE:
-                keyToValue = PictureTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = PictureTypes.getInstanceOf();
 
                 //Issue #224 Values should map, but have examples where they dont, this is a workaround
                 hasEmptyValue = true;
                 break;
             case DataTypes.OBJ_TYPE_OF_EVENT:
-                keyToValue = EventTimingTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = EventTimingTypes.getInstanceOf();
                 break;
             case DataTypes.OBJ_TIME_STAMP_FORMAT:
-                keyToValue = EventTimingTimestampTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = EventTimingTimestampTypes.getInstanceOf();
                 break;
             case DataTypes.OBJ_TYPE_OF_CHANNEL:
-                keyToValue = ChannelTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = ChannelTypes.getInstanceOf();
                 break;
             case DataTypes.OBJ_RECIEVED_AS:
-                keyToValue = ReceivedAsTypes.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = ReceivedAsTypes.getInstanceOf();
                 break;
             case DataTypes.OBJ_CONTENT_TYPE:
-                keyToValue = SynchronisedLyricsContentType.getInstanceOf().getIdToValueMap();
+                simpleIntStringMap = SynchronisedLyricsContentType.getInstanceOf();
                 break;
             default:
                 throw new IllegalArgumentException("Hashmap identifier not defined in this class: " + identifier);
@@ -109,7 +101,7 @@ public class NumberHashMap extends NumberFixedLength {
         this.hasEmptyValue = copyObject.hasEmptyValue;
 
         // we don't need to clone/copy the maps here because they are static
-        this.keyToValue = copyObject.keyToValue;
+        this.simpleIntStringMap = copyObject.simpleIntStringMap;
     }
 
     public void setValue(Object value) {
@@ -137,24 +129,16 @@ public class NumberHashMap extends NumberFixedLength {
 
         return
                 EqualsUtil.areEqual(hasEmptyValue, that.hasEmptyValue) &&
-                        EqualsUtil.areEqual(keyToValue, that.keyToValue) &&
+                        EqualsUtil.areEqual(simpleIntStringMap, that.simpleIntStringMap) &&
                         super.equals(that);
     }
 
-    /**
-     * Read the key from the buffer.
-     *
-     * @param array
-     * @param offset
-     *
-     * @throws InvalidDataTypeException if emptyValues are not allowed and the eky was invalid.
-     */
     public void readByteArray(byte[] array, int offset) throws InvalidDataTypeException {
         super.readByteArray(array, offset);
 
         //Mismatch:Superclass uses Long, but maps expect Integer
-        Integer intValue = ((Long)value).intValue();
-        if (!keyToValue.containsKey(intValue)) {
+        int intValue = ((Number)value).intValue();
+        if (!simpleIntStringMap.containsKey(intValue)) {
             if (!hasEmptyValue) {
                 throw new InvalidDataTypeException(ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier, intValue));
             } else if (identifier.equals(DataTypes.OBJ_PICTURE_TYPE)) {
@@ -166,10 +150,7 @@ public class NumberHashMap extends NumberFixedLength {
     public String toString() {
         if (value == null) {
             return "";
-        } else if (keyToValue.get(value) == null) {
-            return "";
-        } else {
-            return keyToValue.get(value);
         }
+        return simpleIntStringMap.getValue(((Number)value).intValue());
     }
 }

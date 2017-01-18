@@ -22,6 +22,7 @@
  */
 package ealvatag.tag.id3.valuepair;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.datatype.AbstractIntStringValuePair;
 
 import java.nio.charset.Charset;
@@ -39,7 +40,7 @@ import java.util.Map;
  * marks, in JAudioTagger we always implement it as UTF16LE because only this order
  * is understood in Windows, OSX seem to understand both.
  */
-public class TextEncoding extends AbstractIntStringValuePair
+public class TextEncoding extends AbstractIntStringValuePair implements SimpleIntStringMap
 {
 
     //Supported ID3 charset ids
@@ -104,5 +105,13 @@ public class TextEncoding extends AbstractIntStringValuePair
     public Charset getCharsetForId(final int id)
     {
         return idToCharset.get(id);
+    }
+
+    @Override public boolean containsKey(final int key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(final int key) {
+        return Strings.nullToEmpty(idToValue.get(key));
     }
 }

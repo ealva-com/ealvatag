@@ -25,7 +25,6 @@ package ealvatag.tag.id3;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -376,7 +375,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
      */
     public String getFirstGenre() {
         Integer genreId = genre & BYTE_TO_UNSIGNED;
-        String genreValue = GenreTypes.getInstanceOf().getValueForId(genreId);
+        String genreValue = GenreTypes.getInstanceOf().getValue(genreId);
         if (genreValue == null) {
             return "";
         } else {

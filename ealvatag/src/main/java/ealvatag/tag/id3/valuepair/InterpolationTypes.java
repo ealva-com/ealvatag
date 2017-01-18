@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  *
  * Version @version:$Id$
@@ -21,9 +21,10 @@
  */
 package ealvatag.tag.id3.valuepair;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.datatype.AbstractIntStringValuePair;
 
-public class InterpolationTypes extends AbstractIntStringValuePair
+public class InterpolationTypes extends AbstractIntStringValuePair implements SimpleIntStringMap
 {
     private static InterpolationTypes interpolationTypes;
 
@@ -41,5 +42,13 @@ public class InterpolationTypes extends AbstractIntStringValuePair
         idToValue.put(0, "Band");
         idToValue.put(1, "Linear");
         createMaps();
+    }
+
+    @Override public boolean containsKey(final int key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(final int key) {
+        return Strings.nullToEmpty(idToValue.get(key));
     }
 }

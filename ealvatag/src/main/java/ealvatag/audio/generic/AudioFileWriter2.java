@@ -70,17 +70,17 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
     /**
      * Replace with new tag
      *
-     * @param af The file we want to process
+     * @param audioFile The file we want to process
      * @throws CannotWriteException
      */
     @Override
-    public void write(AudioFile af) throws CannotWriteException
+    public void write(AudioFile audioFile) throws CannotWriteException
     {
-        final File file = af.getFile();
-        checkCanWriteAndSize(af, file);
+        final File file = audioFile.getFile();
+        checkCanWriteAndSize(audioFile, file);
         try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel())
         {
-            writeTag(af.getTag(), channel, file.getAbsolutePath());
+            writeTag(audioFile.getTag(), channel, file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {

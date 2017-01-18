@@ -538,7 +538,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
                 if (((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) >= 0) &&
                         ((id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED) != ID3v1Tag.BYTE_TO_UNSIGNED)) {
                     Integer genreId = id3tag.genre & ID3v1Tag.BYTE_TO_UNSIGNED;
-                    String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValueForId(genreId);
+                    String genre = "(" + genreId + ") " + GenreTypes.getInstanceOf().getValue(genreId);
 
                     newBody = new FrameBodyTCON((byte)0, genre);
                     newFrame = new ID3v24Frame(ID3v24Frames.FRAME_ID_GENRE);

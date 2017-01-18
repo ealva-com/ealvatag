@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -19,7 +19,9 @@
  */
 package ealvatag.tag.reference;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.datatype.AbstractIntStringValuePair;
+import ealvatag.tag.id3.valuepair.SimpleIntStringMap;
 
 /**
  * Pictures types for Attached Pictures
@@ -27,7 +29,7 @@ import ealvatag.tag.datatype.AbstractIntStringValuePair;
  * <P>Note this list is used by APIC and PIC frames within ID3v2. It is also used by Flac format Picture blocks
  * and WMA Picture fields.
  */
-public class PictureTypes extends AbstractIntStringValuePair {
+public class PictureTypes extends AbstractIntStringValuePair implements SimpleIntStringMap {
     private static PictureTypes pictureTypes;
 
     public static PictureTypes getInstanceOf() {
@@ -69,6 +71,14 @@ public class PictureTypes extends AbstractIntStringValuePair {
         idToValue.put(20, "Publisher/Studio logotype");
 
         createMaps();
+    }
+
+    @Override public boolean containsKey(final int key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(final int key) {
+        return Strings.nullToEmpty(idToValue.get(key));
     }
 
 }

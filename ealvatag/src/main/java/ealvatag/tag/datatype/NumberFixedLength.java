@@ -92,12 +92,6 @@ public class NumberFixedLength extends AbstractDataType {
         return this.size == object.size && super.equals(obj);
     }
 
-    /**
-     * Read the number from the byte array
-     *
-     * @throws IllegalArgumentException if array is null
-     * @throws IndexOutOfBoundsException if offset is not inbounds
-     */
     public void readByteArray(byte[] array, int offset) throws InvalidDataTypeException {
         if (array == null) {
             throw new NullPointerException("Byte array is null");
