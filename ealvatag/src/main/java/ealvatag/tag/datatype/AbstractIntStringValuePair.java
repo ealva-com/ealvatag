@@ -25,13 +25,6 @@ import java.util.Map;
  * A two way mapping between an Integral Id and a String value
  */
 public class AbstractIntStringValuePair extends AbstractValuePair<Integer, String> {
-    /**
-     * Get value for Id
-     *
-     * @param id
-     *
-     * @return
-     */
     public String getValueForId(int id) {
         return idToValue.get(id);
     }

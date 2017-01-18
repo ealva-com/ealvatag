@@ -42,7 +42,7 @@ public class ChannelTypesTest {
 
     @Test
     public void testAllIdsMapped() throws Exception {
-        for (int i = 0; i < ChannelTypes.MAX_CHANNEL_ID; i++) {
+        for (int i = 0; i <= ChannelTypes.MAX_CHANNEL_ID; i++) {
             assertThat(channelTypes.containsKey(i), is(true));
             assertThat(channelTypes.getValue(i), is(not(emptyOrNullString())));
         }
