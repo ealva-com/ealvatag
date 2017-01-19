@@ -16,11 +16,9 @@
 package ealvatag.tag.id3;
 
 import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldKey;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Defines ID3v23 frames and collections that categorise frames within an ID3v23 tag.
@@ -130,10 +128,9 @@ public class ID3v23Frames extends ID3Frames {
     /**
      * Maps from Generic key to ID3 key
      */
-    private final ImmutableBiMap<FieldKey, ID3v23FieldKey> tagFieldToId3;
-
-
+    private volatile ImmutableBiMap<FieldKey, ID3v23FieldKey> tagFieldToId3;
     private volatile ImmutableBiMap<ID3v23FieldKey, FieldKey> id3ToTagField;
+    private volatile ImmutableMap<String, String> idToValue;
 
     public static ID3v23Frames getInstanceOf() {
         if (instance == null) {
@@ -146,234 +143,52 @@ public class ID3v23Frames extends ID3Frames {
         return instance;
     }
 
-    private final Map<String, String> idToValue = new LinkedHashMap<>();
+    private ID3v23Frames() {}
 
+    /**
+     * @param genericKey FieldKey to query
+     *
+     * @return id3 key for generic key
+     */
+    public ID3v23FieldKey getId3KeyFromGenericKey(FieldKey genericKey) {
+        return getTagFieldToId3().get(genericKey);
+    }
 
-    private ID3v23Frames() {
-        // The defined v23 frames,
-        supportedFrames.add(FRAME_ID_V3_ACCOMPANIMENT);
-        supportedFrames.add(FRAME_ID_V3_ALBUM);
-        supportedFrames.add(FRAME_ID_V3_ARTIST);
-        supportedFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
-        supportedFrames.add(FRAME_ID_V3_AUDIO_ENCRYPTION);
-        supportedFrames.add(FRAME_ID_V3_BPM);
-        supportedFrames.add(FRAME_ID_V3_COMMENT);
-        supportedFrames.add(FRAME_ID_V3_COMMERCIAL_FRAME);
-        supportedFrames.add(FRAME_ID_V3_COMPOSER);
-        supportedFrames.add(FRAME_ID_V3_CONDUCTOR);
-        supportedFrames.add(FRAME_ID_V3_CONTENT_GROUP_DESC);
-        supportedFrames.add(FRAME_ID_V3_COPYRIGHTINFO);
-        supportedFrames.add(FRAME_ID_V3_ENCODEDBY);
-        supportedFrames.add(FRAME_ID_V3_ENCRYPTION);
-        supportedFrames.add(FRAME_ID_V3_EQUALISATION);
-        supportedFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
-        supportedFrames.add(FRAME_ID_V3_FILE_OWNER);
-        supportedFrames.add(FRAME_ID_V3_FILE_TYPE);
-        supportedFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
-        supportedFrames.add(FRAME_ID_V3_GENRE);
-        supportedFrames.add(FRAME_ID_V3_GROUP_ID_REG);
-        supportedFrames.add(FRAME_ID_V3_HW_SW_SETTINGS);
-        supportedFrames.add(FRAME_ID_V3_INITIAL_KEY);
-        supportedFrames.add(FRAME_ID_V3_INVOLVED_PEOPLE);
-        supportedFrames.add(FRAME_ID_V3_ISRC);
-        supportedFrames.add(FRAME_ID_V3_ITUNES_GROUPING);
-        supportedFrames.add(FRAME_ID_V3_LANGUAGE);
-        supportedFrames.add(FRAME_ID_V3_LENGTH);
-        supportedFrames.add(FRAME_ID_V3_LINKED_INFO);
-        supportedFrames.add(FRAME_ID_V3_LYRICIST);
-        supportedFrames.add(FRAME_ID_V3_MEDIA_TYPE);
-        supportedFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
-        supportedFrames.add(FRAME_ID_V3_MOVEMENT);
-        supportedFrames.add(FRAME_ID_V3_MOVEMENT_NO);
-        supportedFrames.add(FRAME_ID_V3_MUSIC_CD_ID);
-        supportedFrames.add(FRAME_ID_V3_ORIGARTIST);
-        supportedFrames.add(FRAME_ID_V3_ORIG_FILENAME);
-        supportedFrames.add(FRAME_ID_V3_ORIG_LYRICIST);
-        supportedFrames.add(FRAME_ID_V3_ORIG_TITLE);
-        supportedFrames.add(FRAME_ID_V3_OWNERSHIP);
-        supportedFrames.add(FRAME_ID_V3_PLAYLIST_DELAY);
-        supportedFrames.add(FRAME_ID_V3_PLAY_COUNTER);
-        supportedFrames.add(FRAME_ID_V3_POPULARIMETER);
-        supportedFrames.add(FRAME_ID_V3_POSITION_SYNC);
-        supportedFrames.add(FRAME_ID_V3_PRIVATE);
-        supportedFrames.add(FRAME_ID_V3_PUBLISHER);
-        supportedFrames.add(FRAME_ID_V3_RADIO_NAME);
-        supportedFrames.add(FRAME_ID_V3_RADIO_OWNER);
-        supportedFrames.add(FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE);
-        supportedFrames.add(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
-        supportedFrames.add(FRAME_ID_V3_REMIXED);
-        supportedFrames.add(FRAME_ID_V3_REVERB);
-        supportedFrames.add(FRAME_ID_V3_SET);
-        supportedFrames.add(FRAME_ID_V3_SET_SUBTITLE);
-        supportedFrames.add(FRAME_ID_V3_SYNC_LYRIC);
-        supportedFrames.add(FRAME_ID_V3_SYNC_TEMPO);
-        supportedFrames.add(FRAME_ID_V3_TDAT);
-        supportedFrames.add(FRAME_ID_V3_TERMS_OF_USE);
-        supportedFrames.add(FRAME_ID_V3_TIME);
-        supportedFrames.add(FRAME_ID_V3_TITLE);
-        supportedFrames.add(FRAME_ID_V3_TITLE_REFINEMENT);
-        supportedFrames.add(FRAME_ID_V3_TORY);
-        supportedFrames.add(FRAME_ID_V3_TRACK);
-        supportedFrames.add(FRAME_ID_V3_TRDA);
-        supportedFrames.add(FRAME_ID_V3_TSIZ);
-        supportedFrames.add(FRAME_ID_V3_TYER);
-        supportedFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
-        supportedFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
-        supportedFrames.add(FRAME_ID_V3_URL_ARTIST_WEB);
-        supportedFrames.add(FRAME_ID_V3_URL_COMMERCIAL);
-        supportedFrames.add(FRAME_ID_V3_URL_COPYRIGHT);
-        supportedFrames.add(FRAME_ID_V3_URL_FILE_WEB);
-        supportedFrames.add(FRAME_ID_V3_URL_OFFICIAL_RADIO);
-        supportedFrames.add(FRAME_ID_V3_URL_PAYMENT);
-        supportedFrames.add(FRAME_ID_V3_URL_PUBLISHERS);
-        supportedFrames.add(FRAME_ID_V3_URL_SOURCE_WEB);
-        supportedFrames.add(FRAME_ID_V3_USER_DEFINED_INFO);
-        supportedFrames.add(FRAME_ID_V3_USER_DEFINED_URL);
+    /**
+     * Get generic key for ID3 field key
+     *
+     * @param fieldKey {@link ID3v23FieldKey} to query
+     *
+     * @return {@link FieldKey} analog to the {@link ID3v23FieldKey}
+     */
+    public FieldKey getGenericKeyFromId3(ID3v23FieldKey fieldKey) {
+        return getId3ToTagField().get(fieldKey);
+    }
 
-        //Extension
-        extensionFrames.add(FRAME_ID_V3_IS_COMPILATION);
-        extensionFrames.add(FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES);
-        extensionFrames.add(FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES);
-        extensionFrames.add(FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES);
-        extensionFrames.add(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ);
-        extensionFrames.add(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ);
-        extensionFrames.add(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ);
-        extensionFrames.add(FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES);
-        extensionFrames.add(FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES);
+    ImmutableSet<FieldKey> getSupportedFields() {
+        return getTagFieldToId3().keySet();
+    }
 
-        //Common
-        commonFrames.add(FRAME_ID_V3_ARTIST);
-        commonFrames.add(FRAME_ID_V3_ALBUM);
-        commonFrames.add(FRAME_ID_V3_TITLE);
-        commonFrames.add(FRAME_ID_V3_GENRE);
-        commonFrames.add(FRAME_ID_V3_TRACK);
-        commonFrames.add(FRAME_ID_V3_TYER);
-        commonFrames.add(FRAME_ID_V3_COMMENT);
+    public boolean containsKey(String key) {
+        return getIdToValue().containsKey(key);
+    }
 
-        //Binary
-        binaryFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
-        binaryFrames.add(FRAME_ID_V3_AUDIO_ENCRYPTION);
-        binaryFrames.add(FRAME_ID_V3_ENCRYPTION);
-        binaryFrames.add(FRAME_ID_V3_EQUALISATION);
-        binaryFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
-        binaryFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
-        binaryFrames.add(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
-        binaryFrames.add(FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE);
-        binaryFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
+    public String getValue(String id) {
+        return getIdToValue().get(id);
+    }
 
-        // Map frameid to a name
-        idToValue.put(FRAME_ID_V3_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment");
-        idToValue.put(FRAME_ID_V3_ALBUM, "Text: Album/Movie/Show title");
-        idToValue.put(FRAME_ID_V3_ARTIST, "Text: Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group");
-        idToValue.put(FRAME_ID_V3_ATTACHED_PICTURE, "Attached picture");
-        idToValue.put(FRAME_ID_V3_AUDIO_ENCRYPTION, "Audio encryption");
-        idToValue.put(FRAME_ID_V3_BPM, "Text: BPM (Beats Per Minute)");
-        idToValue.put(FRAME_ID_V3_COMMENT, "Comments");
-        idToValue.put(FRAME_ID_V3_COMMERCIAL_FRAME, "");
-        idToValue.put(FRAME_ID_V3_COMPOSER, "Text: Composer");
-        idToValue.put(FRAME_ID_V3_CONDUCTOR, "Text: Conductor/Performer refinement");
-        idToValue.put(FRAME_ID_V3_CONTENT_GROUP_DESC, "Text: Content group description");
-        idToValue.put(FRAME_ID_V3_COPYRIGHTINFO, "Text: Copyright message");
-        idToValue.put(FRAME_ID_V3_ENCODEDBY, "Text: Encoded by");
-        idToValue.put(FRAME_ID_V3_ENCRYPTION, "Encryption method registration");
-        idToValue.put(FRAME_ID_V3_EQUALISATION, "Equalization");
-        idToValue.put(FRAME_ID_V3_EVENT_TIMING_CODES, "Event timing codes");
-        idToValue.put(FRAME_ID_V3_FILE_OWNER, "");
-        idToValue.put(FRAME_ID_V3_FILE_TYPE, "Text: File type");
-        idToValue.put(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT, "General encapsulated datatype");
-        idToValue.put(FRAME_ID_V3_GENRE, "Text: Content type");
-        idToValue.put(FRAME_ID_V3_GROUP_ID_REG, "");
-        idToValue.put(FRAME_ID_V3_HW_SW_SETTINGS, "Text: Software/hardware and settings used for encoding");
-        idToValue.put(FRAME_ID_V3_INITIAL_KEY, "Text: Initial key");
-        idToValue.put(FRAME_ID_V3_INVOLVED_PEOPLE, "Involved people list");
-        idToValue.put(FRAME_ID_V3_ISRC, "Text: ISRC (International Standard Recording Code)");
-        idToValue.put(FRAME_ID_V3_ITUNES_GROUPING, "Text: iTunes Grouping");
-        idToValue.put(FRAME_ID_V3_LANGUAGE, "Text: Language(s)");
-        idToValue.put(FRAME_ID_V3_LENGTH, "Text: Length");
-        idToValue.put(FRAME_ID_V3_LINKED_INFO, "Linked information");
-        idToValue.put(FRAME_ID_V3_LYRICIST, "Text: Lyricist/text writer");
-        idToValue.put(FRAME_ID_V3_MEDIA_TYPE, "Text: Media type");
-        idToValue.put(FRAME_ID_V3_MOVEMENT, "Text: Movement");
-        idToValue.put(FRAME_ID_V3_MOVEMENT_NO, "Text: Movement No");
-        idToValue.put(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE, "MPEG location lookup table");
-        idToValue.put(FRAME_ID_V3_MUSIC_CD_ID, "Music CD Identifier");
-        idToValue.put(FRAME_ID_V3_ORIGARTIST, "Text: Original artist(s)/performer(s)");
-        idToValue.put(FRAME_ID_V3_ORIG_FILENAME, "Text: Original filename");
-        idToValue.put(FRAME_ID_V3_ORIG_LYRICIST, "Text: Original Lyricist(s)/text writer(s)");
-        idToValue.put(FRAME_ID_V3_ORIG_TITLE, "Text: Original album/Movie/Show title");
-        idToValue.put(FRAME_ID_V3_OWNERSHIP, "");
-        idToValue.put(FRAME_ID_V3_PLAYLIST_DELAY, "Text: Playlist delay");
-        idToValue.put(FRAME_ID_V3_PLAY_COUNTER, "Play counter");
-        idToValue.put(FRAME_ID_V3_POPULARIMETER, "Popularimeter");
-        idToValue.put(FRAME_ID_V3_POSITION_SYNC, "Position Sync");
-        idToValue.put(FRAME_ID_V3_PRIVATE, "Private frame");
-        idToValue.put(FRAME_ID_V3_PUBLISHER, "Text: Publisher");
-        idToValue.put(FRAME_ID_V3_RADIO_NAME, "");
-        idToValue.put(FRAME_ID_V3_RADIO_OWNER, "");
-        idToValue.put(FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE, "Recommended buffer size");
-        idToValue.put(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, "Relative volume adjustment");
-        idToValue.put(FRAME_ID_V3_REMIXED, "Text: Interpreted, remixed, or otherwise modified by");
-        idToValue.put(FRAME_ID_V3_REVERB, "Reverb");
-        idToValue.put(FRAME_ID_V3_SET, "Text: Part of a setField");
-        idToValue.put(FRAME_ID_V3_SET_SUBTITLE, "Text: SubTitle");
-        idToValue.put(FRAME_ID_V3_SYNC_LYRIC, "Synchronized lyric/text");
-        idToValue.put(FRAME_ID_V3_SYNC_TEMPO, "Synced tempo codes");
-        idToValue.put(FRAME_ID_V3_TDAT, "Text: Date");
-        idToValue.put(FRAME_ID_V3_TERMS_OF_USE, "");
-        idToValue.put(FRAME_ID_V3_TIME, "Text: Time");
-        idToValue.put(FRAME_ID_V3_TITLE, "Text: Title/Songname/Content description");
-        idToValue.put(FRAME_ID_V3_TITLE_REFINEMENT, "Text: Subtitle/Description refinement");
-        idToValue.put(FRAME_ID_V3_TORY, "Text: Original release year");
-        idToValue.put(FRAME_ID_V3_TRACK, "Text: Track number/Position in setField");
-        idToValue.put(FRAME_ID_V3_TRDA, "Text: Recording dates");
-        idToValue.put(FRAME_ID_V3_TSIZ, "Text: Size");
-        idToValue.put(FRAME_ID_V3_TYER, "Text: Year");
-        idToValue.put(FRAME_ID_V3_UNIQUE_FILE_ID, "Unique file identifier");
-        idToValue.put(FRAME_ID_V3_UNSYNC_LYRICS, "Unsychronized lyric/text transcription");
-        idToValue.put(FRAME_ID_V3_URL_ARTIST_WEB, "URL: Official artist/performer webpage");
-        idToValue.put(FRAME_ID_V3_URL_COMMERCIAL, "URL: Commercial information");
-        idToValue.put(FRAME_ID_V3_URL_COPYRIGHT, "URL: Copyright/Legal information");
-        idToValue.put(FRAME_ID_V3_URL_FILE_WEB, "URL: Official audio file webpage");
-        idToValue.put(FRAME_ID_V3_URL_OFFICIAL_RADIO, "Official Radio");
-        idToValue.put(FRAME_ID_V3_URL_PAYMENT, "URL: Payment");
-        idToValue.put(FRAME_ID_V3_URL_PUBLISHERS, "URL: Publishers official webpage");
-        idToValue.put(FRAME_ID_V3_URL_SOURCE_WEB, "URL: Official audio source webpage");
-        idToValue.put(FRAME_ID_V3_USER_DEFINED_INFO, "User defined text information frame");
-        idToValue.put(FRAME_ID_V3_USER_DEFINED_URL, "User defined URL link frame");
-        idToValue.put(FRAME_ID_V3_IS_COMPILATION, "Is Compilation");
-        idToValue.put(FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES, "Text: title sort order");
-        idToValue.put(FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES, "Text: artist sort order");
-        idToValue.put(FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES, "Text: album sort order");
-        idToValue.put(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ, "Text: title sort order");
-        idToValue.put(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, "Text: artist sort order");
-        idToValue.put(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, "Text: album sort order");
-        idToValue.put(FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES, "Text:Album Artist Sort Order Frame");
-        idToValue.put(FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES, "Text:Composer Sort Order Frame");
+    private ImmutableBiMap<FieldKey, ID3v23FieldKey> getTagFieldToId3() {
+        if (tagFieldToId3 == null) {
+            synchronized (this) {
+                if (tagFieldToId3 == null) {
+                    tagFieldToId3 = makeTagFieldToId3();
+                }
+            }
+        }
+        return tagFieldToId3;
+    }
 
-        multipleFrames.add(FRAME_ID_V3_USER_DEFINED_INFO);
-        multipleFrames.add(FRAME_ID_V3_USER_DEFINED_URL);
-        multipleFrames.add(FRAME_ID_V3_ATTACHED_PICTURE);
-        multipleFrames.add(FRAME_ID_V3_PRIVATE);
-        multipleFrames.add(FRAME_ID_V3_COMMENT);
-        multipleFrames.add(FRAME_ID_V3_UNIQUE_FILE_ID);
-        multipleFrames.add(FRAME_ID_V3_UNSYNC_LYRICS);
-        multipleFrames.add(FRAME_ID_V3_POPULARIMETER);
-        multipleFrames.add(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT);
-        multipleFrames.add(FRAME_ID_V3_URL_ARTIST_WEB);
-
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_EQUALISATION);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_POSITION_SYNC);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_SYNC_LYRIC);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_SYNC_TEMPO);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_EVENT_TIMING_CODES);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_ENCODEDBY);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_LENGTH);
-        discardIfFileAlteredFrames.add(FRAME_ID_V3_TSIZ);
-
-        //Mapping from generic key
+    private ImmutableBiMap<FieldKey, ID3v23FieldKey> makeTagFieldToId3() {
         final ImmutableBiMap.Builder<FieldKey, ID3v23FieldKey> builder = ImmutableBiMap.builder();
         builder.put(FieldKey.ACOUSTID_FINGERPRINT, ID3v23FieldKey.ACOUSTID_FINGERPRINT)
                .put(FieldKey.ACOUSTID_ID, ID3v23FieldKey.ACOUSTID_ID)
@@ -524,41 +339,7 @@ public class ID3v23Frames extends ID3Frames {
                .put(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE, ID3v23FieldKey.WORK_PART_LEVEL6_TYPE)
                .put(FieldKey.WORK_TYPE, ID3v23FieldKey.WORK_TYPE)
                .put(FieldKey.YEAR, ID3v23FieldKey.YEAR);
-
-        tagFieldToId3 = builder.build();
-    }
-
-
-    /**
-     * @param genericKey FieldKey to query
-     *
-     * @return id3 key for generic key
-     */
-    public ID3v23FieldKey getId3KeyFromGenericKey(FieldKey genericKey) {
-        return tagFieldToId3.get(genericKey);
-    }
-
-    /**
-     * Get generic key for ID3 field key
-     *
-     * @param fieldKey {@link ID3v23FieldKey} to query
-     *
-     * @return {@link FieldKey} analog to the {@link ID3v23FieldKey}
-     */
-    public FieldKey getGenericKeyFromId3(ID3v23FieldKey fieldKey) {
-        return getId3ToTagField().get(fieldKey);
-    }
-
-    ImmutableSet<FieldKey> getSupportedFields() {
-        return tagFieldToId3.keySet();
-    }
-
-    public boolean containsKey(String key) {
-        return idToValue.containsKey(key);
-    }
-
-    public String getValue(String id) {
-        return idToValue.get(id);
+        return builder.build();
     }
 
     /**
@@ -566,12 +347,259 @@ public class ID3v23Frames extends ID3Frames {
      */
     private ImmutableBiMap<ID3v23FieldKey, FieldKey> getId3ToTagField() {
         if (id3ToTagField == null) {
-            synchronized (ID3v23Frames.class) {
+            synchronized (this) {
                 if (id3ToTagField == null) {
-                    id3ToTagField = tagFieldToId3.inverse();
+                    id3ToTagField = getTagFieldToId3().inverse();
                 }
             }
         }
         return id3ToTagField;
+    }
+
+    private ImmutableMap<String, String> getIdToValue() {
+        if (idToValue == null) {
+            synchronized (this) {
+                if (idToValue == null) {
+                    idToValue = makeIdToValue();
+                }
+            }
+        }
+        return idToValue;
+    }
+
+    private ImmutableMap<String, String> makeIdToValue() {
+        // Map frameid to a name
+        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+        builder.put(FRAME_ID_V3_ACCOMPANIMENT, "Text: Band/Orchestra/Accompaniment")
+               .put(FRAME_ID_V3_ALBUM, "Text: Album/Movie/Show title")
+               .put(FRAME_ID_V3_ARTIST, "Text: Lead artist(s)/Lead performer(s)/Soloist(s)/Performing group")
+               .put(FRAME_ID_V3_ATTACHED_PICTURE, "Attached picture")
+               .put(FRAME_ID_V3_AUDIO_ENCRYPTION, "Audio encryption")
+               .put(FRAME_ID_V3_BPM, "Text: BPM (Beats Per Minute)")
+               .put(FRAME_ID_V3_COMMENT, "Comments")
+               .put(FRAME_ID_V3_COMMERCIAL_FRAME, "")
+               .put(FRAME_ID_V3_COMPOSER, "Text: Composer")
+               .put(FRAME_ID_V3_CONDUCTOR, "Text: Conductor/Performer refinement")
+               .put(FRAME_ID_V3_CONTENT_GROUP_DESC, "Text: Content group description")
+               .put(FRAME_ID_V3_COPYRIGHTINFO, "Text: Copyright message")
+               .put(FRAME_ID_V3_ENCODEDBY, "Text: Encoded by")
+               .put(FRAME_ID_V3_ENCRYPTION, "Encryption method registration")
+               .put(FRAME_ID_V3_EQUALISATION, "Equalization")
+               .put(FRAME_ID_V3_EVENT_TIMING_CODES, "Event timing codes")
+               .put(FRAME_ID_V3_FILE_OWNER, "")
+               .put(FRAME_ID_V3_FILE_TYPE, "Text: File type")
+               .put(FRAME_ID_V3_GENERAL_ENCAPS_OBJECT, "General encapsulated datatype")
+               .put(FRAME_ID_V3_GENRE, "Text: Content type")
+               .put(FRAME_ID_V3_GROUP_ID_REG, "")
+               .put(FRAME_ID_V3_HW_SW_SETTINGS, "Text: Software/hardware and settings used for encoding")
+               .put(FRAME_ID_V3_INITIAL_KEY, "Text: Initial key")
+               .put(FRAME_ID_V3_INVOLVED_PEOPLE, "Involved people list")
+               .put(FRAME_ID_V3_ISRC, "Text: ISRC (International Standard Recording Code)")
+               .put(FRAME_ID_V3_ITUNES_GROUPING, "Text: iTunes Grouping")
+               .put(FRAME_ID_V3_LANGUAGE, "Text: Language(s)")
+               .put(FRAME_ID_V3_LENGTH, "Text: Length")
+               .put(FRAME_ID_V3_LINKED_INFO, "Linked information")
+               .put(FRAME_ID_V3_LYRICIST, "Text: Lyricist/text writer")
+               .put(FRAME_ID_V3_MEDIA_TYPE, "Text: Media type")
+               .put(FRAME_ID_V3_MOVEMENT, "Text: Movement")
+               .put(FRAME_ID_V3_MOVEMENT_NO, "Text: Movement No")
+               .put(FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE, "MPEG location lookup table")
+               .put(FRAME_ID_V3_MUSIC_CD_ID, "Music CD Identifier")
+               .put(FRAME_ID_V3_ORIGARTIST, "Text: Original artist(s)/performer(s)")
+               .put(FRAME_ID_V3_ORIG_FILENAME, "Text: Original filename")
+               .put(FRAME_ID_V3_ORIG_LYRICIST, "Text: Original Lyricist(s)/text writer(s)")
+               .put(FRAME_ID_V3_ORIG_TITLE, "Text: Original album/Movie/Show title")
+               .put(FRAME_ID_V3_OWNERSHIP, "")
+               .put(FRAME_ID_V3_PLAYLIST_DELAY, "Text: Playlist delay")
+               .put(FRAME_ID_V3_PLAY_COUNTER, "Play counter")
+               .put(FRAME_ID_V3_POPULARIMETER, "Popularimeter")
+               .put(FRAME_ID_V3_POSITION_SYNC, "Position Sync")
+               .put(FRAME_ID_V3_PRIVATE, "Private frame")
+               .put(FRAME_ID_V3_PUBLISHER, "Text: Publisher")
+               .put(FRAME_ID_V3_RADIO_NAME, "")
+               .put(FRAME_ID_V3_RADIO_OWNER, "")
+               .put(FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE, "Recommended buffer size")
+               .put(FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT, "Relative volume adjustment")
+               .put(FRAME_ID_V3_REMIXED, "Text: Interpreted, remixed, or otherwise modified by")
+               .put(FRAME_ID_V3_REVERB, "Reverb")
+               .put(FRAME_ID_V3_SET, "Text: Part of a setField")
+               .put(FRAME_ID_V3_SET_SUBTITLE, "Text: SubTitle")
+               .put(FRAME_ID_V3_SYNC_LYRIC, "Synchronized lyric/text")
+               .put(FRAME_ID_V3_SYNC_TEMPO, "Synced tempo codes")
+               .put(FRAME_ID_V3_TDAT, "Text: Date")
+               .put(FRAME_ID_V3_TERMS_OF_USE, "")
+               .put(FRAME_ID_V3_TIME, "Text: Time")
+               .put(FRAME_ID_V3_TITLE, "Text: Title/Songname/Content description")
+               .put(FRAME_ID_V3_TITLE_REFINEMENT, "Text: Subtitle/Description refinement")
+               .put(FRAME_ID_V3_TORY, "Text: Original release year")
+               .put(FRAME_ID_V3_TRACK, "Text: Track number/Position in setField")
+               .put(FRAME_ID_V3_TRDA, "Text: Recording dates")
+               .put(FRAME_ID_V3_TSIZ, "Text: Size")
+               .put(FRAME_ID_V3_TYER, "Text: Year")
+               .put(FRAME_ID_V3_UNIQUE_FILE_ID, "Unique file identifier")
+               .put(FRAME_ID_V3_UNSYNC_LYRICS, "Unsychronized lyric/text transcription")
+               .put(FRAME_ID_V3_URL_ARTIST_WEB, "URL: Official artist/performer webpage")
+               .put(FRAME_ID_V3_URL_COMMERCIAL, "URL: Commercial information")
+               .put(FRAME_ID_V3_URL_COPYRIGHT, "URL: Copyright/Legal information")
+               .put(FRAME_ID_V3_URL_FILE_WEB, "URL: Official audio file webpage")
+               .put(FRAME_ID_V3_URL_OFFICIAL_RADIO, "Official Radio")
+               .put(FRAME_ID_V3_URL_PAYMENT, "URL: Payment")
+               .put(FRAME_ID_V3_URL_PUBLISHERS, "URL: Publishers official webpage")
+               .put(FRAME_ID_V3_URL_SOURCE_WEB, "URL: Official audio source webpage")
+               .put(FRAME_ID_V3_USER_DEFINED_INFO, "User defined text information frame")
+               .put(FRAME_ID_V3_USER_DEFINED_URL, "User defined URL link frame")
+               .put(FRAME_ID_V3_IS_COMPILATION, "Is Compilation")
+               .put(FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES, "Text: title sort order")
+               .put(FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES, "Text: artist sort order")
+               .put(FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES, "Text: album sort order")
+               .put(FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ, "Text: title sort order")
+               .put(FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, "Text: artist sort order")
+               .put(FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, "Text: album sort order")
+               .put(FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES, "Text:Album Artist Sort Order Frame")
+               .put(FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES, "Text:Composer Sort Order Frame");
+        return builder.build();
+    }
+
+    @Override protected ImmutableSet<String> makeDiscardIfFileAlteredFrames() {
+        return ImmutableSet.of(FRAME_ID_V3_EVENT_TIMING_CODES,
+                               FRAME_ID_V3_EQUALISATION,
+                               FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE,
+                               FRAME_ID_V3_POSITION_SYNC,
+                               FRAME_ID_V3_SYNC_LYRIC,
+                               FRAME_ID_V3_SYNC_TEMPO,
+                               FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT,
+                               FRAME_ID_V3_EVENT_TIMING_CODES,
+                               FRAME_ID_V3_ENCODEDBY,
+                               FRAME_ID_V3_LENGTH,
+                               FRAME_ID_V3_TSIZ);
+    }
+
+    @Override protected ImmutableSet<String> makeMultipleFrames() {
+        return ImmutableSet.of(FRAME_ID_V3_USER_DEFINED_INFO,
+                               FRAME_ID_V3_USER_DEFINED_URL,
+                               FRAME_ID_V3_ATTACHED_PICTURE,
+                               FRAME_ID_V3_PRIVATE,
+                               FRAME_ID_V3_COMMENT,
+                               FRAME_ID_V3_UNIQUE_FILE_ID,
+                               FRAME_ID_V3_UNSYNC_LYRICS,
+                               FRAME_ID_V3_POPULARIMETER,
+                               FRAME_ID_V3_GENERAL_ENCAPS_OBJECT,
+                               FRAME_ID_V3_URL_ARTIST_WEB);
+    }
+
+    @Override protected ImmutableSet<String> makeSupportedFrames() {
+        // The defined v23 frames,
+        return ImmutableSet.of(FRAME_ID_V3_ACCOMPANIMENT,
+                               FRAME_ID_V3_ALBUM,
+                               FRAME_ID_V3_ARTIST,
+                               FRAME_ID_V3_ATTACHED_PICTURE,
+                               FRAME_ID_V3_AUDIO_ENCRYPTION,
+                               FRAME_ID_V3_BPM,
+                               FRAME_ID_V3_COMMENT,
+                               FRAME_ID_V3_COMMERCIAL_FRAME,
+                               FRAME_ID_V3_COMPOSER,
+                               FRAME_ID_V3_CONDUCTOR,
+                               FRAME_ID_V3_CONTENT_GROUP_DESC,
+                               FRAME_ID_V3_COPYRIGHTINFO,
+                               FRAME_ID_V3_ENCODEDBY,
+                               FRAME_ID_V3_ENCRYPTION,
+                               FRAME_ID_V3_EQUALISATION,
+                               FRAME_ID_V3_EVENT_TIMING_CODES,
+                               FRAME_ID_V3_FILE_OWNER,
+                               FRAME_ID_V3_FILE_TYPE,
+                               FRAME_ID_V3_GENERAL_ENCAPS_OBJECT,
+                               FRAME_ID_V3_GENRE,
+                               FRAME_ID_V3_GROUP_ID_REG,
+                               FRAME_ID_V3_HW_SW_SETTINGS,
+                               FRAME_ID_V3_INITIAL_KEY,
+                               FRAME_ID_V3_INVOLVED_PEOPLE,
+                               FRAME_ID_V3_ISRC,
+                               FRAME_ID_V3_ITUNES_GROUPING,
+                               FRAME_ID_V3_LANGUAGE,
+                               FRAME_ID_V3_LENGTH,
+                               FRAME_ID_V3_LINKED_INFO,
+                               FRAME_ID_V3_LYRICIST,
+                               FRAME_ID_V3_MEDIA_TYPE,
+                               FRAME_ID_V3_MPEG_LOCATION_LOOKUP_TABLE,
+                               FRAME_ID_V3_MOVEMENT,
+                               FRAME_ID_V3_MOVEMENT_NO,
+                               FRAME_ID_V3_MUSIC_CD_ID,
+                               FRAME_ID_V3_ORIGARTIST,
+                               FRAME_ID_V3_ORIG_FILENAME,
+                               FRAME_ID_V3_ORIG_LYRICIST,
+                               FRAME_ID_V3_ORIG_TITLE,
+                               FRAME_ID_V3_OWNERSHIP,
+                               FRAME_ID_V3_PLAYLIST_DELAY,
+                               FRAME_ID_V3_PLAY_COUNTER,
+                               FRAME_ID_V3_POPULARIMETER,
+                               FRAME_ID_V3_POSITION_SYNC,
+                               FRAME_ID_V3_PRIVATE,
+                               FRAME_ID_V3_PUBLISHER,
+                               FRAME_ID_V3_RADIO_NAME,
+                               FRAME_ID_V3_RADIO_OWNER,
+                               FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE,
+                               FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT,
+                               FRAME_ID_V3_REMIXED,
+                               FRAME_ID_V3_REVERB,
+                               FRAME_ID_V3_SET,
+                               FRAME_ID_V3_SET_SUBTITLE,
+                               FRAME_ID_V3_SYNC_LYRIC,
+                               FRAME_ID_V3_SYNC_TEMPO,
+                               FRAME_ID_V3_TDAT,
+                               FRAME_ID_V3_TERMS_OF_USE,
+                               FRAME_ID_V3_TIME,
+                               FRAME_ID_V3_TITLE,
+                               FRAME_ID_V3_TITLE_REFINEMENT,
+                               FRAME_ID_V3_TORY,
+                               FRAME_ID_V3_TRACK,
+                               FRAME_ID_V3_TRDA,
+                               FRAME_ID_V3_TSIZ,
+                               FRAME_ID_V3_TYER,
+                               FRAME_ID_V3_UNIQUE_FILE_ID,
+                               FRAME_ID_V3_UNSYNC_LYRICS,
+                               FRAME_ID_V3_URL_ARTIST_WEB,
+                               FRAME_ID_V3_URL_COMMERCIAL,
+                               FRAME_ID_V3_URL_COPYRIGHT,
+                               FRAME_ID_V3_URL_FILE_WEB,
+                               FRAME_ID_V3_URL_OFFICIAL_RADIO,
+                               FRAME_ID_V3_URL_PAYMENT,
+                               FRAME_ID_V3_URL_PUBLISHERS,
+                               FRAME_ID_V3_URL_SOURCE_WEB,
+                               FRAME_ID_V3_USER_DEFINED_INFO,
+                               FRAME_ID_V3_USER_DEFINED_URL);
+    }
+
+    @Override protected ImmutableSet<String> makeCommonFrames() {
+        return ImmutableSet.of(FRAME_ID_V3_ARTIST,
+                               FRAME_ID_V3_ALBUM,
+                               FRAME_ID_V3_TITLE,
+                               FRAME_ID_V3_GENRE,
+                               FRAME_ID_V3_TRACK,
+                               FRAME_ID_V3_TYER,
+                               FRAME_ID_V3_COMMENT);
+    }
+
+    @Override protected ImmutableSet<String> makeBinaryFrames() {
+        return ImmutableSet.of(FRAME_ID_V3_ATTACHED_PICTURE,
+                               FRAME_ID_V3_AUDIO_ENCRYPTION,
+                               FRAME_ID_V3_ENCRYPTION,
+                               FRAME_ID_V3_EQUALISATION,
+                               FRAME_ID_V3_EVENT_TIMING_CODES,
+                               FRAME_ID_V3_GENERAL_ENCAPS_OBJECT,
+                               FRAME_ID_V3_RELATIVE_VOLUME_ADJUSTMENT,
+                               FRAME_ID_V3_RECOMMENDED_BUFFER_SIZE,
+                               FRAME_ID_V3_UNIQUE_FILE_ID);
+    }
+
+    @Override protected ImmutableSet<String> makeExtensionFrames() {
+        return ImmutableSet.of(FRAME_ID_V3_IS_COMPILATION,
+                               FRAME_ID_V3_TITLE_SORT_ORDER_ITUNES,
+                               FRAME_ID_V3_ARTIST_SORT_ORDER_ITUNES,
+                               FRAME_ID_V3_ALBUM_SORT_ORDER_ITUNES,
+                               FRAME_ID_V3_TITLE_SORT_ORDER_MUSICBRAINZ,
+                               FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ,
+                               FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ,
+                               FRAME_ID_V3_ALBUM_ARTIST_SORT_ORDER_ITUNES,
+                               FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES);
     }
 }

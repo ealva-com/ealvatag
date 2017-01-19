@@ -15,9 +15,8 @@
  */
 package ealvatag.tag.id3;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeSet;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Defines ID3 Chapter frames and collections that categorise frames.
@@ -36,6 +35,8 @@ public class ID3v2ChapterFrames extends ID3Frames {
 
     private static volatile ID3v2ChapterFrames instance;
 
+    private final ImmutableMap<String, String> idToValue;
+
     public static ID3v2ChapterFrames getInstanceOf() {
         if (instance == null) {
             synchronized (ID3v2ChapterFrames.class) {
@@ -47,13 +48,8 @@ public class ID3v2ChapterFrames extends ID3Frames {
         return instance;
     }
 
-    private final Map<String, String> idToValue = new LinkedHashMap<>();
-
     private ID3v2ChapterFrames() {
-        idToValue.put(FRAME_ID_CHAPTER, "Chapter");
-        idToValue.put(FRAME_ID_TABLE_OF_CONTENT, "Table of content");
-        multipleFrames = new TreeSet<>();
-        discardIfFileAlteredFrames = new TreeSet<>();
+        idToValue = ImmutableMap.of(FRAME_ID_CHAPTER, "Chapter", FRAME_ID_TABLE_OF_CONTENT, "Table of content");
     }
 
     public boolean containsKey(String key) {
@@ -62,5 +58,29 @@ public class ID3v2ChapterFrames extends ID3Frames {
 
     public String getValue(String id) {
         return idToValue.get(id);
+    }
+
+    @Override protected ImmutableSet<String> makeDiscardIfFileAlteredFrames() {
+        return ImmutableSet.of();
+    }
+
+    @Override protected ImmutableSet<String> makeMultipleFrames() {
+        return ImmutableSet.of();
+    }
+
+    @Override protected ImmutableSet<String> makeSupportedFrames() {
+        return ImmutableSet.of(FRAME_ID_CHAPTER, FRAME_ID_TABLE_OF_CONTENT);
+    }
+
+    @Override protected ImmutableSet<String> makeCommonFrames() {
+        return ImmutableSet.of();
+    }
+
+    @Override protected ImmutableSet<String> makeBinaryFrames() {
+        return ImmutableSet.of();
+    }
+
+    @Override protected ImmutableSet<String> makeExtensionFrames() {
+        return ImmutableSet.of();
     }
 }
