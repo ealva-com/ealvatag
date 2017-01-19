@@ -228,41 +228,34 @@ public class Lyrics3v2Field extends AbstractTagFrame
     private AbstractLyrics3v2FieldFrameBody readBody(String identifier, ByteBuffer byteBuffer) throws InvalidTagException
     {
         AbstractLyrics3v2FieldFrameBody newBody;
-        if (identifier.equals(Lyrics3v2Fields.FIELD_V2_AUTHOR))
-        {
-            newBody = new FieldFrameBodyAUT(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ALBUM))
-        {
-            newBody = new FieldFrameBodyEAL(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ARTIST))
-        {
-            newBody = new FieldFrameBodyEAR(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_TRACK))
-        {
-            newBody = new FieldFrameBodyETT(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_IMAGE))
-        {
-            newBody = new FieldFrameBodyIMG(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_INDICATIONS))
-        {
-            newBody = new FieldFrameBodyIND(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT))
-        {
-            newBody = new FieldFrameBodyINF(byteBuffer);
-        }
-        else if (identifier.equals(Lyrics3v2Fields.FIELD_V2_LYRICS_MULTI_LINE_TEXT))
-        {
-            newBody = new FieldFrameBodyLYR(byteBuffer);
-        }
-        else
-        {
-            newBody = new FieldFrameBodyUnsupported(byteBuffer);
+        switch (identifier) {
+            case Lyrics3v2Fields.FIELD_V2_AUTHOR:
+                newBody = new FieldFrameBodyAUT(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_ALBUM:
+                newBody = new FieldFrameBodyEAL(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_ARTIST:
+                newBody = new FieldFrameBodyEAR(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_TRACK:
+                newBody = new FieldFrameBodyETT(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_IMAGE:
+                newBody = new FieldFrameBodyIMG(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_INDICATIONS:
+                newBody = new FieldFrameBodyIND(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_ADDITIONAL_MULTI_LINE_TEXT:
+                newBody = new FieldFrameBodyINF(byteBuffer);
+                break;
+            case Lyrics3v2Fields.FIELD_V2_LYRICS_MULTI_LINE_TEXT:
+                newBody = new FieldFrameBodyLYR(byteBuffer);
+                break;
+            default:
+                newBody = new FieldFrameBodyUnsupported(byteBuffer);
+                break;
         }
         return newBody;
     }

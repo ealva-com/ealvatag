@@ -524,19 +524,30 @@ public class Languages implements SimpleStringStringMap {
 
     /**
      * This is an expensive call the first time, creates a large duplicate data structure, and is currently only used for Test.
-     *
+     * <p>
      * More than 1 language code can reference the same language. See https://www.loc.gov/standards/iso639-2/php/code_list.php
      *
      * @param value the langue
      *
      * @return collections all language codes for the given value (language)
      */
+    @SuppressWarnings("SameParameterValue")
     @VisibleForTesting
     public Collection<String> getIdForValue(String value) {
         return getValueToIdMultiMap().get(value);
     }
 
-    private ImmutableMultimap<String, String> getValueToIdMultiMap() {
+    /**
+     * Returns a inverse multi map of the 3 letter language code to language map. Since more than one code maps to the same language, a
+     * multi map is returned, mapping language to multiple codes
+     *
+     * This method is for applications that provide tag full tag editing. First invocation is expensive, but the same immutable map is
+     * returned on subsequent calls.
+     *
+     * @return multimap of language to language codes
+     */
+    @SuppressWarnings("WeakerAccess")
+    public ImmutableMultimap<String, String> getValueToIdMultiMap() {
         if (valueToId == null) {
             valueToId = idToValue.asMultimap().inverse();
         }

@@ -19,7 +19,8 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldKey;
 
-import static ealvatag.utils.Check.checkArgNotNull;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Defines ID3v24 frames and collections that categorise frames.
@@ -141,6 +142,8 @@ public class ID3v24Frames extends ID3Frames {
         }
         return instance;
     }
+
+    private final Map<String, String> idToValue = new LinkedHashMap<>();
 
     private ID3v24Frames() {
         supportedFrames.add(FRAME_ID_ACCOMPANIMENT);
@@ -343,9 +346,6 @@ public class ID3v24Frames extends ID3Frames {
         idToValue.put(FRAME_ID_ALBUM_ARTIST_SORT_ORDER_ITUNES, "Text:Album Artist Sort Order Frame");
         idToValue.put(FRAME_ID_COMPOSER_SORT_ORDER_ITUNES, "Text:Composer Sort Order Frame");
 
-
-        createMaps();
-
         multipleFrames.add(FRAME_ID_USER_DEFINED_INFO);
         multipleFrames.add(FRAME_ID_USER_DEFINED_URL);
         multipleFrames.add(FRAME_ID_ATTACHED_PICTURE);
@@ -543,5 +543,13 @@ public class ID3v24Frames extends ID3Frames {
 
     ImmutableSet<FieldKey> getSupportedFields() {
         return tagFieldToId3.keySet();
+    }
+
+    public boolean containsKey(String key) {
+        return idToValue.containsKey(key);
+    }
+
+    public String getValue(String id) {
+        return idToValue.get(id);
     }
 }

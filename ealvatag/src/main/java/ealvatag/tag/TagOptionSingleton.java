@@ -684,7 +684,7 @@ public class TagOptionSingleton {
 
         //default all lyrics3 fields to save. id3v1 fields are individual
         // settings. id3v2 fields are always looked at to save.
-        for (String fieldId : Lyrics3v2Fields.getInstanceOf().getIdToValueMap().keySet()) {
+        for (String fieldId : Lyrics3v2Fields.getInstanceOf().getAllKeys()) {
             lyrics3SaveFieldMap.put(fieldId, true);
         }
 

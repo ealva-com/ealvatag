@@ -45,7 +45,7 @@ public class ID3Tags {
         }
         //If 3 is it a known identifier
         else {
-            return identifier.length() == 3 && ID3v22Frames.getInstanceOf().getIdToValueMap().containsKey(identifier);
+            return identifier.length() == 3 && ID3v22Frames.getInstanceOf().containsKey(identifier);
         }
     }
 
@@ -57,7 +57,7 @@ public class ID3Tags {
      */
     public static boolean isID3v23FrameIdentifier(String identifier) {
         return identifier.length() >= 4 &&
-                ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
+                ID3v23Frames.getInstanceOf().containsKey(identifier.substring(0, 4));
     }
 
     /**
@@ -68,7 +68,7 @@ public class ID3Tags {
      */
     public static boolean isID3v24FrameIdentifier(String identifier) {
         return identifier.length() >= 4 &&
-                ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier.substring(0, 4));
+                ID3v24Frames.getInstanceOf().containsKey(identifier.substring(0, 4));
     }
 
     /**
@@ -131,7 +131,7 @@ public class ID3Tags {
             if (v23id == null) {
                 //if not it may be because v2.3 and and v2.4 are same so wont be
                 //in mapping
-                if (ID3v24Frames.getInstanceOf().getIdToValueMap().get(id) != null) {
+                if (ID3v24Frames.getInstanceOf().getValue(id) != null) {
                     return id;
                 } else {
                     return null;
@@ -156,7 +156,7 @@ public class ID3Tags {
         }
 
         //If it is a v23 identifier
-        if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)) {
+        if (ID3v23Frames.getInstanceOf().containsKey(identifier)) {
             //If only name has changed  v22 and modified in v23 return result of.
             return ID3Frames.convertv23Tov22.get(identifier.substring(0, 4));
         }
@@ -175,9 +175,9 @@ public class ID3Tags {
         }
 
         //If it is a ID3v23 identifier
-        if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)) {
+        if (ID3v23Frames.getInstanceOf().containsKey(identifier)) {
             //If no change between ID3v23 and ID3v24 should be in ID3v24 list.
-            if (ID3v24Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)) {
+            if (ID3v24Frames.getInstanceOf().containsKey(identifier)) {
                 return identifier;
             }
             //If only name has changed  ID3v23 and modified in ID3v24 return result of.
@@ -245,7 +245,7 @@ public class ID3Tags {
         }
         id = ID3Frames.convertv24Tov23.get(identifier);
         if (id == null) {
-            if (ID3v23Frames.getInstanceOf().getIdToValueMap().containsKey(identifier)) {
+            if (ID3v23Frames.getInstanceOf().containsKey(identifier)) {
                 id = identifier;
             }
         }

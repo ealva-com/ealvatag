@@ -15,6 +15,8 @@
  */
 package ealvatag.tag.id3;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeSet;
 
 /**
@@ -45,11 +47,20 @@ public class ID3v2ChapterFrames extends ID3Frames {
         return instance;
     }
 
+    private final Map<String, String> idToValue = new LinkedHashMap<>();
+
     private ID3v2ChapterFrames() {
         idToValue.put(FRAME_ID_CHAPTER, "Chapter");
         idToValue.put(FRAME_ID_TABLE_OF_CONTENT, "Table of content");
-        createMaps();
-        multipleFrames = new TreeSet<String>();
-        discardIfFileAlteredFrames = new TreeSet<String>();
+        multipleFrames = new TreeSet<>();
+        discardIfFileAlteredFrames = new TreeSet<>();
+    }
+
+    public boolean containsKey(String key) {
+        return idToValue.containsKey(key);
+    }
+
+    public String getValue(String id) {
+        return idToValue.get(id);
     }
 }

@@ -37,7 +37,7 @@ public class GenreTypes implements SimpleIntStringMap {
     @SuppressWarnings("WeakerAccess") public static final int MAX_GENRE_ID = 191;
 
     private final String[] values;  // ids are contiguous, so we'll just keep them in an array
-    private final TreeMap<String, Integer> valueToId; // one TreeMap with case insensitive ordering so we don't need another map
+    private TreeMap<String, Integer> valueToId; // one TreeMap with case insensitive ordering so we don't need another map
 
     /**
      * @return the maximum genreId that is part of the official Standard, genres above this were added by Winamp later.
@@ -261,15 +261,10 @@ public class GenreTypes implements SimpleIntStringMap {
         values[190] = "Garage Rock";
         values[191] = "Psybient";
 
-        valueToId = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        for (int i = 0, size = values.length; i < size; i++) {
-            final String value = Strings.nullToEmpty(values[i]);
-            valueToId.put(value, i);
-        }
     }
 
     public Set<String> getValueSet() {
-        return valueToId.keySet();
+        return getValueToIdMap().keySet();
     }
 
     /**
@@ -280,7 +275,7 @@ public class GenreTypes implements SimpleIntStringMap {
      * @return the id for the genre value
      */
     public Integer getIdForValue(String value) {
-        return valueToId.get(value);
+        return getValueToIdMap().get(value);
     }
 
     /**
@@ -301,6 +296,21 @@ public class GenreTypes implements SimpleIntStringMap {
             return "";
         }
         return Strings.nullToEmpty(values[id]);
+    }
+
+    private TreeMap<String, Integer> getValueToIdMap() {
+        if (valueToId == null) {
+            synchronized (this) {
+                if (valueToId == null) {
+                    valueToId = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                    for (int i = 0, size = values.length; i < size; i++) {
+                        final String value = Strings.nullToEmpty(values[i]);
+                        valueToId.put(value, i);
+                    }
+                }
+            }
+        }
+        return valueToId;
     }
 
 }
