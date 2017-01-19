@@ -92,6 +92,6 @@ public class FrameBodyTLAN extends AbstractFrameBodyTextInfo implements ID3v24Fr
      */
     public boolean isValid()
     {
-        return Languages.getInstanceOf().getValueForId(getFirstTextValue())!=null;
+        return Languages.getInstanceOf().getValue(getFirstTextValue())!=null;
     }
 }

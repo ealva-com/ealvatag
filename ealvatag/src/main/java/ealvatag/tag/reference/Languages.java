@@ -19,9 +19,13 @@
  */
 package ealvatag.tag.reference;
 
-import ealvatag.tag.datatype.AbstractStringStringValuePair;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
 
-public class Languages extends AbstractStringStringValuePair {
+import java.util.Collection;
+
+public class Languages implements SimpleStringStringMap {
     public static final String DEFAULT_ID = "eng";
     public static final String MEDIA_MONKEY_ID = "XXX";
     @SuppressWarnings("unused")
@@ -35,7 +39,6 @@ public class Languages extends AbstractStringStringValuePair {
 
     private static volatile Languages instance;
 
-
     public static Languages getInstanceOf() {
         if (instance == null) {
             synchronized (Languages.class) {
@@ -47,475 +50,505 @@ public class Languages extends AbstractStringStringValuePair {
         return instance;
     }
 
+    private final ImmutableMap<String, String> idToValue;
+    private ImmutableMultimap<String, String> valueToId = null;
+
     private Languages() {
-        idToValue.put("aar", "Afar");
-        idToValue.put("abk", "Abkhazian");
-        idToValue.put("ace", "Achinese");
-        idToValue.put("ach", "Acoli");
-        idToValue.put("ada", "Adangme");
-        idToValue.put("afa", "Afro-Asiatic");
-        idToValue.put("afh", "Afrihili");
-        idToValue.put("afr", "Afrikaans");
-        idToValue.put("aka", "Akan");
-        idToValue.put("akk", "Akkadian");
-        idToValue.put("alb", "Albanian");
-        idToValue.put("ale", "Aleut");
-        idToValue.put("alg", "Algonquian languages");
-        idToValue.put("amh", "Amharic");
-        idToValue.put("ang", "Old English,(ca.450-1100)");
-        idToValue.put("apa", "Apache languages");
-        idToValue.put("ara", "Arabic");
-        idToValue.put("arc", "Aramaic");
-        idToValue.put("arm", "Armenian");
-        idToValue.put("arn", "Araucanian");
-        idToValue.put("arp", "Arapaho");
-        idToValue.put("art", "Artificial");
-        idToValue.put("arw", "Arawak");
-        idToValue.put("asm", "Assamese");
-        idToValue.put("ast", "Asturian; Bable");
-        idToValue.put("ath", "Athapascan languages");
-        idToValue.put("aus", "Australian languages");
-        idToValue.put("ava", "Avaric");
-        idToValue.put("ave", "Avestan");
-        idToValue.put("awa", "Awadhi");
-        idToValue.put("aym", "Aymara");
-        idToValue.put("aze", "Azerbaijani");
-        idToValue.put("bad", "Banda");
-        idToValue.put("bai", "Bamileke languages");
-        idToValue.put("bak", "Bashkir");
-        idToValue.put("bal", "Baluchi");
-        idToValue.put("bam", "Bambara");
-        idToValue.put("ban", "Balinese");
-        idToValue.put("baq", "Basque");
-        idToValue.put("bas", "Basa");
-        idToValue.put("bat", "Baltic");
-        idToValue.put("bej", "Beja");
-        idToValue.put("bel", "Belarusian");
-        idToValue.put("bem", "Bemba");
-        idToValue.put("ben", "Bengali");
-        idToValue.put("ber", "Berber");
-        idToValue.put("bho", "Bhojpuri");
-        idToValue.put("bih", "Bihari");
-        idToValue.put("bik", "Bikol");
-        idToValue.put("bin", "Bini");
-        idToValue.put("bis", "Bislama");
-        idToValue.put("bla", "Siksika");
-        idToValue.put("bnt", "Bantu");
-        idToValue.put("bod", "Tibetan");
-        idToValue.put("bos", "Bosnian");
-        idToValue.put("bra", "Braj");
-        idToValue.put("bre", "Breton");
-        idToValue.put("btk", "Batak (Indonesia)");
-        idToValue.put("bua", "Buriat");
-        idToValue.put("bug", "Buginese");
-        idToValue.put("bul", "Bulgarian");
-        idToValue.put("bur", "Burmese");
-        idToValue.put("cad", "Caddo");
-        idToValue.put("cai", "Central American Indian");
-        idToValue.put("car", "Carib");
-        idToValue.put("cat", "Catalan");
-        idToValue.put("cau", "Caucasian");
-        idToValue.put("ceb", "Cebuano");
-        idToValue.put("cel", "Celtic");
-        idToValue.put("ces", "Czech");
-        idToValue.put("cha", "Chamorro");
-        idToValue.put("chb", "Chibcha");
-        idToValue.put("che", "Chechen");
-        idToValue.put("chg", "Chagatai");
-        idToValue.put("chi", "Chinese");
-        idToValue.put("chk", "Chuukese");
-        idToValue.put("chm", "Mari");
-        idToValue.put("chn", "Chinook jargon");
-        idToValue.put("cho", "Choctaw");
-        idToValue.put("chp", "Chipewyan");
-        idToValue.put("chr", "Cherokee");
-        idToValue.put("chu", "Church Slavic");
-        idToValue.put("chv", "Chuvash");
-        idToValue.put("chy", "Cheyenne");
-        idToValue.put("cmc", "Chamic languages");
-        idToValue.put("cop", "Coptic");
-        idToValue.put("cor", "Cornish");
-        idToValue.put("cos", "Corsican");
-        idToValue.put("cpe", "Creoles and pidgins, English based");
-        idToValue.put("cpf", "Creoles and pidgins, French based");
-        idToValue.put("cpp", "Creoles and pidgins");
-        idToValue.put("cre", "Cree");
-        idToValue.put("crp", "Creoles and pidgins");
-        idToValue.put("cus", "Cushitic");
-        idToValue.put("cym", "Welsh");
-        idToValue.put("cze", "Czech");
-        idToValue.put("dak", "Dakota");
-        idToValue.put("dan", "Danish");
-        idToValue.put("day", "Dayak");
-        idToValue.put("del", "Delaware");
-        idToValue.put("den", "Slave (Athapascan)");
-        idToValue.put("deu", "German");
-        idToValue.put("dgr", "Dogrib");
-        idToValue.put("din", "Dinka");
-        idToValue.put("div", "Divehi");
-        idToValue.put("doi", "Dogri");
-        idToValue.put("dra", "Dravidian");
-        idToValue.put("dua", "Duala");
-        idToValue.put("dum", "Dutch, Middle (ca.1050-1350)");
-        idToValue.put("dut", "Dutch");
-        idToValue.put("dyu", "Dyula");
-        idToValue.put("dzo", "Dzongkha");
-        idToValue.put("efi", "Efik");
-        idToValue.put("egy", "Egyptian (Ancient)");
-        idToValue.put("eka", "Ekajuk");
-        idToValue.put("ell", "Greek, Modern (1453-)");
-        idToValue.put("elx", "Elamite");
-        idToValue.put("eng", "English");
-        idToValue.put("enm", "English, Middle (1100-1500)");
-        idToValue.put("epo", "Esperanto");
-        idToValue.put("est", "Estonian");
-        idToValue.put("eus", "Basque");
-        idToValue.put("ewe", "Ewe");
-        idToValue.put("ewo", "Ewondo");
-        idToValue.put("fan", "Fang");
-        idToValue.put("fao", "Faroese");
-        idToValue.put("fas", "Persian");
-        idToValue.put("fat", "Fanti");
-        idToValue.put("fij", "Fijian");
-        idToValue.put("fin", "Finnish");
-        idToValue.put("fiu", "Finno-Ugrian");
-        idToValue.put("fon", "Fon");
-        idToValue.put("fra", "French");
-        idToValue.put("frm", "French, Middle (ca.1400-1800)");
-        idToValue.put("fro", "French, Old (842-ca.1400)");
-        idToValue.put("fry", "Frisian");
-        idToValue.put("ful", "Fulah");
-        idToValue.put("fur", "Friulian");
-        idToValue.put("gaa", "Ga");
-        idToValue.put("gay", "Gayo");
-        idToValue.put("gba", "Gbaya");
-        idToValue.put("gem", "Germanic");
-        idToValue.put("geo", "Georgian");
-        idToValue.put("ger", "German");
-        idToValue.put("gez", "Geez");
-        idToValue.put("gil", "Gilbertese");
-        idToValue.put("gla", "Gaelic; Scottish Gaelic");
-        idToValue.put("gle", "Irish");
-        idToValue.put("glg", "Gallegan");
-        idToValue.put("glv", "Manx");
-        idToValue.put("gmh", "German, Middle High (ca.1050-1500)");
-        idToValue.put("goh", "German, Old High (ca.750-1050)");
-        idToValue.put("gon", "Gondi");
-        idToValue.put("gor", "Gorontalo");
-        idToValue.put("got", "Gothic");
-        idToValue.put("grb", "Grebo");
-        idToValue.put("grc", "Greek, Ancient (to 1453)");
-        idToValue.put("gre", "Greek, Modern (1453-)");
-        idToValue.put("grn", "Guarani");
-        idToValue.put("guj", "Gujarati");
-        idToValue.put("gwi", "Gwich´in");
-        idToValue.put("hai", "Haida");
-        idToValue.put("hau", "Hausa");
-        idToValue.put("haw", "Hawaiian");
-        idToValue.put("heb", "Hebrew");
-        idToValue.put("her", "Herero");
-        idToValue.put("hil", "Hiligaynon");
-        idToValue.put("him", "Himachali");
-        idToValue.put("hin", "Hindi");
-        idToValue.put("hit", "Hittite");
-        idToValue.put("hmn", "Hmong");
-        idToValue.put("hmo", "Hiri Motu");
-        idToValue.put("hrv", "Croatian");
-        idToValue.put("hun", "Hungarian");
-        idToValue.put("hup", "Hupa");
-        idToValue.put("hye", "Armenian");
-        idToValue.put("iba", "Iban");
-        idToValue.put("ibo", "Igbo");
-        idToValue.put("ice", "Icelandic");
-        idToValue.put("ido", "Ido");
-        idToValue.put("ijo", "Ijo");
-        idToValue.put("iku", "Inuktitut");
-        idToValue.put("ile", "Interlingue");
-        idToValue.put("ilo", "Iloko");
-        idToValue.put("ina", "Interlingua");
-        idToValue.put("inc", "Indic");
-        idToValue.put("ind", "Indonesian");
-        idToValue.put("ine", "Indo-European");
-        idToValue.put("ipk", "Inupiaq");
-        idToValue.put("ira", "Iranian (Other)");
-        idToValue.put("iro", "Iroquoian languages");
-        idToValue.put("isl", "Icelandic");
-        idToValue.put("ita", "Italian");
-        idToValue.put("jav", "Javanese");
-        idToValue.put("jpn", "Japanese");
-        idToValue.put("jpr", "Judeo-Persian");
-        idToValue.put("jrb", "Judeo-Arabic");
-        idToValue.put("kaa", "Kara-Kalpak");
-        idToValue.put("kab", "Kabyle");
-        idToValue.put("kac", "Kachin");
-        idToValue.put("kal", "Kalaallisut");
-        idToValue.put("kam", "Kamba");
-        idToValue.put("kan", "Kannada");
-        idToValue.put("kar", "Karen");
-        idToValue.put("kas", "Kashmiri");
-        idToValue.put("kat", "Georgian");
-        idToValue.put("kau", "Kanuri");
-        idToValue.put("kaw", "Kawi");
-        idToValue.put("kaz", "Kazakh");
-        idToValue.put("kha", "Khasi");
-        idToValue.put("khi", "Khoisan");
-        idToValue.put("khm", "Khmer");
-        idToValue.put("kho", "Khotanese");
-        idToValue.put("kik", "Kikuyu; Gikuyu");
-        idToValue.put("kin", "Kinyarwanda");
-        idToValue.put("kir", "Kirghiz");
-        idToValue.put("kmb", "Kimbundu");
-        idToValue.put("kok", "Konkani");
-        idToValue.put("kom", "Komi");
-        idToValue.put("kon", "Kongo");
-        idToValue.put("kor", "Korean");
-        idToValue.put("kos", "Kosraean");
-        idToValue.put("kpe", "Kpelle");
-        idToValue.put("kro", "Kru");
-        idToValue.put("kru", "Kurukh");
-        idToValue.put("kua", "Kuanyama; Kwanyama");
-        idToValue.put("kum", "Kumyk");
-        idToValue.put("kur", "Kurdish");
-        idToValue.put("kut", "Kutenai");
-        idToValue.put("lad", "Ladino");
-        idToValue.put("lah", "Lahnda");
-        idToValue.put("lam", "Lamba");
-        idToValue.put("lao", "Lao");
-        idToValue.put("lat", "Latin");
-        idToValue.put("lav", "Latvian");
-        idToValue.put("lez", "Lezghian");
-        idToValue.put("lin", "Lingala");
-        idToValue.put("lit", "Lithuanian");
-        idToValue.put("lol", "Mongo");
-        idToValue.put("loz", "Lozi");
-        idToValue.put("ltz", "Luxembourgish; Letzeburgesch");
-        idToValue.put("lua", "Luba-Lulua");
-        idToValue.put("lub", "Luba-Katanga");
-        idToValue.put("lug", "Ganda");
-        idToValue.put("lui", "Luiseno");
-        idToValue.put("lun", "Lunda");
-        idToValue.put("luo", "Luo (Kenya and Tanzania)");
-        idToValue.put("lus", "lushai");
-        idToValue.put("mac", "Macedonian");
-        idToValue.put("mad", "Madurese");
-        idToValue.put("mag", "Magahi");
-        idToValue.put("mah", "Marshallese");
-        idToValue.put("mai", "Maithili");
-        idToValue.put("mak", "Makasar");
-        idToValue.put("mal", "Malayalam");
-        idToValue.put("man", "Mandingo");
-        idToValue.put("mao", "Maori");
-        idToValue.put("map", "Austronesian");
-        idToValue.put("mar", "Marathi");
-        idToValue.put("mas", "Masai");
-        idToValue.put("may", "Malay");
-        idToValue.put("mdr", "Mandar");
-        idToValue.put("men", "Mende");
-        idToValue.put("mga", "Irish, Middle (900-1200)");
-        idToValue.put("mic", "Micmac");
-        idToValue.put("min", "Minangkabau");
-        idToValue.put("mis", "Miscellaneous languages");
-        idToValue.put("mkd", "Macedonian");
-        idToValue.put("mkh", "Mon-Khmer");
-        idToValue.put("mlg", "Malagasy");
-        idToValue.put("mlt", "Maltese");
-        idToValue.put("mnc", "Manchu");
-        idToValue.put("mni", "Manipuri");
-        idToValue.put("mno", "Manobo languages");
-        idToValue.put("moh", "Mohawk");
-        idToValue.put("mol", "Moldavian");
-        idToValue.put("mon", "Mongolian");
-        idToValue.put("mos", "Mossi");
-        idToValue.put("mri", "Maori");
-        idToValue.put("msa", "Malay");
-        idToValue.put("mul", "Multiple languages");
-        idToValue.put("mun", "Munda languages");
-        idToValue.put("mus", "Creek");
-        idToValue.put("mwr", "Marwari");
-        idToValue.put("mya", "Burmese");
-        idToValue.put("myn", "Mayan languages");
-        idToValue.put("nah", "Nahuatl");
-        idToValue.put("nai", "North American Indian");
-        idToValue.put("nau", "Nauru");
-        idToValue.put("nav", "Navajo; Navaho");
-        idToValue.put("nbl", "South Ndebele");
-        idToValue.put("nde", "North Ndebele");
-        idToValue.put("ndo", "Ndonga");
-        idToValue.put("nds", "Low German; Low Saxon");
-        idToValue.put("nep", "Nepali");
-        idToValue.put("new", "Newari");
-        idToValue.put("nia", "Nias");
-        idToValue.put("nic", "Niger-Kordofanian");
-        idToValue.put("niu", "Niuean");
-        idToValue.put("nld", "Dutch");
-        idToValue.put("nno", "Norwegian Nynorsk");
-        idToValue.put("nob", "Norwegian Bokmål");
-        idToValue.put("non", "Norse, Old");
-        idToValue.put("nor", "Norwegian");
-        idToValue.put("nso", "Sotho, Northern");
-        idToValue.put("nub", "Nubian languages");
-        idToValue.put("nya", "Chichewa; Chewa; Nyanja");
-        idToValue.put("nym", "Nyamwezi");
-        idToValue.put("nyn", "Nyankole");
-        idToValue.put("nyo", "Nyoro");
-        idToValue.put("nzi", "Nzima");
-        idToValue.put("oci", "Occitan (post 1500); Provençal");
-        idToValue.put("oji", "Ojibwa");
-        idToValue.put("ori", "Oriya");
-        idToValue.put("orm", "Oromo");
-        idToValue.put("osa", "Osage");
-        idToValue.put("oss", "Ossetian; Ossetic");
-        idToValue.put("ota", "Turkish, Ottoman (1500-1928)");
-        idToValue.put("oto", "Otomian languages");
-        idToValue.put("paa", "Papuan");
-        idToValue.put("pag", "Pangasinan");
-        idToValue.put("pal", "Pahlavi");
-        idToValue.put("pam", "Pampanga");
-        idToValue.put("pan", "Panjabi");
-        idToValue.put("pap", "Papiamento");
-        idToValue.put("pau", "Palauan");
-        idToValue.put("peo", "Persian, Old (ca.600-400 B.C.)");
-        idToValue.put("per", "Persian");
-        idToValue.put("per", "Persian");
-        idToValue.put("phi", "Philippine");
-        idToValue.put("phn", "Phoenician");
-        idToValue.put("pli", "Pali");
-        idToValue.put("pol", "Polish");
-        idToValue.put("pon", "Pohnpeian");
-        idToValue.put("por", "Portuguese");
-        idToValue.put("pra", "Prakrit languages");
-        idToValue.put("pro", "Provençal, Old (to 1500)");
-        idToValue.put("pus", "Pushto");
-        idToValue.put("que", "Quechua");
-        idToValue.put("raj", "Rajasthani");
-        idToValue.put("rap", "Rapanui");
-        idToValue.put("rar", "Rarotongan");
-        idToValue.put("roa", "Romance");
-        idToValue.put("roh", "Raeto-Romance");
-        idToValue.put("rom", "Romany");
-        idToValue.put("ron", "Romanian");
-        idToValue.put("rum", "Romanian");
-        idToValue.put("run", "Rundi");
-        idToValue.put("rus", "Russian");
-        idToValue.put("sad", "Sandawe");
-        idToValue.put("sag", "Sango");
-        idToValue.put("sah", "Yakut");
-        idToValue.put("sai", "South American Indian");
-        idToValue.put("sal", "Salishan languages");
-        idToValue.put("sam", "Samaritan Aramaic");
-        idToValue.put("san", "Sanskrit");
-        idToValue.put("sas", "Sasak");
-        idToValue.put("sat", "Santali");
-        idToValue.put("scc", "Serbian");
-        idToValue.put("sco", "Scots");
-        idToValue.put("scr", "Croatian");
-        idToValue.put("sel", "Selkup");
-        idToValue.put("sem", "Semitic");
-        idToValue.put("sga", "Irish, Old (to 900)");
-        idToValue.put("sgn", "Sign languages");
-        idToValue.put("shn", "Shan");
-        idToValue.put("sid", "Sidamo");
-        idToValue.put("sin", "Sinhales");
-        idToValue.put("sio", "Siouan languages");
-        idToValue.put("sit", "Sino-Tibetan");
-        idToValue.put("sla", "Slavic");
-        idToValue.put("slk", "Slovak");
-        idToValue.put("slo", "Slovak");
-        idToValue.put("slv", "Slovenian");
-        idToValue.put("sma", "Southern Sami");
-        idToValue.put("sme", "Northern Sami");
-        idToValue.put("smi", "Sami languages");
-        idToValue.put("smj", "Lule Sami");
-        idToValue.put("smn", "Inari Sami");
-        idToValue.put("smo", "Samoan");
-        idToValue.put("sms", "Skolt Sami");
-        idToValue.put("sna", "Shona");
-        idToValue.put("snd", "Sindhi");
-        idToValue.put("snk", "Soninke");
-        idToValue.put("sog", "Sogdian");
-        idToValue.put("som", "Somali");
-        idToValue.put("son", "Songhai");
-        idToValue.put("sot", "Sotho, Southern");
-        idToValue.put("spa", "Spanish; Castilia");
-        idToValue.put("sqi", "Albanian");
-        idToValue.put("srd", "Sardinian");
-        idToValue.put("srp", "Serbian");
-        idToValue.put("srr", "Serer");
-        idToValue.put("ssa", "Nilo-Saharan");
-        idToValue.put("sus", "Susu");
-        idToValue.put("sux", "Sumerian");
-        idToValue.put("swa", "Swahili");
-        idToValue.put("swe", "Swedish");
-        idToValue.put("syr", "Syriac");
-        idToValue.put("tah", "Tahitian");
-        idToValue.put("tai", "Tai");
-        idToValue.put("tam", "Tamil");
-        idToValue.put("tat", "Tatar");
-        idToValue.put("tel", "Telugu");
-        idToValue.put("tem", "Timne");
-        idToValue.put("ter", "Tereno");
-        idToValue.put("tet", "Tetum");
-        idToValue.put("tgk", "Tajik");
-        idToValue.put("tgl", "Tagalog");
-        idToValue.put("tha", "Thai");
-        idToValue.put("tib", "Tibetan");
-        idToValue.put("tig", "Tigre");
-        idToValue.put("tir", "Tigrinya");
-        idToValue.put("tiv", "Tiv");
-        idToValue.put("tkl", "Tokelau");
-        idToValue.put("tli", "Tlingit");
-        idToValue.put("tmh", "Tamashek");
-        idToValue.put("tog", "Tonga (Nyasa)");
-        idToValue.put("ton", "Tonga (Tonga Islands)");
-        idToValue.put("tpi", "Tok Pisin");
-        idToValue.put("tsi", "Tsimshian");
-        idToValue.put("tsn", "Tswana");
-        idToValue.put("tso", "Tsonga");
-        idToValue.put("tuk", "Turkmen");
-        idToValue.put("tum", "Tumbuka");
-        idToValue.put("tup", "Tupi");
-        idToValue.put("tur", "Turkish");
-        idToValue.put("tut", "Altaic");
-        idToValue.put("tvl", "Tuvalu");
-        idToValue.put("twi", "Twi");
-        idToValue.put("tyv", "Tuvinian");
-        idToValue.put("uga", "Ugaritic");
-        idToValue.put("uig", "Uighur");
-        idToValue.put("ukr", "Ukrainian");
-        idToValue.put("umb", "Umbundu");
-        idToValue.put("und", "Undetermined");
-        idToValue.put("urd", "Urdu");
-        idToValue.put("uzb", "Uzbek");
-        idToValue.put("vai", "Vai");
-        idToValue.put("ven", "Venda");
-        idToValue.put("vie", "Vietnamese");
-        idToValue.put("vol", "Volapük");
-        idToValue.put("vot", "Votic");
-        idToValue.put("wak", "Wakashan languages");
-        idToValue.put("wal", "Walamo");
-        idToValue.put("war", "Waray");
-        idToValue.put("was", "Washo");
-        idToValue.put("wel", "Welsh");
-        idToValue.put("wen", "Sorbian languages");
-        idToValue.put("wln", "Walloon");
-        idToValue.put("wol", "Wolof");
-        idToValue.put("xho", "Xhosa");
-        idToValue.put("yao", "Yao");
-        idToValue.put("yap", "Yapese");
-        idToValue.put("yid", "Yiddish");
-        idToValue.put("yor", "Yoruba");
-        idToValue.put("ypk", "Yupik languages");
-        idToValue.put("zap", "Zapotec");
-        idToValue.put("zen", "Zenaga");
-        idToValue.put("zha", "Zhuang; Chuang");
-        idToValue.put("zho", "Chinese");
-        idToValue.put("znd", "Zande");
-        idToValue.put("zul", "Zulu");
-        idToValue.put("zun", "Zuni");
-        idToValue.put("\0\0\0", "Winamp Format");                 //Not Part of Spec but commonly used by some applications
-        idToValue.put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some applications
+        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+        builder.put("aar", "Afar")
+               .put("abk", "Abkhazian")
+               .put("ace", "Achinese")
+               .put("ach", "Acoli")
+               .put("ada", "Adangme")
+               .put("afa", "Afro-Asiatic")
+               .put("afh", "Afrihili")
+               .put("afr", "Afrikaans")
+               .put("aka", "Akan")
+               .put("akk", "Akkadian")
+               .put("alb", "Albanian")
+               .put("ale", "Aleut")
+               .put("alg", "Algonquian languages")
+               .put("amh", "Amharic")
+               .put("ang", "Old English,(ca.450-1100)")
+               .put("apa", "Apache languages")
+               .put("ara", "Arabic")
+               .put("arc", "Aramaic")
+               .put("arm", "Armenian")
+               .put("arn", "Araucanian")
+               .put("arp", "Arapaho")
+               .put("art", "Artificial")
+               .put("arw", "Arawak")
+               .put("asm", "Assamese")
+               .put("ast", "Asturian Bable")
+               .put("ath", "Athapascan languages")
+               .put("aus", "Australian languages")
+               .put("ava", "Avaric")
+               .put("ave", "Avestan")
+               .put("awa", "Awadhi")
+               .put("aym", "Aymara")
+               .put("aze", "Azerbaijani")
+               .put("bad", "Banda")
+               .put("bai", "Bamileke languages")
+               .put("bak", "Bashkir")
+               .put("bal", "Baluchi")
+               .put("bam", "Bambara")
+               .put("ban", "Balinese")
+               .put("baq", "Basque")
+               .put("bas", "Basa")
+               .put("bat", "Baltic")
+               .put("bej", "Beja")
+               .put("bel", "Belarusian")
+               .put("bem", "Bemba")
+               .put("ben", "Bengali")
+               .put("ber", "Berber")
+               .put("bho", "Bhojpuri")
+               .put("bih", "Bihari")
+               .put("bik", "Bikol")
+               .put("bin", "Bini")
+               .put("bis", "Bislama")
+               .put("bla", "Siksika")
+               .put("bnt", "Bantu")
+               .put("bod", "Tibetan")
+               .put("bos", "Bosnian")
+               .put("bra", "Braj")
+               .put("bre", "Breton")
+               .put("btk", "Batak (Indonesia)")
+               .put("bua", "Buriat")
+               .put("bug", "Buginese")
+               .put("bul", "Bulgarian")
+               .put("bur", "Burmese")
+               .put("cad", "Caddo")
+               .put("cai", "Central American Indian")
+               .put("car", "Carib")
+               .put("cat", "Catalan")
+               .put("cau", "Caucasian")
+               .put("ceb", "Cebuano")
+               .put("cel", "Celtic")
+               .put("ces", "Czech")
+               .put("cha", "Chamorro")
+               .put("chb", "Chibcha")
+               .put("che", "Chechen")
+               .put("chg", "Chagatai")
+               .put("chi", "Chinese")
+               .put("chk", "Chuukese")
+               .put("chm", "Mari")
+               .put("chn", "Chinook jargon")
+               .put("cho", "Choctaw")
+               .put("chp", "Chipewyan")
+               .put("chr", "Cherokee")
+               .put("chu", "Church Slavic")
+               .put("chv", "Chuvash")
+               .put("chy", "Cheyenne")
+               .put("cmc", "Chamic languages")
+               .put("cop", "Coptic")
+               .put("cor", "Cornish")
+               .put("cos", "Corsican")
+               .put("cpe", "Creoles and pidgins, English based")
+               .put("cpf", "Creoles and pidgins, French based")
+               .put("cpp", "Creoles and pidgins, Portuguese-based")
+               .put("cre", "Cree")
+               .put("crp", "Creoles and pidgins")
+               .put("cus", "Cushitic")
+               .put("cym", "Welsh")
+               .put("cze", "Czech")
+               .put("dak", "Dakota")
+               .put("dan", "Danish")
+               .put("day", "Dayak")
+               .put("del", "Delaware")
+               .put("den", "Slave (Athapascan)")
+               .put("deu", "German")
+               .put("dgr", "Dogrib")
+               .put("din", "Dinka")
+               .put("div", "Divehi")
+               .put("doi", "Dogri")
+               .put("dra", "Dravidian")
+               .put("dua", "Duala")
+               .put("dum", "Dutch, Middle (ca.1050-1350)")
+               .put("dut", "Dutch")
+               .put("dyu", "Dyula")
+               .put("dzo", "Dzongkha")
+               .put("efi", "Efik")
+               .put("egy", "Egyptian (Ancient)")
+               .put("eka", "Ekajuk")
+               .put("ell", "Greek, Modern (1453-)")
+               .put("elx", "Elamite")
+               .put("eng", "English")
+               .put("enm", "English, Middle (1100-1500)")
+               .put("epo", "Esperanto")
+               .put("est", "Estonian")
+               .put("eus", "Basque")
+               .put("ewe", "Ewe")
+               .put("ewo", "Ewondo")
+               .put("fan", "Fang")
+               .put("fao", "Faroese")
+               .put("fas", "Persian")
+               .put("fat", "Fanti")
+               .put("fij", "Fijian")
+               .put("fin", "Finnish")
+               .put("fiu", "Finno-Ugrian")
+               .put("fon", "Fon")
+               .put("fra", "French")
+               .put("frm", "French, Middle (ca.1400-1800)")
+               .put("fro", "French, Old (842-ca.1400)")
+               .put("fry", "Frisian")
+               .put("ful", "Fulah")
+               .put("fur", "Friulian")
+               .put("gaa", "Ga")
+               .put("gay", "Gayo")
+               .put("gba", "Gbaya")
+               .put("gem", "Germanic")
+               .put("geo", "Georgian")
+               .put("ger", "German")
+               .put("gez", "Geez")
+               .put("gil", "Gilbertese")
+               .put("gla", "Gaelic Scottish Gaelic")
+               .put("gle", "Irish")
+               .put("glg", "Gallegan")
+               .put("glv", "Manx")
+               .put("gmh", "German, Middle High (ca.1050-1500)")
+               .put("goh", "German, Old High (ca.750-1050)")
+               .put("gon", "Gondi")
+               .put("gor", "Gorontalo")
+               .put("got", "Gothic")
+               .put("grb", "Grebo")
+               .put("grc", "Greek, Ancient (to 1453)")
+               .put("gre", "Greek, Modern (1453-)")
+               .put("grn", "Guarani")
+               .put("guj", "Gujarati")
+               .put("gwi", "Gwich´in")
+               .put("hai", "Haida")
+               .put("hau", "Hausa")
+               .put("haw", "Hawaiian")
+               .put("heb", "Hebrew")
+               .put("her", "Herero")
+               .put("hil", "Hiligaynon")
+               .put("him", "Himachali")
+               .put("hin", "Hindi")
+               .put("hit", "Hittite")
+               .put("hmn", "Hmong")
+               .put("hmo", "Hiri Motu")
+               .put("hrv", "Croatian")
+               .put("hun", "Hungarian")
+               .put("hup", "Hupa")
+               .put("hye", "Armenian")
+               .put("iba", "Iban")
+               .put("ibo", "Igbo")
+               .put("ice", "Icelandic")
+               .put("ido", "Ido")
+               .put("ijo", "Ijo")
+               .put("iku", "Inuktitut")
+               .put("ile", "Interlingue")
+               .put("ilo", "Iloko")
+               .put("ina", "Interlingua")
+               .put("inc", "Indic")
+               .put("ind", "Indonesian")
+               .put("ine", "Indo-European")
+               .put("ipk", "Inupiaq")
+               .put("ira", "Iranian (Other)")
+               .put("iro", "Iroquoian languages")
+               .put("isl", "Icelandic")
+               .put("ita", "Italian")
+               .put("jav", "Javanese")
+               .put("jpn", "Japanese")
+               .put("jpr", "Judeo-Persian")
+               .put("jrb", "Judeo-Arabic")
+               .put("kaa", "Kara-Kalpak")
+               .put("kab", "Kabyle")
+               .put("kac", "Kachin")
+               .put("kal", "Kalaallisut")
+               .put("kam", "Kamba")
+               .put("kan", "Kannada")
+               .put("kar", "Karen")
+               .put("kas", "Kashmiri")
+               .put("kat", "Georgian")
+               .put("kau", "Kanuri")
+               .put("kaw", "Kawi")
+               .put("kaz", "Kazakh")
+               .put("kha", "Khasi")
+               .put("khi", "Khoisan")
+               .put("khm", "Khmer")
+               .put("kho", "Khotanese")
+               .put("kik", "Kikuyu Gikuyu")
+               .put("kin", "Kinyarwanda")
+               .put("kir", "Kirghiz")
+               .put("kmb", "Kimbundu")
+               .put("kok", "Konkani")
+               .put("kom", "Komi")
+               .put("kon", "Kongo")
+               .put("kor", "Korean")
+               .put("kos", "Kosraean")
+               .put("kpe", "Kpelle")
+               .put("kro", "Kru")
+               .put("kru", "Kurukh")
+               .put("kua", "Kuanyama Kwanyama")
+               .put("kum", "Kumyk")
+               .put("kur", "Kurdish")
+               .put("kut", "Kutenai")
+               .put("lad", "Ladino")
+               .put("lah", "Lahnda")
+               .put("lam", "Lamba")
+               .put("lao", "Lao")
+               .put("lat", "Latin")
+               .put("lav", "Latvian")
+               .put("lez", "Lezghian")
+               .put("lin", "Lingala")
+               .put("lit", "Lithuanian")
+               .put("lol", "Mongo")
+               .put("loz", "Lozi")
+               .put("ltz", "Luxembourgish Letzeburgesch")
+               .put("lua", "Luba-Lulua")
+               .put("lub", "Luba-Katanga")
+               .put("lug", "Ganda")
+               .put("lui", "Luiseno")
+               .put("lun", "Lunda")
+               .put("luo", "Luo (Kenya and Tanzania)")
+               .put("lus", "lushai")
+               .put("mac", "Macedonian")
+               .put("mad", "Madurese")
+               .put("mag", "Magahi")
+               .put("mah", "Marshallese")
+               .put("mai", "Maithili")
+               .put("mak", "Makasar")
+               .put("mal", "Malayalam")
+               .put("man", "Mandingo")
+               .put("mao", "Maori")
+               .put("map", "Austronesian")
+               .put("mar", "Marathi")
+               .put("mas", "Masai")
+               .put("may", "Malay")
+               .put("mdr", "Mandar")
+               .put("men", "Mende")
+               .put("mga", "Irish, Middle (900-1200)")
+               .put("mic", "Micmac")
+               .put("min", "Minangkabau")
+               .put("mis", "Miscellaneous languages")
+               .put("mkd", "Macedonian")
+               .put("mkh", "Mon-Khmer")
+               .put("mlg", "Malagasy")
+               .put("mlt", "Maltese")
+               .put("mnc", "Manchu")
+               .put("mni", "Manipuri")
+               .put("mno", "Manobo languages")
+               .put("moh", "Mohawk")
+               .put("mol", "Moldavian")
+               .put("mon", "Mongolian")
+               .put("mos", "Mossi")
+               .put("mri", "Maori")
+               .put("msa", "Malay")
+               .put("mul", "Multiple languages")
+               .put("mun", "Munda languages")
+               .put("mus", "Creek")
+               .put("mwr", "Marwari")
+               .put("mya", "Burmese")
+               .put("myn", "Mayan languages")
+               .put("nah", "Nahuatl")
+               .put("nai", "North American Indian")
+               .put("nau", "Nauru")
+               .put("nav", "Navajo Navaho")
+               .put("nbl", "South Ndebele")
+               .put("nde", "North Ndebele")
+               .put("ndo", "Ndonga")
+               .put("nds", "Low German Low Saxon")
+               .put("nep", "Nepali")
+               .put("new", "Newari")
+               .put("nia", "Nias")
+               .put("nic", "Niger-Kordofanian")
+               .put("niu", "Niuean")
+               .put("nld", "Dutch")
+               .put("nno", "Norwegian Nynorsk")
+               .put("nob", "Norwegian Bokmål")
+               .put("non", "Norse, Old")
+               .put("nor", "Norwegian")
+               .put("nso", "Sotho, Northern")
+               .put("nub", "Nubian languages")
+               .put("nya", "Chichewa Chewa Nyanja")
+               .put("nym", "Nyamwezi")
+               .put("nyn", "Nyankole")
+               .put("nyo", "Nyoro")
+               .put("nzi", "Nzima")
+               .put("oci", "Occitan (post 1500) Provençal")
+               .put("oji", "Ojibwa")
+               .put("ori", "Oriya")
+               .put("orm", "Oromo")
+               .put("osa", "Osage")
+               .put("oss", "Ossetian Ossetic")
+               .put("ota", "Turkish, Ottoman (1500-1928)")
+               .put("oto", "Otomian languages")
+               .put("paa", "Papuan")
+               .put("pag", "Pangasinan")
+               .put("pal", "Pahlavi")
+               .put("pam", "Pampanga")
+               .put("pan", "Panjabi")
+               .put("pap", "Papiamento")
+               .put("pau", "Palauan")
+               .put("peo", "Persian, Old (ca.600-400 B.C.)")
+               .put("per", "Persian")
+               .put("phi", "Philippine")
+               .put("phn", "Phoenician")
+               .put("pli", "Pali")
+               .put("pol", "Polish")
+               .put("pon", "Pohnpeian")
+               .put("por", "Portuguese")
+               .put("pra", "Prakrit languages")
+               .put("pro", "Provençal, Old (to 1500)")
+               .put("pus", "Pushto")
+               .put("que", "Quechua")
+               .put("raj", "Rajasthani")
+               .put("rap", "Rapanui")
+               .put("rar", "Rarotongan")
+               .put("roa", "Romance")
+               .put("roh", "Raeto-Romance")
+               .put("rom", "Romany")
+               .put("ron", "Romanian")
+               .put("rum", "Romanian")
+               .put("run", "Rundi")
+               .put("rus", "Russian")
+               .put("sad", "Sandawe")
+               .put("sag", "Sango")
+               .put("sah", "Yakut")
+               .put("sai", "South American Indian")
+               .put("sal", "Salishan languages")
+               .put("sam", "Samaritan Aramaic")
+               .put("san", "Sanskrit")
+               .put("sas", "Sasak")
+               .put("sat", "Santali")
+               .put("sco", "Scots")
+               .put("sel", "Selkup")
+               .put("sem", "Semitic")
+               .put("sga", "Irish, Old (to 900)")
+               .put("sgn", "Sign languages")
+               .put("shn", "Shan")
+               .put("sid", "Sidamo")
+               .put("sin", "Sinhales")
+               .put("sio", "Siouan languages")
+               .put("sit", "Sino-Tibetan")
+               .put("sla", "Slavic")
+               .put("slk", "Slovak")
+               .put("slo", "Slovak")
+               .put("slv", "Slovenian")
+               .put("sma", "Southern Sami")
+               .put("sme", "Northern Sami")
+               .put("smi", "Sami languages")
+               .put("smj", "Lule Sami")
+               .put("smn", "Inari Sami")
+               .put("smo", "Samoan")
+               .put("sms", "Skolt Sami")
+               .put("sna", "Shona")
+               .put("snd", "Sindhi")
+               .put("snk", "Soninke")
+               .put("sog", "Sogdian")
+               .put("som", "Somali")
+               .put("son", "Songhai")
+               .put("sot", "Sotho, Southern")
+               .put("spa", "Spanish Castilia")
+               .put("sqi", "Albanian")
+               .put("srd", "Sardinian")
+               .put("srp", "Serbian")
+               .put("srr", "Serer")
+               .put("ssa", "Nilo-Saharan")
+               .put("sus", "Susu")
+               .put("sux", "Sumerian")
+               .put("swa", "Swahili")
+               .put("swe", "Swedish")
+               .put("syr", "Syriac")
+               .put("tah", "Tahitian")
+               .put("tai", "Tai")
+               .put("tam", "Tamil")
+               .put("tat", "Tatar")
+               .put("tel", "Telugu")
+               .put("tem", "Timne")
+               .put("ter", "Tereno")
+               .put("tet", "Tetum")
+               .put("tgk", "Tajik")
+               .put("tgl", "Tagalog")
+               .put("tha", "Thai")
+               .put("tib", "Tibetan")
+               .put("tig", "Tigre")
+               .put("tir", "Tigrinya")
+               .put("tiv", "Tiv")
+               .put("tkl", "Tokelau")
+               .put("tli", "Tlingit")
+               .put("tmh", "Tamashek")
+               .put("tog", "Tonga (Nyasa)")
+               .put("ton", "Tonga (Tonga Islands)")
+               .put("tpi", "Tok Pisin")
+               .put("tsi", "Tsimshian")
+               .put("tsn", "Tswana")
+               .put("tso", "Tsonga")
+               .put("tuk", "Turkmen")
+               .put("tum", "Tumbuka")
+               .put("tup", "Tupi")
+               .put("tur", "Turkish")
+               .put("tut", "Altaic")
+               .put("tvl", "Tuvalu")
+               .put("twi", "Twi")
+               .put("tyv", "Tuvinian")
+               .put("uga", "Ugaritic")
+               .put("uig", "Uighur")
+               .put("ukr", "Ukrainian")
+               .put("umb", "Umbundu")
+               .put("und", "Undetermined")
+               .put("urd", "Urdu")
+               .put("uzb", "Uzbek")
+               .put("vai", "Vai")
+               .put("ven", "Venda")
+               .put("vie", "Vietnamese")
+               .put("vol", "Volapük")
+               .put("vot", "Votic")
+               .put("wak", "Wakashan languages")
+               .put("wal", "Walamo")
+               .put("war", "Waray")
+               .put("was", "Washo")
+               .put("wel", "Welsh")
+               .put("wen", "Sorbian languages")
+               .put("wln", "Walloon")
+               .put("wol", "Wolof")
+               .put("xho", "Xhosa")
+               .put("yao", "Yao")
+               .put("yap", "Yapese")
+               .put("yid", "Yiddish")
+               .put("yor", "Yoruba")
+               .put("ypk", "Yupik languages")
+               .put("zap", "Zapotec")
+               .put("zen", "Zenaga")
+               .put("zha", "Zhuang Chuang")
+               .put("zho", "Chinese")
+               .put("znd", "Zande")
+               .put("zul", "Zulu")
+               .put("zun", "Zuni")
+               .put("\0\0\0", "Winamp Format")                 //Not Part of Spec but commonly used by some applications
+               .put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some applications
 
-
-        createMaps();
+        idToValue = builder.build();
     }
+
+    /**
+     * This is an expensive call the first time, creates a large duplicate data structure, and is currently only used for Test.
+     *
+     * More than 1 language code can reference the same language. See https://www.loc.gov/standards/iso639-2/php/code_list.php
+     *
+     * @param value the langue
+     *
+     * @return collections all language codes for the given value (language)
+     */
+    @VisibleForTesting
+    public Collection<String> getIdForValue(String value) {
+        return getValueToIdMultiMap().get(value);
+    }
+
+    private ImmutableMultimap<String, String> getValueToIdMultiMap() {
+        if (valueToId == null) {
+            valueToId = idToValue.asMultimap().inverse();
+        }
+        return valueToId;
+    }
+
+    @Override public boolean containsKey(String key) {
+        return idToValue.containsKey(key);
+    }
+
+    @Override public String getValue(String id) {
+        return idToValue.get(id);
+    }
+
 }

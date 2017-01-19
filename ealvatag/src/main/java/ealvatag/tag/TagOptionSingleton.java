@@ -459,7 +459,7 @@ public class TagOptionSingleton {
      * @param lang language ID, [ISO-639-2] ISO/FDIS 639-2 definition
      */
     public void setLanguage(String lang) {
-        if (Languages.getInstanceOf().getIdToValueMap().containsKey(lang)) {
+        if (Languages.getInstanceOf().containsKey(lang)) {
             language = lang;
         }
     }

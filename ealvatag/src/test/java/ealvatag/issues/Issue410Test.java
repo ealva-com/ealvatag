@@ -11,16 +11,12 @@ import java.io.File;
 /**
  * Able to write language ensures writes it as iso code for mp3s
  */
-public class Issue410Test extends AbstractTestCase
-{
-    public void testIssue() throws Exception
-    {
+public class Issue410Test extends AbstractTestCase {
+    public void testIssue() throws Exception {
         Exception caught = null;
-        try
-        {
+        try {
             File orig = new File("testdata", "01.mp3");
-            if (!orig.isFile())
-            {
+            if (!orig.isFile()) {
                 System.err.println("Unable to test file - not available");
                 return;
             }
@@ -32,15 +28,13 @@ public class Issue410Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             assertEquals("English", af.getTag().getFirst(FieldKey.LANGUAGE));
 
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.LANGUAGE,
-                    Languages.getInstanceOf().getIdForValue("English"));
+            final String[] englishes = Languages.getInstanceOf().getIdForValue("English").toArray(new String[2]);
+            af.getTagOrCreateAndSetDefault().setField(FieldKey.LANGUAGE, englishes[0]);
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("eng", af.getTag().getFirst(FieldKey.LANGUAGE));
-        }
-        catch(Exception e)
-        {
-            caught=e;
+        } catch (Exception e) {
+            caught = e;
             e.printStackTrace();
         }
         assertNull(caught);

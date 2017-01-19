@@ -1,184 +1,98 @@
-/**
- *  @author : Paul Taylor
- *  @author : Eric Farng
- *
- *  Version @version:$Id$
- *
- *  MusicTag Copyright (C)2003,2004
- *
- *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- *  or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- *  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
+/*
+ * @author : Paul Taylor
+ * @author : Eric Farng
+ * <p>
+ * Version @version:$Id$
+ * <p>
+ * MusicTag Copyright (C)2003,2004
+ * <p>
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ * <p>
  * Description:
- *
  */
 package ealvatag.tag.datatype;
 
+import com.google.common.base.Strings;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.reference.Languages;
-
-import java.nio.charset.Charset;
-import java.util.Map;
+import ealvatag.tag.reference.SimpleStringStringMap;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
+import java.nio.charset.Charset;
+
 
 /**
- * Represents a String thats acts as a key into an enumeration of values. The String will be encoded
+ * Represents a String that acts as a key into an enumeration of values. The String will be encoded
  * using the default encoding regardless of what encoding may be specified in the framebody
  */
 public class StringHashMap extends StringFixedLength {
 
-    /**
-     *
-     */
-    Map<String, String> keyToValue = null;
+    private boolean hasEmptyValue = false;
 
-    /**
-     *
-     */
-    Map<String, String> valueToKey = null;
+    private final SimpleStringStringMap simpleStringStringMap;
 
-    /**
-     *
-     */
-    boolean hasEmptyValue = false;
-
-    /**
-     * Creates a new ObjectStringHashMap datatype.
-     *
-     * @param identifier
-     * @param frameBody
-     * @param size
-     * @throws IllegalArgumentException
-     */
-    public StringHashMap(String identifier, AbstractTagFrameBody frameBody, int size)
-    {
+    public StringHashMap(String identifier, AbstractTagFrameBody frameBody, int size) {
         super(identifier, frameBody, size);
 
-        if (identifier.equals(DataTypes.OBJ_LANGUAGE))
-        {
-            valueToKey = Languages.getInstanceOf().getValueToIdMap();
-            keyToValue = Languages.getInstanceOf().getIdToValueMap();
-        }
-        else
-        {
+        if (identifier.equals(DataTypes.OBJ_LANGUAGE)) {
+            simpleStringStringMap = Languages.getInstanceOf();
+        } else {
             throw new IllegalArgumentException("Hashmap identifier not defined in this class: " + identifier);
         }
     }
 
-    public StringHashMap(StringHashMap copyObject)
-    {
+    @SuppressWarnings("unused")   // TODO: 1/18/17 Do we need this copy ctor?
+    public StringHashMap(StringHashMap copyObject) {
         super(copyObject);
-
         this.hasEmptyValue = copyObject.hasEmptyValue;
-        this.keyToValue = copyObject.keyToValue;
-        this.valueToKey = copyObject.valueToKey;
+        this.simpleStringStringMap = copyObject.simpleStringStringMap;
     }
 
-    /**
-     * @param value
-     */
-    public void setValue(Object value)
-    {
-        if (value instanceof String)
-        {
+    public void setValue(Object value) {
+        if (value instanceof String) {
             //Issue #273 temporary hack for MM
-            if(value.equals("XXX"))
-            {
-                this.value=value.toString();
+            if (value.equals("XXX")) {
+                this.value = value.toString();
+            } else {
+                this.value = ((String)value).toLowerCase();
             }
-            else
-            {
-                this.value = ((String) value).toLowerCase();
-            }
-        }
-        else
-        {
+        } else {
             this.value = value;
         }
     }
 
-    /**
-     * @param obj
-     * @return
-     */
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof StringHashMap))
-        {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof StringHashMap)) {
             return false;
         }
 
-        StringHashMap object = (StringHashMap) obj;
+        StringHashMap that = (StringHashMap)obj;
 
-        if (this.hasEmptyValue != object.hasEmptyValue)
-        {
-            return false;
-        }
-
-        if (this.keyToValue == null)
-        {
-            if (object.keyToValue != null)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!this.keyToValue.equals(object.keyToValue))
-            {
-                return false;
-            }
-        }
-
-        if (this.keyToValue == null)
-        {
-            if (object.keyToValue != null)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!this.valueToKey.equals(object.valueToKey))
-            {
-                return false;
-            }
-        }
-
-        return super.equals(obj);
+        return this.hasEmptyValue == that.hasEmptyValue &&
+                com.google.common.base.Objects.equal(this.simpleStringStringMap, that.simpleStringStringMap) &&
+                super.equals(obj);
     }
 
-    /**
-     * @return
-     */
-    public String toString()
-    {
-        if (value == null || keyToValue.get(value) == null)
-        {
-            return "";
+    public String toString() {
+        if (value != null) {
+            return Strings.nullToEmpty(simpleStringStringMap.getValue(value.toString()));
         }
-        else
-        {
-            return keyToValue.get(value);
-        }
+        return "";
     }
 
     /**
      * @return the ISO_8859 encoding for Datatypes of this type
      */
-    protected Charset getTextEncodingCharSet()
-    {
+    protected Charset getTextEncodingCharSet() {
         return ISO_8859_1;
     }
 }
