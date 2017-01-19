@@ -17,37 +17,32 @@
 
 package ealvatag.tag.id3.valuepair;
 
+import ealvatag.utils.InclusiveIntegerRange;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test configuration of {@link EventTimingTypes}
+ * Test InterpolationTypes configuration (all 2 of them)
  * <p>
  * Created by Eric A. Snell on 1/18/17.
  */
-public class EventTimingTypesTest extends BaseSimpleIntStringMapTypeTest {
-    private EventTimingTypes types;
+public class InterpolationTypesTest extends BaseSimpleIntStringMapTypeTest {
+    private InterpolationTypes types;
+    private InclusiveIntegerRange range;
 
     @Before
     public void setup() {
-        types = EventTimingTypes.getInstanceOf();
+        types = InterpolationTypes.getInstanceOf();
+        range = new InclusiveIntegerRange(0, InterpolationTypes.MAX_INTERPOLATION_ID);
     }
 
     @Test
-    public void testContiguousIds() throws Exception {
-        testIdRange(types,
-                    EventTimingTypes.CORE_TYPES,
-                    EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                    EventTimingTypes.AUDIO_END_TYPES);
+    public void testAllIds() {
+        testIdRange(types, range);
     }
 
     @Test
-    public void testBadIds() throws Exception {
-        // ranges should not be contiguous (otherwise why have them), so testing each is the same
-        testBadIdAroundRange(types,
-                             EventTimingTypes.CORE_TYPES,
-                             EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                             EventTimingTypes.AUDIO_END_TYPES);
+    public void testBadKeys() throws Exception {
+        testBadIdAroundRange(types, range);
     }
-
 }

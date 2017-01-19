@@ -17,6 +17,9 @@
 
 package ealvatag.tag.reference;
 
+import ealvatag.tag.id3.valuepair.BaseSimpleIntStringMapTypeTest;
+import ealvatag.utils.InclusiveIntegerRange;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -27,37 +30,48 @@ import static org.junit.Assert.*;
  *
  * Created by Eric A. Snell on 1/17/17.
  */
-public class GenreTypesTest {
+public class GenreTypesTest extends BaseSimpleIntStringMapTypeTest {
+    private GenreTypes types;
+    private InclusiveIntegerRange range;
+
+
+    @Before
+    public void setup() {
+        types = GenreTypes.getInstanceOf();
+        range = new InclusiveIntegerRange(0, GenreTypes.getMaxGenreId());
+    }
+
     /**
      * This tests lower case genre names identifications
      */
     @Test
     public void testLowercaseGenreMatch() {
-        final GenreTypes genreTypes = GenreTypes.getInstanceOf();
-        assertThat(genreTypes.getIdForValue("BLuEs"), is(0));
-        assertThat(genreTypes.getIdForValue("CLaSSIC rocK"), is(1));
+        assertThat(types.getIdForValue("BLuEs"), is(0));
+        assertThat(types.getIdForValue("CLaSSIC rocK"), is(1));
 
-        assertThat(genreTypes.getIdForValue("Rock"), is(17));
-        assertThat(genreTypes.getIdForValue("rock"), is(17));
+        assertThat(types.getIdForValue("Rock"), is(17));
+        assertThat(types.getIdForValue("rock"), is(17));
 
         //Doesn't exist
-        assertNull(genreTypes.getIdForValue("rocky"));
-        assertNull(genreTypes.getIdForValue("Rock "));
+        assertNull(types.getIdForValue("rocky"));
+        assertNull(types.getIdForValue("Rock "));
 
         //All values can be found
-        for (String value : genreTypes.getSortedValueSet()) {
-            assertNotNull(genreTypes.getIdForValue(value));
-            assertNotNull(genreTypes.getIdForValue(value.toLowerCase()));
-            assertNotNull(genreTypes.getIdForValue(value.toUpperCase()));
+        for (String value : types.getSortedValueSet()) {
+            assertNotNull(types.getIdForValue(value));
+            assertNotNull(types.getIdForValue(value.toLowerCase()));
+            assertNotNull(types.getIdForValue(value.toUpperCase()));
         }
     }
 
     @Test
-    public void testIdsAreContiguous() throws Exception {
-        final GenreTypes genreTypes = GenreTypes.getInstanceOf();
-        for (int i = 0; i <= GenreTypes.getMaxGenreId(); i++) {
-            assertThat(i, is(genreTypes.getIdForValue(genreTypes.getValue(i))));
-        }
+    public void testAllIds() throws Exception {
+        testIdRange(types, range);
+    }
+
+    @Test
+    public void testBadIds() throws Exception {
+        testBadIdAroundRange(types, range);
     }
 
 }

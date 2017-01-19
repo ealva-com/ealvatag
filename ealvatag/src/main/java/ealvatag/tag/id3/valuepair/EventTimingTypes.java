@@ -102,10 +102,6 @@ public class EventTimingTypes implements SimpleIntStringMap {
         audioEndValues[1] = "Audio file ends";
     }
 
-    public String getValueForId(int id) {
-        return getValue(id);
-    }
-
     @Override public boolean containsKey(final int key) {
         return CORE_TYPES.contains(key) || NOT_PREDEFINED_SYNC_TYPES.contains(key) || AUDIO_END_TYPES.contains(key);
     }

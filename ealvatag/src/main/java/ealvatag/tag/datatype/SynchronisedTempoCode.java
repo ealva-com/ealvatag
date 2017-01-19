@@ -133,7 +133,7 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
 
     @Override
     public String toString() {
-        return "" + getTempo() + " (\"" + EventTimingTypes.getInstanceOf().getValueForId(getTempo()) + "\"), " +
+        return "" + getTempo() + " (\"" + EventTimingTypes.getInstanceOf().getValue(getTempo()) + "\"), " +
                 getTimestamp();
     }
 

@@ -50,7 +50,7 @@ public class GenreTypes implements SimpleIntStringMap {
         return MAX_GENRE_ID;
     }
 
-    private static GenreTypes instance;
+    private static volatile GenreTypes instance;
 
     public static GenreTypes getInstanceOf() {
         if (instance == null) {
@@ -297,7 +297,7 @@ public class GenreTypes implements SimpleIntStringMap {
     }
 
     @Override public String getValue(int id) {
-        if (id < 0 || id > values.length) {
+        if (!containsKey(id)) {
             return "";
         }
         return Strings.nullToEmpty(values[id]);

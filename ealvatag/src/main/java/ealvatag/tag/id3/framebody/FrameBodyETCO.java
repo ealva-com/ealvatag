@@ -155,7 +155,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void setTimestampFormat(final int timestampFormat)
     {
-        if (EventTimingTimestampTypes.getInstanceOf().getValueForId(timestampFormat) == null)
+        if (EventTimingTimestampTypes.getInstanceOf().getValue(timestampFormat) == null)
         {
             throw new IllegalArgumentException("Timestamp format must be 1 or 2 (ID3v2.4, 4.5): " + timestampFormat);
         }

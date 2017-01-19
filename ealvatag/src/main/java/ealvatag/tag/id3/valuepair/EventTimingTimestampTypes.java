@@ -20,33 +20,41 @@
 package ealvatag.tag.id3.valuepair;
 
 import com.google.common.base.Strings;
-import ealvatag.tag.datatype.AbstractIntStringValuePair;
+import ealvatag.utils.InclusiveIntegerRange;
 
-public class EventTimingTimestampTypes extends AbstractIntStringValuePair implements SimpleIntStringMap {
+public class EventTimingTimestampTypes implements SimpleIntStringMap {
+    public static final int TIMESTAMP_KEY_FIELD_SIZE = 1;
+    public static final InclusiveIntegerRange EVENT_TIMING_ID_RANGE = new InclusiveIntegerRange(1, 2);
 
-    private static EventTimingTimestampTypes eventTimingTimestampTypes;
+    private static volatile EventTimingTimestampTypes instance;
 
     public static EventTimingTimestampTypes getInstanceOf() {
-        if (eventTimingTimestampTypes == null) {
-            eventTimingTimestampTypes = new EventTimingTimestampTypes();
+        if (instance == null) {
+            synchronized (EventTimingTimestampTypes.class) {
+                if (instance == null) {
+                    instance = new EventTimingTimestampTypes();
+                }
+            }
         }
-        return eventTimingTimestampTypes;
+        return instance;
     }
 
-    public static final int TIMESTAMP_KEY_FIELD_SIZE = 1;
+    private final String[] values;
 
     private EventTimingTimestampTypes() {
-        idToValue.put(1, "Absolute time using MPEG [MPEG] frames as unit");
-        idToValue.put(2, "Absolute time using milliseconds as unit");
-
-        createMaps();
+        values = new String[EVENT_TIMING_ID_RANGE.size()];
+        values[1 - EVENT_TIMING_ID_RANGE.getLowerBounds()] = "Absolute time using MPEG [MPEG] frames as unit";
+        values[2 - EVENT_TIMING_ID_RANGE.getLowerBounds()] = "Absolute time using milliseconds as unit";
     }
 
     @Override public boolean containsKey(final int key) {
-        return idToValue.containsKey(key);
+        return EVENT_TIMING_ID_RANGE.contains(key);
     }
 
     @Override public String getValue(final int key) {
-        return Strings.nullToEmpty(idToValue.get(key));
+        if (!EVENT_TIMING_ID_RANGE.contains(key)) {
+            return "";
+        }
+        return Strings.nullToEmpty(values[key - EVENT_TIMING_ID_RANGE.getLowerBounds()]);
     }
 }

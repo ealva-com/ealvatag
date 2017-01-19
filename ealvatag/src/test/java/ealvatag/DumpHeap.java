@@ -81,7 +81,7 @@ public class DumpHeap {
             System.out.println(audioHeader);
             System.out.println("Fields:" + Integer.toString(tag.getFieldCount()));
 
-            dumpHeap(heapDumpFileName, false);
+            dumpHeap(heapDumpFileName, true);
         } else {
             System.err.println(inputFile.getCanonicalPath() + " not found");
         }

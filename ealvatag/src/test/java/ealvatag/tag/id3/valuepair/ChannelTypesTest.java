@@ -17,49 +17,33 @@
 
 package ealvatag.tag.id3.valuepair;
 
+import ealvatag.utils.InclusiveIntegerRange;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.text.IsEmptyString.emptyOrNullString;
-import static org.hamcrest.text.IsEmptyString.emptyString;
-
 /**
  * Test channel type mappings
- *
+ * <p>
  * Created by Eric A. Snell on 1/18/17.
  */
-public class ChannelTypesTest {
-    private ChannelTypes channelTypes;
+public class ChannelTypesTest extends BaseSimpleIntStringMapTypeTest {
+    private ChannelTypes types;
+    private InclusiveIntegerRange range;
 
     @Before
     public void setup() {
-        channelTypes = ChannelTypes.getInstanceOf();
+        types = ChannelTypes.getInstanceOf();
+        range = new InclusiveIntegerRange(0, ChannelTypes.MAX_CHANNEL_ID);
     }
 
     @Test
     public void testAllIdsMapped() throws Exception {
-        for (int i = 0; i <= ChannelTypes.MAX_CHANNEL_ID; i++) {
-            assertThat(channelTypes.containsKey(i), is(true));
-            assertThat(channelTypes.getValue(i), is(not(emptyOrNullString())));
-        }
+        testIdRange(types, range);
     }
 
     @Test
     public void testBadKeys() throws Exception {
-        testSingleBadKey(-1);
-        testSingleBadKey(ChannelTypes.MAX_CHANNEL_ID + 1);
-        testSingleBadKey(Integer.MAX_VALUE);
-        testSingleBadKey(Integer.MIN_VALUE);
-    }
-
-    private void testSingleBadKey(final int key) {
-        assertThat(channelTypes.containsKey(key), is(not(true)));
-        assertThat(channelTypes.getValue(key), is(not(nullValue())));
-        assertThat(channelTypes.getValue(key), is(emptyString()));
+        testBadIdAroundRange(types, range);
     }
 
 }

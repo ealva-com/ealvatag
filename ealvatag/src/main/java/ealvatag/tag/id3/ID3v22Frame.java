@@ -34,6 +34,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,10 +87,13 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * equals() method is made up from all the various components
      *
      * @param obj
+     *
      * @return if true if this object is equivalent to obj
      */
     public boolean equals(Object obj) {
-        if (this == obj) { return true; }
+        if (this == obj) {
+            return true;
+        }
 
         if (!(obj instanceof ID3v22Frame)) {
             return false;
@@ -225,6 +229,7 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * Creates a new ID3v22 Frame from another frame of a different tag version
      *
      * @param frame to construct the new frame from
+     *
      * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v22Frame(AbstractID3v2Frame frame) throws InvalidFrameException {
@@ -251,6 +256,7 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      *
      * @param byteBuffer      to read from
      * @param loggingFilename
+     *
      * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v22Frame(ByteBuffer byteBuffer, String loggingFilename)
@@ -263,6 +269,7 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * Creates a new ID3v23Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
+     *
      * @throws ealvatag.tag.InvalidFrameException
      * @deprecated use {@link #ID3v22Frame(ByteBuffer, String)} instead
      */
@@ -359,6 +366,7 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * Read Frame Size, which has to be decoded
      *
      * @param buffer
+     *
      * @return
      */
     private int decodeSize(byte[] buffer) {
@@ -422,6 +430,7 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * must start with a capital letter and only contain capital letters and numbers
      *
      * @param identifier
+     *
      * @return
      */
     public boolean isValidID3v2FrameIdentifier(String identifier) {
@@ -459,11 +468,12 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      * @param encoding charset.
      */
     public void setEncoding(final Charset encoding) {
-        Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
-        if (encodingId != null) {
+        try {
+            byte encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
             if (encodingId < 2) {
-                this.getBody().setTextEncoding(encodingId.byteValue());
+                this.getBody().setTextEncoding(encodingId);
             }
+        } catch (NoSuchElementException ignored) {
         }
     }
 }

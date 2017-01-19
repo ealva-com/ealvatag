@@ -142,7 +142,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @see #getTimestampFormat()
      */
     public void setTimestampFormat(final int timestampFormat) {
-        if (EventTimingTimestampTypes.getInstanceOf().getValueForId(timestampFormat) == null) {
+        if (EventTimingTimestampTypes.getInstanceOf().getValue(timestampFormat) == null) {
             throw new IllegalArgumentException("Timestamp format must be 1 or 2 (ID3v2.4, 4.7): " + timestampFormat);
         }
         setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timestampFormat);

@@ -15,7 +15,6 @@
  */
 package ealvatag.tag.id3;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldKey;
@@ -125,7 +124,7 @@ public class ID3v23Frames extends ID3Frames {
     public static final String FRAME_ID_V3_COMPOSER_SORT_ORDER_ITUNES = "TSOC";
     public static final String FRAME_ID_V3_SET_SUBTITLE = "TSST";
 
-    private static ID3v23Frames id3v23Frames;
+    private static volatile ID3v23Frames instance;
 
     /**
      * Maps from Generic key to ID3 key
@@ -139,14 +138,14 @@ public class ID3v23Frames extends ID3Frames {
     private final ImmutableBiMap<ID3v23FieldKey, FieldKey> id3ToTagField;
 
     public static ID3v23Frames getInstanceOf() {
-        if (id3v23Frames == null) {
+        if (instance == null) {
             synchronized (ID3v23Frames.class) {
-                if (id3v23Frames == null) {
-                    id3v23Frames = new ID3v23Frames();
+                if (instance == null) {
+                    instance = new ID3v23Frames();
                 }
             }
         }
-        return id3v23Frames;
+        return instance;
     }
 
     private ID3v23Frames() {

@@ -15,39 +15,38 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.tag.id3.valuepair;
+package ealvatag.tag.reference;
 
+import ealvatag.tag.id3.valuepair.BaseSimpleIntStringMapTypeTest;
+import ealvatag.utils.InclusiveIntegerRange;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
- * Test configuration of {@link EventTimingTypes}
- * <p>
+ * Test {@link PictureTypes} is configured properly
+ *
  * Created by Eric A. Snell on 1/18/17.
  */
-public class EventTimingTypesTest extends BaseSimpleIntStringMapTypeTest {
-    private EventTimingTypes types;
+public class PictureTypesTest extends BaseSimpleIntStringMapTypeTest {
+    private PictureTypes types;
+    private InclusiveIntegerRange range;
 
     @Before
-    public void setup() {
-        types = EventTimingTypes.getInstanceOf();
+    public void setUp() throws Exception {
+        types = PictureTypes.getInstanceOf();
+        range = new InclusiveIntegerRange(0, PictureTypes.MAX_PICTURE_TYPE_ID);
     }
 
     @Test
-    public void testContiguousIds() throws Exception {
-        testIdRange(types,
-                    EventTimingTypes.CORE_TYPES,
-                    EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                    EventTimingTypes.AUDIO_END_TYPES);
+    public void testIds() throws Exception {
+        testIdRange(types, range);
     }
 
     @Test
     public void testBadIds() throws Exception {
-        // ranges should not be contiguous (otherwise why have them), so testing each is the same
-        testBadIdAroundRange(types,
-                             EventTimingTypes.CORE_TYPES,
-                             EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                             EventTimingTypes.AUDIO_END_TYPES);
+        testBadIdAroundRange(types, range);
     }
 
 }

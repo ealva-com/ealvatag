@@ -1,54 +1,53 @@
-/**
+/*
  * @author : Paul Taylor
- *
+ * <p>
  * Version @version:$Id$
- *
+ * <p>
  * Jaudiotagger Copyright (C)2004,2005
- *
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- * General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- * or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- * you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
- * Description:
- *  Valid Languages for ID Tags
+ * <p>
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ * <p>
+ * Description: Valid Languages for ID Tags
  */
 package ealvatag.tag.reference;
 
 import ealvatag.tag.datatype.AbstractStringStringValuePair;
 
-public class Languages extends AbstractStringStringValuePair
-{
+public class Languages extends AbstractStringStringValuePair {
     public static final String DEFAULT_ID = "eng";
     public static final String MEDIA_MONKEY_ID = "XXX";
+    @SuppressWarnings("unused")
     public static final String WINAMP_ID = "\0\0\0";
 
+    @SuppressWarnings("unused")
     public static final String DEFAULT_VALUE = "English";
 
     //The number of bytes used to hold the language field size
     public static final int LANGUAGE_FIELD_SIZE = 3;
 
-    private static Languages languageTypes;
+    private static volatile Languages instance;
 
 
-    public static Languages getInstanceOf()
-    {
-        if (languageTypes == null)
-        {
-            languageTypes = new Languages();
+    public static Languages getInstanceOf() {
+        if (instance == null) {
+            synchronized (Languages.class) {
+                if (instance == null) {
+                    instance = new Languages();
+                }
+            }
         }
-        return languageTypes;
+        return instance;
     }
 
-    private Languages()
-    {
+    private Languages() {
         idToValue.put("aar", "Afar");
         idToValue.put("abk", "Abkhazian");
         idToValue.put("ace", "Achinese");
@@ -515,7 +514,6 @@ public class Languages extends AbstractStringStringValuePair
         idToValue.put("zun", "Zuni");
         idToValue.put("\0\0\0", "Winamp Format");                 //Not Part of Spec but commonly used by some applications
         idToValue.put("XXX", "Media Monkey Format");              //Not Part of Spec but commonly used by some applications
-
 
 
         createMaps();

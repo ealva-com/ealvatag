@@ -45,6 +45,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -186,6 +187,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      *
      * @param frame
      * @param identifier
+     *
      * @throws InvalidFrameException
      */
     protected ID3v24Frame(ID3v23Frame frame, String identifier) throws InvalidFrameException {
@@ -200,6 +202,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * is unknown.
      *
      * @param frame to construct a new frame from
+     *
      * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException {
@@ -232,6 +235,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * Creates a new ID3v2_4Frame datatype based on Lyrics3.
      *
      * @param field
+     *
      * @throws InvalidTagException
      */
     public ID3v24Frame(Lyrics3v2Field field) throws InvalidTagException {
@@ -297,6 +301,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      *
      * @param byteBuffer      to read from
      * @param loggingFilename
+     *
      * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename)
@@ -309,6 +314,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * Creates a new ID3v24Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer to read from
+     *
      * @throws ealvatag.tag.InvalidFrameException
      * @deprecated use {@link #ID3v24Frame(ByteBuffer, String)} instead
      */
@@ -318,11 +324,14 @@ public class ID3v24Frame extends AbstractID3v2Frame {
 
     /**
      * @param obj
+     *
      * @return if obj is equivalent to this frame
      */
     public boolean equals(Object obj) {
 
-        if (this == obj) { return true; }
+        if (this == obj) {
+            return true;
+        }
 
         if (!(obj instanceof ID3v24Frame)) {
             return false;
@@ -350,6 +359,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * unsynchronize them so this method checks both cases and goes with the option that fits best with the data
      *
      * @param byteBuffer
+     *
      * @throws InvalidFrameException
      */
     private void checkIfFrameSizeThatIsNotSyncSafe(ByteBuffer byteBuffer)
@@ -473,6 +483,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * or just throw exception
      *
      * @param byteBuffer
+     *
      * @throws InvalidFrameException
      */
     private void getFrameSize(ByteBuffer byteBuffer)
@@ -757,6 +768,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
          * Convert V3 Flags to equivalent V4 Flags
          *
          * @param v3Flag
+         *
          * @return
          */
         private byte convertV3ToV4Flags(byte v3Flag) {
@@ -971,6 +983,7 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * must start with a capital letter and only contain capital letters and numbers
      *
      * @param identifier to be checked
+     *
      * @return whether the identifier is valid
      */
     public boolean isValidID3v2FrameIdentifier(String identifier) {
@@ -1010,11 +1023,12 @@ public class ID3v24Frame extends AbstractID3v2Frame {
      * @param encoding charset.
      */
     public void setEncoding(final Charset encoding) {
-        Integer encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
-        if (encodingId != null) {
+        try {
+            byte encodingId = TextEncoding.getInstanceOf().getIdForCharset(encoding);
             if (encodingId < 4) {
-                this.getBody().setTextEncoding(encodingId.byteValue());
+                this.getBody().setTextEncoding(encodingId);
             }
+        } catch (NoSuchElementException ignored) {
         }
     }
 }

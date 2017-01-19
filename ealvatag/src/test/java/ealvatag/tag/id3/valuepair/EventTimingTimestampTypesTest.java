@@ -21,33 +21,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test configuration of {@link EventTimingTypes}
+ * Test {@link EventTimingTimestampTypes} configuration
  * <p>
  * Created by Eric A. Snell on 1/18/17.
  */
-public class EventTimingTypesTest extends BaseSimpleIntStringMapTypeTest {
-    private EventTimingTypes types;
+public class EventTimingTimestampTypesTest extends BaseSimpleIntStringMapTypeTest {
+    private EventTimingTimestampTypes types;
 
     @Before
-    public void setup() {
-        types = EventTimingTypes.getInstanceOf();
+    public void setup() throws Exception {
+        types = EventTimingTimestampTypes.getInstanceOf();
     }
 
     @Test
-    public void testContiguousIds() throws Exception {
-        testIdRange(types,
-                    EventTimingTypes.CORE_TYPES,
-                    EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                    EventTimingTypes.AUDIO_END_TYPES);
+    public void testIds() throws Exception {
+        testIdRange(types, EventTimingTimestampTypes.EVENT_TIMING_ID_RANGE);
     }
 
     @Test
     public void testBadIds() throws Exception {
-        // ranges should not be contiguous (otherwise why have them), so testing each is the same
-        testBadIdAroundRange(types,
-                             EventTimingTypes.CORE_TYPES,
-                             EventTimingTypes.NOT_PREDEFINED_SYNC_TYPES,
-                             EventTimingTypes.AUDIO_END_TYPES);
+        testBadIdAroundRange(types, EventTimingTimestampTypes.EVENT_TIMING_ID_RANGE);
     }
 
 }

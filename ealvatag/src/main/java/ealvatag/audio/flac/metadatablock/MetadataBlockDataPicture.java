@@ -252,7 +252,7 @@ public class MetadataBlockDataPicture
     }
 
     public String toString() {
-        return PictureTypes.getInstanceOf().getValueForId(pictureType) + ":" + mimeType + ":" + description + ":" +
+        return PictureTypes.getInstanceOf().getValue(pictureType) + ":" + mimeType + ":" + description + ":" +
                 "width:" + width + ":height:" + height + ":colourdepth:" + colourDepth + ":indexedColourCount:" +
                 indexedColouredCount
                 + ":image size in bytes:" + lengthOfPictureInBytes + "/" + imageData.length;

@@ -15,7 +15,6 @@
  */
 package ealvatag.tag.id3;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldKey;
@@ -134,13 +133,13 @@ public class ID3v24Frames extends ID3Frames {
     private final ImmutableBiMap<ID3v24FieldKey, FieldKey> id3ToTagField;
 
 
-    private static ID3v24Frames id3v24Frames;
+    private static ID3v24Frames instance;
 
     public static ID3v24Frames getInstanceOf() {
-        if (id3v24Frames == null) {
-            id3v24Frames = new ID3v24Frames();
+        if (instance == null) {
+            instance = new ID3v24Frames();
         }
-        return id3v24Frames;
+        return instance;
     }
 
     private ID3v24Frames() {

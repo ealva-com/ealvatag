@@ -22,33 +22,39 @@
 package ealvatag.tag.id3.valuepair;
 
 import com.google.common.base.Strings;
-import ealvatag.tag.datatype.AbstractIntStringValuePair;
 
-public class InterpolationTypes extends AbstractIntStringValuePair implements SimpleIntStringMap
-{
-    private static InterpolationTypes interpolationTypes;
+public class InterpolationTypes implements SimpleIntStringMap {
+    @SuppressWarnings("WeakerAccess") public static final int MAX_INTERPOLATION_ID = 1;
 
-    public static InterpolationTypes getInstanceOf()
-    {
-        if (interpolationTypes == null)
-        {
-            interpolationTypes = new InterpolationTypes();
+    private static volatile InterpolationTypes instance;
+
+    public static InterpolationTypes getInstanceOf() {
+        if (instance == null) {
+            synchronized (InterpolationTypes.class) {
+                if (instance == null) {
+                    instance = new InterpolationTypes();
+                }
+            }
         }
-        return interpolationTypes;
+        return instance;
     }
 
-    private InterpolationTypes()
-    {
-        idToValue.put(0, "Band");
-        idToValue.put(1, "Linear");
-        createMaps();
+    private final String[] values;
+
+    private InterpolationTypes() {
+        values = new String[MAX_INTERPOLATION_ID + 1];
+        values[0] = "Band";
+        values[1] = "Linear";
     }
 
     @Override public boolean containsKey(final int key) {
-        return idToValue.containsKey(key);
+        return key >= 0 && key <= MAX_INTERPOLATION_ID;
     }
 
     @Override public String getValue(final int key) {
-        return Strings.nullToEmpty(idToValue.get(key));
+        if (!containsKey(key)) {
+            return "";
+        }
+        return Strings.nullToEmpty(values[key]);
     }
 }
