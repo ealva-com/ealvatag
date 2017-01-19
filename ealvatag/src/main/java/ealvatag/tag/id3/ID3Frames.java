@@ -15,10 +15,12 @@
  */
 package ealvatag.tag.id3;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 /**
  * Subclasses Defines ID3 frames for their Tag Version
@@ -32,32 +34,32 @@ public abstract class ID3Frames {
     /**
      * Holds frames whereby multiple occurences are allowed
      */
-    TreeSet<String> multipleFrames = new TreeSet<>();
+    Set<String> multipleFrames = new HashSet<>();
 
     /**
      * These frames should be lost if file changes
      */
-    TreeSet<String> discardIfFileAlteredFrames = new TreeSet<>();
+    Set<String> discardIfFileAlteredFrames = new HashSet<>();
 
     /**
      * These frames are part of the Official Specification for that Tag Version
      */
-    TreeSet<String> supportedFrames = new TreeSet<>();
+    Set<String> supportedFrames = new HashSet<>();
 
     /**
      * These frames are extensions to the  Specification for that Tag Version
      */
-    TreeSet<String> extensionFrames = new TreeSet<>();
+    Set<String> extensionFrames = new HashSet<>();
 
     /**
      * These frames are Common , this is a loose term
      */
-    TreeSet<String> commonFrames = new TreeSet<>();
+    Set<String> commonFrames = new HashSet<>();
 
     /**
      * These frames are Binary
      */
-    TreeSet<String> binaryFrames = new TreeSet<>();
+    Set<String> binaryFrames = new HashSet<>();
 
     /**
      * If file changes discard these frames
@@ -90,7 +92,7 @@ public abstract class ID3Frames {
         return supportedFrames.contains(frameID);
     }
 
-    public TreeSet<String> getSupportedFrames() {
+    public Set<String> getSupportedFrames() {
         return supportedFrames;
     }
 
@@ -126,14 +128,14 @@ public abstract class ID3Frames {
     /**
      * Mapping from v22 to v23
      */
-    static final Map<String, String> convertv22Tov23 = new LinkedHashMap<>();
-    static final Map<String, String> convertv23Tov22 = new LinkedHashMap<>();
-    static final Map<String, String> forcev22Tov23 = new LinkedHashMap<>();
-    static final Map<String, String> forcev23Tov22 = new LinkedHashMap<>();
-    static final Map<String, String> convertv23Tov24 = new LinkedHashMap<>();
-    static final Map<String, String> convertv24Tov23 = new LinkedHashMap<>();
-    static final Map<String, String> forcev23Tov24 = new LinkedHashMap<>();
-    static final Map<String, String> forcev24Tov23 = new LinkedHashMap<>();
+    static final Map<String, String> convertv22Tov23 = new HashMap<>();
+    static final Map<String, String> convertv23Tov22 = new HashMap<>();
+    static final Map<String, String> forcev22Tov23 = new HashMap<>();
+    static final Map<String, String> forcev23Tov22 = new HashMap<>();
+    static final Map<String, String> convertv23Tov24 = new HashMap<>();
+    static final Map<String, String> convertv24Tov23 = new HashMap<>();
+    static final Map<String, String> forcev23Tov24 = new HashMap<>();
+    static final Map<String, String> forcev24Tov23 = new HashMap<>();
 
 
     private static void loadID3v23ID3v24Mapping() {

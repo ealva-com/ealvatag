@@ -131,7 +131,7 @@ public class ID3Tags {
             if (v23id == null) {
                 //if not it may be because v2.3 and and v2.4 are same so wont be
                 //in mapping
-                if (ID3v24Frames.getInstanceOf().getValue(id) != null) {
+                if (ID3v24Frames.getInstanceOf().containsKey(id)) {
                     return id;
                 } else {
                     return null;

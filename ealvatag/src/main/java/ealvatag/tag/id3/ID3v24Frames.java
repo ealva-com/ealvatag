@@ -131,7 +131,7 @@ public class ID3v24Frames extends ID3Frames {
     public static final String FRAME_ID_TITLE_SORT_OWNER = FRAME_ID_TITLE_SORT_ORDER;
 
     private final ImmutableBiMap<FieldKey, ID3v24FieldKey> tagFieldToId3;
-    private final ImmutableBiMap<ID3v24FieldKey, FieldKey> id3ToTagField;
+    private volatile ImmutableBiMap<ID3v24FieldKey, FieldKey> id3ToTagField;
 
 
     private static ID3v24Frames instance;
@@ -518,7 +518,6 @@ public class ID3v24Frames extends ID3Frames {
                .put(FieldKey.YEAR, ID3v24FieldKey.YEAR);
 
         tagFieldToId3 = builder.build();
-        id3ToTagField = tagFieldToId3.inverse();
     }
 
     /**
@@ -538,7 +537,7 @@ public class ID3v24Frames extends ID3Frames {
      * @return generic key for id3 key
      */
     FieldKey getGenericKeyFromId3(ID3v24FieldKey fieldKey) {
-        return id3ToTagField.get(fieldKey);
+        return getId3ToTagField().get(fieldKey);
     }
 
     ImmutableSet<FieldKey> getSupportedFields() {
@@ -551,5 +550,16 @@ public class ID3v24Frames extends ID3Frames {
 
     public String getValue(String id) {
         return idToValue.get(id);
+    }
+
+    private ImmutableBiMap<ID3v24FieldKey, FieldKey> getId3ToTagField() {
+        if (id3ToTagField == null) {
+            synchronized (ID3v24Frames.class) {
+                if (id3ToTagField == null) {
+                    id3ToTagField = tagFieldToId3.inverse();
+                }
+            }
+        }
+        return id3ToTagField;
     }
 }
