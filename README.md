@@ -14,7 +14,7 @@ files. The follow types are currently supported:
 - Dsf
 
 Until the version of this library reaches 1.0, you should consider the API to 
-be very unstable. Currently there is no downloadable jar. Pull requests 
+be very unstable (no Semantic Versioning until 1.0.0 and later). Currently there is no downloadable jar. Pull requests 
 welcome.
 
 Android
