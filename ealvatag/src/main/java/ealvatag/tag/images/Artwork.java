@@ -8,63 +8,63 @@ import java.io.IOException;
 /**
  * Represents artwork in a format independent  way
  */
-public interface Artwork
-{
-    public byte[] getBinaryData();
+public interface Artwork {
+    byte[] getBinaryData();
 
 
-    public void setBinaryData(byte[] binaryData);
+    Artwork setBinaryData(byte[] binaryData);
 
-    public String getMimeType();
+    String getMimeType();
 
-    public void setMimeType(String mimeType);
+    Artwork setMimeType(String mimeType);
 
-    public String getDescription();
+    String getDescription();
 
-    public int getHeight();
+    int getHeight();
 
-    public int getWidth();
+    int getWidth();
 
-    public void setDescription(String description);
+    Artwork setDescription(String description);
 
     /**
      * Should be called when you wish to prime the artwork for saving
      *
      * @return
      */
-    public boolean setImageFromData();
+    boolean setImageFromData();
 
-    public Object getImage() throws IOException;
+    Object getImage() throws IOException;
 
-    public boolean isLinked();
+    boolean isLinked();
 
-    public void setLinked(boolean linked);
+    Artwork setLinked(boolean linked);
 
-    public String getImageUrl();
+    String getImageUrl();
 
-    public void setImageUrl(String imageUrl);
+    Artwork setImageUrl(String imageUrl);
 
-    public int getPictureType();
+    int getPictureType();
 
-    public void setPictureType(int pictureType);
+    Artwork setPictureType(int pictureType);
 
     /**
      * Create Artwork from File
      *
      * @param file
+     *
      * @throws IOException
      */
-    public void setFromFile(File file)  throws IOException;
+    Artwork setFromFile(File file) throws IOException;
 
     /**
      * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
      *
      * @param coverArt
      */
-    public void setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt);
+    Artwork setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt);
 
 
-    public void setWidth(int width);
+    Artwork setWidth(int width);
 
-    public void setHeight(int height);
+    Artwork setHeight(int height);
 }

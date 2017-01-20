@@ -10,6 +10,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.Id3SupportingTag;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * Wraps ID3Tag for most of its metadata.
  */
-public class AiffTag implements Tag, Id3SupportingTag {
+public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
 
     public void addChunkSummary(ChunkSummary cs) {
@@ -106,29 +107,32 @@ public class AiffTag implements Tag, Id3SupportingTag {
     }
 
     @Override
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         setField(tagfield);
+        return this;
     }
 
     @Override
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         addField(tagfield);
+        return this;
     }
 
-    /**
-     * @param field
-     *
-     * @throws FieldDataInvalidException
-     */
     @Override
     public void setField(TagField field) throws FieldDataInvalidException {
         id3Tag.setField(field);
     }
 
     @Override
-    public TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
+    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                             UnsupportedFieldException,
+                                                                             FieldDataInvalidException {
         return id3Tag.createField(genericKey, value);
     }
 

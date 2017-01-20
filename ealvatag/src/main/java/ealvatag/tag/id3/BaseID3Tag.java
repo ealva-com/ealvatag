@@ -31,16 +31,16 @@ import java.util.Iterator;
 /**
  * A tag is term given to a container that holds audio metadata
  */
-public abstract class AbstractTag extends AbstractTagItem
+public abstract class BaseID3Tag extends AbstractTagItem
 {
     protected static final String TYPE_TAG = "tag";
 
 
-    public AbstractTag()
+    public BaseID3Tag()
     {
     }
 
-    public AbstractTag(AbstractTag copyObject)
+    public BaseID3Tag(BaseID3Tag copyObject)
     {
         super(copyObject);
     }
@@ -80,7 +80,7 @@ public abstract class AbstractTag extends AbstractTagItem
      */
     public boolean equals(Object obj)
     {
-        return (obj instanceof AbstractTag) && super.equals(obj);
+        return (obj instanceof BaseID3Tag) && super.equals(obj);
 
     }
 

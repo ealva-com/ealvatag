@@ -29,6 +29,7 @@ import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
@@ -256,7 +257,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     @Override
-    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws KeyNotFoundException,
+    public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws UnsupportedFieldException,
                                                                                                   FieldDataInvalidException {
         return new VorbisCommentTagField(vorbisCommentFieldKey.getFieldName(), value);
     }
@@ -482,48 +483,33 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     @Override
-    public void setField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-
-        String value = values[0];
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
         if (genericKey == FieldKey.ALBUM_ARTIST) {
-            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().setField(this, genericKey, value);
+            TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().setField(this, genericKey, checkVarArg0NotNull(values));
         } else {
-            TagField tagfield = createField(genericKey, value);
+            TagField tagfield = createField(genericKey, values);
             setField(tagfield);
         }
+        return this;
     }
 
-    /**
-     * Create new field and add it to the tag
-     *
-     * @param genericKey
-     * @param values
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
     @Override
-    public void addField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        String value = values[0];
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                       UnsupportedFieldException,
+                                                                       FieldDataInvalidException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        String value = checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values");
         if (genericKey == FieldKey.ALBUM_ARTIST) {
             TagOptionSingleton.getInstance().getVorbisAlbumArtistSaveOptions().addField(this, genericKey, value);
         } else {
             TagField tagfield = createField(genericKey, value);
             addField(tagfield);
         }
+        return this;
     }
 
-    /**
-     * Delete fields with this generic key
-     *
-     * @param genericKey
-     */
     public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
         if (genericKey == null) {
             throw new KeyNotFoundException();
@@ -606,11 +592,9 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     /**
-     * Add Field
+     * {@inheritDoc}
      * <p>
-     * <p>Overidden because there can only be one vendor set
-     *
-     * @param field
+     * There can only be one vendor set
      */
     public void addField(TagField field) {
         if (field.getId().equals(VorbisCommentFieldKey.VENDOR.getFieldName())) {
@@ -624,9 +608,9 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
      * Create Tag Field using generic key
      */
     @Override
-    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,
-                                                                              FieldDataInvalidException,
-                                                                              IllegalArgumentException {
+    public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                              UnsupportedFieldException,
+                                                                              FieldDataInvalidException {
         return createField(getVorbisCommentFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")),
                            checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values"));
     }

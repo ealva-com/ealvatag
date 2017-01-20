@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.ID3v11Tag;
 import ealvatag.tag.id3.ID3v1Tag;
 
@@ -25,7 +26,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testAddInvalidField() throws Exception
@@ -41,7 +42,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testCreateInvalidField() throws Exception
@@ -57,7 +58,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testDeleteInvalidField() throws Exception
@@ -90,7 +91,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testAddInvalidFieldV11() throws Exception
@@ -106,7 +107,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testCreateInvalidFieldV11() throws Exception
@@ -122,7 +123,7 @@ public class Issue403Test extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertTrue(caught instanceof KeyNotFoundException);
+        assertTrue(caught instanceof UnsupportedFieldException);
     }
 
     public void testDeleteInvalidFieldV11() throws Exception

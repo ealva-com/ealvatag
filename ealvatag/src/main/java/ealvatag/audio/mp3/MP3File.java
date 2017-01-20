@@ -34,10 +34,11 @@ import ealvatag.logging.PlainTextTagDisplayFormatter;
 import ealvatag.logging.XMLTagDisplayFormatter;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.AbstractID3v2Tag;
-import ealvatag.tag.id3.AbstractTag;
+import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3v11Tag;
 import ealvatag.tag.id3.ID3v1Tag;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -616,7 +617,7 @@ public class MP3File extends AudioFile {
      * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
      *               new ID3v1_1 dataType.
      */
-    public void setID3v1Tag(AbstractTag mp3tag) {
+    public void setID3v1Tag(BaseID3Tag mp3tag) {
         LOG.trace("setting tagv1:abstract");
         id3v1tag = new ID3v11Tag(mp3tag);
     }
@@ -739,7 +740,7 @@ public class MP3File extends AudioFile {
      * @param mp3tag Any MP3Tag dataType can be used and will be converted into a
      *               new ID3v2_4 dataType.
      */
-    public void setID3v2Tag(AbstractTag mp3tag) {
+    public void setID3v2Tag(BaseID3Tag mp3tag) {
         id3v2tag = new ID3v24Tag(mp3tag);
 
     }
@@ -797,7 +798,7 @@ public class MP3File extends AudioFile {
      *               new Lyrics3v2 dataType.
      */
     /*
-    public void setLyrics3Tag(AbstractTag mp3tag)
+    public void setLyrics3Tag(BaseID3Tag mp3tag)
     {
         lyrics3tag = new Lyrics3v2(mp3tag);
     }
@@ -834,7 +835,7 @@ public class MP3File extends AudioFile {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void delete(AbstractTag mp3tag) throws FileNotFoundException, IOException {
+    public void delete(BaseID3Tag mp3tag) throws FileNotFoundException, IOException {
         RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
         mp3tag.delete(raf);
         raf.close();
@@ -1071,5 +1072,9 @@ public class MP3File extends AudioFile {
                              TagOptionSingleton.getInstance().getID3V2Version()));
         return getTag();
     }
+
+//    @Override public TagFieldContainer getTag() {
+//        return (TagFieldContainer)super.getTag();
+//    }
 }
 

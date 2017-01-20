@@ -48,13 +48,13 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_LYRICS_SITE,"http://test7"));
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
             mp3File.save();
 
             af = AudioFileIO.read(testFile);
@@ -130,13 +130,13 @@ public class Issue242Test extends AbstractTestCase
 
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_LYRICS_SITE,"http://test7"));
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
 
             mp3File.save();
 
@@ -215,13 +215,13 @@ public class Issue242Test extends AbstractTestCase
 
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6"));
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.URL_LYRICS_SITE,"http://test7"));
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
             mp3File.save();
 
             af = AudioFileIO.read(testFile);

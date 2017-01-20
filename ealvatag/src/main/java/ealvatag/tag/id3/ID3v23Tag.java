@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -143,7 +144,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
      *
      * @param mp3tag
      */
-    public ID3v23Tag(AbstractTag mp3tag) {
+    public ID3v23Tag(BaseID3Tag mp3tag) {
         LOG.debug("Creating tag from a tag of a different version");
         frameMap = new LinkedHashMap<>();
         encryptedFrameMap = new LinkedHashMap<>();
@@ -383,17 +384,11 @@ public class ID3v23Tag extends AbstractID3v2Tag {
      * @throws FieldDataInvalidException
      */
     @Override
-    public TagField createField(FieldKey genericKey, String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        }
-
-        if (values == null || values[0] == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-
-        String value = values[0];
+    public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                              UnsupportedFieldException,
+                                                                              FieldDataInvalidException {
+        checkArgNotNull(genericKey);
+        String value = checkVarArg0NotNull(values);
         if (genericKey == FieldKey.GENRE) {
             if (value == null) {
                 throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());

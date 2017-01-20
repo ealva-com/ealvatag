@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.images.ArtworkFactory;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -49,13 +50,14 @@ public class M4aWriteTagTest extends TestCase
             tag.setField(FieldKey.ARTIST,"AUTHOR");
             tag.setField(FieldKey.ALBUM,"ALBUM");
             //tag.setField(FieldKey.TRACK,"2");
-            tag.setField(tag.createField(FieldKey.TRACK, "2"));
-            tag.setField(tag.createField(FieldKey.TRACK_TOTAL, "12"));
+            tag.setField(FieldKey.TRACK, "2");
+            tag.setField(FieldKey.TRACK_TOTAL, "12");
             assertEquals("2",tag.getFirst(FieldKey.TRACK));
-            //tag.setField(tag.createField(FieldKey.DISC_NO,"4/15"));
-            tag.setField(new Mp4DiscNoField(4, 15));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
-            tag.setField(tag.createField(FieldKey.BPM, "300"));
+            //tag.setField(FieldKey.DISC_NO,"4/15"));
+            tag.setField(FieldKey.DISC_NO, "4");
+            tag.setField(FieldKey.DISC_TOTAL, "15");
+            tag.setField(FieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31");
+            tag.setField(FieldKey.BPM, "300");
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -809,10 +811,13 @@ public class M4aWriteTagTest extends TestCase
             //Change values to different value (but same no of characters, this is the easiest mod to make)
             tag.setField(FieldKey.ARTIST,"AUTHOR");
             tag.setField(FieldKey.ALBUM,"ALBUM");
-            tag.setField(new Mp4TrackField(2, 12));
-            tag.setField(new Mp4DiscNoField(4, 15));
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31"));
-            tag.setField(tag.createField(FieldKey.BPM, "300"));
+            tag.setField(FieldKey.TRACK, "2");
+            tag.setField(FieldKey.TRACK_TOTAL, "12");
+            tag.setField(FieldKey.DISC_NO, "4");
+            tag.setField(FieldKey.DISC_TOTAL, "15");
+
+            tag.setField(FieldKey.MUSICBRAINZ_TRACK_ID, "e785f700-c1aa-4943-bcee-87dd316a2c31");
+            tag.setField(FieldKey.BPM, "300");
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -1621,13 +1626,13 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Add second image
             imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
             imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Save changes and reread from disk
             AudioFileIO.write(f);
@@ -1694,7 +1699,7 @@ public class M4aWriteTagTest extends TestCase
             //Change album to different value (but same no of characters, this is the easiest mod to make
             tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
             tag.setField(FieldKey.ALBUM,"VERYLONGALBUMTNAME");
-            tag.setField(tag.createField(FieldKey.MUSICBRAINZ_ARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed"));
+            tag.setField(FieldKey.MUSICBRAINZ_ARTISTID, "989a13f6-b58c-4559-b09e-76ae0adb94ed");
             //Save changes and reread from disk
             f.commit();
             f = AudioFileIO.read(testFile);
@@ -1742,7 +1747,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Save changes and reread from disk
             AudioFileIO.write(f);
@@ -2000,7 +2005,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(TEST_FILE5_SIZE, testFile.length());
 
             //Change value using key
-            tag.setField(tag.createField(FieldKey.GENRE, "1")); //key for classic rock
+            tag.setField(FieldKey.GENRE, "1"); //key for classic rock
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -2009,7 +2014,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));   //coz doesn't exist
 
             //Change value using string
-            tag.setField(tag.createField(FieldKey.GENRE, "Tango")); //key for classic rock
+            tag.setField(FieldKey.GENRE, "Tango");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -2017,23 +2022,21 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("Tango", tag.getFirst(Mp4FieldKey.GENRE));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));   //coz doesn't exist
 
-            //Change value using string which is ok for ID3 but because extended winamp is ot ok for mp4
+            //Change value using string which is ok for ID3 but because extended winamp is not ok for mp4
             //so has to use custom
-            tag.setField(tag.createField(FieldKey.GENRE, "SynthPop"));
+            tag.setField(FieldKey.GENRE, "SynthPop");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
 
-            //TODO really want this value to didsappear automtically but unfortunately have to manully do it
-            //at moment 9 see next)
-            assertEquals("Tango", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Tango", tag.getFirst(Mp4FieldKey.GENRE));
+            assertEquals("SynthPop", tag.getFirst(FieldKey.GENRE));
+            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
             assertEquals("SynthPop", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
 
             //Delete fields and let lib decide what to do (has to use custom)
             tag.deleteField(Mp4FieldKey.GENRE);
             tag.deleteField(Mp4FieldKey.GENRE_CUSTOM);
-            tag.setField(tag.createField(FieldKey.GENRE, "SynthPop"));
+            tag.setField(FieldKey.GENRE, "SynthPop");
 
             assertEquals("SynthPop", tag.getFirst(FieldKey.GENRE));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
@@ -2045,7 +2048,7 @@ public class M4aWriteTagTest extends TestCase
             //Delete fields and let lib decide what to do (can use list)
             tag.deleteField(Mp4FieldKey.GENRE);
             tag.deleteField(Mp4FieldKey.GENRE_CUSTOM);
-            tag.setField(tag.createField(FieldKey.GENRE, "Tango"));
+            tag.setField(FieldKey.GENRE, "Tango");
 
             assertEquals("Tango", tag.getFirst(FieldKey.GENRE));
             assertEquals("Tango", tag.getFirst(Mp4FieldKey.GENRE));
@@ -2074,7 +2077,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals(TEST_FILE5_SIZE, testFile.length());
 
             //Change value using string to value that can only be saved using custom
-            tag.setField(tag.createField(FieldKey.GENRE, "Tangoey"));
+            tag.setField(FieldKey.GENRE, "Tangoey");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -2083,7 +2086,7 @@ public class M4aWriteTagTest extends TestCase
             assertEquals("Tangoey", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
 
             tag.deleteField(FieldKey.GENRE);
-            tag.addField(tag.createField(FieldKey.GENRE, "Slimey"));
+            tag.addField(FieldKey.GENRE, "Slimey");
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -2189,7 +2192,7 @@ public class M4aWriteTagTest extends TestCase
 
             //Change value using string
             TagOptionSingleton.getInstance().setWriteMp4GenresAsText(true);
-            tag.setField(tag.createField(FieldKey.GENRE, "Tango")); //key for classic rock
+            tag.setField(FieldKey.GENRE, "Tango"); //key for classic rock
             f.commit();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -2252,7 +2255,7 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)
@@ -2286,7 +2289,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)
@@ -2320,7 +2323,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(((Mp4Tag) tag).createArtworkField(imagedata));
+            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)
@@ -2353,7 +2356,7 @@ public class M4aWriteTagTest extends TestCase
 
             tag.setField(FieldKey.TITLE,"Title");
             tag.setField(FieldKey.ALBUM,"Album");
-            tag.setField(tag.createField(Mp4FieldKey.CDDB_TRACKNUMBER, "1"));
+            tag.setField(Mp4FieldKey.CDDB_TRACKNUMBER, "1");
             f.commit();
 
             //Reread changes

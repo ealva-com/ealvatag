@@ -26,6 +26,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
@@ -512,65 +513,47 @@ public class Mp4Tag extends AbstractTag {
         return new Mp4TagCoverField(artwork.getBinaryData());
     }
 
-    /**
-     * Create new field and add it to the tag, with special handling for trackNo, discNo fields as we dont want multiple
-     * fields to be created for these fields
-     *
-     * @param genericKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
     @Override
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        if (
-                (genericKey == FieldKey.TRACK) ||
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        if ((genericKey == FieldKey.TRACK) ||
                         (genericKey == FieldKey.TRACK_TOTAL) ||
                         (genericKey == FieldKey.DISC_NO) ||
-                        (genericKey == FieldKey.DISC_TOTAL)
-                ) {
-            setField(genericKey, value);
+                        (genericKey == FieldKey.DISC_TOTAL)) {
+            setField(genericKey, values);
         } else {
-            TagField tagfield = createField(genericKey, value);
+            TagField tagfield = createField(genericKey, values);
             addField(tagfield);
         }
+        return this;
     }
 
-    /**
-     * Create Tag Field using generic key
-     * <p>
-     * This should use the correct subclass for the key
-     *
-     * @param genericKey
-     * @param values
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
     @Override
-    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
+    public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                              UnsupportedFieldException,
+                                                                              FieldDataInvalidException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         String value = checkVarArg0NotNull(values, AT_LEAST_ONE_REQUIRED, "values");
+
+        // TODO: 1/20/17 Make this a big switch statement without the nasty if else logic
         //Special handling for these number fields because multiple generic keys map to a single mp4 field
-        if (
-                (genericKey == FieldKey.TRACK) ||
-                        (genericKey == FieldKey.TRACK_TOTAL) ||
-                        (genericKey == FieldKey.DISC_NO) ||
-                        (genericKey == FieldKey.DISC_TOTAL)
-                ) {
+        if ((genericKey == FieldKey.TRACK) ||
+                (genericKey == FieldKey.TRACK_TOTAL) ||
+                (genericKey == FieldKey.DISC_NO) ||
+                (genericKey == FieldKey.DISC_TOTAL)) {
             try {
                 int number = Integer.parseInt(value);
-                if (genericKey == FieldKey.TRACK) {
-                    return new Mp4TrackField(number);
-                } else if (genericKey == FieldKey.TRACK_TOTAL) {
-                    return new Mp4TrackField(0, number);
-                } else if (genericKey == FieldKey.DISC_NO) {
-                    return new Mp4DiscNoField(number);
-                } else if (genericKey == FieldKey.DISC_TOTAL) {
-                    return new Mp4DiscNoField(0, number);
+                switch (genericKey) {
+                    case TRACK:
+                        return new Mp4TrackField(number);
+                    case TRACK_TOTAL:
+                        return new Mp4TrackField(0, number);
+                    case DISC_NO:
+                        return new Mp4DiscNoField(number);
+                    case DISC_TOTAL:
+                        return new Mp4DiscNoField(0, number);
                 }
             } catch (NumberFormatException nfe) {
                 //If not number we want to convert to an expected exception (which is not a RuntimeException)
@@ -594,17 +577,14 @@ public class Mp4Tag extends AbstractTag {
     }
 
     /**
-     * Overidden to ensure cannot have both a genre field and a custom genre field
-     *
-     * @param genericKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * {@inheritDoc}
+     * Cannot have both a genre field and a custom genre field
      */
     @Override
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
 
         if (genericKey == FieldKey.GENRE) {
             if (tagfield.getId().equals(GENRE.getFieldName())) {
@@ -614,6 +594,7 @@ public class Mp4Tag extends AbstractTag {
             }
         }
         setField(tagfield);
+        return this;
     }
 
     /**
@@ -689,21 +670,20 @@ public class Mp4Tag extends AbstractTag {
      * <p>
      * Uses the correct subclass for the key
      *
-     * @param mp4FieldKey
-     * @param value
+     * @param mp4FieldKey mp4 field key
+     * @param value       value to set into tag field
      *
-     * @return
+     * @return tag field for the given key
      *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * @throws IllegalArgumentException      if {@code mp4FieldKey} or {@code value} are null
+     * @throws FieldDataInvalidException     if the data is not valid for the given {@link Mp4FieldKey}
+     * @throws UnsupportedOperationException if the key is unsupported (check this - can we throw UnsupportedKeyException
      */
-    public TagField createField(Mp4FieldKey mp4FieldKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
-        if (value == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        if (mp4FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public TagField createField(Mp4FieldKey mp4FieldKey, String value) throws IllegalArgumentException,
+                                                                              UnsupportedOperationException,
+                                                                              FieldDataInvalidException {
+        checkArgNotNull(mp4FieldKey);
+        checkArgNotNull(value);
 
         //This is boolean stored as 1, but calling program might setField as 'true' so we handle this
         //case internally , any other values it is set to we treat as false

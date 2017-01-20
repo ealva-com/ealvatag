@@ -46,7 +46,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -129,7 +128,7 @@ public class ID3v11Tag extends ID3v1Tag {
      * @param mp3tag
      * @throws UnsupportedOperationException
      */
-    public ID3v11Tag(AbstractTag mp3tag) {
+    public ID3v11Tag(BaseID3Tag mp3tag) {
         if (mp3tag != null) {
             if (mp3tag instanceof ID3v1Tag) {
                 if (mp3tag instanceof ID3v11Tag) {

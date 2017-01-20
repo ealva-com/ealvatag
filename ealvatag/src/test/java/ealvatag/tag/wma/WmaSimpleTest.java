@@ -366,7 +366,7 @@ public class WmaSimpleTest extends AbstractTestCase
                 {
                     if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
                     {
-                        tag.setField(tag.createField(key, key.name() + "_value_" + i));
+                        tag.setField(key, key.name() + "_value_" + i);
                     }
                 }
                 f.commit();
@@ -419,7 +419,7 @@ public class WmaSimpleTest extends AbstractTestCase
             {
                 if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
                 {
-                    tag.addField(tag.createField(key, key.name() + "_value"));
+                    tag.addField(key, key.name() + "_value");
                 }
             }
             f.commit();

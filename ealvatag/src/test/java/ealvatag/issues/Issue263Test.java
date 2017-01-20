@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
@@ -148,7 +149,7 @@ public class Issue263Test extends AbstractTestCase
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
@@ -250,7 +251,7 @@ public class Issue263Test extends AbstractTestCase
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 }

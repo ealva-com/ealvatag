@@ -32,6 +32,7 @@ import ealvatag.utils.Check;
 
 import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -156,14 +157,14 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public TagField createField(final FieldKey genericKey, final String... values) throws KeyNotFoundException, FieldDataInvalidException {
+    public TagField createField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
+                                                                                          UnsupportedFieldException,
+                                                                                          FieldDataInvalidException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
-            if (values == null || values[0] == null) {
-                throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-            }
-            return new GenericTagTextField(genericKey.name(), values[0]);
+            return new GenericTagTextField(genericKey.name(), checkVarArg0NotNull(values));
         } else {
-            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
+            throw new UnsupportedFieldException(genericKey.name());
         }
     }
 

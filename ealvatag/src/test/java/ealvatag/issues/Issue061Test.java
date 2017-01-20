@@ -16,151 +16,127 @@ import ealvatag.tag.wav.WavTag;
 /**
  * Test
  */
-public class Issue061Test extends AbstractTestCase
-{
-    public void testMp3SetNull1() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+public class Issue061Test extends AbstractTestCase {
+    public void testMp3SetNull1() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new ID3v23Tag();
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testMp3SetNull2() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testMp3SetNull2() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new ID3v23Tag();
             tag.setField(FieldKey.GENRE, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetMp4Null() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testMp3SetFieldKeyNull() throws Exception {
+        Exception ex = null;
+        try {
+            Tag tag = new ID3v23Tag();
+            tag.setField(null, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ex = e;
+        }
+        assertTrue(ex instanceof IllegalArgumentException);
+    }
+
+    public void testSetMp4Null() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new Mp4Tag();
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetFlacNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testSetFlacNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new FlacTag();
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetOggNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testSetOggNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new VorbisCommentTag();
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetAifNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testSetAifNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new AiffTag();
             ((AiffTag)tag).setID3Tag(new ID3v23Tag());
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetWavNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testSetWavNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new WavTag(WavOptions.READ_ID3_ONLY);
             ((WavTag)tag).setID3Tag(new ID3v23Tag());
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetWavInfoNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+    public void testSetWavInfoNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new WavTag(WavOptions.READ_INFO_ONLY);
             ((WavTag)tag).setInfoTag(new WavInfoTag());
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertNotNull(ex);
         assertTrue(ex instanceof IllegalArgumentException);
     }
-    public void testSetWmaNull() throws Exception
-    {
-        Exception ex=null;
-        try
-        {
+
+    public void testSetWmaNull() throws Exception {
+        Exception ex = null;
+        try {
             Tag tag = new AsfTag();
             tag.setField(FieldKey.ARTIST, null);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            ex=e;
+            ex = e;
         }
         assertTrue(ex instanceof IllegalArgumentException);
     }

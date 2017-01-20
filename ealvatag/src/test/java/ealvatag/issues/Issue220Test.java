@@ -158,7 +158,7 @@ public class Issue220Test extends AbstractTestCase
                af.getTag().setField(FieldKey.ALBUM,"KARENTAYLORALBUM");
                af.getTag().setField(FieldKey.TITLE,"KARENTAYLORTITLE");
                af.getTag().setField(FieldKey.GENRE,"KARENTAYLORGENRE");
-               af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID,"12345678"));
+               af.getTag().setField(FieldKey.AMAZON_ID,"12345678");
 
                af.commit();
                System.out.println("All is going well");

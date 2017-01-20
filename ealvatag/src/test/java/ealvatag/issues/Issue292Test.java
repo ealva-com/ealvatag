@@ -37,8 +37,8 @@ public class Issue292Test extends AbstractTestCase
 
             //Read and save chnages
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(af.getTag().createField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
-            af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+            af.getTag().setField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
             af.commit();
 
@@ -82,8 +82,8 @@ public class Issue292Test extends AbstractTestCase
 
             //Read and save chnages
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(af.getTag().createField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
-            af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"));
+            af.getTag().setField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+            af.getTag().setField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
             af.commit();
 

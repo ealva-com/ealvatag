@@ -204,7 +204,7 @@ public class AudioFileIO {
     /**
      * Write the tag contained in the audioFile in the actual file on the disk.
      *
-     * @param f          The AudioFile to be written
+     * @param audioFile  The AudioFile to be written
      * @param targetPath The AudioFile path to which to be written without the extension. Cannot be null
      *
      * @throws IllegalArgumentException    if targetPath is null or empty
@@ -212,9 +212,9 @@ public class AudioFileIO {
      * @throws CannotWriteException        If the file could not be written/accessed, the extension wasn't recognized, or other IO error
      *                                     occurred.
      */
-    public static void writeAs(AudioFile f, String targetPath) throws CannotWriteException {
+    public static void writeAs(AudioFile audioFile, String targetPath) throws CannotWriteException {
         checkArgument(!Strings.isNullOrEmpty(targetPath));
-        getDefaultAudioFileIO().writeFileAs(f, targetPath);
+        getDefaultAudioFileIO().writeFileAs(audioFile, targetPath);
     }
 
     private final ModificationHandler modificationHandler;

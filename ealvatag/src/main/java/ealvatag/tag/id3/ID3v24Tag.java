@@ -480,7 +480,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      *
      * @param mp3tag
      */
-    public ID3v24Tag(AbstractTag mp3tag) {
+    public ID3v24Tag(BaseID3Tag mp3tag) {
         LOG.debug("Creating tag from a tag of a different version");
         frameMap = new LinkedHashMap<>();
         encryptedFrameMap = new LinkedHashMap<>();
@@ -1254,9 +1254,9 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      * <p>
      * {@link FieldKey#GENRE} has special processing in this method
      */
-    public TagField createField(final FieldKey genericKey, String... values) throws KeyNotFoundException,
-                                                                                    FieldDataInvalidException,
-                                                                                    IllegalArgumentException {
+    public TagField createField(final FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                                    UnsupportedFieldException,
+                                                                                    FieldDataInvalidException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value");

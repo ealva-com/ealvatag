@@ -598,8 +598,8 @@ public final class AsfTag extends AbstractTag {
 
     @Override
     public AsfTagTextField createField(final FieldKey fieldKey, final String... values) throws IllegalArgumentException,
-                                                                                                 FieldDataInvalidException,
-                                                                                                 UnsupportedFieldException {
+                                                                                               UnsupportedFieldException,
+                                                                                               FieldDataInvalidException {
         return createField(getAsfFieldKey(checkArgNotNull(fieldKey, CANNOT_BE_NULL, "fieldKey")),
                            checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value"));
     }

@@ -22,14 +22,14 @@
  */
 package ealvatag.tag.lyrics3;
 
-import ealvatag.tag.id3.AbstractTag;
+import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3v1Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 
-public abstract class AbstractLyrics3 extends AbstractTag
+public abstract class AbstractLyrics3 extends BaseID3Tag
 {
     public AbstractLyrics3()
     {

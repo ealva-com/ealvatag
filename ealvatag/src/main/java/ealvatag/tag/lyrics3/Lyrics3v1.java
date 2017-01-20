@@ -25,7 +25,7 @@ package ealvatag.tag.lyrics3;
 
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagNotFoundException;
-import ealvatag.tag.id3.AbstractTag;
+import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3Tags;
 import ealvatag.tag.id3.ID3v1Tag;
 
@@ -54,7 +54,7 @@ public class Lyrics3v1 extends AbstractLyrics3
         this.lyric = copyObject.lyric;
     }
 
-    public Lyrics3v1(AbstractTag mp3Tag)
+    public Lyrics3v1(BaseID3Tag mp3Tag)
     {
         if (mp3Tag != null)
         {

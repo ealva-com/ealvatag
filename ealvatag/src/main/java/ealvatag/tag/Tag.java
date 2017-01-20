@@ -18,7 +18,6 @@
  */
 package ealvatag.tag;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.images.Artwork;
@@ -35,6 +34,7 @@ import java.util.List;
  * <li>Some general concepts will be refined or redefined</li>
  * <li>Illegal arguments will throw IllegalArgumentException, not throw KeyNotFoundException</li>
  * <li>Unsupported keys for a type of tag will throw UnsupportedKeyException not throw KeyNotFoundException</li>
+ * <li>Methods whose comments said "used internally" will be removed from the public interface</li>
  * </list>
  * <p>
  * <p>
@@ -67,26 +67,57 @@ public interface Tag {
     /**
      * Create the field based on the generic key and set it in the tag
      *
-     * @param genericKey THE FIELD TO SET
-     * @param value
+     * @param genericKey the field to set
+     * @param values     value(s) to set into the field
      *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * @return self
+     *
+     * @throws IllegalArgumentException  if the {@code genericKey} is null or no value is passed
+     * @throws UnsupportedFieldException if this Tag does not support the {@link FieldKey}
+     * @throws FieldDataInvalidException if the data is invalid for the given field
      */
-    void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
+    Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                               UnsupportedFieldException,
+                                                               FieldDataInvalidException;
+
+    /**
+     * Create artwork field based on the data in artwork and then set it in the tag itself
+     *
+     * @param artwork the artwork to set
+     *
+     * @throws IllegalArgumentException  if the {@code artwork} is null
+     * @throws UnsupportedFieldException if this Tag does not support artwork
+     * @throws FieldDataInvalidException if the data is invalid for the given field
+     */
+    void setField(Artwork artwork) throws FieldDataInvalidException;
 
     /**
      * Create the field based on the generic key and add it to the tag
      * <p>
      * This is handled differently by different formats
      *
-     * @param genericKey
-     * @param value
+     * @param genericKey the field to set
+     * @param values     value(2) to set into the field
      *
-     * @throws KeyNotFoundException
+     * @return self
+     *
+     * @throws IllegalArgumentException  if the {@code genericKey} is null or no value is passed
+     * @throws UnsupportedFieldException if this Tag does not support the {@link FieldKey}
+     * @throws FieldDataInvalidException if the data is invalid for the given field
+     */
+    Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                               UnsupportedFieldException,
+                                                               FieldDataInvalidException;
+
+    /**
+     * Create artwork field based on the data in artwork and then add it to the tag itself
+     *
+     * @param artwork
+     *
      * @throws FieldDataInvalidException
      */
-    void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException;
+    void addField(Artwork artwork) throws FieldDataInvalidException;
+
 
     /**
      * Delete any fields with this key
@@ -177,7 +208,7 @@ public interface Tag {
      * Retrieve String value of the nth tag field that exists for this generic key
      *
      * @param genericKey field to query
-     * @param index index to query
+     * @param index      index to query
      *
      * @return the value of the {@link FieldKey} at the given {@code index}
      *
@@ -202,7 +233,7 @@ public interface Tag {
      *
      * @return the first field that matches this generic key
      *
-     * @throws IllegalArgumentException if {@code fieldKey} is null
+     * @throws IllegalArgumentException  if {@code fieldKey} is null
      * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
      */
     TagField getFirstField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
@@ -222,7 +253,7 @@ public interface Tag {
      *
      * @return true if this tag instance contains the {@link FieldKey}
      *
-     * @throws IllegalArgumentException if {@code fieldKey} is null
+     * @throws IllegalArgumentException  if {@code fieldKey} is null
      * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
      */
     boolean hasField(FieldKey fieldKey) throws IllegalArgumentException, UnsupportedFieldException;
@@ -309,42 +340,6 @@ public interface Tag {
     TagField createField(Artwork artwork) throws FieldDataInvalidException;
 
     /**
-     * Create artwork field based on the data in artwork and then set it in the tag itself
-     *
-     * @param artwork
-     *
-     * @throws FieldDataInvalidException
-     */
-    void setField(Artwork artwork) throws FieldDataInvalidException;
-
-    /**
-     * Create artwork field based on the data in artwork and then add it to the tag itself
-     *
-     * @param artwork
-     *
-     * @throws FieldDataInvalidException
-     */
-    void addField(Artwork artwork) throws FieldDataInvalidException;
-
-    /**
-     * Sets a field in the structure, used internally by the library<br>
-     *
-     * @param field The field to add.
-     *
-     * @throws FieldDataInvalidException
-     */
-    void setField(TagField field) throws FieldDataInvalidException;
-
-    /**
-     * Adds a field to the structure, used internally by the library<br>
-     *
-     * @param field The field to add.
-     *
-     * @throws FieldDataInvalidException
-     */
-    void addField(TagField field) throws FieldDataInvalidException;
-
-    /**
      * Create a new field
      *
      * @param genericKey create field for this key
@@ -352,13 +347,13 @@ public interface Tag {
      *
      * @return {@link TagField} for {@code genericKey}
      *
-     * @throws KeyNotFoundException      if the generic key us unsupported by this tag
-     * @throws FieldDataInvalidException data could is not valid for this field type
      * @throws IllegalArgumentException  if {@code genericKey} is null or at least 1 values is not passed
+     * @throws UnsupportedFieldException if the generic key us unsupported by this tag or is {@link FieldKey#COVER_ART}
+     * @throws FieldDataInvalidException data could is not valid for this field type
      */
-    TagField createField(FieldKey genericKey, String... value) throws KeyNotFoundException,
-                                                                      FieldDataInvalidException,
-                                                                      IllegalArgumentException;
+    TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException;
 
     /**
      * Creates isCompilation field

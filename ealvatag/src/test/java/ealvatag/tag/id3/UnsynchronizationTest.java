@@ -99,7 +99,7 @@ public class UnsynchronizationTest extends AbstractTestCase
         assertFalse(v24tag.isUnsynchronization());
 
         //Convert to v23
-        ID3v23Tag v23tag = new ID3v23Tag((AbstractTag) v24tag);
+        ID3v23Tag v23tag = new ID3v23Tag((BaseID3Tag) v24tag);
         mp3File.setID3v2Tag(v23tag);
 
         //Write mp3 back to file
@@ -136,7 +136,7 @@ public class UnsynchronizationTest extends AbstractTestCase
         assertFalse(v24tag.isUnsynchronization());
 
         //Convert to v22
-        ID3v22Tag v22tag = new ID3v22Tag((AbstractTag) v24tag);
+        ID3v22Tag v22tag = new ID3v22Tag((BaseID3Tag) v24tag);
         mp3File.setID3v2Tag(v22tag);
 
         //Write mp3 back to file

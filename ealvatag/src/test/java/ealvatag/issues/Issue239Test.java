@@ -37,8 +37,8 @@ public class Issue239Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.COMMENT,"comment1"));
-            mp3File.getTag().addField(mp3File.getTag().createField(FieldKey.COMMENT,"comment2"));
+            mp3File.getTag().setField(FieldKey.COMMENT,"comment1");
+            mp3File.getTag().addField(FieldKey.COMMENT,"comment2");
 
             mp3File.save();
 
@@ -89,8 +89,8 @@ public class Issue239Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.CUSTOM1,"comment1"));
-            mp3File.getTag().addField(mp3File.getTag().createField(FieldKey.CUSTOM1,"comment2"));
+            mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
+            mp3File.getTag().addField(FieldKey.CUSTOM1,"comment2");
 
             mp3File.save();
 
@@ -141,8 +141,8 @@ public class Issue239Test extends AbstractTestCase
             assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
 
             //Now write these fields
-            mp3File.getTag().setField(mp3File.getTag().createField(FieldKey.CUSTOM1,"comment1"));
-            mp3File.getTag().addField(mp3File.getTag().createField(FieldKey.CUSTOM2,"comment2"));
+            mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
+            mp3File.getTag().addField(FieldKey.CUSTOM2,"comment2");
 
             mp3File.save();
 

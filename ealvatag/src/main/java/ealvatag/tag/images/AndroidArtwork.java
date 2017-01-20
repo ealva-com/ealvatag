@@ -1,69 +1,60 @@
 package ealvatag.tag.images;
 
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
-import ealvatag.tag.id3.valuepair.ImageFormats;
-import ealvatag.tag.reference.PictureTypes;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 /**
  * Represents artwork in a format independent way
  */
-public class AndroidArtwork implements Artwork
-{
-    private byte[]          binaryData;
-    private String          mimeType="";
-    private String          description="";
-    private boolean         isLinked=false;
-    private String          imageUrl="";
-    private int             pictureType=-1;
-    private int             width;
-    private int             height;
+public class AndroidArtwork extends AbstractArtwork {
+    private byte[] binaryData;
+    private String mimeType = "";
+    private String description = "";
+    private boolean isLinked = false;
+    private String imageUrl = "";
+    private int pictureType = -1;
+    private int width;
+    private int height;
 
-    public AndroidArtwork()
-    {
+    public AndroidArtwork() {
 
     }
-    public byte[] getBinaryData()
-    {
+
+    public byte[] getBinaryData() {
         return binaryData;
     }
 
-    public void setBinaryData(byte[] binaryData)
-    {
+    public Artwork setBinaryData(byte[] binaryData) {
         this.binaryData = binaryData;
+        return this;
     }
 
-    public String getMimeType()
-    {
+    public String getMimeType() {
         return mimeType;
     }
 
-    public void setMimeType(String mimeType)
-    {
+    public Artwork setMimeType(String mimeType) {
         this.mimeType = mimeType;
+        return this;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
-    public void setDescription(String description)
-    {
+    public Artwork setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     /**
@@ -71,148 +62,103 @@ public class AndroidArtwork implements Artwork
      *
      * @return
      */
-    public boolean setImageFromData()
-    {
+    public boolean setImageFromData() {
         throw new UnsupportedOperationException();
     }
 
-    public Object getImage() throws IOException
-    {
+    public Object getImage() throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isLinked()
-    {
+    public boolean isLinked() {
         return isLinked;
     }
 
-    public void setLinked(boolean linked)
-    {
+    public Artwork setLinked(boolean linked) {
         isLinked = linked;
+        return this;
     }
 
-    public String getImageUrl()
-    {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl)
-    {
+    public Artwork setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
     }
 
-    public int getPictureType()
-    {
+    public int getPictureType() {
         return pictureType;
     }
 
-    public void setPictureType(int pictureType)
-    {
+    public Artwork setPictureType(int pictureType) {
         this.pictureType = pictureType;
+        return this;
     }
+
 
     /**
      * Create Artwork from File
      *
      * @param file
-     * @throws java.io.IOException
-     */
-    public void setFromFile(File file)  throws IOException
-    {
-        RandomAccessFile imageFile = new RandomAccessFile(file, "r");
-        byte[] imagedata = new byte[(int) imageFile.length()];
-        imageFile.read(imagedata);
-        imageFile.close();
-
-        setBinaryData(imagedata);
-        setMimeType(ImageFormats.getMimeTypeForBinarySignature(imagedata));
-        setDescription("");
-        setPictureType(PictureTypes.DEFAULT_ID);
-    }
-
-    /**
-     * Create Artwork from File
      *
-     * @param file
      * @return
+     *
      * @throws java.io.IOException
      */
-    public static AndroidArtwork createArtworkFromFile(File file)  throws IOException
-    {
+    public static AndroidArtwork createArtworkFromFile(File file) throws IOException {
         AndroidArtwork artwork = new AndroidArtwork();
         artwork.setFromFile(file);
         return artwork;
     }
 
     /**
-     *
      * @param url
+     *
      * @return
+     *
      * @throws IOException
      */
-    public static AndroidArtwork createLinkedArtworkFromURL(String url)  throws IOException
-    {
+    public static AndroidArtwork createLinkedArtworkFromURL(String url) throws IOException {
         AndroidArtwork artwork = new AndroidArtwork();
         artwork.setLinkedFromURL(url);
         return artwork;
     }
 
     /**
-       * Create Linked Artwork from URL
-       *
-       * @param url
-       * @throws java.io.IOException
-       */
-      public void setLinkedFromURL(String url)  throws IOException
-      {
-          setLinked(true);
-          setImageUrl(url);
-      }
-
-
-    /**
-     * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
+     * Create Linked Artwork from URL
      *
-     * @param coverArt
+     * @param url
+     *
+     * @throws java.io.IOException
      */
-    public void setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt)
-    {
-        setMimeType(coverArt.getMimeType());
-        setDescription(coverArt.getDescription());
-        setPictureType(coverArt.getPictureType());
-        if(coverArt.isImageUrl())
-        {
-            setLinked(coverArt.isImageUrl());
-            setImageUrl(coverArt.getImageUrl());
-        }
-        else
-        {
-            setBinaryData(coverArt.getImageData());
-        }
-        setWidth(coverArt.getWidth());
-        setHeight(coverArt.getHeight());
+    public void setLinkedFromURL(String url) throws IOException {
+        setLinked(true);
+        setImageUrl(url);
     }
+
 
     /**
      * Create artwork from Flac block
      *
      * @param coverArt
+     *
      * @return
      */
-    public static AndroidArtwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt)
-    {
+    public static AndroidArtwork createArtworkFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt) {
         AndroidArtwork artwork = new AndroidArtwork();
         artwork.setFromMetadataBlockDataPicture(coverArt);
         return artwork;
     }
 
-    public void setWidth(int width)
-    {
+    public Artwork setWidth(int width) {
         this.width = width;
+        return this;
     }
 
-    public void setHeight(int height)
-    {
+    public Artwork setHeight(int height) {
         this.height = height;
+        return this;
     }
 }

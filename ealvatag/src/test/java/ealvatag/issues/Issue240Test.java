@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.mp4.Mp4Tag;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public class Issue240Test extends AbstractTestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            af.getTag().addField(((Mp4Tag) af.getTag()).createArtworkField(imagedata));
+            af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata));
             af.commit();
 
             //Read File back

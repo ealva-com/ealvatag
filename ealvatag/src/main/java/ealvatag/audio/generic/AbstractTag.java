@@ -23,6 +23,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagTextField;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
@@ -41,7 +42,7 @@ import java.util.Map;
  *
  * @author Raphaël Slinckx
  */
-public abstract class AbstractTag implements Tag {
+public abstract class AbstractTag implements TagFieldContainer {
     /**
      * Stores the amount of {@link TagField} with {@link TagField#isCommon()}
      * <code>true</code>.
@@ -90,34 +91,22 @@ public abstract class AbstractTag implements Tag {
      */
     protected abstract boolean isAllowedEncoding(Charset enc);
 
-    /**
-     * Create new field and set it in the tag
-     *
-     * @param genericKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
     @Override
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                     UnsupportedFieldException,
+                                                                     FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         setField(tagfield);
+        return this;
     }
 
-    /**
-     * Create new field and add it to the tag
-     *
-     * @param genericKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
     @Override
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         addField(tagfield);
+        return this;
     }
 
     /**
@@ -331,14 +320,6 @@ public abstract class AbstractTag implements Tag {
         this.addField(createField(artwork));
     }
 
-    /**
-     * Set field
-     * <p>
-     * Changed:Just because field is empty it doesn't mean it should be deleted. That should be the choice
-     * of the developer. (Or does this break things)
-     *
-     * @see ealvatag.tag.Tag#setField(ealvatag.tag.TagField)
-     */
     @Override
     public void setField(TagField field) {
         if (field == null) {
@@ -362,14 +343,6 @@ public abstract class AbstractTag implements Tag {
         }
     }
 
-    /**
-     * Add field
-     *
-     * @see ealvatag.tag.Tag#addField(ealvatag.tag.TagField)
-     * <p>
-     * Changed so add empty fields
-     */
-    @Override
     public void addField(TagField field) {
         if (field == null) {
             return;
@@ -401,8 +374,8 @@ public abstract class AbstractTag implements Tag {
      * @throws UnsupportedFieldException if the {@link FieldKey} is not supported
      */
     public abstract TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
-                                                                                      FieldDataInvalidException,
-                                                                                      UnsupportedFieldException;
+                                                                                      UnsupportedFieldException,
+                                                                                      FieldDataInvalidException;
 
     /**
      * (overridden)

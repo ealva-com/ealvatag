@@ -30,7 +30,7 @@ package ealvatag.tag.id3;
  * @author : Eric Farng
  * @author : Paul Taylor
  */
-public abstract class AbstractID3Tag extends AbstractTag {
+public abstract class AbstractID3Tag extends BaseID3Tag {
     public AbstractID3Tag() {
     }
 

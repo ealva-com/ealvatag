@@ -20,6 +20,7 @@ package ealvatag.tag.wav;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import ealvatag.audio.generic.AbstractTag;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
@@ -29,6 +30,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.AbstractID3v2Tag;
@@ -159,7 +161,7 @@ public class WavTag implements Tag, Id3SupportingTag {
     }
 
 
-    public Tag getActiveTag() {
+    public TagFieldContainer getActiveTag() {
         switch (wavOptions) {
             case READ_ID3_ONLY:
             case READ_ID3_ONLY_AND_SYNC:
@@ -192,7 +194,7 @@ public class WavTag implements Tag, Id3SupportingTag {
     }
 
     public boolean equals(Object obj) {
-        return getActiveTag().equals(obj);
+        return getActiveTag().equals(obj); // TODO: 1/20/17 Wrong!
     }
 
     public void addField(TagField field) throws FieldDataInvalidException {
@@ -223,27 +225,30 @@ public class WavTag implements Tag, Id3SupportingTag {
         return (getActiveTag() == null || getActiveTag().isEmpty());
     }
 
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         setField(tagfield);
+        return this;
     }
 
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        TagField tagfield = createField(genericKey, values);
         addField(tagfield);
+        return this;
     }
 
-    /**
-     * @param field
-     * @throws FieldDataInvalidException
-     */
     public void setField(TagField field) throws FieldDataInvalidException {
         getActiveTag().setField(field);
     }
 
 
-    public TagField createField(FieldKey genericKey, String... value)
-            throws KeyNotFoundException, FieldDataInvalidException {
+    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                             UnsupportedFieldException,
+                                                                             FieldDataInvalidException {
         return getActiveTag().createField(genericKey, value);
     }
 

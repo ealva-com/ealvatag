@@ -1,5 +1,7 @@
 package ealvatag.tag.id3;
 
+import ealvatag.tag.images.Artwork;
+import ealvatag.tag.images.ArtworkFactory;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -379,7 +381,7 @@ public class NewInterfaceTest extends TestCase
 
         //Track
         af.getTag().setField(FieldKey.TRACK,"7");
-        af.getTag().setField(af.getTag().createField(FieldKey.TRACK_TOTAL, "11"));
+        af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         assertEquals("7",af.getTag().getFirst(FieldKey.TRACK));
         assertEquals("11",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
         af.commit();
@@ -393,12 +395,12 @@ public class NewInterfaceTest extends TestCase
 
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff"));
+        af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
         af.commit();
         af = AudioFileIO.read(testFile);
 
          //Mood
-        af.getTag().setField(af.getTag().createField(FieldKey.MOOD, "mood"));
+        af.getTag().setField(FieldKey.MOOD, "mood");
         af.commit();
         af = AudioFileIO.read(testFile);
 
@@ -408,7 +410,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(8, af.getTag().getFieldCount());
 
         //Now addField another different field that also uses a TXXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICIP_ID, "musicip_id"));
+        af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, ((List) ((ID3v24Tag) af.getTag()).getFrame("TXXX")).size());
@@ -419,7 +421,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(9, af.getTag().getFieldCount());
 
         //Now addField yet another different field that also uses a TXXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid"));
+        af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(3, ((List) ((ID3v24Tag) af.getTag()).getFrame("TXXX")).size());
@@ -444,7 +446,7 @@ public class NewInterfaceTest extends TestCase
         //Cover Art:invalid way to do it
         try
         {
-            af.getTag().setField(af.getTag().createField(FieldKey.COVER_ART, "coverart"));
+            af.getTag().setField(FieldKey.COVER_ART, "coverart");
         }
         catch (java.lang.UnsupportedOperationException uoe)
         {
@@ -456,7 +458,7 @@ public class NewInterfaceTest extends TestCase
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
         byte[] imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(1, ((ID3v24Tag) af.getTag()).getFields(FieldKey.COVER_ART).size());
@@ -476,7 +478,7 @@ public class NewInterfaceTest extends TestCase
         imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
         imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -497,7 +499,7 @@ public class NewInterfaceTest extends TestCase
         assertNotNull(bi);
 
         //Add a linked Image
-        af.getTag().addField(tag.createLinkedArtworkField("../testdata/coverart.jpg"));
+        af.getTag().addField(ArtworkFactory.getNew().setImageUrl("../testdata/coverart.jpg").setLinked(true));
         af.commit();
 
         af = AudioFileIO.read(testFile);
@@ -669,7 +671,7 @@ public class NewInterfaceTest extends TestCase
 
         //Track
         af.getTag().setField(FieldKey.TRACK,"7");
-        af.getTag().setField(af.getTag().createField(FieldKey.TRACK_TOTAL, "11"));
+        af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         assertEquals("7",af.getTag().getFirst(FieldKey.TRACK));
         assertEquals("11",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
 
@@ -685,7 +687,7 @@ public class NewInterfaceTest extends TestCase
 
         //AmazonId also testing utf encoding here
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff"));
+        af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals("asin123456" + "\u01ff", af.getTag().getFirst(FieldKey.AMAZON_ID));
@@ -694,7 +696,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(7, af.getTag().getFieldCount());
 
          //Mood
-        af.getTag().setField(af.getTag().createField(FieldKey.MOOD, "mood"));
+        af.getTag().setField(FieldKey.MOOD, "mood");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals("mood", af.getTag().getFirst(FieldKey.MOOD));
@@ -706,11 +708,11 @@ public class NewInterfaceTest extends TestCase
         assertEquals("7",af.getTag().getFirst(FieldKey.TRACK));
 
         //Track Total
-        af.getTag().setField(af.getTag().createField(FieldKey.TRACK_TOTAL, "11"));
+        af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         assertEquals("11",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
 
         //Now addField another different field that also uses a TXXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICIP_ID, "musicip_id"));
+        af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, ((List) ((ID3v23Tag) af.getTag()).getFrame("TXXX")).size());
@@ -725,7 +727,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals("11",((ID3v23Tag)af.getTag()).getFirst(ID3v23FieldKey.TRACK_TOTAL));
 
         //Now addField yet another different field that also uses a TXXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid"));
+        af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(3, ((List) ((ID3v23Tag) af.getTag()).getFrame("TXXX")).size());
@@ -749,7 +751,7 @@ public class NewInterfaceTest extends TestCase
         //Cover Art:invalid way to do it
         try
         {
-            af.getTag().setField(af.getTag().createField(FieldKey.COVER_ART, "coverart"));
+            af.getTag().setField(FieldKey.COVER_ART, "coverart");
         }
         catch (java.lang.UnsupportedOperationException uoe)
         {
@@ -761,7 +763,7 @@ public class NewInterfaceTest extends TestCase
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
         byte[] imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(1, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -771,7 +773,7 @@ public class NewInterfaceTest extends TestCase
         imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
         imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -918,7 +920,7 @@ public class NewInterfaceTest extends TestCase
 
         //Track
         af.getTag().setField(FieldKey.TRACK,"7");
-        af.getTag().setField(af.getTag().createField(FieldKey.TRACK_TOTAL, "11"));
+        af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         assertEquals("7",af.getTag().getFirst(FieldKey.TRACK));
         assertEquals("11",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
         af.commit();
@@ -933,12 +935,12 @@ public class NewInterfaceTest extends TestCase
 
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
-        af.getTag().setField(af.getTag().createField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff"));
+        af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
         af.commit();
         af = AudioFileIO.read(testFile);
 
         //Mood
-        af.getTag().setField(af.getTag().createField(FieldKey.MOOD, "mood"));
+        af.getTag().setField(FieldKey.MOOD, "mood");
         af.commit();
         af = AudioFileIO.read(testFile);
          assertEquals("mood", af.getTag().getFirst(FieldKey.MOOD));
@@ -953,7 +955,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(7, af.getTag().getFieldCount());
 
         //Now addField another different field that also uses a TXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICIP_ID, "musicip_id"));
+        af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, ((List) ((ID3v22Tag) af.getTag()).getFrame("TXX")).size());
@@ -964,7 +966,7 @@ public class NewInterfaceTest extends TestCase
         assertEquals(8, af.getTag().getFieldCount());
 
         //Now addField yet another different field that also uses a TXX frame
-        af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid"));
+        af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(3, ((List) ((ID3v22Tag) af.getTag()).getFrame("TXX")).size());
@@ -988,7 +990,7 @@ public class NewInterfaceTest extends TestCase
         //Cover Art:invalid way to do it
         try
         {
-            af.getTag().setField(af.getTag().createField(FieldKey.COVER_ART, "coverart"));
+            af.getTag().setField(FieldKey.COVER_ART, "coverart");
         }
         catch (java.lang.UnsupportedOperationException uoe)
         {
@@ -1000,7 +1002,7 @@ public class NewInterfaceTest extends TestCase
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
         byte[] imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(1, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -1010,7 +1012,7 @@ public class NewInterfaceTest extends TestCase
         imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
         imagedata = new byte[(int) imageFile.length()];
         imageFile.read(imagedata);
-        af.getTag().addField(tag.createArtworkField(imagedata, "image/png"));
+        af.getTag().addField(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
         af.commit();
         af = AudioFileIO.read(testFile);
         assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -1063,7 +1065,7 @@ public class NewInterfaceTest extends TestCase
             assertEquals(3, af.getTag().getFields(FieldKey.COMMENT).size());
 
             //Add comment using generic call
-            af.getTag().setField(af.getTag().createField(FieldKey.COMMENT, "abcdef-ghijklmn"));
+            af.getTag().setField(FieldKey.COMMENT, "abcdef-ghijklmn");
 
             //Remove all Comment tags
             af.getTag().deleteField(FieldKey.COMMENT);
@@ -1090,17 +1092,17 @@ public class NewInterfaceTest extends TestCase
             //Change description, cant do this with common interface
             fb.setDescription("test");
             //Because has different description the following setField will addField another txxx rather than overwriting the first one
-            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn"));
+            af.getTag().setField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn");
             assertEquals(2, ((List) tag.getFrame("TXXX")).size());
             //Now adding TXXX with same id so gets overwritten
-            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_ARTISTID, "abcfffff"));
+            af.getTag().setField(FieldKey.MUSICBRAINZ_ARTISTID, "abcfffff");
             assertEquals(2, ((List) tag.getFrame("TXXX")).size());
 
             //Try deleting some of these
             tag.removeFrameOfType("TXXX");
             assertNull(tag.getFrame("TXXX"));
 
-            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn"));
+            af.getTag().setField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn");
             ((ID3v24Tag) af.getTag()).deleteField(FieldKey.MUSICBRAINZ_ARTISTID);
             assertNull(tag.getFrame("TXXX"));
 
@@ -1117,10 +1119,10 @@ public class NewInterfaceTest extends TestCase
             assertEquals("owner", fb.getOwner());
 
             //Because has different owner the following setField will addField another ufid rather than overwriting the first one
-            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcdef-ghijklmn"));
+            af.getTag().setField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcdef-ghijklmn");
             assertEquals(2, ((List) tag.getFrame("UFID")).size());
             //Now adding UFID with same owner so gets overwritten
-            af.getTag().setField(af.getTag().createField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcfffff"));
+            af.getTag().setField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcfffff");
             assertEquals(2, ((List) tag.getFrame("UFID")).size());
 
             //Try deleting some of these
@@ -1139,13 +1141,13 @@ public class NewInterfaceTest extends TestCase
             assertEquals("lyrics1", fb.getDescription());
 
             //Because has different desc the following setField will addField another uslt rather than overwriting the first one
-            af.getTag().setField(af.getTag().createField(FieldKey.LYRICS, "abcdef-ghijklmn"));
+            af.getTag().setField(FieldKey.LYRICS, "abcdef-ghijklmn");
             assertEquals(2, ((List) tag.getFrame("USLT")).size());
             assertEquals(2, af.getTag().getFields(FieldKey.LYRICS).size());
             frame = (ID3v24Frame) ((List) tag.getFrame("USLT")).get(1);
             assertEquals("", ((FrameBodyUSLT) frame.getBody()).getDescription());
             //Now adding USLT with same description so gets overwritten
-            af.getTag().setField(af.getTag().createField(FieldKey.LYRICS, "abcfffff"));
+            af.getTag().setField(FieldKey.LYRICS, "abcfffff");
             assertEquals(2, ((List) tag.getFrame("USLT")).size());
             assertEquals(2, af.getTag().getFields(FieldKey.LYRICS).size());
 

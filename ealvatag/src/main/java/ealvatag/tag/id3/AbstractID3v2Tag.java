@@ -31,6 +31,7 @@ import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.Pair;
@@ -73,7 +74,7 @@ import java.util.*;
  * @author : Eric Farng
  * @version $Id$
  */
-public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
+public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFieldContainer {
     //Tag ID as held in file
     public static final byte[] TAG_ID = {'I', 'D', '3'};
     public static final String TAGID = "ID3";
@@ -523,14 +524,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
 
     protected abstract ID3Frames getID3Frames();
 
-    public void setField(FieldKey genericKey, String... values) throws KeyNotFoundException, FieldDataInvalidException {
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        // create checks params
         TagField tagfield = createField(genericKey, values);
         setField(tagfield);
+        return this;
     }
 
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                     UnsupportedFieldException,
+                                                                     FieldDataInvalidException {
+        // create checks params
+        TagField tagfield = createField(genericKey, values);
         addField(tagfield);
+        return this;
     }
 
     /**
@@ -1139,11 +1148,11 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag {
         }
     }
 
-    public TagField createField(FieldKey genericKey, String... values) throws KeyNotFoundException,
-                                                                              FieldDataInvalidException,
-                                                                              IllegalArgumentException {
+    public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                              UnsupportedFieldException,
+                                                                              FieldDataInvalidException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
-        String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value");
+        String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "values");
 
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 

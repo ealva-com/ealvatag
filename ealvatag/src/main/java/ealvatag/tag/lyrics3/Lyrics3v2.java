@@ -27,7 +27,7 @@ import ealvatag.tag.TagException;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.AbstractID3v2Frame;
-import ealvatag.tag.id3.AbstractTag;
+import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3v1Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 
@@ -75,7 +75,7 @@ public class Lyrics3v2 extends AbstractLyrics3
      * @param mp3tag
      * @throws UnsupportedOperationException
      */
-    public Lyrics3v2(AbstractTag mp3tag)
+    public Lyrics3v2(BaseID3Tag mp3tag)
     {
         if (mp3tag != null)
         {

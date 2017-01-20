@@ -40,6 +40,10 @@ import ealvatag.tag.reference.GenreTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkVarArg0NotNull;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -160,7 +164,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
         this.genre = copyObject.genre;
     }
 
-    public ID3v1Tag(AbstractTag mp3tag) {
+    public ID3v1Tag(BaseID3Tag mp3tag) {
 
         if (mp3tag != null) {
             ID3v11Tag convertedTag;
@@ -307,7 +311,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     public ImmutableList<TagField> getArtist() {
         final String firstArtist = getFirstArtist();
         if (firstArtist.length() > 0) {
-           return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), firstArtist));
+            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), firstArtist));
         } else {
             return ImmutableList.of();
         }
@@ -534,13 +538,21 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     }
 
 
-    public void setField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(genericKey, value);
+    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                     UnsupportedFieldException,
+                                                                     FieldDataInvalidException {
+        // create field checks parameters
+        TagField tagfield = createField(genericKey, values);
         setField(tagfield);
+        return this;
     }
 
-    public void addField(FieldKey genericKey, String... value) throws KeyNotFoundException, FieldDataInvalidException {
-        setField(genericKey, value);
+    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                      UnsupportedFieldException,
+                                                                      FieldDataInvalidException {
+        // parameters checked later in chain // TODO: 1/20/17 refactor into public and private methods
+        setField(genericKey, values);
+        return this;
     }
 
     public void setField(TagField field) {
@@ -580,16 +592,14 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
     /**
      * Create Tag Field using generic key
      */
-    public TagField createField(FieldKey genericKey, String... values) {
-        String value = values[0];
-        if (genericKey == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        ID3v1FieldKey idv1FieldKey = tagFieldToID3v1Field.get(genericKey);
+    public TagField createField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
+                                                                                          UnsupportedFieldException,
+                                                                                          FieldDataInvalidException {
+        ID3v1FieldKey idv1FieldKey = tagFieldToID3v1Field.get(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
         if (idv1FieldKey == null) {
-            throw new KeyNotFoundException(ErrorMessage.INVALID_FIELD_FOR_ID3V1TAG.getMsg(genericKey.name()));
+            throw new UnsupportedFieldException(genericKey.name());
         }
-        return new ID3v1TagField(idv1FieldKey.name(), value);
+        return new ID3v1TagField(idv1FieldKey.name(), checkVarArg0NotNull(values));
     }
 
     public Charset getEncoding() {
@@ -697,7 +707,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements Tag {
         return getValue(id, n);
     }
 
-    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException  {
+    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         return getFirst(genericKey);
     }
 

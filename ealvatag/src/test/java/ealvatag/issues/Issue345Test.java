@@ -36,15 +36,15 @@ public class Issue345Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v24Tag());
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
@@ -134,15 +134,15 @@ public class Issue345Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v23Tag());
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
@@ -220,15 +220,15 @@ public class Issue345Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             af.setTag(new ID3v22Tag());
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
@@ -310,15 +310,15 @@ public class Issue345Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
@@ -359,12 +359,12 @@ public class Issue345Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
             assertEquals("mixer",af.getTag().getFirst(FieldKey.MIXER));
@@ -406,15 +406,15 @@ public class Issue345Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
@@ -455,15 +455,15 @@ public class Issue345Test extends AbstractTestCase
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag();
-            tag.setField(tag.createField(FieldKey.RATING,"50"));
-            tag.setField(tag.createField(FieldKey.MIXER,"mixer"));
-            tag.setField(tag.createField(FieldKey.ENGINEER,"engineervalue"));
-            tag.setField(tag.createField(FieldKey.DJMIXER,"djmixervalue"));
-            tag.setField(tag.createField(FieldKey.PRODUCER,"producervalue"));
-            tag.setField(tag.createField(FieldKey.ARRANGER,"arrangervalue"));
-            tag.setField(tag.createField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint"));
+            tag.setField(FieldKey.RATING,"50");
+            tag.setField(FieldKey.MIXER,"mixer");
+            tag.setField(FieldKey.ENGINEER,"engineervalue");
+            tag.setField(FieldKey.DJMIXER,"djmixervalue");
+            tag.setField(FieldKey.PRODUCER,"producervalue");
+            tag.setField(FieldKey.ARRANGER,"arrangervalue");
+            tag.setField(FieldKey.ACOUSTID_FINGERPRINT,"acousticfingerprint");
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
-            tag.setField(tag.createField(FieldKey.COUNTRY,"France"));
+            tag.setField(FieldKey.COUNTRY,"France");
             assertEquals("France",af.getTag().getFirst(FieldKey.COUNTRY));
 
             assertEquals("50",af.getTag().getFirst(FieldKey.RATING));
