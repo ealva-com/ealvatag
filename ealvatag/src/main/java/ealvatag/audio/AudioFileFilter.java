@@ -32,20 +32,17 @@ import java.io.FileFilter;
  * @version $Id$
  * @since v0.01
  */
-public class AudioFileFilter implements FileFilter
-{
+public class AudioFileFilter implements FileFilter {
     /**
      * allows Directories
      */
     private final boolean allowDirectories;
 
-    public AudioFileFilter( boolean allowDirectories)
-    {
-        this.allowDirectories=allowDirectories;
+    public AudioFileFilter(boolean allowDirectories) {
+        this.allowDirectories = allowDirectories;
     }
 
-    public AudioFileFilter()
-    {
+    public AudioFileFilter() {
         this(true);
     }
 
@@ -53,35 +50,21 @@ public class AudioFileFilter implements FileFilter
      * <p>Check whether the given file meet the required conditions (supported by the library OR directory).
      * The File must also be readable and not hidden.
      *
-     * @param    f    The file to test
+     * @param f The file to test
+     *
      * @return a boolean indicating if the file is accepted or not
      */
-    public boolean accept(File f)
-    {
-        if (f.isHidden() || !f.canRead())
-        {
+    public boolean accept(File f) {
+        if (f.isHidden() || !f.canRead()) {
             return false;
         }
 
-        if (f.isDirectory())
-        {
+        if (f.isDirectory()) {
             return allowDirectories;
         }
 
         String ext = Utils.getExtension(f);
 
-        try
-        {
-            if (SupportedFileFormat.valueOf(ext.toUpperCase()) != null)
-            {
-                return true;
-            }
-        }
-        catch(IllegalArgumentException iae)
-        {
-            //Not known enum value
-            return false;
-        }
-        return false;
-	}
+        return SupportedFileFormat.fromExtension(ext) != SupportedFileFormat.UNKNOWN;
+    }
 }

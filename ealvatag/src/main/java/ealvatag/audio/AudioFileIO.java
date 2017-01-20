@@ -19,6 +19,7 @@
 package ealvatag.audio;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import ealvatag.audio.aiff.AiffFileReader;
 import ealvatag.audio.aiff.AiffFileWriter;
 import ealvatag.audio.asf.AsfFileReader;
@@ -34,7 +35,10 @@ import ealvatag.audio.flac.FlacFileReader;
 import ealvatag.audio.flac.FlacFileWriter;
 import ealvatag.audio.generic.AudioFileModificationListener;
 import ealvatag.audio.generic.AudioFileReader;
+import ealvatag.audio.generic.AudioFileReaderFactory;
 import ealvatag.audio.generic.AudioFileWriter;
+import ealvatag.audio.generic.AudioFileWriterFactory;
+import ealvatag.audio.generic.CachingAudioFileReaderFactory;
 import ealvatag.audio.generic.ModificationHandler;
 import ealvatag.audio.generic.Utils;
 import ealvatag.audio.mp3.MP3FileReader;
@@ -56,8 +60,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The main entry point for the Tag Reading/Writing operations, this class will
@@ -102,13 +104,18 @@ public class AudioFileIO {
 
     private static Logger LOG = LoggerFactory.getLogger(AudioFileIO.class);
 
-    // !! Do not forget to also add new supported extensions to AudioFileFilter
-    // !!
-
-    /**
-     * This field contains the default instance for static use.
-     */
     private static AudioFileIO defaultInstance;
+
+    public static AudioFileIO getDefaultAudioFileIO() {
+        if (defaultInstance == null) {
+            synchronized (AudioFileIO.class) {
+                if (defaultInstance == null) {
+                    defaultInstance = new AudioFileIO();
+                }
+            }
+        }
+        return defaultInstance;
+    }
 
     /**
      * Delete the tag, if any, contained in the given file.
@@ -121,18 +128,6 @@ public class AudioFileIO {
      */
     public static void delete(AudioFile audioFile) throws CannotReadException, CannotWriteException {
         getDefaultAudioFileIO().deleteTag(audioFile);
-    }
-
-    /**
-     * This method returns the default instance for static use.<br>
-     *
-     * @return The default instance.
-     */
-    public static AudioFileIO getDefaultAudioFileIO() {
-        if (defaultInstance == null) {
-            defaultInstance = new AudioFileIO();
-        }
-        return defaultInstance;
     }
 
     /**
@@ -223,13 +218,125 @@ public class AudioFileIO {
     }
 
     private final ModificationHandler modificationHandler;
-    private Map<String, AudioFileReader> readers = new HashMap<>();
-    private Map<String, AudioFileWriter> writers = new HashMap<>();
+    private final ImmutableMap<String, AudioFileReaderFactory> readerFactories;
+    private final ImmutableMap<String, AudioFileWriterFactory> writerFactories;
 
 
     private AudioFileIO() {
         this.modificationHandler = new ModificationHandler();
-        prepareReadersAndWriters();
+
+        // !! Do not forget to also add new supported extensions to AudioFileFilter
+        // !!
+        // TODO: 1/19/17 This warning "do not forget" = ensure tests check this 
+
+        // Tag Readers
+        final AudioFileReaderFactory mp4ReaderFactory = new CachingAudioFileReaderFactory() {
+            @Override protected AudioFileReader doMake() {
+                return new Mp4FileReader();
+            }
+        };
+        final AudioFileReaderFactory aiffReaderFactory = new CachingAudioFileReaderFactory() {
+            @Override protected AudioFileReader doMake() {
+                return new AiffFileReader();
+            }
+        };
+        final AudioFileReaderFactory realReaderFactory = new AudioFileReaderFactory() {
+            @Override public AudioFileReader make() {
+                return new RealFileReader();
+            }
+        };
+
+        readerFactories = ImmutableMap.<String, AudioFileReaderFactory>builder()
+                .put(SupportedFileFormat.OGG.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new OggFileReader();
+                    }
+                })
+                .put(SupportedFileFormat.FLAC.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new FlacFileReader();
+                    }
+                })
+                .put(SupportedFileFormat.MP3.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new MP3FileReader();
+                    }
+                })
+                .put(SupportedFileFormat.MP4.getFileSuffix(), mp4ReaderFactory)
+                .put(SupportedFileFormat.M4A.getFileSuffix(), mp4ReaderFactory)
+                .put(SupportedFileFormat.M4P.getFileSuffix(), mp4ReaderFactory)
+                .put(SupportedFileFormat.M4B.getFileSuffix(), mp4ReaderFactory)
+                .put(SupportedFileFormat.WAV.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new WavFileReader();
+                    }
+                })
+                .put(SupportedFileFormat.WMA.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new AsfFileReader();
+                    }
+                })
+                .put(SupportedFileFormat.AIF.getFileSuffix(), aiffReaderFactory)
+                .put(SupportedFileFormat.AIFC.getFileSuffix(), aiffReaderFactory)
+                .put(SupportedFileFormat.AIFF.getFileSuffix(), aiffReaderFactory)
+                .put(SupportedFileFormat.DSF.getFileSuffix(), new CachingAudioFileReaderFactory() {
+                    @Override protected AudioFileReader doMake() {
+                        return new DsfFileReader();
+                    }
+                })
+                .put(SupportedFileFormat.RA.getFileSuffix(), realReaderFactory)
+                .put(SupportedFileFormat.RM.getFileSuffix(), realReaderFactory)
+                .build();
+
+        final AudioFileWriterFactory mp4WriterFactory = new AudioFileWriterFactory() {
+            @Override public AudioFileWriter make() {
+                return new Mp4FileWriter();
+            }
+        };
+        final AudioFileWriterFactory aiffWriterFactory = new AudioFileWriterFactory() {
+            @Override public AudioFileWriter make() {
+                return new AiffFileWriter();
+            }
+        };
+        writerFactories = ImmutableMap.<String, AudioFileWriterFactory>builder()
+                .put(SupportedFileFormat.OGG.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new OggFileWriter();
+                    }
+                })
+                .put(SupportedFileFormat.FLAC.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new FlacFileWriter();
+                    }
+                })
+                .put(SupportedFileFormat.MP3.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new MP3FileWriter();
+                    }
+                })
+                .put(SupportedFileFormat.MP4.getFileSuffix(), mp4WriterFactory)
+                .put(SupportedFileFormat.M4A.getFileSuffix(), mp4WriterFactory)
+                .put(SupportedFileFormat.M4P.getFileSuffix(), mp4WriterFactory)
+                .put(SupportedFileFormat.M4B.getFileSuffix(), mp4WriterFactory)
+                .put(SupportedFileFormat.WAV.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new WavFileWriter();
+                    }
+                })
+                .put(SupportedFileFormat.WMA.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new AsfFileWriter();
+                    }
+                })
+                .put(SupportedFileFormat.AIF.getFileSuffix(), aiffWriterFactory)
+                .put(SupportedFileFormat.AIFC.getFileSuffix(), aiffWriterFactory)
+                .put(SupportedFileFormat.AIFF.getFileSuffix(), aiffWriterFactory)
+                .put(SupportedFileFormat.DSF.getFileSuffix(), new AudioFileWriterFactory() {
+                    @Override public AudioFileWriter make() {
+                        return new DsfFileWriter();
+                    }
+                })
+                .build();
     }
 
     /**
@@ -253,56 +360,17 @@ public class AudioFileIO {
     public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException {
         String ext = Utils.getExtension(f.getFile());
 
-        AudioFileWriter afw = writers.get(ext);
-        if (afw == null) {
-            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
-        }
+        AudioFileWriter afw = getWriterForExtension(ext);
 
         afw.delete(f);
     }
 
-    /**
-     * Creates the readers and writers.
-     */
-    private void prepareReadersAndWriters() {
-
-        // Tag Readers
-        readers.put(SupportedFileFormat.OGG.getFileSuffix(), new OggFileReader());
-        readers.put(SupportedFileFormat.FLAC.getFileSuffix(), new FlacFileReader());
-        readers.put(SupportedFileFormat.MP3.getFileSuffix(), new MP3FileReader());
-        readers.put(SupportedFileFormat.MP4.getFileSuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4A.getFileSuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4P.getFileSuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.M4B.getFileSuffix(), new Mp4FileReader());
-        readers.put(SupportedFileFormat.WAV.getFileSuffix(), new WavFileReader());
-        readers.put(SupportedFileFormat.WMA.getFileSuffix(), new AsfFileReader());
-        readers.put(SupportedFileFormat.AIF.getFileSuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.AIFC.getFileSuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.AIFF.getFileSuffix(), new AiffFileReader());
-        readers.put(SupportedFileFormat.DSF.getFileSuffix(), new DsfFileReader());
-        final RealFileReader realReader = new RealFileReader();
-        readers.put(SupportedFileFormat.RA.getFileSuffix(), realReader);
-        readers.put(SupportedFileFormat.RM.getFileSuffix(), realReader);
-
-        // Tag Writers
-        writers.put(SupportedFileFormat.OGG.getFileSuffix(), new OggFileWriter());
-        writers.put(SupportedFileFormat.FLAC.getFileSuffix(), new FlacFileWriter());
-        writers.put(SupportedFileFormat.MP3.getFileSuffix(), new MP3FileWriter());
-        writers.put(SupportedFileFormat.MP4.getFileSuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4A.getFileSuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4P.getFileSuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.M4B.getFileSuffix(), new Mp4FileWriter());
-        writers.put(SupportedFileFormat.WAV.getFileSuffix(), new WavFileWriter());
-        writers.put(SupportedFileFormat.WMA.getFileSuffix(), new AsfFileWriter());
-        writers.put(SupportedFileFormat.AIF.getFileSuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.AIFC.getFileSuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.AIFF.getFileSuffix(), new AiffFileWriter());
-        writers.put(SupportedFileFormat.DSF.getFileSuffix(), new DsfFileWriter());
-
-        // Register modificationHandler
-        for (AudioFileWriter curr : writers.values()) {
-            curr.setAudioFileModificationListener(this.modificationHandler);
+    private AudioFileWriter getWriterForExtension(final String ext) throws CannotWriteException {
+        final AudioFileWriterFactory factory = writerFactories.get(ext);
+        if (factory == null) {
+            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
         }
+        return factory.make().setAudioFileModificationListener(modificationHandler);
     }
 
     /**
@@ -322,15 +390,7 @@ public class AudioFileIO {
     public AudioFile readFile(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         ensureFileExists(f);
-        String ext = Utils.getExtension(f);
-
-        AudioFileReader afr = readers.get(ext);
-        if (afr == null) {
-            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
-        }
-        AudioFile tempFile = afr.read(f);
-        tempFile.setExt(ext);
-        return tempFile;
+        return readAudioFile(f, Utils.getExtension(f));
     }
 
     /**
@@ -350,17 +410,15 @@ public class AudioFileIO {
     public AudioFile readFileMagic(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         ensureFileExists(f);
-        String ext = Utils.getMagicExtension(f);
+        return readAudioFile(f, Utils.getMagicExtension(f));
+    }
 
-        AudioFileReader afr = readers.get(ext);
-        if (afr == null) {
-            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
-        }
-
-        AudioFile tempFile = afr.read(f);
-        tempFile.setExt(ext);
-        return tempFile;
-
+    private AudioFile readAudioFile(final File f, final String ext) throws CannotReadException,
+                                                                           IOException,
+                                                                           TagException,
+                                                                           ReadOnlyFileException,
+                                                                           InvalidAudioFrameException {
+        return getReaderForExtension(ext).read(f).setExt(ext);
     }
 
     /**
@@ -381,17 +439,15 @@ public class AudioFileIO {
     public AudioFile readFileAs(File f, String ext)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         ensureFileExists(f);
-//      String ext = Utils.getExtension(f);
+        return readAudioFile(f, ext);
+    }
 
-        AudioFileReader afr = readers.get(ext);
-        if (afr == null) {
+    private AudioFileReader getReaderForExtension(final String ext) throws CannotReadException {
+        AudioFileReaderFactory factory = readerFactories.get(ext);
+        if (factory == null) {
             throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
         }
-
-        AudioFile tempFile = afr.read(f);
-        tempFile.setExt(ext);
-        return tempFile;
-
+        return factory.make();
     }
 
     private void ensureFileExists(File file) throws FileNotFoundException {
@@ -423,7 +479,7 @@ public class AudioFileIO {
 
     private void writeFile(final AudioFile audioFile) throws CannotWriteException {
         String ext = audioFile.getExt();
-        AudioFileWriter afw = writers.get(ext);
+        AudioFileWriter afw = getWriterForExtension(ext);
         if (afw == null) {
             throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT.getMsg(ext));
         }

@@ -65,11 +65,7 @@ public abstract class AudioFileWriter {
             "The filename, directory name, or volume label syntax is incorrect";
     private static final int FILE_NAME_TOO_LONG_SAFE_LIMIT = 50;
 
-    /**
-     * If not <code>null</code>, this listener is used to notify the listener
-     * about modification events.<br>
-     */
-    private AudioFileModificationListener modificationListener = null;
+    private AudioFileModificationListener modificationListener = NullAudioFileModificationListener.INSTANCE;
 
     /**
      * Delete the tag (if any) present in the given file
@@ -109,13 +105,9 @@ public abstract class AudioFileWriter {
             rafTemp.seek(0);
 
             try {
-                if (this.modificationListener != null) {
-                    this.modificationListener.fileWillBeModified(af, true);
-                }
+                modificationListener.fileWillBeModified(af, true);
                 deleteTag(af.getTag(), raf, rafTemp);
-                if (this.modificationListener != null) {
-                    this.modificationListener.fileModified(af, tempF);
-                }
+                modificationListener.fileModified(af, tempF);
             } catch (ModifyVetoException veto) {
                 throw new CannotWriteException(veto);
             }
@@ -177,10 +169,7 @@ public abstract class AudioFileWriter {
                 LOG.error("AudioFileWriter exception cleaning up delete:" + af.getFile().getPath() + " or" +
                                   tempF.getAbsolutePath() + ":" + ex);
             }
-            // Notify listener
-            if (this.modificationListener != null) {
-                this.modificationListener.fileOperationFinished(result);
-            }
+            modificationListener.fileOperationFinished(result);
         }
     }
 
@@ -225,8 +214,9 @@ public abstract class AudioFileWriter {
      *
      * @param listener The listener. <code>null</code> allowed to deregister.
      */
-    public void setAudioFileModificationListener(AudioFileModificationListener listener) {
-        this.modificationListener = listener;
+    public AudioFileWriter setAudioFileModificationListener(AudioFileModificationListener listener) {
+        this.modificationListener = NullAudioFileModificationListener.nullToNullIntance(listener);
+        return this;
     }
 
     /**
@@ -388,13 +378,9 @@ public abstract class AudioFileWriter {
             raf.seek(0);
             rafTemp.seek(0);
             try {
-                if (this.modificationListener != null) {
-                    this.modificationListener.fileWillBeModified(audioFile, false);
-                }
+                modificationListener.fileWillBeModified(audioFile, false);
                 writeTag(audioFile, audioFile.getTag(), raf, rafTemp);
-                if (this.modificationListener != null) {
-                    this.modificationListener.fileModified(audioFile, newFile);
-                }
+                modificationListener.fileModified(audioFile, newFile);
             } catch (ModifyVetoException veto) {
                 throw new CannotWriteException(veto);
             }
@@ -457,9 +443,7 @@ public abstract class AudioFileWriter {
             }
         }
 
-        if (this.modificationListener != null) {
-            this.modificationListener.fileOperationFinished(result);
-        }
+        modificationListener.fileOperationFinished(result);
     }
 
     /**

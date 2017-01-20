@@ -158,8 +158,9 @@ public class AudioFile {
      *
      * @param ext
      */
-    public void setExt(String ext) {
-        this.extension = ext;
+    public AudioFile setExt(String ext) {
+        extension = ext;
+        return this;
     }
 
     /**
