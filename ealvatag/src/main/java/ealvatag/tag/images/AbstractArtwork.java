@@ -31,13 +31,15 @@ import java.io.RandomAccessFile;
  * Created by Eric A. Snell on 1/20/17.
  */
 public abstract class AbstractArtwork implements Artwork {
-    /**
-     * Create Artwork from File
-     *
-     * @param file
-     *
-     * @throws java.io.IOException
-     */
+    private byte[] binaryData;
+    private String mimeType = "";
+    private String description = "";
+    private boolean isLinked = false;
+    private String imageUrl = "";
+    private int pictureType = -1;
+    private int width;
+    private int height;
+
     public Artwork setFromFile(File file) throws IOException {
         RandomAccessFile imageFile = new RandomAccessFile(file, "r");
         byte[] imagedata = new byte[(int)imageFile.length()];
@@ -51,11 +53,6 @@ public abstract class AbstractArtwork implements Artwork {
         return this;
     }
 
-    /**
-     * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
-     *
-     * @param coverArt
-     */
     public Artwork setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt) {
         setMimeType(coverArt.getMimeType());
         setDescription(coverArt.getDescription());
@@ -68,6 +65,83 @@ public abstract class AbstractArtwork implements Artwork {
         }
         setWidth(coverArt.getWidth());
         setHeight(coverArt.getHeight());
+        return this;
+    }
+
+    public byte[] getBinaryData() {
+        return binaryData;
+    }
+
+    public Artwork setBinaryData(byte[] binaryData) {
+        this.binaryData = binaryData;
+        return this;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public Artwork setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public Artwork setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public boolean isLinked() {
+        return isLinked;
+    }
+
+    public Artwork setLinked(boolean linked) {
+        isLinked = linked;
+        return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Artwork setImageUrl(String imageUrl) {
+        return setLinkedFromURL(imageUrl);
+    }
+
+    public int getPictureType() {
+        return pictureType;
+    }
+
+    public Artwork setPictureType(int pictureType) {
+        this.pictureType = pictureType;
+        return this;
+    }
+
+    public Artwork setWidth(int width) {
+        this.width = width;
+        return this;
+    }
+
+    public Artwork setHeight(int height) {
+        this.height = height;
+        return this;
+    }
+
+    private Artwork setLinkedFromURL(String url) {
+        isLinked = true;
+        imageUrl = url;
         return this;
     }
 }
