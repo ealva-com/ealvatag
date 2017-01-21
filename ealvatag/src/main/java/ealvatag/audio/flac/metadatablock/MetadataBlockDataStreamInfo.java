@@ -18,7 +18,7 @@
  */
 package ealvatag.audio.flac.metadatablock;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

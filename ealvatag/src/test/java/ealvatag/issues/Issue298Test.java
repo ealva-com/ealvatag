@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -220,7 +221,7 @@ public class Issue298Test extends AbstractTestCase
 
 
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
             }
@@ -269,7 +270,7 @@ public class Issue298Test extends AbstractTestCase
             tag.setField(FieldKey.PERFORMER_NAME,"PerformerName");
             tag.setField(FieldKey.PERFORMER_NAME_SORT,"PerformerNameSort");
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM1).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body =(FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
@@ -277,7 +278,7 @@ public class Issue298Test extends AbstractTestCase
                 assertEquals(Languages.MEDIA_MONKEY_ID,body.getLanguage());
             }
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM2);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM2).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body =(FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
@@ -285,7 +286,7 @@ public class Issue298Test extends AbstractTestCase
                 assertEquals(Languages.MEDIA_MONKEY_ID,body.getLanguage());
             }
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM3);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM3).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body =(FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
@@ -293,7 +294,7 @@ public class Issue298Test extends AbstractTestCase
                 assertEquals(Languages.MEDIA_MONKEY_ID,body.getLanguage());
             }
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM4);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM4).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body =(FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
@@ -301,7 +302,7 @@ public class Issue298Test extends AbstractTestCase
                 assertEquals(Languages.MEDIA_MONKEY_ID,body.getLanguage());
             }
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM5);
+                TagField tagField = af.getTag().getFirstField(FieldKey.CUSTOM5).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body =(FrameBodyCOMM)((ID3v24Frame)tagField).getBody();

@@ -1,5 +1,6 @@
 package ealvatag.tag.asf;
 
+import ealvatag.audio.Utils;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.MetadataDescriptor;
 import ealvatag.logging.ErrorMessage;
@@ -120,7 +121,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
         baos.write(pictureType);
 
         // ImageDataSize
-        baos.write(ealvatag.audio.generic.Utils
+        baos.write(Utils
                            .getSizeLEInt32(data.length), 0, 4);
 
         // mimetype
@@ -196,7 +197,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
         this.pictureType = this.getRawContent()[0];
 
         // ImageDataSize
-        this.imageDataSize = ealvatag.audio.generic.Utils.getIntLE(this
+        this.imageDataSize = Utils.getIntLE(this
                                                                            .getRawContent(), 1, 2);
 
         // Set Count to after picture type,datasize and two byte nulls

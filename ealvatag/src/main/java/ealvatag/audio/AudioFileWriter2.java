@@ -1,11 +1,28 @@
-package ealvatag.audio.generic;
+/*
+ * Copyright (c) 2017 Eric A. Snell
+ *
+ * This file is part of eAlvaTag.
+ *
+ * eAlvaTag is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * eAlvaTag is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with eAlvaTag.  If not,
+ * see <http://www.gnu.org/licenses/>.
+ */
 
-import ealvatag.audio.AudioFile;
+package ealvatag.audio;
+
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +97,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         checkCanWriteAndSize(audioFile, file);
         try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel())
         {
-            writeTag(audioFile.getTag(), channel, file.getAbsolutePath());
+            writeTag(audioFile.getTagFieldContainer(), channel, file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {
@@ -125,9 +142,9 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      * @param fileName
      * @throws CannotWriteException
      */
-    protected abstract void writeTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException;
+    protected abstract void writeTag(TagFieldContainer tag, FileChannel channel, final String fileName) throws CannotWriteException;
 
-    protected   void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
+    protected   void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotReadException, CannotWriteException, IOException
     {
         throw new UnsupportedOperationException("Old method not used in version 2");
     }

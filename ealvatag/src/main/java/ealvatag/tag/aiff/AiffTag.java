@@ -1,5 +1,6 @@
 package ealvatag.tag.aiff;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.iff.ChunkHeader;
@@ -16,6 +17,9 @@ import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.Id3SupportingTag;
 import ealvatag.tag.images.Artwork;
 
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,31 +29,9 @@ import java.util.List;
  * Wraps ID3Tag for most of its metadata.
  */
 public class AiffTag implements TagFieldContainer, Id3SupportingTag {
-    private List<ChunkSummary> chunkSummaryList = new ArrayList<ChunkSummary>();
-
-    public void addChunkSummary(ChunkSummary cs) {
-        chunkSummaryList.add(cs);
-    }
-
-    public List<ChunkSummary> getChunkSummaryList() {
-        return chunkSummaryList;
-    }
-
+    private List<ChunkSummary> chunkSummaryList = new ArrayList<>();
     private boolean isIncorrectlyAlignedTag = false;
-
     private boolean isExistingId3Tag = false;
-
-    /**
-     * @return true if the file that this tag was written from already contains an ID3 chunk
-     */
-    public boolean isExistingId3Tag() {
-        return isExistingId3Tag;
-    }
-
-    public void setExistingId3Tag(boolean isExistingId3Tag) {
-        this.isExistingId3Tag = isExistingId3Tag;
-    }
-
     private AbstractID3v2Tag id3Tag;
 
     public AiffTag() {
@@ -57,6 +39,14 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
 
     public AiffTag(AbstractID3v2Tag t) {
         id3Tag = t;
+    }
+
+    public void addChunkSummary(ChunkSummary cs) {
+        chunkSummaryList.add(cs);
+    }
+
+    public List<ChunkSummary> getChunkSummaryList() {
+        return chunkSummaryList;
     }
 
     /**
@@ -73,24 +63,8 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
         id3Tag = t;
     }
 
-    @Override
-    public void addField(TagField field) throws FieldDataInvalidException {
-        id3Tag.addField(field);
-    }
-
-    @Override
-    public ImmutableList<TagField> getFields(String id) {
-        return ImmutableList.copyOf(id3Tag.getFields(id));
-    }
-
-    @Override
-    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return id3Tag.getAll(genericKey);
-    }
-
-    @Override
-    public boolean hasCommonFields() {
-        return id3Tag.hasCommonFields();
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return id3Tag.getSupportedFields();
     }
 
     /**
@@ -104,6 +78,25 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     @Override
     public boolean isEmpty() {
         return (id3Tag == null || id3Tag.isEmpty());
+    }
+
+    @Override
+    public boolean hasField(FieldKey genericKey) {
+        return id3Tag.hasField(genericKey);
+    }
+
+    @Override
+    public boolean hasField(String id) {
+        return id3Tag.hasField(id);
+    }
+
+    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey).size();
+    }
+
+    @Override
+    public int getFieldCount() {
+        return id3Tag.getFieldCount();
     }
 
     @Override
@@ -125,69 +118,67 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public void setField(TagField field) throws FieldDataInvalidException {
-        id3Tag.setField(field);
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+        return getFieldAt(genericKey, 0);
     }
 
     @Override
-    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
-                                                                             UnsupportedFieldException,
-                                                                             FieldDataInvalidException {
-        return id3Tag.createField(genericKey, value);
-    }
-
-    @Override
-    public String getFirst(String id) {
+    public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFirst(id);
     }
 
     @Override
-    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
-        return id3Tag.getValue(genericKey, index);
+    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+        return id3Tag.getFieldAt(genericKey, index);
     }
 
     @Override
-    public String getFirst(FieldKey id) throws KeyNotFoundException {
-        return getValue(id, 0);
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return id3Tag.getAll(genericKey);
     }
 
     @Override
-    public TagField getFirstField(String id) {
-        return id3Tag.getFirstField(id);
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+        id3Tag.deleteField(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
+        return this;
     }
 
     @Override
-    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        } else {
-            return id3Tag.getFirstField(genericKey);
-        }
-    }
-
-    /**
-     * Delete any instance of tag fields with this key
-     *
-     * @param genericKey
-     */
-    @Override
-    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
-        id3Tag.deleteField(genericKey);
+    public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
+        id3Tag.deleteField(id);  // this call will check parameters
+        return this;
     }
 
     @Override
-    public void deleteField(String id) throws KeyNotFoundException {
-        id3Tag.deleteField(id);
+    public Tag setArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+        id3Tag.setArtwork(checkArgNotNull(artwork, CANNOT_BE_NULL, "artwork"));
+        return this;
     }
 
     @Override
-    public Iterator<TagField> getFields() {
-        return id3Tag.getFields();
+    public Tag addArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+        id3Tag.addArtwork(checkArgNotNull(artwork, CANNOT_BE_NULL, "artwork"));
+        return this;
     }
 
     @Override
-    public int getFieldCount() {
-        return id3Tag.getFieldCount();
+    public Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException {
+        return id3Tag.getFirstArtwork();
+    }
+
+    @Override
+    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
+        return id3Tag.getArtworkList();
+    }
+
+    @Override
+    public void deleteArtwork() throws KeyNotFoundException {
+        id3Tag.deleteArtwork();
+    }
+
+    @Override
+    public boolean hasCommonFields() {
+        return id3Tag.hasCommonFields();
     }
 
     @Override
@@ -200,27 +191,16 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
         return id3Tag.setEncoding(enc);
     }
 
-    /**
-     * Create artwork field. Not currently supported.
-     */
     @Override
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
-        return id3Tag.createField(artwork);
+    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                             UnsupportedFieldException,
+                                                                             FieldDataInvalidException {
+        return id3Tag.createField(genericKey, value);
     }
 
     @Override
-    public void setField(Artwork artwork) throws FieldDataInvalidException {
-        id3Tag.setField(artwork);
-    }
-
-    @Override
-    public void addField(Artwork artwork) throws FieldDataInvalidException {
-        id3Tag.addField(artwork);
-    }
-
-    @Override
-    public List<Artwork> getArtworkList() {
-        return id3Tag.getArtworkList();
+    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+        return id3Tag.createArtwork(artwork);
     }
 
     @Override
@@ -229,66 +209,51 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public Artwork getFirstArtwork() {
-        return id3Tag.getFirstArtwork();
-    }
-
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    @Override
-    public void deleteArtworkField() throws KeyNotFoundException {
-        id3Tag.deleteArtworkField();
+    public Iterator<TagField> getFields() {
+        return id3Tag.getFields();
     }
 
     @Override
-    public boolean hasField(FieldKey genericKey) {
-        return id3Tag.hasField(genericKey);
-    }
-
-
-    @Override
-    public boolean hasField(String id) {
-        return id3Tag.hasField(id);
+    public ImmutableList<TagField> getFields(String id) {
+        return ImmutableList.copyOf(id3Tag.getFields(id));
     }
 
     @Override
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return id3Tag.getSupportedFields();
+    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+        return id3Tag.getFirstField(id);
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
+    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException {
+        return id3Tag.getFirstField(genericKey);
+    }
 
-        for (ChunkSummary cs : chunkSummaryList) {
-            sb.append(cs.toString() + "\n");
-        }
-        if (id3Tag != null) {
-            sb.append("Aiff ID3 Tag:\n");
-            if (isExistingId3Tag()) {
-                if (isIncorrectlyAlignedTag) {
-                    sb.append("\tincorrectly starts as odd byte\n");
-                }
-                sb.append("\tstartLocation:" + Hex.asDecAndHex(getStartLocationInFileOfId3Chunk()) + "\n");
-                sb.append("\tendLocation:" + Hex.asDecAndHex(getEndLocationInFileOfId3Chunk()) + "\n");
-            }
-            sb.append(id3Tag.toString() + "\n");
-            return sb.toString();
-        } else {
-            return "tag:empty";
+    @Override
+    public TagField createCompilationField(boolean value) throws UnsupportedFieldException {
+        try {
+            return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+        } catch (FieldDataInvalidException e) {
+            throw new RuntimeException(e);  // should never happen. If so, library misconfiguration
         }
     }
 
-    /**
-     * @return size of the vanilla ID3Tag excluding surrounding chunk
-     */
+    @Override
+    public void setField(TagField field) throws FieldDataInvalidException {
+        id3Tag.setField(field);
+    }
+
+    @Override
+    public void addField(TagField field) throws FieldDataInvalidException {
+        id3Tag.addField(field);
+    }
+
+    public long getSizeOfID3TagIncludingChunkHeader() {
+        if (!isExistingId3Tag()) {
+            return 0;
+        }
+        return getSizeOfID3TagOnly() + ChunkHeader.CHUNK_HEADER_SIZE;
+    }
+
     public long getSizeOfID3TagOnly() {
         if (!isExistingId3Tag()) {
             return 0;
@@ -297,20 +262,44 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     /**
-     * @return size of the ID3 Chunk including header
+     * @return true if the file that this tag was written from already contains an ID3 chunk
      */
-    public long getSizeOfID3TagIncludingChunkHeader() {
-        if (!isExistingId3Tag()) {
-            return 0;
-        }
-        return getSizeOfID3TagOnly() + ChunkHeader.CHUNK_HEADER_SIZE;
+    public boolean isExistingId3Tag() {
+        return isExistingId3Tag;
     }
 
-    /**
-     * Offset into file of start ID3Chunk including header
-     *
-     * @return
-     */
+    @SuppressWarnings("SameParameterValue")
+    public void setExistingId3Tag(boolean isExistingId3Tag) {
+        this.isExistingId3Tag = isExistingId3Tag;
+    }
+
+    public boolean equals(Object obj) {
+        return id3Tag.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (ChunkSummary cs : chunkSummaryList) {
+            sb.append(cs.toString()).append("\n");
+        }
+        if (id3Tag != null) {
+            sb.append("Aiff ID3 Tag:\n");
+            if (isExistingId3Tag()) {
+                if (isIncorrectlyAlignedTag) {
+                    sb.append("\tincorrectly starts as odd byte\n");
+                }
+                sb.append("\tstartLocation:").append(Hex.asDecAndHex(getStartLocationInFileOfId3Chunk())).append("\n");
+                sb.append("\tendLocation:").append(Hex.asDecAndHex(getEndLocationInFileOfId3Chunk())).append("\n");
+            }
+            sb.append(id3Tag.toString()).append("\n");
+            return sb.toString();
+        } else {
+            return "tag:empty";
+        }
+    }
+
     public long getStartLocationInFileOfId3Chunk() {
         if (!isExistingId3Tag()) {
             return 0;
@@ -325,14 +314,11 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
         return id3Tag.getEndLocationInFile();
     }
 
-    public boolean equals(Object obj) {
-        return id3Tag.equals(obj);
-    }
-
     public boolean isIncorrectlyAlignedTag() {
         return isIncorrectlyAlignedTag;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag) {
         this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
     }

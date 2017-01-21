@@ -27,10 +27,13 @@ import com.google.common.collect.ImmutableList;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
 import ealvatag.tag.id3.framebody.FrameBodyTALB;
 import ealvatag.tag.id3.framebody.FrameBodyTCON;
@@ -40,6 +43,9 @@ import ealvatag.tag.id3.framebody.FrameBodyTPE1;
 import ealvatag.tag.id3.framebody.FrameBodyTRCK;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -351,7 +357,7 @@ public class ID3v11Tag extends ID3v1Tag {
         }
     }
 
-    public TagField getFirstField(String id) {
+    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> results;
 
         if (FieldKey.TRACK.name().equals(id)) {
@@ -371,17 +377,14 @@ public class ID3v11Tag extends ID3v1Tag {
         return track <= 0 && super.isEmpty();
     }
 
-    /**
-     * Delete any instance of tag fields with this key
-     *
-     * @param genericKey
-     */
-    public void deleteField(FieldKey genericKey) {
+    public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.TRACK) {
             track = 0;
         } else {
             super.deleteField(genericKey);
         }
+        return this;
     }
 
     /**

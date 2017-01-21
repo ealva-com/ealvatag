@@ -25,6 +25,7 @@ import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -68,7 +69,7 @@ public class AudioFile {
     /**
      * The tag
      */
-    protected Tag tag;
+    protected TagFieldContainer tag;
 
     /**
      * The tag
@@ -83,12 +84,11 @@ public class AudioFile {
      * <p>These constructors are used by the different readers, users should not use them, but use the
      * <code>AudioFileIO.read(File)</code> method instead !.
      * <p>Create the AudioFile representing file f, the encoding audio headers and containing the tag
-     *
-     * @param f           The file of the audio file
+     *  @param f           The file of the audio file
      * @param audioHeader the encoding audioHeaders over this file
      * @param tag         the tag contained in this file or null if no tag exists
      */
-    public AudioFile(File f, AudioHeader audioHeader, Tag tag) {
+    public AudioFile(File f, AudioHeader audioHeader, TagFieldContainer tag) {
         this.file = f;
         this.audioHeader = audioHeader;
         this.tag = tag;
@@ -99,12 +99,11 @@ public class AudioFile {
      * <p>These constructors are used by the different readers, users should not use them, but use the
      * <code>AudioFileIO.read(File)</code> method instead !.
      * <p>Create the AudioFile representing file denoted by pathnames, the encoding audio Headers and containing the tag
-     *
-     * @param s           The pathname of the audio file
+     *  @param s           The pathname of the audio file
      * @param audioHeader the encoding audioHeaders over this file
      * @param tag         the tag contained in this file
      */
-    public AudioFile(String s, AudioHeader audioHeader, Tag tag) {
+    public AudioFile(String s, AudioHeader audioHeader, TagFieldContainer tag) {
         this.file = new File(s);
         this.audioHeader = audioHeader;
         this.tag = tag;
@@ -175,10 +174,12 @@ public class AudioFile {
     /**
      * Assign a tag to this audio file
      *
+     * Are we really exposing this to the library user??
+     *
      * @param tag Tag to be assigned
      */
     public void setTag(Tag tag) {
-        this.tag = tag;
+        this.tag = (TagFieldContainer)tag;
     }
 
     /**
@@ -199,6 +200,10 @@ public class AudioFile {
      * @return Returns the tag contained in this AudioFile, or null if no tag exists.
      */
     public Tag getTag() {
+        return tag;
+    }
+
+    TagFieldContainer getTagFieldContainer() {
         return tag;
     }
 

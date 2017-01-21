@@ -18,7 +18,7 @@
  */
 package ealvatag.audio.wav.chunk;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.wav.WavChunkType;

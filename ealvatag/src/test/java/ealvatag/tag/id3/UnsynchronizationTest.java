@@ -178,7 +178,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             assertFalse(v23TagUnsynced.isUnsynchronization());
             Tag unsyncedTag = af.getTag();
             Artwork artworkUnsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
-            unsyncedTag.setField(artworkUnsynced);
+            unsyncedTag.setArtwork(artworkUnsynced);
             af.commit();
 
             //Save Notsynced
@@ -189,7 +189,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             assertFalse(v23TagNotsynced.isUnsynchronization());
             Tag notSyncedTag = af.getTag();
             Artwork artworkNotsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
-            notSyncedTag.setField(artworkNotsynced);
+            notSyncedTag.setArtwork(artworkNotsynced);
             af.commit();
 
             //Now read back ok

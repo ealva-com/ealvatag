@@ -232,15 +232,15 @@ public class Issue173Test extends AbstractTestCase
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
             assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("17\u000077",body.getText());
             tag.setField(FieldKey.GENRE, "1");
             tag.addField(FieldKey.GENRE,"2");
             assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
             assertEquals("Classic Rock",results.get(0));
             assertEquals("Country", results.get(1));
@@ -258,20 +258,20 @@ public class Issue173Test extends AbstractTestCase
             tag.setField(FieldKey.GENRE, "Remix");
             tag.addField(FieldKey.GENRE, "CR");
             assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("RX\u0000CR",body.getText());
             mp3File.commit();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v24Tag) mp3File.getTag();
             assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("RX\u0000CR",body.getText());
             tag.addField(FieldKey.GENRE,"67");
-            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
             assertEquals("RX\u0000CR\u000067",body.getText());
         }
         catch (Exception ex)
@@ -336,16 +336,16 @@ public class Issue173Test extends AbstractTestCase
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
             assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
 
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             assertEquals("(17)(77)",body.getText());
             tag.setField(FieldKey.GENRE, "1");
             tag.addField(FieldKey.GENRE,"2");
             assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
             assertEquals("Classic Rock",results.get(0));
             assertEquals("Country", results.get(1));
@@ -435,16 +435,16 @@ public class Issue173Test extends AbstractTestCase
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
             assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
 
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(17)(77)",body.getText());
             tag.setField(FieldKey.GENRE, "1");
             tag.addField(FieldKey.GENRE,"2");
             assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
             assertEquals("Classic Rock",results.get(0));
             assertEquals("Country", results.get(1));
@@ -463,8 +463,8 @@ public class Issue173Test extends AbstractTestCase
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(RX)(CR)",body.getText());
             assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
+            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
+            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
             mp3File.commit();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v23Tag) mp3File.getTag();

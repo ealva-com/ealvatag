@@ -35,7 +35,9 @@ import org.slf4j.LoggerFactory;
 
 import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
 import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.File;
@@ -227,6 +229,8 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         return ID3v22Frames.getInstanceOf();
     }
 
+
+
     /**
      * Maps the generic key to the id3 key and return the list of values for this field as strings
      *
@@ -255,7 +259,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     }
 
     @Override
-    public String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
@@ -266,8 +270,12 @@ public class ID3v22Tag extends AbstractID3v2Tag {
             }
             return "";
         } else {
-            return super.getValue(genericKey, index);
+            return super.getFieldAt(genericKey, index);
         }
+    }
+
+    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey).size();
     }
 
     public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,
@@ -726,14 +734,16 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      *
      * @param id
      */
-    public void deleteField(String id) {
+    public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY,"id");
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
+        return this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<Artwork> getArtworkList() {
+    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
         List<TagField> coverartList = getFields(FieldKey.COVER_ART);
         List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
 
@@ -756,7 +766,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     /**
      * {@inheritDoc}
      */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
         if (!artwork.isLinked()) {

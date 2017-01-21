@@ -62,8 +62,8 @@ public class Issue327Test extends AbstractTestCase
         //What does ealvatag read the values back as
         f = (MP3File)AudioFileIO.read(testFile);
         assertEquals("Ϟ",f.getTag().getFirst(FieldKey.ALBUM_ARTIST));
-        assertEquals("Ϟ",f.getTag().getValue(FieldKey.ALBUM_ARTIST,0));
-        assertEquals("Ϟ",f.getTag().getValue(FieldKey.ALBUM_ARTIST,1));
+        assertEquals("Ϟ",f.getTag().getFieldAt(FieldKey.ALBUM_ARTIST, 0));
+        assertEquals("Ϟ",f.getTag().getFieldAt(FieldKey.ALBUM_ARTIST, 1));
 
     }
 }

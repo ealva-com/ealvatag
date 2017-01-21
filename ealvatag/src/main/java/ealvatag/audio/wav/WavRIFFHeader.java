@@ -19,7 +19,7 @@
 package ealvatag.audio.wav;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -19,9 +19,9 @@
 package ealvatag.audio.mp4;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.tag.TagFieldContainer;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -41,7 +41,7 @@ public class Mp4FileReader extends AudioFileReader
         return ir.read(raf);
     }
 
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
         return tr.read(raf);
     }

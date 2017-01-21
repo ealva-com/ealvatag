@@ -25,8 +25,9 @@ import ealvatag.audio.asf.data.MetadataContainer;
 import ealvatag.audio.asf.io.*;
 import ealvatag.audio.asf.util.TagConverter;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.AudioFileWriter;
+import ealvatag.audio.AudioFileWriter;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.asf.AsfTag;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ public class AsfFileWriter extends AudioFileWriter
      * {@inheritDoc}
      */
     @Override
-    protected void writeTag(AudioFile audioFile, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
+    protected void writeTag(AudioFile audioFile, final TagFieldContainer tag, final RandomAccessFile raf, final RandomAccessFile rafTemp) throws CannotWriteException, IOException
     {
         /*
          * Since this implementation should not change the structure of the ASF

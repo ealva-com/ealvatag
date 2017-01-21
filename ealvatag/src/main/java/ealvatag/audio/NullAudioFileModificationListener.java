@@ -15,9 +15,8 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.audio.generic;
+package ealvatag.audio;
 
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.exceptions.ModifyVetoException;
 
 import java.io.File;

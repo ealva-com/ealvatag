@@ -123,6 +123,7 @@ public enum ErrorMessage
     FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}");
 
     public static final String CANNOT_BE_NULL = "%s cannot be null";
+    public static final String CANNOT_BE_NULL_OR_EMPTY = "%s cannot be null or the empty string";
     public static final String AT_LEAST_ONE_REQUIRED = "At least one %s required";
 
     String msg;

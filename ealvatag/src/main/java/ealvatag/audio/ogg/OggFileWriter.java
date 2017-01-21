@@ -21,8 +21,9 @@ package ealvatag.audio.ogg;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.AudioFileWriter;
+import ealvatag.audio.AudioFileWriter;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class OggFileWriter extends AudioFileWriter {
 
     private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
 
-    protected void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp)
+    protected void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
             throws CannotReadException, CannotWriteException, IOException {
         vtw.write(tag, raf, rafTemp);
     }

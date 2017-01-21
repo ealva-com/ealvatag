@@ -2,7 +2,7 @@ package ealvatag.audio.aiff.chunk;
 
 import ealvatag.audio.aiff.AiffAudioHeader;
 import ealvatag.audio.aiff.AiffUtil;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 

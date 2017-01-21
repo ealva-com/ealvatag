@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
@@ -55,7 +56,7 @@ public class Issue345Test extends AbstractTestCase
             assertEquals("arrangervalue",af.getTag().getFirst(FieldKey.ARRANGER));
             assertEquals("acousticfingerprint",af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.RATING);
+                TagField tagField = af.getTag().getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyPOPM);
             }
@@ -69,7 +70,7 @@ public class Issue345Test extends AbstractTestCase
             assertEquals("producervalue",af.getTag().getFirst(FieldKey.PRODUCER));
             assertEquals("arrangervalue",af.getTag().getFirst(FieldKey.ARRANGER));
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.RATING);
+                TagField tagField = af.getTag().getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyPOPM);
             }

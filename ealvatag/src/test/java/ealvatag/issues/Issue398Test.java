@@ -39,14 +39,14 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("", tag.getFirst(FieldKey.TRACK));
             assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertEquals(0,tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
             tag.setField(FieldKey.TRACK,"1");
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals(1,tag.getAll(FieldKey.TRACK).size());
@@ -79,11 +79,11 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("",tag.getFirst(FieldKey.TRACK));
             assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
@@ -113,11 +113,11 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("",tag.getFirst(FieldKey.TRACK));
             assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
@@ -169,8 +169,8 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("", tag.getFirst(FieldKey.TRACK));
             assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertEquals(0, tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
             tag.setField(FieldKey.TRACK,"1");
@@ -179,7 +179,7 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("1", tag.getFirst(FieldKey.TRACK));
             assertEquals("", tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertEquals(1,tag.getAll(FieldKey.TRACK).size());
             assertEquals(0,tag.getAll(FieldKey.TRACK_TOTAL).size());
 
@@ -253,11 +253,11 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("",tag.getFirst(FieldKey.TRACK));
             assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
 
@@ -297,11 +297,11 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("",tag.getFirst(FieldKey.TRACK));
             assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }
@@ -331,11 +331,11 @@ public class Issue398Test extends AbstractTestCase
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
             assertEquals("",tag.getFirst(FieldKey.TRACK));
             assertEquals("",tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertFalse(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             tag.setField(FieldKey.TRACK,"1");
-            assertNotNull(tag.getFirstField(FieldKey.TRACK));
-            assertNull(tag.getFirstField(FieldKey.TRACK_TOTAL));
+            assertTrue(tag.getFirstField(FieldKey.TRACK).isPresent());
+            assertFalse(tag.getFirstField(FieldKey.TRACK_TOTAL).isPresent());
             assertTrue(tag.hasField(FieldKey.TRACK));
             assertFalse(tag.hasField(FieldKey.TRACK_TOTAL));
         }

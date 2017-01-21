@@ -1,6 +1,7 @@
 package ealvatag.audio.flac.metadatablock;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.AbstractTag;
+import ealvatag.audio.Utils;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.TagField;
@@ -270,7 +271,7 @@ public class MetadataBlockDataPicture
     /**
      * Returns the Id of the represented tag field.<br>
      * This value should uniquely identify a kind of tag data, like title.
-     * {@link ealvatag.audio.generic.AbstractTag} will use the &quot;id&quot; to summarize multiple
+     * {@link AbstractTag} will use the &quot;id&quot; to summarize multiple
      * fields.
      *
      * @return Unique identifier for the fields type. (title, artist...)

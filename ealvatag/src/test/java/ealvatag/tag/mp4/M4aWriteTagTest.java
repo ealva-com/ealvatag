@@ -1626,13 +1626,13 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Add second image
             imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
             imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Save changes and reread from disk
             AudioFileIO.write(f);
@@ -1747,7 +1747,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Save changes and reread from disk
             AudioFileIO.write(f);
@@ -2255,7 +2255,7 @@ public class M4aWriteTagTest extends TestCase
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)
@@ -2289,7 +2289,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)
@@ -2323,7 +2323,7 @@ public class M4aWriteTagTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
             f.commit();
         }
         catch (Exception e)

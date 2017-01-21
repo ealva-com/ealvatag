@@ -365,7 +365,7 @@ public class M4aWriteDatatoMultTrackAudioTest extends TestCase
             imagedata[2] = (byte) 0x4E;
             imagedata[3] = (byte) 0x47;
 
-            tag.addField(ArtworkFactory.getNew().setBinaryData(imagedata));
+            tag.addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
 
             //Save changes and reread from disk
             f.commit();

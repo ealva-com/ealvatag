@@ -39,9 +39,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.BARCODE,"BARCODE2");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.BARCODE,0));
+            assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.BARCODE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
-            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.BARCODE,1));
+            assertEquals("BARCODE2",af.getTag().getFieldAt(FieldKey.BARCODE, 1));
 
             //No of Barcode Values
             assertEquals(2,af.getTag().getAll(FieldKey.BARCODE).size());
@@ -81,9 +81,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.CATALOG_NO,"CATALOGNO");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.BARCODE,0));
+            assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.BARCODE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
-            assertEquals("CATALOGNO",af.getTag().getValue(FieldKey.CATALOG_NO,0));
+            assertEquals("CATALOGNO",af.getTag().getFieldAt(FieldKey.CATALOG_NO, 0));
 
             //No of Barcode Values
             assertEquals(1,af.getTag().getAll(FieldKey.BARCODE).size());
@@ -129,9 +129,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://www.wrathrecords.co.uk/bfarm.htm");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("http://www.wrathrecords.co.uk/afarm.htm",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,0));
+            assertEquals("http://www.wrathrecords.co.uk/afarm.htm",af.getTag().getFieldAt(FieldKey.URL_DISCOGS_ARTIST_SITE, 0));
             assertEquals("http://www.wrathrecords.co.uk/afarm.htm", af.getTag().getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals("http://www.wrathrecords.co.uk/bfarm.htm",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,1));
+            assertEquals("http://www.wrathrecords.co.uk/bfarm.htm",af.getTag().getFieldAt(FieldKey.URL_DISCOGS_ARTIST_SITE, 1));
 
             //No of Url Values
             assertEquals(2,af.getTag().getAll(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
@@ -173,9 +173,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.ARTISTS,"ARTISTS");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.BARCODE,0));
+            assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.BARCODE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
-            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.BARCODE,1));
+            assertEquals("BARCODE2",af.getTag().getFieldAt(FieldKey.BARCODE, 1));
 
             //No of Barcode Values
             assertEquals(2,af.getTag().getAll(FieldKey.BARCODE).size());
@@ -217,9 +217,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"ARTISTS");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,0));
+            assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.URL_DISCOGS_ARTIST_SITE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.URL_DISCOGS_ARTIST_SITE,1));
+            assertEquals("BARCODE2",af.getTag().getFieldAt(FieldKey.URL_DISCOGS_ARTIST_SITE, 1));
 
             //No of Barcode Values
             assertEquals(2,af.getTag().getAll(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
@@ -262,9 +262,9 @@ public class Issue412Test extends AbstractTestCase
             af.getTag().addField(FieldKey.COMPOSER,"composer4");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("composer1",af.getTag().getValue(FieldKey.COMPOSER,0));
+            assertEquals("composer1",af.getTag().getFieldAt(FieldKey.COMPOSER, 0));
             assertEquals("composer1", af.getTag().getFirst(FieldKey.COMPOSER));
-            assertEquals("composer2",af.getTag().getValue(FieldKey.COMPOSER,1));
+            assertEquals("composer2",af.getTag().getFieldAt(FieldKey.COMPOSER, 1));
 
             //No of Composer Values
             assertEquals(4,af.getTag().getAll(FieldKey.COMPOSER).size());

@@ -1,6 +1,6 @@
 package ealvatag.audio.aiff;
 
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.GenericAudioHeader;
 import org.junit.Assert;
 import org.junit.Test;
 

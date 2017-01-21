@@ -19,9 +19,9 @@
 package ealvatag.audio.wav;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader2;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AudioFileReader2;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.wav.WavTag;
 
@@ -44,7 +44,7 @@ public class WavFileReader extends AudioFileReader2
     }
 
     @Override
-    protected Tag getTag(FileChannel channel, final String fileName) throws IOException, CannotReadException
+    protected TagFieldContainer getTag(FileChannel channel, final String fileName) throws IOException, CannotReadException
     {
         WavTag tag =  new WavTagReader(fileName).read(channel);
         switch (TagOptionSingleton.getInstance().getWavOptions())

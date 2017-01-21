@@ -15,31 +15,15 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.tag;
+package ealvatag.audio;
 
 /**
- * A general interface for extending {@link Tag} as a container of {@link TagField}
- * <p>
- * Created to start getting "used internally" methods out of the public interface
- * <p>
- * Created by Eric A. Snell on 1/20/17.
+ * Factory interface for {@link AudioFileReader} instances. These are needed to delay construction of readers until they are needed. An
+ * implementation might always create a new instance or could cache instances - that is implementation specific.
+ *
+ * Created by Eric A. Snell on 1/19/17.
  */
-public interface TagFieldContainer extends Tag {
+public interface AudioFileReaderFactory {
 
-    /**
-     * Sets a field in the structure, used internally by the library<br>
-     *
-     * @param field The field to add.
-     *
-     * @throws FieldDataInvalidException
-     */
-    void setField(TagField field) throws FieldDataInvalidException;
-
-    /**
-     * Adds a field to the structure, used internally by the library<br>
-     *
-     * @param field The field to add.
-     */
-    void addField(TagField field) throws FieldDataInvalidException;
-
+    AudioFileReader make();
 }

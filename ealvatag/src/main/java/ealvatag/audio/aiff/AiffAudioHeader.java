@@ -1,6 +1,6 @@
 package ealvatag.audio.aiff;
 
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.GenericAudioHeader;
 
 import java.util.ArrayList;
 import java.util.Date;

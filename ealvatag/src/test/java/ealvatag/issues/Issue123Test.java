@@ -18,6 +18,7 @@ import java.io.File;
  */
 public class Issue123Test extends AbstractTestCase
 {
+
     public void testWriteJRiverAlbumArtistOgg() throws Exception
     {
         File orig = new File("testdata", "test.ogg");
@@ -333,7 +334,7 @@ public class Issue123Test extends AbstractTestCase
             assertEquals(((FlacTag)af.getTag()).getVorbisCommentTag().getFirst(VorbisCommentFieldKey.ALBUMARTIST_JRIVER), "");
 
             TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_JRIVER_ALBUMARTIST);
-            assertEquals(af.getTag().getFirst(FieldKey.ALBUM_ARTIST),"");
+            assertEquals("", af.getTag().getFirst(FieldKey.ALBUM_ARTIST));
 
             TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_ALBUMARTIST_THEN_JRIVER);
             assertEquals(af.getTag().getFirst(FieldKey.ALBUM_ARTIST),"fred");

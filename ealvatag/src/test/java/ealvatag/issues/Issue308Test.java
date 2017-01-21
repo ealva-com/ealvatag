@@ -38,7 +38,7 @@ public class Issue308Test extends AbstractTestCase
             Artwork artwork = ArtworkFactory.getNew();
             artwork.setFromFile(new File("testdata","coverart_large.jpg"));
 
-            af.getTag().setField(artwork);
+            af.getTag().setArtwork(artwork);
             af.commit();
 
             //Reread

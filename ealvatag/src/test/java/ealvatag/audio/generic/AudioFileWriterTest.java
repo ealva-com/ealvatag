@@ -1,9 +1,11 @@
 package ealvatag.audio.generic;
 
 import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileWriter;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.flac.FlacTag;
 import org.junit.After;
@@ -144,8 +146,7 @@ public class AudioFileWriterTest {
             // not implemented
         }
 
-        @Override
-        protected void writeTag(final AudioFile audioFile, final Tag tag, final RandomAccessFile raf, final RandomAccessFile rafTemp)
+        protected void writeTag(final AudioFile audioFile, final TagFieldContainer tag, final RandomAccessFile raf, final RandomAccessFile rafTemp)
                 throws CannotReadException, CannotWriteException, IOException {
             // dummy code, just copy from raf to rafTemp
             final long length = raf.length();

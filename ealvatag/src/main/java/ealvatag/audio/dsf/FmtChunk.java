@@ -1,7 +1,7 @@
 package ealvatag.audio.dsf;
 
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class FmtChunk {
     /**
      * @param audioInfoChunk contains the bytes from "format version" up to "reserved"
      *                       fields
-     * @return an empty {@link ealvatag.audio.generic.GenericAudioHeader} if audioInfoChunk has less
+     * @return an empty {@link GenericAudioHeader} if audioInfoChunk has less
      * than 40 bytes, the read data otherwise. Never <code>null</code>.
      */
     @SuppressWarnings("unused")

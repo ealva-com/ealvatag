@@ -28,7 +28,7 @@ public class Issue356Test extends AbstractTestCase
         audioFile.setTag(new ID3v24Tag());
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
-        tag.setField(artwork);
+        tag.setArtwork(artwork);
         audioFile.commit();
 
         tag = audioFile.getTag();
@@ -49,7 +49,7 @@ public class Issue356Test extends AbstractTestCase
         audioFile.setTag(new ID3v23Tag());
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
-        tag.setField(artwork);
+        tag.setArtwork(artwork);
         audioFile.commit();
 
         tag = audioFile.getTag();
@@ -70,7 +70,7 @@ public class Issue356Test extends AbstractTestCase
         audioFile.setTag(new ID3v22Tag());
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
-        tag.setField(artwork);
+        tag.setArtwork(artwork);
         audioFile.commit();
 
         tag = audioFile.getTag();

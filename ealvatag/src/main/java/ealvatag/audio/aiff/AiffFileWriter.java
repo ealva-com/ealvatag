@@ -19,8 +19,9 @@
 package ealvatag.audio.aiff;
 
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.AudioFileWriter2;
+import ealvatag.audio.AudioFileWriter2;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 
 import java.nio.channels.FileChannel;
 
@@ -34,7 +35,7 @@ public class AiffFileWriter extends AudioFileWriter2
     private AiffTagWriter tw = new AiffTagWriter();
 
     @Override
-    protected void writeTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException
+    protected void writeTag(TagFieldContainer tag, FileChannel channel, final String fileName) throws CannotWriteException
     {
         tw.write(tag, channel, fileName);
     }

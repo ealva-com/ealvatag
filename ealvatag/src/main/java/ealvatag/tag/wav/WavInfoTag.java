@@ -19,14 +19,14 @@
 package ealvatag.tag.wav;
 
 import com.google.common.collect.ImmutableSet;
-import ealvatag.audio.generic.GenericTag;
+import ealvatag.audio.GenericTag;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.logging.Hex;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +79,12 @@ public class WavInfoTag extends GenericTag {
         return output.toString();
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+    public TagField createCompilationField(boolean value) throws UnsupportedFieldException {
+        try {
+            return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+        } catch (FieldDataInvalidException e) {
+            throw new RuntimeException(e); // should never happen unless library misconfiguration
+        }
     }
 
     @Override public ImmutableSet<FieldKey> getSupportedFields() {

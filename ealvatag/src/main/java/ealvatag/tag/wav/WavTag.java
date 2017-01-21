@@ -18,9 +18,9 @@
  */
 package ealvatag.tag.wav;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import ealvatag.audio.generic.AbstractTag;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
@@ -39,6 +39,9 @@ import ealvatag.tag.images.Artwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.checkArgNotNull;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,12 +55,26 @@ import java.util.List;
  * <p>
  * The default is that ID3 takes precedence if it exists
  */
-public class WavTag implements Tag, Id3SupportingTag {
+public class WavTag implements TagFieldContainer, Id3SupportingTag {
     private static final Logger LOG = LoggerFactory.getLogger(WavTag.class);
 
     private static final String NULL = "\0";
 
     private List<ChunkSummary> chunkSummaryList = new ArrayList<>();
+    private boolean isIncorrectlyAlignedTag = false;
+    private boolean isExistingId3Tag = false;
+    private boolean isExistingInfoTag = false;
+    private WavInfoTag infoTag;
+    private AbstractID3v2Tag id3Tag;
+    private WavOptions wavOptions;
+
+    public static AbstractID3v2Tag createDefaultID3Tag() {
+        return TagOptionSingleton.createDefaultID3Tag();
+    }
+
+    public WavTag(WavOptions wavOptions) {
+        this.wavOptions = wavOptions;
+    }
 
     public void addChunkSummary(ChunkSummary cs) {
         chunkSummaryList.add(cs);
@@ -67,59 +84,24 @@ public class WavTag implements Tag, Id3SupportingTag {
         return chunkSummaryList;
     }
 
-    private boolean isIncorrectlyAlignedTag = false;
-
-    private boolean isExistingId3Tag = false;
-    private boolean isExistingInfoTag = false;
-
-    private WavInfoTag infoTag;
-    private AbstractID3v2Tag id3Tag;
-
-    private WavOptions wavOptions;
-
-    public WavTag(WavOptions wavOptions) {
-        this.wavOptions = wavOptions;
-    }
-
-    /**
-     * @return true if the file that this tag was written from already contains an ID3 chunk
-     */
-    public boolean isExistingId3Tag() {
-        return isExistingId3Tag;
-    }
-
-    /**
-     * @return true if the file that this tag read from already contains a LISTINFO chunk
-     */
-    public boolean isExistingInfoTag() {
-        return isExistingInfoTag;
-    }
-
-    /**
-     * @return the Info tag
-     */
     public WavInfoTag getInfoTag() {
         return infoTag;
+    }
+
+    public boolean isInfoTag() {
+        return infoTag != null;
     }
 
     public void setInfoTag(WavInfoTag infoTag) {
         this.infoTag = infoTag;
     }
 
-    /**
-     * Does the info tag exist, note it is created by default if one does not exist in file it was read from
-     *
-     * @return
-     */
-    public boolean isInfoTag() {
-        return infoTag != null;
-    }
-
-    /**
-     * Returns the ID3 tag
-     */
     public AbstractID3v2Tag getID3Tag() {
         return id3Tag;
+    }
+
+    public boolean isID3Tag() {
+        return id3Tag != null;
     }
 
     /**
@@ -129,13 +111,8 @@ public class WavTag implements Tag, Id3SupportingTag {
         id3Tag = t;
     }
 
-    /**
-     * Does an ID3 tag exist, note it is created by default if one does not exist in file it was read from
-     *
-     * @return
-     */
-    public boolean isID3Tag() {
-        return id3Tag != null;
+    public boolean equals(Object obj) {
+        return getActiveTag().equals(obj); // TODO: 1/20/17 Wrong!
     }
 
     @Override
@@ -160,6 +137,19 @@ public class WavTag implements Tag, Id3SupportingTag {
         return sb.toString();
     }
 
+    public long getStartLocationInFileOfId3Chunk() {
+        if (!isExistingId3Tag()) {
+            return 0;
+        }
+        return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
+    }
+
+    public long getEndLocationInFileOfId3Chunk() {
+        if (!isExistingId3Tag()) {
+            return 0;
+        }
+        return id3Tag.getEndLocationInFile();
+    }
 
     public TagFieldContainer getActiveTag() {
         switch (wavOptions) {
@@ -193,24 +183,30 @@ public class WavTag implements Tag, Id3SupportingTag {
         }
     }
 
-    public boolean equals(Object obj) {
-        return getActiveTag().equals(obj); // TODO: 1/20/17 Wrong!
+    /**
+     * @return true if the file that this tag was written from already contains an ID3 chunk
+     */
+    public boolean isExistingId3Tag() {
+        return isExistingId3Tag;
     }
 
-    public void addField(TagField field) throws FieldDataInvalidException {
-        getActiveTag().addField(field);
+    public void setExistingId3Tag(boolean isExistingId3Tag) {
+        this.isExistingId3Tag = isExistingId3Tag;
     }
 
-    public ImmutableList<TagField> getFields(String id) {
-        return getActiveTag().getFields(id);
+    /**
+     * @return true if the file that this tag read from already contains a LISTINFO chunk
+     */
+    public boolean isExistingInfoTag() {
+        return isExistingInfoTag;
     }
 
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
-        return getActiveTag().getAll(genericKey);
+    public void setExistingInfoTag(boolean isExistingInfoTag) {
+        this.isExistingInfoTag = isExistingInfoTag;
     }
 
-    public boolean hasCommonFields() {
-        return getActiveTag().hasCommonFields();
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return getActiveTag().getSupportedFields();
     }
 
     /**
@@ -223,6 +219,27 @@ public class WavTag implements Tag, Id3SupportingTag {
      */
     public boolean isEmpty() {
         return (getActiveTag() == null || getActiveTag().isEmpty());
+    }
+
+    /**
+     * @param genericKey
+     *
+     * @return
+     */
+    public boolean hasField(FieldKey genericKey) {
+        return getActiveTag().hasField(genericKey);
+    }
+
+    public boolean hasField(String id) {
+        return getActiveTag().hasField(id);
+    }
+
+    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey).size();
+    }
+
+    public int getFieldCount() {
+        return getActiveTag().getFieldCount();
     }
 
     public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
@@ -241,61 +258,56 @@ public class WavTag implements Tag, Id3SupportingTag {
         return this;
     }
 
-    public void setField(TagField field) throws FieldDataInvalidException {
-        getActiveTag().setField(field);
+    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+        return getFieldAt(genericKey, 0);
     }
 
-
-    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
-                                                                             UnsupportedFieldException,
-                                                                             FieldDataInvalidException {
-        return getActiveTag().createField(genericKey, value);
-    }
-
-
-    public String getFirst(String id) {
+    public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFirst(id);
     }
 
-    public String getValue(FieldKey genericKey, int index) throws KeyNotFoundException {
-        return getActiveTag().getValue(genericKey, index);
+    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+        return getActiveTag().getFieldAt(genericKey, index);
     }
 
-    public String getFirst(FieldKey id) throws KeyNotFoundException {
-        return getValue(id, 0);
+    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+        return getActiveTag().getAll(genericKey);
     }
 
-    public TagField getFirstField(String id) {
-        return getActiveTag().getFirstField(id);
-    }
-
-    public TagField getFirstField(FieldKey genericKey) throws KeyNotFoundException {
-        if (genericKey == null) {
-            throw new KeyNotFoundException();
-        } else {
-            return getActiveTag().getFirstField(genericKey);
-        }
-    }
-
-    /**
-     * Delete any instance of tag fields with this key
-     *
-     * @param genericKey
-     */
-    public void deleteField(FieldKey genericKey) throws KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
         getActiveTag().deleteField(genericKey);
+        return this;
     }
 
-    public void deleteField(String id) throws KeyNotFoundException {
+    public Tag deleteField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         getActiveTag().deleteField(id);
+        return this;
     }
 
-    public Iterator<TagField> getFields() {
-        return getActiveTag().getFields();
+    public Tag setArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+        setField(createArtwork(checkArgNotNull(artwork, CANNOT_BE_NULL, "artwork")));
+        return this;
     }
 
-    public int getFieldCount() {
-        return getActiveTag().getFieldCount();
+    public Tag addArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+        addField(createArtwork(checkArgNotNull(artwork, CANNOT_BE_NULL, "artwork")));
+        return this;
+    }
+
+    public Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException {
+        return getActiveTag().getFirstArtwork();
+    }
+
+    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
+        return getActiveTag().getArtworkList();
+    }
+
+    public void deleteArtwork() throws KeyNotFoundException {
+        getActiveTag().deleteArtwork();
+    }
+
+    public boolean hasCommonFields() {
+        return getActiveTag().hasCommonFields();
     }
 
     public int getFieldCountIncludingSubValues() {
@@ -306,85 +318,53 @@ public class WavTag implements Tag, Id3SupportingTag {
         return getActiveTag().setEncoding(enc);
     }
 
+    public TagField createField(FieldKey genericKey, String... value) throws IllegalArgumentException,
+                                                                             UnsupportedFieldException,
+                                                                             FieldDataInvalidException {
+        return getActiveTag().createField(genericKey, value);
+    }
+
     /**
      * Create artwork field. Not currently supported.
      */
-    public TagField createField(Artwork artwork) throws FieldDataInvalidException {
-        return getActiveTag().createField(artwork);
+    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+        return getActiveTag().createArtwork(artwork);
     }
 
     public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFields(genericKey);
     }
 
-    public Artwork getFirstArtwork() {
-        return getActiveTag().getFirstArtwork();
+    public Iterator<TagField> getFields() {
+        return getActiveTag().getFields();
     }
 
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public void deleteArtworkField() throws KeyNotFoundException {
-        getActiveTag().deleteArtworkField();
+    public ImmutableList<TagField> getFields(String id) {
+        return getActiveTag().getFields(id);
     }
 
-    /**
-     * @param genericKey
-     * @return
-     */
-    public boolean hasField(FieldKey genericKey) {
-        return getActiveTag().hasField(genericKey);
+    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+        return getActiveTag().getFirstField(id);
     }
 
-
-    public boolean hasField(String id) {
-        return getActiveTag().hasField(id);
+    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getActiveTag().getFirstField(genericKey);
     }
 
-    public TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException {
-        return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return getActiveTag().getSupportedFields();
-    }
-
-    public List<Artwork> getArtworkList() {
-        return getActiveTag().getArtworkList();
-    }
-
-    /**
-     * Create field and then set within tag itself
-     *
-     * @param artwork
-     * @throws FieldDataInvalidException
-     */
-    public void setField(Artwork artwork) throws FieldDataInvalidException {
-        this.setField(createField(artwork));
-    }
-
-    public void addField(Artwork artwork) throws FieldDataInvalidException {
-        this.addField(createField(artwork));
-    }
-
-    public void setExistingId3Tag(boolean isExistingId3Tag) {
-        this.isExistingId3Tag = isExistingId3Tag;
-    }
-
-    public void setExistingInfoTag(boolean isExistingInfoTag) {
-        this.isExistingInfoTag = isExistingInfoTag;
-    }
-
-    /**
-     * @return size of the vanilla ID3Tag exclusing surrounding chunk
-     */
-    public long getSizeOfID3TagOnly() {
-        if (!isExistingId3Tag()) {
-            return 0;
+    public TagField createCompilationField(boolean value) throws UnsupportedFieldException {
+        try {
+            return createField(FieldKey.IS_COMPILATION, String.valueOf(value));
+        } catch (FieldDataInvalidException e) {
+            throw new RuntimeException(e);  // if this ever happens it's library misconfiguration
         }
-        return (id3Tag.getEndLocationInFile() - id3Tag.getStartLocationInFile());
+    }
+
+    public void setField(TagField field) throws FieldDataInvalidException {
+        getActiveTag().setField(field);
+    }
+
+    public void addField(TagField field) throws FieldDataInvalidException {
+        getActiveTag().addField(field);
     }
 
     /**
@@ -398,24 +378,27 @@ public class WavTag implements Tag, Id3SupportingTag {
     }
 
     /**
-     * Offset into file of start ID3Chunk including header
-     *
-     * @return
+     * @return size of the vanilla ID3Tag exclusing surrounding chunk
      */
-    public long getStartLocationInFileOfId3Chunk() {
+    public long getSizeOfID3TagOnly() {
         if (!isExistingId3Tag()) {
             return 0;
         }
-        return id3Tag.getStartLocationInFile() - ChunkHeader.CHUNK_HEADER_SIZE;
+        return (id3Tag.getEndLocationInFile() - id3Tag.getStartLocationInFile());
     }
 
-    public long getEndLocationInFileOfId3Chunk() {
-        if (!isExistingId3Tag()) {
-            return 0;
+    /**
+     * Call after read to ensure your preferred tag can make use of any additional metadata
+     * held in the other tag, only used if the activetag field is empty for the fieldkey
+     */
+    public void syncTagsAfterRead() {
+        if (getActiveTag() instanceof WavInfoTag) {
+            syncToInfoFromId3IfEmpty();
+        } else {
+            syncToId3FromInfoIfEmpty();
         }
-        return id3Tag.getEndLocationInFile();
-    }
 
+    }
 
     /**
      * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
@@ -436,6 +419,10 @@ public class WavTag implements Tag, Id3SupportingTag {
         }
     }
 
+    private String stripNullTerminator(String value) {
+        return value.endsWith(NULL) ? value.substring(0, value.length() - 1) : value;
+    }
+
     /**
      * If we have field in INFO tag but not ID3 tag (perhaps coz doesn't exist add them to ID3 tag)
      */
@@ -454,6 +441,23 @@ public class WavTag implements Tag, Id3SupportingTag {
         }
     }
 
+    private String addNullTerminatorIfNone(String value) {
+        return value.endsWith(NULL) ? value : value + NULL;
+    }
+
+    /**
+     * Call before save if saving both tags ensure any new information is the active tag is added to the other tag
+     * overwriting any existing fields
+     */
+    public void syncTagBeforeWrite() {
+        if (getActiveTag() instanceof WavInfoTag) {
+            syncToId3FromInfoOverwrite();
+        } else {
+            syncToInfoFromId3Overwrite();
+        }
+
+    }
+
     /**
      * If we have field in INFO tag write to ID3 tag, if not we delete form ID3
      * (but only for tag that we can actually have in INFO tag)
@@ -461,9 +465,10 @@ public class WavTag implements Tag, Id3SupportingTag {
     public void syncToId3FromInfoOverwrite() {
         try {
             for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
-                if (!infoTag.getFirst(fieldKey).isEmpty()) {
-                    id3Tag.setField(fieldKey, stripNullTerminator(infoTag.getFirst(fieldKey)));
-                } else {
+                final String first = infoTag.getFirst(fieldKey);
+                if (!first.isEmpty()) {
+                    id3Tag.setField(fieldKey, stripNullTerminator(first));
+                } else if (hasField(fieldKey)) {
                     id3Tag.deleteField(fieldKey);
                 }
             }
@@ -481,7 +486,7 @@ public class WavTag implements Tag, Id3SupportingTag {
             for (FieldKey fieldKey : WavInfoTag.getSupportedTagKeys()) {
                 if (!id3Tag.getFirst(fieldKey).isEmpty()) {
                     infoTag.setField(fieldKey, addNullTerminatorIfNone(id3Tag.getFirst(fieldKey)));
-                } else {
+                } else if (hasField(fieldKey)) {
                     infoTag.deleteField(fieldKey);
                 }
             }
@@ -490,54 +495,11 @@ public class WavTag implements Tag, Id3SupportingTag {
         }
     }
 
-    private String stripNullTerminator(String value) {
-        return value.endsWith(NULL) ? value.substring(0, value.length() - 1) : value;
-    }
-
-    private String addNullTerminatorIfNone(String value) {
-        return value.endsWith(NULL) ? value : value + NULL;
-    }
-
-    /**
-     * Call after read to ensure your preferred tag can make use of any additional metadata
-     * held in the other tag, only used if the activetag field is empty for the fieldkey
-     */
-    public void syncTagsAfterRead() {
-        if (getActiveTag() instanceof WavInfoTag) {
-            syncToInfoFromId3IfEmpty();
-        } else {
-            syncToId3FromInfoIfEmpty();
-        }
-
-    }
-
-    /**
-     * Call before save if saving both tags ensure any new information is the active tag is added to the other tag
-     * overwriting any existing fields
-     */
-    public void syncTagBeforeWrite() {
-        if (getActiveTag() instanceof WavInfoTag) {
-            syncToId3FromInfoOverwrite();
-        } else {
-            syncToInfoFromId3Overwrite();
-        }
-
-    }
-
     public boolean isIncorrectlyAlignedTag() {
         return isIncorrectlyAlignedTag;
     }
 
     public void setIncorrectlyAlignedTag(boolean isIncorrectlyAlignedTag) {
         this.isIncorrectlyAlignedTag = isIncorrectlyAlignedTag;
-    }
-
-    /**
-     * Default based on user option
-     *
-     * @return
-     */
-    public static AbstractID3v2Tag createDefaultID3Tag() {
-        return TagOptionSingleton.createDefaultID3Tag();
     }
 }

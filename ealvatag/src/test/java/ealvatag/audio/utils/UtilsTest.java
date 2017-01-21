@@ -1,7 +1,7 @@
 package ealvatag.audio.utils;
 
+import ealvatag.audio.Utils;
 import junit.framework.TestCase;
-import ealvatag.audio.generic.Utils;
 
 /**
  * Created by Paul on 18/09/2015.

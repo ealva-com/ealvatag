@@ -1,7 +1,7 @@
 package ealvatag.audio.real;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

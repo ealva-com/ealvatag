@@ -61,22 +61,6 @@ public class Issue403Test extends AbstractTestCase
         assertTrue(caught instanceof UnsupportedFieldException);
     }
 
-    public void testDeleteInvalidField() throws Exception
-    {
-        Exception caught = null;
-        try
-        {
-            Tag v1Tag = new ID3v1Tag();
-            v1Tag.deleteField(FieldKey.DISC_NO);
-        }
-        catch(Exception e)
-        {
-            caught=e;
-            e.printStackTrace();
-        }
-        //No need to throw exception because no error ocurred
-        assertNull(caught);
-    }
 
     public void testSetInvalidFieldV11() throws Exception
     {
@@ -126,20 +110,4 @@ public class Issue403Test extends AbstractTestCase
         assertTrue(caught instanceof UnsupportedFieldException);
     }
 
-    public void testDeleteInvalidFieldV11() throws Exception
-    {
-        Exception caught = null;
-        try
-        {
-            Tag v1Tag = new ID3v11Tag();
-            v1Tag.deleteField(FieldKey.DISC_NO);
-        }
-        catch(Exception e)
-        {
-            caught=e;
-            e.printStackTrace();
-        }
-        //No need to throw exception because no error ocurred
-        assertNull(caught);
-    }
 }

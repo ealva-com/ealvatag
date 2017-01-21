@@ -1,6 +1,6 @@
 package ealvatag.audio.mp4;
 
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.mp4.atom.Mp4EsdsBox;
 
 /**

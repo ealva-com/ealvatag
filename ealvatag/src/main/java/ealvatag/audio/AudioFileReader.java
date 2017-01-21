@@ -1,24 +1,21 @@
 /*
- * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2017 Eric A. Snell
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of eAlvaTag.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * eAlvaTag is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * eAlvaTag is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License along with eAlvaTag.  If not,
+ * see <http://www.gnu.org/licenses/>.
  */
-package ealvatag.audio.generic;
+package ealvatag.audio;
 
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.NoReadPermissionsException;
@@ -26,6 +23,7 @@ import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
+import ealvatag.tag.TagFieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +69,7 @@ public abstract class AudioFileReader {
       * manually)
       * @exception CannotReadException when an error occured during the parsing of the tag
       */
-    protected abstract Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException;
+    protected abstract TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException;
 
     /*
       * Reads the given file, and return an AudioFile object containing the Tag
@@ -102,8 +100,7 @@ public abstract class AudioFileReader {
 
             GenericAudioHeader info = getEncodingInfo(raf);
             raf.seek(0);
-            Tag tag = getTag(raf);
-            return new AudioFile(f, info, tag);
+            return new AudioFile(f, info, getTag(raf));
 
         } catch (CannotReadException cre) {
             throw cre;

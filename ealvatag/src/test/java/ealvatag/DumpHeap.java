@@ -17,10 +17,12 @@
 
 package ealvatag;
 
+import com.google.common.collect.ImmutableSet;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
+import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
 
 import javax.management.MBeanServer;
@@ -77,7 +79,19 @@ public class DumpHeap {
         if (inputFile.exists()) {
             AudioFile audioFile = AudioFileIO.read(inputFile);
             final AudioHeader audioHeader = audioFile.getAudioHeader();
+            final String channels = audioHeader.getChannels();
+            final String bitRate = audioHeader.getBitRate();
+            final String encodingType = audioHeader.getEncodingType();
             final Tag tag = audioFile.getTag();
+            if (tag.hasField(FieldKey.TITLE)) {
+                final String title = tag.getFirst(FieldKey.TITLE);
+            }
+            final ImmutableSet<FieldKey> supportedFields = tag.getSupportedFields();
+            if (supportedFields.contains(FieldKey.COVER_ART)) {
+                System.out.println("File type supports Artwork");
+            }
+            tag.setField(FieldKey.TITLE, "My New Title");
+            audioFile.commit();
             System.out.println(audioHeader);
             System.out.println("Fields:" + Integer.toString(tag.getFieldCount()));
 

@@ -1024,7 +1024,7 @@ public class MP3File extends AudioFile {
      * @param tag
      */
     public void setTag(Tag tag) {
-        this.tag = tag;
+        this.tag = (TagFieldContainer)tag;
         if (tag instanceof ID3v1Tag) {
             setID3v1Tag((ID3v1Tag)tag);
         } else {
@@ -1073,8 +1073,8 @@ public class MP3File extends AudioFile {
         return getTag();
     }
 
-//    @Override public TagFieldContainer getTag() {
-//        return (TagFieldContainer)super.getTag();
-//    }
+    @Override public TagFieldContainer getTag() {
+        return (TagFieldContainer)super.getTag();
+    }
 }
 

@@ -4,10 +4,10 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
-import ealvatag.audio.generic.AudioFileReader;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
 import ealvatag.tag.TagException;
+import ealvatag.tag.TagFieldContainer;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class MP3FileReader extends AudioFileReader
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }
 
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
         throw new RuntimeException("MP3FileReader.getEncodingInfo should be called");
     }

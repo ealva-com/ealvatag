@@ -19,11 +19,11 @@
 package ealvatag.audio.ogg;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader;
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.ogg.util.OggInfoReader;
 import ealvatag.audio.ogg.util.OggPageHeader;
-import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class OggFileReader extends AudioFileReader {
         return ir.read(raf);
     }
 
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException {
+    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException {
         return vtr.read(raf);
     }
 

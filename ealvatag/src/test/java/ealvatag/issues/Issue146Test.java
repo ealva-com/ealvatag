@@ -39,9 +39,9 @@ public class Issue146Test extends AbstractTestCase
             }
             tag.setField(FieldKey.TITLE,"好好学习");
             afile.commit();
-            System.out.println(tag.getValue(FieldKey.TITLE, 0)+tag.getValue(FieldKey.TITLE, 0).getBytes().length);
+            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0)+tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
             tag = AudioFileIO.read(file).getTag();
-            System.out.println(tag.getValue(FieldKey.TITLE, 0)+tag.getValue(FieldKey.TITLE, 0).getBytes().length);
+            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0)+tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
         }
     }
 }

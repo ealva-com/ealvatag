@@ -1,5 +1,6 @@
 package ealvatag.audio.generic;
 
+import ealvatag.audio.Utils;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;

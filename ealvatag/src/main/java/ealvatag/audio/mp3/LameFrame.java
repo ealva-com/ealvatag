@@ -18,7 +18,7 @@
  */
 package ealvatag.audio.mp3;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;

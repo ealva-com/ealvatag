@@ -19,9 +19,10 @@
 package ealvatag.audio.dsf;
 
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.AudioFileWriter2;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.AudioFileWriter2;
+import ealvatag.audio.Utils;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 
 import java.io.*;
@@ -33,7 +34,7 @@ import java.nio.channels.FileChannel;
  */
 public class DsfFileWriter extends AudioFileWriter2
 {
-    protected void writeTag(Tag tag, FileChannel fc, final String fileName) throws CannotWriteException
+    protected void writeTag(TagFieldContainer tag, FileChannel fc, final String fileName) throws CannotWriteException
     {
         try
         {

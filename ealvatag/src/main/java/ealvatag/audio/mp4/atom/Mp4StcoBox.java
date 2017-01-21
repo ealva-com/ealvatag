@@ -1,7 +1,7 @@
 package ealvatag.audio.mp4.atom;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 
 import java.io.IOException;

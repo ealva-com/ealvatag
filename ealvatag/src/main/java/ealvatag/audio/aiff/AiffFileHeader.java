@@ -1,7 +1,7 @@
 package ealvatag.audio.aiff;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.logging.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

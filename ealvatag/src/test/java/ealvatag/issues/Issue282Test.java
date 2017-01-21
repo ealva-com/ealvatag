@@ -41,7 +41,7 @@ public class Issue282Test extends AbstractTestCase
             System.out.println(af.getTag().toString());
 
             //Change File
-            af.getTag().setField(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
+            af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
 
             af.commit();
             outputFile.delete();
@@ -83,7 +83,7 @@ public class Issue282Test extends AbstractTestCase
 
                //Create tag and Change File
                af.getTagOrCreateAndSetDefault();
-               af.getTag().setField(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
+               af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
                af.commit();
 
            }

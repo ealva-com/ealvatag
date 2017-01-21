@@ -622,7 +622,7 @@ public class AiffAudioTagTest {
             Assert.assertTrue(((AiffTag)tag).isExistingId3Tag());
             Assert.assertEquals(2, tag.getArtworkList().size());
 
-            tag.deleteArtworkField();
+            tag.deleteArtwork();
             f.commit();
 
             AudioFile updatedFile = AudioFileIO.read(testFile);

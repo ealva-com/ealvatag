@@ -19,13 +19,15 @@
 package ealvatag.audio.exceptions;
 
 
+import ealvatag.audio.AudioFileModificationListener;
+
 /**
  * This exception is thrown if a
- * {@link ealvatag.audio.generic.AudioFileModificationListener} wants to
+ * {@link AudioFileModificationListener} wants to
  * prevent; from actually finishing its
  * operation.<br>
  * This exception can be used in all methods but
- * {@link ealvatag.audio.generic.AudioFileModificationListener#fileOperationFinished(java.io.File)}.
+ * {@link AudioFileModificationListener#fileOperationFinished(java.io.File)}.
  *
  * @author Christian Laireiter
  */

@@ -18,14 +18,14 @@
  */
 package ealvatag.tag.mp4;
 
-import ealvatag.audio.generic.AbstractTagCreator;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.AbstractTagCreator;
+import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
-import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.mp4.field.Mp4TagCoverField;
 
 import java.io.ByteArrayOutputStream;
@@ -77,7 +77,7 @@ public class Mp4TagCreator extends AbstractTagCreator
      * @return
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
+    public ByteBuffer convert(TagFieldContainer tag, int padding) throws UnsupportedEncodingException
     {
         try
         {

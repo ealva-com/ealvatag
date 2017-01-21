@@ -22,7 +22,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -15,15 +15,26 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.audio.generic;
+package ealvatag.audio;
 
 /**
- * Factory interface for {@link AudioFileWriter} instances. These are needed to delay construction of writers until they are needed. An
- * implementation might always create a new instance or could cache instances - that is implementation specific.
+ * Creates the reader once and doles out the same one
  *
  * Created by Eric A. Snell on 1/19/17.
  */
-public interface AudioFileWriterFactory {
+public abstract class CachingAudioFileReaderFactory implements AudioFileReaderFactory {
+    private volatile AudioFileReader reader = null;
 
-    AudioFileWriter make();
+    @Override public final AudioFileReader make() {
+        if (reader == null) {
+            synchronized (this) {
+                if (reader == null) {
+                    reader = doMake();
+                }
+            }
+        }
+        return reader;
+    }
+
+    protected abstract AudioFileReader doMake();
 }

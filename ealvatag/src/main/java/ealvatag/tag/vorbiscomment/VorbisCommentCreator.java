@@ -18,10 +18,10 @@
  */
 package ealvatag.tag.vorbiscomment;
 
-import ealvatag.audio.generic.AbstractTagCreator;
-import ealvatag.audio.generic.Utils;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AbstractTagCreator;
+import ealvatag.audio.Utils;
 import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class VorbisCommentCreator extends AbstractTagCreator
      * @throws UnsupportedEncodingException
      */
     //TODO padding parameter currently ignored
-    public ByteBuffer convert(Tag tag, int padding) throws UnsupportedEncodingException
+    public ByteBuffer convert(TagFieldContainer tag, int padding) throws UnsupportedEncodingException
     {
         try
         {

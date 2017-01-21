@@ -21,10 +21,11 @@ package ealvatag.audio.ogg;
 
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.ogg.util.OggCRCFactory;
 import ealvatag.audio.ogg.util.OggPageHeader;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.id3.AbstractID3v1Tag;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class OggVorbisTagWriter {
         write(emptyTag, raf, tempRaf);
     }
 
-    public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp)
+    public void write(TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
             throws CannotReadException, CannotWriteException, IOException {
         LOG.debug("Starting to write file:");
 

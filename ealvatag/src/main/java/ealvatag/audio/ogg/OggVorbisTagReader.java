@@ -25,6 +25,7 @@ import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.audio.ogg.util.VorbisPacketType;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.vorbiscomment.VorbisCommentReader;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 import org.slf4j.Logger;
@@ -62,7 +63,7 @@ public class OggVorbisTagReader {
      * @throws CannotReadException
      * @throws IOException
      */
-    public Tag read(RandomAccessFile raf) throws CannotReadException, IOException {
+    public TagFieldContainer read(RandomAccessFile raf) throws CannotReadException, IOException {
         LOG.debug("Starting to read ogg vorbis tag from file:");
         byte[] rawVorbisCommentData = readRawPacketData(raf);
 

@@ -17,6 +17,7 @@ import java.io.File;
  */
 public class Issue084Test extends AbstractTestCase
 {
+
     /**
      * Read file with metadata added by MediaMonkey
      */

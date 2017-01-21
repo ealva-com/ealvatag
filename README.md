@@ -17,6 +17,31 @@ Until the version of this library reaches 1.0, you should consider the API to
 be very unstable (no Semantic Versioning until 1.0.0 and later). Currently there is no downloadable jar. Pull requests 
 welcome.
 
+Quick Start
+-----------
+
+    File inputFile = new File("MyFavoriteSong.mp3");
+    AudioFile audioFile = AudioFileIO.read(inputFile);
+    
+    final AudioHeader audioHeader = audioFile.getAudioHeader();
+    final String channels = audioHeader.getChannels();
+    final String bitRate = audioHeader.getBitRate();
+    final String encodingType = audioHeader.getEncodingType();
+    
+    final Tag tag = audioFile.getTag();
+    if (tag.hasField(FieldKey.TITLE)) {
+        final String title = tag.getFirst(FieldKey.TITLE);
+    }
+    
+    tag.setField(FieldKey.TITLE, "My New Title");
+    audioFile.commit();
+    
+    final ImmutableSet<FieldKey> supportedFields = tag.getSupportedFields();
+    if (supportedFields.contains(FieldKey.COVER_ART)) {
+        System.out.println("File type supports Artwork");
+    }
+
+
 Android
 -------
 

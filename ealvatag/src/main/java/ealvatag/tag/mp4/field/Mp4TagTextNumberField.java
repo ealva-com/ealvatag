@@ -18,7 +18,7 @@
  */
 package ealvatag.tag.mp4.field;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.atom.Mp4DataBox;

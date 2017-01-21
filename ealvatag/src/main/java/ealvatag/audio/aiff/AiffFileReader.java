@@ -1,9 +1,9 @@
 package ealvatag.audio.aiff;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader2;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AudioFileReader2;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.tag.TagFieldContainer;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -23,7 +23,7 @@ public class AiffFileReader extends AudioFileReader2
     }
 
     @Override
-    protected Tag getTag(FileChannel channel, final String fileName) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(FileChannel channel, final String fileName) throws CannotReadException, IOException
     {
         return im.read(channel, fileName);
     }

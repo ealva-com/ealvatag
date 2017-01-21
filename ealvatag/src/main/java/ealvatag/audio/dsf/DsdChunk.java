@@ -1,6 +1,6 @@
 package ealvatag.audio.dsf;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 
 import java.nio.ByteBuffer;

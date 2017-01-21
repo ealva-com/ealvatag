@@ -29,8 +29,8 @@ import ealvatag.audio.asf.util.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
-import ealvatag.audio.generic.AudioFileReader;
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagException;
 import ealvatag.tag.asf.AsfTag;
@@ -131,7 +131,7 @@ public class AsfFileReader extends AudioFileReader {
     /**
      * (overridden)
      *
-     * @see ealvatag.audio.generic.AudioFileReader#getEncodingInfo(java.io.RandomAccessFile)
+     * @see AudioFileReader#getEncodingInfo(java.io.RandomAccessFile)
      */
     @Override
     protected GenericAudioHeader getEncodingInfo(final RandomAccessFile raf) throws CannotReadException, IOException {
@@ -169,7 +169,7 @@ public class AsfFileReader extends AudioFileReader {
     /**
      * (overridden)
      *
-     * @see ealvatag.audio.generic.AudioFileReader#getTag(java.io.RandomAccessFile)
+     * @see AudioFileReader#getTag(java.io.RandomAccessFile)
      */
     @Override
     protected AsfTag getTag(final RandomAccessFile raf) throws CannotReadException, IOException {

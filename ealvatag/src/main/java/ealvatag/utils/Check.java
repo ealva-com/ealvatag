@@ -1,5 +1,7 @@
 package ealvatag.utils;
 
+import com.google.common.base.Strings;
+
 /**
  * Along the line of Guava's Preconditions
  * <p>
@@ -56,4 +58,12 @@ public class Check {
         }
     }
 
+    public static String checkArgNotNullOrEmpty(final String reference,
+                                               final String errorMessageTemplate,
+                                               final Object... errorMessageArgs) {
+        if (reference == null || Strings.isNullOrEmpty(reference)) {
+            throw new IllegalArgumentException(String.format(errorMessageTemplate, errorMessageArgs));
+        }
+        return reference;
+    }
 }

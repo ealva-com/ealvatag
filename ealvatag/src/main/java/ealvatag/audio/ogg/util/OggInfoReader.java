@@ -20,8 +20,8 @@
 package ealvatag.audio.ogg.util;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package ealvatag.audio.iff;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

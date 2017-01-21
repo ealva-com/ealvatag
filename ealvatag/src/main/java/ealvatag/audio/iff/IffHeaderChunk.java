@@ -1,6 +1,6 @@
 package ealvatag.audio.iff;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

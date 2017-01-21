@@ -5,12 +5,13 @@
 package ealvatag.audio.dsf;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader2;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.AudioFileReader2;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.logging.Level;
 
 import static ealvatag.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
 
@@ -60,7 +60,7 @@ public class DsfFileReader extends AudioFileReader2
     }
 
     @Override
-    protected Tag getTag(FileChannel fc, final String fileName) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(FileChannel fc, final String fileName) throws CannotReadException, IOException
     {
         DsdChunk dsd = DsdChunk.readChunk(Utils.readFileDataIntoBufferLE(fc, DsdChunk.DSD_HEADER_LENGTH));
         if (dsd != null)
@@ -84,7 +84,7 @@ public class DsfFileReader extends AudioFileReader2
      * <code>null</code>.
      * @throws IOException if cannot read file.
      */
-    private Tag readTag(FileChannel fc, DsdChunk dsd, String fileName) throws CannotReadException,IOException
+    private TagFieldContainer readTag(FileChannel fc, DsdChunk dsd, String fileName) throws CannotReadException,IOException
     {
         if(dsd.getMetadataOffset() > 0)
         {

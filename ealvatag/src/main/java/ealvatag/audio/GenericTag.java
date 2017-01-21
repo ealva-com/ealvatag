@@ -1,34 +1,32 @@
 /*
- * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2017 Eric A. Snell
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of eAlvaTag.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * eAlvaTag is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * eAlvaTag is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License along with eAlvaTag.  If not,
+ * see <http://www.gnu.org/licenses/>.
  */
-package ealvatag.audio.generic;
+package ealvatag.audio;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
-import ealvatag.utils.Check;
 
 import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
@@ -170,16 +168,16 @@ public abstract class GenericTag extends AbstractTag {
 
     @Override
     public String getFirst(final FieldKey genericKey) throws KeyNotFoundException {
-        return getValue(genericKey, 0);
+        return getFieldAt(genericKey, 0);
     }
 
     @Override
-    public String getValue(final FieldKey genericKey, final int index) throws KeyNotFoundException {
+    public String getFieldAt(final FieldKey genericKey, final int index) throws KeyNotFoundException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             return getItem(genericKey.name(), index);
         } else {
-            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
+            throw new UnsupportedFieldException(genericKey.name());
         }
     }
 
@@ -204,31 +202,34 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public void deleteField(final FieldKey genericKey) throws KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             deleteField(genericKey.name());
         } else {
-            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
+            throw new UnsupportedFieldException(genericKey.name());
         }
+        return this;
     }
 
     @Override
-    public TagField getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, genericKey);
         if (getSupportedFields().contains(genericKey)) {
-            return getFirstField(genericKey.name());
+            return Optional.fromNullable(getFirstField(genericKey.name()));
         } else {
-            throw new UnsupportedOperationException(ErrorMessage.OPERATION_NOT_SUPPORTED_FOR_FIELD.getMsg(genericKey));
+            throw new UnsupportedFieldException(genericKey.name());
         }
     }
 
     @Override
-    public List<Artwork> getArtworkList() {
+    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
         return Collections.emptyList();
     }
 
     @Override
-    public TagField createField(final Artwork artwork) throws FieldDataInvalidException {
-        throw new UnsupportedOperationException(ErrorMessage.GENERIC_NOT_SUPPORTED.getMsg());
+    public TagField createArtwork(final Artwork artwork) throws FieldDataInvalidException {
+        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
     }
 
     @Override public ImmutableSet<FieldKey> getSupportedFields() {

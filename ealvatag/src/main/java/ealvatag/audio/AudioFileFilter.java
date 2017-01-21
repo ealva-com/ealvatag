@@ -18,8 +18,6 @@
  */
 package ealvatag.audio;
 
-import ealvatag.audio.generic.Utils;
-
 import java.io.File;
 import java.io.FileFilter;
 

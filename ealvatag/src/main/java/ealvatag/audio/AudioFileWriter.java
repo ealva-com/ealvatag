@@ -1,30 +1,28 @@
 /*
- * Entagged Audio Tag library
- * Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
+ * Copyright (c) 2017 Eric A. Snell
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of eAlvaTag.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * eAlvaTag is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * eAlvaTag is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License along with eAlvaTag.  If not,
+ * see <http://www.gnu.org/licenses/>.
  */
-package ealvatag.audio.generic;
+package ealvatag.audio;
 
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.ModifyVetoException;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.utils.Check;
 import org.slf4j.Logger;
@@ -379,7 +377,7 @@ public abstract class AudioFileWriter {
             rafTemp.seek(0);
             try {
                 modificationListener.fileWillBeModified(audioFile, false);
-                writeTag(audioFile, audioFile.getTag(), raf, rafTemp);
+                writeTag(audioFile, audioFile.getTagFieldContainer(), raf, rafTemp);
                 modificationListener.fileModified(audioFile, newFile);
             } catch (ModifyVetoException veto) {
                 throw new CannotWriteException(veto);
@@ -767,6 +765,6 @@ public abstract class AudioFileWriter {
      * @throws CannotWriteException                          when an error occured during the generation of the tag
      * @throws ealvatag.audio.exceptions.CannotReadException
      */
-    protected abstract void writeTag(AudioFile audioFile, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp)
+    protected abstract void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
             throws CannotReadException, CannotWriteException, IOException;
 }

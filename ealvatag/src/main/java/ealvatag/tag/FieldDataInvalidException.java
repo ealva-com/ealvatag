@@ -7,13 +7,11 @@ package ealvatag.tag;
  * then this exception will be thrown
  */
 public class FieldDataInvalidException extends TagException {
-    /**
-     * Creates a new KeyNotFoundException datatype.
-     *
-     * @param msg the detail message.
-     */
     public FieldDataInvalidException(String msg) {
         super(msg);
     }
 
+    public FieldDataInvalidException(final Throwable cause) {
+        super(cause);
+    }
 }

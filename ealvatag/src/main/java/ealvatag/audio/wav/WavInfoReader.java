@@ -19,8 +19,8 @@
 package ealvatag.audio.wav;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.IffHeaderChunk;

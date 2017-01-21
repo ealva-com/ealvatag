@@ -1,6 +1,6 @@
 package ealvatag.audio.wav.chunk;
 
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.wav.WavInfoTag;

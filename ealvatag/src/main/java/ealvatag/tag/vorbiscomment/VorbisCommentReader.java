@@ -20,7 +20,7 @@
 package ealvatag.tag.vorbiscomment;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.logging.ErrorMessage;
 import org.slf4j.Logger;

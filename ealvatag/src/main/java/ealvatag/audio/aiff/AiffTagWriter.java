@@ -22,7 +22,7 @@ import ealvatag.audio.aiff.chunk.AiffChunkSummary;
 import ealvatag.audio.aiff.chunk.AiffChunkType;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;

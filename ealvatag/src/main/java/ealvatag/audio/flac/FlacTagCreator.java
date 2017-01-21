@@ -22,8 +22,8 @@ import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPadding;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.audio.generic.AbstractTagCreator;
-import ealvatag.tag.Tag;
+import ealvatag.audio.AbstractTagCreator;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ public class FlacTagCreator
      * @return
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(Tag tag, int paddingSize) throws UnsupportedEncodingException {
+    public ByteBuffer convert(TagFieldContainer tag, int paddingSize) throws UnsupportedEncodingException {
         LOG.trace("Convert flac tag:padding:{}", paddingSize);
         FlacTag flacTag = (FlacTag)tag;
 

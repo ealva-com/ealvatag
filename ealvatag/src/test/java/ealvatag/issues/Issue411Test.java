@@ -39,9 +39,9 @@ public class Issue411Test extends AbstractTestCase
             af.getTag().addField(FieldKey.COMPOSER, "john");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("fred", af.getTag().getValue(FieldKey.COMPOSER, 0));
+            assertEquals("fred", af.getTag().getFieldAt(FieldKey.COMPOSER, 0));
             assertEquals("fred", af.getTag().getFirst(FieldKey.COMPOSER));
-            assertEquals("john",af.getTag().getValue(FieldKey.COMPOSER,1));
+            assertEquals("john",af.getTag().getFieldAt(FieldKey.COMPOSER, 1));
 
             //No of Composer Values
             assertEquals(2,af.getTag().getAll(FieldKey.COMPOSER).size());
@@ -118,7 +118,7 @@ public class Issue411Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("Rock", af.getTag().getFirst(FieldKey.GENRE));
-            assertEquals("Dance",af.getTag().getValue(FieldKey.GENRE,1));
+            assertEquals("Dance",af.getTag().getFieldAt(FieldKey.GENRE, 1));
             assertEquals(1,af.getTag().getFields(FieldKey.GENRE).size());
         }
         catch(Exception e)
@@ -154,7 +154,7 @@ public class Issue411Test extends AbstractTestCase
             af.commit();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("john",af.getTag().getValue(FieldKey.ENGINEER, 1));
+            assertEquals("john",af.getTag().getFieldAt(FieldKey.ENGINEER, 1));
             assertEquals(2, af.getTag().getFields(FieldKey.ENGINEER).size());
         }
         catch(Exception e)
@@ -189,9 +189,9 @@ public class Issue411Test extends AbstractTestCase
             af.getTag().addField(FieldKey.BARCODE,"BARCODE2");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("BARCODE1",af.getTag().getValue(FieldKey.BARCODE,0));
+            assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.BARCODE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
-            assertEquals("BARCODE2",af.getTag().getValue(FieldKey.BARCODE,1));
+            assertEquals("BARCODE2",af.getTag().getFieldAt(FieldKey.BARCODE, 1));
 
             //No of Barcode Values
             assertEquals(2, af.getTag().getAll(FieldKey.BARCODE).size());

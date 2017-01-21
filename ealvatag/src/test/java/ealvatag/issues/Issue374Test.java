@@ -48,7 +48,7 @@ public class Issue374Test extends AbstractTestCase
                     tag = new ID3v23Tag();
                     af.setTag(tag);
                 }
-                tag.addField(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart_large.jpg")));
+                tag.addArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart_large.jpg")));
                 af.commit();
                 System.out.println("Checking:"+testFile);
                 af = AudioFileIO.read(testFile);

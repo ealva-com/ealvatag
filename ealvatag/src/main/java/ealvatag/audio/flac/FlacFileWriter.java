@@ -19,8 +19,9 @@
 package ealvatag.audio.flac;
 
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.generic.AudioFileWriter2;
+import ealvatag.audio.AudioFileWriter2;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 
 import java.nio.channels.FileChannel;
 
@@ -34,7 +35,7 @@ public class FlacFileWriter extends AudioFileWriter2
     private FlacTagWriter tw = new FlacTagWriter();
 
     @Override
-    protected void writeTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException
+    protected void writeTag(TagFieldContainer tag, FileChannel channel, final String fileName) throws CannotWriteException
     {
         tw.write(tag, channel, fileName);
     }

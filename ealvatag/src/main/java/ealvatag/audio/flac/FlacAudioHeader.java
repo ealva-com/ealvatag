@@ -1,6 +1,6 @@
 package ealvatag.audio.flac;
 
-import ealvatag.audio.generic.GenericAudioHeader;
+import ealvatag.audio.GenericAudioHeader;
 
 public class FlacAudioHeader extends GenericAudioHeader
 {

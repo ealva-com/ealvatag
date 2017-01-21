@@ -11,7 +11,6 @@ import java.io.IOException;
 public interface Artwork {
     byte[] getBinaryData();
 
-
     Artwork setBinaryData(byte[] binaryData);
 
     String getMimeType();
@@ -20,19 +19,32 @@ public interface Artwork {
 
     String getDescription();
 
+    Artwork setDescription(String description);
+
     int getHeight();
+
+    Artwork setHeight(int height);
 
     int getWidth();
 
-    Artwork setDescription(String description);
+    Artwork setWidth(int width);
 
     /**
      * Should be called when you wish to prime the artwork for saving
      *
-     * @return
+     * @return true if successful
+     *
+     * @throws UnsupportedOperationException if AndroidArtwork
      */
     boolean setImageFromData();
 
+    /**
+     *
+     * @return a BufferedImage if not on the Android platform
+     *
+     * @throws IOException if error reading the image data
+     * @throws UnsupportedOperationException if AndroidArtwork
+     */
     Object getImage() throws IOException;
 
     boolean isLinked();
@@ -47,24 +59,12 @@ public interface Artwork {
 
     Artwork setPictureType(int pictureType);
 
-    /**
-     * Create Artwork from File
-     *
-     * @param file
-     *
-     * @throws IOException
-     */
     Artwork setFromFile(File file) throws IOException;
 
     /**
      * Populate Artwork from MetadataBlockDataPicture as used by Flac and VorbisComment
      *
-     * @param coverArt
+     * @param coverArt block data picture
      */
     Artwork setFromMetadataBlockDataPicture(MetadataBlockDataPicture coverArt);
-
-
-    Artwork setWidth(int width);
-
-    Artwork setHeight(int height);
 }

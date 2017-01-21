@@ -30,6 +30,8 @@ import ealvatag.audio.flac.metadatablock.MetadataBlockDataSeekTable;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.utils.DirectByteBufferUtils;
@@ -84,7 +86,7 @@ public class FlacTagWriter {
      * @param fileName
      * @throws CannotWriteException
      */
-    public void write(Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
+    public void write(TagFieldContainer tag, FileChannel fc, final String fileName) throws CannotWriteException {
         LOG.trace("{} Writing tag", fileName);
         try {
             MetadataBlockInfo blockInfo = new MetadataBlockInfo();
@@ -213,7 +215,7 @@ public class FlacTagWriter {
      * @throws UnsupportedEncodingException
      */
     private void insertUsingDirectBuffer(String fileName,
-                                         Tag tag,
+                                         TagFieldContainer tag,
                                          FileChannel fc,
                                          MetadataBlockInfo blockInfo,
                                          FlacStreamReader flacStream,
@@ -261,7 +263,7 @@ public class FlacTagWriter {
      * @throws UnsupportedEncodingException
      */
     private void insertUsingChunks(String file,
-                                   Tag tag,
+                                   TagFieldContainer tag,
                                    FileChannel fc,
                                    MetadataBlockInfo blockInfo,
                                    FlacStreamReader flacStream,
@@ -344,7 +346,7 @@ public class FlacTagWriter {
      * @throws UnsupportedEncodingException
      */
     private void insertTagAndShift(String fileName,
-                                   Tag tag,
+                                   TagFieldContainer tag,
                                    FileChannel fc,
                                    MetadataBlockInfo blockInfo,
                                    FlacStreamReader flacStream,
@@ -406,7 +408,7 @@ public class FlacTagWriter {
      * @throws IOException
      * @throws UnsupportedEncodingException
      */
-    private void insertTagAndShiftViaMappedByteBuffer(Tag tag,
+    private void insertTagAndShiftViaMappedByteBuffer(TagFieldContainer tag,
                                                       MappedByteBuffer mappedFile,
                                                       FileChannel fc,
                                                       long targetSizeBeforeAudioData,
@@ -451,7 +453,7 @@ public class FlacTagWriter {
         writeTags(tag, fc, blockInfo, flacStream);
     }
 
-    private void writeTags(Tag tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream)
+    private void writeTags(TagFieldContainer tag, FileChannel fc, MetadataBlockInfo blockInfo, FlacStreamReader flacStream)
             throws IOException {
         //Jump over Id3 (if exists) Flac Header
         fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);

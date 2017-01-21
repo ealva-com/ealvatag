@@ -96,7 +96,7 @@ public class Issue310Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test85.mp4",new File("test85Test3.mp4"));
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png")));
+            af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png")));
             af.commit();
             af = AudioFileIO.read(testFile);
         }

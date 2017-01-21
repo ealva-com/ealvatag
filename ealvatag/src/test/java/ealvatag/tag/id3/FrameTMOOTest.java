@@ -153,8 +153,6 @@ public void testCreateID3v22Frame()
     /**
      * Testing not only conversion of MOOD but also what hapens when have two frame of different types (TMOO and TXXX) that
      * become the same type TXXX
-     *
-     * @throws Exception
      */
     public void testConvertV24ToV23() throws Exception
     {
@@ -197,8 +195,6 @@ public void testCreateID3v22Frame()
     /**
      * Testing not only conversion of MOOD but also what happens when have two frame of different types (TMOO and TXXX) that
      * become the same type TXXX
-     *
-     * @throws Exception
      */
     public void testConvertV23ToV24() throws Exception
     {

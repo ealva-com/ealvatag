@@ -10,6 +10,7 @@ import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.images.Images;
+import ealvatag.tag.images.NullArtwork;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class Issue294Test extends AbstractTestCase
 
             //File is corrupt
             assertEquals(1,af.getTag().getArtworkList().size());
-            Artwork artwork = af.getTag().getFirstArtwork();
+            Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
             assertEquals("image/jpeg",artwork.getMimeType());
             assertTrue(ImageFormats.isPortableFormat(artwork.getBinaryData()));
 
@@ -59,7 +60,7 @@ public class Issue294Test extends AbstractTestCase
             //af.getID3v2TagAsv24().removeFrame("APIC");
 
             final List multiFrames = new ArrayList();
-            multiFrames.add(af.getID3v2Tag().createField(ArtworkFactory.createArtworkFromFile(testPix)));
+            multiFrames.add(af.getID3v2Tag().createArtwork(ArtworkFactory.createArtworkFromFile(testPix)));
             af.getID3v2Tag().setFrame("APIC", multiFrames);
             af.commit();
 

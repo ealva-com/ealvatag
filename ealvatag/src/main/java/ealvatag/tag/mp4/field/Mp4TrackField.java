@@ -11,17 +11,15 @@ import java.util.ArrayList;
 
 /**
  * Represents the Track No field
- *
+ * <p>
  * <p>There are a number of reserved fields making matters more complicated
  * Reserved:2 bytes
  * Track Number:2 bytes
  * No of Tracks:2 bytes (or zero if not known)
  * PlayListTitleReserved: 1 byte
  * playtitlenameReserved:0 bytes
- *
  */
-public class Mp4TrackField extends Mp4TagTextNumberField
-{
+public class Mp4TrackField extends Mp4TagTextNumberField {
     private static final int NONE_VALUE_INDEX = 0;
     private static final int TRACK_NO_INDEX = 1;
     private static final int TRACK_TOTAL_INDEX = 2;
@@ -31,25 +29,21 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      * Create new Track Field parsing the String for the trackno/total
      *
      * @param trackValue
+     *
      * @throws ealvatag.tag.FieldDataInvalidException
      */
-    public Mp4TrackField(String trackValue) throws FieldDataInvalidException
-    {
+    public Mp4TrackField(String trackValue) throws FieldDataInvalidException {
         super(Mp4FieldKey.TRACK.getFieldName(), trackValue);
 
         numbers = new ArrayList<Short>();
         numbers.add(new Short("0"));
 
         String values[] = trackValue.split("/");
-        switch (values.length)
-        {
+        switch (values.length) {
             case 1:
-                try
-                {
+                try {
                     numbers.add(Short.parseShort(values[0]));
-                }
-                catch (NumberFormatException nfe)
-                {
+                } catch (NumberFormatException nfe) {
                     throw new FieldDataInvalidException("Value of:" + values[0] + " is invalid for field:" + id);
                 }
                 numbers.add(new Short("0"));
@@ -57,20 +51,14 @@ public class Mp4TrackField extends Mp4TagTextNumberField
                 break;
 
             case 2:
-                try
-                {
+                try {
                     numbers.add(Short.parseShort(values[0]));
-                }
-                catch (NumberFormatException nfe)
-                {
+                } catch (NumberFormatException nfe) {
                     throw new FieldDataInvalidException("Value of:" + values[0] + " is invalid for field:" + id);
                 }
-                try
-                {
+                try {
                     numbers.add(Short.parseShort(values[1]));
-                }
-                catch (NumberFormatException nfe)
-                {
+                } catch (NumberFormatException nfe) {
                     throw new FieldDataInvalidException("Value of:" + values[1] + " is invalid for field:" + id);
                 }
                 numbers.add(new Short("0"));
@@ -87,13 +75,12 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      *
      * @param trackNo
      */
-    public Mp4TrackField(int trackNo)
-    {
+    public Mp4TrackField(int trackNo) {
 
         super(Mp4FieldKey.TRACK.getFieldName(), String.valueOf(trackNo));
         numbers = new ArrayList<Short>();
         numbers.add(new Short("0"));
-        numbers.add((short) trackNo);
+        numbers.add((short)trackNo);
         numbers.add(new Short("0"));
         numbers.add(new Short("0"));
     }
@@ -104,13 +91,12 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      * @param trackNo
      * @param total
      */
-    public Mp4TrackField(int trackNo, int total)
-    {
+    public Mp4TrackField(int trackNo, int total) {
         super(Mp4FieldKey.TRACK.getFieldName(), String.valueOf(trackNo));
         numbers = new ArrayList<Short>();
         numbers.add(new Short("0"));
-        numbers.add((short) trackNo);
-        numbers.add((short) total);
+        numbers.add((short)trackNo);
+        numbers.add((short)total);
         numbers.add(new Short("0"));
     }
 
@@ -119,16 +105,15 @@ public class Mp4TrackField extends Mp4TagTextNumberField
      *
      * @param id
      * @param data
+     *
      * @throws UnsupportedEncodingException
      */
-    public Mp4TrackField(String id, ByteBuffer data) throws UnsupportedEncodingException
-    {
+    public Mp4TrackField(String id, ByteBuffer data) throws UnsupportedEncodingException {
         super(id, data);
     }
 
 
-    protected void build(ByteBuffer data) throws UnsupportedEncodingException
-    {
+    protected void build(ByteBuffer data) throws UnsupportedEncodingException {
         //Data actually contains a 'Data' Box so process data using this
         Mp4BoxHeader header = new Mp4BoxHeader(data);
         Mp4DataBox databox = new Mp4DataBox(header, data);
@@ -137,14 +122,11 @@ public class Mp4TrackField extends Mp4TagTextNumberField
         //Track number always hold three values, we can discard the first one, the second one is the track no
         //and the third is the total no of tracks so only use if not zero
         StringBuffer sb = new StringBuffer();
-        if(numbers!=null)
-        {
-            if ((numbers.size() > TRACK_NO_INDEX) && (numbers.get(TRACK_NO_INDEX) > 0))
-            {
+        if (numbers != null) {
+            if ((numbers.size() > TRACK_NO_INDEX) && (numbers.get(TRACK_NO_INDEX) > 0)) {
                 sb.append(numbers.get(TRACK_NO_INDEX));
             }
-            if ((numbers.size() > TRACK_TOTAL_INDEX) && (numbers.get(TRACK_TOTAL_INDEX) > 0))
-            {
+            if ((numbers.size() > TRACK_TOTAL_INDEX) && (numbers.get(TRACK_TOTAL_INDEX) > 0)) {
                 sb.append("/").append(numbers.get(TRACK_TOTAL_INDEX));
             }
         }
@@ -154,41 +136,35 @@ public class Mp4TrackField extends Mp4TagTextNumberField
     /**
      * @return
      */
-    public Short getTrackNo()
-    {
+    public Short getTrackNo() {
         return numbers.get(TRACK_NO_INDEX);
+    }
+
+    /**
+     * Set Track No
+     *
+     * @param trackNo
+     */
+    public void setTrackNo(int trackNo) {
+        numbers.set(TRACK_NO_INDEX, (short)trackNo);
     }
 
     /**
      * @return
      */
-    public Short getTrackTotal()
-    {
-        if(numbers.size()<=TRACK_TOTAL_INDEX)
-        {
+    public Short getTrackTotal() {
+        if (numbers.size() <= TRACK_TOTAL_INDEX) {
             return 0;
         }
         return numbers.get(TRACK_TOTAL_INDEX);
     }
-
-     /**
-     * Set Track No
-     *
-     * @param trackNo
-     */
-    public void setTrackNo(int trackNo)
-    {
-        numbers.set(TRACK_NO_INDEX, (short) trackNo);
-    }
-
 
     /**
      * Set total number of tracks
      *
      * @param trackTotal
      */
-    public void setTrackTotal(int trackTotal)
-    {
-       numbers.set(TRACK_TOTAL_INDEX, (short) trackTotal);
+    public void setTrackTotal(int trackTotal) {
+        numbers.set(TRACK_TOTAL_INDEX, (short)trackTotal);
     }
 }

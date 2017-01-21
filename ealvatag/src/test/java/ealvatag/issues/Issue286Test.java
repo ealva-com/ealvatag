@@ -8,6 +8,7 @@ import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.images.Images;
+import ealvatag.tag.images.NullArtwork;
 
 import java.io.File;
 
@@ -25,7 +26,7 @@ public class Issue286Test extends AbstractTestCase
         File file = new File("testdata", "test76.ogg");
         AudioFile af = AudioFileIO.read(file);
         assertEquals(1,af.getTag().getArtworkList().size());
-        Artwork artwork = af.getTag().getFirstArtwork();
+        Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
         System.out.println(artwork);
         assertEquals(600, Images.getImage(artwork).getWidth());
         assertEquals(800, Images.getImage(artwork).getHeight());
@@ -43,7 +44,7 @@ public class Issue286Test extends AbstractTestCase
         File file = new File("testdata", "test77.ogg");
         AudioFile af = AudioFileIO.read(file);
         assertEquals(1,af.getTag().getArtworkList().size());
-        Artwork artwork = af.getTag().getFirstArtwork();
+        Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
         System.out.println(artwork);
         assertEquals(600,Images.getImage(artwork).getWidth());
         assertEquals(800,Images.getImage(artwork).getHeight());
@@ -68,8 +69,8 @@ public class Issue286Test extends AbstractTestCase
             Tag tag = af.getTag();
 
             assertEquals(1, tag.getArtworkList().size());
-            assertTrue(tag.getArtworkList().get(0) instanceof Artwork);
-            Artwork artwork = tag.getFirstArtwork();
+            assertNotNull(tag.getArtworkList().get(0));
+            Artwork artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals("",artwork.getDescription());
@@ -79,21 +80,21 @@ public class Issue286Test extends AbstractTestCase
             Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             newartwork.setDescription("A new file");
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
-            tag.addField(newartwork);
+            tag.addArtwork(newartwork);
             af.commit();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
             assertEquals(2, tag.getArtworkList().size());
 
 
-            assertTrue(tag.getArtworkList().get(0) instanceof Artwork);
-            artwork = tag.getFirstArtwork();
+            assertNotNull(tag.getArtworkList().get(0));
+            artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());
             assertEquals("",artwork.getDescription());
             assertEquals(200, Images.getImage(artwork).getWidth());
 
-            assertTrue(tag.getArtworkList().get(1) instanceof Artwork);
+            assertNotNull(tag.getArtworkList().get(1));
             artwork = tag.getArtworkList().get(1);
             assertEquals("image/png", artwork.getMimeType());
             assertNotNull(artwork.getImage());

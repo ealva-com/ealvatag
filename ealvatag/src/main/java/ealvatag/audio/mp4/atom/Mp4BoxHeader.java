@@ -20,7 +20,7 @@ package ealvatag.audio.mp4.atom;
 
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.Utils;
 import ealvatag.logging.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

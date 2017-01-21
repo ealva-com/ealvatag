@@ -27,6 +27,7 @@ import ealvatag.audio.mp4.atom.Mp4MetaBox;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.mp4.Mp4Tag;
 import ealvatag.tag.mp4.Mp4TagCreator;
@@ -374,7 +375,7 @@ public class Mp4TagWriter {
      * @throws CannotWriteException
      * @throws IOException
      */
-    public void write(Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp)
+    public void write(TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
             throws CannotWriteException, IOException {
         LOG.debug("Started writing tag data");
         FileChannel fileReadChannel = raf.getChannel();

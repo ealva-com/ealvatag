@@ -42,9 +42,9 @@ public class Issue417Test extends AbstractTestCase
             af.getTag().addField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test4.html");
             af.commit();
             af = AudioFileIO.read(testFile);
-            assertEquals("http://test1.html",af.getTag().getValue(FieldKey.URL_OFFICIAL_ARTIST_SITE,0));
+            assertEquals("http://test1.html",af.getTag().getFieldAt(FieldKey.URL_OFFICIAL_ARTIST_SITE, 0));
             assertEquals("http://test1.html", af.getTag().getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));
-            assertEquals("http://test2.html",af.getTag().getValue(FieldKey.URL_OFFICIAL_ARTIST_SITE,1));
+            assertEquals("http://test2.html",af.getTag().getFieldAt(FieldKey.URL_OFFICIAL_ARTIST_SITE, 1));
 
             //No of WOAR Values
             assertEquals(4,af.getTag().getAll(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());

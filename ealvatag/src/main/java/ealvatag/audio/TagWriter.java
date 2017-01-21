@@ -15,15 +15,31 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.audio.generic;
+package ealvatag.audio;
+
+import ealvatag.audio.AudioFile;
+import ealvatag.audio.exceptions.CannotWriteException;
+import ealvatag.tag.Tag;
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
- * Factory interface for {@link AudioFileReader} instances. These are needed to delay construction of readers until they are needed. An
- * implementation might always create a new instance or could cache instances - that is implementation specific.
- *
- * Created by Eric A. Snell on 1/19/17.
+ * Created by Paul on 15/09/2015.
  */
-public interface AudioFileReaderFactory {
+public interface TagWriter
+{
+    public void delete(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws IOException, CannotWriteException;
 
-    AudioFileReader make();
+
+    /**
+     * Write tag to file
+     *
+     * @param tag
+     * @param raf
+     * @param rafTemp
+     * @throws ealvatag.audio.exceptions.CannotWriteException
+     * @throws java.io.IOException
+     */
+    public void write(AudioFile af, Tag tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException;
 }

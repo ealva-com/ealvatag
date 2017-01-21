@@ -18,6 +18,7 @@
  */
 package ealvatag.tag;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.images.Artwork;
@@ -27,9 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Temporary notes - Switching from Jaudiotagger to ealvatag
+ * Switching from Jaudiotagger to ealvatag
  * <list>
- * <li>Changes will be incompatible to Jaudiotagger users that depend particular types of exceptions thrown under certain
+ * <li>Changes will be incompatible to Jaudiotagger users that depend on particular types of exceptions thrown under certain
  * conditions</li>
  * <li>Some general concepts will be refined or redefined</li>
  * <li>Illegal arguments will throw IllegalArgumentException, not throw KeyNotFoundException</li>
@@ -63,11 +64,59 @@ import java.util.List;
  * @author Paul Taylor
  */
 public interface Tag {
+    /**
+     * Get all the {@link FieldKey}s this tag supports
+     *
+     * @return set of supported keys. Guaranteed non-null
+     */
+    ImmutableSet<FieldKey> getSupportedFields();
+
+    /**
+     * Determines whether the tag has no fields specified.<br>
+     *
+     * @return <code>true</code> if tag contains no field.
+     */
+    boolean isEmpty();
+
+    /**
+     * Determines whether the tag has at least one field with the specified field key.
+     *
+     * @param genericKey the key to search for
+     *
+     * @return true if this tag instance contains the {@link FieldKey}
+     *
+     * @throws IllegalArgumentException  if {@code fieldKey} is null
+     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
+     */
+    boolean hasField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Determines whether the tag has at least one field with the specified
+     * &quot;id&quot;.
+     *
+     * @param id The field id to look for.
+     *
+     * @return <code>true</code> if tag contains a {@link TagField} with the given {@linkplain TagField#getId() id}.
+     */
+    boolean hasField(String id);
+
+    int getFieldCount(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Return the number of fields
+     * <p>
+     * <p>Fields with the same identifiers are counted separately
+     * <p>
+     * i.e two TITLE fields in a Vorbis Comment file would count as two
+     *
+     * @return total number of fields
+     */
+    int getFieldCount();
 
     /**
      * Create the field based on the generic key and set it in the tag
      *
-     * @param genericKey the field to set
+     * @param genericKey the field to set (Never {@link FieldKey#COVER_ART}
      * @param values     value(s) to set into the field
      *
      * @return self
@@ -79,17 +128,6 @@ public interface Tag {
     Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
                                                                UnsupportedFieldException,
                                                                FieldDataInvalidException;
-
-    /**
-     * Create artwork field based on the data in artwork and then set it in the tag itself
-     *
-     * @param artwork the artwork to set
-     *
-     * @throws IllegalArgumentException  if the {@code artwork} is null
-     * @throws UnsupportedFieldException if this Tag does not support artwork
-     * @throws FieldDataInvalidException if the data is invalid for the given field
-     */
-    void setField(Artwork artwork) throws FieldDataInvalidException;
 
     /**
      * Create the field based on the generic key and add it to the tag
@@ -110,56 +148,43 @@ public interface Tag {
                                                                FieldDataInvalidException;
 
     /**
-     * Create artwork field based on the data in artwork and then add it to the tag itself
+     * Retrieve String value of the first field that exists for this generic key
      *
-     * @param artwork
+     * @param genericKey field to get
      *
-     * @throws FieldDataInvalidException
-     */
-    void addField(Artwork artwork) throws FieldDataInvalidException;
-
-
-    /**
-     * Delete any fields with this key
-     *
-     * @param genericKey key of field to delete
+     * @return value of the field or empty string if the field does not exist
      *
      * @throws IllegalArgumentException  if {@code genericKey} is null
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
-    void deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+    String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
-     * Delete any fields with this id
-     *
-     * @param id field id
-     */
-    void deleteField(String id);
-
-    /**
-     * Returns a {@link ImmutableList} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
+     * Retrieve String value of the first field that exists for this format specific key
      * <p>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     * Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
-     * @param id The field id.
+     * @param id field to get
      *
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;. List is empty if none found
+     * @return value of the field or empty string if the field does not exist
+     *
+     * @throws IllegalArgumentException  if {@code id} is null or empty
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the field specified by {@code id}
      */
-    ImmutableList<TagField> getFields(String id);
+    String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
-     * Returns a {@link List} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() genericKey}&quot;
-     * is the specified one.<br>
+     * Retrieve String value of the nth tag field that exists for this generic key
      *
-     * @param genericKey The field genericKey.
+     * @param genericKey field to query
+     * @param index      index to query
      *
-     * @return A list of {@link TagField} objects with the given &quot;genericKey&quot;.
+     * @return the value of the {@link FieldKey} at the given {@code index}. Empty string if
      *
      * @throws IllegalArgumentException  if {@code genericKey} is null
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
-    ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+    String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Retrieve all String values that exist for this generic key
@@ -173,123 +198,87 @@ public interface Tag {
      */
     List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
-
     /**
-     * Iterator over all the fields within the tag, handle multiple fields with the same id
+     * Delete any fields with this key
      *
-     * @return iterator over whole list
-     */
-    Iterator<TagField> getFields();
-
-
-    /**
-     * Retrieve String value of the first value that exists for this format specific key
-     * <p>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     * @param genericKey key of field to delete
      *
-     * @param id
-     *
-     * @return
-     */
-    String getFirst(String id);
-
-    /**
-     * Retrieve String value of the first tag field that exists for this generic key
-     *
-     * @param id
-     *
-     * @return String value or empty string
-     *
-     * @throws KeyNotFoundException
-     */
-    String getFirst(FieldKey id) throws IllegalArgumentException, KeyNotFoundException;
-
-    /**
-     * Retrieve String value of the nth tag field that exists for this generic key
-     *
-     * @param genericKey field to query
-     * @param index      index to query
-     *
-     * @return the value of the {@link FieldKey} at the given {@code index}
+     * @return self
      *
      * @throws IllegalArgumentException  if {@code genericKey} is null
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
+     * @throws KeyNotFoundException      if the Tag does not contain the field
      */
-    String getValue(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException;
+    Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException;
 
     /**
-     * Retrieve the first field that exists for this format specific key
+     * Delete any fields with this id
+     *
+     * @param id field id
+     *
+     * @throws IllegalArgumentException  if {@code id} is null or empty
+     * @throws UnsupportedFieldException some tag implementations supported a limited number of fields and may throw this exception
+     */
+    Tag deleteField(String id) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Create artwork field based on the data in artwork and then set it in the tag
+     *
+     * @param artwork the artwork to set
+     *
+     * @return self
+     *
+     * @throws IllegalArgumentException  if the {@code artwork} is null
+     * @throws UnsupportedFieldException if this Tag does not support artwork
+     * @throws FieldDataInvalidException if the data is invalid. Cannot be encoded, ...
+     */
+    Tag setArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException;
+
+    /**
+     * Create artwork field based on the data in artwork and then add it to the tag
+     *
+     * @param artwork the artwork to added
+     *
+     * @return self
+     *
+     * @throws IllegalArgumentException  if the {@code artwork} is null
+     * @throws UnsupportedFieldException if this Tag does not support artwork
+     * @throws FieldDataInvalidException if the data is invalid. Cannot be encoded, ...
+     */
+    Tag addArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException;
+
+    /**
+     * @return first artwork
+     *
+     * @throws UnsupportedFieldException if the tag does not support artwork
+     */
+    Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException;
+
+    /**
+     * @return a list of all artwork in this file using the format independent Artwork class
+     *
+     * @throws UnsupportedFieldException if the tag does not support artwork
+     */
+    List<Artwork> getArtworkList() throws UnsupportedFieldException;
+
+    /**
+     * Delete any instance of tag fields used to store artwork
      * <p>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     * <p>We need this additional deleteField method because in some formats artwork can be stored
+     * in multiple fields
      *
-     * @param id audio specific key
-     *
-     * @return tag field or null if doesn't exist
+     * @throws UnsupportedFieldException if this tag doesn't support Artwork
+     * @throws KeyNotFoundException      if this tag does not contain artwork
      */
-    TagField getFirstField(String id);
-
-    /**
-     * @param genericKey field to search for
-     *
-     * @return the first field that matches this generic key
-     *
-     * @throws IllegalArgumentException  if {@code fieldKey} is null
-     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
-     */
-    TagField getFirstField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+    void deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException;
 
     /**
      * Returns <code>true</code>, if at least one of the contained
-     * {@linkplain TagField fields} is a common field ({@link TagField#isCommon()}).
+     * fields is a "common" field.
      *
      * @return <code>true</code> if a {@linkplain TagField#isCommon() common} field is present.
      */
     boolean hasCommonFields();
-
-    /**
-     * Determines whether the tag has at least one field with the specified field key.
-     *
-     * @param fieldKey the key to search for
-     *
-     * @return true if this tag instance contains the {@link FieldKey}
-     *
-     * @throws IllegalArgumentException  if {@code fieldKey} is null
-     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
-     */
-    boolean hasField(FieldKey fieldKey) throws IllegalArgumentException, UnsupportedFieldException;
-
-    /**
-     * Determines whether the tag has at least one field with the specified
-     * &quot;id&quot;.
-     *
-     * @param id The field id to look for.
-     *
-     * @return <code>true</code> if tag contains a {@link TagField} with the given {@linkplain TagField#getId() id}.
-     */
-    boolean hasField(String id);
-
-    /**
-     * Determines whether the tag has no fields specified.<br>
-     *
-     * @return <code>true</code> if tag contains no field.
-     */
-    boolean isEmpty();
-
-
-    //TODO, do we need this
-    String toString();
-
-    /**
-     * Return the number of fields
-     * <p>
-     * <p>Fields with the same identifiers are counted separately
-     * <p>
-     * i.e two TITLE fields in a Vorbis Comment file would count as two
-     *
-     * @return total number of fields
-     */
-    int getFieldCount();
-
 
     /**
      * Return the number of fields taking multiple value fields into consideration
@@ -302,42 +291,7 @@ public interface Tag {
      */
     int getFieldCountIncludingSubValues();
 
-
-    //TODO is this a special field?
     boolean setEncoding(Charset enc) throws FieldDataInvalidException;
-
-
-    /**
-     * @return a list of all artwork in this file using the format independent Artwork class
-     */
-    List<Artwork> getArtworkList();
-
-    /**
-     * @return first artwork or null if none exist
-     */
-    Artwork getFirstArtwork();
-
-    /**
-     * Delete any instance of tag fields used to store artwork
-     * <p>
-     * <p>We need this additional deleteField method because in some formats artwork can be stored
-     * in multiple fields
-     *
-     * @throws KeyNotFoundException
-     */
-    void deleteArtworkField() throws KeyNotFoundException;
-
-
-    /**
-     * Create artwork field based on the data in artwork
-     *
-     * @param artwork
-     *
-     * @return suitable tagfield for this format that represents the artwork data
-     *
-     * @throws FieldDataInvalidException
-     */
-    TagField createField(Artwork artwork) throws FieldDataInvalidException;
 
     /**
      * Create a new field
@@ -355,26 +309,75 @@ public interface Tag {
                                                                       UnsupportedFieldException,
                                                                       FieldDataInvalidException;
 
+    TagField createArtwork(Artwork artwork) throws FieldDataInvalidException;
+
+    /**
+     * Returns a {@link List} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() genericKey}&quot;
+     * is the specified one.<br>
+     *
+     * @param genericKey The field genericKey.
+     *
+     * @return A list of {@link TagField} objects with the given &quot;genericKey&quot;.
+     *
+     * @throws IllegalArgumentException  if {@code genericKey} is null
+     * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
+     */
+    ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Iterator over all the fields within the tag, handle multiple fields with the same id
+     *
+     * @return iterator over whole list
+     */
+    Iterator<TagField> getFields();
+
+    /**
+     * Returns a {@link ImmutableList} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+     * is the specified one.<br>
+     * <p>
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     *
+     * @param id The field id.
+     *
+     * @return A list of {@link TagField} objects with the given &quot;id&quot;. List is empty if none found
+     */
+    ImmutableList<TagField> getFields(String id);
+
+    /**
+     * Retrieve the first field that exists for this format specific key
+     * <p>
+     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     *
+     * @param id audio specific key
+     *
+     * @return tag field
+     *
+     * @throws IllegalArgumentException  if {@code id} is null or empty
+     * @throws UnsupportedFieldException if the Tag instance does not support the field given by {@code id} parameter
+     */
+    TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * @param genericKey field to search for
+     *
+     * @return the first field that matches this generic key
+     *
+     * @throws IllegalArgumentException  if {@code fieldKey} is null
+     * @throws UnsupportedFieldException if this tag doesn't support the {@link FieldKey}
+     */
+    Optional<TagField> getFirstField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
     /**
      * Creates isCompilation field
      * <p>
      * It is useful to have this method because it handles ensuring that the correct value to represent a boolean
      * is stored in the underlying field format.
      *
-     * @param value
+     * @param value the boolean to be converted to the underlying tag representation
      *
-     * @return
+     * @return the {@link FieldKey#IS_COMPILATION}
      *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
+     * @throws UnsupportedFieldException if the Tag doesn't support the {@link FieldKey#IS_COMPILATION} field
      */
-    TagField createCompilationField(boolean value) throws KeyNotFoundException, FieldDataInvalidException;
-
-    /**
-     * Get all the {@link FieldKey}s this tag supports
-     *
-     * @return set of supported keys. Guaranteed non-null
-     */
-    ImmutableSet<FieldKey> getSupportedFields();
-
+    TagField createCompilationField(boolean value) throws UnsupportedFieldException;
 }

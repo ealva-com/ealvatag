@@ -142,8 +142,8 @@ public class FrameBodyTIPLTest extends AbstractTestCase
         ((ID3v24Tag)f.getTag()).addField(FieldKey.ARRANGER, "Arranger2");
         assertEquals(1, f.getTag().getFieldCount());
         assertEquals("Arranger1", f.getTag().getFirst(FieldKey.ARRANGER));
-        assertEquals("Arranger1", f.getTag().getValue(FieldKey.ARRANGER,0));
-        assertEquals("Arranger2", f.getTag().getValue(FieldKey.ARRANGER,1));
+        assertEquals("Arranger1", f.getTag().getFieldAt(FieldKey.ARRANGER, 0));
+        assertEquals("Arranger2", f.getTag().getFieldAt(FieldKey.ARRANGER, 1));
 
         f.commit();
         f = AudioFileIO.read(testFile);

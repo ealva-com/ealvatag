@@ -1,12 +1,12 @@
 package ealvatag.audio.real;
 
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.generic.AudioFileReader;
-import ealvatag.audio.generic.GenericAudioHeader;
-import ealvatag.audio.generic.Utils;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public class RealFileReader extends AudioFileReader
     }
 
     @Override
-    protected Tag getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
         final RealChunk cont = findContChunk(raf);
         final DataInputStream dis = cont.getDataInputStream();

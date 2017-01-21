@@ -21,6 +21,7 @@ package ealvatag.audio.ogg;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.audio.ogg.util.VorbisPacketType;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
 
 import java.io.UnsupportedEncodingException;
@@ -39,7 +40,7 @@ public class OggVorbisCommentTagCreator {
     private VorbisCommentCreator creator = new VorbisCommentCreator();
 
     //Creates the ByteBuffer for the ogg tag
-    public ByteBuffer convert(Tag tag) throws UnsupportedEncodingException {
+    public ByteBuffer convert(TagFieldContainer tag) throws UnsupportedEncodingException {
         ByteBuffer ogg = creator.convert(tag);
         int tagLength =
                 ogg.capacity() + VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH +
