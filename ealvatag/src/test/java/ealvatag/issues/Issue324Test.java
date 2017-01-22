@@ -29,7 +29,7 @@ public class Issue324Test extends AbstractTestCase
         assertEquals("Iron Maiden",f.getID3v1Tag().getFirst(FieldKey.ARTIST));
         f.setID3v1Tag(new ID3v11Tag());
         f.getID3v1Tag().setField(FieldKey.ARTIST,"Iron Mask");
-        f.commit();
+        f.save();
         assertEquals(1853744,testFile.length());
         f = (MP3File)AudioFileIO.read(testFile);
         assertEquals("Iron Mask",f.getID3v1Tag().getFirst(FieldKey.ARTIST));

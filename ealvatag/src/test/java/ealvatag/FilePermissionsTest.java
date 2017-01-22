@@ -85,7 +85,7 @@ public class FilePermissionsTest {
 			AudioFile aFile = AudioFileIO.read(testFile);
 			Tag tag = aFile.getTag();
 			tag.setField(FieldKey.ALBUM, "album");
-			aFile.commit();
+			aFile.save();
 		} finally {
 			testFile.setWritable(true);
 			TagOptionSingleton.getInstance().setToDefault();

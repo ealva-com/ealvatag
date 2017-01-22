@@ -43,7 +43,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
         {
             tag.deleteField(AsfFieldKey.getAsfFieldKey(curr));
         }
-        file.commit();
+        file.save();
         AsfHeader header = AsfHeaderReader.readHeader(file.getFile());
         assertNull(header.getContentDescription());
         for (String currKey : ContentDescription.ALLOWED)
@@ -56,7 +56,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
             file = AudioFileIO.read(file.getFile());
             tag = (AsfTag) file.getTag();
             tag.addField(tag.createField(curr, curr.getFieldName()));
-            file.commit();
+            file.save();
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNotNull(header.getContentDescription());
             assertNull("Key: " + curr.getFieldName(), header.getExtendedContentDescription());

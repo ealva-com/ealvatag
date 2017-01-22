@@ -10,6 +10,7 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
+import ealvatag.tag.reference.ID3V2Version;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -48,7 +49,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Write mp3 back to file ,
         TagOptionSingleton.getInstance().setUnsyncTags(false);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
         assertFalse(v24tag.isUnsynchronization());
@@ -67,7 +68,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Enable unsynchronization and write mp3 back to file , only APIC requires unsynchronization
         TagOptionSingleton.getInstance().setUnsyncTags(true);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24tag = (ID3v24Tag) mp3File.getID3v2Tag();
         assertFalse(v24tag.isUnsynchronization());
@@ -104,7 +105,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Write mp3 back to file
         TagOptionSingleton.getInstance().setUnsyncTags(false);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
         assertFalse(v23tag.isUnsynchronization());
@@ -112,7 +113,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Enable unsynchronization and write mp3 back to file, only APIC requires unsynchronization
         TagOptionSingleton.getInstance().setUnsyncTags(true);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
         assertTrue(v23tag.isUnsynchronization());
@@ -141,7 +142,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Write mp3 back to file
         TagOptionSingleton.getInstance().setUnsyncTags(false);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v22tag = (ID3v22Tag) mp3File.getID3v2Tag();
         assertFalse(v22tag.isUnsynchronization());
@@ -149,7 +150,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
         //Enable unsynchronization and write mp3 back to file , only APIC requires unsynchronization
         TagOptionSingleton.getInstance().setUnsyncTags(true);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v22tag = (ID3v22Tag) mp3File.getID3v2Tag();
         assertTrue(v22tag.isUnsynchronization());
@@ -173,24 +174,25 @@ public class UnsynchronizationTest extends AbstractTestCase
             //Save Unsynced
             TagOptionSingleton.getInstance().setUnsyncTags(true);
             AudioFile af = AudioFileIO.read(testFile);
-            af.setTag(new ID3v23Tag());
+            TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+            af.setNewDefaultTag();
             ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag();
             assertFalse(v23TagUnsynced.isUnsynchronization());
             Tag unsyncedTag = af.getTag();
             Artwork artworkUnsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             unsyncedTag.setArtwork(artworkUnsynced);
-            af.commit();
+            af.save();
 
             //Save Notsynced
             TagOptionSingleton.getInstance().setUnsyncTags(false);
             af = AudioFileIO.read(testFile2);
-            af.setTag(new ID3v23Tag());
+            af.setNewDefaultTag();
             ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag();
             assertFalse(v23TagNotsynced.isUnsynchronization());
             Tag notSyncedTag = af.getTag();
             Artwork artworkNotsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             notSyncedTag.setArtwork(artworkNotsynced);
-            af.commit();
+            af.save();
 
             //Now read back ok
             long start = System.nanoTime();

@@ -17,7 +17,6 @@ import java.io.RandomAccessFile;
  */
 public class RealFileReader extends AudioFileReader
 {
-
     @Override
     protected GenericAudioHeader getEncodingInfo(RandomAccessFile raf) throws CannotReadException, IOException
     {

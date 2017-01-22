@@ -24,7 +24,7 @@ public class Issue420Test extends AbstractTestCase
         mp3File.getID3v1Tag().setYear("1971");
         //TODO this seems wrong
         assertNull(mp3File.getTag());
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         assertNotNull(mp3File.getTag());
         assertEquals(0,mp3File.getTag().getFields("TYER").size());

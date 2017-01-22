@@ -31,7 +31,7 @@ public class Issue052Test extends AbstractTestCase
             frame.setBody(frameBody);
             tag.setFrame(frame);
             mp3File.setID3v2Tag(tag);
-            mp3File.save();
+            mp3File.saveMp3();
         }
         catch (Exception e)
         {

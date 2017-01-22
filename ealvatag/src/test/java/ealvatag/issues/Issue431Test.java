@@ -27,9 +27,9 @@ public class Issue431Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK, "1");
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -61,9 +61,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes
@@ -91,9 +91,9 @@ public class Issue431Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         //Track isnt padded
@@ -141,9 +141,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("001", tag.getFirst(FieldKey.TRACK));
@@ -155,9 +155,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_THREE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("0001", tag.getFirst(FieldKey.TRACK));
@@ -169,9 +169,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_THREE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"112");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("0112", tag.getFirst(FieldKey.TRACK));
@@ -183,9 +183,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
@@ -198,10 +198,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TRACK_TOTAL,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("01", tag.getFirst(FieldKey.TRACK));
@@ -215,10 +215,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TRACK_TOTAL,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("001", tag.getFirst(FieldKey.TRACK));
@@ -230,9 +230,9 @@ public class Issue431Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK, "1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
@@ -245,9 +245,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
 
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK, "1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
@@ -258,10 +258,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumbers(false);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"01");
         assertEquals("01", tag.getFirst(FieldKey.TRACK));
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes
@@ -288,9 +288,9 @@ public class Issue431Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO, "1");
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -322,9 +322,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes
@@ -352,9 +352,9 @@ public class Issue431Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         //Track isnt padded
@@ -402,9 +402,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("001", tag.getFirst(FieldKey.DISC_NO));
@@ -416,9 +416,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_THREE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("0001", tag.getFirst(FieldKey.DISC_NO));
@@ -430,9 +430,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_THREE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"112");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("0112", tag.getFirst(FieldKey.DISC_NO));
@@ -444,9 +444,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
@@ -459,10 +459,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
         tag.setField(FieldKey.DISC_TOTAL,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
@@ -476,10 +476,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_TWO_ZERO);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"1");
         tag.setField(FieldKey.DISC_TOTAL,"1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("001", tag.getFirst(FieldKey.DISC_NO));
@@ -491,9 +491,9 @@ public class Issue431Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO, "1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
@@ -506,9 +506,9 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumberTotalLength(PadNumberOption.PAD_ONE_ZERO);
 
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO, "1");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
@@ -519,10 +519,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumbers(false);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"01");
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes
@@ -549,11 +549,11 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumbers(false);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_NO,"01");
         tag.setField(FieldKey.DISC_TOTAL,"08");
         assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes
@@ -583,10 +583,10 @@ public class Issue431Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setPadNumbers(false);
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_TOTAL,"08");
         assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
-        f.commit();
+        f.save();
 
         //Frame Header
         //Check Bytes

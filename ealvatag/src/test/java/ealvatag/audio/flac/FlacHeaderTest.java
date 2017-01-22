@@ -86,7 +86,7 @@ public class FlacHeaderTest extends TestCase
 
             //Create Image Link
             tag.getImages().add((MetadataBlockDataPicture) tag.createLinkedArtworkField("../testdata/coverart.jpg"));
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             image = tag.getImages().get(2);
             assertEquals(3, (int) image.getPictureType());
@@ -241,7 +241,7 @@ public class FlacHeaderTest extends TestCase
 
             FlacTag tag = (FlacTag) f.getTag();
             tag.setField(FieldKey.ARTIST,"artist");
-            f.commit();
+            f.save();
             System.out.println("Writing audio data");
             f = AudioFileIO.read(testFile);
             System.out.println(f);

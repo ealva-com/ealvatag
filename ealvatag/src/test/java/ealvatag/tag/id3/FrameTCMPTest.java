@@ -103,7 +103,7 @@ public class FrameTCMPTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTCMPTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -124,7 +124,7 @@ public class FrameTCMPTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -142,12 +142,12 @@ public class FrameTCMPTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTCMPTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
         mp3File.setID3v2TagOnly(new ID3v23Tag(mp3File.getID3v2TagAsv24()));
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -166,12 +166,12 @@ public class FrameTCMPTest extends AbstractTestCase
         ID3v22Frame id3v22frame = new ID3v22Frame(ID3v22Frames.FRAME_ID_V2_IS_COMPILATION);
         tag.setFrame(id3v22frame);
         mp3File.setID3v2TagOnly(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
         mp3File.setID3v2TagOnly(new ID3v24Tag(mp3File.getID3v2Tag()));
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);

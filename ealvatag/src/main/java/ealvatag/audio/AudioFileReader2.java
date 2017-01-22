@@ -22,7 +22,6 @@ import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.NoReadPermissionsException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
    * @exception NoReadPermissionsException if permissions prevent reading of file
    * @exception CannotReadException If anything went bad during the read of this file
    */
-    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
+    public AudioFileImpl read(File f, final String extension) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException
     {
             LOG.debug(ErrorMessage.GENERAL_READ.getMsg(f));
 
@@ -68,7 +67,7 @@ public abstract class AudioFileReader2 extends AudioFileReader
             final String absolutePath = f.getAbsolutePath();
             GenericAudioHeader info = getEncodingInfo(channel, absolutePath);
             channel.position(0);
-            return new AudioFile(f, info, getTag(channel, absolutePath));
+            return new AudioFileImpl(f, extension, info, getTag(channel, absolutePath));
         } catch (IllegalArgumentException e) {
             LOG.warn(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
             throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));

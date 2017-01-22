@@ -96,7 +96,7 @@ public class FrameCOMMTest extends AbstractTestCase
 
             //Set language to null, this is common problem for new frames might null lang codes
             frameBody.setLanguage(null);
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             commFrame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame("COMM");
             frameBody = (FrameBodyCOMM) commFrame.getBody();
@@ -104,7 +104,7 @@ public class FrameCOMMTest extends AbstractTestCase
 
             //Set language to too short a value
             frameBody.setLanguage("aa");
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             commFrame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame("COMM");
             frameBody = (FrameBodyCOMM) commFrame.getBody();
@@ -112,7 +112,7 @@ public class FrameCOMMTest extends AbstractTestCase
 
             //Set language to too long a value
             frameBody.setLanguage("aaaaaaa");
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             commFrame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame("COMM");
             frameBody = (FrameBodyCOMM) commFrame.getBody();

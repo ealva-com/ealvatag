@@ -38,7 +38,7 @@ public class Issue277Test extends AbstractTestCase
 
             //Old way
             af.getTag().setField(FieldKey.IS_COMPILATION,"1");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals(1,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
             assertEquals("1",af.getTag().getFirst(FieldKey.IS_COMPILATION));
@@ -76,7 +76,7 @@ public class Issue277Test extends AbstractTestCase
 
             //Old way
             af.getTag().setField(FieldKey.IS_COMPILATION,"true");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals(1,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
             assertEquals("1",af.getTag().getFirst(FieldKey.IS_COMPILATION));
@@ -115,7 +115,7 @@ public class Issue277Test extends AbstractTestCase
 
             //Old way
             af.getTag().setField(FieldKey.RATING,"1");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals(1,tag.get(Mp4FieldKey.RATING).size());
             assertEquals("1",tag.getFirst(Mp4FieldKey.RATING));

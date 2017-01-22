@@ -36,7 +36,7 @@ public class Issue240Test extends AbstractTestCase
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
             af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
-            af.commit();
+            af.save();
 
             //Read File back
             af = AudioFileIO.read(testFile);

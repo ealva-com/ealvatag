@@ -17,11 +17,11 @@ public class Issue426Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.ARTIST,"fred");
         tag.setField(FieldKey.MUSICBRAINZ_ARTISTID,"fred");
         tag.setField(FieldKey.MUSICBRAINZ_TRACK_ID,"fred");
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();

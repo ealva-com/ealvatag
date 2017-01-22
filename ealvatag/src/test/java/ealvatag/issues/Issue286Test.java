@@ -81,7 +81,7 @@ public class Issue286Test extends AbstractTestCase
             newartwork.setDescription("A new file");
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
             tag.addArtwork(newartwork);
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             tag = af.getTag();
             assertEquals(2, tag.getArtworkList().size());

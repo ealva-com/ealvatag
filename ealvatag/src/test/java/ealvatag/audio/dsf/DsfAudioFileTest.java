@@ -56,7 +56,7 @@ public class DsfAudioFileTest extends TestCase {
             Tag tag = f.getTag();
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -94,7 +94,7 @@ public class DsfAudioFileTest extends TestCase {
             f.getTag().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag();
             System.out.println(tag);
-            f.delete();
+            f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -154,11 +154,11 @@ public class DsfAudioFileTest extends TestCase {
         try {
             AudioFile f = AudioFileIO.read(testFile);
             assertNull(f.getTag());
-            f.getTagOrCreateAndSetDefault().addField(FieldKey.ARTIST, "fred");
+            f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag();
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -188,10 +188,10 @@ public class DsfAudioFileTest extends TestCase {
         try {
             AudioFile f = AudioFileIO.read(testFile);
             assertNull(f.getTag());
-            f.getTagOrCreateAndSetDefault().addField(FieldKey.ARTIST, "fred");
+            f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag();
             System.out.println(tag);
-            f.delete();
+            f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -211,22 +211,24 @@ public class DsfAudioFileTest extends TestCase {
             return;
         }
 
+        // code blocks are simply to scope variables LOL This is hilarious. Leaving for someone else to find and get some giggles
+
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
             File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).createDefaultTag() instanceof ID3v24Tag);
+            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v24Tag);
         }
 
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).createDefaultTag() instanceof ID3v23Tag);
+            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v23Tag);
         }
 
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).createDefaultTag() instanceof ID3v22Tag);
+            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v22Tag);
         }
 
         TagOptionSingleton.getInstance().setToDefault();

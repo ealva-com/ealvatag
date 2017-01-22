@@ -2,6 +2,7 @@ package ealvatag.tag.wma;
 
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.MetadataContainer;
 import ealvatag.audio.asf.io.AsfExtHeaderModifier;
@@ -137,10 +138,10 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     public void testChunkLocations() throws Exception
     {
         File testFile = prepareTestFile(null);
-        AudioFile read = AudioFileIO.read(testFile);
+        AudioFileImpl read = (AudioFileImpl)AudioFileIO.read(testFile);
         AudioFileIO.delete(read);
-        read.setTag(testTag);
-        read.commit();
+        read.setAndReturn(testTag);
+        read.save();
         checkExcpectations(testFile, true, true, false, false);
         applyTag(testFile, false, false);
         applyTag(testFile, false, true);

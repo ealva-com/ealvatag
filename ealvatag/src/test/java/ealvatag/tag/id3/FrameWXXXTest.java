@@ -87,7 +87,7 @@ public class FrameWXXXTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -135,7 +135,7 @@ public class FrameWXXXTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(getInitialisedUnicodeFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -162,7 +162,7 @@ public class FrameWXXXTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(getRawUnicodeFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);

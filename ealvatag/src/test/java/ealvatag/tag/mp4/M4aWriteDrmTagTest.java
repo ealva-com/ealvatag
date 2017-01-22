@@ -78,7 +78,7 @@ public class M4aWriteDrmTagTest extends TestCase
             Tag tag = f.getTag();
             tag.setField(FieldKey.ARTIST,"AUTHOR");
             tag.setField(FieldKey.ALBUM,"ALBUM");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
 

@@ -29,12 +29,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "Rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "Rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("(17)",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
@@ -59,12 +59,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("(17)",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
@@ -89,12 +89,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "Rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "Rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("Rock",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v23Tag);
             tconbody = ( FrameBodyTCON) ((ID3v23Frame)((ID3v23Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
@@ -119,12 +119,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "Rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "Rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("17",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
@@ -149,12 +149,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("17",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
@@ -179,12 +179,12 @@ public class Issue055Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
 
             //Create and Save Genre passing text value
-            mp3File.getTagOrCreateAndSetDefault().addField(FieldKey.GENRE, "Rock");
+            mp3File.getTagOrSetNewDefault().addField(FieldKey.GENRE, "Rock");
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             FrameBodyTCON tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();
             assertEquals("Rock",tconbody.getFirstTextValue());
-            mp3File.save();
+            mp3File.saveMp3();
             assertEquals("Rock", mp3File.getID3v2Tag().getFirst(FieldKey.GENRE));
             assertTrue(mp3File.getID3v2Tag() instanceof ID3v24Tag);
             tconbody = ( FrameBodyTCON) ((ID3v24Frame)((ID3v24Tag)mp3File.getID3v2Tag()).getFrame("TCON")).getBody();

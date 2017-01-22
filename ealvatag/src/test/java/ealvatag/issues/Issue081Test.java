@@ -57,7 +57,7 @@ public class Issue081Test extends AbstractTestCase
         id3Tag.setField(FieldKey.DISC_NO, "5");
         id3Tag.setField(FieldKey.IS_COMPILATION, "true");
         tag.setID3Tag(id3Tag);
-        audioFile.commit();
+        audioFile.save();
     }
 
     public void testInfoTagFile() throws Exception {
@@ -81,6 +81,6 @@ public class Issue081Test extends AbstractTestCase
         wavInfoTag.setField(FieldKey.TRACK,"3");
         wavInfoTag.setField(FieldKey.YEAR,"2011");
         tag.setInfoTag(wavInfoTag);
-        audioFile.commit();
+        audioFile.save();
     }
 }

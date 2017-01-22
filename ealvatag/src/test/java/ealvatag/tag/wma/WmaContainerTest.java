@@ -31,9 +31,9 @@ public class WmaContainerTest extends WmaTestCase {
     public void testExtContentAfterWrite() throws Exception {
         File prepareTestFile = prepareTestFile(null);
         AudioFile read = AudioFileIO.read(prepareTestFile);
-        read.commit(); // Normalize Text file
+        read.save(); // Normalize Text file
         byte[] ext = AsfHeaderUtils.getFirstChunk(read.getFile(), GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
-        read.commit();
+        read.save();
         byte[] ext2 = AsfHeaderUtils.getFirstChunk(read.getFile(), GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
         assertTrue(Arrays.equals(ext, ext2));
 //        assertEquals(ext, ext2);

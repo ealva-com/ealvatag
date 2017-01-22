@@ -62,7 +62,7 @@ public class Issue294Test extends AbstractTestCase
             final List multiFrames = new ArrayList();
             multiFrames.add(af.getID3v2Tag().createArtwork(ArtworkFactory.createArtworkFromFile(testPix)));
             af.getID3v2Tag().setFrame("APIC", multiFrames);
-            af.commit();
+            af.save();
 
             //Can we read this image file
             artwork = ArtworkFactory.createArtworkFromFile(testPix);

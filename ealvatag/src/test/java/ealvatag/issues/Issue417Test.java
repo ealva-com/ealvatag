@@ -32,15 +32,15 @@ public class Issue417Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE, "http://test1.html");
+            af.getTagOrSetNewDefault().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE, "http://test1.html");
             assertTrue(af.getTag() instanceof ID3v23Tag);
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("http://test1.html", af.getTag().getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));
             af.getTag().addField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test2.html");
             af.getTag().addField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test3.html");
             af.getTag().addField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test4.html");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("http://test1.html",af.getTag().getFieldAt(FieldKey.URL_OFFICIAL_ARTIST_SITE, 0));
             assertEquals("http://test1.html", af.getTag().getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));

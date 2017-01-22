@@ -63,7 +63,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
@@ -127,7 +127,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
             //Modify Value
             tag.setField(FieldKey.ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             tag.setField(FieldKey.ALBUM_ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
@@ -195,7 +195,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
@@ -260,7 +260,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
@@ -330,7 +330,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
@@ -383,7 +383,7 @@ public class WavMetadataNewTagsId3BeforeInfoTest extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("test129.wav", new File("test128OddData.wav"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            f.delete();
+            f.deleteFileTag();
 
         }
         catch (Exception e) {

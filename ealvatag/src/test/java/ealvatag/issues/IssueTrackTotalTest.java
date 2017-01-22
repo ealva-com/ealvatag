@@ -33,7 +33,7 @@ public class IssueTrackTotalTest extends AbstractTestCase
             assertNotNull(mp3.getID3v2Tag());
             assertNotNull(af.getTag().getFirst(FieldKey.TRACK_TOTAL));
             assertEquals("",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
-            assertEquals("",af.getTagOrCreateDefault().getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("",af.getTagOrSetNewDefault().getFirst(FieldKey.TRACK_TOTAL));
 
         }
         catch(Exception e)

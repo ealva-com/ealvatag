@@ -110,7 +110,7 @@ public class Issue255Test extends AbstractTestCase
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
             af.getTag().setField(FieldKey.ALBUM,"NewValue");
-            af.commit();
+            af.save();
         }
         catch(Exception e)
         {

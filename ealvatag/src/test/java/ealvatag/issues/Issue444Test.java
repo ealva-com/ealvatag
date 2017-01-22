@@ -27,9 +27,9 @@ public class Issue444Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
             File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             af.getTag().setField(FieldKey.YEAR, "2004-10-12");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("2004-10-12",af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v24Tag) af.getTag()).getFrame("TYER"));
@@ -49,7 +49,7 @@ public class Issue444Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             af.getTag().setField(FieldKey.YEAR, "2004-10-12");
             assertEquals("2004-10-12", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -62,7 +62,7 @@ public class Issue444Test extends AbstractTestCase
             assertEquals("2004", i.next().getContent());
             assertEquals("1210", i.next().getContent());
             assertEquals("2004-10-12",aggframe.getContent());
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("2004-10-12", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -89,7 +89,7 @@ public class Issue444Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             af.getTag().setField(FieldKey.YEAR, "2004-10");
             assertEquals("2004-10-01", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -102,7 +102,7 @@ public class Issue444Test extends AbstractTestCase
             assertEquals("2004", i.next().getContent());
             assertEquals("0110", i.next().getContent());
             assertEquals("2004-10-01",aggframe.getContent());
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("2004-10-01", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -129,7 +129,7 @@ public class Issue444Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             af.getTag().setField(FieldKey.YEAR, "2004");
             assertEquals("2004", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -137,7 +137,7 @@ public class Issue444Test extends AbstractTestCase
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDAT"));
             assertNull(((ID3v23Tag) af.getTag()).getFrame("TYERTDAT"));
 
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("2004", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));
@@ -160,7 +160,7 @@ public class Issue444Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrNew0.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             af.getTag().setField(FieldKey.YEAR, "20");
             assertEquals("0020", af.getTag().getFirst(FieldKey.YEAR));
             assertNull(((ID3v23Tag)af.getTag()).getFrame("TDRC"));

@@ -197,10 +197,6 @@ public class Issue398Test extends AbstractTestCase
         assertNull(caught);
     }
 
-    /** Mp4 should only allow one track field
-     *
-     * @throws Exception
-     */
     public void testMp4getValue() throws Exception
     {
         Exception caught = null;

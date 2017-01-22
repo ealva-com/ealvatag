@@ -49,7 +49,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      * @throws ealvatag.audio.exceptions.CannotReadException
      */
     @Override
-    public void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    public void delete(AudioFile af) throws CannotWriteException
     {
         final File file = af.getFile();
         checkCanWriteAndSize(af, file);
@@ -91,7 +91,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      * @throws CannotWriteException
      */
     @Override
-    public void write(AudioFile audioFile) throws CannotWriteException
+    public void write(AudioFileImpl audioFile) throws CannotWriteException
     {
         final File file = audioFile.getFile();
         checkCanWriteAndSize(audioFile, file);
@@ -126,7 +126,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
      * @throws CannotReadException
      * @throws CannotWriteException
      */
-    protected abstract void deleteTag(Tag tag, FileChannel channel, final String fileName) throws CannotReadException, CannotWriteException;
+    protected abstract void deleteTag(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException;
 
 
     public void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf) throws CannotReadException, CannotWriteException, IOException

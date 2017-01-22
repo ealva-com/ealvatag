@@ -57,7 +57,7 @@ public interface AudioFileModificationListener {
      * Informs the listener that the process has been finished.<br>
      * The given file is either the original file or the modified copy.<br>
      *
-     * @param result The remaining file. It's not of {@link AudioFile} since it may be possible that a new file was created. In that case
+     * @param result The remaining file. It's not of {@link AudioFileImpl} since it may be possible that a new file was created. In that case
      *               the audiolibs would need to parse the file again, which leads to long and unnecessary operation time, if the tag data
      *               is not needed any more.
      */

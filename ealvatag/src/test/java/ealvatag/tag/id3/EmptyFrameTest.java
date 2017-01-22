@@ -30,7 +30,7 @@ public class EmptyFrameTest extends TestCase
 
         mp3File.getID3v2Tag().setFrame(emptyFrame);
         mp3File.getID3v2Tag().setFrame(nonemptyFrame);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         assertTrue(mp3File.hasID3v2Tag());
 
@@ -50,7 +50,7 @@ public class EmptyFrameTest extends TestCase
 
         //Convert to v24
         mp3File.setID3v2Tag(new ID3v24Tag(mp3File.getID3v2Tag()));
-        mp3File.save();
+        mp3File.saveMp3();
 
         assertTrue(mp3File.hasID3v2Tag());
         assertEquals(8, mp3File.getID3v2Tag().getFieldCount());
@@ -62,7 +62,7 @@ public class EmptyFrameTest extends TestCase
 
         mp3File.getID3v2Tag().setFrame(emptyFrame);
         mp3File.getID3v2Tag().setFrame(nonemptyFrame);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         assertTrue(mp3File.hasID3v2Tag());
 
@@ -82,7 +82,7 @@ public class EmptyFrameTest extends TestCase
 
         //Convert to v24
         mp3File.setID3v2Tag(new ID3v22Tag(mp3File.getID3v2Tag()));
-        mp3File.save();
+        mp3File.saveMp3();
 
         assertTrue(mp3File.hasID3v2Tag());
         assertEquals(8, mp3File.getID3v2Tag().getFieldCount());
@@ -94,7 +94,7 @@ public class EmptyFrameTest extends TestCase
 
         mp3File.getID3v2Tag().setFrame(emptyFrame);
         mp3File.getID3v2Tag().setFrame(nonemptyFrame);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         assertTrue(mp3File.hasID3v2Tag());
 

@@ -22,7 +22,7 @@ public class Issue468Test extends AbstractTestCase
             assertNotNull(af.getTag());
             FlacTag tag = (FlacTag)af.getTag();
             tag.setField( tag.createArtworkField(null, 1, "","", 100, 200, 128, 1));
-            af.commit();
+            af.save();
 
         }
         catch(Exception e)

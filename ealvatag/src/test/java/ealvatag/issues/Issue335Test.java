@@ -41,7 +41,7 @@ public class Issue335Test extends AbstractTestCase
         ID3v23Tag tag = new ID3v23Tag(f.getID3v2Tag());
         assertEquals(3, body.getTextEncoding());
         f.setID3v2Tag(tag);
-        f.commit();
+        f.save();
 
         f = (MP3File) AudioFileIO.read(testFile);
         assertEquals("Familial", f.getID3v2Tag().getFirst("TALB"));
@@ -77,7 +77,7 @@ public class Issue335Test extends AbstractTestCase
         //We default to 0
         assertEquals(0, body.getTextEncoding());
         f.setID3v2Tag(tag);
-        f.commit();
+        f.save();
 
         f = (MP3File) AudioFileIO.read(testFile);
         assertEquals("ǿ", f.getID3v2Tag().getFirst("TALB"));
@@ -114,7 +114,7 @@ public class Issue335Test extends AbstractTestCase
         //We default to 0
         assertEquals(0, body.getTextEncoding());
         f.setID3v2Tag(tag);
-        f.commit();
+        f.save();
 
         f = (MP3File) AudioFileIO.read(testFile);
         tag = (ID3v23Tag) f.getID3v2Tag();
@@ -151,7 +151,7 @@ public class Issue335Test extends AbstractTestCase
         Tag tag=null;
         MP3File mP3AudioFile = (MP3File) AudioFileIO.read(orig);
         mP3AudioFile.getID3v2Tag().setField(FieldKey.ARTIST,"fred");
-        mP3AudioFile.commit();
+        mP3AudioFile.save();
 
         mP3AudioFile = (MP3File) AudioFileIO.read(orig);
         if (mP3AudioFile.hasID3v2Tag())

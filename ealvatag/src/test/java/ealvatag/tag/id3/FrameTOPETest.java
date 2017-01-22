@@ -19,7 +19,7 @@ public class FrameTOPETest extends AbstractTestCase
         //Save as V23
         ID3v23Tag v23Tag = new ID3v23Tag((AbstractID3v2Tag) v24Tag);
         mp3File.setID3v2Tag(v23Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v23Tag = (ID3v23Tag) mp3File.getID3v2Tag();

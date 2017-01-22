@@ -157,7 +157,7 @@ public class VorbisWriteTagTest
             tag.setField(VIOLINIST, SARAH_CURTIS);
             assertEquals(IMAGE_SLASH_PNG, tag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
 
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = (VorbisCommentTag)f.getTag();
@@ -302,7 +302,7 @@ public class VorbisWriteTagTest
             tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -356,7 +356,7 @@ public class VorbisWriteTagTest
             tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -414,7 +414,7 @@ public class VorbisWriteTagTest
             tag.setField(FieldKey.ARTIST, "AUTHOR");
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -468,7 +468,7 @@ public class VorbisWriteTagTest
             tag.setField(FieldKey.ARTIST, "ARTISTIC");
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -522,7 +522,7 @@ public class VorbisWriteTagTest
             tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -578,7 +578,7 @@ public class VorbisWriteTagTest
             tag.setField(tag.createField(VorbisCommentFieldKey.COVERARTMIME, "image/png"));
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -632,7 +632,7 @@ public class VorbisWriteTagTest
             tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -684,7 +684,7 @@ public class VorbisWriteTagTest
             tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -735,7 +735,7 @@ public class VorbisWriteTagTest
             tag.deleteField(VorbisCommentFieldKey.COVERARTMIME);
 
             //Save
-            f.commit();
+            f.save();
 
             //Reread
             f = AudioFileIO.read(testFile);
@@ -765,8 +765,8 @@ public class VorbisWriteTagTest
     public void testDeleteTag() throws Exception {
         File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDelete.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
-        f.setTag(VorbisCommentTag.createNewTag());
-        f.commit();
+        f.setNewDefaultTag();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         assertTrue(f.getTag().isEmpty());
@@ -793,7 +793,7 @@ public class VorbisWriteTagTest
         AudioFile f = AudioFileIO.read(testFile);
         f.getTag().addField(FieldKey.ALBUM_ARTIST, "artist1");
         f.getTag().addField(FieldKey.ALBUM_ARTIST, "artist2");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST);
         assertEquals(tagFields.size(), 2);
@@ -810,7 +810,7 @@ public class VorbisWriteTagTest
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2, tagFields.size());
         f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
-        f.commit();
+        f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
@@ -823,7 +823,7 @@ public class VorbisWriteTagTest
         f.getTag().deleteField("ALBUMARTISTSORT");
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);

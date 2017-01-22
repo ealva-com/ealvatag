@@ -32,7 +32,7 @@ public class Issue423Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testGetAllMp3.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TITLE,"title");
         assertTrue(tag.hasField(FieldKey.TRACK));
@@ -49,7 +49,7 @@ public class Issue423Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TITLE,"title");
         assertTrue(tag.hasField(FieldKey.TRACK));
@@ -66,7 +66,7 @@ public class Issue423Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TITLE,"title");
         assertTrue(tag.hasField(FieldKey.TRACK));
@@ -83,7 +83,7 @@ public class Issue423Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.TRACK,"1");
         tag.setField(FieldKey.TITLE,"title");
         assertTrue(tag.hasField(FieldKey.TRACK));

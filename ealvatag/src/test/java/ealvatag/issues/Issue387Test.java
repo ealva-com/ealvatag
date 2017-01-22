@@ -28,8 +28,8 @@ public class Issue387Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test100.mp4");
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getAudioHeader());
-            af.getTagOrCreateAndSetDefault();
-            af.commit();
+            af.getTagOrSetNewDefault();
+            af.save();
 
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();

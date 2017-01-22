@@ -25,7 +25,7 @@ public class Issue327Test extends AbstractTestCase
         f.getID3v2Tag().addField(FieldKey.MOOD,"For Checking End");
         f.getID3v2Tag().addField(FieldKey.ALBUM_ARTIST,"Ϟ");
         f.getID3v2Tag().addField(FieldKey.ALBUM_ARTIST,"Ϟ");
-        f.commit();
+        f.save();
         ByteBuffer bb = ByteBuffer.allocate(40);
         FileChannel fc = new RandomAccessFile(testFile,"r").getChannel();
         fc.read(bb);

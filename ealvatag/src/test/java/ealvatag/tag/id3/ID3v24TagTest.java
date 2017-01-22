@@ -31,6 +31,7 @@ import ealvatag.tag.id3.framebody.FrameBodyTDRC;
 import ealvatag.tag.id3.framebody.FrameBodyTIT2;
 import ealvatag.tag.id3.framebody.FrameBodyTPE1;
 import ealvatag.tag.id3.framebody.FrameBodyTRCK;
+import ealvatag.tag.reference.ID3V2Version;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -130,7 +131,7 @@ public class ID3v24TagTest
         assertTrue(mp3File.hasID3v1Tag());
         assertTrue(mp3File.hasID3v2Tag());
         try {
-            mp3File.save();
+            mp3File.saveMp3();
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -210,7 +211,8 @@ public class ID3v24TagTest
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleText.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
-        f.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        f.setNewDefaultTag();
         List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
 
@@ -246,7 +248,7 @@ public class ID3v24TagTest
         assertEquals(1, ((AbstractID3v2Tag)f.getTag()).getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(1, tagFields.size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         assertEquals(1, f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT).size());
         assertEquals("artist1", f.getTag().getFirst(FieldKey.ALBUM_ARTIST_SORT));
@@ -265,7 +267,8 @@ public class ID3v24TagTest
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleTextTXXX.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
-        f.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        f.setNewDefaultTag();
         List<TagField> tagFields = f.getTag().getFields(FieldKey.BARCODE);
         assertEquals(0, tagFields.size());
         f.getTag().addField(FieldKey.BARCODE, "xxxxxxxxxxxxxx");
@@ -275,7 +278,7 @@ public class ID3v24TagTest
         tagFields = f.getTag().getFields(FieldKey.BARCODE);
         assertEquals(1, tagFields.size());
         assertEquals(2, f.getTag().getAll(FieldKey.BARCODE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         assertEquals(1, f.getTag().getFields(FieldKey.BARCODE).size());
         assertEquals(1, f.getTag().getFieldCount());
@@ -292,7 +295,8 @@ public class ID3v24TagTest
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleTextTXXX.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
-        f.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        f.setNewDefaultTag();
         List<TagField> tagFields = f.getTag().getFields(FieldKey.BARCODE);
         assertEquals(0, tagFields.size());
         f.getTag().addField(FieldKey.BARCODE, "xxxxxxxxxxxxxx");
@@ -302,7 +306,7 @@ public class ID3v24TagTest
         assertEquals(2, f.getTag().getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.BARCODE);
         assertEquals(1, tagFields.size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         assertEquals(1, f.getTag().getFields(FieldKey.BARCODE).size());
         assertEquals(1, f.getTag().getFields(FieldKey.MUSICBRAINZ_DISC_ID).size());
@@ -315,7 +319,8 @@ public class ID3v24TagTest
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultiple.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         assertNull(f.getTag());
-        f.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        f.setNewDefaultTag();
         List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
         f.getTag().addField(FieldKey.URL_OFFICIAL_RELEASE_SITE, "http://www,test.com");
@@ -325,7 +330,7 @@ public class ID3v24TagTest
         assertEquals(1, ((AbstractID3v2Tag)f.getTag()).getFieldCount());
         tagFields = f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE);
         //assertEquals(1,tagFields.size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         assertEquals(1, f.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
         assertEquals(1, f.getTag().getFieldCount());
@@ -339,7 +344,7 @@ public class ID3v24TagTest
         MP3File mp3File = new MP3File(testFile);
         ID3v23Tag v2Tag = new ID3v23Tag();
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Delete using generic key
         AudioFile f = AudioFileIO.read(testFile);
@@ -349,7 +354,7 @@ public class ID3v24TagTest
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(1, tagFields.size());
         f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
-        f.commit();
+        f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
@@ -361,7 +366,7 @@ public class ID3v24TagTest
         f.getTag().deleteField("TSO2");
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
@@ -409,7 +414,7 @@ public class ID3v24TagTest
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("test70.mp3");
             MP3File audioFile = new MP3File(testFile);
-            AudioFileIO.write(audioFile);
+            audioFile.save();
         } catch (Exception e) {
             exceptionCaught = e;
         }
@@ -420,11 +425,12 @@ public class ID3v24TagTest
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteMultipleV24.mp3"));
         AudioFile file = AudioFileIO.read(testFile);
         assertNull(file.getTag());
-        file.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        file.setNewDefaultTag();
         file.getTag().deleteField(FieldKey.GENRE);
         file.getTag().addField(FieldKey.GENRE, "Genre1");
         file.getTag().addField(FieldKey.GENRE, "Genre2");
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         System.out.println(file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Genre1", file.getTag().getFirst(FieldKey.GENRE));
@@ -436,7 +442,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -449,7 +455,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -461,14 +467,15 @@ public class ID3v24TagTest
         MP3File file = null;
         file = new MP3File(testFile);
         assertNull(file.getID3v1Tag());
-        file.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        file.setNewDefaultTag();
         assertNotNull(file.getTag());
         ID3v24Tag v24Tag = (ID3v24Tag)file.getTag();
         TagField genreField = v24Tag.createField(FieldKey.GENRE, "Genre1");
         v24Tag.addField(genreField);
         genreField = v24Tag.createField(FieldKey.GENRE, "Genre2");
         v24Tag.addField(genreField);
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Genre1", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Genre1", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -484,7 +491,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -500,7 +507,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -512,14 +519,15 @@ public class ID3v24TagTest
         MP3File file = null;
         file = new MP3File(testFile);
         assertNull(file.getID3v1Tag());
-        file.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        file.setNewDefaultTag();
         assertNotNull(file.getTag());
         ID3v24Tag v24Tag = (ID3v24Tag)file.getTag();
         TagField genreField = v24Tag.createField(ID3v24FieldKey.GENRE, "Genre1");
         v24Tag.addField(genreField);
         genreField = v24Tag.createField(ID3v24FieldKey.GENRE, "Genre2");
         v24Tag.addField(genreField);
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Genre1", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Genre1", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -535,7 +543,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
@@ -551,7 +559,7 @@ public class ID3v24TagTest
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));
         assertEquals("Pranks", file.getTag().getFieldAt(FieldKey.GENRE, 1));
-        file.commit();
+        file.save();
         file = new MP3File(testFile);
         assertEquals("Death Metal", file.getTag().getFirst(FieldKey.GENRE));
         assertEquals("Death Metal", file.getTag().getFieldAt(FieldKey.GENRE, 0));

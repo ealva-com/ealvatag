@@ -25,10 +25,10 @@ public class Issue443Test extends AbstractTestCase
             test.setID3v1Tag(new ID3v1Tag());
             assertNotNull(test.getID3v1Tag());
             assertNull(test.getID3v2Tag());
-            test.commit();
+            test.save();
 
             test = new MP3File(testFile);
-            test.getTagAndConvertOrCreateAndSetDefault();
+            test.getConvertedTagOrSetNewDefault();
             assertNotNull(test.getID3v1Tag());
             assertNotNull(test.getID3v2Tag());
 
@@ -52,10 +52,10 @@ public class Issue443Test extends AbstractTestCase
             test.setID3v1Tag(new ID3v1Tag());
             assertNotNull(test.getID3v1Tag());
             assertNull(test.getID3v2Tag());
-            test.commit();
+            test.save();
 
             test = new MP3File(testFile);
-            test.getTagOrCreateAndSetDefault();
+            test.getTagOrSetNewDefault();
             assertNotNull(test.getID3v1Tag());
             assertNotNull(test.getID3v2Tag());
 
@@ -79,10 +79,10 @@ public class Issue443Test extends AbstractTestCase
             test.setID3v1Tag(new ID3v1Tag());
             assertNotNull(test.getID3v1Tag());
             assertNull(test.getID3v2Tag());
-            test.commit();
+            test.save();
 
             test = new MP3File(testFile);
-            Tag tag = test.getTagOrCreateDefault();
+            Tag tag = test.getTagOrSetNewDefault();
             assertTrue(tag instanceof ID3v23Tag);
 
 

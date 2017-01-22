@@ -28,7 +28,7 @@ public class Issue452Test extends AbstractTestCase
         assertEquals(0x54adf, mp3File.getMP3AudioHeader().getMp3StartByte());
 
         mp3File.getTag().setField(FieldKey.ALBUM,"newalbum");
-        mp3File.commit();
+        mp3File.save();
         mp3File = new MP3File(testFile);
         assertEquals(0x54adf, mp3File.getMP3AudioHeader().getMp3StartByte());
         System.out.println("AudioHeaderAfter"+mp3File.getMP3AudioHeader());

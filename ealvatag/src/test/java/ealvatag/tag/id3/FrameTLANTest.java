@@ -15,6 +15,6 @@ public class FrameTLANTest extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("Issue116.id3", "testV1.mp3");
 
         MP3File mp3File = new MP3File(testFile);
-        mp3File.save();
+        mp3File.saveMp3();
     }
 }

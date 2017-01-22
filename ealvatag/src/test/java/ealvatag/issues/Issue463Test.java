@@ -39,7 +39,7 @@ public class Issue463Test extends AbstractTestCase
 
             af.getTag().setField(FieldKey.ARTIST,"fred");
             assertEquals("fred",af.getTag().getFirst(FieldKey.ARTIST));
-            af.commit();
+            af.save();
 
             raf = new RandomAccessFile(testFile,"r");
             tree = new Mp4AtomTree(raf,false);

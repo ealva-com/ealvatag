@@ -299,7 +299,7 @@ public class WmaSimpleTest extends AbstractTestCase
 
             // setField the IsVbr value (can be modified for now)
             tag.setField(tag.createField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = (AsfTag) f.getTag();
@@ -369,7 +369,7 @@ public class WmaSimpleTest extends AbstractTestCase
                         tag.setField(key, key.name() + "_value_" + i);
                     }
                 }
-                f.commit();
+                f.save();
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag();
                 for (FieldKey key : FieldKey.values())
@@ -422,7 +422,7 @@ public class WmaSimpleTest extends AbstractTestCase
                     tag.addField(key, key.name() + "_value");
                 }
             }
-            f.commit();
+            f.save();
 
             //Reread File
             f = AudioFileIO.read(testFile);
@@ -910,7 +910,7 @@ public class WmaSimpleTest extends AbstractTestCase
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(1,tagFields.size());
         f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
-        f.commit();
+        f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
@@ -922,7 +922,7 @@ public class WmaSimpleTest extends AbstractTestCase
         f.getTag().deleteField("WM/AlbumArtistSortOrder");
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);

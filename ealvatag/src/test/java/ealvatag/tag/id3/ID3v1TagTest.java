@@ -82,7 +82,7 @@ public class ID3v1TagTest {
 
         //Save tag to file
         mp3File.setID3v1Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -105,7 +105,7 @@ public class ID3v1TagTest {
 
         //Save tag to file
         mp3File.setID3v1Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -118,7 +118,7 @@ public class ID3v1TagTest {
         Assert.assertEquals(ID3v1TagTest.YEAR, tag.getFirst(FieldKey.YEAR));
 
         tag.setField(FieldKey.TRACK, "3");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         tag = mp3File.getID3v1Tag();
         Assert.assertEquals("", tag.getFirst(FieldKey.TRACK)); // ID3v1 doesn't support track, should throw UnsupportedFieldException
@@ -132,8 +132,7 @@ public class ID3v1TagTest {
         //Create v1 Tag
         Tag tag = file.getTag();
         if (tag == null) {
-            file.setTag(new ID3v1Tag());
-            tag = file.getTag();
+            tag = file.setNewDefaultTag();
         }
         tag.setField(FieldKey.ARTIST, ID3v1TagTest.ARTIST);
         tag.setField(FieldKey.ALBUM, ID3v1TagTest.ALBUM);
@@ -143,8 +142,7 @@ public class ID3v1TagTest {
         tag.setField(FieldKey.YEAR, ID3v1TagTest.YEAR);
 
         //Save tag changes to file
-        file.setTag(tag);
-        file.commit();
+        file.save();
 
         //Reload
         file = AudioFileIO.read(testFile);

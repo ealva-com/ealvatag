@@ -124,7 +124,7 @@ public class ItunesTest extends AbstractTestCase
 
         //Null remains
         TagOptionSingleton.getInstance().setRemoveTrailingTerminatorOnWrite(false);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
         fb = (FrameBodyTPE1) v24frame.getBody();
@@ -133,7 +133,7 @@ public class ItunesTest extends AbstractTestCase
 
         //Null removed
         TagOptionSingleton.getInstance().setRemoveTrailingTerminatorOnWrite(true);
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
         fb = (FrameBodyTPE1) v24frame.getBody();
@@ -145,7 +145,7 @@ public class ItunesTest extends AbstractTestCase
         fb.addTextValue(SECOND_VALUE);
         assertEquals(2, fb.getNumberOfValues());
         assertEquals(SECOND_VALUE, fb.getValueAtIndex(1));
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);

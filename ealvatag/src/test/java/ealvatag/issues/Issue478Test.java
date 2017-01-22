@@ -35,7 +35,7 @@ public class Issue478Test extends AbstractTestCase
             assertTrue(tag.hasFrame("PCST"));
             assertNotNull(tag.getFrame("PCST"));
             assertNotNull(tag.getFrame("TGID"));
-            mp3File.commit();
+            mp3File.save();
 
             af = AudioFileIO.read(testFile);
             mp3File = (MP3File) af;
@@ -62,7 +62,7 @@ public class Issue478Test extends AbstractTestCase
             assertNotNull(tag.getFrame("TGID"));
 
             //Save v23 tag constructed from v24 tag
-            mp3File.commit();
+            mp3File.save();
             af = AudioFileIO.read(testFile);
             mp3File = (MP3File) af;
             tag   = (ID3v23Tag)mp3File.getID3v2Tag();

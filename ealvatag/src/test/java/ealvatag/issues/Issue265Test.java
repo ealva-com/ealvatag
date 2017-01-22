@@ -88,7 +88,7 @@ public class Issue265Test extends AbstractTestCase
                 sb.append("x");
             }
             tag.setField(FieldKey.ARTIST,sb.toString());
-            f.commit();
+            f.save();
 
         }
         catch (Exception e)
@@ -167,7 +167,7 @@ public class Issue265Test extends AbstractTestCase
                    sb.append("x");
                }
                tag.setField(FieldKey.TITLE,sb.toString());
-               f.commit();
+               f.save();
 
            }
            catch (Exception e)

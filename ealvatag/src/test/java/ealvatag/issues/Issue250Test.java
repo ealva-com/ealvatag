@@ -32,7 +32,7 @@ public class Issue250Test extends AbstractTestCase
         assertEquals(13,id3v23tag.getFieldCount());
         assertEquals(3,id3v23tag.getFields("PRIV").size());
         assertEquals(1,id3v23tag.getInvalidFrames()); //PRIV frame
-        f.commit();
+        f.save();
         f = (MP3File)AudioFileIO.read(testFile);
         tag = f.getTag();
         id3v23tag = (ID3v23Tag)tag;

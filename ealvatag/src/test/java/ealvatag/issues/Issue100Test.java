@@ -54,7 +54,7 @@ public class Issue100Test extends AbstractTestCase
             Iterator<String> iter = keys.iterator();
             assertEquals("PRIV",iter.next());
             assertEquals("UFID",iter.next());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File = (MP3File)af;
@@ -101,7 +101,7 @@ public class Issue100Test extends AbstractTestCase
             Iterator<String> iter = keys.iterator();
             assertEquals("PRIV",iter.next());
             assertEquals("UFID",iter.next());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File = (MP3File)af;
@@ -149,7 +149,7 @@ public class Issue100Test extends AbstractTestCase
             Iterator<String> iter = keys.iterator();
             assertEquals("PIC",iter.next());
             assertEquals("UFI",iter.next());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File = (MP3File)af;

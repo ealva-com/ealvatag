@@ -32,15 +32,15 @@ public class Issue435Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setToDefault();
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-            af.getTagOrCreateAndSetDefault();
+            af.getTagOrSetNewDefault();
             ((ID3v23Tag)af.getTag()).setFrame(frame);
-            af.commit();
+            af.save();
 
             af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setToDefault();
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
-            af.getTagAndConvertOrCreateAndSetDefault();
-            af.commit();
+            af.getConvertedTagOrSetNewDefault();
+            af.save();
             assertTrue(af.getTag() instanceof ID3v24Tag);
             assertTrue(((ID3v24Tag)af.getTag()).getFrame("TDRC") instanceof AbstractID3v2Frame);
 

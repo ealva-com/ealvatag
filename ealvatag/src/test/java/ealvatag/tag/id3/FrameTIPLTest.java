@@ -96,7 +96,7 @@ public class FrameTIPLTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTIPLTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -114,7 +114,7 @@ public class FrameTIPLTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTIPLTest.getInitialisedFrameOdd());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -135,7 +135,7 @@ public class FrameTIPLTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -154,7 +154,7 @@ public class FrameTIPLTest extends AbstractTestCase
         tag.setFrame(FrameTIPLTest.getInitialisedFrame());
 
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
@@ -162,7 +162,7 @@ public class FrameTIPLTest extends AbstractTestCase
         mp3File.setID3v2TagOnly(v23Tag);
 
         assertTrue(v23Tag.hasFrame("IPLS"));
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);

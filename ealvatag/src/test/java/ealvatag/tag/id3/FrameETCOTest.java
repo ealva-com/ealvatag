@@ -71,7 +71,7 @@ public class FrameETCOTest extends AbstractTestCase
         final FrameBodyETCO referenceBody = (FrameBodyETCO) referenceFrame.getBody();
         tag.setFrame(referenceFrame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -104,7 +104,7 @@ public class FrameETCOTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);

@@ -77,7 +77,7 @@ public class FramePCNTTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FramePCNTTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -99,7 +99,7 @@ public class FramePCNTTest extends AbstractTestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);

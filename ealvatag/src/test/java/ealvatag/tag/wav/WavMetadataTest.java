@@ -21,21 +21,18 @@ import java.io.File;
  * User: paul
  * Date: 07-Dec-2007
  */
-public class WavMetadataTest extends AbstractTestCase
-{
+public class WavMetadataTest extends AbstractTestCase {
 
 
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testReadFileWithListInfoMetadata()
-    {
+    public void testReadFileWithListInfoMetadata() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -46,7 +43,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             //Ease of use methods for common fields
             assertEquals("artistName\0", tag.getFirst(FieldKey.ARTIST));
@@ -71,9 +68,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -84,15 +79,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveBoth()
-    {
+    public void testModifyFileMetadataSaveBoth() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveBoth.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -103,7 +96,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -118,12 +111,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -135,14 +128,12 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(18L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -152,14 +143,12 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileWithMoreMetadataSaveBothInfoThenId3()
-    {
+    public void testModifyFileWithMoreMetadataSaveBothInfoThenId3() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadataInfoId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -171,7 +160,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertEquals(926264L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926560L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -186,17 +175,19 @@ public class WavMetadataTest extends AbstractTestCase
             //Modify Value
             tag.setField(FieldKey.ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             tag.setField(FieldKey.ALBUM_ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(f.getTag());
 
 
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ALBUM_ARTIST));
 
             assertEquals(926264L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926700L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -208,29 +199,25 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"smallervalue");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "smallervalue");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(tag.getInfoTag());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testModifyFileWithMoreMetadataSaveBothId3ThenInfo()
-    {
+    public void testModifyFileWithMoreMetadataSaveBothId3ThenInfo() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadataId3Info.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -242,7 +229,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertEquals(926264L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926560L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -257,15 +244,17 @@ public class WavMetadataTest extends AbstractTestCase
             //Modify Value
             tag.setField(FieldKey.ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             tag.setField(FieldKey.ALBUM_ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ALBUM_ARTIST));
             assertEquals(10L, tag.getSizeOfID3TagOnly()); //Because have SAVE BOTH option but nothign added to ID3 save empty ID3tag
             assertEquals(926264L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(18L, tag.getSizeOfID3TagIncludingChunkHeader());
@@ -275,8 +264,8 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(926718L, testFile.length());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"smallervalue");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "smallervalue");
+            f.save();
             f = AudioFileIO.read(testFile);
             System.out.println(tag.getInfoTag());
             assertEquals(10L, tag.getSizeOfID3TagOnly()); //Because have SAVE BOTH option but nothign added to ID3 save empty ID3tag
@@ -287,9 +276,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(428L, tag.getInfoTag().getSizeOfTag());
             assertEquals(926648L, testFile.length());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -299,13 +286,11 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Delete file with Info metadata
      */
-    public void testDeleteFileInfoMetadata()
-    {
+    public void testDeleteFileInfoMetadata() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123DeleteMetadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -314,7 +299,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertTrue(tag.isExistingInfoTag());
@@ -336,7 +321,7 @@ public class WavMetadataTest extends AbstractTestCase
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertFalse(tag.isExistingInfoTag());
@@ -349,9 +334,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -361,13 +344,11 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Delete file with Id3 metadata
      */
-    public void testDeleteFileId3Metadata()
-    {
+    public void testDeleteFileId3Metadata() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test126.wav", new File("test126DeleteId3Metadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -376,14 +357,14 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertFalse(tag.isExistingInfoTag());
             assertTrue(tag.isExistingId3Tag());
 
             //Ease of use methods for common fields
-           assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
             assertNull(tag.getInfoTag().getStartLocationInFile());
             assertNull(tag.getInfoTag().getEndLocationInFile());
@@ -398,7 +379,7 @@ public class WavMetadataTest extends AbstractTestCase
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertFalse(tag.isExistingInfoTag());
@@ -411,9 +392,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -423,14 +402,12 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testReadFileWithID3AndListInfoMetadata()
-    {
+    public void testReadFileWithID3AndListInfoMetadata() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -441,7 +418,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             //Ease of use methods for common fields
             assertEquals("id3artistName\0", tag.getFirst(FieldKey.ARTIST));
@@ -481,9 +458,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(926264L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(243L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -494,15 +469,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Delete file with Info and ID3 metadata
      */
-    public void testDeleteFileInfoAndID3Metadata()
-    {
+    public void testDeleteFileInfoAndID3Metadata() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test125.wav", new File("test125DeleteMetadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -512,7 +485,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertTrue(tag.isExistingInfoTag());
@@ -527,15 +500,13 @@ public class WavMetadataTest extends AbstractTestCase
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             assertTrue(tag.isInfoTag());
             assertTrue(tag.isID3Tag());
             assertFalse(tag.isExistingInfoTag());
             assertFalse(tag.isExistingId3Tag());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -545,12 +516,10 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testWavReadOptionsHasId3AndInfo()
-    {
+    public void testWavReadOptionsHasId3AndInfo() {
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             {
                 TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
                 File testFile = AbstractTestCase.copyAudioToTmp("test125.wav");
@@ -611,9 +580,7 @@ public class WavMetadataTest extends AbstractTestCase
                 assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
                 assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -623,12 +590,10 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testWavReadOptionsHasInfoOnly()
-    {
+    public void testWavReadOptionsHasInfoOnly() {
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             {
                 TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
                 TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
@@ -694,9 +659,7 @@ public class WavMetadataTest extends AbstractTestCase
                 assertEquals("1\0", tag.getFirst(FieldKey.TRACK));
                 assertEquals("rock\0", tag.getFirst(FieldKey.GENRE));
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -706,15 +669,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveActive()
-    {
+    public void testModifyFileMetadataSaveActive() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -724,7 +685,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -739,12 +700,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -756,14 +717,12 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -773,15 +732,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileWithMoreMetadataSaveActive()
-    {
+    public void testModifyFileWithMoreMetadataSaveActive() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadataSaveActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -791,7 +748,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertEquals(926264L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926560L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -806,15 +763,17 @@ public class WavMetadataTest extends AbstractTestCase
             //Modify Value
             tag.setField(FieldKey.ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             tag.setField(FieldKey.ALBUM_ARTIST, "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ARTIST));
+            assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+                         tag.getFirst(FieldKey.ALBUM_ARTIST));
 
             assertEquals(926264L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926700L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -823,9 +782,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -835,15 +792,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveExistingActiveInfo()
-    {
+    public void testModifyFileMetadataSaveExistingActiveInfo() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_INFO_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -853,7 +808,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -868,12 +823,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -885,15 +840,13 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(0L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -903,15 +856,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveExistingActiveId3Info()
-    {
+    public void testModifyFileMetadataSaveExistingActiveId3Info() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -921,7 +872,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -937,12 +888,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -954,14 +905,12 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(34L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -971,15 +920,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveActiveId3()
-    {
+    public void testModifyFileMetadataSaveActiveId3() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -989,7 +936,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -1005,12 +952,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -1027,14 +974,12 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(34L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any additional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -1044,15 +989,13 @@ public class WavMetadataTest extends AbstractTestCase
     /**
      * Read file with metadata added by MediaMonkey
      */
-    public void testModifyFileMetadataSaveActiveId32()
-    {
+    public void testModifyFileMetadataSaveActiveId32() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test126.wav", new File("test126ModifyMetadataSaveActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -1062,7 +1005,7 @@ public class WavMetadataTest extends AbstractTestCase
 
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertFalse(tag.isExistingInfoTag());
 
@@ -1078,12 +1021,12 @@ public class WavMetadataTest extends AbstractTestCase
 
             //Modify Value
             tag.setField(FieldKey.ARTIST, "fred");
-            f.commit();
+            f.save();
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(tag.getInfoTag());
 
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
@@ -1101,29 +1044,25 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(34L, tag.getSizeOfID3TagIncludingChunkHeader());
 
             //So tag field now shorter so needs to truncate any addtional data
-            tag.setField(FieldKey.ARTIST,"fr");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "fr");
+            f.save();
 
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testWriteNumberedOddSaveActive()
-    {
+    public void testWriteNumberedOddSaveActive() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test125.wav", new File("test125ID3OddNumberedActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -1133,7 +1072,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertEquals(926508L, tag.getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926662L, tag.getInfoTag().getEndLocationInFile().longValue());
@@ -1142,40 +1081,36 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(926264L, tag.getStartLocationInFileOfId3Chunk());
             assertEquals(243L, tag.getSizeOfID3TagIncludingChunkHeader());
 
-            tag.setField(FieldKey.ARTIST,"a nice long artist names");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "a nice long artist names");
+            f.save();
             f = AudioFileIO.read(testFile);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            tag.setField(FieldKey.ARTIST,"a nice long artist s");
+            tag.setField(FieldKey.ARTIST, "a nice long artist s");
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
 
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testWriteNumberedOddSaveBoth()
-    {
+    public void testWriteNumberedOddSaveBoth() {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test125.wav", new File("test125ID3OddNumberedBoth.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -1185,7 +1120,7 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
             assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            WavTag tag = (WavTag)f.getTag();
 
             assertEquals("id3artistName", tag.getFirst(FieldKey.ARTIST));
             assertEquals(926264L, tag.getStartLocationInFileOfId3Chunk());
@@ -1196,10 +1131,10 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(146L, tag.getInfoTag().getSizeOfTag());
 
 
-            tag.setField(FieldKey.ARTIST,"a nice long artist names");
-            f.commit();
+            tag.setField(FieldKey.ARTIST, "a nice long artist names");
+            f.save();
             f = AudioFileIO.read(testFile);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
@@ -1210,11 +1145,11 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals(926674L, tag.getInfoTag().getEndLocationInFile().longValue());
             assertEquals(158L, tag.getInfoTag().getSizeOfTag());
 
-            tag.setField(FieldKey.ARTIST,"a nice long artist s");
+            tag.setField(FieldKey.ARTIST, "a nice long artist s");
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
-            tag = (WavTag) f.getTag();
+            tag = (WavTag)f.getTag();
 
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
@@ -1227,21 +1162,19 @@ public class WavMetadataTest extends AbstractTestCase
 
             assertEquals("a nice long artist s", tag.getFirst(FieldKey.ARTIST));
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    /** This file has three bytes of padding data at end of file */
-    public void testReadFileWithPaddingAtEndOfListInfoMetadata()
-    {
+    /**
+     * This file has three bytes of padding data at end of file
+     */
+    public void testReadFileWithPaddingAtEndOfListInfoMetadata() {
         File orig = new File("testdata", "test146.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1251,8 +1184,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test146.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
@@ -1260,8 +1192,8 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("Bo Junior", f.getTag().getFirst(FieldKey.ARTIST));
             assertEquals("Coffee Pot, Part 2", f.getTag().getFirst(FieldKey.TITLE));
             assertEquals("Hipshaker", f.getTag().getFirst(FieldKey.ALBUM));
-            f.getTag().setField(FieldKey.ALBUM,"Hippy");
-            f.commit();
+            f.getTag().setField(FieldKey.ALBUM, "Hippy");
+            f.save();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
@@ -1269,20 +1201,16 @@ public class WavMetadataTest extends AbstractTestCase
             assertEquals("Coffee Pot, Part 2", f.getTag().getFirst(FieldKey.TITLE));
             assertEquals("Hippy", f.getTag().getFirst(FieldKey.ALBUM));
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testNaimRip()
-    {
+    public void testNaimRip() {
         File orig = new File("testdata", "test149.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1291,56 +1219,46 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test149.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testCreationOfDefaultTag()
-    {
+    public void testCreationOfDefaultTag() {
         File orig = new File("testdata", "test126.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test126.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            f.createDefaultTag();
+            f.setNewDefaultTag();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testRip2()
-    {
+    public void testRip2() {
         File orig = new File("testdata", "test500.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1349,34 +1267,29 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test500.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            f.delete();
+            f.deleteFileTag();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testRip3()
-    {
+    public void testRip3() {
         File orig = new File("testdata", "test501.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1385,8 +1298,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test501.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1394,21 +1306,16 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
 
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
         assertNull(exceptionCaught);
     }
 
-    public void testRip4()
-    {
+    public void testRip4() {
         File orig = new File("testdata", "test502.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1417,8 +1324,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test502.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1426,10 +1332,7 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
 
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -1437,14 +1340,11 @@ public class WavMetadataTest extends AbstractTestCase
     }
 
     /**
-     *  When chunk header has negative size we know something has gone wrong and should throw exception accordingly
-     *
+     * When chunk header has negative size we know something has gone wrong and should throw exception accordingly
      */
-    public void testWavWithCorruptDataAfterDataChunkHeaderSize()
-    {
+    public void testWavWithCorruptDataAfterDataChunkHeaderSize() {
         File orig = new File("testdata", "test503.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1453,8 +1353,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test503.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1462,21 +1361,16 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
 
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assert(exceptionCaught instanceof CannotReadException);
+        assert (exceptionCaught instanceof CannotReadException);
     }
 
-    public void testCleanAndThenWriteWavWithCorruptDataChunkHeaderSize()
-    {
+    public void testCleanAndThenWriteWavWithCorruptDataChunkHeaderSize() {
         File orig = new File("testdata", "test504.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1486,46 +1380,38 @@ public class WavMetadataTest extends AbstractTestCase
 
         Exception exceptionCaught = null;
         File testFile = AbstractTestCase.copyAudioToTmp("test504.wav", new File("test504clean.wav"));
-        try
-        {
+        try {
 
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
         Exception exceptionCaught2 = null;
-        try
-        {
+        try {
             WavCleaner wc = new WavCleaner(testFile);
             wc.clean();
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
-            tag.setField(FieldKey.ALBUM,"fred");
+            tag.setField(FieldKey.ALBUM, "fred");
 
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught2 = e;
         }
         assertNull(exceptionCaught2);
     }
 
-    public void testWavRead()
-    {
+    public void testWavRead() {
         File orig = new File("testdata", "test505.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1534,8 +1420,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test505.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1543,20 +1428,15 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
 
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
     }
 
-    public void testWavReadNew()
-    {
+    public void testWavReadNew() {
         File orig = new File("testdata", "test506.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1565,8 +1445,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test506.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1574,12 +1453,10 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
             f.getTag().setField(FieldKey.ARTIST, "artist");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -1589,23 +1466,21 @@ public class WavMetadataTest extends AbstractTestCase
     public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {
 
         FilePermissionsTest.runWriteWriteProtectedFileWithCheckDisabled("test123.wav");
-	}
+    }
 
     public void testWriteWriteProtectedFileWithCheckEnabled() throws Exception {
 
-    	FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test123.wav");
-	}
+        FilePermissionsTest.runWriteWriteProtectedFileWithCheckEnabled("test123.wav");
+    }
 
     public void testWriteReadOnlyFileWithCheckDisabled() throws Exception {
 
-    	FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
-	}
+        FilePermissionsTest.runWriteReadOnlyFileWithCheckDisabled("test123.wav");
+    }
 
-    public void testReadJacobPavluk()
-    {
+    public void testReadJacobPavluk() {
         File orig = new File("testdata", "GreenLight.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1614,22 +1489,18 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_EXISTING_AND_ACTIVE);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("GreenLight.wav");
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
-            f.getTag().setField(FieldKey.ARTIST,"artist");
-            f.commit();
+            f.getTag().setField(FieldKey.ARTIST, "artist");
+            f.save();
             System.out.println("**********************SavedAudioFIle");
             f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
-        }
-
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
@@ -1640,19 +1511,16 @@ public class WavMetadataTest extends AbstractTestCase
      * bug153.wav has two tags: an info tag with title, album and track number, and an ID3 tag with
      * artist. This test ensures the track number is copied over.
      */
-    public void testTrackNumbersSyncedWhenNullTerminated() throws Exception
-    {
+    public void testTrackNumbersSyncedWhenNullTerminated() throws Exception {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO_AND_SYNC);
         File testFile = AbstractTestCase.copyAudioToTmp("bug153.wav", new File("bug153.wav"));
         AudioFile f = AudioFileIO.read(testFile);
         assertEquals("7", f.getTag().getFirst(FieldKey.TRACK));
     }
 
-    public void testWavRead2()
-    {
+    public void testWavRead2() {
         File orig = new File("testdata", "test160.wav");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
@@ -1661,8 +1529,7 @@ public class WavMetadataTest extends AbstractTestCase
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
 
         Exception exceptionCaught = null;
-        try
-        {
+        try {
             File testFile = AbstractTestCase.copyAudioToTmp("test160.wav");
             AudioFile f = AudioFileIO.read(testFile);
 
@@ -1670,12 +1537,10 @@ public class WavMetadataTest extends AbstractTestCase
             System.out.println(f.getTag());
 
             f.getTag().setField(FieldKey.ARTIST, "artist");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }

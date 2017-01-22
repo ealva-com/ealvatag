@@ -31,7 +31,7 @@ public class Issue406Test extends AbstractTestCase
             assertEquals(af.getTag().getFirst(FieldKey.ARTIST),"The Clash");
             assertEquals(af.getTag().getFirst(FieldKey.YEAR),"1979");
             af.getTag().setField(FieldKey.TITLE,"Bridport Calling");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals(af.getTag().getFirst(FieldKey.TITLE),"Bridport Calling");
         }

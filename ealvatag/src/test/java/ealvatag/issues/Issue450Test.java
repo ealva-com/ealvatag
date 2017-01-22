@@ -40,7 +40,7 @@ public class Issue450Test extends AbstractTestCase
         assertEquals(FrameBodyWOAR.class,frame.getBody().getClass());
         fb = (FrameBodyWOAR)frame.getBody();
         System.out.println(fb.getUrlLink());
-        mp3file.commit();
+        mp3file.save();
 
 
 

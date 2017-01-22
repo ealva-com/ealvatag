@@ -43,7 +43,7 @@ public class Issue269Test extends AbstractTestCase
             assertEquals("thievery corporation - Om Lounge",af.getTag().getFirst(FieldKey.ARTIST));
 
             af.getTag().setField(FieldKey.ALBUM,"FRED");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
             assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
@@ -88,7 +88,7 @@ public class Issue269Test extends AbstractTestCase
             assertEquals(0,id3v23Tag.getPaddingSize());
 
             af.getTag().setField(FieldKey.ALBUM,"FRED");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
             assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
@@ -149,7 +149,7 @@ public class Issue269Test extends AbstractTestCase
             //this falg should be set
             assertEquals(0x40,frame.getStatusFlags().getWriteFlags());
             af.getTag().setField(FieldKey.ALBUM,"FRED");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             id3v23Tag = (ID3v23Tag)af.getTag();
             System.out.println(af.getTag().toString());
@@ -205,7 +205,7 @@ public class Issue269Test extends AbstractTestCase
                assertEquals(0,id3v23Tag.getPaddingSize());
 
                af.getTag().setField(FieldKey.ALBUM,"FRED");
-               af.commit();
+               af.save();
                af = AudioFileIO.read(testFile);
                System.out.println(af.getTag().toString());
                assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));

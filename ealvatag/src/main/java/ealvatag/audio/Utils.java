@@ -335,7 +335,7 @@ public class Utils
      */
     public static String getMinBaseFilenameAllowedForTempFile(final File file)
     {
-        final String s = AudioFile.getBaseFilename(file);
+        final String s = AudioFileImpl.getBaseFilename(file);
         if (s.length() >= 3)
         {
             return s;

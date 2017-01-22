@@ -34,7 +34,7 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("1", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp4File.commit();
+        mp4File.save();
         mp4File = AudioFileIO.read(testFile);
         assertEquals("1", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
@@ -65,7 +65,7 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("1", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp4File.commit();
+        mp4File.save();
         mp4File = AudioFileIO.read(testFile);
         assertEquals("1", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
@@ -94,7 +94,7 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("0", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp4File.commit();
+        mp4File.save();
         mp4File = AudioFileIO.read(testFile);
         assertEquals("0", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
     }
@@ -121,7 +121,7 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("0", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp4File.commit();
+        mp4File.save();
         mp4File = AudioFileIO.read(testFile);
         assertEquals("0", mp4File.getTag().getFirst(FieldKey.IS_COMPILATION));
     }
@@ -135,7 +135,7 @@ public class Issue455Test extends AbstractTestCase {
         try {
 
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault().setField(FieldKey.IS_COMPILATION, "true");
+            mp3File.getTagOrSetNewDefault().setField(FieldKey.IS_COMPILATION, "true");
         } catch (Exception ex) {
             ex.printStackTrace();
             e = ex;
@@ -144,9 +144,9 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("true", mp3File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp3File.commit();
+        mp3File.save();
         mp3File = AudioFileIO.read(testFile);
-        assertEquals("true", mp3File.getTagOrCreateAndSetDefault().getFirst(FieldKey.IS_COMPILATION));
+        assertEquals("true", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
 
     }
 
@@ -161,7 +161,7 @@ public class Issue455Test extends AbstractTestCase {
         try {
 
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault();
+            mp3File.getTagOrSetNewDefault();
             mp3File.getTag().setField(FieldKey.IS_COMPILATION, "1");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -171,9 +171,9 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("1", mp3File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp3File.commit();
+        mp3File.save();
         mp3File = AudioFileIO.read(testFile);
-        assertEquals("1", mp3File.getTagOrCreateAndSetDefault().getFirst(FieldKey.IS_COMPILATION));
+        assertEquals("1", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
 
     }
 
@@ -185,7 +185,7 @@ public class Issue455Test extends AbstractTestCase {
         try {
 
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault().setField(FieldKey.IS_COMPILATION, "false");
+            mp3File.getTagOrSetNewDefault().setField(FieldKey.IS_COMPILATION, "false");
         } catch (Exception ex) {
             ex.printStackTrace();
             e = ex;
@@ -194,7 +194,7 @@ public class Issue455Test extends AbstractTestCase {
         assertEquals("false", mp3File.getTag().getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
-        mp3File.commit();
+        mp3File.save();
         mp3File = AudioFileIO.read(testFile);
         assertEquals("false", mp3File.getTag().getFirst(FieldKey.IS_COMPILATION));
     }

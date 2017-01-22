@@ -32,7 +32,7 @@ public class Issue433Test extends AbstractTestCase
         AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().setField(FieldKey.ALBUM,"fredwwwwwwwwwwwwwwwwwwwwwwww");
-        af.commit();
+        af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         atomTree.printAtomTree();
@@ -58,7 +58,7 @@ public class Issue433Test extends AbstractTestCase
         AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().setField(FieldKey.ALBUM,"fred");
-        af.commit();
+        af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         atomTree.printAtomTree();
@@ -84,7 +84,7 @@ public class Issue433Test extends AbstractTestCase
         AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().setField(FieldKey.ALBUM,"fredwwwwwwwwwwwwwwwwwwwwwwww");
-        af.commit();
+        af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         atomTree.printAtomTree();
@@ -110,7 +110,7 @@ public class Issue433Test extends AbstractTestCase
         AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().setField(FieldKey.ALBUM,"fred");
-        af.commit();
+        af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         atomTree.printAtomTree();

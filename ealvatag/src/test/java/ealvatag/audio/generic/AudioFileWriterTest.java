@@ -1,6 +1,7 @@
 package ealvatag.audio.generic;
 
 import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileWriter;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -29,7 +30,7 @@ import java.util.Arrays;
  */
 public class AudioFileWriterTest {
 
-    private AudioFile audioFile;
+    private AudioFileImpl audioFile;
 
     @Before public void setUp() throws IOException {
         final File file = File.createTempFile("AudioFileWriterTest", ".bin");
@@ -38,7 +39,7 @@ public class AudioFileWriterTest {
                 out.write("Some random stuff\n".getBytes(StandardCharsets.US_ASCII));
             }
         }
-        this.audioFile = new AudioFile(file, null, new FlacTag());
+        this.audioFile = new AudioFileImpl(file, "flac", null, new FlacTag());
         TagOptionSingleton.getInstance().setToDefault();
     }
 

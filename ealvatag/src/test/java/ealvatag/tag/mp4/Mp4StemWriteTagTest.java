@@ -64,7 +64,7 @@ public class Mp4StemWriteTagTest extends TestCase {
         final char[] chars = new char[freeSpace * 2]; // twice the size of the total available free space
         Arrays.fill(chars, 'C');
         audioFile.getTag().setField(FieldKey.TITLE, new String(chars));
-        audioFile.commit();
+        audioFile.save();
 
         final Mp4AtomTree treeAfter = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         final List<Mp4StcoBox> afterStcos = treeAfter.getStcos();
@@ -111,7 +111,7 @@ public class Mp4StemWriteTagTest extends TestCase {
             tag.addField(tag.createArtworkField(imagedata));
 
             //Save changes and reread from disk
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
 

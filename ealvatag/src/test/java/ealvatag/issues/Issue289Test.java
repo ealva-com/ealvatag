@@ -36,7 +36,7 @@ public class Issue289Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
             af.getTag().setField(FieldKey.MUSICIP_ID,"91421a81-50b9-f577-70cf-20356eea212e");
-            af.commit();
+            af.save();
 
             af = AudioFileIO.read(testFile);
             assertEquals("91421a81-50b9-f577-70cf-20356eea212e",af.getTag().getFirst(FieldKey.MUSICIP_ID));

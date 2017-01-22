@@ -611,7 +611,7 @@ public class MP3AudioHeaderTest extends TestCase
             final TagOptionSingleton tagOptions = TagOptionSingleton.getInstance();
             tagOptions.setToDefault();
 
-            mp3file.save();
+            mp3file.saveMp3();
 
             mp3file = new MP3File(testFile);
             mp3AudioHeader = mp3file.getMP3AudioHeader();

@@ -159,7 +159,7 @@ public class AiffAudioTagTest {
         Assert.assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
         tag.setField(FieldKey.ARTIST, "Warmplay");
         Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -170,7 +170,7 @@ public class AiffAudioTagTest {
 
         Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
         tag.setField(FieldKey.ARTIST, "Warmplayer");
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -200,7 +200,7 @@ public class AiffAudioTagTest {
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "Warmplay");
             Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -290,7 +290,7 @@ public class AiffAudioTagTest {
         Assert.assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
         tag.setField(FieldKey.ARTIST, "Warmplay");
         Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -298,7 +298,7 @@ public class AiffAudioTagTest {
 
         Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
         tag.setField(FieldKey.ARTIST, "Warmplayer");
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
@@ -346,8 +346,8 @@ public class AiffAudioTagTest {
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
 
-        f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "album");
-        f.commit();
+        f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "album");
+        f.save();
 
         f = AudioFileIO.read(testFile);
         ah = f.getAudioHeader();
@@ -364,8 +364,8 @@ public class AiffAudioTagTest {
         System.out.println(ah);
         System.out.println(f.getTag());
 
-        f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "album");
-        f.commit();
+        f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "album");
+        f.save();
 
         f = AudioFileIO.read(testFile);
         ah = f.getAudioHeader();
@@ -386,8 +386,8 @@ public class AiffAudioTagTest {
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
 
-        f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "album");
-        f.commit();
+        f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "album");
+        f.save();
 
         f = AudioFileIO.read(testFile);
         ah = f.getAudioHeader();
@@ -403,8 +403,8 @@ public class AiffAudioTagTest {
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
 
-        f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "album");
-        f.commit();
+        f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "album");
+        f.save();
 
         f = AudioFileIO.read(testFile);
         ah = f.getAudioHeader();
@@ -434,10 +434,10 @@ public class AiffAudioTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().deleteField(FieldKey.ACOUSTID_ID);
             f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             f.getTag().setField(FieldKey.ARTIST, "freddy");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
             Assert.assertEquals(f.getTag().getFirst(FieldKey.ARTIST), "freddy");
@@ -467,7 +467,7 @@ public class AiffAudioTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().deleteField(FieldKey.ACOUSTID_ID);
             f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
-            f.commit();
+            f.save();
             AudioFileIO.delete(f);
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
@@ -557,8 +557,8 @@ public class AiffAudioTagTest {
             System.out.println(ah);
             System.out.println(f.getTag());
 
-            f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "albums");
-            f.commit();
+            f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "albums");
+            f.save();
             f = AudioFileIO.read(testFile);
             ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -569,8 +569,8 @@ public class AiffAudioTagTest {
             Assert.assertEquals(154, ((AiffTag)f.getTag()).getEndLocationInFileOfId3Chunk());
 
 
-            f.getTagOrCreateAndSetDefault().setField(FieldKey.ALBUM, "albuks");
-            f.commit();
+            f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "albuks");
+            f.save();
             f = AudioFileIO.read(testFile);
             ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -623,7 +623,7 @@ public class AiffAudioTagTest {
             Assert.assertEquals(2, tag.getArtworkList().size());
 
             tag.deleteArtwork();
-            f.commit();
+            f.save();
 
             AudioFile updatedFile = AudioFileIO.read(testFile);
             Tag updatedTag = updatedFile.getTag();

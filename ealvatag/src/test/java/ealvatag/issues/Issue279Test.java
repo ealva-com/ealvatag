@@ -37,7 +37,7 @@ public class Issue279Test extends AbstractTestCase
 
 
             af.getTag().setField(FieldKey.ALBUM,"FRED");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().toString());
             assertEquals("FRED", af.getTag().getFirst(FieldKey.ALBUM));

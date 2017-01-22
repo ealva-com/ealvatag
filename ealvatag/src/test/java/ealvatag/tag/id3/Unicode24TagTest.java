@@ -122,7 +122,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -167,7 +167,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -213,7 +213,7 @@ public class Unicode24TagTest extends TestCase
        ID3v24Tag tag = new ID3v24Tag();
        tag.setFrame(frame);
        mp3File.setID3v2Tag(tag);
-       mp3File.save();
+       mp3File.saveMp3();
 
        //Reload, should be written as UTF16 because of the text
        mp3File = new MP3File(testFile);
@@ -258,7 +258,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -305,7 +305,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_ARTIST);
@@ -349,7 +349,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16BE
         mp3File = new MP3File(testFile);
@@ -393,7 +393,7 @@ public class Unicode24TagTest extends TestCase
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF8
         mp3File = new MP3File(testFile);
@@ -419,7 +419,7 @@ public class Unicode24TagTest extends TestCase
         assertEquals(TextEncoding.UTF_8, body.getTextEncoding());
 
         //Save
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Read file after save
         mp3File = new MP3File(testFile);
@@ -453,7 +453,7 @@ public class Unicode24TagTest extends TestCase
         TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
 
         //Save
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Read file after save
         mp3File = new MP3File(testFile);
@@ -487,7 +487,7 @@ public class Unicode24TagTest extends TestCase
         TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
         TagOptionSingleton.getInstance().setId3v24DefaultTextEncoding(TextEncoding.UTF_16);
         //Save
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Read file after save
         mp3File = new MP3File(testFile);

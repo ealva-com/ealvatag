@@ -28,7 +28,7 @@ public class Issue404Test extends AbstractTestCase
             File orig = AbstractTestCase.copyAudioToTmp("test3811111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111...........................................................m4a");
             AudioFile af = AudioFileIO.read(orig);
             af.getTag().setField(FieldKey.ALBUM, "Albumstuff");
-            AudioFileIO.write(af);
+            af.save();
         }
         catch(Exception e)
         {

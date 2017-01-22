@@ -86,13 +86,13 @@ public class SupportedFileFormatTest {
 
     @Test(expected = RuntimeException.class)
     public void unknownCannotCreateDefault() {
-        UNKNOWN.createDefaultTag();
+        UNKNOWN.makeDefaultTag();
         Assert.fail("UNKNOWN format can't create a tag");
     }
 
     private void defaultTagIsInstanceOf(EnumSet<SupportedFileFormat> formatSet, SupportedFileFormat format, Class<?> tagClass) {
         formatSet.remove(format);
-        final Tag defaultTag = format.createDefaultTag();
+        final Tag defaultTag = format.makeDefaultTag();
         Assert.assertTrue("Expected:" + tagClass + " Actual:" + defaultTag.getClass(), tagClass.isInstance(defaultTag));
     }
 

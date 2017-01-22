@@ -39,17 +39,17 @@ public class Issue308Test extends AbstractTestCase
             artwork.setFromFile(new File("testdata","coverart_large.jpg"));
 
             af.getTag().setArtwork(artwork);
-            af.commit();
+            af.save();
 
             //Reread
             System.out.println("Read Audio");
             af = AudioFileIO.read(testFile);
             System.out.println("Rewrite Audio");
-            af.commit();
+            af.save();
 
             //Resave
             af.getTag().addField(FieldKey.TITLE,"TESTdddddddddddddddddddddddd");
-            af.commit();
+            af.save();
         }
         catch(Exception ex)
         {

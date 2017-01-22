@@ -18,8 +18,8 @@
  */
 package ealvatag.audio;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Files;
 import ealvatag.audio.aiff.AiffFileReader;
 import ealvatag.audio.aiff.AiffFileWriter;
 import ealvatag.audio.asf.AsfFileReader;
@@ -47,11 +47,10 @@ import ealvatag.tag.TagException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * The main entry point for the Tag Reading/Writing operations, this class will
@@ -88,7 +87,7 @@ import java.io.IOException;
  *
  * @author Raphael Slinckx
  * @version $Id$
- * @see AudioFile
+ * @see AudioFileImpl
  * @see ealvatag.tag.Tag
  * @since v0.01
  */
@@ -97,8 +96,15 @@ public class AudioFileIO {
     private static Logger LOG = LoggerFactory.getLogger(AudioFileIO.class);
 
     private static AudioFileIO defaultInstance;
+    private final ModificationHandler modificationHandler;
+    private final ImmutableMap<String, AudioFileReaderFactory> readerFactories;
+    private final ImmutableMap<String, AudioFileWriterFactory> writerFactories;
 
-    public static AudioFileIO getDefaultAudioFileIO() {
+    public static void delete(AudioFile audioFile) throws CannotWriteException {
+        instance().deleteTag(audioFile);
+    }
+
+    public static AudioFileIO instance() {
         if (defaultInstance == null) {
             synchronized (AudioFileIO.class) {
                 if (defaultInstance == null) {
@@ -109,17 +115,31 @@ public class AudioFileIO {
         return defaultInstance;
     }
 
+    // TODO: 1/21/17 Most of these methods should be package scope ore moved totally into AudioFileImpl
+    // TODO: 1/21/17 First step is to stop clients from calling them and have them directly call on AudioFile to do these things
+
     /**
      * Delete the tag, if any, contained in the given file.
      *
-     * @param audioFile The file where the tag will be deleted
+     * @param f The file where the tag will be deleted
      *
      * @throws ealvatag.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or
      *                                                        other IO error occurred.
-     * @throws ealvatag.audio.exceptions.CannotReadException
      */
-    public static void delete(AudioFile audioFile) throws CannotReadException, CannotWriteException {
-        getDefaultAudioFileIO().deleteTag(audioFile);
+    void deleteTag(AudioFile f) throws CannotWriteException {
+        String ext = Utils.getExtension(f.getFile());
+
+        AudioFileWriter afw = getWriterForExtension(ext);
+
+        afw.delete(f);
+    }
+
+    private AudioFileWriter getWriterForExtension(final String ext) throws CannotWriteException {
+        final AudioFileWriterFactory factory = writerFactories.get(ext);
+        if (factory == null) {
+            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
+        }
+        return factory.make().setAudioFileModificationListener(modificationHandler);
     }
 
     /**
@@ -137,9 +157,60 @@ public class AudioFileIO {
      * @throws java.io.IOException
      * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
      */
-    public static AudioFile readAs(File f, String ext)
-            throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        return getDefaultAudioFileIO().readFileAs(f, ext);
+    public static AudioFile readAs(File f, String ext) throws CannotReadException,
+                                                              IOException,
+                                                              TagException,
+                                                              ReadOnlyFileException,
+                                                              InvalidAudioFrameException {
+        return instance().readFileAs(f, ext.toLowerCase());
+    }
+
+    /**
+     * Read the tag contained in the given file.
+     *
+     * @param f   The file to read.
+     * @param ext The extension to be used.
+     *
+     * @return The AudioFile with the file tag and the file encoding info.
+     *
+     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
+     *                                                              error occurred during the read.
+     * @throws ealvatag.tag.TagException
+     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
+     * @throws java.io.IOException
+     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     */
+    public AudioFile readFileAs(File f, String ext) throws CannotReadException,
+                                                           IOException,
+                                                           TagException,
+                                                           ReadOnlyFileException,
+                                                           InvalidAudioFrameException {
+        ensureFileExists(f);
+        return readAudioFile(f, ext);
+    }
+
+    private AudioFile readAudioFile(final File f, final String ext) throws CannotReadException,
+                                                                           IOException,
+                                                                           TagException,
+                                                                           ReadOnlyFileException,
+                                                                           InvalidAudioFrameException {
+        final String extension = ext.toLowerCase(Locale.ROOT);
+        return getReaderForExtension(extension).read(f, extension);
+    }
+
+    private AudioFileReader getReaderForExtension(final String ext) throws CannotReadException {
+        AudioFileReaderFactory factory = readerFactories.get(ext);
+        if (factory == null) {
+            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
+        }
+        return factory.make();
+    }
+
+    private void ensureFileExists(File file) throws FileNotFoundException {
+        if (!file.exists()) {
+            LOG.error("Unable to find:{}" + file);
+            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
+        }
     }
 
     /**
@@ -158,7 +229,30 @@ public class AudioFileIO {
      */
     public static AudioFile readMagic(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        return getDefaultAudioFileIO().readFileMagic(f);
+        return instance().readFileMagic(f);
+    }
+
+    /**
+     * Read the tag contained in the given file.
+     *
+     * @param file The file to read.
+     *
+     * @return The AudioFile with the file tag and the file encoding info.
+     *
+     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
+     *                                                              error occurred during the read.
+     * @throws ealvatag.tag.TagException
+     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
+     * @throws java.io.IOException
+     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     */
+    public AudioFile readFileMagic(File file) throws CannotReadException,
+                                                     IOException,
+                                                     TagException,
+                                                     ReadOnlyFileException,
+                                                     InvalidAudioFrameException {
+        ensureFileExists(file);
+        return readAudioFile(file, Utils.getMagicExtension(file));
     }
 
     /**
@@ -175,9 +269,32 @@ public class AudioFileIO {
      * @throws java.io.IOException
      * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
      */
-    public static AudioFile read(File f)
+    public static AudioFile read(File f) throws CannotReadException,
+                                                IOException,
+                                                TagException,
+                                                ReadOnlyFileException,
+                                                InvalidAudioFrameException {
+        return instance().readFile(f);
+    }
+
+    /**
+     * Read the tag contained in the given file.
+     *
+     * @param f The file to read.
+     *
+     * @return The AudioFile with the file tag and the file encoding info.
+     *
+     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
+     *                                                              error occurred during the read.
+     * @throws ealvatag.tag.TagException
+     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
+     * @throws java.io.IOException
+     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     */
+    AudioFile readFile(File f)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        return getDefaultAudioFileIO().readFile(f);
+        ensureFileExists(f);
+        return readAudioFile(f, Files.getFileExtension(f.getName()));
     }
 
     /**
@@ -189,8 +306,17 @@ public class AudioFileIO {
      * @throws CannotWriteException        If the file could not be written/accessed, the extension wasn't recognized, or other IO error
      *                                     occurred.
      */
-    public static void write(AudioFile f) throws CannotWriteException {
-        getDefaultAudioFileIO().writeFile(f);
+    static void write(AudioFileImpl f) throws CannotWriteException {
+        instance().writeFile(f);
+    }
+
+    private void writeFile(final AudioFileImpl audioFile) throws CannotWriteException {
+        String ext = audioFile.getExt();
+        AudioFileWriter afw = getWriterForExtension(ext);
+        if (afw == null) {
+            throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT.getMsg(ext));
+        }
+        afw.write(audioFile);
     }
 
     /**
@@ -199,27 +325,27 @@ public class AudioFileIO {
      * @param audioFile  The AudioFile to be written
      * @param targetPath The AudioFile path to which to be written without the extension. Cannot be null
      *
-     * @throws IllegalArgumentException    if targetPath is null or empty
-     * @throws NoWritePermissionsException if the file could not be written to due to file permissions
-     * @throws CannotWriteException        If the file could not be written/accessed, the extension wasn't recognized, or other IO error
-     *                                     occurred.
+     * @throws IllegalArgumentException if targetPath is null or empty
+     * @throws CannotWriteException     If the file could not be written/accessed, the extension wasn't recognized, or other IO error
+     *                                  occurred.
      */
-    public static void writeAs(AudioFile audioFile, String targetPath) throws CannotWriteException {
-        checkArgument(!Strings.isNullOrEmpty(targetPath));
-        getDefaultAudioFileIO().writeFileAs(audioFile, targetPath);
+    void writeFileAs(AudioFileImpl audioFile, String targetPath) throws CannotWriteException {
+        try {
+            final File destination = new File(targetPath + "." + audioFile.getExt());
+            Utils.copyThrowsOnException(audioFile.getFile(), destination);
+            audioFile.setFile(destination);
+            writeFile(audioFile);
+        } catch (IOException e) {
+            throw new CannotWriteException("Error While Copying", e);
+        }
     }
-
-    private final ModificationHandler modificationHandler;
-    private final ImmutableMap<String, AudioFileReaderFactory> readerFactories;
-    private final ImmutableMap<String, AudioFileWriterFactory> writerFactories;
-
 
     private AudioFileIO() {
         this.modificationHandler = new ModificationHandler();
 
         // !! Do not forget to also add new supported extensions to AudioFileFilter
         // !!
-        // TODO: 1/19/17 This warning "do not forget" = ensure tests check this 
+        // TODO: 1/19/17 This warning "do not forget" = ensure tests check this
 
         // Tag Readers
         final AudioFileReaderFactory mp4ReaderFactory = new CachingAudioFileReaderFactory() {
@@ -341,141 +467,12 @@ public class AudioFileIO {
     }
 
     /**
-     * Delete the tag, if any, contained in the given file.
-     *
-     * @param f The file where the tag will be deleted
-     *
-     * @throws ealvatag.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or
-     *                                                        other IO error occurred.
-     * @throws ealvatag.audio.exceptions.CannotReadException
-     */
-    public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException {
-        String ext = Utils.getExtension(f.getFile());
-
-        AudioFileWriter afw = getWriterForExtension(ext);
-
-        afw.delete(f);
-    }
-
-    private AudioFileWriter getWriterForExtension(final String ext) throws CannotWriteException {
-        final AudioFileWriterFactory factory = writerFactories.get(ext);
-        if (factory == null) {
-            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
-        }
-        return factory.make().setAudioFileModificationListener(modificationHandler);
-    }
-
-    /**
-     * Read the tag contained in the given file.
-     *
-     * @param f The file to read.
-     *
-     * @return The AudioFile with the file tag and the file encoding info.
-     *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
-     */
-    public AudioFile readFile(File f)
-            throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        ensureFileExists(f);
-        return readAudioFile(f, Utils.getExtension(f));
-    }
-
-    /**
-     * Read the tag contained in the given file.
-     *
-     * @param f The file to read.
-     *
-     * @return The AudioFile with the file tag and the file encoding info.
-     *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
-     */
-    public AudioFile readFileMagic(File f)
-            throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        ensureFileExists(f);
-        return readAudioFile(f, Utils.getMagicExtension(f));
-    }
-
-    private AudioFile readAudioFile(final File f, final String ext) throws CannotReadException,
-                                                                           IOException,
-                                                                           TagException,
-                                                                           ReadOnlyFileException,
-                                                                           InvalidAudioFrameException {
-        return getReaderForExtension(ext).read(f).setExt(ext);
-    }
-
-    /**
-     * Read the tag contained in the given file.
-     *
-     * @param f   The file to read.
-     * @param ext The extension to be used.
-     *
-     * @return The AudioFile with the file tag and the file encoding info.
-     *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
-     */
-    public AudioFile readFileAs(File f, String ext)
-            throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        ensureFileExists(f);
-        return readAudioFile(f, ext);
-    }
-
-    private AudioFileReader getReaderForExtension(final String ext) throws CannotReadException {
-        AudioFileReaderFactory factory = readerFactories.get(ext);
-        if (factory == null) {
-            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
-        }
-        return factory.make();
-    }
-
-    private void ensureFileExists(File file) throws FileNotFoundException {
-        if (!file.exists()) {
-            LOG.error("Unable to find:{}" + file);
-            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
-        }
-    }
-
-    /**
      * Removes a listener for all file formats.
      *
      * @param listener listener
      */
     public void removeAudioFileModificationListener(AudioFileModificationListener listener) {
         this.modificationHandler.removeAudioFileModificationListener(listener);
-    }
-
-    private void writeFileAs(AudioFile audioFile, String targetPath) throws CannotWriteException {
-        try {
-            final File destination = new File(targetPath + "." + audioFile.getExt());
-            Utils.copyThrowsOnException(audioFile.getFile(), destination);
-            audioFile.setFile(destination);
-            writeFile(audioFile);
-        } catch (IOException e) {
-            throw new CannotWriteException("Error While Copying" + e.getMessage());
-        }
-    }
-
-    private void writeFile(final AudioFile audioFile) throws CannotWriteException {
-        String ext = audioFile.getExt();
-        AudioFileWriter afw = getWriterForExtension(ext);
-        if (afw == null) {
-            throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT.getMsg(ext));
-        }
-        afw.write(audioFile);
     }
 
 }

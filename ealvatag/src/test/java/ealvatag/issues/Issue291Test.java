@@ -33,7 +33,7 @@ public class Issue291Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println("Tag is"+af.getTag().toString());
             af.getTag().setField(FieldKey.ARTIST,"Kenny Rankin1");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("Kenny Rankin1",af.getTag().getFirst(FieldKey.ARTIST));
         }

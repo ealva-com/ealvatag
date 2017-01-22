@@ -30,39 +30,39 @@ public class Issue233Test extends AbstractTestCase
 
             //Save and deleteField v24 tag
             mp3File.setID3v2Tag(new ID3v24Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertTrue(mp3File.hasID3v2Tag());
 
             mp3File.setID3v2Tag(null);
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertFalse(mp3File.hasID3v2Tag());
 
             //Save and deleteField v23 tag
             mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertTrue(mp3File.hasID3v2Tag());
 
             mp3File.setID3v2Tag(null);
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertFalse(mp3File.hasID3v2Tag());
 
             //Save and deleteField v22 tag
             mp3File.setID3v2Tag(new ID3v22Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertTrue(mp3File.hasID3v2Tag());
 
             mp3File.setID3v2Tag(null);
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
             assertFalse(mp3File.hasID3v1Tag());
             assertFalse(mp3File.hasID3v2Tag());
@@ -88,7 +88,7 @@ public class Issue233Test extends AbstractTestCase
         {
             File        testFile    = AbstractTestCase.copyAudioToTmp("test32.mp3");
             AudioFile   af          = AudioFileIO.read(testFile);
-            AudioFileIO.delete(af);
+            af.deleteFileTag();
         }
         catch (Exception e)
         {

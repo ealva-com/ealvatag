@@ -38,7 +38,7 @@ public class Issue418Test extends AbstractTestCase
         assertEquals(1, tag.getFields(FieldKey.GENRE).size());
 
 
-        f.commit();
+        f.save();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag();

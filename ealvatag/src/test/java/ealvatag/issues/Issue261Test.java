@@ -36,7 +36,7 @@ public class Issue261Test extends AbstractTestCase
 
             //Write file
             af.getTag().setField(FieldKey.YEAR,"2007");
-            af.commit();
+            af.save();
 
             af = AudioFileIO.read(testFile);
             assertEquals("2007",af.getTag().getFirst(FieldKey.YEAR));

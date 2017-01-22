@@ -4,11 +4,10 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.Tag;
-import ealvatag.tag.id3.ID3v22Tag;
-import ealvatag.tag.id3.ID3v23Tag;
-import ealvatag.tag.id3.ID3v24Tag;
+import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
+import ealvatag.tag.reference.ID3V2Version;
 
 import java.io.File;
 import java.util.List;
@@ -25,11 +24,12 @@ public class Issue356Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWritingLinkedUrlToID3v24.mp3"));
         audioFile=AudioFileIO.read(testFile);
-        audioFile.setTag(new ID3v24Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
+        audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
         tag.setArtwork(artwork);
-        audioFile.commit();
+        audioFile.save();
 
         tag = audioFile.getTag();
         final List<Artwork> artworkList = tag.getArtworkList();
@@ -46,11 +46,12 @@ public class Issue356Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWritingLinkedUrlToID3v23.mp3"));
         audioFile=AudioFileIO.read(testFile);
-        audioFile.setTag(new ID3v23Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+        audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
         tag.setArtwork(artwork);
-        audioFile.commit();
+        audioFile.save();
 
         tag = audioFile.getTag();
         final List<Artwork> artworkList = tag.getArtworkList();
@@ -67,11 +68,12 @@ public class Issue356Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3",new File("testWritingLinkedUrlToID3v22.mp3"));
         audioFile=AudioFileIO.read(testFile);
-        audioFile.setTag(new ID3v22Tag());
+        TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
+        audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
         Tag tag = audioFile.getTag();
         tag.setArtwork(artwork);
-        audioFile.commit();
+        audioFile.save();
 
         tag = audioFile.getTag();
         final List<Artwork> artworkList = tag.getArtworkList();

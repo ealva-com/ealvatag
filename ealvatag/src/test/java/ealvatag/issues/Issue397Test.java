@@ -28,7 +28,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -44,7 +44,7 @@ public class Issue397Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v22.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -53,7 +53,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -70,7 +70,7 @@ public class Issue397Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v23.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -79,7 +79,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -96,7 +96,7 @@ public class Issue397Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetSubtitleForMp3v24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -105,7 +105,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -120,7 +120,7 @@ public class Issue397Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -129,7 +129,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -144,7 +144,7 @@ public class Issue397Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -153,7 +153,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -168,7 +168,7 @@ public class Issue397Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.DISC_SUBTITLE,"discsubtitle");
         tag.setField(FieldKey.SUBTITLE,"subtitle");
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));
@@ -177,7 +177,7 @@ public class Issue397Test extends AbstractTestCase
         assertTrue(tag.hasField(FieldKey.SUBTITLE));
         assertEquals("subtitle",tag.getFirst(FieldKey.SUBTITLE));
         assertEquals(1,tag.getAll(FieldKey.SUBTITLE).size());
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag.hasField(FieldKey.DISC_SUBTITLE));

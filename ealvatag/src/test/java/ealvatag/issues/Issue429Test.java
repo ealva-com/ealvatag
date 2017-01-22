@@ -22,9 +22,9 @@ public class Issue429Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.ARTIST,"fred");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag instanceof ID3v23Tag);
@@ -35,9 +35,9 @@ public class Issue429Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.ARTIST,"fred");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag instanceof ID3v24Tag);
@@ -48,9 +48,9 @@ public class Issue429Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.setField(FieldKey.ARTIST,"fred");
-        f.commit();
+        f.save();
         f = AudioFileIO.read(testFile);
         tag = f.getTag();
         assertTrue(tag instanceof ID3v22Tag);
@@ -61,14 +61,14 @@ public class Issue429Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         assertTrue(tag instanceof ID3v23Tag);
         tag.setField(FieldKey.ARTIST,"fred");
-        f.commit();
+        f.save();
         assertTrue(tag instanceof ID3v23Tag);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
         f = AudioFileIO.read(testFile);
-        tag = f.getTagAndConvertOrCreateAndSetDefault();
+        tag = f.getConvertedTagOrSetNewDefault();
         assertTrue(tag instanceof ID3v24Tag);
         assertEquals(tag.getFirst(FieldKey.ARTIST),"fred");
     }
@@ -78,14 +78,14 @@ public class Issue429Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
-        Tag tag = f.getTagOrCreateAndSetDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         assertTrue(tag instanceof ID3v24Tag);
         tag.setField(FieldKey.ARTIST,"fred");
-        f.commit();
+        f.save();
         assertTrue(tag instanceof ID3v24Tag);
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         f = AudioFileIO.read(testFile);
-        tag = f.getTagAndConvertOrCreateAndSetDefault();
+        tag = f.getConvertedTagOrSetNewDefault();
         assertTrue(tag instanceof ID3v23Tag);
         assertEquals(tag.getFirst(FieldKey.ARTIST),"fred");
     }

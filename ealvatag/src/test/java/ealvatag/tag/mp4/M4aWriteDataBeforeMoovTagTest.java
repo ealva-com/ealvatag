@@ -38,7 +38,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             //Change values and Save changes and reread from disk
             tag.setField(FieldKey.ARTIST,"AUTHOR");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(tag);
@@ -84,7 +84,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             tag.setField(FieldKey.ALBUM,"AL");
             tag.setField(FieldKey.TITLE,"T");
 
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(tag);
@@ -128,7 +128,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             //Change values and Save changes and reread from disk
             tag.setField(FieldKey.ARTIST,"AR");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(tag);
@@ -194,7 +194,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             tag.setField(FieldKey.GENRE, "1"); //key for classic rock
             tag.setField(FieldKey.ENCODER, "encoder");
             //Save changes and reread from disk
-            f.commit();
+            f.save();
 
             atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
@@ -286,7 +286,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             tag.setField(FieldKey.GENRE, "1"); //key for classic rock
             tag.setField(FieldKey.ENCODER, "encoder");
             //Save changes and reread from disk
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(f.getAudioHeader());

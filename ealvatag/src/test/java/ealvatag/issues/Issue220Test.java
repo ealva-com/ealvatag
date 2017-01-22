@@ -76,7 +76,7 @@ public class Issue220Test extends AbstractTestCase
             af.getTag().setField(FieldKey.TITLE,"title");
             af.getTag().setField(FieldKey.GENRE,"genre");
             af.getTag().setField(FieldKey.YEAR,"year");
-            af.commit();
+            af.save();
 
             //Read file again okay
 
@@ -160,7 +160,7 @@ public class Issue220Test extends AbstractTestCase
                af.getTag().setField(FieldKey.GENRE,"KARENTAYLORGENRE");
                af.getTag().setField(FieldKey.AMAZON_ID,"12345678");
 
-               af.commit();
+               af.save();
                System.out.println("All is going well");
                af = AudioFileIO.read(testFile);
                assertEquals("KARENTAYLORALBUM",af.getTag().getFirst(FieldKey.ALBUM));
@@ -202,7 +202,7 @@ public class Issue220Test extends AbstractTestCase
 
                     //Write file
                     af.getTag().setField(FieldKey.TITLE,"ti");
-                    af.commit();
+                    af.save();
 
                     //Read file again okay
                     af = AudioFileIO.read(testFile);
@@ -246,7 +246,7 @@ public class Issue220Test extends AbstractTestCase
                     af.getTag().setField(FieldKey.TITLE,"title");
                     af.getTag().setField(FieldKey.GENRE,"genre");
                     af.getTag().setField(FieldKey.YEAR,"year");
-                    af.commit();
+                    af.save();
 
                     //Read file again okay
                     af = AudioFileIO.read(testFile);

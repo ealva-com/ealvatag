@@ -35,7 +35,7 @@ public class Issue315Test extends AbstractTestCase
 
             //Modify File
             af.getTag().setField(FieldKey.TITLE,"newtitle");
-            af.commit();
+            af.save();
 
             //Reread File
             af = AudioFileIO.read(testFile);

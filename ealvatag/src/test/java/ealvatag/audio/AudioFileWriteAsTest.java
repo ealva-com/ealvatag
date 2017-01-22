@@ -6,6 +6,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.Is.is;
+
 import java.io.File;
 
 /**
@@ -30,19 +35,16 @@ public class AudioFileWriteAsTest {
     }
 
     @Test public void testWriteAs() throws Exception {
-        af.getTagOrCreateAndSetDefault().setField(FieldKey.LANGUAGE, LANGUAGE);
-        af.commit();
+        af.getTagOrSetNewDefault().setField(FieldKey.LANGUAGE, LANGUAGE);
+        af.save();
+
+        assertNotNull(af.getTag());
 
         final String parent = sourceFile.getParent();
         File destinationNoExtension = new File(parent, DESTINATION_FILE_NAME);
-        AudioFileIO.writeAs(af, destinationNoExtension.getPath());
+        af.saveAs(destinationNoExtension.getPath());
 
         Assert.assertEquals(destinationNoExtension + EXPECTED_EXTENSION, af.getFile().getPath());
         Assert.assertEquals(LANGUAGE, af.getTag().getFirst(FieldKey.LANGUAGE));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testWriteAsWithNull() throws Exception {
-        AudioFileIO.writeAs(af, null);
     }
 }

@@ -64,8 +64,8 @@ public class ConcurrentWritesTest extends TestCase
         public Boolean call() throws Exception
         {
             AudioFile audiofile = AudioFileIO.read(file);
-            audiofile.getTagOrCreateAndSetDefault().setField(FieldKey.CUSTOM1,file.getName());
-            audiofile.commit();
+            audiofile.getTagOrSetNewDefault().setField(FieldKey.CUSTOM1, file.getName());
+            audiofile.save();
             audiofile = AudioFileIO.read(file);
             assertEquals(file.getName(),audiofile.getTag().getFirst(FieldKey.CUSTOM1));
             return true;

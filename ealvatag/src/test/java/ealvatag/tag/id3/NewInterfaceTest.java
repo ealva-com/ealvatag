@@ -22,6 +22,7 @@ import ealvatag.tag.id3.framebody.FrameBodyUFID;
 import ealvatag.tag.id3.framebody.FrameBodyUSLT;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.images.ArtworkFactory;
+import ealvatag.tag.reference.ID3V2Version;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,11 +57,11 @@ public class NewInterfaceTest {
         Exception ex = null;
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
-            ealvatag.audio.AudioFile audioFile = ealvatag.audio.AudioFileIO.read(testFile);
+            AudioFile audioFile = AudioFileIO.read(testFile);
             ealvatag.tag.Tag newTag = audioFile.getTag();
             if (audioFile.getTag() == null) {
-                audioFile.setTag(new ID3v23Tag());
-                newTag = audioFile.getTag();
+                TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+                newTag = audioFile.setNewDefaultTag();
             }
 
             newTag.setField(FieldKey.ALBUM, "album");
@@ -79,7 +80,7 @@ public class NewInterfaceTest {
             Assert.assertEquals("year", newTag.getFirst(FieldKey.YEAR));
             Assert.assertEquals("1", newTag.getFirst(FieldKey.TRACK));
 
-            audioFile.commit();
+            audioFile.save();
 
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
@@ -95,7 +96,7 @@ public class NewInterfaceTest {
 
             TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
-            audioFile.commit();
+            audioFile.save();
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
             Assert.assertEquals("album", newTag.getFirst(FieldKey.ALBUM));
@@ -110,7 +111,7 @@ public class NewInterfaceTest {
 
             TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.ISO_8859_1);
             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
-            audioFile.commit();
+            audioFile.save();
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
             body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
@@ -140,7 +141,7 @@ public class NewInterfaceTest {
         v1tag.setField(FieldKey.GENRE, "Rock");
         v1tag.setField(v1tag.createField(FieldKey.TRACK, "12"));
         mp3File.setID3v1Tag(v1tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has only v1 tag
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -185,7 +186,7 @@ public class NewInterfaceTest {
         v1tag.setField(FieldKey.ARTIST, V1_ARTIST);
         v1tag.setField(FieldKey.ALBUM, "V1ALBUM");
         mp3File.setID3v1Tag(v1tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has only v1 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -203,7 +204,7 @@ public class NewInterfaceTest {
         ((FrameBodyTPE1)frame.getBody()).setText(FrameBodyTPE1Test.TPE1_TEST_STRING);
         tag.setFrame(frame);
         mp3File.setID3v2TagOnly(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has v1 and v2 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -221,7 +222,7 @@ public class NewInterfaceTest {
         Assert.assertEquals(V1_ARTIST, ((MP3File)af).getID3v1Tag().getFirst(FieldKey.ARTIST));
         //Write album ( new method)
         af.getTag().setField(FieldKey.ALBUM, ALBUM_TEST_STRING);
-        af.commit();
+        af.save();
 
         //Read back album (new method)
         af = AudioFileIO.read(testFile);
@@ -239,7 +240,7 @@ public class NewInterfaceTest {
 
         //If addField again, the value gets appended using the null char sperator system
         af.getTag().addField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFieldAt(FieldKey.ALBUM, 1));
@@ -252,7 +253,7 @@ public class NewInterfaceTest {
 
         //And can replace existing value
         af.getTag().setField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
@@ -261,7 +262,7 @@ public class NewInterfaceTest {
 
         //and deleteField it
         af.getTag().deleteField(FieldKey.ALBUM);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
@@ -271,7 +272,7 @@ public class NewInterfaceTest {
         //Test out the other basic fields
         //Year
         af.getTag().setField(FieldKey.YEAR, "1991");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
@@ -282,7 +283,7 @@ public class NewInterfaceTest {
 
         //Title
         af.getTag().setField(FieldKey.TITLE, "Title");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
@@ -293,7 +294,7 @@ public class NewInterfaceTest {
 
         //Comment, trickier because uses different framebody subclass to the ones above
         af.getTag().setField(FieldKey.COMMENT, "Comment");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Comment", af.getTag().getFirst(FieldKey.COMMENT));
         Assert.assertEquals("Comment", ((ID3v24Tag)af.getTag()).getFirst(ID3v24FieldKey.COMMENT));
@@ -313,13 +314,13 @@ public class NewInterfaceTest {
         List<TagField> comments = af.getTag().getFields(FieldKey.COMMENT);
         ((FrameBodyCOMM)((ID3v24Frame)comments.get(1)).getBody()).setDescription("test2");
         af.getTag().setField(FieldKey.COMMENT, "Comment3");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, af.getTag().getFields(FieldKey.COMMENT).size());
 
         //Add fourth Comment (but duplicate key - so overwrites 3rd comment)
         af.getTag().setField(FieldKey.COMMENT, "Comment4");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, af.getTag().getFields(FieldKey.COMMENT).size());
 
@@ -329,7 +330,7 @@ public class NewInterfaceTest {
 
         //Add first one back in
         af.getTag().setField(FieldKey.COMMENT, "Comment");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.COMMENT).size());
         Assert.assertEquals(4, af.getTag().getFieldCount());
@@ -338,7 +339,7 @@ public class NewInterfaceTest {
         //TODO only one genre frame allowed, but that can contain multiple GENRE values, currently
         //must parse as one genre e.g 34 67
         af.getTag().setField(FieldKey.GENRE, "CustomGenre");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("CustomGenre", af.getTag().getFirst(FieldKey.GENRE));
         Assert.assertEquals("CustomGenre", af.getTag().getFirst(FieldKey.GENRE));
@@ -351,7 +352,7 @@ public class NewInterfaceTest {
         af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("11", af.getTag().getFirst(FieldKey.TRACK_TOTAL));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
@@ -363,12 +364,12 @@ public class NewInterfaceTest {
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
         af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
 
         //Mood
         af.getTag().setField(FieldKey.MOOD, "mood");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
 
         Assert.assertEquals("asin123456" + "\u01ff", af.getTag().getFirst(FieldKey.AMAZON_ID));
@@ -378,7 +379,7 @@ public class NewInterfaceTest {
 
         //Now addField another different field that also uses a TXXX frame
         af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v24Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -389,7 +390,7 @@ public class NewInterfaceTest {
 
         //Now addField yet another different field that also uses a TXXX frame
         af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, ((List)((ID3v24Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -405,7 +406,7 @@ public class NewInterfaceTest {
 
         //Now deleteField field
         af.getTag().deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v24Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.MUSICIP_ID).size());
@@ -425,7 +426,7 @@ public class NewInterfaceTest {
         byte[] imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(1, ((ID3v24Tag)af.getTag()).getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(1, ((ID3v24Tag)af.getTag()).getFields(ID3v24FieldKey.COVER_ART.getFieldName()).size());
@@ -447,7 +448,7 @@ public class NewInterfaceTest {
         imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(11, af.getTag().getFieldCount());
@@ -466,7 +467,7 @@ public class NewInterfaceTest {
 
         //Add a linked Image
         af.getTag().addArtwork(ArtworkFactory.getNew().setImageUrl("../testdata/coverart.jpg").setLinked(true));
-        af.commit();
+        af.save();
 
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, af.getTag().getFields(FieldKey.COVER_ART).size());
@@ -520,7 +521,7 @@ public class NewInterfaceTest {
         v1tag.setField(FieldKey.ARTIST, V1_ARTIST);
         v1tag.setField(FieldKey.ALBUM, "V1ALBUM");
         mp3File.setID3v1Tag(v1tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has only v1 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -538,7 +539,7 @@ public class NewInterfaceTest {
         ((FrameBodyTPE1)frame.getBody()).setText(FrameBodyTPE1Test.TPE1_TEST_STRING);
         tag.setFrame(frame);
         mp3File.setID3v2TagOnly(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has v1 and v2 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -553,7 +554,7 @@ public class NewInterfaceTest {
         Assert.assertEquals(V1_ARTIST, ((MP3File)af).getID3v1Tag().getFirst(FieldKey.ARTIST));
         //Write album ( new method)
         af.getTag().setField(FieldKey.ALBUM, ALBUM_TEST_STRING);
-        af.commit();
+        af.save();
 
         //Read back album (new method)
         af = AudioFileIO.read(testFile);
@@ -568,7 +569,7 @@ public class NewInterfaceTest {
 
         //If add smae field again appended to existiong frame
         af.getTag().addField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING, ((ID3v23Tag)af.getTag()).getFirst(ID3v23FieldKey.ALBUM));
@@ -576,7 +577,7 @@ public class NewInterfaceTest {
 
         //But can replace existing value
         af.getTag().setField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
@@ -585,7 +586,7 @@ public class NewInterfaceTest {
 
         //and deleteField it
         af.getTag().deleteField(FieldKey.ALBUM);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
@@ -595,7 +596,7 @@ public class NewInterfaceTest {
         //Test out the other basic fields
         //Year
         af.getTag().setField(FieldKey.YEAR, "1991");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
@@ -605,7 +606,7 @@ public class NewInterfaceTest {
 
         //Title
         af.getTag().setField(FieldKey.TITLE, "Title");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
@@ -615,7 +616,7 @@ public class NewInterfaceTest {
 
         //Comment, trickier because uses different framebody subclass to the ones above
         af.getTag().setField(FieldKey.COMMENT, "Comment");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Comment", af.getTag().getFirst(FieldKey.COMMENT));
         Assert.assertEquals("Comment", ((ID3v23Tag)af.getTag()).getFirst(ID3v23FieldKey.COMMENT));
@@ -626,7 +627,7 @@ public class NewInterfaceTest {
         //TODO only one genre frame allowed, but that can contain multiple GENRE values, currently
         //must parse as one genre e.g 34 67
         af.getTag().setField(FieldKey.GENRE, "CustomGenre");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("CustomGenre", af.getTag().getFirst(FieldKey.GENRE));
         Assert.assertEquals("CustomGenre", ((ID3v23Tag)af.getTag()).getFirst(ID3v23FieldKey.GENRE));
@@ -640,7 +641,7 @@ public class NewInterfaceTest {
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("11", af.getTag().getFirst(FieldKey.TRACK_TOTAL));
 
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
@@ -653,7 +654,7 @@ public class NewInterfaceTest {
         //AmazonId also testing utf encoding here
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
         af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("asin123456" + "\u01ff", af.getTag().getFirst(FieldKey.AMAZON_ID));
         Assert.assertEquals("asin123456" + "\u01ff", ((ID3v23Tag)af.getTag()).getFirst(ID3v23FieldKey.AMAZON_ID));
@@ -662,12 +663,12 @@ public class NewInterfaceTest {
 
         //Mood
         af.getTag().setField(FieldKey.MOOD, "mood");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("mood", af.getTag().getFirst(FieldKey.MOOD));
         //Now deleteField field
         af.getTag().deleteField(FieldKey.MOOD);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
 
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
@@ -678,7 +679,7 @@ public class NewInterfaceTest {
 
         //Now addField another different field that also uses a TXXX frame
         af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v23Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -693,7 +694,7 @@ public class NewInterfaceTest {
 
         //Now addField yet another different field that also uses a TXXX frame
         af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, ((List)((ID3v23Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -706,7 +707,7 @@ public class NewInterfaceTest {
 
         //Now deleteField field
         af.getTag().deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v23Tag)af.getTag()).getFrame("TXXX")).size());
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.MUSICIP_ID).size());
@@ -726,7 +727,7 @@ public class NewInterfaceTest {
         byte[] imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(9, af.getTag().getFieldCount());
@@ -736,7 +737,7 @@ public class NewInterfaceTest {
         imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(10, af.getTag().getFieldCount());
@@ -758,7 +759,7 @@ public class NewInterfaceTest {
         v1tag.setField(FieldKey.ARTIST, V1_ARTIST);
         v1tag.setField(FieldKey.ALBUM, "V1ALBUM");
         mp3File.setID3v1Tag(v1tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has only v1 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -776,7 +777,7 @@ public class NewInterfaceTest {
         ((FrameBodyTPE1)frame.getBody()).setText(FrameBodyTPE1Test.TPE1_TEST_STRING);
         tag.setFrame(frame);
         mp3File.setID3v2TagOnly(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Has v1 and v2 tag at this point
         Assert.assertTrue(mp3File.hasID3v1Tag());
@@ -795,7 +796,7 @@ public class NewInterfaceTest {
         Assert.assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.ALBUM).size());
 
-        af.commit();
+        af.save();
 
         //Read back album (new method)
         af = AudioFileIO.read(testFile);
@@ -810,7 +811,7 @@ public class NewInterfaceTest {
 
         //If add extra text field its appended to existing frame
         af.getTag().addField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING, af.getTag().getFieldAt(FieldKey.ALBUM, 0));
@@ -820,7 +821,7 @@ public class NewInterfaceTest {
 
         //But can replace existing value
         af.getTag().setField(FieldKey.ALBUM, ALBUM_TEST_STRING2);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ALBUM_TEST_STRING2, af.getTag().getFirst(FieldKey.ALBUM));
@@ -829,7 +830,7 @@ public class NewInterfaceTest {
 
         //and deleteField it
         af.getTag().deleteField(FieldKey.ALBUM);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
         Assert.assertEquals("", af.getTag().getFirst(FieldKey.ALBUM));
@@ -839,7 +840,7 @@ public class NewInterfaceTest {
         //Test out the other basic fields
         //Year
         af.getTag().setField(FieldKey.YEAR, "1991");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
         Assert.assertEquals("1991", af.getTag().getFirst(FieldKey.YEAR));
@@ -849,7 +850,7 @@ public class NewInterfaceTest {
 
         //Title
         af.getTag().setField(FieldKey.TITLE, "Title");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
         Assert.assertEquals("Title", af.getTag().getFirst(FieldKey.TITLE));
@@ -859,7 +860,7 @@ public class NewInterfaceTest {
 
         //Comment, trickier because uses different framebody subclass to the ones above
         af.getTag().setField(FieldKey.COMMENT, "Comment");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("Comment", af.getTag().getFirst(FieldKey.COMMENT));
         Assert.assertEquals("Comment", af.getTag().getFirst(FieldKey.COMMENT));
@@ -871,7 +872,7 @@ public class NewInterfaceTest {
         //TODO only one genre frame allowed, but that can contain multiple GENRE values, currently
         //must parse as one genre e.g 34 67
         af.getTag().setField(FieldKey.GENRE, "CustomGenre");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("CustomGenre", af.getTag().getFirst(FieldKey.GENRE));
         Assert.assertEquals("CustomGenre", af.getTag().getFirst(FieldKey.GENRE));
@@ -884,7 +885,7 @@ public class NewInterfaceTest {
         af.getTag().setField(FieldKey.TRACK_TOTAL, "11");
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("11", af.getTag().getFirst(FieldKey.TRACK_TOTAL));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
         Assert.assertEquals("7", af.getTag().getFirst(FieldKey.TRACK));
@@ -897,17 +898,17 @@ public class NewInterfaceTest {
         //AmazonId
         //This is one of many fields that uses the TXXX frame, the logic is more complicated
         af.getTag().setField(FieldKey.AMAZON_ID, "asin123456" + "\u01ff");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
 
         //Mood
         af.getTag().setField(FieldKey.MOOD, "mood");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals("mood", af.getTag().getFirst(FieldKey.MOOD));
         //Now deleteField field
         af.getTag().deleteField(FieldKey.MOOD);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
 
         Assert.assertEquals("asin123456" + "\u01ff", af.getTag().getFirst(FieldKey.AMAZON_ID));
@@ -917,7 +918,7 @@ public class NewInterfaceTest {
 
         //Now addField another different field that also uses a TXX frame
         af.getTag().setField(FieldKey.MUSICIP_ID, "musicip_id");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v22Tag)af.getTag()).getFrame("TXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -928,7 +929,7 @@ public class NewInterfaceTest {
 
         //Now addField yet another different field that also uses a TXX frame
         af.getTag().setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(3, ((List)((ID3v22Tag)af.getTag()).getFrame("TXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().getFirst(FieldKey.MUSICIP_ID));
@@ -941,7 +942,7 @@ public class NewInterfaceTest {
 
         //Now deleteField field
         af.getTag().deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, ((List)((ID3v22Tag)af.getTag()).getFrame("TXX")).size());
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.MUSICIP_ID).size());
@@ -961,7 +962,7 @@ public class NewInterfaceTest {
         byte[] imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(1, af.getTag().getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(9, af.getTag().getFieldCount());
@@ -971,7 +972,7 @@ public class NewInterfaceTest {
         imagedata = new byte[(int)imageFile.length()];
         imageFile.read(imagedata);
         af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata).setMimeType("image/png"));
-        af.commit();
+        af.save();
         af = AudioFileIO.read(testFile);
         Assert.assertEquals(2, af.getTag().getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(10, af.getTag().getFieldCount());
@@ -992,7 +993,7 @@ public class NewInterfaceTest {
         ((FrameBodyCOMM)frame.getBody()).setText("Comment");
         tag.setFrame(frame);
         mp3File.setID3v2TagOnly(tag);
-        mp3File.save();
+        mp3File.saveMp3();
         af = AudioFileIO.read(testFile);
         mp3File = (MP3File)af;
 
@@ -1011,13 +1012,13 @@ public class NewInterfaceTest {
             List<TagField> comments = af.getTag().getFields(FieldKey.COMMENT);
             ((FrameBodyCOMM)((ID3v24Frame)comments.get(1)).getBody()).setDescription("test2");
             af.getTag().setField(FieldKey.COMMENT, "Comment3");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             Assert.assertEquals(3, af.getTag().getFields(FieldKey.COMMENT).size());
 
             //Add fourth Comment (but duplicate key - so overwrites 3rd comment)
             af.getTag().setField(FieldKey.COMMENT, "Comment4");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             Assert.assertEquals(3, af.getTag().getFields(FieldKey.COMMENT).size());
 
@@ -1030,7 +1031,7 @@ public class NewInterfaceTest {
 
             //Add first one back in
             af.getTag().setField(FieldKey.COMMENT, "Comment");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             Assert.assertEquals(1, af.getTag().getFields(FieldKey.COMMENT).size());
             Assert.assertEquals(1, af.getTag().getFieldCount());
@@ -1184,17 +1185,17 @@ public class NewInterfaceTest {
         Exception ex = null;
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
-            ealvatag.audio.AudioFile audioFile = ealvatag.audio.AudioFileIO.read(testFile);
+            AudioFile audioFile = AudioFileIO.read(testFile);
             ealvatag.tag.Tag newTag = audioFile.getTag();
             Assert.assertTrue(newTag == null);
             if (audioFile.getTag() == null) {
-                audioFile.setTag(new ID3v23Tag());
-                newTag = audioFile.getTag();
+                TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+                newTag = audioFile.setNewDefaultTag();
             }
 
             //Write literal String
             newTag.setField(FieldKey.GENRE, "Rock");
-            audioFile.commit();
+            audioFile.save();
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
             //..and read back
@@ -1202,7 +1203,7 @@ public class NewInterfaceTest {
 
             //Write Code
             newTag.setField(FieldKey.GENRE, "(17)");
-            audioFile.commit();
+            audioFile.save();
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag();
             //..and read back
@@ -1223,11 +1224,11 @@ public class NewInterfaceTest {
 
         Exception exceptionCaught = null;
         File testFile = AbstractTestCase.copyAudioToTmp("test30.mp3");
-        MP3File mp3file = null;
+        MP3File mp3file;
         try {
             mp3file = new MP3File(testFile);
             //deleteField multiple frames starting make change to file
-            ((ID3v24Tag)mp3file.getID3v2Tag()).removeFrameOfType("PRIV");
+            mp3file.getID3v2Tag().removeFrameOfType("PRIV");
 
         } catch (Exception e) {
             e.printStackTrace();

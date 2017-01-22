@@ -24,91 +24,91 @@ import java.util.Map;
 public enum SupportedFileFormat {
     OGG("ogg") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return VorbisCommentTag.createNewTag();
         }
     },
     MP3("mp3") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return TagOptionSingleton.createDefaultID3Tag();
         }
     },
     FLAC("flac") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>());
         }
     },
     MP4("mp4") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new Mp4Tag();
         }
     },
     M4A("m4a") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new Mp4Tag();
         }
     },
     M4P("m4p") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new Mp4Tag();
         }
     },
     WMA("wma") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new AsfTag();
         }
     },
     WAV("wav") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new WavTag(TagOptionSingleton.getInstance().getWavOptions());
         }
     },
     RA("ra") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new RealTag();
         }
     },
     RM("rm") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new RealTag();
         }
     },
     M4B("m4b") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new Mp4Tag();
         }
     },
     AIF("aif") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new AiffTag();
         }
     },
     AIFF("aiff") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new AiffTag();
         }
     },
     AIFC("aifc") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return new AiffTag();
         }
     },
     DSF("dsf") {
         @Override
-        public Tag createDefaultTag() {
+        public Tag makeDefaultTag() throws UnsupportedFileType {
             return Dsf.createDefaultTag();
         }
     },
@@ -117,8 +117,8 @@ public enum SupportedFileFormat {
      */
     UNKNOWN("") {
         @Override
-        public Tag createDefaultTag() {
-            throw new RuntimeException("Unable to create default tag for this file format:" + name());
+        public Tag makeDefaultTag() throws UnsupportedFileType {
+            throw new UnsupportedFileType("Unable to create default tag for this file format:" + name());
         }
     };
 
@@ -169,8 +169,7 @@ public enum SupportedFileFormat {
      *
      * @return the default tag for the given type
      *
-     * @throws RuntimeException if can't create the default tag
+     * @throws UnsupportedFileType if can't create the default tag
      */
-    // TODO: 1/7/17 should we have a more specific type of runtime exception? RuntimeException is copied from legacy
-    public abstract Tag createDefaultTag() throws RuntimeException;
+    public abstract Tag makeDefaultTag() throws UnsupportedFileType;
 }

@@ -134,10 +134,10 @@ public class FrameTDATTest extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("id3asv24.mp3"));
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         AudioFile af = AudioFileIO.read(testFile);
-        af.getTagAndConvertOrCreateAndSetDefault();
+        af.getConvertedTagOrSetNewDefault();
         af.getTag().setField(FieldKey.ARTIST, "fred");
         af.getTag().setField(FieldKey.YEAR, "2003-06-23");
-        af.commit();
+        af.save();
         assertEquals(af.getTag().getFirst(FieldKey.YEAR),"2003-06-23");
         af = AudioFileIO.read(testFile);
         assertEquals(af.getTag().getFirst(FieldKey.ARTIST),"fred");

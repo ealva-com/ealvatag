@@ -18,7 +18,7 @@
  */
 package ealvatag.audio.asf;
 
-import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.AudioStreamChunk;
 import ealvatag.audio.asf.data.MetadataContainer;
@@ -201,7 +201,7 @@ public class AsfFileReader extends AudioFileReader {
      * {@inheritDoc}
      */
     @Override
-    public AudioFile read(final File f)
+    public AudioFileImpl read(final File f, final String extension)
             throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
         if (!f.canRead()) {
             throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg
@@ -227,7 +227,7 @@ public class AsfFileReader extends AudioFileReader {
                                                                                                  f.length()));
             }
 
-            return new AudioFile(f, getAudioHeader(header), getTag(header));
+            return new AudioFileImpl(f, extension, getAudioHeader(header), getTag(header));
 
         } catch (final CannotReadException e) {
             throw e;

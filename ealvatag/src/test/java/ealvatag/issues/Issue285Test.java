@@ -35,7 +35,7 @@ public class Issue285Test extends AbstractTestCase
 
             AudioFile af = AudioFileIO.read(testFile);
             af.getTag().setField(FieldKey.COMMENT,"TEST");
-            af.commit();
+            af.save();
 
         }
         catch (Exception e)

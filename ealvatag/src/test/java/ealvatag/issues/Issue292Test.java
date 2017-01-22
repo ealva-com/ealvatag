@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.tag.FieldKey;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class Issue292Test extends AbstractTestCase
 
             testFile = AbstractTestCase.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
             //Put file in backup location
-            originalFileBackup = new File(testFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(testFile)+ ".old");
+            originalFileBackup = new File(testFile.getAbsoluteFile().getParentFile().getPath(), AudioFileImpl.getBaseFilename(testFile)+ ".old");
             testFile.renameTo(originalFileBackup);
 
             //Copy over again
@@ -40,7 +41,7 @@ public class Issue292Test extends AbstractTestCase
             af.getTag().setField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             af.getTag().setField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
-            af.commit();
+            af.save();
 
             af = AudioFileIO.read(testFile);
             assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(FieldKey.ARTIST));
@@ -74,7 +75,7 @@ public class Issue292Test extends AbstractTestCase
 
             testFile = AbstractTestCase.copyAudioToTmp("test8.m4a");
             //Put file in backup location
-            originalFileBackup = new File(testFile.getAbsoluteFile().getParentFile().getPath(), AudioFile.getBaseFilename(testFile)+ ".old");
+            originalFileBackup = new File(testFile.getAbsoluteFile().getParentFile().getPath(), AudioFileImpl.getBaseFilename(testFile)+ ".old");
             testFile.renameTo(originalFileBackup);
 
             //Copy over again
@@ -85,7 +86,7 @@ public class Issue292Test extends AbstractTestCase
             af.getTag().setField(FieldKey.ARTIST,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             af.getTag().setField(FieldKey.AMAZON_ID,"fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
-            af.commit();
+            af.save();
 
             af = AudioFileIO.read(testFile);
             assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",af.getTag().getFirst(FieldKey.ARTIST));

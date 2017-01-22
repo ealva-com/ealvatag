@@ -85,11 +85,11 @@ public class VorbisReadTagTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWithEmptyField.ogg"));
             AudioFile file = AudioFileIO.read(testFile);
             file.getTag().setField(FieldKey.YEAR,"");
-            file.commit();
+            file.save();
 
             file = AudioFileIO.read(testFile);
             file.getTag().setField(FieldKey.TITLE,"testtitle");
-            file.commit();
+            file.save();
 
             file = AudioFileIO.read(testFile);
         }

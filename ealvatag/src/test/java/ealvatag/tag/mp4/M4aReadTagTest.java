@@ -1037,7 +1037,7 @@ public class M4aReadTagTest extends TestCase
             //Make a change and save
             tag.setField(FieldKey.TITLE,"NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
             tag.setField(tag.createField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag();
@@ -1179,7 +1179,7 @@ public class M4aReadTagTest extends TestCase
 
             //Add another field and save
             tag.setField(tag.createField(FieldKey.COMPOSER_SORT, "C3"));
-            f.commit();
+            f.save();
 
             //Reget
             tag = (Mp4Tag) f.getTag();
@@ -1318,7 +1318,7 @@ public class M4aReadTagTest extends TestCase
             System.out.println(tag);
 
             tag.setField(FieldKey.TRACK,"8");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
@@ -1416,7 +1416,7 @@ public class M4aReadTagTest extends TestCase
 
             tag.setField(FieldKey.TRACK,"0");
             tag.setField(FieldKey.TRACK_TOTAL,"6");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag();

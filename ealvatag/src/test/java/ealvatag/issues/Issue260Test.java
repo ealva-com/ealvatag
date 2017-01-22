@@ -71,7 +71,7 @@ public class Issue260Test extends AbstractTestCase
             af.getTag().setField(FieldKey.TITLE,"title");
             af.getTag().setField(FieldKey.GENRE,"genre");
             af.getTag().setField(FieldKey.YEAR,"year");
-            af.commit();
+            af.save();
 
             //Read file again okay
             af = AudioFileIO.read(testFile);
@@ -150,7 +150,7 @@ public class Issue260Test extends AbstractTestCase
             af.getTag().setField(FieldKey.TITLE,"title");
             af.getTag().setField(FieldKey.GENRE,"genre");
             af.getTag().setField(FieldKey.YEAR,"year");
-            af.commit();
+            af.save();
 
             //Read file again okay
             af = AudioFileIO.read(testFile);

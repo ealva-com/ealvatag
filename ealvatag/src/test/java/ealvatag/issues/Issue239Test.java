@@ -28,7 +28,7 @@ public class Issue239Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
             mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
@@ -40,7 +40,7 @@ public class Issue239Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.COMMENT,"comment1");
             mp3File.getTag().addField(FieldKey.COMMENT,"comment2");
 
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -51,7 +51,7 @@ public class Issue239Test extends AbstractTestCase
             //Delete Fields
             mp3File.getTag().deleteField(FieldKey.COMMENT);
             assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -80,7 +80,7 @@ public class Issue239Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
             mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
@@ -92,7 +92,7 @@ public class Issue239Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
             mp3File.getTag().addField(FieldKey.CUSTOM1,"comment2");
 
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -103,7 +103,7 @@ public class Issue239Test extends AbstractTestCase
             //Delete Fields
             mp3File.getTag().deleteField(FieldKey.CUSTOM1);
             assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -132,7 +132,7 @@ public class Issue239Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3File= (MP3File)af;
             mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.save();
+            mp3File.saveMp3();
             mp3File = new MP3File(testFile);
 
             af = AudioFileIO.read(testFile);
@@ -144,7 +144,7 @@ public class Issue239Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
             mp3File.getTag().addField(FieldKey.CUSTOM2,"comment2");
 
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -156,7 +156,7 @@ public class Issue239Test extends AbstractTestCase
             mp3File.getTag().deleteField(FieldKey.CUSTOM1);
             assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
             assertEquals(1,mp3File.getTag().getFields(FieldKey.CUSTOM2).size());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;

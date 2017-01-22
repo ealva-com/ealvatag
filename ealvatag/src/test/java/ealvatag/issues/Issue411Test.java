@@ -31,13 +31,13 @@ public class Issue411Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.COMPOSER, "fred");
+            af.getTagOrSetNewDefault().setField(FieldKey.COMPOSER, "fred");
             assertTrue(af.getTag() instanceof ID3v23Tag);
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.COMPOSER));
             af.getTag().addField(FieldKey.COMPOSER, "john");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFieldAt(FieldKey.COMPOSER, 0));
             assertEquals("fred", af.getTag().getFirst(FieldKey.COMPOSER));
@@ -75,12 +75,12 @@ public class Issue411Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("test.flac");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.COMPOSER, "fred");
-            af.commit();
+            af.getTagOrSetNewDefault().setField(FieldKey.COMPOSER, "fred");
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.COMPOSER));
             af.getTag().addField(FieldKey.COMPOSER, "john");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.COMPOSER));
             assertEquals("john", af.getTag().getFields(FieldKey.COMPOSER).get(1).toString());
@@ -110,12 +110,12 @@ public class Issue411Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3", new File("issue411TestIssue3.mp3"));
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.GENRE, "rock");
-            af.commit();
+            af.getTagOrSetNewDefault().setField(FieldKey.GENRE, "rock");
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("Rock", af.getTag().getFirst(FieldKey.GENRE));
             af.getTag().addField(FieldKey.GENRE, "dance");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("Rock", af.getTag().getFirst(FieldKey.GENRE));
             assertEquals("Dance",af.getTag().getFieldAt(FieldKey.GENRE, 1));
@@ -145,13 +145,13 @@ public class Issue411Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.ENGINEER, "fred");
+            af.getTagOrSetNewDefault().setField(FieldKey.ENGINEER, "fred");
             assertTrue(af.getTag() instanceof ID3v23Tag);
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.ENGINEER));
             af.getTag().addField(FieldKey.ENGINEER, "john");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("fred", af.getTag().getFirst(FieldKey.ENGINEER));
             assertEquals("john",af.getTag().getFieldAt(FieldKey.ENGINEER, 1));
@@ -181,13 +181,13 @@ public class Issue411Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTagOrCreateAndSetDefault().setField(FieldKey.BARCODE, "BARCODE1");
+            af.getTagOrSetNewDefault().setField(FieldKey.BARCODE, "BARCODE1");
             assertTrue(af.getTag() instanceof ID3v23Tag);
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
             af.getTag().addField(FieldKey.BARCODE,"BARCODE2");
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             assertEquals("BARCODE1",af.getTag().getFieldAt(FieldKey.BARCODE, 0));
             assertEquals("BARCODE1", af.getTag().getFirst(FieldKey.BARCODE));
@@ -226,12 +226,12 @@ public class Issue411Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             AudioFile af = AudioFileIO.read(testFile);
 
-            Tag tag = af.getTagOrCreateAndSetDefault();
+            Tag tag = af.getTagOrSetNewDefault();
             tag.setField(FieldKey.BARCODE, "BARCODE1");
             assertTrue(tag instanceof ID3v23Tag);
             tag.addField(FieldKey.BARCODE,"BARCODE2");
             assertEquals(2,tag.getAll(FieldKey.BARCODE).size());
-            af.commit();
+            af.save();
             af = AudioFileIO.read(testFile);
             tag=af.getTag();
             tag.deleteField(FieldKey.BARCODE);

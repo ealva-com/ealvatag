@@ -30,7 +30,7 @@ public class DuplicateFrameTest extends AbstractTestCase
         //Frame contains two TYER frames
         assertEquals(21,id3v23tag.getDuplicateBytes());
         assertEquals("*TYER*","*"+id3v23tag.getDuplicateFrameId()+"*");
-        f.commit();
+        f.save();
         f = (MP3File)AudioFileIO.read(testFile);
         tag = f.getTag();
         id3v23tag = (ID3v23Tag)tag;

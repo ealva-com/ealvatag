@@ -60,7 +60,7 @@ public class Issue224Test extends AbstractTestCase
             //SetDescription
             body.setDescription("FREDDY");
             assertEquals("FREDDY", body.getDescription());
-            f.commit();
+            f.save();
 
         }
         catch (Exception e)

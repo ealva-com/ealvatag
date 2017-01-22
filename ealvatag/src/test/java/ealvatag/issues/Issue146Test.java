@@ -11,37 +11,24 @@ import java.io.File;
 /**
  * Test
  */
-public class Issue146Test extends AbstractTestCase
-{
-    public void testIssue146() throws Exception
-    {
+public class Issue146Test extends AbstractTestCase {
+    public void testIssue146() throws Exception {
         File orig = new File("testdata", "test158.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
         File file = AbstractTestCase.copyAudioToTmp("test158.mp3");
 
-        if (file.exists())
-        {
+        if (file.exists()) {
             AudioFile afile = AudioFileIO.read(file);
-            Tag tag = afile.getTagOrCreateDefault();
-
-            System.out.println(tag);
-            if (tag == null)
-            {
-                System.out.println("Tag is null");
-                tag = afile.createDefaultTag();
-                System.out.println(tag);
-                afile.setTag(tag);
-            }
-            tag.setField(FieldKey.TITLE,"好好学习");
-            afile.commit();
-            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0)+tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
+            Tag tag = afile.getTagOrSetNewDefault();
+            tag.setField(FieldKey.TITLE, "好好学习");
+            afile.save();
+            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0) + tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
             tag = AudioFileIO.read(file).getTag();
-            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0)+tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
+            System.out.println(tag.getFieldAt(FieldKey.TITLE, 0) + tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
         }
     }
 }

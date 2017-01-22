@@ -112,7 +112,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -159,7 +159,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -207,7 +207,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -254,7 +254,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16 because of the text
         mp3File = new MP3File(testFile);
@@ -301,7 +301,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF16BE
         mp3File = new MP3File(testFile);
@@ -348,7 +348,7 @@ public class Unicode23NullTerminatedTagTest extends TestCase
         ID3v23Tag tag = new ID3v23Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload, should be written as UTF8
         mp3File = new MP3File(testFile);

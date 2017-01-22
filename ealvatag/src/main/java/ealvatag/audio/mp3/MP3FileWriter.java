@@ -16,32 +16,29 @@ import java.io.RandomAccessFile;
  */
 public class MP3FileWriter extends AudioFileWriter
 {
-    public void deleteTag(AudioFile f) throws CannotWriteException
-    {
+    public void deleteTag(AudioFile f) throws CannotWriteException, CannotReadException {
         //Because audio file is an instanceof MP3File this directs it to save
         //taking into account if the tag has been sent to null in which case it will be deleted
-        f.commit();
+        f.save();
     }
 
-    public void writeFile(AudioFile f) throws CannotWriteException
-    {
+    public void writeFile(AudioFile f) throws CannotWriteException, CannotReadException {
         //Because audio file is an instanceof MP3File this directs it to save
-        f.commit();
+        f.save();
     }
 
     /**
      * Delete the Id3v1 and ID3v2 tags from file
      *
      * @param af
-     * @throws CannotReadException
      * @throws CannotWriteException
      */
     @Override
-    public synchronized void delete(AudioFile af) throws CannotReadException, CannotWriteException
+    public synchronized void delete(AudioFile af) throws CannotWriteException
     {
         ((MP3File)af).setID3v1Tag(null);
         ((MP3File)af).setID3v2Tag(null);
-        af.commit();
+        af.save();
     }
 
     protected void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp) throws CannotWriteException, IOException

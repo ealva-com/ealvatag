@@ -41,7 +41,7 @@ public class Issue461Test extends AbstractTestCase
         assertNotNull(fbTdat);
         assertEquals("3001", fbTdat.getText());
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag=(ID3v23Tag)mp3File.getID3v2Tag();
@@ -68,7 +68,7 @@ public class Issue461Test extends AbstractTestCase
         assertEquals("2004-01-30", v24Tag.getFirst(ID3v24FieldKey.YEAR));
         ID3v23Tag v2Tag = new ID3v23Tag(v24Tag);
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
@@ -84,7 +84,7 @@ public class Issue461Test extends AbstractTestCase
         assertNotNull(fbTdat);
         assertEquals("3001", fbTdat.getText());
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag=(ID3v23Tag)mp3File.getID3v2Tag();
@@ -115,7 +115,7 @@ public class Issue461Test extends AbstractTestCase
         ID3v23Tag v2Tag = new ID3v23Tag(v24Tag);
         assertEquals("2004", v2Tag.getFirst(ID3v23FieldKey.YEAR));
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
@@ -143,7 +143,7 @@ public class Issue461Test extends AbstractTestCase
         ID3v23Tag v2Tag = new ID3v23Tag(v24Tag);
         assertEquals("2004", v2Tag.getFirst(ID3v23FieldKey.YEAR));
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
@@ -164,7 +164,7 @@ public class Issue461Test extends AbstractTestCase
         //TODO shoudnt this be 2004-06-30 it is after save
         assertEquals("2004", v2Tag.getFirst(ID3v23FieldKey.YEAR));
         mp3File.setID3v2TagOnly(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();
@@ -200,7 +200,7 @@ public class Issue461Test extends AbstractTestCase
         //TODO shoudnt this be 2004-06-01 it is after save
         assertEquals("2004", v2Tag.getFirst(ID3v23FieldKey.YEAR));
         mp3File.setID3v2Tag(v2Tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v2Tag = (ID3v23Tag)mp3File.getID3v2Tag();

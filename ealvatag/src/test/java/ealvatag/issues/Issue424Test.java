@@ -35,7 +35,7 @@ public class Issue424Test extends AbstractTestCase
         assertEquals("2",tag.getFirst(FieldKey.DISC_NO));
         assertTrue(tag.hasField(FieldKey.DISC_TOTAL));
         assertEquals("3", tag.getFirst(FieldKey.DISC_TOTAL));
-        f.commit();
+        f.save();
 
     }
 
@@ -43,7 +43,7 @@ public class Issue424Test extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTagOrCreateDefault();
+        Tag tag = f.getTagOrSetNewDefault();
         tag.deleteField(FieldKey.TRACK);
         tag.addField(FieldKey.TRACK,"1");
         tag.deleteField(FieldKey.TRACK_TOTAL);

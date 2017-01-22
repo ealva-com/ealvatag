@@ -47,7 +47,7 @@ public class FrameULSTTest extends AbstractTestCase
         lyricsBody.setLanguage(Languages.DEFAULT_ID);
         lyricsBody.setDescription("description");
         lyricsBody.setLyric("lyric1");
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Check normal values
         mp3File = new MP3File(testFile);
@@ -60,7 +60,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Now force to UTF-16
         lyricsBody.setLyric("lyric\u111F");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_UNSYNC_LYRICS);
         lyricsBody = (FrameBodyUSLT) v24frame.getBody();
@@ -71,11 +71,11 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Now check UTf16 with empty description
         lyricsBody.setDescription("");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v24frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_UNSYNC_LYRICS);
         lyricsBody = (FrameBodyUSLT) v24frame.getBody();
-        mp3File.save();
+        mp3File.saveMp3();
         assertEquals("", lyricsBody.getDescription());
         assertEquals(1, lyricsBody.getTextEncoding());
     }
@@ -96,7 +96,7 @@ public class FrameULSTTest extends AbstractTestCase
         ID3v23Frame v23frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         v23frame.setBody(lyricsBody);
         tag.setFrame(v23frame);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Check normal values
         mp3File = new MP3File(testFile);
@@ -109,7 +109,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Change to another ISO8859value
         lyricsBody.setLyric("lyric");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         lyricsBody = (FrameBodyUSLT) v23frame.getBody();
@@ -118,7 +118,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Now force to UTF-16
         lyricsBody.setLyric("lyric\u111F");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         lyricsBody = (FrameBodyUSLT) v23frame.getBody();
@@ -129,11 +129,11 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Now check UTf16 with empty description
         lyricsBody.setDescription("");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         lyricsBody = (FrameBodyUSLT) v23frame.getBody();
-        mp3File.save();
+        mp3File.saveMp3();
         assertEquals("", lyricsBody.getDescription());
         assertEquals(1, lyricsBody.getTextEncoding());
     }
@@ -154,7 +154,7 @@ public class FrameULSTTest extends AbstractTestCase
         ID3v23Frame v23frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);
         v23frame.setBody(lyricsBody);
         tag.setFrame(v23frame);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Check normal values
         mp3File = new MP3File(testFile);
@@ -187,7 +187,7 @@ public class FrameULSTTest extends AbstractTestCase
         ID3v24Frame v24frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_UNSYNC_LYRICS);
         v24frame.setBody(lyricsBody);
         tag.setFrame(v24frame);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Check normal values
         mp3File = new MP3File(testFile);
@@ -220,7 +220,7 @@ public class FrameULSTTest extends AbstractTestCase
         ID3v24Frame v24frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_UNSYNC_LYRICS);
         v24frame.setBody(lyricsBody);
         tag.setFrame(v24frame);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Check normal values
         mp3File = new MP3File(testFile);
@@ -233,7 +233,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //Change Encoding
         lyricsBody.setTextEncoding((byte)1);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         v23frame = (ID3v23Frame) mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_UNSYNC_LYRICS);

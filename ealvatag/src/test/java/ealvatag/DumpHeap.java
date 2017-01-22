@@ -91,7 +91,7 @@ public class DumpHeap {
                 System.out.println("File type supports Artwork");
             }
             tag.setField(FieldKey.TITLE, "My New Title");
-            audioFile.commit();
+            audioFile.save();
             System.out.println(audioHeader);
             System.out.println("Fields:" + Integer.toString(tag.getFieldCount()));
 

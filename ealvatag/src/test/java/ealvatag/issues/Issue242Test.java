@@ -32,7 +32,7 @@ public class Issue242Test extends AbstractTestCase
             //Checking not overwriting audio when have to pad to fix data
             long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
             mp3File.setID3v2Tag(new ID3v24Tag());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -55,7 +55,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
             mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
             mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -77,7 +77,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
             mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
             mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
-            mp3File.save();
+            mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
@@ -113,7 +113,7 @@ public class Issue242Test extends AbstractTestCase
             long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
 
             mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -138,7 +138,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
             mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
 
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -159,7 +159,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
             mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
             mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
-            mp3File.save();
+            mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
@@ -198,7 +198,7 @@ public class Issue242Test extends AbstractTestCase
             long mp3AudioLength=testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte();
 
             mp3File.setID3v2Tag(new ID3v22Tag());
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -222,7 +222,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
             mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
             mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
-            mp3File.save();
+            mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
@@ -244,7 +244,7 @@ public class Issue242Test extends AbstractTestCase
             mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
             mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
 
-            mp3File.save();
+            mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());

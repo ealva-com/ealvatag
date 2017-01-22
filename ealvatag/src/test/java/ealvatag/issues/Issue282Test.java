@@ -43,7 +43,7 @@ public class Issue282Test extends AbstractTestCase
             //Change File
             af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
 
-            af.commit();
+            af.save();
             outputFile.delete();
 
         }
@@ -82,9 +82,9 @@ public class Issue282Test extends AbstractTestCase
                AudioFile af = AudioFileIO.read(outputFile);
 
                //Create tag and Change File
-               af.getTagOrCreateAndSetDefault();
+               af.getTagOrSetNewDefault();
                af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
-               af.commit();
+               af.save();
 
            }
            catch (Exception e)

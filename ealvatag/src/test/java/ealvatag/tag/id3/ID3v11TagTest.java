@@ -279,7 +279,7 @@ public class ID3v11TagTest extends TestCase
         tag.setTrack(ID3v11TagTest.TRACK_VALUE);
         //Save tag to file
         mp3File.setID3v1Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -294,7 +294,7 @@ public class ID3v11TagTest extends TestCase
         assertEquals(ID3v11TagTest.TRACK_VALUE, tag.getFirst(FieldKey.TRACK));
 
         tag.setField(FieldKey.TRACK,"3");
-        mp3File.save();
+        mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         tag = (ID3v11Tag)mp3File.getID3v1Tag();
         assertEquals("3", tag.getFirst(FieldKey.TRACK ));

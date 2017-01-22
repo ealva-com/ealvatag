@@ -120,7 +120,7 @@ public void testCreateID3v22Frame()
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(FrameTMOOTest.getInitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -141,7 +141,7 @@ public void testCreateID3v22Frame()
         ID3v24Tag tag = new ID3v24Tag();
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -164,7 +164,7 @@ public void testCreateID3v22Frame()
         tag.setFrame(FrameTMOOTest.getInitialisedFrame());
         tag.setFrame(FrameTXXXTest.getV24InitialisedFrame());
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
@@ -177,7 +177,7 @@ public void testCreateID3v22Frame()
         {
             System.out.println(((ID3v23Frame) i.next()).getIdentifier());
         }
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
@@ -210,7 +210,7 @@ public void testCreateID3v22Frame()
         frame.setBody(frameBody);
         tag.setFrame(frame);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);
@@ -253,7 +253,7 @@ public void testCreateID3v22Frame()
         }
         tag.setFrame("TXXX",frames);
         mp3File.setID3v2Tag(tag);
-        mp3File.save();
+        mp3File.saveMp3();
 
         //Reload and convert to v23 and save
         mp3File = new MP3File(testFile);

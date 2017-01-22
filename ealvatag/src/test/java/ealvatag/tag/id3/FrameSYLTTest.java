@@ -47,7 +47,7 @@ public class FrameSYLTTest extends AbstractTestCase
         id3.setFrame(frame2);
 
         mp3File.setID3v2Tag(id3);
-        mp3File.save();
+        mp3File.saveMp3();
 
         mp3File = new MP3File(testFile);
         frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_SYNC_LYRIC);

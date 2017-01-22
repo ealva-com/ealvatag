@@ -39,7 +39,7 @@ public class Issue093Test extends AbstractTestCase
             Tag tag = f.getTag();
             System.out.println(tag);
             f.getTag().setField(FieldKey.ARTIST,"Jonathon");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(tag);
@@ -74,7 +74,7 @@ public class Issue093Test extends AbstractTestCase
             Tag tag = f.getTag();
             System.out.println(tag);
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag();
             System.out.println(tag);
@@ -109,7 +109,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -144,7 +144,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -179,7 +179,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -214,7 +214,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -249,7 +249,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -284,7 +284,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -319,7 +319,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);
@@ -354,7 +354,7 @@ public class Issue093Test extends AbstractTestCase
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
             f.getTag().setField(FieldKey.ARTIST,"fred");
-            f.commit();
+            f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag();
             System.out.println(tag);

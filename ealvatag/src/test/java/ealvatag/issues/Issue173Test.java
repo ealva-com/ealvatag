@@ -48,7 +48,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            mp4File.commit();
+            mp4File.save();
 
             //Rereads as value
             mp4File = AudioFileIO.read(testFile);
@@ -63,7 +63,7 @@ public class Issue173Test extends AbstractTestCase
             //TODO should read back as Blues here I think
             assertEquals("1", tag.getFirst(FieldKey.GENRE));
             assertEquals("1", tag.getFirst(Mp4FieldKey.GENRE));
-            mp4File.commit();
+            mp4File.save();
             //On fresh reread shows as mapped value
             mp4File = AudioFileIO.read(testFile);
             tag = (Mp4Tag) mp4File.getTag();
@@ -77,7 +77,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
             assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
-            mp4File.commit();
+            mp4File.save();
             assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
             assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
@@ -87,7 +87,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
-            mp4File.commit();
+            mp4File.save();
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
@@ -99,7 +99,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
-            mp4File.commit();
+            mp4File.save();
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
@@ -136,7 +136,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             //Doesnt remove CUSTOM field as we are using mp4 interface
             assertEquals("Genre", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            mp4File.commit();
+            mp4File.save();
             assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             //Doesnt remove CUSTOM field as we are using mp4 interface
@@ -194,7 +194,7 @@ public class Issue173Test extends AbstractTestCase
             ID3v24Tag tag = null;
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault();
+            mp3File.getTagOrSetNewDefault();
             tag = (ID3v24Tag) mp3File.getTag();
 
             //Set string  representation of standard value
@@ -246,7 +246,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("1\u00002",body.getText());
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v24Tag) mp3File.getTag();
             results = tag.getAll(FieldKey.GENRE);
@@ -262,7 +262,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("RX\u0000CR",body.getText());
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v24Tag) mp3File.getTag();
             assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
@@ -298,7 +298,7 @@ public class Issue173Test extends AbstractTestCase
             ID3v22Tag tag = null;
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault();
+            mp3File.getTagOrSetNewDefault();
             tag = (ID3v22Tag) mp3File.getTag();
 
             //Set string  representation of standard value
@@ -351,7 +351,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             assertEquals("(1)(2)",body.getText());
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v22Tag) mp3File.getTag();
             results = tag.getAll(FieldKey.GENRE);
@@ -366,7 +366,7 @@ public class Issue173Test extends AbstractTestCase
 //            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
 //            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
 //            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v22Tag) mp3File.getTag();
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
@@ -397,7 +397,7 @@ public class Issue173Test extends AbstractTestCase
             ID3v23Tag tag = null;
             File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
-            mp3File.getTagOrCreateAndSetDefault();
+            mp3File.getTagOrSetNewDefault();
             tag = (ID3v23Tag) mp3File.getTag();
 
             //Set string  representation of standard value
@@ -450,7 +450,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             assertEquals("(1)(2)",body.getText());
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v23Tag) mp3File.getTag();
             results = tag.getAll(FieldKey.GENRE);
@@ -465,7 +465,7 @@ public class Issue173Test extends AbstractTestCase
             assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
             assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
             assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
-            mp3File.commit();
+            mp3File.save();
             mp3File = AudioFileIO.read(testFile);
             tag = (ID3v23Tag) mp3File.getTag();
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();

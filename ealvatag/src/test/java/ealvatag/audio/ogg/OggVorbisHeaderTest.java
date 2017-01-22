@@ -68,7 +68,7 @@ public class OggVorbisHeaderTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
 
             f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
-            f.commit();
+            f.save();
 
             //assertEquals("192",f.getAudioHeader().getBitRate());
             //assertEquals("Ogg Vorbis v1",f.getAudioHeader().getEncodingType());
@@ -101,7 +101,7 @@ public class OggVorbisHeaderTest extends TestCase
             //Size of VorbisComment should increase
             assertTrue(f.getTag() instanceof VorbisCommentTag);
             f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof VorbisCommentTag);
@@ -146,7 +146,7 @@ public class OggVorbisHeaderTest extends TestCase
             assertTrue(f.getTag() instanceof VorbisCommentTag);
             VorbisCommentTag vorbisTag = (VorbisCommentTag) f.getTag();
             vorbisTag.setField(vorbisTag.createField(VorbisCommentFieldKey.COVERART, "ccc"));
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof VorbisCommentTag);
@@ -198,7 +198,7 @@ public class OggVorbisHeaderTest extends TestCase
             //Size of VorbisComment should increase
             assertTrue(f.getTag() instanceof VorbisCommentTag);
             f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof VorbisCommentTag);
@@ -250,7 +250,7 @@ public class OggVorbisHeaderTest extends TestCase
             }
             f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
             f.getTag().setField(FieldKey.TITLE,sb.toString());
-            f.commit();
+            f.save();
 
             f = AudioFileIO.read(testFile);
             assertTrue(f.getTag() instanceof VorbisCommentTag);

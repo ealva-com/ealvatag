@@ -71,9 +71,8 @@ public abstract class AudioFileWriter {
      * @param af The file to process
      *
      * @throws CannotWriteException                          if anything went wrong
-     * @throws ealvatag.audio.exceptions.CannotReadException
      */
-    public void delete(AudioFile af) throws CannotReadException, CannotWriteException {
+    public void delete(AudioFile af) throws CannotWriteException {
         final File file = af.getFile();
         if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite()) {
             LOG.error("Unable to write file: " + file);
@@ -232,15 +231,11 @@ public abstract class AudioFileWriter {
      *
      * @throws CannotWriteException
      */
-    private void precheckWrite(AudioFile af) throws CannotWriteException {
+    private void precheckWrite(AudioFile af) throws CannotWriteException, CannotReadException {
         // Preliminary checks
-        try {
-            if (af.getTag().isEmpty()) {
-                delete(af);
-                return;
-            }
-        } catch (CannotReadException re) {
-            throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED.getMsg(af.getFile().getPath()));
+        if (af.getTag().isEmpty()) {
+            delete(af);
+            return;
         }
 
         File file = af.getFile();
@@ -265,16 +260,21 @@ public abstract class AudioFileWriter {
      */
     // TODO Creates temp file in same folder as the original file, this is safe
     // but would impose a performance overhead if the original file is on a networked drive
-    public void write(AudioFile audioFile) throws CannotWriteException {
+    public void write(AudioFileImpl audioFile) throws CannotWriteException {
         Check.checkArgNotNull(audioFile, ErrorMessage.CANNOT_BE_NULL, "audioFile");
         LOG.trace("Started writing tag data for file:" + audioFile.getFile().getName());
 
         // Prechecks
-        precheckWrite(audioFile);
+
+        try {
+            precheckWrite(audioFile);
+        } catch (CannotReadException e) {
+            throw new CannotWriteException(e);
+        }
 
         //mp3's use a different mechanism to the other formats
         if (audioFile instanceof MP3File) {
-            audioFile.commit();
+            audioFile.save();
             return;
         }
 
@@ -614,13 +614,13 @@ public abstract class AudioFileWriter {
         // Rename Original File
         // Can fail on Vista if have Special Permission 'Delete' set Deny
         File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                           AudioFile.getBaseFilename(originalFile) + ".old");
+                                           AudioFileImpl.getBaseFilename(originalFile) + ".old");
 
         //If already exists modify the suffix
         int count = 1;
         while (originalFileBackup.exists()) {
             originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                          AudioFile.getBaseFilename(originalFile) + ".old" + count);
+                                          AudioFileImpl.getBaseFilename(originalFile) + ".old" + count);
             count++;
         }
 

@@ -18,7 +18,7 @@ package ealvatag.tag.id3;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.UnableToCreateFileException;
 import ealvatag.audio.exceptions.UnableToModifyFileException;
@@ -1929,12 +1929,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         boolean renameOriginalResult;
         //Rename Original File to make a backup in case problem with new file
         File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                           AudioFile.getBaseFilename(originalFile) + ".old");
+                                           AudioFileImpl.getBaseFilename(originalFile) + ".old");
         //If already exists modify the suffix
         int count = 1;
         while (originalFileBackup.exists()) {
             originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                          AudioFile.getBaseFilename(originalFile) + ".old" + count);
+                                          AudioFileImpl.getBaseFilename(originalFile) + ".old" + count);
             count++;
         }
 

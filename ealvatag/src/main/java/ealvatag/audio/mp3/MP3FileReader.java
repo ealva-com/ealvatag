@@ -1,6 +1,8 @@
 package ealvatag.audio.mp3;
 
+import com.google.common.io.Files;
 import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
@@ -31,12 +33,13 @@ public class MP3FileReader extends AudioFileReader
 
     /**
      * @param f
+     * @param extension
      * @return
      */
     //Override because we read mp3s differently to the entagged code
-    public AudioFile read(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
+    public AudioFileImpl read(File f, final String extension) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
+        MP3File mp3File = new MP3File(f, extension, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, true);
         return mp3File;
     }
 
@@ -52,7 +55,7 @@ public class MP3FileReader extends AudioFileReader
      */
     public AudioFile readMustBeWritable(File f) throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException
     {
-        MP3File mp3File = new MP3File(f, MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
+        MP3File mp3File = new MP3File(f, Files.getFileExtension(f.getName()), MP3File.LOAD_IDV1TAG | MP3File.LOAD_IDV2TAG, false);
         return mp3File;
     }
 

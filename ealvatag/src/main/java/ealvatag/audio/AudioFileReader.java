@@ -21,7 +21,6 @@ import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.NoReadPermissionsException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
 import org.slf4j.Logger;
@@ -79,34 +78,34 @@ public abstract class AudioFileReader {
       * @param f The file to read
       * @exception CannotReadException If anything went bad during the read of this file
       */
-    public AudioFile read(File f) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
-                                         InvalidAudioFrameException {
-        LOG.trace(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()));
+    public AudioFile read(File file, final String extension) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
+                                                                    InvalidAudioFrameException {
+        LOG.trace(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()));
 
-        if (!f.canRead()) {
-            LOG.error(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f.getAbsolutePath()));
+        if (!file.canRead()) {
+            LOG.error(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(file.getAbsolutePath()));
             throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
-                                                         .getMsg(f.getAbsolutePath()));
+                                                         .getMsg(file.getAbsolutePath()));
         }
 
-        if (f.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE) {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(f.getAbsolutePath()));
+        if (file.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE) {
+            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(file.getAbsolutePath()));
         }
 
         RandomAccessFile raf = null;
         try {
-            raf = new RandomAccessFile(f, "r");
+            raf = new RandomAccessFile(file, "r");
             raf.seek(0);
 
             GenericAudioHeader info = getEncodingInfo(raf);
             raf.seek(0);
-            return new AudioFile(f, info, getTag(raf));
+            return new AudioFileImpl(file, extension, info, getTag(raf));
 
         } catch (CannotReadException cre) {
             throw cre;
         } catch (Exception e) {
-            LOG.error(ErrorMessage.GENERAL_READ.getMsg(f.getAbsolutePath()), e);
-            throw new CannotReadException(f.getAbsolutePath() + ":" + e.getMessage(), e);
+            LOG.error(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()), e);
+            throw new CannotReadException(file.getAbsolutePath() + ":" + e.getMessage(), e);
         } finally {
             try {
                 if (raf != null) {
@@ -114,7 +113,7 @@ public abstract class AudioFileReader {
                 }
             } catch (Exception ex) {
                 LOG.warn(ErrorMessage.GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE
-                                 .getMsg(f.getAbsolutePath()));
+                                 .getMsg(file.getAbsolutePath()));
             }
         }
     }
