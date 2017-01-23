@@ -1,5 +1,6 @@
 package ealvatag.audio.generic;
 
+import com.google.common.io.Files;
 import ealvatag.audio.Utils;
 import junit.framework.TestCase;
 
@@ -13,7 +14,7 @@ import java.nio.ByteBuffer;
 public class UtilsTest  extends TestCase {
 
     public void testGetExtension () {
-        assertEquals ("jpeg", Utils.getExtension (new File("_12XYZ.jpeg")));
+        assertEquals ("jpeg", Files.getFileExtension(new File("_12XYZ.jpeg").getName()));
     }
 
     public void testReadUInt16 () {

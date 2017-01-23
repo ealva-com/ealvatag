@@ -42,7 +42,7 @@ public interface AudioFile {
     /**
      * Delete any {@link Tag} in the underlying file
      *
-     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
+     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occurred.
      */
     void deleteFileTag() throws CannotWriteException;
 

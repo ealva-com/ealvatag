@@ -15,6 +15,7 @@
  */
 package ealvatag;
 
+import ealvatag.audio.Utils;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagOptionSingleton;
 import junit.framework.TestCase;
@@ -96,45 +97,6 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
     /**
-     * Copy a File
-     *
-     * @param fromFile The existing File
-     * @param toFile   The new File
-     *
-     * @return <code>true</code> if and only if the renaming succeeded; <code>false</code> otherwise
-     */
-    public static boolean copy(File fromFile, File toFile) {
-        try {
-            FileInputStream in = new FileInputStream(fromFile);
-            FileOutputStream out = new FileOutputStream(toFile);
-            byte[] buf = new byte[8192];
-
-            int len;
-
-            while ((len = in.read(buf)) > -1) {
-                out.write(buf, 0, len);
-            }
-
-            in.close();
-            out.close();
-
-            // cleanupif files are not the same length
-            if (fromFile.length() != toFile.length()) {
-                //noinspection ResultOfMethodCallIgnored
-                toFile.delete();
-
-                return false;
-            }
-
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    /**
      * Copy audiofile to processing dir ready for use in test
      *
      * @param fileName name of the file to copy
@@ -148,7 +110,7 @@ public abstract class AbstractTestCase extends TestCase {
             //noinspection ResultOfMethodCallIgnored
             outputFile.getParentFile().mkdirs();
         }
-        boolean result = copy(inputFile, outputFile);
+        boolean result = Utils.copy(inputFile, outputFile);
         assertTrue(result);
         return outputFile;
     }
@@ -169,7 +131,7 @@ public abstract class AbstractTestCase extends TestCase {
             //noinspection ResultOfMethodCallIgnored
             outputFile.getParentFile().mkdirs();
         }
-        boolean result = copy(inputFile, outputFile);
+        boolean result = Utils.copy(inputFile, outputFile);
         assertTrue(result);
         return outputFile;
     }

@@ -60,28 +60,12 @@ import java.io.RandomAccessFile;
  * @since v0.01
  */
 public class AudioFileImpl implements AudioFile {
-    //Logger
     private static Logger LOG = LoggerFactory.getLogger(AudioFileImpl.class);
 
-    /**
-     * The physical file that this instance represents.
-     */
     protected File file;
-
-    /**
-     * The Audio header info
-     */
     protected AudioHeader audioHeader;
-
-    /**
-     * The tag
-     */
     protected TagFieldContainer tag;
-
-    /**
-     * The tag
-     */
-    protected String extension;
+    protected String extension;         // we parsed it once to find the reader, so let's store it and not keep parsing
 
     /**
      * These constructors are used by the different readers, users should not use them.

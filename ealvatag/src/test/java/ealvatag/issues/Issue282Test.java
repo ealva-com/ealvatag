@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.images.ArtworkFactory;
 
@@ -24,7 +25,7 @@ public class Issue282Test extends AbstractTestCase
             return;
         }
 
-        File testFile = null;
+        File testFile;
         Exception exceptionCaught = null;
         try
         {
@@ -32,7 +33,7 @@ public class Issue282Test extends AbstractTestCase
 
             //Copy up a level coz we need it to be in same folder as working directory so can just specify filename
             File outputFile = new File(testFile.getName());
-            boolean result  = copy(testFile, outputFile);
+            boolean result  = Utils.copy(testFile, outputFile);
             assertTrue(result);
 
             //make Relative
@@ -45,6 +46,7 @@ public class Issue282Test extends AbstractTestCase
             af.getTag().or(NullTag.INSTANCE).setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
 
             af.save();
+            //noinspection ResultOfMethodCallIgnored
             outputFile.delete();
 
         }
@@ -66,7 +68,7 @@ public class Issue282Test extends AbstractTestCase
                return;
            }
 
-           File testFile = null;
+           File testFile;
            Exception exceptionCaught = null;
            try
            {
@@ -74,7 +76,7 @@ public class Issue282Test extends AbstractTestCase
 
                //Copy up a level coz we need it to be in same folder as working directory so can just specify filename
                File outputFile = new File(testFile.getName());
-               boolean result  = copy(testFile, outputFile);
+               boolean result  = Utils.copy(testFile, outputFile);
                assertTrue(result);
 
                //make Relative

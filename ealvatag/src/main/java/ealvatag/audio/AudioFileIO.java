@@ -205,25 +205,11 @@ public class AudioFileIO {
         return readAudioFile(file, Utils.getMagicExtension(file));
     }
 
-    /**
-     * Read the tag contained in the given file.
-     *
-     * @param f The file to read.
-     *
-     * @return The AudioFile with the file tag and the file encoding info.
-     *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
-     */
     public AudioFile readFile(File f) throws CannotReadException,
-                                             IOException,
-                                             TagException,
-                                             ReadOnlyFileException,
-                                             InvalidAudioFrameException {
+                                              IOException,
+                                              TagException,
+                                              ReadOnlyFileException,
+                                              InvalidAudioFrameException {
         ensureFileExists(f);
         return readAudioFile(f, Files.getFileExtension(f.getName()));
     }
@@ -237,7 +223,7 @@ public class AudioFileIO {
      *                                                        other IO error occurred.
      */
     void deleteTag(AudioFileImpl f) throws CannotWriteException {
-        String ext = Utils.getExtension(f.getFile());
+        String ext = Files.getFileExtension(f.getFile().getName());
 
         AudioFileWriter afw = getWriterForExtension(ext);
 

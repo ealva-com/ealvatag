@@ -18,6 +18,8 @@
  */
 package ealvatag.audio;
 
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.FileFilter;
 
@@ -61,7 +63,7 @@ public class AudioFileFilter implements FileFilter {
             return allowDirectories;
         }
 
-        String ext = Utils.getExtension(f);
+        String ext = Files.getFileExtension(f.getName());
 
         return SupportedFileFormat.fromExtension(ext) != SupportedFileFormat.UNKNOWN;
     }
