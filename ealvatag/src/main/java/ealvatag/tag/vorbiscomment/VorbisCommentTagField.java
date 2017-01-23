@@ -21,11 +21,18 @@ package ealvatag.tag.vorbiscomment;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.ALBUM;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.ARTIST;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.COMMENT;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.DATE;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.DESCRIPTION;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.GENRE;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.TITLE;
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.TRACKNUMBER;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.*;
 
 /**
  * This class represents the name and content of a tag entry in ogg-files.
@@ -34,8 +41,7 @@ import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.*;
  * @author Raphael Slinckx (KiKiDonK)
  * @author Christian Laireiter (liree)
  */
-public class VorbisCommentTagField implements TagTextField
-{
+public class VorbisCommentTagField implements TagTextField {
 
     /**
      * If <code>true</code>, the id of the current encapsulated tag field is
@@ -65,27 +71,21 @@ public class VorbisCommentTagField implements TagTextField
      * Creates an instance.
      *
      * @param raw Raw byte data of the tagfield.
+     *
      * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
      */
-    public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException
-    {
+    public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException {
         String field = new String(raw, "UTF-8");
         int i = field.indexOf("=");
-        if (i == -1)
-        {
+        if (i == -1) {
             //Beware that ogg ID, must be capitalized and contain no space..
             this.id = ERRONEOUS_ID;
             this.content = field;
-        }
-        else
-        {
+        } else {
             this.id = field.substring(0, i).toUpperCase();
-            if (field.length() > i)
-            {
+            if (field.length() > i) {
                 this.content = field.substring(i + 1);
-            }
-            else
-            {
+            } else {
                 //We have "XXXXXX=" with nothing after the "="
                 this.content = "";
             }
@@ -99,8 +99,7 @@ public class VorbisCommentTagField implements TagTextField
      * @param fieldId      ID (name) of the field.
      * @param fieldContent Content of the field.
      */
-    public VorbisCommentTagField(String fieldId, String fieldContent)
-    {
+    public VorbisCommentTagField(String fieldId, String fieldContent) {
         this.id = fieldId.toUpperCase();
         this.content = fieldContent;
         checkCommon();
@@ -111,11 +110,10 @@ public class VorbisCommentTagField implements TagTextField
      * {@link #common}in order to reflect if the tag id is a commonly used one.
      * <br>
      */
-    private void checkCommon()
-    {
+    private void checkCommon() {
         this.common = id.equals(TITLE.getFieldName()) || id.equals(ALBUM.getFieldName()) || id.equals(ARTIST.getFieldName())
                 || id.equals(GENRE.getFieldName()) || id.equals(TRACKNUMBER.getFieldName()) || id.equals(DATE.getFieldName())
-        || id.equals(DESCRIPTION.getFieldName()) || id.equals(COMMENT.getFieldName());
+                || id.equals(DESCRIPTION.getFieldName()) || id.equals(COMMENT.getFieldName());
 
     }
 
@@ -125,11 +123,9 @@ public class VorbisCommentTagField implements TagTextField
      *
      * @param src       bytes to copy.
      * @param dst       where to copy to.
-     * @param dstOffset at which position of <code>dst</code> the data should be
-     *                  copied.
+     * @param dstOffset at which position of <code>dst</code> the data should be copied.
      */
-    protected void copy(byte[] src, byte[] dst, int dstOffset)
-    {
+    protected void copy(byte[] src, byte[] dst, int dstOffset) {
         //        for (int i = 0; i < src.length; i++)
         //            dst[i + dstOffset] = src[i];
         /*
@@ -140,52 +136,46 @@ public class VorbisCommentTagField implements TagTextField
     }
 
     @Override
-    public void copyContent(TagField field)
-    {
-        if (field instanceof TagTextField)
-        {
-            this.content = ((TagTextField) field).getContent();
+    public void copyContent(TagField field) {
+        if (field instanceof TagTextField) {
+            this.content = ((TagTextField)field).getContent();
         }
     }
 
     @Override
-    public String getContent()
-    {
+    public String getContent() {
         return content;
     }
 
     @Override
-    public Charset getEncoding()
-    {
+    public Charset getEncoding() {
         return StandardCharsets.UTF_8;
     }
 
     @Override
-    public String getId()
-    {
+    public String getId() {
         return this.id;
     }
 
     @Override
-    public byte[] getRawContent() throws UnsupportedEncodingException
-    {
+    public byte[] getRawContent() throws UnsupportedEncodingException {
         byte[] size = new byte[VorbisCommentReader.FIELD_COMMENT_LENGTH_LENGTH];
         byte[] idBytes = this.id.getBytes(StandardCharsets.ISO_8859_1);
         byte[] contentBytes = this.content.getBytes(StandardCharsets.UTF_8);
         byte[] b = new byte[4 + idBytes.length + 1 + contentBytes.length];
 
         int length = idBytes.length + 1 + contentBytes.length;
-        size[3] = (byte) ((length & 0xFF000000) >> 24);
-        size[2] = (byte) ((length & 0x00FF0000) >> 16);
-        size[1] = (byte) ((length & 0x0000FF00) >> 8);
-        size[0] = (byte) (length & 0x000000FF);
+        size[3] = (byte)((length & 0xFF000000) >> 24);
+        size[2] = (byte)((length & 0x00FF0000) >> 16);
+        size[1] = (byte)((length & 0x0000FF00) >> 8);
+        size[0] = (byte)(length & 0x000000FF);
 
         int offset = 0;
         copy(size, b, offset);
         offset += 4;
         copy(idBytes, b, offset);
         offset += idBytes.length;
-        b[offset] = (byte) 0x3D;
+        b[offset] = (byte)0x3D;
         offset++;// "="
         copy(contentBytes, b, offset);
 
@@ -193,51 +183,44 @@ public class VorbisCommentTagField implements TagTextField
     }
 
     @Override
-    public boolean isBinary()
-    {
+    public boolean isBinary() {
         return false;
     }
 
     @Override
-    public void isBinary(boolean b)
-    {
-        if (b)
-        {
+    public void isBinary(boolean b) {
+        if (b) {
             // Only throw if binary = true requested.
-            throw new UnsupportedOperationException("OggTagFields cannot be changed to binary.\n" + "binary data should be stored elsewhere" + " according to Vorbis_I_spec.");
+            throw new UnsupportedOperationException("OggTagFields cannot be changed to binary.\n" +
+                                                            "binary data should be stored elsewhere" +
+                                                            " according to Vorbis_I_spec.");
         }
     }
 
     @Override
-    public boolean isCommon()
-    {
+    public boolean isCommon() {
         return common;
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return this.content.equals("");
     }
 
     @Override
-    public void setContent(String s)
-    {
+    public void setContent(String s) {
         this.content = s;
     }
 
     @Override
-    public void setEncoding(final Charset s)
-    {
-        if (!StandardCharsets.UTF_8.equals(s))
-        {
+    public void setEncoding(final Charset s) {
+        if (!StandardCharsets.UTF_8.equals(s)) {
             throw new UnsupportedOperationException("The encoding of OggTagFields cannot be " + "changed.(specified to be UTF-8)");
         }
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return getContent();
     }
 }

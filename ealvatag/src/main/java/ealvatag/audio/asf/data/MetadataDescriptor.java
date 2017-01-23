@@ -449,8 +449,8 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
                 bytesNeeded = 2;
                 break;
             default:
-                throw new UnsupportedOperationException(
-                        "The current type doesn't allow an interpretation as a number. (" + getType() + ")");
+                throw new UnsupportedOperationException("The current type doesn't allow an interpretation as a number. (" +
+                                                                getType() + ")");
         }
         if (bytesNeeded > this.content.length) {
             throw new IllegalStateException("The stored data cannot represent the type of current object.");

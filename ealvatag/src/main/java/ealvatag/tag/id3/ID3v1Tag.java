@@ -30,7 +30,6 @@ import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -142,11 +141,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
             if (mp3tag instanceof ID3v1Tag) {
                 throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
             }
-            if (mp3tag instanceof ID3v11Tag) {
-                convertedTag = (ID3v11Tag)mp3tag;
-            } else {
-                convertedTag = new ID3v11Tag(mp3tag);
-            }
+            convertedTag = new ID3v11Tag(mp3tag);
             this.album = convertedTag.album;
             this.artist = convertedTag.artist;
             this.comment = convertedTag.comment;
@@ -705,7 +700,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         }
     }
 
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return getFirst(genericKey);
     }
 
@@ -713,7 +709,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return Collections.singletonList(getFirst(genericKey.name()));
     }
 
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         switch (genericKey) {
             case ARTIST:
@@ -762,7 +758,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return Collections.emptyList();
     }
 
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
     }
 
@@ -805,7 +801,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
      *
      * @return A list of {@link TagField} objects with the given &quot;id&quot;.
      */
-    public ImmutableList<TagField> getFields(FieldKey genericKey) {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         switch (genericKey) {
             case ARTIST:
                 return getArtist();
@@ -867,7 +864,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return Optional.absent();
     }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey) {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> l = getFields(genericKey);
         return (l.size() != 0) ? Optional.fromNullable(l.get(0)) : Optional.<TagField>absent();
     }

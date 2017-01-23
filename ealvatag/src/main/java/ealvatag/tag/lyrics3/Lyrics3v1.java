@@ -157,11 +157,6 @@ public class Lyrics3v1 extends AbstractLyrics3
 
     }
 
-    /**
-     * @return
-     * @throws java.lang.UnsupportedOperationException
-     *
-     */
     public Iterator iterator()
     {
         /**

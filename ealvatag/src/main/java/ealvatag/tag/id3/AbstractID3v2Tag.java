@@ -29,7 +29,6 @@ import ealvatag.logging.FileSystemMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -597,14 +596,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         return this;
     }
 
-    /**
-     * Retrieve the first value that exists for this generic key
-     *
-     * @param genericKey
-     *
-     * @return
-     */
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
@@ -644,7 +636,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @return
      */
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
 
         //Special case here because the generic key to frameid/subid mapping is identical for trackno versus tracktotal
@@ -708,7 +701,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         }
     }
 
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
@@ -755,7 +748,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         return Optional.absent();
     }
 
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         return deleteField(FieldKey.COVER_ART);
     }
 
@@ -831,7 +824,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * values these will be stored within a single frame so only one field will be returned not two. This can be
      * confusing because getValues() would return two values.
      */
-    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
@@ -1024,7 +1018,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         }
     }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> fields = getFields(genericKey);
         if (fields.size() > 0) {
             return Optional.fromNullable(fields.get(0));
@@ -1055,16 +1050,10 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *
-     * @param formatKey
-     * @param values
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    protected TagField doCreateTagField(FrameAndSubId formatKey, String... values)
-            throws KeyNotFoundException, FieldDataInvalidException {
+    TagField doCreateTagField(FrameAndSubId formatKey, String... values) throws IllegalArgumentException,
+                                                                                UnsupportedFieldException,
+                                                                                FieldDataInvalidException {
         String value = values[0];
 
         AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());
@@ -1121,7 +1110,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                 ((FrameBodyTMCL)(frame.getBody())).addPair(values[0]);
             }
         } else if ((frame.getBody() instanceof FrameBodyAPIC) || (frame.getBody() instanceof FrameBodyPIC)) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         } else {
             throw new FieldDataInvalidException(
                     "Field with key of:" + formatKey.getFrameId() + ":does not accept cannot parse data:" + value);
@@ -2217,13 +2206,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * <p/>
      * This method  does all the complex stuff of splitting multiple values in one frame into separate values.
      *
-     * @param formatKey
+     * @param formatKey frame and sub-id
      *
-     * @return
+     * @return the list of values
      *
-     * @throws KeyNotFoundException
      */
-    protected List<String> doGetValues(FrameAndSubId formatKey) throws KeyNotFoundException {
+    protected List<String> doGetValues(FrameAndSubId formatKey) {
         List<String> values = new ArrayList<String>();
 
         if (formatKey.getSubId() != null) {
@@ -2260,8 +2248,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                         }
                     }
                 } else {
-                    throw new RuntimeException(
-                            "Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
+                    throw new UnsupportedFieldException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
         }
@@ -2312,14 +2299,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * than simply taking the frame index. For example if two composers have been added then then they can be retrieved
      * individually using index=0, index=1 despite the fact that both internally will be stored in a single TCOM frame.
      *
-     * @param formatKey
+     * @param formatKey frame and sub id
      * @param index     the index specified by the user
      *
      * @return
      *
-     * @throws KeyNotFoundException
      */
-    String doGetValueAtIndex(FrameAndSubId formatKey, int index) throws KeyNotFoundException {
+    String doGetValueAtIndex(FrameAndSubId formatKey, int index)  {
         List<String> values = doGetValues(formatKey);
         if (values.size() > index) {
             return values.get(index);
@@ -2391,14 +2377,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         }
     }
 
-    /**
-     * Internal delete method, for deleting/modifying an individual ID3 frame
-     *
-     * @param formatKey
-     *
-     * @throws KeyNotFoundException
-     */
-    protected void doDeleteTagField(FrameAndSubId formatKey) throws KeyNotFoundException {
+    void doDeleteTagField(FrameAndSubId formatKey) throws UnsupportedFieldException {
         if (formatKey.getSubId() != null) {
             //Get list of frames that this uses
             List<TagField> list = getModifiableFieldList(formatKey.getFrameId());
@@ -2469,8 +2448,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                         removeFrame(formatKey.getFrameId());
                     }
                 } else {
-                    throw new RuntimeException(
-                            "Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
+                    throw new UnsupportedFieldException("Need to implement getFields(FieldKey genericKey) for:" + next.getClass());
                 }
             }
         } else if ((formatKey.getGenericKey() != null) &&

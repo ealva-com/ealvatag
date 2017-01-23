@@ -38,7 +38,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -90,7 +89,7 @@ public abstract class AbstractTag implements TagFieldContainer {
     }
 
 
-    protected String getItem(String id, int index) throws KeyNotFoundException {
+    protected String getItem(String id, int index) {
         List<TagField> tagFieldList = getFields(id);
         if (tagFieldList.size() > index) {
             return tagFieldList.get(index).toString();
@@ -175,7 +174,7 @@ public abstract class AbstractTag implements TagFieldContainer {
     }
 
     @Override
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
@@ -209,7 +208,7 @@ public abstract class AbstractTag implements TagFieldContainer {
         return Optional.absent();
     }
 
-    public Tag deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
        return deleteField(FieldKey.COVER_ART);
     }
 

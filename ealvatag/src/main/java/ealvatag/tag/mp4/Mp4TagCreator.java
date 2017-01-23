@@ -23,7 +23,6 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.mp4.field.Mp4TagCoverField;
@@ -37,10 +36,10 @@ import java.util.Iterator;
 
 /**
  * Create raw content of mp4 tag data, concerns itself with atoms upto the ilst atom
- *
+ * <p>
  * <p>This level was selected because the ilst atom can be recreated without reference to existing mp4 fields
  * but fields above this level are dependent upon other information that is not held in the tag.
- *
+ * <p>
  * <pre>
  * |--- ftyp
  * |--- moov
@@ -67,36 +66,30 @@ import java.util.Iterator;
  * |--- mdat
  * </pre>
  */
-public class Mp4TagCreator extends AbstractTagCreator
-{
+public class Mp4TagCreator extends AbstractTagCreator {
     /**
      * Convert tagdata to rawdata ready for writing to file
      *
      * @param tag
      * @param padding TODO padding parameter currently ignored
+     *
      * @return
+     *
      * @throws UnsupportedEncodingException
      */
-    public ByteBuffer convert(TagFieldContainer tag, int padding) throws UnsupportedEncodingException
-    {
-        try
-        {
+    public ByteBuffer convert(TagFieldContainer tag, int padding) throws UnsupportedEncodingException {
+        try {
             //Add metadata raw content
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Iterator<TagField> it = tag.getFields();
             boolean processedArtwork = false;
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 TagField frame = it.next();
                 //To ensure order is maintained dont process artwork until iterator hits it.
-                if (frame instanceof Mp4TagCoverField)
-                {
-                    if (processedArtwork)
-                    {
+                if (frame instanceof Mp4TagCoverField) {
+                    if (processedArtwork) {
                         //ignore
-                    }
-                    else
-                    {
+                    } else {
                         processedArtwork = true;
 
                         //Because each artwork image is held within the tag as a separate field, but when
@@ -105,17 +98,8 @@ public class Mp4TagCreator extends AbstractTagCreator
                         //if we have more than 1 but do it anyway even if only have 1 image)
                         ByteArrayOutputStream covrDataBaos = new ByteArrayOutputStream();
 
-                        try
-                        {
-                            for (TagField artwork : tag.getFields(FieldKey.COVER_ART))
-                            {
-                                covrDataBaos.write(((Mp4TagField) artwork).getRawContentDataOnly());
-                            }
-                        }
-                        catch (KeyNotFoundException knfe)
-                        {
-                            //This cannot happen
-                            throw new RuntimeException("Unable to find COVERART Key");
+                        for (TagField artwork : tag.getFields(FieldKey.COVER_ART)) {
+                            covrDataBaos.write(((Mp4TagField)artwork).getRawContentDataOnly());
                         }
 
                         //Now create the parent Data
@@ -124,9 +108,7 @@ public class Mp4TagCreator extends AbstractTagCreator
                         baos.write(Mp4FieldKey.ARTWORK.getFieldName().getBytes(StandardCharsets.ISO_8859_1));
                         baos.write(data);
                     }
-                }
-                else
-                {
+                } else {
                     baos.write(frame.getRawContent());
                 }
             }
@@ -141,9 +123,7 @@ public class Mp4TagCreator extends AbstractTagCreator
             ByteBuffer buf = ByteBuffer.wrap(ilst.toByteArray());
             buf.rewind();
             return buf;
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             //Should never happen as not writing to file at this point
             throw new RuntimeException(ioe);
         }

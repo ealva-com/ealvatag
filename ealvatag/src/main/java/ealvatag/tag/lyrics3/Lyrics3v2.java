@@ -72,8 +72,7 @@ public class Lyrics3v2 extends AbstractLyrics3
     /**
      * Creates a new Lyrics3v2 datatype.
      *
-     * @param mp3tag
-     * @throws UnsupportedOperationException
+     * @param mp3tag base ID3 tag
      */
     public Lyrics3v2(BaseID3Tag mp3tag)
     {

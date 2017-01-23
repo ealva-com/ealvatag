@@ -10,6 +10,7 @@ import ealvatag.tag.NullTagField;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
@@ -28,6 +29,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.fail;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -421,10 +424,10 @@ public class NewInterfaceTest {
         //Cover Art:invalid way to do it
         try {
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.COVER_ART, "coverart");
-        } catch (java.lang.UnsupportedOperationException uoe) {
-            e = uoe;
+            fail();
+        } catch (Exception ufe) {
+            Assert.assertTrue(ufe instanceof UnsupportedFieldException);
         }
-        Assert.assertTrue(e instanceof UnsupportedOperationException);
 
         //Add new image correctly
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -723,10 +726,10 @@ public class NewInterfaceTest {
         //Cover Art:invalid way to do it
         try {
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.COVER_ART, "coverart");
-        } catch (java.lang.UnsupportedOperationException uoe) {
-            e = uoe;
+            fail();
+        } catch (Exception uoe) {
+            Assert.assertTrue(uoe instanceof UnsupportedFieldException);
         }
-        Assert.assertTrue(e instanceof UnsupportedOperationException);
 
         //Add new image correctly
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -959,10 +962,10 @@ public class NewInterfaceTest {
         //Cover Art:invalid way to do it
         try {
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.COVER_ART, "coverart");
-        } catch (java.lang.UnsupportedOperationException uoe) {
-            e = uoe;
+            fail();
+        } catch (Exception uoe) {
+            Assert.assertTrue(uoe instanceof UnsupportedFieldException);
         }
-        Assert.assertTrue(e instanceof UnsupportedOperationException);
 
         //Add new image correctly
         RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");

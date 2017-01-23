@@ -28,24 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Switching from Jaudiotagger to ealvatag
- * <list>
- * <li>Changes will be incompatible to Jaudiotagger users that depend on particular types of exceptions thrown under certain
- * conditions</li>
- * <li>Some general concepts will be refined or redefined</li>
- * <li>Illegal arguments will throw IllegalArgumentException, not throw KeyNotFoundException</li>
- * <li>Unsupported keys for a type of tag will throw UnsupportedKeyException not throw KeyNotFoundException</li>
- * <li>Methods whose comments said "used internally" will be removed from the public interface</li>
- * </list>
- * <p>
- * <p>
  * This interface represents the basic data structure for the default
- * audio library functionality.<br>
+ * audio library functionality.
  * <p>
  * Some audio file tagging systems allow to specify multiple values for one type
  * of information. The artist for example. Some songs may be a cooperation of
  * two or more artists. Sometimes a tagging user wants to specify them in the
- * tag without making one long text string.<br>
+ * tag without making one long text string.
  * <p>
  * The addField() method can be used for this but it is possible the underlying implementation
  * does not support that kind of storing multiple values and will just overwrite the existing value<br>
@@ -207,9 +196,8 @@ public interface Tag {
      *
      * @throws IllegalArgumentException  if {@code genericKey} is null
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
-     * @throws KeyNotFoundException      if the Tag does not contain the field
      */
-    Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException;
+    Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Delete any fields with this id
@@ -263,16 +251,12 @@ public interface Tag {
 
     /**
      * Delete any instance of tag fields used to store artwork
-     * <p>
-     * <p>We need this additional deleteField method because in some formats artwork can be stored
-     * in multiple fields
      *
      * @return self
      *
      * @throws UnsupportedFieldException if this tag doesn't support Artwork
-     * @throws KeyNotFoundException      if this tag does not contain artwork
      */
-    Tag deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException;
+    Tag deleteArtwork() throws UnsupportedFieldException;
 
     /**
      * Returns <code>true</code>, if at least one of the contained

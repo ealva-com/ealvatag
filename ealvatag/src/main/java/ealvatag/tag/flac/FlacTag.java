@@ -7,7 +7,6 @@ import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -96,7 +95,7 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return this;
     }
 
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey.equals(FieldKey.COVER_ART)) {
             images.clear();
@@ -126,7 +125,8 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         }
     }
 
-    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey.equals(FieldKey.COVER_ART)) {
             ImmutableList.Builder<TagField> builder = ImmutableList.builder();
             builder.addAll(images);
@@ -136,9 +136,9 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         }
     }
 
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey == FieldKey.COVER_ART) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(genericKey.name());
         } else {
             return tag.getAll(genericKey);
         }
@@ -151,13 +151,13 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
 
     public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
         if (id.equals(FieldKey.COVER_ART.name())) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         } else {
             return tag.getFirst(id);
         }
     }
 
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
@@ -166,8 +166,8 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
      *
      * @throws UnsupportedFieldException if the {@link FieldKey} is {@link FieldKey#COVER_ART}
      */
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException,
-                                                                    UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey.equals(FieldKey.COVER_ART)) {
             throw new UnsupportedFieldException(genericKey.name());
         } else {
@@ -187,7 +187,8 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         }
     }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.COVER_ART) {
             return getFirstField(FieldKey.COVER_ART.name());
@@ -264,7 +265,7 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return Optional.absent();
     }
 
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         return deleteField(FieldKey.COVER_ART);
     }
 
@@ -348,32 +349,17 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return tag.getSupportedFields();
     }
 
-    /**
-     * Create and set field with name of vorbisCommentkey
-     *
-     * @param vorbisCommentKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
+    public void setField(String vorbisCommentKey, String value) throws IllegalArgumentException,
+                                                                       UnsupportedFieldException,
+                                                                       FieldDataInvalidException {
         TagField tagfield = createField(vorbisCommentKey, value);
         setField(tagfield);
     }
 
-    /**
-     * Create and add field with name of vorbisCommentkey
-     *
-     * @param vorbisCommentKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
-        TagField tagfield = createField(vorbisCommentKey, value);
-        addField(tagfield);
+    public void addField(String vorbisCommentKey, String value) throws IllegalArgumentException,
+                                                                       UnsupportedFieldException,
+                                                                       FieldDataInvalidException {
+        addField(createField(vorbisCommentKey, value));
     }
 
     public TagField createField(VorbisCommentFieldKey vorbisCommentFieldKey, String value) throws UnsupportedFieldException,
@@ -384,20 +370,9 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return tag.createField(vorbisCommentFieldKey, value);
     }
 
-    /**
-     * Create Tag Field using ogg key
-     * <p>
-     * This method is provided to allow you to create key of any value because VorbisComment allows
-     * arbitary keys.
-     *
-     * @param vorbisCommentFieldKey
-     * @param value
-     *
-     * @return
-     */
     public TagField createField(String vorbisCommentFieldKey, String value) {
         if (vorbisCommentFieldKey.equals(VorbisCommentFieldKey.COVERART.getFieldName())) {
-            throw new UnsupportedOperationException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
         }
         return tag.createField(vorbisCommentFieldKey, value);
     }

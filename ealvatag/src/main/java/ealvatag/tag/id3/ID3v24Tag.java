@@ -1089,74 +1089,27 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         return unsynchronization;
     }
 
-    /**
-     * Create a new frame with the specified frameid
-     *
-     * @param id
-     *
-     * @return
-     */
     public ID3v24Frame createFrame(String id) {
         return new ID3v24Frame(id);
     }
 
 
-    /**
-     * Create Frame for Id3 Key
-     * <p>
-     * Only textual data supported at the moment, should only be used with frames that
-     * support a simple string argument.
-     *
-     * @param id3Key
-     * @param value
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public TagField createField(ID3v24FieldKey id3Key, String value) throws KeyNotFoundException, FieldDataInvalidException {
-        if (id3Key == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
+    public TagField createField(ID3v24FieldKey id3Key, String value) throws IllegalArgumentException, FieldDataInvalidException {
+        checkArgNotNull(id3Key);
+        return super.doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), checkArgNotNullOrEmpty(value));
     }
 
-    /**
-     * Retrieve the first value that exists for this id3v24key
-     *
-     * @param id3v24FieldKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public String getFirst(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException {
-        if (id3v24FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-
+    public String getFirst(ID3v24FieldKey id3v24FieldKey) throws IllegalArgumentException {
+        checkArgNotNull(id3v24FieldKey);
         FieldKey genericKey = ID3v24Frames.getInstanceOf().getGenericKeyFromId3(id3v24FieldKey);
-        if (genericKey != null) {
-            return super.getFirst(genericKey);
-        } else {
-            FrameAndSubId frameAndSubId = new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId());
-            return super.doGetValueAtIndex(frameAndSubId, 0);
-        }
+        return genericKey != null
+               ? super.getFirst(genericKey)
+               : super.doGetValueAtIndex(new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()), 0);
     }
 
 
-    /**
-     * Delete fields with this id3v24FieldKey
-     *
-     * @param id3v24FieldKey
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public void deleteField(ID3v24FieldKey id3v24FieldKey) throws KeyNotFoundException {
-        if (id3v24FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public void deleteField(ID3v24FieldKey id3v24FieldKey) throws IllegalArgumentException {
+        checkArgNotNull(id3v24FieldKey);
         super.doDeleteTagField(new FrameAndSubId(null, id3v24FieldKey.getFrameId(), id3v24FieldKey.getSubId()));
     }
 
@@ -1278,16 +1231,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         return ID3v24Frames.getInstanceOf().getSupportedFields();
     }
 
-    /**
-     * Maps the generic key to the id3 key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
             List<String> convertedGenres = new ArrayList<String>();
@@ -1306,7 +1250,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);

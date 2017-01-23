@@ -8,7 +8,6 @@ import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.logging.Hex;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -118,7 +117,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
@@ -128,7 +127,8 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFieldAt(genericKey, index);
     }
 
@@ -138,7 +138,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         id3Tag.deleteField(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
         return this;
     }
@@ -172,7 +172,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         id3Tag.deleteArtwork();
         return this;
     }
@@ -205,7 +205,8 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public ImmutableList<TagField> getFields(FieldKey genericKey) throws KeyNotFoundException {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFields(genericKey);
     }
 
@@ -225,7 +226,8 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFirstField(genericKey);
     }
 

@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
@@ -167,12 +166,13 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
     @Override
-    public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(final FieldKey genericKey, final int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             return getItem(genericKey.name(), index);
@@ -182,7 +182,8 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         final List<TagField> tagFields = fields.get(genericKey.name());
         if (tagFields == null) {
@@ -202,7 +203,7 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             deleteField(genericKey.name());
@@ -213,7 +214,8 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, genericKey);
         if (getSupportedFields().contains(genericKey)) {
             return getFirstField(genericKey.name());

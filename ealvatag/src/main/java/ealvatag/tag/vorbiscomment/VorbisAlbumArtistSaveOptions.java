@@ -2,7 +2,6 @@ package ealvatag.tag.vorbiscomment;
 
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.TagField;
 
 /**
@@ -16,14 +15,14 @@ public enum VorbisAlbumArtistSaveOptions {
     WRITE_ALBUMARTIST {
         @Override
         public void setField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(genericKey, value);
             tag.setField(tagfield);
         }
 
         @Override
         public void addField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(genericKey, value);
             tag.addField(tagfield);
         }
@@ -31,21 +30,21 @@ public enum VorbisAlbumArtistSaveOptions {
         @Override
         public void deleteField(final VorbisCommentTag tag,
                                 final VorbisCommentFieldKey mappedKey)
-                throws KeyNotFoundException {
+                throws IllegalArgumentException {
             tag.deleteField(mappedKey);
         }
     },
     WRITE_JRIVER_ALBUMARTIST {
         @Override
         public void setField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
             tag.setField(tagfield);
         }
 
         @Override
         public void addField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
             tag.addField(tagfield);
         }
@@ -53,14 +52,14 @@ public enum VorbisAlbumArtistSaveOptions {
         @Override
         public void deleteField(final VorbisCommentTag tag,
                                 final VorbisCommentFieldKey mappedKey)
-                throws KeyNotFoundException {
+                throws IllegalArgumentException {
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
         }
     },
     WRITE_BOTH {
         @Override
         public void setField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField genericField = tag.createField(genericKey, value);
             tag.setField(genericField);
             TagField jRiverField = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
@@ -69,7 +68,7 @@ public enum VorbisAlbumArtistSaveOptions {
 
         @Override
         public void addField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField genericField = tag.createField(genericKey, value);
             tag.addField(genericField);
             TagField jRiverField = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
@@ -79,7 +78,7 @@ public enum VorbisAlbumArtistSaveOptions {
         @Override
         public void deleteField(final VorbisCommentTag tag,
                                 final VorbisCommentFieldKey mappedKey)
-                throws KeyNotFoundException {
+                throws IllegalArgumentException {
             tag.deleteField(mappedKey);
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER);
         }
@@ -87,7 +86,7 @@ public enum VorbisAlbumArtistSaveOptions {
     WRITE_ALBUMARTIST_AND_DELETE_JRIVER_ALBUMARTIST {
         @Override
         public void setField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(genericKey, value);
             tag.setField(tagfield);
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
@@ -95,7 +94,7 @@ public enum VorbisAlbumArtistSaveOptions {
 
         @Override
         public void addField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(genericKey, value);
             tag.addField(tagfield);
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName());
@@ -104,14 +103,14 @@ public enum VorbisAlbumArtistSaveOptions {
         @Override
         public void deleteField(final VorbisCommentTag tag,
                                 final VorbisCommentFieldKey mappedKey)
-                throws KeyNotFoundException {
+                throws IllegalArgumentException {
             WRITE_ALBUMARTIST.deleteField(tag, mappedKey);
         }
     },
     WRITE_JRIVER_ALBUMARTIST_AND_DELETE_ALBUMARTIST {
         @Override
         public void setField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
             tag.setField(tagfield);
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
@@ -119,7 +118,7 @@ public enum VorbisAlbumArtistSaveOptions {
 
         @Override
         public void addField(final ContainsVorbisCommentField tag, final FieldKey genericKey, final String value)
-                throws KeyNotFoundException, FieldDataInvalidException {
+                throws IllegalArgumentException, FieldDataInvalidException {
             TagField tagfield = tag.createField(VorbisCommentFieldKey.ALBUMARTIST_JRIVER, value);
             tag.addField(tagfield);
             tag.deleteField(VorbisCommentFieldKey.ALBUMARTIST.getFieldName());
@@ -128,19 +127,19 @@ public enum VorbisAlbumArtistSaveOptions {
         @Override
         public void deleteField(final VorbisCommentTag tag,
                                 final VorbisCommentFieldKey mappedKey)
-                throws KeyNotFoundException {
+                throws IllegalArgumentException {
             WRITE_JRIVER_ALBUMARTIST.deleteField(tag, mappedKey);
         }
     };
 
     public abstract void setField(ContainsVorbisCommentField tag,
                                   FieldKey genericKey,
-                                  String value) throws KeyNotFoundException, FieldDataInvalidException;
+                                  String value) throws IllegalArgumentException, FieldDataInvalidException;
 
     public abstract void addField(ContainsVorbisCommentField tag,
                                   FieldKey genericKey,
-                                  String value) throws KeyNotFoundException, FieldDataInvalidException;
+                                  String value) throws IllegalArgumentException, FieldDataInvalidException;
 
     public abstract void deleteField(VorbisCommentTag tag,
-                                     VorbisCommentFieldKey mappedKey) throws KeyNotFoundException;
+                                     VorbisCommentFieldKey mappedKey) throws IllegalArgumentException;
 }

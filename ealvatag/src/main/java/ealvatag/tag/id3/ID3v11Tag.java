@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableList;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagField;
@@ -132,15 +131,14 @@ public class ID3v11Tag extends ID3v1Tag {
     /**
      * Creates a new ID3v11 datatype from a non v11 tag
      *
-     * @param mp3tag
-     * @throws UnsupportedOperationException
+     * @param mp3tag the base ID3 tag
+     * @throws UnsupportedOperationException if copy ctor not called and should type cast the arg
      */
     public ID3v11Tag(BaseID3Tag mp3tag) {
         if (mp3tag != null) {
             if (mp3tag instanceof ID3v1Tag) {
                 if (mp3tag instanceof ID3v11Tag) {
-                    throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the " +
-                                                                    "argument");
+                    throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
                 }
                 // id3v1_1 objects are also id3v1 objects
                 ID3v1Tag id3old = (ID3v1Tag)mp3tag;
@@ -322,7 +320,8 @@ public class ID3v11Tag extends ID3v1Tag {
     }
 
 
-    public ImmutableList<TagField> getFields(FieldKey genericKey) {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey == FieldKey.TRACK) {
             return getTrack();
         } else {
@@ -330,7 +329,7 @@ public class ID3v11Tag extends ID3v1Tag {
         }
     }
 
-    public String getFirst(FieldKey genericKey) {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         switch (genericKey) {
             case ARTIST:
                 return getFirstArtist();
@@ -378,7 +377,7 @@ public class ID3v11Tag extends ID3v1Tag {
         return track <= 0 && super.isEmpty();
     }
 
-    public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.TRACK) {
             track = 0;

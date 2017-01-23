@@ -19,7 +19,19 @@ import com.google.common.collect.ImmutableSet;
 import ealvatag.FileConstants;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.*;
+import ealvatag.tag.EmptyFrameException;
+import ealvatag.tag.FieldDataInvalidException;
+import ealvatag.tag.FieldKey;
+import ealvatag.tag.InvalidDataTypeException;
+import ealvatag.tag.InvalidFrameException;
+import ealvatag.tag.InvalidFrameIdentifierException;
+import ealvatag.tag.PaddingException;
+import ealvatag.tag.Tag;
+import ealvatag.tag.TagException;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagNotFoundException;
+import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
@@ -229,18 +241,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         return ID3v22Frames.getInstanceOf();
     }
 
-
-
-    /**
-     * Maps the generic key to the id3 key and return the list of values for this field as strings
-     *
-     * @param genericKey
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     */
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
             List<String> convertedGenres = new ArrayList<String>();
@@ -259,7 +260,8 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
@@ -675,57 +677,26 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
      *
-     * @param id3Key
-     * @param value
-     *
-     * @return
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
      */
-    public TagField createField(ID3v22FieldKey id3Key, String value)
-            throws KeyNotFoundException, FieldDataInvalidException {
-        if (id3Key == null) {
-            throw new KeyNotFoundException();
-        }
+    public TagField createField(ID3v22FieldKey id3Key, String value) throws IllegalArgumentException, FieldDataInvalidException {
+        checkArgNotNull(id3Key);
+        checkArgNotNullOrEmpty(value);
         return doCreateTagField(new FrameAndSubId(null, id3Key.getFrameId(), id3Key.getSubId()), value);
     }
 
-    /**
-     * Retrieve the first value that exists for this id3v22key
-     *
-     * @param id3v22FieldKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public String getFirst(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException {
-        if (id3v22FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-
+    public String getFirst(ID3v22FieldKey id3v22FieldKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(id3v22FieldKey);
         FieldKey genericKey = ID3v22Frames.getInstanceOf().getGenericKeyFromId3(id3v22FieldKey);
         if (genericKey != null) {
             return super.getFirst(genericKey);
         } else {
-            FrameAndSubId frameAndSubId =
-                    new FrameAndSubId(null, id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
+            FrameAndSubId frameAndSubId = new FrameAndSubId(null, id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId());
             return super.doGetValueAtIndex(frameAndSubId, 0);
         }
     }
 
-    /**
-     * Delete fields with this id3v22FieldKey
-     *
-     * @param id3v22FieldKey
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public void deleteField(ID3v22FieldKey id3v22FieldKey) throws KeyNotFoundException {
-        if (id3v22FieldKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public void deleteField(ID3v22FieldKey id3v22FieldKey) throws IllegalArgumentException {
+        checkArgNotNull(id3v22FieldKey);
         super.doDeleteTagField(new FrameAndSubId(null, id3v22FieldKey.getFrameId(), id3v22FieldKey.getSubId()));
     }
 
@@ -735,7 +706,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * @param id
      */
     public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY,"id");
+        checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY, "id");
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
         return this;
     }

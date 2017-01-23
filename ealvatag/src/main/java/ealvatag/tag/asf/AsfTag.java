@@ -9,7 +9,6 @@ import ealvatag.audio.AbstractTag;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -374,9 +373,9 @@ public final class AsfTag extends AbstractTag {
         checkArgNotNull(value, CANNOT_BE_NULL, "value");
         switch (asfFieldKey) {
             case COVER_ART:
-                throw new UnsupportedOperationException("Cover Art cannot be created using this method");
+                throw new UnsupportedFieldException("Cover Art cannot be created using this method");
             case BANNER_IMAGE:
-                throw new UnsupportedOperationException("Banner Image cannot be created using this method");
+                throw new UnsupportedFieldException("Banner Image cannot be created using this method");
             default:
                 return new AsfTagTextField(asfFieldKey.getFieldName(), value);
         }
@@ -399,7 +398,8 @@ public final class AsfTag extends AbstractTag {
         super.deleteField(fieldKey.getFieldName());
     }
 
-    public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return super.getFields(getAsfFieldKey(checkArgNotNull(genericKey)).getFieldName());
     }
 
@@ -407,7 +407,8 @@ public final class AsfTag extends AbstractTag {
         return super.getAll(getAsfFieldKey(checkArgNotNull(genericKey)).getFieldName());
     }
 
-    public String getFieldAt(final FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(final FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return super.getItem(getAsfFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")).getFieldName(), index);
     }
 
@@ -482,19 +483,8 @@ public final class AsfTag extends AbstractTag {
         setField(createCopyrightField(Copyright));
     }
 
-    /**
-     * Retrieve the first value that exists for this asfkey
-     *
-     * @param asfKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public String getFirst(AsfFieldKey asfKey) throws KeyNotFoundException {
-        if (asfKey == null) {
-            throw new KeyNotFoundException();
-        }
+    public String getFirst(AsfFieldKey asfKey) throws IllegalArgumentException {
+        checkArgNotNull(asfKey);
         return super.getFirst(asfKey.getFieldName());
     }
 
@@ -545,18 +535,19 @@ public final class AsfTag extends AbstractTag {
     }
 
     @Override
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         super.deleteField(getAsfFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")).getFieldName());
         return this;
     }
 
     @Override
-    public String getFirst(final FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
     @Override
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws UnsupportedFieldException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return super.getFirstField(getAsfFieldKey(genericKey).getFieldName());
     }
 

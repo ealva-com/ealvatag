@@ -36,7 +36,7 @@ public interface Artwork {
      *
      * @throws UnsupportedOperationException if AndroidArtwork
      */
-    boolean setImageFromData();
+    boolean setImageFromData() throws UnsupportedOperationException;
 
     /**
      *
@@ -45,7 +45,7 @@ public interface Artwork {
      * @throws IOException if error reading the image data
      * @throws UnsupportedOperationException if AndroidArtwork
      */
-    Object getImage() throws IOException;
+    Object getImage() throws IOException, UnsupportedOperationException;
 
     boolean isLinked();
 

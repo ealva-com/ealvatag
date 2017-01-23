@@ -27,7 +27,6 @@ import ealvatag.audio.wav.WavOptions;
 import ealvatag.logging.Hex;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -258,7 +257,7 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return this;
     }
 
-    public String getFirst(FieldKey genericKey) throws KeyNotFoundException {
+    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
     }
 
@@ -266,15 +265,16 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().getFirst(id);
     }
 
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFieldAt(genericKey, index);
     }
 
-    public List<String> getAll(FieldKey genericKey) throws KeyNotFoundException {
+    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getAll(genericKey);
     }
 
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         getActiveTag().deleteField(genericKey);
         return this;
     }
@@ -302,7 +302,7 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().getArtworkList();
     }
 
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         getActiveTag().deleteArtwork();
         return this;
     }
@@ -332,7 +332,8 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().createArtwork(artwork);
     }
 
-    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFields(genericKey);
     }
 
@@ -348,7 +349,8 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().getFirstField(id);
     }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFirstField(genericKey);
     }
 

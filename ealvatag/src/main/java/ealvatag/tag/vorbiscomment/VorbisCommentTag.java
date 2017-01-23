@@ -29,7 +29,6 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -261,7 +260,8 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return tagFieldToOggField.keySet();
     }
 
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(FieldKey genericKey, int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.ALBUM_ARTIST) {
             switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
@@ -309,7 +309,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return super.getAll(getVorbisCommentFieldKey(genericKey).getFieldName());
     }
 
-    public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
+    public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.ALBUM_ARTIST) {
             TagOptionSingleton.getInstance()
@@ -354,20 +354,8 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return artworkList;
     }
 
-    /**
-     * Retrieve the first value that exists for this vorbis comment key
-     *
-     * @param vorbisCommentKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public List<TagField> get(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException {
-        if (vorbisCommentKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getFields(vorbisCommentKey.getFieldName());
+    public List<TagField> get(VorbisCommentFieldKey vorbisCommentKey) throws IllegalArgumentException {
+        return super.getFields(checkArgNotNull(vorbisCommentKey).getFieldName());
     }
 
     /**
@@ -381,20 +369,8 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return rawdata;
     }
 
-    /**
-     * Retrieve the first value that exists for this vorbis comment key
-     *
-     * @param vorbisCommentKey
-     *
-     * @return
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public String getFirst(VorbisCommentFieldKey vorbisCommentKey) throws KeyNotFoundException {
-        if (vorbisCommentKey == null) {
-            throw new KeyNotFoundException();
-        }
-        return super.getFirst(vorbisCommentKey.getFieldName());
+    public String getFirst(VorbisCommentFieldKey vorbisCommentKey) throws IllegalArgumentException {
+        return super.getFirst(checkArgNotNull(vorbisCommentKey).getFieldName());
     }
 
     /**
@@ -432,7 +408,8 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         }
     }
 
-    public ImmutableList<TagField> getFields(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public ImmutableList<TagField> getFields(FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return super.getFields(getVorbisCommentFieldKey(genericKey).getFieldName());
     }
 
@@ -446,7 +423,8 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return vorbisCommentFieldKey;
     }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return getFirstField(getVorbisCommentFieldKey(genericKey).getFieldName());
     }
 
@@ -490,25 +468,10 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         }
     }
 
-    /**
-     * Delete fields with this vorbisCommentFieldKey
-     *
-     * @param vorbisCommentFieldKey
-     *
-     * @throws ealvatag.tag.KeyNotFoundException
-     */
-    public void deleteField(VorbisCommentFieldKey vorbisCommentFieldKey) throws KeyNotFoundException {
-        if (vorbisCommentFieldKey == null) {
-            throw new KeyNotFoundException();
-        }
-        super.deleteField(vorbisCommentFieldKey.getFieldName());
+    public void deleteField(VorbisCommentFieldKey vorbisCommentFieldKey) throws IllegalArgumentException {
+        super.deleteField(checkArgNotNull(vorbisCommentFieldKey).getFieldName());
     }
 
-    /**
-     * @param vorbisFieldKey
-     *
-     * @return
-     */
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
         return getFields(vorbisFieldKey.getFieldName()).size() != 0;
     }
@@ -575,12 +538,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return this;
     }
 
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public Tag deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws UnsupportedFieldException {
         //New Method
         deleteField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
 
@@ -637,16 +595,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
 
     }
 
-    /**
-     * Create and set field with name of vorbisCommentkey
-     *
-     * @param vorbisCommentKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public void setField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
+    public void setField(String vorbisCommentKey, String value) throws IllegalArgumentException, FieldDataInvalidException {
         TagField tagfield = createField(vorbisCommentKey, value);
         setField(tagfield);
     }
@@ -669,16 +618,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return new VorbisCommentTagField(vorbisCommentFieldKey, value);
     }
 
-    /**
-     * Create and add field with name of vorbisCommentkey
-     *
-     * @param vorbisCommentKey
-     * @param value
-     *
-     * @throws KeyNotFoundException
-     * @throws FieldDataInvalidException
-     */
-    public void addField(String vorbisCommentKey, String value) throws KeyNotFoundException, FieldDataInvalidException {
+    public void addField(String vorbisCommentKey, String value) throws IllegalArgumentException, FieldDataInvalidException {
         TagField tagfield = createField(vorbisCommentKey, value);
         addField(tagfield);
     }

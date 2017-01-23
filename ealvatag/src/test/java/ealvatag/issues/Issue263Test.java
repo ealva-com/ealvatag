@@ -37,7 +37,7 @@ public class Issue263Test extends AbstractTestCase {
 
 
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Issue263Test extends AbstractTestCase {
 
 
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
@@ -86,7 +86,7 @@ public class Issue263Test extends AbstractTestCase {
 
 
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
@@ -151,7 +151,7 @@ public class Issue263Test extends AbstractTestCase {
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
@@ -172,7 +172,7 @@ public class Issue263Test extends AbstractTestCase {
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
@@ -194,7 +194,7 @@ public class Issue263Test extends AbstractTestCase {
             exceptionCaught = e;
         }
         assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedOperationException);
+        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**

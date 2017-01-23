@@ -73,7 +73,8 @@ public final class NullTag implements Tag {
         return this;
     }
 
-    @Override public String getFirst(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public String getFirst(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return "";
     }
 
@@ -81,18 +82,18 @@ public final class NullTag implements Tag {
         return null;
     }
 
-    @Override public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException,
-                                                                                          UnsupportedFieldException {
+    @Override public String getFieldAt(final FieldKey genericKey, final int index)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return "";
     }
 
-    @Override public List<String> getAll(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public List<String> getAll(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return ImmutableList.of();
     }
 
-    @Override public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException,
-                                                                       UnsupportedFieldException,
-                                                                       KeyNotFoundException {
+    @Override public Tag deleteField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return this;
     }
 
@@ -118,7 +119,7 @@ public final class NullTag implements Tag {
         return ImmutableList.of();
     }
 
-    @Override public Tag deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException {
+    @Override public Tag deleteArtwork() throws UnsupportedFieldException {
         return this;
     }
 
@@ -144,8 +145,8 @@ public final class NullTag implements Tag {
         return NullTagField.INSTANCE;
     }
 
-    @Override public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException,
-                                                                                         UnsupportedFieldException {
+    @Override public ImmutableList<TagField> getFields(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return ImmutableList.of();
     }
 
@@ -161,8 +162,8 @@ public final class NullTag implements Tag {
         return Optional.absent();
     }
 
-    @Override public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException,
-                                                                                        UnsupportedFieldException {
+    @Override public Optional<TagField> getFirstField(final FieldKey genericKey)
+            throws IllegalArgumentException, UnsupportedFieldException {
         return Optional.absent();
     }
 

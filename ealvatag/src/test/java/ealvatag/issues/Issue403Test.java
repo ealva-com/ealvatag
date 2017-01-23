@@ -2,7 +2,6 @@ package ealvatag.issues;
 
 import ealvatag.AbstractTestCase;
 import ealvatag.tag.FieldKey;
-import ealvatag.tag.KeyNotFoundException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.id3.ID3v11Tag;
