@@ -175,12 +175,12 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         }
     }
 
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         if (id.equals(FieldKey.COVER_ART.name())) {
             if (images.size() > 0) {
-                return images.get(0);
+                return Optional.<TagField>fromNullable(images.get(0));
             } else {
-                return null;
+                return Optional.absent();
             }
         } else {
             return tag.getFirstField(id);
@@ -190,7 +190,7 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
     public Optional<TagField> getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.COVER_ART) {
-            return Optional.fromNullable(getFirstField(FieldKey.COVER_ART.name()));
+            return getFirstField(FieldKey.COVER_ART.name());
         } else {
             return tag.getFirstField(genericKey);
         }

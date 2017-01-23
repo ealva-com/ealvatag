@@ -447,7 +447,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return Optional.fromNullable(getFirstField(getVorbisCommentFieldKey(genericKey).getFieldName()));
+        return getFirstField(getVorbisCommentFieldKey(genericKey).getFieldName());
     }
 
     public TagField createCompilationField(boolean value) throws UnsupportedFieldException {

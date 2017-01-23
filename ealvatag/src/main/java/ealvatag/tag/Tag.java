@@ -313,6 +313,8 @@ public interface Tag {
 
     TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException;
 
+    // TODO: 1/23/17 Are the getFields() methods necessary anymore or only for testing??
+
     /**
      * Returns a {@link List} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() genericKey}&quot;
      * is the specified one.<br>
@@ -348,7 +350,7 @@ public interface Tag {
     /**
      * Retrieve the first field that exists for this format specific key
      * <p>
-     * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
+     * Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
      *
@@ -357,7 +359,7 @@ public interface Tag {
      * @throws IllegalArgumentException  if {@code id} is null or empty
      * @throws UnsupportedFieldException if the Tag instance does not support the field given by {@code id} parameter
      */
-    TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException;
+    Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * @param genericKey field to search for

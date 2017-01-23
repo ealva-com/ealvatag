@@ -61,13 +61,15 @@ public final class NullTag implements Tag {
         return 0;
     }
 
-    @Override public Tag setField(final FieldKey genericKey, final String... values)
-            throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+    @Override public Tag setField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
+                                                                                            UnsupportedFieldException,
+                                                                                            FieldDataInvalidException {
         return this;
     }
 
-    @Override public Tag addField(final FieldKey genericKey, final String... values)
-            throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+    @Override public Tag addField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
+                                                                                            UnsupportedFieldException,
+                                                                                            FieldDataInvalidException {
         return this;
     }
 
@@ -79,36 +81,37 @@ public final class NullTag implements Tag {
         return null;
     }
 
-    @Override public String getFieldAt(final FieldKey genericKey, final int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+    @Override public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException,
+                                                                                          UnsupportedFieldException {
+        return "";
     }
 
     @Override public List<String> getAll(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+        return ImmutableList.of();
     }
 
-    @Override public Tag deleteField(final FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {
-        return null;
+    @Override public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException,
+                                                                       UnsupportedFieldException,
+                                                                       KeyNotFoundException {
+        return this;
     }
 
     @Override public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+        return this;
     }
 
     @Override public Tag setArtwork(final Artwork artwork)
             throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
-        return null;
+        return this;
     }
 
     @Override public Tag addArtwork(final Artwork artwork)
             throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
-        return null;
+        return this;
     }
 
     @Override public Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException {
-        return null;
+        return Optional.absent();
     }
 
     @Override public List<Artwork> getArtworkList() throws UnsupportedFieldException {
@@ -131,38 +134,39 @@ public final class NullTag implements Tag {
         return false;
     }
 
-    @Override public TagField createField(final FieldKey genericKey, final String... value)
-            throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
-        return null;
+    @Override public TagField createField(final FieldKey genericKey, final String... value) throws IllegalArgumentException,
+                                                                                                   UnsupportedFieldException,
+                                                                                                   FieldDataInvalidException {
+        return NullTagField.INSTANCE;
     }
 
     @Override public TagField createArtwork(final Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
-        return null;
+        return NullTagField.INSTANCE;
     }
 
-    @Override public ImmutableList<TagField> getFields(final FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+    @Override public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException,
+                                                                                         UnsupportedFieldException {
+        return ImmutableList.of();
     }
 
     @Override public Iterator<TagField> getFields() {
-        return null;
+        return ImmutableList.<TagField>of().iterator();
     }
 
     @Override public ImmutableList<TagField> getFields(final String id) {
-        return null;
+        return ImmutableList.of();
     }
 
-    @Override public TagField getFirstField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+    @Override public Optional<TagField> getFirstField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
+        return Optional.absent();
     }
 
-    @Override public Optional<TagField> getFirstField(final FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return null;
+    @Override public Optional<TagField> getFirstField(final FieldKey genericKey) throws IllegalArgumentException,
+                                                                                        UnsupportedFieldException {
+        return Optional.absent();
     }
 
     @Override public TagField createCompilationField(final boolean value) throws UnsupportedFieldException {
-        return null;
+        return NullTagField.INSTANCE;
     }
 }

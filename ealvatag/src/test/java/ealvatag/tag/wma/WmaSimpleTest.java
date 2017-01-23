@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
@@ -427,22 +428,22 @@ public class WmaSimpleTest extends AbstractTestCase
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
 
-            TagField tf = tag.getFirstField(AsfFieldKey.ALBUM.getFieldName());
+            TagField tf = tag.getFirstField(AsfFieldKey.ALBUM.getFieldName()).or(NullTagField.INSTANCE);
             assertEquals("WM/AlbumTitle", tf.getId());
             assertEquals("ALBUM_value", ((TagTextField) tf).getContent());
             assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
-            tf = tag.getFirstField(AsfFieldKey.ALBUM_ARTIST.getFieldName());
+            tf = tag.getFirstField(AsfFieldKey.ALBUM_ARTIST.getFieldName()).or(NullTagField.INSTANCE);
             assertEquals("WM/AlbumArtist", tf.getId());
             assertEquals("ALBUM_ARTIST_value", ((TagTextField) tf).getContent());
             assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
-            tf = tag.getFirstField(AsfFieldKey.AMAZON_ID.getFieldName());
+            tf = tag.getFirstField(AsfFieldKey.AMAZON_ID.getFieldName()).or(NullTagField.INSTANCE);
             assertEquals("ASIN", tf.getId());
             assertEquals("AMAZON_ID_value", ((TagTextField) tf).getContent());
             assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());
 
-            tf = tag.getFirstField(AsfFieldKey.TITLE.getFieldName());
+            tf = tag.getFirstField(AsfFieldKey.TITLE.getFieldName()).or(NullTagField.INSTANCE);
             assertEquals("TITLE", tf.getId());
             assertEquals("TITLE_value", ((TagTextField) tf).getContent());
             assertEquals(StandardCharsets.UTF_16LE, ((TagTextField) tf).getEncoding());

@@ -842,7 +842,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return ImmutableList.of();
     }
 
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> results = null;
 
         if (FieldKey.ARTIST.name().equals(id)) {
@@ -861,10 +861,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
 
         if (results != null) {
             if (results.size() > 0) {
-                return results.get(0);
+                return Optional.fromNullable(results.get(0));
             }
         }
-        return null;
+        return Optional.absent();
     }
 
     public Optional<TagField> getFirstField(final FieldKey genericKey) {

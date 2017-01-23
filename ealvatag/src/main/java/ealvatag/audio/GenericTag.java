@@ -172,7 +172,7 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public String getFieldAt(final FieldKey genericKey, final int index) throws KeyNotFoundException {
+    public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             return getItem(genericKey.name(), index);
@@ -216,7 +216,7 @@ public abstract class GenericTag extends AbstractTag {
     public Optional<TagField> getFirstField(final FieldKey genericKey) throws KeyNotFoundException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, genericKey);
         if (getSupportedFields().contains(genericKey)) {
-            return Optional.fromNullable(getFirstField(genericKey.name()));
+            return getFirstField(genericKey.name());
         } else {
             throw new UnsupportedFieldException(genericKey.name());
         }

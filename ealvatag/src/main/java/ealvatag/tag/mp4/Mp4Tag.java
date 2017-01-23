@@ -353,7 +353,7 @@ public class Mp4Tag extends AbstractTag {
         return super.getFields(mp4FieldKey.getFieldName());
     }
 
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> fields = getFields(genericKey);
         if (fields.size() > index) {
             TagField field = fields.get(index);
@@ -387,11 +387,9 @@ public class Mp4Tag extends AbstractTag {
         return Optional.fromNullable(fields.get(0));
     }
 
-    public Mp4TagField getFirstField(Mp4FieldKey mp4Key) throws KeyNotFoundException {
-        if (mp4Key == null) {
-            throw new KeyNotFoundException();
-        }
-        return (Mp4TagField)super.getFirstField(mp4Key.getFieldName());
+    public Mp4TagField getFirstField(Mp4FieldKey mp4Key) throws IllegalArgumentException {
+        checkArgNotNull(mp4Key);
+        return (Mp4TagField)super.getFirstField(mp4Key.getFieldName()).orNull();
     }
 
     public Tag deleteField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException, KeyNotFoundException {

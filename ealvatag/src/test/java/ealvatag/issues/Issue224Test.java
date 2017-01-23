@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.NullTag;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.id3.ID3v23Frame;
@@ -40,7 +41,8 @@ public class Issue224Test extends AbstractTestCase
             assertEquals(11, tag.getFieldCount());
             assertTrue(tag instanceof ID3v23Tag);
             ID3v23Tag id3v23Tag = (ID3v23Tag) tag;
-            TagField coverArtField = id3v23Tag.getFirstField(ealvatag.tag.id3.ID3v23FieldKey.COVER_ART.getFieldName());
+            TagField coverArtField = id3v23Tag.getFirstField(ealvatag.tag.id3.ID3v23FieldKey.COVER_ART.getFieldName())
+                                              .or(NullTagField.INSTANCE);
             assertTrue(coverArtField instanceof ID3v23Frame);
             assertTrue(((ID3v23Frame) coverArtField).getBody() instanceof FrameBodyAPIC);
             FrameBodyAPIC body = (FrameBodyAPIC) ((ID3v23Frame) coverArtField).getBody();

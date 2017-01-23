@@ -128,7 +128,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFieldAt(genericKey, index);
     }
 
@@ -220,7 +220,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFirstField(id);
     }
 

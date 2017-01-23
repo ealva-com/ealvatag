@@ -356,7 +356,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.YEAR) {
             AggregatedFrame af = (AggregatedFrame)getFrame(TyerTdatAggregatedFrame.ID_TYER_TDAT);

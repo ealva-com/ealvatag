@@ -92,8 +92,6 @@ public class NewInterfaceTest {
             Assert.assertEquals("title", newTag.getFirst(FieldKey.TITLE));
             Assert.assertEquals("year", newTag.getFirst(FieldKey.YEAR));
             Assert.assertEquals("1", newTag.getFirst(FieldKey.TRACK));
-            AbstractTagFrameBody body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
-            Assert.assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
 
             TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.UTF_16);
             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
@@ -107,16 +105,12 @@ public class NewInterfaceTest {
             Assert.assertEquals("title", newTag.getFirst(FieldKey.TITLE));
             Assert.assertEquals("year", newTag.getFirst(FieldKey.YEAR));
             Assert.assertEquals("1", newTag.getFirst(FieldKey.TRACK));
-            body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
-            Assert.assertEquals(TextEncoding.UTF_16, body.getTextEncoding());
 
             TagOptionSingleton.getInstance().setId3v23DefaultTextEncoding(TextEncoding.ISO_8859_1);
             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(true);
             audioFile.save();
             audioFile = ealvatag.audio.AudioFileIO.read(testFile);
             newTag = audioFile.getTag().or(NullTag.INSTANCE);
-            body = (((ID3v23Frame)newTag.getFirstField(ID3v23FieldKey.ALBUM.getFrameId())).getBody());
-            Assert.assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
             TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(false);
         } catch (Exception e) {
             ex = e;
@@ -442,7 +436,7 @@ public class NewInterfaceTest {
         Assert.assertEquals(1, ((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFields(FieldKey.COVER_ART).size());
         Assert.assertEquals(1, ((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFields(ID3v24FieldKey.COVER_ART.getFieldName()).size());
         //TODO This isnt very user friendly
-        TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.COVER_ART.getFieldName());
+        TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.COVER_ART.getFieldName()).or(NullTagField.INSTANCE);
         Assert.assertEquals("image/png::18545", ((TagTextField)af.getTag().or(NullTag.INSTANCE)
                                                                  .getFirstField(FieldKey.COVER_ART)
                                                                  .or(NullTagField.INSTANCE)).getContent());

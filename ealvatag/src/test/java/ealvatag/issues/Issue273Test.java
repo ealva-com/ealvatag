@@ -38,7 +38,8 @@ public class Issue273Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
-            AbstractID3v2Frame frame = tag.getFirstField("COMM");
+            AbstractID3v2Frame frame = (AbstractID3v2Frame)tag.getFirstField("COMM").orNull();
+            assertNotNull(frame);
             FrameBodyCOMM fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("eng",fb.getLanguage());
             af.save();
@@ -52,7 +53,8 @@ public class Issue273Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
-            frame = tag.getFirstField("COMM");
+            frame = (AbstractID3v2Frame)tag.getFirstField("COMM").orNull();
+            assertNotNull(frame);
             fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("XXX",fb.getLanguage());
             af.save();
@@ -63,7 +65,8 @@ public class Issue273Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
-            frame = tag.getFirstField("COMM");
+            frame = (AbstractID3v2Frame)tag.getFirstField("COMM").orNull();
+            assertNotNull(frame);
             fb = (FrameBodyCOMM)frame.getBody();
             assertEquals("\0\0\0",fb.getLanguage());
             af.save();

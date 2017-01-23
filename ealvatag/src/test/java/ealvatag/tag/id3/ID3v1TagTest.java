@@ -6,6 +6,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
@@ -193,28 +194,28 @@ public class ID3v1TagTest {
 
         v1Tag.setField(new ID3v1TagField(FieldKey.ARTIST.name(), "artist"));
         Assert.assertEquals("artist", ((TagTextField)v1Tag.getFields(FieldKey.ARTIST).get(0)).getContent());
-        Assert.assertEquals("artist", ((TagTextField)v1Tag.getFirstField(FieldKey.ARTIST.name())).getContent());
+        Assert.assertEquals("artist", ((TagTextField)v1Tag.getFirstField(FieldKey.ARTIST.name()).or(NullTagField.INSTANCE)).getContent());
         Assert.assertEquals("artist", ((TagTextField)(v1Tag.getFields(FieldKey.ARTIST.name()).get(0))).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.ALBUM.name(), "album"));
         Assert.assertEquals("album", ((TagTextField)v1Tag.getFields(FieldKey.ALBUM).get(0)).getContent());
-        Assert.assertEquals("album", ((TagTextField)v1Tag.getFirstField(FieldKey.ALBUM.name())).getContent());
+        Assert.assertEquals("album", ((TagTextField)v1Tag.getFirstField(FieldKey.ALBUM.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.TITLE.name(), "title"));
         Assert.assertEquals("title", ((TagTextField)v1Tag.getFields(FieldKey.TITLE).get(0)).getContent());
-        Assert.assertEquals("title", ((TagTextField)v1Tag.getFirstField(FieldKey.TITLE.name())).getContent());
+        Assert.assertEquals("title", ((TagTextField)v1Tag.getFirstField(FieldKey.TITLE.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.YEAR.name(), "year"));
         Assert.assertEquals("year", ((TagTextField)v1Tag.getFields(FieldKey.YEAR).get(0)).getContent());
-        Assert.assertEquals("year", ((TagTextField)v1Tag.getFirstField(FieldKey.YEAR.name())).getContent());
+        Assert.assertEquals("year", ((TagTextField)v1Tag.getFirstField(FieldKey.YEAR.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.GENRE.name(), "Country"));
         Assert.assertEquals("Country", ((TagTextField)v1Tag.getFields(FieldKey.GENRE).get(0)).getContent());
-        Assert.assertEquals("Country", ((TagTextField)v1Tag.getFirstField(FieldKey.GENRE.name())).getContent());
+        Assert.assertEquals("Country", ((TagTextField)v1Tag.getFirstField(FieldKey.GENRE.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.COMMENT.name(), "comment"));
         Assert.assertEquals("comment", ((TagTextField)v1Tag.getFields(FieldKey.COMMENT).get(0)).getContent());
-        Assert.assertEquals("comment", ((TagTextField)v1Tag.getFirstField(FieldKey.COMMENT.name())).getContent());
+        Assert.assertEquals("comment", ((TagTextField)v1Tag.getFirstField(FieldKey.COMMENT.name()).or(NullTagField.INSTANCE)).getContent());
 
         //Check nothing been overwritten
         Assert.assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));

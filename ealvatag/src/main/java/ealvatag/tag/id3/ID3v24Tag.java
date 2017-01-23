@@ -1306,7 +1306,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
     }
 
     @Override
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);

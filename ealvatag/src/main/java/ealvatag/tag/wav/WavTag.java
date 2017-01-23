@@ -344,7 +344,7 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().getFields(id);
     }
 
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFirstField(id);
     }
 

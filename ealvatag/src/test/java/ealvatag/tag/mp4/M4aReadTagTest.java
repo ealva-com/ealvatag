@@ -1,6 +1,7 @@
 package ealvatag.tag.mp4;
 
 import ealvatag.tag.NullTag;
+import ealvatag.tag.TagField;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -1034,7 +1035,9 @@ public class M4aReadTagTest extends TestCase
             assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
             assertEquals(1, tag.getFields(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
-            assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
+            TagField tagField = tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).orNull();
+            assertNotNull(tagField);
+            assertEquals("AApr", tagField.getId());
             //Make a change and save
             tag.setField(FieldKey.TITLE,"NEWTITLE\u00A9\u01ff");      //test UTF8 encoding
             tag.setField(tag.createField(Mp4FieldKey.CONTENT_TYPE, Mp4ContentTypeValue.TV_SHOW.getIdAsString()));
@@ -1043,7 +1046,9 @@ public class M4aReadTagTest extends TestCase
             f = AudioFileIO.read(testFile);
             tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
-            assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
+            tagField = tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).orNull();
+            assertNotNull(tagField);
+            assertEquals("AApr", tagField.getId());
             assertEquals("NEWTITLE\u00A9\u01ff", tag.getFirst(FieldKey.TITLE));
             assertEquals(Mp4ContentTypeValue.TV_SHOW.getIdAsString(), tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
             assertEquals(1, tag.getFields(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());

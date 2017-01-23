@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -42,31 +43,31 @@ public class Issue241Test extends AbstractTestCase {
             af.save();
             af = AudioFileIO.read(testFile);
             tag = af.getTag().or(NullTag.INSTANCE);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
-            TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName());
+            assertEquals("eng", tag.getFirst(FieldKey.LANGUAGE));
+            assertEquals("C#", tag.getFirst(FieldKey.KEY));
+            assertEquals("English", Languages.getInstanceOf().getValue(tag.getFirst(FieldKey.LANGUAGE)));
+            TagField tagField = tag.getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName()).or(NullTagField.INSTANCE);
             assertTrue(tagField instanceof ID3v24Frame);
             assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
             assertTrue(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
 
-            tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.KEY.getFieldName());
+            tagField = tag.getFirstField(ID3v24FieldKey.KEY.getFieldName()).or(NullTagField.INSTANCE);
             assertTrue(tagField instanceof ID3v24Frame);
             assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
             assertTrue(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());
 
             tag.setField(FieldKey.LANGUAGE, "fred");
             af.save();
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName());
+            assertEquals("fred", tag.getFirst(FieldKey.LANGUAGE));
+            tagField = tag.getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName()).or(NullTagField.INSTANCE);
             assertTrue(tagField instanceof ID3v24Frame);
             assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
             assertFalse(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
 
             tag.setField(FieldKey.KEY, "keys");
             af.save();
-            assertEquals("keys", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(ID3v24FieldKey.KEY.getFieldName());
+            assertEquals("keys", tag.getFirst(FieldKey.KEY));
+            tagField = tag.getFirstField(ID3v24FieldKey.KEY.getFieldName()).or(NullTagField.INSTANCE);
             assertTrue(tagField instanceof ID3v24Frame);
             assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
             assertFalse(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());

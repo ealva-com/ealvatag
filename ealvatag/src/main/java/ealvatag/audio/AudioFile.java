@@ -20,6 +20,8 @@ package ealvatag.audio;
 import com.google.common.base.Optional;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.Tag;
+import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.reference.ID3V2Version;
 
 import java.io.File;
 
@@ -98,6 +100,7 @@ public interface AudioFile {
      * @return the existing tag converted to the default type, or a new default tag for the given file type
      *
      * @throws UnsupportedFileType if the file type is unrecognized
+     * @see TagOptionSingleton#setID3V2Version(ID3V2Version)
      * @see #getTag()
      * @see #setNewDefaultTag()
      */

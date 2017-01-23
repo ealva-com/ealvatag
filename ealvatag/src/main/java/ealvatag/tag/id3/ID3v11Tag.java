@@ -23,6 +23,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
@@ -357,17 +358,17 @@ public class ID3v11Tag extends ID3v1Tag {
         }
     }
 
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> results;
 
         if (FieldKey.TRACK.name().equals(id)) {
             results = getTrack();
             if (results != null) {
                 if (results.size() > 0) {
-                    return results.get(0);
+                    return Optional.fromNullable(results.get(0));
                 }
             }
-            return null;
+            return Optional.absent();
         } else {
             return super.getFirstField(id);
         }

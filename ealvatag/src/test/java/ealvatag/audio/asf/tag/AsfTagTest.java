@@ -1,5 +1,6 @@
 package ealvatag.audio.asf.tag;
 
+import ealvatag.tag.NullTagField;
 import junit.framework.TestCase;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -65,7 +66,7 @@ public class AsfTagTest extends TestCase
         final AsfTag asfTag = new AsfTag();
         AsfTagTextField textField = asfTag.createField(AsfFieldKey.ALBUM, AsfFieldKey.ALBUM.toString());
         asfTag.setField(textField);
-        assertSame(textField, asfTag.getFirstField(AsfFieldKey.ALBUM.getFieldName()));
+        assertSame(textField, asfTag.getFirstField(AsfFieldKey.ALBUM.getFieldName()).or(NullTagField.INSTANCE));
     }
 
     public void testUncommonAsfTagFields()

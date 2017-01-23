@@ -1,5 +1,6 @@
 package ealvatag.tag.id3;
 
+import ealvatag.tag.NullTagField;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -184,44 +185,44 @@ public class ID3v11TagTest extends TestCase
         assertEquals("artist", ((TagTextField) v1Tag.getFields(FieldKey.ARTIST).get(0)).getContent());
         assertEquals("artist", v1Tag.getFirst(FieldKey.ARTIST));
         assertEquals("artist", ((TagTextField) (v1Tag.getArtist().get(0))).getContent());
-        assertEquals("artist", ((TagTextField) v1Tag.getFirstField(FieldKey.ARTIST.name())).getContent());
+        assertEquals("artist", ((TagTextField) v1Tag.getFirstField(FieldKey.ARTIST.name()).or(NullTagField.INSTANCE)).getContent());
         assertEquals("artist", ((TagTextField) (v1Tag.getFields(FieldKey.ARTIST.name()).get(0))).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.ALBUM.name(), "album"));
         assertEquals("album", ((TagTextField) v1Tag.getFields(FieldKey.ALBUM).get(0)).getContent());
         assertEquals("album", v1Tag.getFirst(FieldKey.ALBUM));
         assertEquals("album", ((TagTextField) (v1Tag.getAlbum().get(0))).getContent());
-        assertEquals("album", ((TagTextField) v1Tag.getFirstField(FieldKey.ALBUM.name())).getContent());
+        assertEquals("album", ((TagTextField) v1Tag.getFirstField(FieldKey.ALBUM.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.TITLE.name(), "title"));
         assertEquals("title", ((TagTextField) v1Tag.getFields(FieldKey.TITLE).get(0)).getContent());
         assertEquals("title", v1Tag.getFirst(FieldKey.TITLE));
         assertEquals("title", ((TagTextField) (v1Tag.getTitle().get(0))).getContent());
-        assertEquals("title", ((TagTextField) v1Tag.getFirstField(FieldKey.TITLE.name())).getContent());
+        assertEquals("title", ((TagTextField) v1Tag.getFirstField(FieldKey.TITLE.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.YEAR.name(), "year"));
         assertEquals("year", ((TagTextField) v1Tag.getFields(FieldKey.YEAR).get(0)).getContent());
         assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));
         assertEquals("year", ((TagTextField) (v1Tag.getYear().get(0))).getContent());
-        assertEquals("year", ((TagTextField) v1Tag.getFirstField(FieldKey.YEAR.name())).getContent());
+        assertEquals("year", ((TagTextField) v1Tag.getFirstField(FieldKey.YEAR.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.GENRE.name(), "Country"));
         assertEquals("Country", ((TagTextField) v1Tag.getFields(FieldKey.GENRE).get(0)).getContent());
         assertEquals("Country", v1Tag.getFirst(FieldKey.GENRE));
         assertEquals("Country", ((TagTextField) (v1Tag.getGenre().get(0))).getContent());
-        assertEquals("Country", ((TagTextField) v1Tag.getFirstField(FieldKey.GENRE.name())).getContent());
+        assertEquals("Country", ((TagTextField) v1Tag.getFirstField(FieldKey.GENRE.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.COMMENT.name(), "comment"));
         assertEquals("comment", ((TagTextField) v1Tag.getFields(FieldKey.COMMENT).get(0)).getContent());
         assertEquals("comment", v1Tag.getFirstComment());
         assertEquals("comment", ((TagTextField) (v1Tag.getFields(FieldKey.COMMENT).get(0))).getContent());
-        assertEquals("comment", ((TagTextField) v1Tag.getFirstField(FieldKey.COMMENT.name())).getContent());
+        assertEquals("comment", ((TagTextField) v1Tag.getFirstField(FieldKey.COMMENT.name()).or(NullTagField.INSTANCE)).getContent());
 
         v1Tag.setField(new ID3v1TagField(FieldKey.TRACK.name(), "5"));
         assertEquals("5", ((TagTextField) v1Tag.getFields(FieldKey.TRACK).get(0)).getContent());
         assertEquals("5", v1Tag.getFirst(FieldKey.TRACK));
         assertEquals("5", ((TagTextField) (v1Tag.getTrack().get(0))).getContent());
-        assertEquals("5", ((TagTextField) v1Tag.getFirstField(FieldKey.TRACK.name())).getContent());
+        assertEquals("5", ((TagTextField) v1Tag.getFirstField(FieldKey.TRACK.name()).or(NullTagField.INSTANCE)).getContent());
 
         //Check nothing been overwritten
         assertEquals("year", v1Tag.getFirst(FieldKey.YEAR));

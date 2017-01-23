@@ -307,9 +307,9 @@ public abstract class AbstractTag implements TagFieldContainer {
     }
 
     @Override
-    public TagField getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
         List<TagField> l = getFields(id);
-        return (l.size() != 0) ? l.get(0) : null;
+        return l.size() != 0 ? Optional.fromNullable(l.get(0)) : Optional.<TagField>absent();
     }
 
     @Override

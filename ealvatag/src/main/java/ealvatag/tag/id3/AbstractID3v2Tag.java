@@ -618,7 +618,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * @return
      */
     public String getFirst(String identifier) throws IllegalArgumentException, UnsupportedFieldException {
-        AbstractID3v2Frame frame = getFirstField(identifier);
+        AbstractID3v2Frame frame = (AbstractID3v2Frame)getFirstField(identifier).orNull();
         if (frame == null) {
             return "";
         }
@@ -644,7 +644,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @return
      */
-    public String getFieldAt(FieldKey genericKey, int index) throws KeyNotFoundException {
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
 
         //Special case here because the generic key to frameid/subid mapping is identical for trackno versus tracktotal
@@ -1014,15 +1014,13 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @return tag field or null if doesn't exist
      */
-    public AbstractID3v2Frame getFirstField(String identifier) throws IllegalArgumentException, UnsupportedFieldException {
+    public Optional<TagField> getFirstField(String identifier) throws IllegalArgumentException, UnsupportedFieldException {
         Object object = getFrame(identifier);
-        if (object == null) {
-            return null;
-        }
         if (object instanceof List) {
-            return ((List<AbstractID3v2Frame>)object).get(0);
+            //noinspection unchecked
+            return Optional.of(((List<TagField>)object).get(0));
         } else {
-            return (AbstractID3v2Frame)object;
+            return Optional.fromNullable((TagField)object);
         }
     }
 

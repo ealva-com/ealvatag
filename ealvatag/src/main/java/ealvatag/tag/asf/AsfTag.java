@@ -557,7 +557,7 @@ public final class AsfTag extends AbstractTag {
 
     @Override
     public Optional<TagField> getFirstField(final FieldKey genericKey) throws UnsupportedFieldException {
-        return Optional.fromNullable(super.getFirstField(getAsfFieldKey(genericKey).getFieldName()));
+        return super.getFirstField(getAsfFieldKey(genericKey).getFieldName());
     }
 
     public boolean hasField(FieldKey genericKey) {
