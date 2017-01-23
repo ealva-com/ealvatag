@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v23Tag;
 
 import java.io.File;
@@ -34,28 +35,28 @@ public class Issue239Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COMMENT).size());
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.COMMENT,"comment1");
-            mp3File.getTag().addField(FieldKey.COMMENT,"comment2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.COMMENT,"comment1");
+            mp3File.getTag().or(NullTag.INSTANCE).addField(FieldKey.COMMENT,"comment2");
 
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertTrue(mp3File.getTag() instanceof ID3v23Tag);
-            assertEquals(2,mp3File.getTag().getFields(FieldKey.COMMENT).size());
+            assertTrue(mp3File.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
+            assertEquals(2,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COMMENT).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.COMMENT);
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.COMMENT);
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COMMENT).size());
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.COMMENT).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COMMENT).size());
 
         }
         catch (Exception e)
@@ -86,28 +87,28 @@ public class Issue239Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
-            mp3File.getTag().addField(FieldKey.CUSTOM1,"comment2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.CUSTOM1,"comment1");
+            mp3File.getTag().or(NullTag.INSTANCE).addField(FieldKey.CUSTOM1,"comment2");
 
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertTrue(mp3File.getTag() instanceof ID3v23Tag);
-            assertEquals(2,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            assertTrue(mp3File.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
+            assertEquals(2,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.CUSTOM1);
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.CUSTOM1);
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
 
         }
         catch (Exception e)
@@ -138,30 +139,30 @@ public class Issue239Test extends AbstractTestCase
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.CUSTOM1,"comment1");
-            mp3File.getTag().addField(FieldKey.CUSTOM2,"comment2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.CUSTOM1,"comment1");
+            mp3File.getTag().or(NullTag.INSTANCE).addField(FieldKey.CUSTOM2,"comment2");
 
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertTrue(mp3File.getTag() instanceof ID3v23Tag);
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
+            assertTrue(mp3File.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.CUSTOM1);
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.CUSTOM2).size());
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.CUSTOM1);
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM2).size());
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.CUSTOM1).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.CUSTOM2).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM1).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.CUSTOM2).size());
 
         }
         catch (Exception e)

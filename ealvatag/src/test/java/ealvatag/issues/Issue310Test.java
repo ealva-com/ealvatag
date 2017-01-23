@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.images.ArtworkFactory;
 
 import java.io.File;
@@ -32,10 +33,10 @@ public class Issue310Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test85.mp4",new File("test85Test1.mp4"));
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(FieldKey.ARTIST,"Kenny Rankin1");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "Kenny Rankin1");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("Kenny Rankin1",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("Kenny Rankin1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
         }
         catch (Exception e)
         {
@@ -64,10 +65,10 @@ public class Issue310Test extends AbstractTestCase
                testFile = AbstractTestCase.copyAudioToTmp("test85.mp4",new File("test85Test2.mp4"));
                AudioFile af = AudioFileIO.read(testFile);
 
-               af.getTag().deleteField(FieldKey.ENCODER);
+               af.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ENCODER);
                af.save();
                af = AudioFileIO.read(testFile);
-               assertEquals("",af.getTag().getFirst(FieldKey.ENCODER));
+               assertEquals("",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENCODER));
            }
            catch (Exception e)
            {
@@ -96,7 +97,7 @@ public class Issue310Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test85.mp4",new File("test85Test3.mp4"));
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png")));
+            af.getTag().or(NullTag.INSTANCE).setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png")));
             af.save();
             af = AudioFileIO.read(testFile);
         }

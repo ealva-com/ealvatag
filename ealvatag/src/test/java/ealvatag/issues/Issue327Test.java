@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v23Tag;
 
 import java.io.File;
@@ -61,9 +62,9 @@ public class Issue327Test extends AbstractTestCase
 
         //What does ealvatag read the values back as
         f = (MP3File)AudioFileIO.read(testFile);
-        assertEquals("Ϟ",f.getTag().getFirst(FieldKey.ALBUM_ARTIST));
-        assertEquals("Ϟ",f.getTag().getFieldAt(FieldKey.ALBUM_ARTIST, 0));
-        assertEquals("Ϟ",f.getTag().getFieldAt(FieldKey.ALBUM_ARTIST, 1));
+        assertEquals("Ϟ",f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTIST));
+        assertEquals("Ϟ",f.getTag().or(NullTag.INSTANCE).getFieldAt(FieldKey.ALBUM_ARTIST, 0));
+        assertEquals("Ϟ",f.getTag().or(NullTag.INSTANCE).getFieldAt(FieldKey.ALBUM_ARTIST, 1));
 
     }
 }

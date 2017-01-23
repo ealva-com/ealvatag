@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 
@@ -38,7 +39,7 @@ public class FrameTPOSTest extends AbstractTestCase
         try
         {
             AudioFile af = AudioFileIO.read(orig);
-            Tag newTags = (Tag)af.getTag();
+            Tag newTags = (Tag)af.getTag().or(NullTag.INSTANCE);
             Iterator<TagField> i = newTags.getFields();
             while(i.hasNext())
             {

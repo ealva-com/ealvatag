@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -27,7 +28,7 @@ public class Issue404Test extends AbstractTestCase
         {
             File orig = AbstractTestCase.copyAudioToTmp("test3811111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111...........................................................m4a");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag().setField(FieldKey.ALBUM, "Albumstuff");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "Albumstuff");
             af.save();
         }
         catch(Exception e)

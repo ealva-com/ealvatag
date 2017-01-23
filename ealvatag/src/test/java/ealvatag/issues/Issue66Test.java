@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
@@ -29,10 +30,10 @@ public class Issue66Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("test118.m4a");
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(af.getTag().getFirst(FieldKey.ARTIST), "Shahmen");
+            assertEquals(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST), "Shahmen");
 
 
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             if (tag != null)
             {
                 AudioHeader head = af.getAudioHeader();

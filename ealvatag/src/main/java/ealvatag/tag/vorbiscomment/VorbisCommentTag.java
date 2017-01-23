@@ -423,7 +423,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return new VorbisCommentTagField(vorbisCommentFieldKey.getFieldName(), value);
     }
 
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         try {
             return createField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE,
                                new String(Base64Coder.encode(createMetadataBlockDataPicture(artwork).getRawContent())));
@@ -580,13 +580,14 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
      *
      * @throws KeyNotFoundException
      */
-    public void deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws KeyNotFoundException {
         //New Method
         deleteField(VorbisCommentFieldKey.METADATA_BLOCK_PICTURE);
 
         //Old Method
         deleteField(VorbisCommentFieldKey.COVERART);
         deleteField(VorbisCommentFieldKey.COVERARTMIME);
+        return this;
     }
 
     protected boolean isAllowedEncoding(Charset enc) {

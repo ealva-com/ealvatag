@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -33,13 +34,13 @@ public class Issue268Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
 
-            af.getTag().setField(FieldKey.ALBUM,"FRED");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"FRED");
             af.save();
             af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("FRED",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
 
         }

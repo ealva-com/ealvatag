@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.Mp4Tag;
 
@@ -34,14 +35,14 @@ public class Issue277Test extends AbstractTestCase
             testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
 
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(0,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
+            assertEquals(0,af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.IS_COMPILATION).size());
 
             //Old way
-            af.getTag().setField(FieldKey.IS_COMPILATION,"1");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.IS_COMPILATION,"1");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals(1,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
-            assertEquals("1",af.getTag().getFirst(FieldKey.IS_COMPILATION));
+            assertEquals(1,af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.IS_COMPILATION).size());
+            assertEquals("1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
 
         }
@@ -72,14 +73,14 @@ public class Issue277Test extends AbstractTestCase
             testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
 
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(0,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
+            assertEquals(0,af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.IS_COMPILATION).size());
 
             //Old way
-            af.getTag().setField(FieldKey.IS_COMPILATION,"true");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.IS_COMPILATION,"true");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals(1,af.getTag().getFields(FieldKey.IS_COMPILATION).size());
-            assertEquals("1",af.getTag().getFirst(FieldKey.IS_COMPILATION));
+            assertEquals(1,af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.IS_COMPILATION).size());
+            assertEquals("1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
 
         }
@@ -110,11 +111,11 @@ public class Issue277Test extends AbstractTestCase
             testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
 
             AudioFile af = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag)af.getTag();
+            Mp4Tag tag = (Mp4Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals(0,tag.get(Mp4FieldKey.RATING).size());
 
             //Old way
-            af.getTag().setField(FieldKey.RATING,"1");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.RATING,"1");
             af.save();
             af = AudioFileIO.read(testFile);
             assertEquals(1,tag.get(Mp4FieldKey.RATING).size());
@@ -149,10 +150,10 @@ public class Issue277Test extends AbstractTestCase
             testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
 
             AudioFile af = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag)af.getTag();
+            Mp4Tag tag = (Mp4Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals(0,tag.get(Mp4FieldKey.RATING).size());
 
-            af.getTag().setField(FieldKey.RATING,"true");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.RATING,"true");
 
 
         }

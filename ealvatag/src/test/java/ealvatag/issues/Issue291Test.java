@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -31,11 +32,11 @@ public class Issue291Test extends AbstractTestCase
         {
             testFile = AbstractTestCase.copyAudioToTmp("test83.mp4");
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println("Tag is"+af.getTag().toString());
-            af.getTag().setField(FieldKey.ARTIST,"Kenny Rankin1");
+            System.out.println("Tag is"+af.getTag().or(NullTag.INSTANCE).toString());
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST,"Kenny Rankin1");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("Kenny Rankin1",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("Kenny Rankin1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
         }
         catch (Exception e)
         {

@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.KeyNotFoundException;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class Issue319Test extends AbstractTestCase
 
 
         MP3File audioFile = (MP3File)AudioFileIO.read(file1);
-        Tag tag = audioFile.getTag();
+        Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
 
         FieldKey key = FieldKey.DISC_NO;
         try {

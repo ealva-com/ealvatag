@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -24,15 +25,15 @@ public class Issue452Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("test110.mp3", new File("testFindAudioHeaderWhenTagSizeIsTooShortAndHasNullPadding.mp3"));
         MP3File mp3File = new MP3File(testFile);
         System.out.println("AudioHeaderBefore"+mp3File.getMP3AudioHeader());
-        System.out.println("AlbumField:"+mp3File.getTag().getFirst(FieldKey.ALBUM));
+        System.out.println("AlbumField:"+mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
         assertEquals(0x54adf, mp3File.getMP3AudioHeader().getMp3StartByte());
 
-        mp3File.getTag().setField(FieldKey.ALBUM,"newalbum");
+        mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"newalbum");
         mp3File.save();
         mp3File = new MP3File(testFile);
         assertEquals(0x54adf, mp3File.getMP3AudioHeader().getMp3StartByte());
         System.out.println("AudioHeaderAfter"+mp3File.getMP3AudioHeader());
-        System.out.println("AlbumField"+mp3File.getTag().getFirst(FieldKey.ALBUM));
+        System.out.println("AlbumField"+mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
 

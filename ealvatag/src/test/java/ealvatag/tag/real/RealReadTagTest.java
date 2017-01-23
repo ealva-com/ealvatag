@@ -7,6 +7,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 
@@ -75,7 +76,7 @@ public class RealReadTagTest extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp(filename);
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals(3, tag.getFieldCount()); // If this line fails we need to update our test as the RealMedia tag parser has been augmented
         assertEquals(title, tag.getFirst(FieldKey.TITLE));
         assertEquals(artist, tag.getFirst(FieldKey.ARTIST));

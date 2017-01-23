@@ -17,6 +17,7 @@
 
 package ealvatag.audio;
 
+import com.google.common.base.Optional;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.Tag;
 
@@ -65,9 +66,9 @@ public interface AudioFile {
      * not allow there to be no tag so in this case the reader would return an empty tag whereas for others such
      * as mp3 it is purely optional.
      *
-     * @return Returns the tag contained in this AudioFile, or null if no tag exists.
+     * @return Returns the tag contained in this AudioFile
      */
-    Tag getTag();
+    Optional<Tag> getTag();
 
     /**
      * Discards the current {@link Tag}, makes and sets a new {@link Tag} of the default type, and returns the new {@link Tag}

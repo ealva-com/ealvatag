@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -31,7 +32,7 @@ public class Issue222Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            assertTrue(af.getTag().isEmpty());    //But empty
+            assertTrue(af.getTag().or(NullTag.INSTANCE).isEmpty());    //But empty
         }
         catch(Exception e)
         {

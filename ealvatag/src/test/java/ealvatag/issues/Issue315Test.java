@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -34,7 +35,7 @@ public class Issue315Test extends AbstractTestCase
 
 
             //Modify File
-            af.getTag().setField(FieldKey.TITLE,"newtitle");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.TITLE, "newtitle");
             af.save();
 
             //Reread File

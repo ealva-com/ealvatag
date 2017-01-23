@@ -34,6 +34,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 
 /**
+ *
  * Created by Paul on 28/01/2016.
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter
@@ -55,7 +56,7 @@ public abstract class AudioFileWriter2 extends AudioFileWriter
         checkCanWriteAndSize(af, file);
         try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel())
         {
-            deleteTag(af.getTag(), channel, file.getAbsolutePath());
+            deleteTag(af.getTag().orNull(), channel, file.getAbsolutePath());
         }
         catch (FileNotFoundException e)
         {

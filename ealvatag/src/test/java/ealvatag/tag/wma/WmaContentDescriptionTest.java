@@ -6,6 +6,7 @@ import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.ContentDescription;
 import ealvatag.audio.asf.io.AsfHeaderReader;
 import ealvatag.audio.asf.util.TagConverter;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.asf.AsfFieldKey;
 import ealvatag.tag.asf.AsfTag;
 
@@ -38,7 +39,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
     public void testContentDescriptionRemoval() throws Exception
     {
         AudioFile file = getAudioFile();
-        AsfTag tag = (AsfTag) file.getTag();
+        AsfTag tag = (AsfTag) file.getTag().or(NullTag.INSTANCE);
         for (String curr : ContentDescription.ALLOWED)
         {
             tag.deleteField(AsfFieldKey.getAsfFieldKey(curr));
@@ -49,12 +50,12 @@ public class WmaContentDescriptionTest extends WmaTestCase
         for (String currKey : ContentDescription.ALLOWED)
         {
             AsfFieldKey curr = AsfFieldKey.getAsfFieldKey(currKey);
-            AudioFileIO.delete(file);
+            file.deleteFileTag();
             header = AsfHeaderReader.readHeader(file.getFile());
             assertNull(header.getContentDescription());
             assertNull(header.getExtendedContentDescription());
             file = AudioFileIO.read(file.getFile());
-            tag = (AsfTag) file.getTag();
+            tag = (AsfTag) file.getTag().or(NullTag.INSTANCE);
             tag.addField(tag.createField(curr, curr.getFieldName()));
             file.save();
             header = AsfHeaderReader.readHeader(file.getFile());

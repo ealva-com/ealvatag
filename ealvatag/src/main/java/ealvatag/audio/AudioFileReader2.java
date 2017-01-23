@@ -68,9 +68,9 @@ public abstract class AudioFileReader2 extends AudioFileReader
             GenericAudioHeader info = getEncodingInfo(channel, absolutePath);
             channel.position(0);
             return new AudioFileImpl(f, extension, info, getTag(channel, absolutePath));
-        } catch (IllegalArgumentException e) {
-            LOG.warn(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+//        } catch (IllegalArgumentException e) {
+//            LOG.warn(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
+//            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(f));
         } catch (FileNotFoundException e) {
             LOG.warn("Unable to read file: " + f + " " + e.getMessage());
             throw e;

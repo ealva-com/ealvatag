@@ -2,6 +2,7 @@ package ealvatag.audio;
 
 import ealvatag.AbstractTestCase;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,13 +39,13 @@ public class AudioFileWriteAsTest {
         af.getTagOrSetNewDefault().setField(FieldKey.LANGUAGE, LANGUAGE);
         af.save();
 
-        assertNotNull(af.getTag());
+        assertNotNull(af.getTag().orNull());
 
         final String parent = sourceFile.getParent();
         File destinationNoExtension = new File(parent, DESTINATION_FILE_NAME);
         af.saveAs(destinationNoExtension.getPath());
 
         Assert.assertEquals(destinationNoExtension + EXPECTED_EXTENSION, af.getFile().getPath());
-        Assert.assertEquals(LANGUAGE, af.getTag().getFirst(FieldKey.LANGUAGE));
+        Assert.assertEquals(LANGUAGE, af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
     }
 }

@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.images.ArtworkFactory;
 
 import java.io.File;
@@ -38,10 +39,10 @@ public class Issue282Test extends AbstractTestCase
             assertTrue(outputFile.exists());
             //Read File okay
             AudioFile af = AudioFileIO.read(outputFile);
-            System.out.println(af.getTag().toString());
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
 
             //Change File
-            af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
+            af.getTag().or(NullTag.INSTANCE).setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
 
             af.save();
             outputFile.delete();
@@ -83,7 +84,7 @@ public class Issue282Test extends AbstractTestCase
 
                //Create tag and Change File
                af.getTagOrSetNewDefault();
-               af.getTag().setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
+               af.getTag().or(NullTag.INSTANCE).setArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata/coverart.jpg")));
                af.save();
 
            }

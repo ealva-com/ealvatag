@@ -1,5 +1,6 @@
 package ealvatag.audio.flac;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -35,8 +36,8 @@ public class FlacHeaderTest extends TestCase
             assertEquals(5, f.getAudioHeader().getTrackLength());
 
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(6, infoReader.countMetaBlocks(f.getFile()));
 
@@ -132,8 +133,8 @@ public class FlacHeaderTest extends TestCase
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertEquals(5, f.getAudioHeader().getTrackLength());
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
             //No Images
@@ -170,8 +171,8 @@ public class FlacHeaderTest extends TestCase
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertEquals(10, f.getAudioHeader().getTrackLength());
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
             //No Images
@@ -208,8 +209,8 @@ public class FlacHeaderTest extends TestCase
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertEquals(289, f.getAudioHeader().getTrackLength());
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag) f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
             //No Images
@@ -239,7 +240,7 @@ public class FlacHeaderTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f);
 
-            FlacTag tag = (FlacTag) f.getTag();
+            FlacTag tag = (FlacTag) f.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.ARTIST,"artist");
             f.save();
             System.out.println("Writing audio data");

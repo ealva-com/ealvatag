@@ -766,7 +766,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     /**
      * {@inheritDoc}
      */
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
         FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
         if (!artwork.isLinked()) {

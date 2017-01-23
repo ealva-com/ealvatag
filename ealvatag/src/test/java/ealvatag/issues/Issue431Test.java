@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v23Frame;
@@ -32,7 +33,7 @@ public class Issue431Test extends AbstractTestCase
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
 
         //Check the underlying frame
@@ -81,7 +82,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -95,7 +96,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         //Track isnt padded
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
 
@@ -145,7 +146,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("001", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -159,7 +160,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("0001", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -173,7 +174,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK,"112");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("0112", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -187,7 +188,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -203,7 +204,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK_TOTAL,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.TRACK));
         assertEquals("01", tag.getFirst(FieldKey.TRACK_TOTAL));
 
@@ -220,7 +221,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK_TOTAL,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("001", tag.getFirst(FieldKey.TRACK));
         assertEquals("001", tag.getFirst(FieldKey.TRACK_TOTAL));
 
@@ -234,7 +235,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK, "1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -249,7 +250,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.TRACK, "1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -279,7 +280,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.TRACK));
     }
 
@@ -293,7 +294,7 @@ public class Issue431Test extends AbstractTestCase
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
 
         //Check the underlying frame
@@ -342,7 +343,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -356,7 +357,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         //Track isnt padded
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
 
@@ -406,7 +407,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("001", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -420,7 +421,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("0001", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -434,7 +435,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO,"112");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("0112", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -448,7 +449,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -464,7 +465,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_TOTAL,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
         assertEquals("01", tag.getFirst(FieldKey.DISC_TOTAL));
 
@@ -481,7 +482,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_TOTAL,"1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("001", tag.getFirst(FieldKey.DISC_NO));
         assertEquals("001", tag.getFirst(FieldKey.DISC_TOTAL));
 
@@ -495,7 +496,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO, "1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -510,7 +511,7 @@ public class Issue431Test extends AbstractTestCase
         tag.setField(FieldKey.DISC_NO, "1");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("1", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -540,7 +541,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("01", tag.getFirst(FieldKey.DISC_NO));
     }
 
@@ -574,7 +575,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
     }
 
@@ -606,7 +607,7 @@ public class Issue431Test extends AbstractTestCase
 
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("08", tag.getFirst(FieldKey.DISC_TOTAL));
     }
 }

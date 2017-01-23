@@ -228,7 +228,7 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public TagField createArtwork(final Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(final Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
     }
 

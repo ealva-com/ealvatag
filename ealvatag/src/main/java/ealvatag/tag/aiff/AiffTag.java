@@ -172,8 +172,9 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public void deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws KeyNotFoundException {
         id3Tag.deleteArtwork();
+        return this;
     }
 
     @Override
@@ -199,7 +200,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     @Override
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         return id3Tag.createArtwork(artwork);
     }
 

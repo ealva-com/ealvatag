@@ -6,6 +6,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.wav.WavOptions;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
@@ -49,7 +50,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = (AudioFileImpl)AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             Artwork artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -62,7 +63,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -86,7 +87,7 @@ public class Issue245Test extends AbstractTestCase {
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             af.getTagOrSetNewDefault();
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(0, tag.getArtworkList().size());
 
@@ -98,7 +99,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             Artwork artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -111,7 +112,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -147,7 +148,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             Artwork artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -160,7 +161,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -182,7 +183,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -197,7 +198,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -209,7 +210,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -231,7 +232,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(2, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -249,7 +250,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(2, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -262,7 +263,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,7 +286,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -303,7 +304,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertTrue(tag.getFirstField(FieldKey.COVER_ART).or(NullTagField.INSTANCE) instanceof AsfTagCoverField);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -317,7 +318,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -339,7 +340,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -355,7 +356,7 @@ public class Issue245Test extends AbstractTestCase {
             tag.setArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
             artwork = tag.getFirstArtwork().or(NullArtwork.INSTANCE);
@@ -367,7 +368,7 @@ public class Issue245Test extends AbstractTestCase {
             assertEquals(0, tag.getArtworkList().size());
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getArtworkList().size());
 
         } catch (Exception e) {
@@ -391,7 +392,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(0, tag.getArtworkList().size());
 
@@ -409,7 +410,7 @@ public class Issue245Test extends AbstractTestCase {
             Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setArtwork(newartwork);
 
         } catch (Exception e) {
@@ -423,7 +424,7 @@ public class Issue245Test extends AbstractTestCase {
         try {
             //Now try and addField image
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.deleteArtwork();
             assertEquals(0, tag.getArtworkList().size());
             af.save();
@@ -447,7 +448,7 @@ public class Issue245Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(0, tag.getArtworkList().size());
         } catch (Exception e) {
@@ -463,7 +464,7 @@ public class Issue245Test extends AbstractTestCase {
             Artwork newartwork = ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart.png"));
             assertTrue(ImageFormats.isPortableFormat(newartwork.getBinaryData()));
 
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setArtwork(newartwork);
 
         } catch (Exception e) {
@@ -477,7 +478,7 @@ public class Issue245Test extends AbstractTestCase {
         try {
 
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.deleteArtwork();
 
 

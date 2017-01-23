@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -35,11 +36,11 @@ public class Issue261Test extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
 
             //Write file
-            af.getTag().setField(FieldKey.YEAR,"2007");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.YEAR, "2007");
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("2007",af.getTag().getFirst(FieldKey.YEAR));
+            assertEquals("2007",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.YEAR));
 
 
 

@@ -6,6 +6,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -29,7 +30,7 @@ public class DsfAudioFileTest extends TestCase {
         assertEquals("2822400", ah.getSampleRate());
         assertEquals(5, ah.getTrackLength());
         assertFalse(ah.isLossless());
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
         assertEquals("test3", tag.getFirst(FieldKey.TITLE));
@@ -52,14 +53,14 @@ public class DsfAudioFileTest extends TestCase {
         File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122write.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            f.getTag().addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag();
+            f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
             assertEquals("test3", tag.getFirst(FieldKey.TITLE));
@@ -91,13 +92,13 @@ public class DsfAudioFileTest extends TestCase {
         File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122delete.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            f.getTag().addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag();
+            f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
         } catch (Exception e) {
@@ -130,7 +131,7 @@ public class DsfAudioFileTest extends TestCase {
             assertEquals("2822400", ah.getSampleRate());
             assertEquals(5, ah.getTrackLength());
             assertFalse(ah.isLossless());
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().orNull();
             assertNull(tag);
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,15 +154,15 @@ public class DsfAudioFileTest extends TestCase {
         File testFile = AbstractTestCase.copyAudioToTmp("test156.dsf", new File("test156write.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            assertNull(f.getTag());
+            assertNull(f.getTag().orNull());
             f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -187,14 +188,14 @@ public class DsfAudioFileTest extends TestCase {
         File testFile = AbstractTestCase.copyAudioToTmp("test156.dsf", new File("test156delete.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            assertNull(f.getTag());
+            assertNull(f.getTag().orNull());
             f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
         } catch (Exception e) {

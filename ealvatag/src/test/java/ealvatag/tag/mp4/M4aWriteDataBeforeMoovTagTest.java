@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -33,14 +34,14 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
             tag.setField(FieldKey.ARTIST,"AUTHOR");
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //See tree again
@@ -76,7 +77,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
@@ -86,7 +87,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //See tree again
@@ -123,14 +124,14 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
 
             //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //Change values and Save changes and reread from disk
             tag.setField(FieldKey.ARTIST,"AR");
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //See tree again
@@ -167,7 +168,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
             atomTree.printAtomTree();
 
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             //Change values
             tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
@@ -200,7 +201,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             atomTree.printAtomTree();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
@@ -259,7 +260,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test19.m4a", new File("testWriteWhenMDatAtStart9.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             //Change values
             tag.setField(FieldKey.ARTIST,"VERYLONGARTISTNAME");
@@ -288,7 +289,7 @@ public class M4aWriteDataBeforeMoovTagTest extends TestCase
             //Save changes and reread from disk
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 

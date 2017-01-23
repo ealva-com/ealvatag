@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v23Tag;
@@ -22,18 +23,18 @@ public class Issue185Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
 
             //No Tag
-            assertNull(af.getTag());
+            assertNull(af.getTag().orNull());
 
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.setNewDefaultTag();
 
-            assertTrue(af.getTag() instanceof ID3v23Tag);
+            assertTrue(af.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
 
             //Save changes
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertTrue(af.getTag() instanceof ID3v23Tag);
+            assertTrue(af.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
 
         } catch (Exception e) {
             exceptionCaught = e;
@@ -49,18 +50,18 @@ public class Issue185Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
 
             //No Tag
-            assertNull(af.getTag());
+            assertNull(af.getTag().orNull());
 
             //Tag Created and setField
             Tag tag = af.getTagOrSetNewDefault();
             assertTrue(tag instanceof ID3v23Tag);
-            assertTrue(af.getTag() instanceof ID3v23Tag);
+            assertTrue(af.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
 
             //Save changes
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertTrue(af.getTag() instanceof ID3v23Tag);
+            assertTrue(af.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
 
         } catch (Exception e) {
             exceptionCaught = e;

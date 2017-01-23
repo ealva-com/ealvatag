@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Hex;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
@@ -176,9 +177,9 @@ public class UnsynchronizationTest extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.setNewDefaultTag();
-            ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag();
+            ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertFalse(v23TagUnsynced.isUnsynchronization());
-            Tag unsyncedTag = af.getTag();
+            Tag unsyncedTag = af.getTag().or(NullTag.INSTANCE);
             Artwork artworkUnsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             unsyncedTag.setArtwork(artworkUnsynced);
             af.save();
@@ -187,9 +188,9 @@ public class UnsynchronizationTest extends AbstractTestCase
             TagOptionSingleton.getInstance().setUnsyncTags(false);
             af = AudioFileIO.read(testFile2);
             af.setNewDefaultTag();
-            ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag();
+            ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertFalse(v23TagNotsynced.isUnsynchronization());
-            Tag notSyncedTag = af.getTag();
+            Tag notSyncedTag = af.getTag().or(NullTag.INSTANCE);
             Artwork artworkNotsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             notSyncedTag.setArtwork(artworkNotsynced);
             af.save();
@@ -200,7 +201,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             long time = System.nanoTime() - start;
             System.out.printf("NOTSYNCED Took %6.3f ms \n", time/1e6);
 
-            notSyncedTag = af.getTag();
+            notSyncedTag = af.getTag().or(NullTag.INSTANCE);
             v23TagNotsynced = (ID3v23Tag)notSyncedTag;
             assertEquals(1,notSyncedTag.getArtworkList().size());
             artworkNotsynced = notSyncedTag.getArtworkList().get(0);
@@ -211,7 +212,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             time = System.nanoTime() - start;
             System.out.printf("UNSYCNCED Took %6.3f ms \n", time/1e6);
 
-            unsyncedTag = af.getTag();
+            unsyncedTag = af.getTag().or(NullTag.INSTANCE);
             v23TagUnsynced = (ID3v23Tag)unsyncedTag;
             assertTrue(v23TagUnsynced.isUnsynchronization());
             assertEquals(1,unsyncedTag.getArtworkList().size());

@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -25,8 +26,8 @@ public class Issue161Test extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test159.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            assertNotNull(af.getTag());
-            System.out.println(af.getTag());
+            assertNotNull(af.getTag().orNull());
+            System.out.println(af.getTag().or(NullTag.INSTANCE));
         }
         catch(Exception e)
         {

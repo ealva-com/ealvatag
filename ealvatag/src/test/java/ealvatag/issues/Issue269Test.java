@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.AbstractID3v2Frame;
 import ealvatag.tag.id3.ID3v23Frame;
 import ealvatag.tag.id3.ID3v23Frames;
@@ -38,15 +39,15 @@ public class Issue269Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("00000",af.getTag().getFirst(FieldKey.BPM));
-            assertEquals("thievery corporation - Om Lounge",af.getTag().getFirst(FieldKey.ARTIST));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("00000",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.BPM));
+            assertEquals("thievery corporation - Om Lounge",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
-            af.getTag().setField(FieldKey.ALBUM,"FRED");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"FRED");
             af.save();
             af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("FRED",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
 
         }
@@ -79,19 +80,19 @@ public class Issue269Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("tonight (instrumental)",af.getTag().getFirst(FieldKey.TITLE));
-            assertEquals("Young Gunz",af.getTag().getFirst(FieldKey.ARTIST));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("tonight (instrumental)",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
+            assertEquals("Young Gunz",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
-            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals(156497728,id3v23Tag.getCrc32());
             assertEquals(0,id3v23Tag.getPaddingSize());
 
-            af.getTag().setField(FieldKey.ALBUM,"FRED");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"FRED");
             af.save();
             af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("FRED",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
 
         }
@@ -125,11 +126,11 @@ public class Issue269Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("Don't Leave Me",af.getTag().getFirst(FieldKey.TITLE));
-            assertEquals("All-American Rejects",af.getTag().getFirst(FieldKey.ARTIST));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("Don't Leave Me",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
+            assertEquals("All-American Rejects",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
-            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+            ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals(0,id3v23Tag.getPaddingSize());
 
             AbstractID3v2Frame frame1 = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_COPYRIGHTINFO);
@@ -148,12 +149,12 @@ public class Issue269Test extends AbstractTestCase
             //ealvatag converts to this because encodeby frame should be updated if the audio is changed and so
             //this falg should be set
             assertEquals(0x40,frame.getStatusFlags().getWriteFlags());
-            af.getTag().setField(FieldKey.ALBUM,"FRED");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"FRED");
             af.save();
             af = AudioFileIO.read(testFile);
-            id3v23Tag = (ID3v23Tag)af.getTag();
-            System.out.println(af.getTag().toString());
-            assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
+            id3v23Tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("FRED",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
             //The frame is preserved and still encrypted
             frame = (ID3v23Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
@@ -196,19 +197,19 @@ public class Issue269Test extends AbstractTestCase
 
                //Read File okay
                AudioFile af = AudioFileIO.read(testFile);
-               System.out.println(af.getTag().toString());
-               assertEquals("tonight (instrumental)",af.getTag().getFirst(FieldKey.TITLE));
-               assertEquals("Young Gunz",af.getTag().getFirst(FieldKey.ARTIST));
+               System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+               assertEquals("tonight (instrumental)",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
+               assertEquals("Young Gunz",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
-               ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag();
+               ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
                assertEquals(156497728,id3v23Tag.getCrc32());
                assertEquals(0,id3v23Tag.getPaddingSize());
 
-               af.getTag().setField(FieldKey.ALBUM,"FRED");
+               af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"FRED");
                af.save();
                af = AudioFileIO.read(testFile);
-               System.out.println(af.getTag().toString());
-               assertEquals("FRED",af.getTag().getFirst(FieldKey.ALBUM));
+               System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+               assertEquals("FRED",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
 
            }

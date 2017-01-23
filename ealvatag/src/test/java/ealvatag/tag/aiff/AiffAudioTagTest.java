@@ -13,6 +13,7 @@ import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.audio.wav.WavOptions;
 import ealvatag.audio.wav.WavSaveOptions;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -37,7 +38,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         Assert.assertTrue(tag instanceof AiffTag);
         Assert.assertTrue(((AiffTag)tag).getID3Tag() instanceof ID3v23Tag);
@@ -53,7 +54,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         Assert.assertTrue(tag instanceof AiffTag);
         Assert.assertTrue(((AiffTag)tag).getID3Tag() instanceof ID3v22Tag);
@@ -68,7 +69,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         Assert.assertNotNull(tag);
         Assert.assertTrue(tag instanceof AiffTag);
@@ -90,7 +91,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(ah);
         System.out.println(ah.getBitRate());
         Assert.assertEquals("2", ah.getChannels());
@@ -120,7 +121,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(ah);
         System.out.println(ah.getBitRate());
         Assert.assertEquals("2", ah.getChannels());
@@ -150,7 +151,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         Assert.assertNotNull(tag);
         Assert.assertEquals(10274L, ((AiffTag)tag).getSizeOfID3TagIncludingChunkHeader());
         Assert.assertEquals(10266L, ((AiffTag)tag).getSizeOfID3TagOnly());
@@ -162,7 +163,7 @@ public class AiffAudioTagTest {
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         Assert.assertEquals(10274L, ((AiffTag)tag).getSizeOfID3TagIncludingChunkHeader());
         Assert.assertEquals(10266L, ((AiffTag)tag).getSizeOfID3TagOnly());
         Assert.assertEquals(882054L, ((AiffTag)tag).getStartLocationInFileOfId3Chunk());
@@ -173,7 +174,7 @@ public class AiffAudioTagTest {
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(f.getTag());
         Assert.assertEquals(10274L, ((AiffTag)tag).getSizeOfID3TagIncludingChunkHeader());
         Assert.assertEquals(10266L, ((AiffTag)tag).getSizeOfID3TagOnly());
@@ -195,7 +196,7 @@ public class AiffAudioTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             Assert.assertNotNull(tag);
             System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "Warmplay");
@@ -203,7 +204,7 @@ public class AiffAudioTagTest {
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
         } catch (Exception ex) {
@@ -219,17 +220,17 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         Assert.assertNotNull(tag);
         Assert.assertNotNull(((AiffTag)tag).getID3Tag());
         Assert.assertFalse(tag.isEmpty());
         Assert.assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
-        AudioFileIO.delete(f);
+        f.deleteFileTag();
 
         final int newSize = readAIFFFormSize(testFile);
         AudioFile f2 = AudioFileIO.read(testFile);
-        Tag tag2 = f2.getTag();
+        Tag tag2 = f2.getTag().or(NullTag.INSTANCE);
         System.out.println(tag2);
         Assert.assertNotNull(tag2);
         Assert.assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
@@ -249,17 +250,17 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
         Assert.assertNotNull(tag);
         Assert.assertNotNull(((AiffTag)tag).getID3Tag());
         Assert.assertFalse(tag.isEmpty());
         Assert.assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
-        AudioFileIO.delete(f);
+        f.deleteFileTag();
 
         final int newSize = readAIFFFormSize(testFile);
         AudioFile f2 = AudioFileIO.read(testFile);
-        Tag tag2 = f2.getTag();
+        Tag tag2 = f2.getTag().or(NullTag.INSTANCE);
         System.out.println(tag2);
         Assert.assertNotNull(tag2);
         Assert.assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
@@ -282,7 +283,7 @@ public class AiffAudioTagTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         Assert.assertEquals(10274L, ((AiffTag)tag).getSizeOfID3TagIncludingChunkHeader());
         Assert.assertEquals(10266L, ((AiffTag)tag).getSizeOfID3TagOnly());
         Assert.assertEquals(12L, ((AiffTag)tag).getStartLocationInFileOfId3Chunk());
@@ -293,7 +294,7 @@ public class AiffAudioTagTest {
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(f.getTag());
 
         Assert.assertEquals("Warmplay", tag.getFirst(FieldKey.ARTIST));
@@ -301,7 +302,7 @@ public class AiffAudioTagTest {
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(f.getTag());
         Assert.assertEquals("Warmplayer", tag.getFirst(FieldKey.ARTIST));
         Assert.assertEquals(10274L, ((AiffTag)tag).getSizeOfID3TagIncludingChunkHeader());
@@ -353,7 +354,7 @@ public class AiffAudioTagTest {
         ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
-        Assert.assertEquals("album", f.getTag().getFirst(FieldKey.ALBUM));
+        Assert.assertEquals("album", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
     @Test public void testWriteMetadataAifcWithUnknonwExtraChunk() throws Exception {
@@ -372,7 +373,7 @@ public class AiffAudioTagTest {
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
         System.out.println(f.getTag());
-        Assert.assertEquals("album", f.getTag().getFirst(FieldKey.ALBUM));
+        Assert.assertEquals("album", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
     /**
@@ -410,7 +411,7 @@ public class AiffAudioTagTest {
         ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
         System.out.println(ah);
-        Assert.assertEquals("album", f.getTag().getFirst(FieldKey.ALBUM));
+        Assert.assertEquals("album", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
     /**
@@ -432,15 +433,15 @@ public class AiffAudioTagTest {
         File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144Odd.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            f.getTag().deleteField(FieldKey.ACOUSTID_ID);
-            f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
+            f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_ID);
+            f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_FINGERPRINT);
             f.save();
             f = AudioFileIO.read(testFile);
-            f.getTag().setField(FieldKey.ARTIST, "freddy");
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "freddy");
             f.save();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-            Assert.assertEquals(f.getTag().getFirst(FieldKey.ARTIST), "freddy");
+            Assert.assertEquals(f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST), "freddy");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -465,15 +466,15 @@ public class AiffAudioTagTest {
         File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144OddDelete.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            f.getTag().deleteField(FieldKey.ACOUSTID_ID);
-            f.getTag().deleteField(FieldKey.ACOUSTID_FINGERPRINT);
+            f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_ID);
+            f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_FINGERPRINT);
             f.save();
-            AudioFileIO.delete(f);
+            f.deleteFileTag();
             f = AudioFileIO.read(testFile);
             System.out.println(f.getTag());
-            Assert.assertEquals(0, ((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
-            Assert.assertEquals(0, ((AiffTag)f.getTag()).getSizeOfID3TagIncludingChunkHeader());
-            Assert.assertEquals(0, ((AiffTag)f.getTag()).getSizeOfID3TagOnly());
+            Assert.assertEquals(0, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getStartLocationInFileOfId3Chunk());
+            Assert.assertEquals(0, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getSizeOfID3TagIncludingChunkHeader());
+            Assert.assertEquals(0, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getSizeOfID3TagOnly());
 
 
         } catch (Exception e) {
@@ -508,17 +509,17 @@ public class AiffAudioTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             Assert.assertNotNull(tag);
             Assert.assertNotNull(((AiffTag)tag).getID3Tag());
             Assert.assertFalse(tag.isEmpty());
             Assert.assertEquals("Coldplay", tag.getFirst(FieldKey.ARTIST));
-            AudioFileIO.delete(f);
+            f.deleteFileTag();
 
             final int newSize = readAIFFFormSize(testFile);
             AudioFile f2 = AudioFileIO.read(testFile);
-            Tag tag2 = f2.getTag();
+            Tag tag2 = f2.getTag().or(NullTag.INSTANCE);
             System.out.println(tag2);
             Assert.assertNotNull(tag2);
             Assert.assertTrue(tag2.getFirst(FieldKey.ARTIST).isEmpty());
@@ -564,9 +565,9 @@ public class AiffAudioTagTest {
             Assert.assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
             System.out.println(f.getTag());
-            Assert.assertEquals("albums", f.getTag().getFirst(FieldKey.ALBUM));
-            Assert.assertEquals(122, ((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
-            Assert.assertEquals(154, ((AiffTag)f.getTag()).getEndLocationInFileOfId3Chunk());
+            Assert.assertEquals("albums", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
+            Assert.assertEquals(122, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getStartLocationInFileOfId3Chunk());
+            Assert.assertEquals(154, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getEndLocationInFileOfId3Chunk());
 
 
             f.getTagOrSetNewDefault().setField(FieldKey.ALBUM, "albuks");
@@ -576,9 +577,9 @@ public class AiffAudioTagTest {
             Assert.assertTrue(ah instanceof AiffAudioHeader);
             System.out.println(ah);
             System.out.println(f.getTag());
-            Assert.assertEquals("albuks", f.getTag().getFirst(FieldKey.ALBUM));
-            Assert.assertEquals(122, ((AiffTag)f.getTag()).getStartLocationInFileOfId3Chunk());
-            Assert.assertEquals(154, ((AiffTag)f.getTag()).getEndLocationInFileOfId3Chunk());
+            Assert.assertEquals("albuks", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
+            Assert.assertEquals(122, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getStartLocationInFileOfId3Chunk());
+            Assert.assertEquals(154, ((AiffTag)f.getTag().or(NullTag.INSTANCE)).getEndLocationInFileOfId3Chunk());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -615,7 +616,7 @@ public class AiffAudioTagTest {
         File testFile = AbstractTestCase.copyAudioToTmp("test157.aif", new File("testDeleteArtworkField.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
             Assert.assertNotNull(tag);
             Assert.assertTrue(tag instanceof AiffTag);
@@ -626,7 +627,7 @@ public class AiffAudioTagTest {
             f.save();
 
             AudioFile updatedFile = AudioFileIO.read(testFile);
-            Tag updatedTag = updatedFile.getTag();
+            Tag updatedTag = updatedFile.getTag().or(NullTag.INSTANCE);
 
             Assert.assertEquals(0, updatedTag.getArtworkList().size());
 

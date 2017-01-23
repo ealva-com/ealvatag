@@ -458,7 +458,7 @@ public class Mp4Tag extends AbstractTag {
         return new Mp4TagCoverField(data);
     }
 
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         return new Mp4TagCoverField(artwork.getBinaryData());
     }
 

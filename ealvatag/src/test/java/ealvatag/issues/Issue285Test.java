@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -34,7 +35,7 @@ public class Issue285Test extends AbstractTestCase
             //ofr.summarizeOggPageHeaders(testFile);
 
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(FieldKey.COMMENT,"TEST");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.COMMENT, "TEST");
             af.save();
 
         }

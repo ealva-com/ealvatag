@@ -46,6 +46,9 @@ public abstract class AudioFileReader {
     private static Logger LOG = LoggerFactory.getLogger(AudioFileReader.class);
     protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
+
+
+
     /*
     * Returns the encoding info object associated wih the current File.
     * The subclass can assume the RAF pointer is at the first byte of the file.

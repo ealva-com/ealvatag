@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 
@@ -38,7 +39,7 @@ public class Issue308Test extends AbstractTestCase
             Artwork artwork = ArtworkFactory.getNew();
             artwork.setFromFile(new File("testdata","coverart_large.jpg"));
 
-            af.getTag().setArtwork(artwork);
+            af.getTag().or(NullTag.INSTANCE).setArtwork(artwork);
             af.save();
 
             //Reread
@@ -48,7 +49,7 @@ public class Issue308Test extends AbstractTestCase
             af.save();
 
             //Resave
-            af.getTag().addField(FieldKey.TITLE,"TESTdddddddddddddddddddddddd");
+            af.getTag().or(NullTag.INSTANCE).addField(FieldKey.TITLE,"TESTdddddddddddddddddddddddd");
             af.save();
         }
         catch(Exception ex)

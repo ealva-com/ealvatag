@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.mp4.Mp4Tag;
 
@@ -29,18 +30,18 @@ public class Issue240Test extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test34.m4a");
 
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(0,((Mp4Tag)af.getTag()).getFields(FieldKey.COVER_ART).size());
+            assertEquals(0,((Mp4Tag)af.getTag().or(NullTag.INSTANCE)).getFields(FieldKey.COVER_ART).size());
 
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
             byte[] imagedata = new byte[(int) imageFile.length()];
             imageFile.read(imagedata);
-            af.getTag().addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
+            af.getTag().or(NullTag.INSTANCE).addArtwork(ArtworkFactory.getNew().setBinaryData(imagedata));
             af.save();
 
             //Read File back
             af = AudioFileIO.read(testFile);
-            assertEquals(1,((Mp4Tag)af.getTag()).getFields(FieldKey.COVER_ART).size());
+            assertEquals(1,((Mp4Tag)af.getTag().or(NullTag.INSTANCE)).getFields(FieldKey.COVER_ART).size());
         }
         catch (Exception e)
         {

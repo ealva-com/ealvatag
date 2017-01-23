@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
@@ -130,7 +131,7 @@ public class ID3v1TagTest {
         AudioFile file = AudioFileIO.read(testFile);
 
         //Create v1 Tag
-        Tag tag = file.getTag();
+        Tag tag = file.getTag().orNull();
         if (tag == null) {
             tag = file.setNewDefaultTag();
         }
@@ -146,7 +147,7 @@ public class ID3v1TagTest {
 
         //Reload
         file = AudioFileIO.read(testFile);
-        tag = file.getTag();
+        tag = file.getTag().or(NullTag.INSTANCE);
         Assert.assertEquals(ID3v1TagTest.ARTIST, tag.getFirst(FieldKey.ARTIST));
         Assert.assertEquals(ID3v1TagTest.ALBUM, tag.getFirst(FieldKey.ALBUM));
         Assert.assertEquals(ID3v1TagTest.COMMENT, tag.getFirst(FieldKey.COMMENT));

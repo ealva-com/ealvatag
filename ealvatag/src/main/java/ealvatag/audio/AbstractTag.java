@@ -209,8 +209,8 @@ public abstract class AbstractTag implements TagFieldContainer {
         return Optional.absent();
     }
 
-    public void deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException {
-        this.deleteField(FieldKey.COVER_ART);
+    public Tag deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException {
+       return deleteField(FieldKey.COVER_ART);
     }
 
     /**

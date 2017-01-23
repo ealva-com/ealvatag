@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.NullTagField;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
@@ -33,7 +34,7 @@ public class Issue345Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
             af.setNewDefaultTag();
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -41,33 +42,33 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
+                TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyPOPM);
             }
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            tag = af.getTag().or(NullTag.INSTANCE);
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             {
-                TagField tagField = af.getTag().getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
+                TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.RATING).or(NullTagField.INSTANCE);
                 assertTrue(tagField instanceof ID3v24Frame);
                 assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyPOPM);
             }
@@ -78,8 +79,8 @@ public class Issue345Test extends AbstractTestCase {
             }
 
             tag.deleteField(FieldKey.ENGINEER);
-            assertEquals("", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
 
             fields = tag.getFields(FieldKey.PRODUCER);
             for (TagField field : fields) {
@@ -89,9 +90,9 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
-            assertEquals("", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
+            tag = af.getTag().or(NullTag.INSTANCE);
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
 
             tag.deleteField(FieldKey.PRODUCER);
             tag.deleteField(FieldKey.MIXER);
@@ -100,9 +101,9 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
-            assertEquals("", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("", af.getTag().getFirst(FieldKey.DJMIXER));
+            tag = af.getTag().or(NullTag.INSTANCE);
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
 
 
         } catch (Exception e) {
@@ -125,7 +126,7 @@ public class Issue345Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.setNewDefaultTag();
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -133,19 +134,19 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals("50", tag.getFirst(FieldKey.RATING));
             assertEquals("mixer", tag.getFirst(FieldKey.MIXER));
             assertEquals("engineervalue", tag.getFirst(FieldKey.ENGINEER));
@@ -170,9 +171,9 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
-            assertEquals("", af.getTag().getFirst(FieldKey.ARRANGER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
+            tag = af.getTag().or(NullTag.INSTANCE);
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
 
             tag.deleteField(FieldKey.ENGINEER);
             tag.deleteField(FieldKey.PRODUCER);
@@ -182,9 +183,9 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
-            assertEquals("", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("", af.getTag().getFirst(FieldKey.DJMIXER));
+            tag = af.getTag().or(NullTag.INSTANCE);
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -213,19 +214,19 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals("50", tag.getFirst(FieldKey.RATING));
             assertEquals("mixer", tag.getFirst(FieldKey.MIXER));
             assertEquals("engineervalue", tag.getFirst(FieldKey.ENGINEER));
@@ -255,9 +256,9 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals("", tag.getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
 
             tag.deleteField(FieldKey.PRODUCER);
             tag.deleteField(FieldKey.MIXER);
@@ -266,7 +267,7 @@ public class Issue345Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals("", tag.getFirst(FieldKey.ENGINEER));
             assertEquals("", tag.getFirst(FieldKey.DJMIXER));
         } catch (Exception e) {
@@ -288,7 +289,7 @@ public class Issue345Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -296,24 +297,24 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -333,7 +334,7 @@ public class Issue345Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -341,20 +342,20 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -375,7 +376,7 @@ public class Issue345Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -383,24 +384,24 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -420,7 +421,7 @@ public class Issue345Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.RATING, "50");
             tag.setField(FieldKey.MIXER, "mixer");
             tag.setField(FieldKey.ENGINEER, "engineervalue");
@@ -428,24 +429,24 @@ public class Issue345Test extends AbstractTestCase {
             tag.setField(FieldKey.PRODUCER, "producervalue");
             tag.setField(FieldKey.ARRANGER, "arrangervalue");
             tag.setField(FieldKey.ACOUSTID_FINGERPRINT, "acousticfingerprint");
-            assertEquals("acousticfingerprint", af.getTag().getFirst(FieldKey.ACOUSTID_FINGERPRINT));
+            assertEquals("acousticfingerprint", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ACOUSTID_FINGERPRINT));
             tag.setField(FieldKey.COUNTRY, "France");
-            assertEquals("France", af.getTag().getFirst(FieldKey.COUNTRY));
+            assertEquals("France", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COUNTRY));
 
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("50", af.getTag().getFirst(FieldKey.RATING));
-            assertEquals("mixer", af.getTag().getFirst(FieldKey.MIXER));
-            assertEquals("engineervalue", af.getTag().getFirst(FieldKey.ENGINEER));
-            assertEquals("djmixervalue", af.getTag().getFirst(FieldKey.DJMIXER));
-            assertEquals("producervalue", af.getTag().getFirst(FieldKey.PRODUCER));
-            assertEquals("arrangervalue", af.getTag().getFirst(FieldKey.ARRANGER));
+            assertEquals("50", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RATING));
+            assertEquals("mixer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MIXER));
+            assertEquals("engineervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENGINEER));
+            assertEquals("djmixervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.DJMIXER));
+            assertEquals("producervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            assertEquals("arrangervalue", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

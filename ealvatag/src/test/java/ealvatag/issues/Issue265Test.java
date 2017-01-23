@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 
@@ -34,7 +35,7 @@ public class Issue265Test extends AbstractTestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
 
@@ -75,7 +76,7 @@ public class Issue265Test extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
             //Enable value
@@ -116,7 +117,7 @@ public class Issue265Test extends AbstractTestCase
            {
                File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
                AudioFile f = AudioFileIO.read(testFile);
-               Tag tag = f.getTag();
+               Tag tag = f.getTag().or(NullTag.INSTANCE);
 
                TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(false);
                StringBuffer sb = new StringBuffer();
@@ -155,7 +156,7 @@ public class Issue265Test extends AbstractTestCase
            {
                File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
                AudioFile f = AudioFileIO.read(testFile);
-               Tag tag = f.getTag();
+               Tag tag = f.getTag().or(NullTag.INSTANCE);
 
                //Enable value
                TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(true);

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.AbstractID3v2Frame;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
@@ -30,12 +31,12 @@ public class Issue273Test extends AbstractTestCase
             af.save();
 
             af = AudioFileIO.read(testFile);
-            ID3v23Tag tag = (ID3v23Tag)af.getTag();
+            ID3v23Tag tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             tag.addField(FieldKey.COMMENT,"COMMENTVALUE");
             af.save();
 
             af = AudioFileIO.read(testFile);
-            tag = (ID3v23Tag)af.getTag();
+            tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             AbstractID3v2Frame frame = tag.getFirstField("COMM");
             FrameBodyCOMM fb = (FrameBodyCOMM)frame.getBody();
@@ -49,7 +50,7 @@ public class Issue273Test extends AbstractTestCase
             af.save();
 
             af = AudioFileIO.read(testFile);
-            tag = (ID3v23Tag)af.getTag();
+            tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             frame = tag.getFirstField("COMM");
             fb = (FrameBodyCOMM)frame.getBody();
@@ -60,7 +61,7 @@ public class Issue273Test extends AbstractTestCase
             af.save();
 
             af = AudioFileIO.read(testFile);
-            tag = (ID3v23Tag)af.getTag();
+            tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             assertEquals("COMMENTVALUE",tag.getFirst(FieldKey.COMMENT));
             frame = tag.getFirstField("COMM");
             fb = (FrameBodyCOMM)frame.getBody();

@@ -6,6 +6,7 @@ import ealvatag.FilePermissionsTest;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v24Tag;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,16 +20,16 @@ public class DsfAudioFileTest {
     @Test public void testReadDsfMetadata() throws Exception {
         File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122readmetadata.dsf"));
         AudioFile f = AudioFileIO.read(testFile);
-        System.out.println(f.getTag());
-        Assert.assertTrue(f.getTag() instanceof ID3v24Tag);
-        assertEquals("test3", f.getTag().getFirst(FieldKey.TITLE));
-        assertEquals("Artist", f.getTag().getFirst(FieldKey.ARTIST));
-        assertEquals("Album Artist", f.getTag().getFirst(FieldKey.ALBUM_ARTIST));
-        assertEquals("Album", f.getTag().getFirst(FieldKey.ALBUM));
-        assertEquals("Crossover", f.getTag().getFirst(FieldKey.GENRE));
-        assertEquals("comments", f.getTag().getFirst(FieldKey.COMMENT));
-        assertEquals("Publisher", f.getTag().getFirst(FieldKey.RECORD_LABEL));
-        assertEquals("Composer", f.getTag().getFirst(FieldKey.COMPOSER));
+        System.out.println(f.getTag().or(NullTag.INSTANCE));
+        Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof ID3v24Tag);
+        assertEquals("test3", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
+        assertEquals("Artist", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
+        assertEquals("Album Artist", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTIST));
+        assertEquals("Album", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
+        assertEquals("Crossover", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.GENRE));
+        assertEquals("comments", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COMMENT));
+        assertEquals("Publisher", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RECORD_LABEL));
+        assertEquals("Composer", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.COMPOSER));
     }
 
     @Test public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {

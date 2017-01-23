@@ -1,5 +1,6 @@
 package ealvatag.tag.wma;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -72,7 +73,7 @@ public abstract class WmaTestCase extends TestCase
      */
     public Tag getTag() throws Exception
     {
-        return getAudioFile().getTag();
+        return getAudioFile().getTag().or(NullTag.INSTANCE);
     }
 
     /**

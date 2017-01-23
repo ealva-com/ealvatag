@@ -35,6 +35,7 @@
         <!-- Test Dependencies -->
         <junit.version>4.11</junit.version>
         <hamcrest.version>2.0.0.0</hamcrest.version>
+        <mockito.version>2.6.4</mockito.version>
     </properties>
 
     <scm>
@@ -69,7 +70,13 @@
                 <artifactId>hamcrest-junit</artifactId>
                 <version>${hamcrest.version}</version>
             </dependency>
-            
+    
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.openjdk.jmh</groupId>
                 <artifactId>jmh-core</artifactId>

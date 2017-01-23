@@ -1,5 +1,6 @@
 package ealvatag.audio.ogg;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -36,7 +37,7 @@ public class OggVorbisHeaderTest extends TestCase
             //assertEquals("44100",f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
 
 
         }
@@ -67,7 +68,7 @@ public class OggVorbisHeaderTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg", new File("test2.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"bbbbbbb");
             f.save();
 
             //assertEquals("192",f.getAudioHeader().getBitRate());
@@ -75,7 +76,7 @@ public class OggVorbisHeaderTest extends TestCase
             //assertEquals("2",f.getAudioHeader().getChannels());
             //assertEquals("44100",f.getAudioHeader().getSampleRate());
 
-            //assertTrue(f.getTag() instanceof VorbisCommentTag);
+            //assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
 
 
         }
@@ -99,13 +100,13 @@ public class OggVorbisHeaderTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
 
             //Size of VorbisComment should increase
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"bbbbbbb");
             f.save();
 
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            assertEquals("bbbbbbb", f.getTag().getFirst(FieldKey.ALBUM));
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            assertEquals("bbbbbbb", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
             OggFileReader ofr = new OggFileReader();
             OggPageHeader oph = ofr.readOggPageHeader(new RandomAccessFile(testFile, "r"), 0);
@@ -143,13 +144,13 @@ public class OggVorbisHeaderTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
 
             //Size of VorbisComment should decrease just setting a nonsical but muuch smaller value for image
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            VorbisCommentTag vorbisTag = (VorbisCommentTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            VorbisCommentTag vorbisTag = (VorbisCommentTag) f.getTag().or(NullTag.INSTANCE);
             vorbisTag.setField(vorbisTag.createField(VorbisCommentFieldKey.COVERART, "ccc"));
             f.save();
 
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
 
             OggFileReader ofr = new OggFileReader();
             OggPageHeader oph = ofr.readOggPageHeader(new RandomAccessFile(testFile, "r"), 0);
@@ -196,13 +197,13 @@ public class OggVorbisHeaderTest extends TestCase
             AudioFile f = AudioFileIO.read(testFile);
 
             //Size of VorbisComment should increase
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"bbbbbbb");
             f.save();
 
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            assertEquals("bbbbbbb", f.getTag().getFirst(FieldKey.ALBUM));
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            assertEquals("bbbbbbb", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
             OggFileReader ofr = new OggFileReader();
             OggPageHeader oph = ofr.readOggPageHeader(new RandomAccessFile(testFile, "r"), 0);
@@ -242,20 +243,20 @@ public class OggVorbisHeaderTest extends TestCase
 
             //Size of VorbisComment should increase and to a level that the setupheader cant fit completely
             //in last page pf comment header so has to be split over two pages
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < 24000; i++)
             {
                 sb.append("z");
             }
-            f.getTag().setField(FieldKey.ALBUM,"bbbbbbb");
-            f.getTag().setField(FieldKey.TITLE,sb.toString());
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM,"bbbbbbb");
+            f.getTag().or(NullTag.INSTANCE).setField(FieldKey.TITLE,sb.toString());
             f.save();
 
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof VorbisCommentTag);
-            assertEquals("bbbbbbb", f.getTag().getFirst(FieldKey.ALBUM));
-            assertEquals(sb.toString(), f.getTag().getFirst(FieldKey.TITLE));
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            assertEquals("bbbbbbb", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
+            assertEquals(sb.toString(), f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
 
             //Identification Header type oggFlag =2
             OggFileReader ofr = new OggFileReader();

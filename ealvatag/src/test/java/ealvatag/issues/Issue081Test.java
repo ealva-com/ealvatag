@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
@@ -27,7 +28,7 @@ public class Issue081Test extends AbstractTestCase
 
         AudioFile audioFile = AudioFileIO.read(file);
         System.out.println(audioFile.getAudioHeader());
-        WavTag tag = (WavTag) audioFile.getTag();
+        WavTag tag = (WavTag) audioFile.getTag().or(NullTag.INSTANCE);
         System.out.println(tag.getInfoTag());
     }
 
@@ -42,7 +43,7 @@ public class Issue081Test extends AbstractTestCase
         File file = AbstractTestCase.copyAudioToTmp("test142.wav", new File("test142SaveId3.wav"));
 
         AudioFile audioFile = AudioFileIO.read(file);
-        WavTag tag = (WavTag) audioFile.getTag();
+        WavTag tag = (WavTag) audioFile.getTag().or(NullTag.INSTANCE);
         ID3v24Tag id3Tag = new ID3v24Tag();
         id3Tag.setField(FieldKey.TITLE,"Skeksis (Original Mix)");
         id3Tag.setField(FieldKey.ARTIST,"Alan Fitzpatrock");
@@ -71,7 +72,7 @@ public class Issue081Test extends AbstractTestCase
         File file = AbstractTestCase.copyAudioToTmp("test142.wav", new File("test142SaveInfo.wav"));
 
         AudioFile audioFile = AudioFileIO.read(file);
-        WavTag tag = (WavTag) audioFile.getTag();
+        WavTag tag = (WavTag) audioFile.getTag().or(NullTag.INSTANCE);
         WavInfoTag wavInfoTag = new WavInfoTag();
         wavInfoTag.setField(FieldKey.TITLE,"Skeksis (Original Mix)");
         wavInfoTag.setField(FieldKey.ARTIST,"Alan Fitzpatrock");

@@ -12,6 +12,7 @@ import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagOptionSingleton;
@@ -83,7 +84,7 @@ public class FilePermissionsTest {
 		TagOptionSingleton.getInstance().setCheckIsWritable(performPreCheck);
 		try {
 			AudioFile aFile = AudioFileIO.read(testFile);
-			Tag tag = aFile.getTag();
+			Tag tag = aFile.getTag().or(NullTag.INSTANCE);
 			tag.setField(FieldKey.ALBUM, "album");
 			aFile.save();
 		} finally {

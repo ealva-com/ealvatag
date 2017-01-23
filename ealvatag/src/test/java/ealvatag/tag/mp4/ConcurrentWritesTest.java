@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -67,7 +68,7 @@ public class ConcurrentWritesTest extends TestCase
             audiofile.getTagOrSetNewDefault().setField(FieldKey.CUSTOM1, file.getName());
             audiofile.save();
             audiofile = AudioFileIO.read(file);
-            assertEquals(file.getName(),audiofile.getTag().getFirst(FieldKey.CUSTOM1));
+            assertEquals(file.getName(),audiofile.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
             return true;
         }
     }

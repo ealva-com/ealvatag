@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -34,7 +35,7 @@ public class M4aReadDrmTagTest extends TestCase
 
             File testFile = AbstractTestCase.copyAudioToTmp("test9.m4p");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -43,7 +44,7 @@ public class M4aReadDrmTagTest extends TestCase
             //Time in seconds
             assertEquals(329, f.getAudioHeader().getTrackLength());
             assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            assertEquals(new String("2"), f.getAudioHeader().getChannels());
+            assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
             assertEquals(EncoderType.DRM_AAC.getDescription(), f.getAudioHeader().getEncodingType());
 

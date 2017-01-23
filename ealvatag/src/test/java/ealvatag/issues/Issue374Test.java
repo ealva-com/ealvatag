@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v1Tag;
@@ -43,7 +44,7 @@ public class Issue374Test extends AbstractTestCase {
                 String s2 = String.valueOf(af.getAudioHeader().getTrackLength());
                 String s3 = String.valueOf(af.getAudioHeader().isVariableBitRate());
 
-                Tag tag = af.getTag();
+                Tag tag = af.getTag().orNull();
                 if (tag == null || tag instanceof ID3v1Tag) {
                     TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
                     tag = af.setNewDefaultTag();
@@ -59,7 +60,7 @@ public class Issue374Test extends AbstractTestCase {
                 assertEquals(s1, s11);
                 assertEquals(s2, s22);
                 assertEquals(s3, s33);
-                assertTrue(af.getTag().getFields(FieldKey.COVER_ART).size() > 0);
+                assertTrue(af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COVER_ART).size() > 0);
 
             } catch (Exception e) {
                 caught = e;

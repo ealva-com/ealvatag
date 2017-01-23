@@ -58,6 +58,21 @@ public class Check {
         }
     }
 
+    public static String checkArgNotNullOrEmpty(final String reference) {
+        if (reference == null || Strings.isNullOrEmpty(reference)) {
+            throw new IllegalArgumentException();
+        }
+        return reference;
+    }
+
+    public static String checkArgNotNullOrEmpty(final String reference,
+                                                final String errorMessageTemplate) {
+        if (reference == null || Strings.isNullOrEmpty(reference)) {
+            throw new IllegalArgumentException(errorMessageTemplate);
+        }
+        return reference;
+    }
+
     public static String checkArgNotNullOrEmpty(final String reference,
                                                final String errorMessageTemplate,
                                                final Object... errorMessageArgs) {

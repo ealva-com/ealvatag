@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class Issue146Test extends AbstractTestCase {
             tag.setField(FieldKey.TITLE, "好好学习");
             afile.save();
             System.out.println(tag.getFieldAt(FieldKey.TITLE, 0) + tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
-            tag = AudioFileIO.read(file).getTag();
+            tag = AudioFileIO.read(file).getTag().or(NullTag.INSTANCE);
             System.out.println(tag.getFieldAt(FieldKey.TITLE, 0) + tag.getFieldAt(FieldKey.TITLE, 0).getBytes().length);
         }
     }

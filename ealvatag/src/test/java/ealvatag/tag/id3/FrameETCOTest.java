@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.framebody.FrameBodyETCO;
 import ealvatag.tag.id3.framebody.FrameBodyETCOTest;
 
@@ -44,7 +45,7 @@ public class FrameETCOTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test20.mp3");
             AudioFile f = AudioFileIO.read(testFile);
-            final ID3v23Frame frame = ((ID3v23Frame) ((ID3v23Tag) f.getTag()).getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES));
+            final ID3v23Frame frame = ((ID3v23Frame) ((ID3v23Tag) f.getTag().or(NullTag.INSTANCE)).getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES));
             FrameBodyETCO body = (FrameBodyETCO) frame.getBody();
             assertEquals(2, body.getTimestampFormat());
             assertEquals(1, body.getTimingCodes().size());

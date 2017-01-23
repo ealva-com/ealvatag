@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,7 +51,7 @@ public class Issue005Test extends AbstractTestCase
         {
             File orig = new File("testdata", "testNonExistent.flac");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag();
+            af.getTag().or(NullTag.INSTANCE);
         }
         catch(Exception ex)
         {
@@ -67,7 +68,7 @@ public class Issue005Test extends AbstractTestCase
         {
             File orig = new File("testdata", "testNonExistent.ogg");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag();
+            af.getTag().or(NullTag.INSTANCE);
         }
         catch(Exception ex)
         {
@@ -84,7 +85,7 @@ public class Issue005Test extends AbstractTestCase
         {
             File orig = new File("testdata", "testNonExistent.m4a");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag();
+            af.getTag().or(NullTag.INSTANCE);
         }
         catch(Exception ex)
         {
@@ -101,7 +102,7 @@ public class Issue005Test extends AbstractTestCase
         {
             File orig = new File("testdata", "testNonExistent.wma");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag();
+            af.getTag().or(NullTag.INSTANCE);
         }
         catch(Exception ex)
         {
@@ -118,7 +119,7 @@ public class Issue005Test extends AbstractTestCase
         {
             File orig = new File("testdata", "testNonExistent.wav");
             AudioFile af = AudioFileIO.read(orig);
-            af.getTag();
+            af.getTag().or(NullTag.INSTANCE);
         }
         catch(Exception ex)
         {

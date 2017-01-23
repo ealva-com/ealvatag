@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -33,7 +34,7 @@ public class Issue270Test extends AbstractTestCase
 
             //Read FileFails
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
         }
         catch(Exception e)
         {

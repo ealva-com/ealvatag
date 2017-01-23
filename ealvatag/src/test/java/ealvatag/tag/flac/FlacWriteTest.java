@@ -7,6 +7,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.flac.FlacInfoReader;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.valuepair.ImageFormats;
@@ -47,8 +48,8 @@ public class FlacWriteTest
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("44100", f.getAudioHeader().getSampleRate());
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag)f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             //No Images
@@ -100,7 +101,7 @@ public class FlacWriteTest
             f.save();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
-            assertTrue(f.getTag() instanceof FlacTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
 
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
@@ -108,7 +109,7 @@ public class FlacWriteTest
             assertEquals("encoder", tag.getFirst(FieldKey.ENCODER));
 
 
-            tag = (FlacTag)f.getTag();
+            tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             assertEquals("artist\u01ff", tag.getFirst(FieldKey.ARTIST));
             assertEquals("album", tag.getFirst(FieldKey.ALBUM));
             assertEquals(ALBUM_ARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST));
@@ -169,8 +170,8 @@ public class FlacWriteTest
             assertEquals("2", f.getAudioHeader().getChannels());
             assertEquals("44100", f.getAudioHeader().getSampleRate());
 
-            assertTrue(f.getTag() instanceof FlacTag);
-            FlacTag tag = (FlacTag)f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+            FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
             //No Images
@@ -222,7 +223,7 @@ public class FlacWriteTest
             f.save();
             f = AudioFileIO.read(testFile);
             assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
-            assertTrue(f.getTag() instanceof FlacTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
 
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
             assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
@@ -230,7 +231,7 @@ public class FlacWriteTest
             assertEquals("encoder", tag.getFirst(FieldKey.ENCODER));
 
 
-            tag = (FlacTag)f.getTag();
+            tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             assertEquals("artist\u01ff", tag.getFirst(FieldKey.ARTIST));
             assertEquals("album", tag.getFirst(FieldKey.ALBUM));
             assertEquals(ALBUM_ARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST));
@@ -289,13 +290,13 @@ public class FlacWriteTest
         assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
         assertEquals("2", f.getAudioHeader().getChannels());
         assertEquals("44100", f.getAudioHeader().getSampleRate());
-        assertEquals(2, ((FlacTag)f.getTag()).getImages().size());
-        assertTrue(f.getTag() instanceof FlacTag);
-        assertFalse(f.getTag().isEmpty());
+        assertEquals(2, ((FlacTag)f.getTag().or(NullTag.INSTANCE)).getImages().size());
+        assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+        assertFalse(f.getTag().or(NullTag.INSTANCE).isEmpty());
 
-        AudioFileIO.delete(f);
+        f.deleteFileTag();
         f = AudioFileIO.read(testFile);
-        assertTrue(f.getTag().isEmpty());
+        assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
     }
 
 
@@ -307,10 +308,10 @@ public class FlacWriteTest
         AudioFile f = AudioFileIO.read(testFile);
         FlacInfoReader infoReader = new FlacInfoReader();
         assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
-        f.getTag().setField(FieldKey.ALBUM, "BLOCK");
+        f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "BLOCK");
         f.save();
         f = AudioFileIO.read(testFile);
-        assertEquals("BLOCK", f.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals("BLOCK", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
     /**
@@ -321,12 +322,12 @@ public class FlacWriteTest
         AudioFile f = AudioFileIO.read(testFile);
         FlacInfoReader infoReader = new FlacInfoReader();
         assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
-        f.getTag().setField(FieldKey.ALBUM, "BLOCK");
+        f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "BLOCK");
         f.save();
         f = AudioFileIO.read(testFile);
         infoReader = new FlacInfoReader();
         assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
-        assertEquals("BLOCK", f.getTag().getFirst(FieldKey.ALBUM));
+        assertEquals("BLOCK", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
     }
 
@@ -343,8 +344,8 @@ public class FlacWriteTest
         assertEquals("2", f.getAudioHeader().getChannels());
         assertEquals("44100", f.getAudioHeader().getSampleRate());
 
-        assertTrue(f.getTag() instanceof FlacTag);
-        FlacTag tag = (FlacTag)f.getTag();
+        assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
+        FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
         assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
         assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
 
@@ -376,10 +377,10 @@ public class FlacWriteTest
         f.save();
         f = AudioFileIO.read(testFile);
         assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
-        assertTrue(f.getTag() instanceof FlacTag);
+        assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
         assertEquals("reference libFLAC 1.1.4 20070213", tag.getFirst(FieldKey.ENCODER));
         assertEquals("reference libFLAC 1.1.4 20070213", tag.getVorbisCommentTag().getVendor());
-        tag = (FlacTag)f.getTag();
+        tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
         assertEquals("BLOCK", tag.getFirst(FieldKey.ARTIST));
         assertEquals(1, tag.getArtworkList().size());
     }
@@ -387,24 +388,24 @@ public class FlacWriteTest
     public void testDeleteTag() throws Exception {
         File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("testDelete.flac"));
         AudioFile f = AudioFileIO.read(testFile);
-        AudioFileIO.delete(f);
+        f.deleteFileTag();
 
         f = AudioFileIO.read(testFile);
-        assertTrue(f.getTag().isEmpty());
+        assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
     }
 
     public void testWriteMultipleFields() throws Exception {
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac", new File("testWriteMultiple.flac"));
         AudioFile f = AudioFileIO.read(testFile);
-        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2, tagFields.size());
         f.save();
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2, tagFields.size());
     }
 
@@ -412,30 +413,30 @@ public class FlacWriteTest
         //Delete using generic key
         File testFile = AbstractTestCase.copyAudioToTmp("test.flac", new File("testWriteMultiple.flac"));
         AudioFile f = AudioFileIO.read(testFile);
-        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2, tagFields.size());
-        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ALBUM_ARTIST_SORT);
         f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2, tagFields.size());
-        f.getTag().deleteField("ALBUMARTISTSORT");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).deleteField("ALBUMARTISTSORT");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0, tagFields.size());
 
     }
@@ -449,14 +450,14 @@ public class FlacWriteTest
 //        AudioFile f = AudioFileIO.read(testFile);
 //        FlacInfoReader infoReader = new FlacInfoReader();
 //        assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
-//        f.getTag().setField(FieldKey.ARTIST, "fred");
+//        f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
 //        f.commit();
 //
 //        f = AudioFileIO.read(testFile);
 //
 //        infoReader = new FlacInfoReader();
 //        assertEquals(3, infoReader.countMetaBlocks(f.getFile()));
-//        assertEquals("fred", f.getTag().getFirst(FieldKey.ARTIST));
+//        assertEquals("fred", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 //    }
 
     public void testWriteWriteProtectedFileWithCheckDisabled() throws Exception {

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.reference.ID3V2Version;
 
@@ -28,7 +29,7 @@ public class Issue373Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.setNewDefaultTag();
-            af.getTag().setField(FieldKey.ARTIST, "artist");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "artist");
 
             Thread.sleep(20000);
             //Now open in another program to lock it, cannot reproduce programtically

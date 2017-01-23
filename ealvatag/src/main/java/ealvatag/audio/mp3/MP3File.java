@@ -21,6 +21,7 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.google.common.io.Files;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.UnsupportedFileType;
@@ -805,7 +806,7 @@ public class MP3File extends AudioFileImpl {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void delete(BaseID3Tag mp3tag) throws FileNotFoundException, IOException {
+    public void delete(BaseID3Tag mp3tag) throws IOException {
         RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
         mp3tag.delete(raf);
         raf.close();
@@ -934,10 +935,6 @@ public class MP3File extends AudioFileImpl {
             LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file.getName()));
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file.getName()));
         }
-    }
-
-    @Override public TagFieldContainer getTag() {
-        return (TagFieldContainer)super.getTag();
     }
 
     /**

@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -41,7 +42,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile,"r"),false);
             tree.printAtomTree();
@@ -205,7 +206,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test38.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -362,7 +363,7 @@ public class M4aReadTagTest extends TestCase
           {
               File testFile = AbstractTestCase.copyAudioToTmp("test39.m4a");
               AudioFile f = AudioFileIO.read(testFile);
-              Tag tag = f.getTag();
+              Tag tag = f.getTag().or(NullTag.INSTANCE);
 
               System.out.println(f.getAudioHeader());
               System.out.println(tag);
@@ -431,7 +432,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test2.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -602,7 +603,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -843,7 +844,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test5.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -887,7 +888,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test13.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -917,7 +918,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test3.m4a", new File("testIssue156.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -964,7 +965,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("unable_to_read.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             tag.getFirst(FieldKey.ALBUM);
             tag.getFirst(FieldKey.ARTIST);
@@ -1017,7 +1018,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test14.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1040,7 +1041,7 @@ public class M4aReadTagTest extends TestCase
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) f.getTag();
+            tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             assertEquals("AApr", tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).getId());
             assertEquals("NEWTITLE\u00A9\u01ff", tag.getFirst(FieldKey.TITLE));
@@ -1086,7 +1087,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test16.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1122,7 +1123,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test27.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1164,7 +1165,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test31.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1182,7 +1183,7 @@ public class M4aReadTagTest extends TestCase
             f.save();
 
             //Reget
-            tag = (Mp4Tag) f.getTag();
+            tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1220,7 +1221,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test32.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1249,7 +1250,7 @@ public class M4aReadTagTest extends TestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test33.m4a");
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1310,7 +1311,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test84.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals("6",tag.getFirst(FieldKey.TRACK));
             assertEquals("12",tag.getFirst(FieldKey.TRACK_TOTAL));
 
@@ -1321,7 +1322,7 @@ public class M4aReadTagTest extends TestCase
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals("8",tag.getFirst(FieldKey.TRACK));
             assertEquals("12",tag.getFirst(FieldKey.TRACK_TOTAL));
 
@@ -1350,7 +1351,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test86.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals("Away From The Sun",tag.getFirst(FieldKey.TITLE));
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -1380,7 +1381,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test147.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
         }
         catch (Exception e)
         {
@@ -1407,7 +1408,7 @@ public class M4aReadTagTest extends TestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test84.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals("6",tag.getFirst(FieldKey.TRACK));
             assertEquals("12",tag.getFirst(FieldKey.TRACK_TOTAL));
 
@@ -1419,7 +1420,7 @@ public class M4aReadTagTest extends TestCase
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals("6",tag.getFirst(FieldKey.TRACK_TOTAL));
             assertEquals("6",tag.getFirst(FieldKey.TRACK));
 

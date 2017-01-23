@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.reference.Languages;
 
 import java.io.File;
@@ -26,13 +27,13 @@ public class Issue410Test extends AbstractTestCase {
             af.getTagOrSetNewDefault().setField(FieldKey.LANGUAGE, "English");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("English", af.getTag().getFirst(FieldKey.LANGUAGE));
+            assertEquals("English", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
 
             final String[] englishes = Languages.getInstanceOf().getIdForValue("English").toArray(new String[2]);
             af.getTagOrSetNewDefault().setField(FieldKey.LANGUAGE, englishes[0]);
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().getFirst(FieldKey.LANGUAGE));
+            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
         } catch (Exception e) {
             caught = e;
             e.printStackTrace();

@@ -23,6 +23,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import javax.management.MBeanServer;
@@ -82,7 +83,7 @@ public class DumpHeap {
             final String channels = audioHeader.getChannels();
             final String bitRate = audioHeader.getBitRate();
             final String encodingType = audioHeader.getEncodingType();
-            final Tag tag = audioFile.getTag();
+            final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
             if (tag.hasField(FieldKey.TITLE)) {
                 final String title = tag.getFirst(FieldKey.TITLE);
             }

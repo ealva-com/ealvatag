@@ -16,11 +16,14 @@
  */
 package ealvatag.audio;
 
+import com.google.common.base.Preconditions;
+import com.google.common.io.Files;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.ModifyVetoException;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
@@ -103,7 +106,7 @@ public abstract class AudioFileWriter {
 
             try {
                 modificationListener.fileWillBeModified(af, true);
-                deleteTag(af.getTag(), raf, rafTemp);
+                deleteTag(af.getTag().orNull(), raf, rafTemp);
                 modificationListener.fileModified(af, tempF);
             } catch (ModifyVetoException veto) {
                 throw new CannotWriteException(veto);
@@ -231,9 +234,13 @@ public abstract class AudioFileWriter {
      *
      * @throws CannotWriteException
      */
-    private void precheckWrite(AudioFile af) throws CannotWriteException, CannotReadException {
-        // Preliminary checks
-        if (af.getTag().isEmpty()) {
+    private void precheckWrite(AudioFile af) throws CannotWriteException {
+        Tag tag = af.getTag().or(NullTag.INSTANCE);
+        if (tag == NullTag.INSTANCE) {
+            throw new CannotWriteException("Null tag");
+        }
+
+        if (tag.isEmpty()) {
             delete(af);
             return;
         }
@@ -244,7 +251,7 @@ public abstract class AudioFileWriter {
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING.getMsg(file));
         }
 
-        if (af.getFile().length() <= MINIMUM_FILESIZE) {
+        if (file.length() <= MINIMUM_FILESIZE) {
             LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file));
             throw new CannotWriteException(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL.getMsg(file));
         }
@@ -266,11 +273,7 @@ public abstract class AudioFileWriter {
 
         // Prechecks
 
-        try {
-            precheckWrite(audioFile);
-        } catch (CannotReadException e) {
-            throw new CannotWriteException(e);
-        }
+        precheckWrite(audioFile);
 
         //mp3's use a different mechanism to the other formats
         if (audioFile instanceof MP3File) {
@@ -614,13 +617,13 @@ public abstract class AudioFileWriter {
         // Rename Original File
         // Can fail on Vista if have Special Permission 'Delete' set Deny
         File originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                           AudioFileImpl.getBaseFilename(originalFile) + ".old");
+                                           Files.getNameWithoutExtension(originalFile.getPath()) + ".old");
 
         //If already exists modify the suffix
         int count = 1;
         while (originalFileBackup.exists()) {
             originalFileBackup = new File(originalFile.getAbsoluteFile().getParentFile().getPath(),
-                                          AudioFileImpl.getBaseFilename(originalFile) + ".old" + count);
+                                          Files.getNameWithoutExtension(originalFile.getPath()) + ".old" + count);
             count++;
         }
 

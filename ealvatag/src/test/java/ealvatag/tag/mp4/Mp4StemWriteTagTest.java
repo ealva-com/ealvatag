@@ -1,5 +1,6 @@
 package ealvatag.tag.mp4;
 
+import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
@@ -63,7 +64,7 @@ public class Mp4StemWriteTagTest extends TestCase {
         final AudioFile audioFile = AudioFileIO.read(testFile);
         final char[] chars = new char[freeSpace * 2]; // twice the size of the total available free space
         Arrays.fill(chars, 'C');
-        audioFile.getTag().setField(FieldKey.TITLE, new String(chars));
+        audioFile.getTag().or(NullTag.INSTANCE).setField(FieldKey.TITLE, new String(chars));
         audioFile.save();
 
         final Mp4AtomTree treeAfter = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
@@ -102,7 +103,7 @@ public class Mp4StemWriteTagTest extends TestCase {
             assertEquals(TEST_FILE1_SIZE, testFile.length());
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag();
+            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
@@ -113,7 +114,7 @@ public class Mp4StemWriteTagTest extends TestCase {
             //Save changes and reread from disk
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) f.getTag();
+            tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
 
             //Total FileSize must be larger, as the free atom in meta is only 844 big
             assertEquals(1450641, testFile.length());

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
@@ -69,8 +70,8 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("32000", f.getAudioHeader().getSampleRate());
             assertFalse(f.getAudioHeader().isVariableBitRate());
 
-            assertTrue(f.getTag() instanceof AsfTag);
-            AsfTag tag = (AsfTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);
+            AsfTag tag = (AsfTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //Ease of use methods for common fields
@@ -160,8 +161,8 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("44100", f.getAudioHeader().getSampleRate());
             assertFalse(f.getAudioHeader().isVariableBitRate());
 
-            assertTrue(f.getTag() instanceof AsfTag);
-            AsfTag tag = (AsfTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);
+            AsfTag tag = (AsfTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
             //Ease of use methods for common fields
@@ -273,8 +274,8 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("32000", f.getAudioHeader().getSampleRate());
             assertFalse(f.getAudioHeader().isVariableBitRate());
 
-            assertTrue(f.getTag() instanceof AsfTag);
-            AsfTag tag = (AsfTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);
+            AsfTag tag = (AsfTag) f.getTag().or(NullTag.INSTANCE);
 
             //Write some new values and save
             tag.setField(FieldKey.ARTIST,"artist2");
@@ -302,7 +303,7 @@ public class WmaSimpleTest extends AbstractTestCase
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = (AsfTag) f.getTag();
+            tag = (AsfTag) f.getTag().or(NullTag.INSTANCE);
 
             assertTrue(f.getAudioHeader().isVariableBitRate());
 
@@ -326,11 +327,9 @@ public class WmaSimpleTest extends AbstractTestCase
             assertEquals("11",tag.getFirst(FieldKey.TRACK_TOTAL));
 
 
-
-
-            AudioFileIO.delete(f);
+            f.deleteFileTag();
             f = AudioFileIO.read(testFile);
-            tag = (AsfTag) f.getTag();
+            tag = (AsfTag) f.getTag().or(NullTag.INSTANCE);
 
             assertFalse(f.getAudioHeader().isVariableBitRate());
             assertTrue(tag.isEmpty());
@@ -355,13 +354,13 @@ public class WmaSimpleTest extends AbstractTestCase
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            AudioFileIO.delete(f);
+            f.deleteFileTag();
 
             // Tests multiple iterations on same file
             for (int i = 0; i < 2; i++)
             {
                 f = AudioFileIO.read(testFile);
-                Tag tag = f.getTag();
+                Tag tag = f.getTag().or(NullTag.INSTANCE);
                 for (FieldKey key : FieldKey.values())
                 {
                     if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
@@ -371,7 +370,7 @@ public class WmaSimpleTest extends AbstractTestCase
                 }
                 f.save();
                 f = AudioFileIO.read(testFile);
-                tag = f.getTag();
+                tag = f.getTag().or(NullTag.INSTANCE);
                 for (FieldKey key : FieldKey.values())
                 {
                     /*
@@ -410,11 +409,11 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
             AudioFile f = AudioFileIO.read(testFile);
-            AudioFileIO.delete(f);
+            f.deleteFileTag();
 
             //test fields are written with correct ids
             f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             for (FieldKey key : FieldKey.values())
             {
                 if (!(key == FieldKey.COVER_ART) && !(key == FieldKey.ITUNES_GROUPING))
@@ -426,7 +425,7 @@ public class WmaSimpleTest extends AbstractTestCase
 
             //Reread File
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
 
             TagField tf = tag.getFirstField(AsfFieldKey.ALBUM.getFieldName());
             assertEquals("WM/AlbumTitle", tf.getId());
@@ -479,7 +478,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test3.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            assertEquals("Glass", f.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("Glass", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
             //Now
         }
         catch (Exception e)
@@ -504,7 +503,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
             TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
@@ -590,7 +589,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test4.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
             TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
@@ -670,7 +669,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test5.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
             TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
@@ -753,7 +752,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test6.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
             TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
@@ -845,7 +844,7 @@ public class WmaSimpleTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test7.wma");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(0, tag.getFields(FieldKey.COVER_ART).size());
 
             //Now createField artwork field
@@ -857,7 +856,7 @@ public class WmaSimpleTest extends AbstractTestCase
             f.commit();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag();
+            tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(1, tag.getFields(FieldKey.COVER_ART).size());
 
             TagField tagField = tag.getFields(FieldKey.COVER_ART).get(0);
@@ -888,13 +887,13 @@ public class WmaSimpleTest extends AbstractTestCase
     {
         File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testWriteMultiple.wma"));
         AudioFile f = AudioFileIO.read(testFile);
-        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(tagFields.size(),0);
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT,"artist2");
         f.commit();
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(2,tagFields.size());
     }
     */
@@ -904,28 +903,28 @@ public class WmaSimpleTest extends AbstractTestCase
         //Delete using generic key
         File testFile = AbstractTestCase.copyAudioToTmp("test1.wma", new File("testDeleteFields.wma"));
         AudioFile f = AudioFileIO.read(testFile);
-        List<TagField> tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(1,tagFields.size());
-        f.getTag().deleteField(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ALBUM_ARTIST_SORT);
         f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
-        f.getTag().addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT,"artist1");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(1,tagFields.size());
-        f.getTag().deleteField("WM/AlbumArtistSortOrder");
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        f.getTag().or(NullTag.INSTANCE).deleteField("WM/AlbumArtistSortOrder");
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tagFields = f.getTag().getFields(FieldKey.ALBUM_ARTIST_SORT);
+        tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
         assertEquals(0,tagFields.size());
 
     }

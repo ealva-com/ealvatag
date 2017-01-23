@@ -7,6 +7,7 @@ import ealvatag.audio.wav.WavOptions;
 import ealvatag.audio.wav.WavSaveOptions;
 import ealvatag.audio.wav.WavSaveOrder;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v24Tag;
 
@@ -42,8 +43,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
 
 
             assertTrue(tag.isExistingInfoTag());
@@ -67,8 +68,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -107,8 +108,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
 
             assertEquals(926264L, ((WavTag) tag).getInfoTag().getStartLocationInFile().longValue());
             assertEquals(926560L, ((WavTag) tag).getInfoTag().getEndLocationInFile().longValue());
@@ -131,8 +132,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ARTIST));
             assertEquals("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", tag.getFirst(FieldKey.ALBUM_ARTIST));
@@ -175,8 +176,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -200,8 +201,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -240,8 +241,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
 
             assertTrue(tag.isExistingInfoTag());
 
@@ -265,8 +266,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(((WavTag) tag).getInfoTag());
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
@@ -310,8 +311,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
 
 
-            assertTrue(f.getTag() instanceof WavTag);
-            WavTag tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            WavTag tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
 
             assertFalse(tag.isExistingInfoTag());
 
@@ -335,8 +336,8 @@ public class WavMetadataNewTagsInfobeforeId3Test extends AbstractTestCase
 
             //Read modified metadata now in file
             f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag() instanceof WavTag);
-            tag = (WavTag) f.getTag();
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
+            tag = (WavTag) f.getTag().or(NullTag.INSTANCE);
             System.out.println(((WavTag) tag).getInfoTag());
 
             assertEquals("fred", tag.getFirst(FieldKey.ARTIST));

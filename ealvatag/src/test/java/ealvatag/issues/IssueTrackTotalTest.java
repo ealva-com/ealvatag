@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -31,8 +32,8 @@ public class IssueTrackTotalTest extends AbstractTestCase
             AudioFile af = AudioFileIO.read(testFile);
             MP3File mp3 = (MP3File)af;
             assertNotNull(mp3.getID3v2Tag());
-            assertNotNull(af.getTag().getFirst(FieldKey.TRACK_TOTAL));
-            assertEquals("",af.getTag().getFirst(FieldKey.TRACK_TOTAL));
+            assertNotNull(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TRACK_TOTAL));
+            assertEquals("",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TRACK_TOTAL));
             assertEquals("",af.getTagOrSetNewDefault().getFirst(FieldKey.TRACK_TOTAL));
 
         }

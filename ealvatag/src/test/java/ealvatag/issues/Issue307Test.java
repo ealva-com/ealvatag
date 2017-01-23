@@ -2,6 +2,7 @@ package ealvatag.issues;
 
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v23Frame;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.framebody.FrameBodyIPLS;
@@ -42,7 +43,8 @@ public class Issue307Test extends AbstractTestCase
             ex.printStackTrace();
         }
         assertNull(e);
-        FrameBodyIPLS frameBody = (FrameBodyIPLS)(((ID3v23Frame)((ID3v23Tag)mp3File.getTag()).getFirstField("IPLS")).getBody());
+        FrameBodyIPLS frameBody = (FrameBodyIPLS)(((ID3v23Frame)((ID3v23Tag)mp3File.getTag().or(NullTag.INSTANCE)).getFirstField("IPLS")).getBody
+                ());
         assertEquals(3,frameBody.getNumberOfPairs());
         assertEquals("producer",frameBody.getKeyAtIndex(0));
         assertEquals("Tom Wilson",frameBody.getValueAtIndex(0));

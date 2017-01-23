@@ -430,7 +430,7 @@ public final class AsfTag extends AbstractTag {
      *
      * @return ASF field capable of storing artwork.
      */
-    public AsfTagCoverField createArtwork(final Artwork artwork) {
+    public AsfTagCoverField createArtwork(final Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         return new AsfTagCoverField(artwork.getBinaryData(), artwork.getPictureType(), artwork.getDescription(), artwork.getMimeType());
     }
 

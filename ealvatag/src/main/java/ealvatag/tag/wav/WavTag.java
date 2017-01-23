@@ -302,8 +302,9 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().getArtworkList();
     }
 
-    public void deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws KeyNotFoundException {
         getActiveTag().deleteArtwork();
+        return this;
     }
 
     public boolean hasCommonFields() {
@@ -327,7 +328,7 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
     /**
      * Create artwork field. Not currently supported.
      */
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         return getActiveTag().createArtwork(artwork);
     }
 

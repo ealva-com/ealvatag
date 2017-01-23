@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
@@ -39,54 +40,54 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
 
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
-            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_LYRICS_SITE,"http://test7");
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertTrue(mp3File.getTag() instanceof ID3v24Tag);
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertTrue(mp3File.getTag().or(NullTag.INSTANCE) instanceof ID3v24Tag);
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_LYRICS_SITE);
             mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
         }
         catch (Exception e)
         {
@@ -120,56 +121,56 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
 
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
-            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_LYRICS_SITE,"http://test7");
 
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_LYRICS_SITE);
             mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
         }
         catch (Exception e)
@@ -205,55 +206,55 @@ public class Issue242Test extends AbstractTestCase
             assertEquals(mp3AudioLength,testFile.length() - mp3File.getMP3AudioHeader().getMp3StartByte());
 
             //Check mapped okay ands empty
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
 
             //Now write these fields
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
-            mp3File.getTag().setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
-            mp3File.getTag().setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
-            mp3File.getTag().setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
-            mp3File.getTag().setField(FieldKey.URL_LYRICS_SITE,"http://test7");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_RELEASE_SITE,"http://test1");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_RELEASE_SITE,"http://test2");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_DISCOGS_ARTIST_SITE,"http://test3");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE,"http://test4");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE,"http://test5");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_OFFICIAL_ARTIST_SITE,"http://test6");
+            mp3File.getTag().or(NullTag.INSTANCE).setField(FieldKey.URL_LYRICS_SITE,"http://test7");
             mp3File.saveMp3();
 
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
             //Check mapped okay ands empty
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(1,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(1,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
 
             //Delete Fields
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
-            mp3File.getTag().deleteField(FieldKey.URL_LYRICS_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_DISCOGS_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_RELEASE_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_WIKIPEDIA_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_OFFICIAL_ARTIST_SITE);
+            mp3File.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.URL_LYRICS_SITE);
 
             mp3File.saveMp3();
             af = AudioFileIO.read(testFile);
             mp3File= (MP3File)af;
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
-            assertEquals(0,mp3File.getTag().getFields(FieldKey.URL_LYRICS_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_OFFICIAL_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_DISCOGS_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_RELEASE_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_WIKIPEDIA_ARTIST_SITE).size());
+            assertEquals(0,mp3File.getTag().or(NullTag.INSTANCE).getFields(FieldKey.URL_LYRICS_SITE).size());
         }
         catch (Exception e)
         {

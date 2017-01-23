@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.id3.ID3v23Frame;
@@ -35,7 +36,7 @@ public class Issue224Test extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test31.mp3");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag();
+            Tag tag = f.getTag().or(NullTag.INSTANCE);
             assertEquals(11, tag.getFieldCount());
             assertTrue(tag instanceof ID3v23Tag);
             ID3v23Tag id3v23Tag = (ID3v23Tag) tag;

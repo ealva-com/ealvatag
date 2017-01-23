@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 
@@ -25,8 +26,8 @@ public class Issue250Test extends AbstractTestCase
         File testFile = AbstractTestCase.copyAudioToTmp("test78.mp3");
 
         MP3File f = (MP3File)AudioFileIO.read(testFile);
-        Tag tag = f.getTag();
-        assertTrue(f.getTag() instanceof ID3v23Tag);
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
+        assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof ID3v23Tag);
         ID3v23Tag id3v23tag = (ID3v23Tag)tag;
         //Dodgy frame is not counted
         assertEquals(13,id3v23tag.getFieldCount());
@@ -34,7 +35,7 @@ public class Issue250Test extends AbstractTestCase
         assertEquals(1,id3v23tag.getInvalidFrames()); //PRIV frame
         f.save();
         f = (MP3File)AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         id3v23tag = (ID3v23Tag)tag;
         assertEquals(13,id3v23tag.getFieldCount());
         assertEquals(3,id3v23tag.getFields("PRIV").size());

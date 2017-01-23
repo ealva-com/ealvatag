@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -26,23 +27,23 @@ public class ReadMp4MovementTagsTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test161.m4a");
             AudioFile af = AudioFileIO.read(testFile);
-            assertNotNull(af.getTag());
-            assertEquals("I. Preludium (Pastorale). Allegro moderato",af.getTag().getFirst(FieldKey.MOVEMENT));
-            assertEquals("2",af.getTag().getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("0",af.getTag().getFirst(FieldKey.MOVEMENT_TOTAL));
+            assertNotNull(af.getTag().orNull());
+            assertEquals("I. Preludium (Pastorale). Allegro moderato",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            assertEquals("2",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            assertEquals("0",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
 
-            af.getTag().setField(FieldKey.MOVEMENT, "fred");
-            af.getTag().setField(FieldKey.MOVEMENT_NO, "1");
-            af.getTag().setField(FieldKey.MOVEMENT_TOTAL, "7");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MOVEMENT, "fred");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MOVEMENT_NO, "1");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MOVEMENT_TOTAL, "7");
 
-            assertEquals("fred",af.getTag().getFirst(FieldKey.MOVEMENT));
-            assertEquals("1",af.getTag().getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("7",af.getTag().getFirst(FieldKey.MOVEMENT_TOTAL));
+            assertEquals("fred",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            assertEquals("1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            assertEquals("7",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("fred",af.getTag().getFirst(FieldKey.MOVEMENT));
-            assertEquals("1",af.getTag().getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("7",af.getTag().getFirst(FieldKey.MOVEMENT_TOTAL));
+            assertEquals("fred",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            assertEquals("1",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            assertEquals("7",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
 
         }
         catch(Exception e)

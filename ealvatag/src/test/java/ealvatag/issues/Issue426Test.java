@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class Issue426Test extends AbstractTestCase
         f.save();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
 
         assertTrue(tag.hasField(FieldKey.ARTIST));
         assertTrue(tag.hasField(FieldKey.MUSICBRAINZ_ARTISTID));

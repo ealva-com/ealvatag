@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.AbstractID3v2Frame;
 import ealvatag.tag.id3.ID3v23Frame;
@@ -33,7 +34,7 @@ public class Issue435Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setToDefault();
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.getTagOrSetNewDefault();
-            ((ID3v23Tag)af.getTag()).setFrame(frame);
+            ((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).setFrame(frame);
             af.save();
 
             af = AudioFileIO.read(testFile);
@@ -41,8 +42,8 @@ public class Issue435Test extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
             af.getConvertedTagOrSetNewDefault();
             af.save();
-            assertTrue(af.getTag() instanceof ID3v24Tag);
-            assertTrue(((ID3v24Tag)af.getTag()).getFrame("TDRC") instanceof AbstractID3v2Frame);
+            assertTrue(af.getTag().or(NullTag.INSTANCE) instanceof ID3v24Tag);
+            assertTrue(((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TDRC") instanceof AbstractID3v2Frame);
 
             TagOptionSingleton.getInstance().setToDefault();
         }

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
@@ -52,7 +53,7 @@ public class Issue263Test extends AbstractTestCase {
             AudioFile af = AudioFileIO.read(testFile);
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             af.setNewDefaultTag();
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +102,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +122,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,7 +144,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +165,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,7 +187,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -207,7 +208,7 @@ public class Issue263Test extends AbstractTestCase {
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
             tag.createField(FieldKey.COVER_ART, "test");
         } catch (Exception e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp4.Mp4AtomTree;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class Issue451Test extends AbstractTestCase
         try
         {
             AudioFile af = AudioFileIO.read(testFile);
-            ImageFormats.getMimeTypeForBinarySignature(af.getTag().getArtworkList().get(0).getBinaryData());
+            ImageFormats.getMimeTypeForBinarySignature(af.getTag().or(NullTag.INSTANCE).getArtworkList().get(0).getBinaryData());
         }
         catch(ArrayIndexOutOfBoundsException aex)
         {

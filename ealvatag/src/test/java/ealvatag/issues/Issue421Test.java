@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class Issue421Test extends AbstractTestCase
 
         File testFile = AbstractTestCase.copyAudioToTmp("Arizona.m4a");
         AudioFile f = AudioFileIO.read(testFile);
-        Tag tag = f.getTag();
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
         assertEquals("13",tag.getFirst(FieldKey.TRACK));
         assertEquals("14",tag.getFirst(FieldKey.TRACK_TOTAL));
         assertEquals("13",tag.getAll(FieldKey.TRACK).get(0));

@@ -264,21 +264,11 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return Optional.absent();
     }
 
-    /**
-     * Delete all instance of artwork Field
-     *
-     * @throws KeyNotFoundException
-     */
-    public void deleteArtwork() throws KeyNotFoundException {
-        this.deleteField(FieldKey.COVER_ART);
+    public Tag deleteArtwork() throws KeyNotFoundException {
+        return deleteField(FieldKey.COVER_ART);
     }
 
-    /**
-     * Create artwork field
-     *
-     * @return
-     */
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         if (artwork.isLinked()) {
             return new MetadataBlockDataPicture(
                     artwork.getImageUrl().getBytes(StandardCharsets.ISO_8859_1),

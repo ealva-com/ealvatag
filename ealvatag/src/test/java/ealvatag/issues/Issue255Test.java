@@ -6,6 +6,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -109,7 +110,7 @@ public class Issue255Test extends AbstractTestCase
 
             //Add a v24Tag
             AudioFile af = AudioFileIO.read(testFile);
-            af.getTag().setField(FieldKey.ALBUM,"NewValue");
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "NewValue");
             af.save();
         }
         catch(Exception e)

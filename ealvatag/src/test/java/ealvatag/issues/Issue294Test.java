@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.audio.mp3.MPEGFrameHeader;
 import ealvatag.logging.Hex;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.images.Artwork;
@@ -47,14 +48,14 @@ public class Issue294Test extends AbstractTestCase
             MP3File af = (MP3File)AudioFileIO.read(testFile);
 
             //File is corrupt
-            assertEquals(1,af.getTag().getArtworkList().size());
-            Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
+            assertEquals(1,af.getTag().or(NullTag.INSTANCE).getArtworkList().size());
+            Artwork artwork = af.getTag().or(NullTag.INSTANCE).getFirstArtwork().or(NullArtwork.INSTANCE);
             assertEquals("image/jpeg",artwork.getMimeType());
             assertTrue(ImageFormats.isPortableFormat(artwork.getBinaryData()));
 
 
             //Delete and commit
-            //af.getTag().deleteArtworkField();
+            //af.getTag().or(NullTag.INSTANCE).deleteArtworkField();
             //af.commit();
 
             //af.getID3v2TagAsv24().removeFrame("APIC");
@@ -79,8 +80,8 @@ public class Issue294Test extends AbstractTestCase
             byte[]origData=artwork.getBinaryData();
 
             af = (MP3File)AudioFileIO.read(testFile);
-            assertEquals(1,af.getTag().getArtworkList().size());
-            artwork = af.getTag().getArtworkList().get(0);
+            assertEquals(1,af.getTag().or(NullTag.INSTANCE).getArtworkList().size());
+            artwork = af.getTag().or(NullTag.INSTANCE).getArtworkList().get(0);
             assertEquals(118145,artwork.getBinaryData().length);
             assertEquals(0xFF,(int)artwork.getBinaryData()[0] & MPEGFrameHeader.SYNC_BYTE1);
             assertEquals(0xD8,(int)artwork.getBinaryData()[1] & MPEGFrameHeader.SYNC_BYTE1);

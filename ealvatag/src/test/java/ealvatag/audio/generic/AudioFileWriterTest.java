@@ -3,6 +3,7 @@ package ealvatag.audio.generic;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileWriter;
+import ealvatag.audio.AudioHeader;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.tag.Tag;
@@ -13,6 +14,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,7 +42,7 @@ public class AudioFileWriterTest {
                 out.write("Some random stuff\n".getBytes(StandardCharsets.US_ASCII));
             }
         }
-        this.audioFile = new AudioFileImpl(file, "flac", null, new FlacTag());
+        this.audioFile = new AudioFileImpl(file, "flac", mock(AudioHeader.class), new FlacTag());
         TagOptionSingleton.getInstance().setToDefault();
     }
 

@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.images.Artwork;
@@ -25,8 +26,8 @@ public class Issue286Test extends AbstractTestCase
     {
         File file = new File("testdata", "test76.ogg");
         AudioFile af = AudioFileIO.read(file);
-        assertEquals(1,af.getTag().getArtworkList().size());
-        Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
+        assertEquals(1,af.getTag().or(NullTag.INSTANCE).getArtworkList().size());
+        Artwork artwork = af.getTag().or(NullTag.INSTANCE).getFirstArtwork().or(NullArtwork.INSTANCE);
         System.out.println(artwork);
         assertEquals(600, Images.getImage(artwork).getWidth());
         assertEquals(800, Images.getImage(artwork).getHeight());
@@ -43,8 +44,8 @@ public class Issue286Test extends AbstractTestCase
     {
         File file = new File("testdata", "test77.ogg");
         AudioFile af = AudioFileIO.read(file);
-        assertEquals(1,af.getTag().getArtworkList().size());
-        Artwork artwork = af.getTag().getFirstArtwork().or(NullArtwork.INSTANCE);
+        assertEquals(1,af.getTag().or(NullTag.INSTANCE).getArtworkList().size());
+        Artwork artwork = af.getTag().or(NullTag.INSTANCE).getFirstArtwork().or(NullArtwork.INSTANCE);
         System.out.println(artwork);
         assertEquals(600,Images.getImage(artwork).getWidth());
         assertEquals(800,Images.getImage(artwork).getHeight());
@@ -66,7 +67,7 @@ public class Issue286Test extends AbstractTestCase
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
-            Tag tag = af.getTag();
+            Tag tag = af.getTag().or(NullTag.INSTANCE);
 
             assertEquals(1, tag.getArtworkList().size());
             assertNotNull(tag.getArtworkList().get(0));
@@ -83,7 +84,7 @@ public class Issue286Test extends AbstractTestCase
             tag.addArtwork(newartwork);
             af.save();
             af = AudioFileIO.read(testFile);
-            tag = af.getTag();
+            tag = af.getTag().or(NullTag.INSTANCE);
             assertEquals(2, tag.getArtworkList().size());
 
 

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
@@ -118,22 +119,22 @@ public class FrameBodyTIPLTest extends AbstractTestCase {
     public void testMultiArrangerIDv24() throws Exception {
         File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testWriteArrangerv24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
-        assertNull(f.getTag());
+        assertNull(f.getTag().orNull());
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
 
         f.setNewDefaultTag();
-        f.getTag().setField(FieldKey.ARRANGER, "Arranger1");
-        f.getTag().addField(FieldKey.ARRANGER, "Arranger2");
-        assertEquals(1, f.getTag().getFieldCount());
-        assertEquals("Arranger1", f.getTag().getFirst(FieldKey.ARRANGER));
-        assertEquals("Arranger1", f.getTag().getFieldAt(FieldKey.ARRANGER, 0));
-        assertEquals("Arranger2", f.getTag().getFieldAt(FieldKey.ARRANGER, 1));
+        f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARRANGER, "Arranger1");
+        f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARRANGER, "Arranger2");
+        assertEquals(1, f.getTag().or(NullTag.INSTANCE).getFieldCount());
+        assertEquals("Arranger1", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER));
+        assertEquals("Arranger1", f.getTag().or(NullTag.INSTANCE).getFieldAt(FieldKey.ARRANGER, 0));
+        assertEquals("Arranger2", f.getTag().or(NullTag.INSTANCE).getFieldAt(FieldKey.ARRANGER, 1));
 
         f.save();
         f = AudioFileIO.read(testFile);
-        assertEquals(2, f.getTag().getFields(FieldKey.ARRANGER).size());
-        assertEquals(1, f.getTag().getFieldCount());
-        assertEquals(1, f.getTag().getFieldCount());
+        assertEquals(2, f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ARRANGER).size());
+        assertEquals(1, f.getTag().or(NullTag.INSTANCE).getFieldCount());
+        assertEquals(1, f.getTag().or(NullTag.INSTANCE).getFieldCount());
     }
 
 

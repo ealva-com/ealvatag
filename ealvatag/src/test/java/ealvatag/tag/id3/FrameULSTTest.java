@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.framebody.FrameBodyUSLT;
 import ealvatag.tag.reference.Languages;
 
@@ -30,7 +31,7 @@ public class FrameULSTTest extends AbstractTestCase
 
         //New Method should be same length
         AudioFile file = AudioFileIO.read(testFile);
-        assertEquals(589, file.getTag().getFirst(FieldKey.LYRICS).length());
+        assertEquals(589, file.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LYRICS).length());
     }
 
     public void testWriteULSTID3v24() throws Exception

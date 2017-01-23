@@ -762,7 +762,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return Collections.emptyList();
     }
 
-    public void deleteArtwork() throws KeyNotFoundException {
+    public Tag deleteArtwork() throws KeyNotFoundException {
         throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
     }
 
@@ -793,7 +793,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return new ID3v1TagField(idv1FieldKey.name(), checkVarArg0NotNull(values));
     }
 
-    public TagField createArtwork(Artwork artwork) throws FieldDataInvalidException {
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
         throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
     }
 

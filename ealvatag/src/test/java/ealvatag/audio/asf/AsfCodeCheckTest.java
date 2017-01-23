@@ -1,5 +1,6 @@
 package ealvatag.audio.asf;
 
+import ealvatag.tag.Tag;
 import ealvatag.tag.images.Artwork;
 import junit.framework.TestCase;
 import ealvatag.audio.asf.data.AsfHeader;
@@ -18,7 +19,7 @@ public class AsfCodeCheckTest extends TestCase
 
     /**
      * Tests the correct implementation of {@link AsfTag}.<br>
-     * For example if {@link AsfTag#createArtwork(Artwork)} (String)} returns a field whose {@link ealvatag.tag.TagField#getId()}
+     * For example if {@link Tag#createArtwork(Artwork)} (String)} returns a field whose {@link ealvatag.tag.TagField#getId()}
      * equals {@link ealvatag.tag.asf.AsfFieldKey#ALBUM}s }.
      */
     public void testAsfTagImpl() throws Exception

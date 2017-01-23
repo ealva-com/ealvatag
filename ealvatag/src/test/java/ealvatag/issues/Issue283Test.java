@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -28,10 +29,10 @@ public class Issue283Test extends AbstractTestCase {
         {
             testFile = AbstractTestCase.copyAudioToTmp("test56.m4b");
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            assertEquals("Aesop",af.getTag().getFirst(FieldKey.ARTIST));
-            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirst(FieldKey.TITLE));
-            assertEquals("Aesop's Fables (Unabridged)",af.getTag().getFirst(FieldKey.ALBUM));
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            assertEquals("Aesop",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
+            assertEquals("Aesop's Fables (Unabridged)",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
+            assertEquals("Aesop's Fables (Unabridged)",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
 
         }
         catch (Exception e)
@@ -58,11 +59,11 @@ public class Issue283Test extends AbstractTestCase {
            {
                testFile = AbstractTestCase.copyAudioToTmp("test56.m4b");
                AudioFile af = AudioFileIO.read(testFile);
-               af.getTag().setField(FieldKey.ARTIST,"Aesops");
+               af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST,"Aesops");
                af.save();
 
                af = AudioFileIO.read(testFile);
-               assertEquals("Aesops",af.getTag().getFirst(FieldKey.ARTIST));
+               assertEquals("Aesops",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
 
            }

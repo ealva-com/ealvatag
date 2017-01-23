@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.id3.AbstractID3v2Frame;
 import ealvatag.tag.id3.AbstractTagFrameBody;
@@ -161,7 +162,7 @@ public class Issue335Test extends AbstractTestCase
         }
         else
         {
-            tag = mP3AudioFile.getTag();
+            tag = mP3AudioFile.getTag().or(NullTag.INSTANCE);
             isMP3v2 = false;
         }
 

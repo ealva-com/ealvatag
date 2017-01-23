@@ -6,6 +6,7 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.OggFileReader;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -84,11 +85,11 @@ public class VorbisReadTagTest extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWithEmptyField.ogg"));
             AudioFile file = AudioFileIO.read(testFile);
-            file.getTag().setField(FieldKey.YEAR,"");
+            file.getTag().or(NullTag.INSTANCE).setField(FieldKey.YEAR, "");
             file.save();
 
             file = AudioFileIO.read(testFile);
-            file.getTag().setField(FieldKey.TITLE,"testtitle");
+            file.getTag().or(NullTag.INSTANCE).setField(FieldKey.TITLE,"testtitle");
             file.save();
 
             file = AudioFileIO.read(testFile);

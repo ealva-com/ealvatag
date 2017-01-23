@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
@@ -112,10 +113,10 @@ public class Issue233Test extends AbstractTestCase
             File        testFile    = AbstractTestCase.copyAudioToTmp("test32.mp3");
             AudioFile   af          = AudioFileIO.read(testFile);
             MP3File     mf          = (MP3File)af;
-            assertEquals("The Ides Of March",af.getTag().getFirst(FieldKey.TITLE));
+            assertEquals("The Ides Of March",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
             assertEquals("Iron Maiden",mf.getID3v1Tag().getFirst(FieldKey.ARTIST));
             assertEquals("",mf.getID3v2Tag().getFirst(FieldKey.ARTIST));
-            assertEquals("",af.getTag().getFirst(FieldKey.ARTIST));
+            assertEquals("",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
 
 
         }

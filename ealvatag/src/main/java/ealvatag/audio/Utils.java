@@ -16,6 +16,7 @@
  */
 package ealvatag.audio;
 
+import com.google.common.io.Files;
 import ealvatag.utils.FileTypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -335,7 +336,7 @@ public class Utils
      */
     public static String getMinBaseFilenameAllowedForTempFile(final File file)
     {
-        final String s = AudioFileImpl.getBaseFilename(file);
+        final String s = Files.getNameWithoutExtension(file.getPath());
         if (s.length() >= 3)
         {
             return s;

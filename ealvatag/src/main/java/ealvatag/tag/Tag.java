@@ -267,10 +267,12 @@ public interface Tag {
      * <p>We need this additional deleteField method because in some formats artwork can be stored
      * in multiple fields
      *
+     * @return self
+     *
      * @throws UnsupportedFieldException if this tag doesn't support Artwork
      * @throws KeyNotFoundException      if this tag does not contain artwork
      */
-    void deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException;
+    Tag deleteArtwork() throws UnsupportedFieldException, KeyNotFoundException;
 
     /**
      * Returns <code>true</code>, if at least one of the contained
@@ -309,7 +311,7 @@ public interface Tag {
                                                                       UnsupportedFieldException,
                                                                       FieldDataInvalidException;
 
-    TagField createArtwork(Artwork artwork) throws FieldDataInvalidException;
+    TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException;
 
     /**
      * Returns a {@link List} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() genericKey}&quot;

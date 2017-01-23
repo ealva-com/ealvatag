@@ -12,6 +12,7 @@ import ealvatag.audio.asf.io.ChunkModifier;
 import ealvatag.audio.asf.io.WriteableChunkModifer;
 import ealvatag.audio.asf.util.TagConverter;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.asf.AsfFieldKey;
 import ealvatag.tag.asf.AsfTag;
 
@@ -67,7 +68,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
         // getFields an audio file instance
         AudioFile read = AudioFileIO.read(testFile);
         // deleteField all managed data
-        AudioFileIO.delete(read);
+        read.deleteFileTag();
         // Create chunks
         MetadataContainer[] distributeMetadata = TagConverter.distributeMetadata(this.testTag);
         // createField creator for the content description object (chunk)
@@ -117,7 +118,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     {
         AudioFile read = AudioFileIO.read(testFile);
         assertTrue(read.getAudioHeader().isVariableBitRate());
-        assertEquals("TheArtist", read.getTag().getFirst(FieldKey.ARTIST));
+        assertEquals("TheArtist", read.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
         AsfHeader readHeader = AsfHeaderReader.readHeader(testFile);
         assertNotNull(readHeader.findContentDescription());
         assertNotNull(readHeader.findExtendedContentDescription());
@@ -139,7 +140,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     {
         File testFile = prepareTestFile(null);
         AudioFileImpl read = (AudioFileImpl)AudioFileIO.read(testFile);
-        AudioFileIO.delete(read);
+        read.deleteFileTag();
         read.setAndReturn(testTag);
         read.save();
         checkExcpectations(testFile, true, true, false, false);

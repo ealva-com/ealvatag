@@ -5,6 +5,7 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.ogg.OggFileReader;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 
 import java.io.File;
 
@@ -34,12 +35,12 @@ public class Issue289Test extends AbstractTestCase
             //ofr.shortSummarizeOggPageHeaders(testFile);
 
             AudioFile af = AudioFileIO.read(testFile);
-            System.out.println(af.getTag().toString());
-            af.getTag().setField(FieldKey.MUSICIP_ID,"91421a81-50b9-f577-70cf-20356eea212e");
+            System.out.println(af.getTag().or(NullTag.INSTANCE).toString());
+            af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICIP_ID,"91421a81-50b9-f577-70cf-20356eea212e");
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("91421a81-50b9-f577-70cf-20356eea212e",af.getTag().getFirst(FieldKey.MUSICIP_ID));
+            assertEquals("91421a81-50b9-f577-70cf-20356eea212e",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
 
             ofr.shortSummarizeOggPageHeaders(testFile);
         }

@@ -3,6 +3,7 @@ package ealvatag.tag.vorbiscomment;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
 
@@ -27,10 +28,10 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("testsmallimage.ogg");
             AudioFile f = AudioFileIO.read(testFile);
-            String mimeType = ((VorbisCommentTag)f.getTag()).getFirst(VorbisCommentFieldKey.COVERARTMIME);
+            String mimeType = ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getFirst(VorbisCommentFieldKey.COVERARTMIME);
             assertEquals("image/jpeg", mimeType);
             if (mimeType != null & mimeType.length() > 0) {
-                String imageRawData = ((VorbisCommentTag)f.getTag()).getFirst(VorbisCommentFieldKey.COVERART);
+                String imageRawData = ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getFirst(VorbisCommentFieldKey.COVERART);
                 assertEquals(22972, imageRawData.length());
             }
         } catch (Exception e) {
@@ -49,10 +50,10 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("testlargeimage.ogg");
             AudioFile f = AudioFileIO.read(testFile);
-            String mimeType = ((VorbisCommentTag)f.getTag()).getFirst(VorbisCommentFieldKey.COVERARTMIME);
+            String mimeType = ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getFirst(VorbisCommentFieldKey.COVERARTMIME);
             assertEquals("image/jpeg", mimeType);
             if (mimeType != null & mimeType.length() > 0) {
-                String imageRawData = ((VorbisCommentTag)f.getTag()).getFirst(VorbisCommentFieldKey.COVERART);
+                String imageRawData = ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getFirst(VorbisCommentFieldKey.COVERART);
                 assertEquals(1013576, imageRawData.length());
             }
         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage1.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
-            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -82,7 +83,7 @@ public class VorbisImageTest extends AbstractTestCase {
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = (VorbisCommentTag)f.getTag();
+            tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //VorbisImage base64 image, and reconstruct
             assertEquals(base64image, tag.getFirst(VorbisCommentFieldKey.COVERART));
@@ -105,7 +106,7 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage2.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
-            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image using purpose built method
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -116,7 +117,7 @@ public class VorbisImageTest extends AbstractTestCase {
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = (VorbisCommentTag)f.getTag();
+            tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //VorbisImage base64 image, and reconstruct
             char[] testdata = Base64Coder.encode(imagedata);
@@ -141,7 +142,7 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteImage3.ogg"));
             AudioFile f = AudioFileIO.read(testFile);
-            VorbisCommentTag tag = (VorbisCommentTag)f.getTag();
+            VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -154,7 +155,7 @@ public class VorbisImageTest extends AbstractTestCase {
             f.save();
 
             f = AudioFileIO.read(testFile);
-            tag = (VorbisCommentTag)f.getTag();
+            tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //VorbisImage base64 image, and reconstruct
             assertEquals("image/png", tag.getArtworkMimeType());
@@ -181,7 +182,7 @@ public class VorbisImageTest extends AbstractTestCase {
         try {
             File testFile = AbstractTestCase.copyAudioToTmp("testnewlineimage.small.ogg");
             AudioFile f = AudioFileIO.read(testFile);
-            List<Artwork> artwork = ((VorbisCommentTag)f.getTag()).getArtworkList();
+            List<Artwork> artwork = ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getArtworkList();
             assertEquals(1, artwork.size());
             final Artwork next = artwork.iterator().next();
             final FileOutputStream fos = new FileOutputStream(new File("test.jpg"));

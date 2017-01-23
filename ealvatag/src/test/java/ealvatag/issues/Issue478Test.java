@@ -28,7 +28,7 @@ public class Issue478Test extends AbstractTestCase
         {
             File testFile = AbstractTestCase.copyAudioToTmp("test115.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            assertNotNull(af.getTag());
+            assertNotNull(af.getTag().orNull());
             MP3File mp3File = (MP3File) af;
             ID3v23Tag tag   = (ID3v23Tag)mp3File.getID3v2Tag();
             assertTrue(tag.hasFrame("TGID"));

@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -26,7 +27,7 @@ public class Issue429Test extends AbstractTestCase
         tag.setField(FieldKey.ARTIST,"fred");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertTrue(tag instanceof ID3v23Tag);
     }
 
@@ -39,7 +40,7 @@ public class Issue429Test extends AbstractTestCase
         tag.setField(FieldKey.ARTIST,"fred");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertTrue(tag instanceof ID3v24Tag);
     }
 
@@ -52,7 +53,7 @@ public class Issue429Test extends AbstractTestCase
         tag.setField(FieldKey.ARTIST,"fred");
         f.save();
         f = AudioFileIO.read(testFile);
-        tag = f.getTag();
+        tag = f.getTag().or(NullTag.INSTANCE);
         assertTrue(tag instanceof ID3v22Tag);
     }
 

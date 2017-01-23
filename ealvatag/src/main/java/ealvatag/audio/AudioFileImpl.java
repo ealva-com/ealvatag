@@ -19,6 +19,8 @@
 package ealvatag.audio;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.google.common.io.Files;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -36,6 +38,9 @@ import ealvatag.tag.reference.ID3V2Version;
 import ealvatag.utils.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -79,41 +84,34 @@ public class AudioFileImpl implements AudioFile {
     protected String extension;
 
     /**
-     * @param file
+     * These constructors are used by the different readers, users should not use them.
+     * <p>
+     * Create the AudioFile representing file f, the encoding audio headers and containing the tag
      *
-     * @return filename with audioFormat separator stripped off.
-     */
-    public static String getBaseFilename(File file) {
-        int index = file.getName().toLowerCase().lastIndexOf(".");
-        if (index > 0) {
-            return file.getName().substring(0, index);
-        }
-        return file.getName();
-    }
-
-    /**
-     * <p>These constructors are used by the different readers, users should not use them, but use the
-     * <code>AudioFileIO.read(File)</code> method instead !.
-     * <p>Create the AudioFile representing file f, the encoding audio headers and containing the tag
-     *  @param file           The file of the audio file
+     * @param file        The file of the audio file
      * @param extension   the file extension (was used to selected the Reader, so we have already parsed it once)
      * @param audioHeader the encoding audioHeaders over this file
      * @param tag         the tag contained in this file or null if no tag exists
      */
     public AudioFileImpl(final File file, final String extension, AudioHeader audioHeader, TagFieldContainer tag) {
+        checkArgNotNull(file);
+        checkArgNotNullOrEmpty(extension);
+        checkArgNotNull(audioHeader);
         this.file = file;
         this.extension = extension;
         this.audioHeader = audioHeader;
         this.tag = tag;
     }
 
-    public AudioFileImpl(final File file, final String extension) {
+    protected AudioFileImpl(final File file, final String extension) {
+        checkArgNotNull(file);
+        checkArgNotNullOrEmpty(extension);
         this.file = file;
         this.extension = extension;
     }
 
     @Override public void save() throws CannotWriteException {
-        AudioFileIO.write(this);
+        AudioFileIO.instance().writeFile(this);
     }
 
     @Override public void saveAs(final String fullPathWithoutExtension) throws IllegalArgumentException, CannotWriteException {
@@ -122,14 +120,14 @@ public class AudioFileImpl implements AudioFile {
     }
 
     @Override public void deleteFileTag() throws CannotWriteException {
-        AudioFileIO.delete(this);
+        AudioFileIO.instance().deleteTag(this);
     }
 
     @Override public File getFile() {
         return file;
     }
 
-    public void setFile(File file) {
+    void setFile(File file) {
         this.file = file;
     }
 
@@ -141,8 +139,8 @@ public class AudioFileImpl implements AudioFile {
         return audioHeader;
     }
 
-    @Override public Tag getTag() {
-        return tag;
+    @Override public Optional<Tag> getTag() {
+        return Optional.fromNullable((Tag)tag);
     }
 
     @Override public Tag setNewDefaultTag() throws UnsupportedFileType {
@@ -160,11 +158,7 @@ public class AudioFileImpl implements AudioFile {
     }
 
     @Override public Tag getTagOrSetNewDefault() throws UnsupportedFileType {
-        Tag tag = getTag();
-        if (tag == null) {
-            tag = setAndReturn(makeDefaultTag());
-        }
-        return tag;
+        return getTag().or(new MakeDefaultTagSupplier());
     }
 
     @Override public Tag getConvertedTagOrSetNewDefault() {
@@ -304,5 +298,11 @@ public class AudioFileImpl implements AudioFile {
      */
     public String displayStructureAsPlainText() {
         return "";
+    }
+
+    private class MakeDefaultTagSupplier implements Supplier<Tag> {
+        @Override public Tag get() {
+            return setAndReturn(makeDefaultTag());
+        }
     }
 }

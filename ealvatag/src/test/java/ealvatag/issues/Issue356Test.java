@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.images.Artwork;
@@ -27,11 +28,11 @@ public class Issue356Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
         audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
-        Tag tag = audioFile.getTag();
+        Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
         tag.setArtwork(artwork);
         audioFile.save();
 
-        tag = audioFile.getTag();
+        tag = audioFile.getTag().or(NullTag.INSTANCE);
         final List<Artwork> artworkList = tag.getArtworkList();
         assertEquals(1,artworkList.size());
         final Artwork onlyArt = artworkList.iterator().next();
@@ -49,11 +50,11 @@ public class Issue356Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
         audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
-        Tag tag = audioFile.getTag();
+        Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
         tag.setArtwork(artwork);
         audioFile.save();
 
-        tag = audioFile.getTag();
+        tag = audioFile.getTag().or(NullTag.INSTANCE);
         final List<Artwork> artworkList = tag.getArtworkList();
         assertEquals(1,artworkList.size());
         final Artwork onlyArt = artworkList.iterator().next();
@@ -71,11 +72,11 @@ public class Issue356Test extends AbstractTestCase
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
         audioFile.setNewDefaultTag();
         final Artwork artwork = ArtworkFactory.createLinkedArtworkFromURL(IMAGE_URL);
-        Tag tag = audioFile.getTag();
+        Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
         tag.setArtwork(artwork);
         audioFile.save();
 
-        tag = audioFile.getTag();
+        tag = audioFile.getTag().or(NullTag.INSTANCE);
         final List<Artwork> artworkList = tag.getArtworkList();
         assertEquals(1,artworkList.size());
         final Artwork onlyArt = artworkList.iterator().next();

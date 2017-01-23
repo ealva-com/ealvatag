@@ -4,6 +4,7 @@ import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.logging.Hex;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.wav.WavTag;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("22050", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
             assertEquals(14, f.getAudioHeader().getTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
@@ -111,7 +112,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("8000", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
             assertEquals(3, f.getAudioHeader().getTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
@@ -139,7 +140,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("8000", f.getAudioHeader().getSampleRate());
             assertEquals(0, f.getAudioHeader().getBitsPerSample());
             assertEquals(3, f.getAudioHeader().getTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
@@ -167,7 +168,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals("8000", f.getAudioHeader().getSampleRate());
             assertEquals(8, f.getAudioHeader().getBitsPerSample());
             assertEquals(3, f.getAudioHeader().getTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
@@ -196,7 +197,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals(32, f.getAudioHeader().getBitsPerSample());
             assertEquals(0, f.getAudioHeader().getTrackLength());
             assertEquals(0.32897958159446716d, f.getAudioHeader().getPreciseTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
@@ -225,7 +226,7 @@ public class WavSimpleTest extends AbstractTestCase
             assertEquals(16, f.getAudioHeader().getBitsPerSample());
             assertEquals(5, f.getAudioHeader().getTrackLength());
             assertEquals(4.784897804260254d, f.getAudioHeader().getPreciseTrackLength());
-            assertTrue(f.getTag() instanceof WavTag);
+            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
         }
         catch (Exception e)
         {
