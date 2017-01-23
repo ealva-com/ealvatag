@@ -154,5 +154,5 @@ public enum FieldKey {
     URL_WIKIPEDIA_RELEASE_SITE,
     WORK,
     WORK_TYPE,
-    YEAR;
+    YEAR
 }

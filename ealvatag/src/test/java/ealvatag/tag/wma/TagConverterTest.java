@@ -7,6 +7,10 @@ import ealvatag.audio.asf.data.MetadataContainerUtils;
 import ealvatag.audio.asf.io.AsfHeaderReader;
 import ealvatag.audio.asf.util.TagConverter;
 import ealvatag.tag.asf.AsfTag;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import java.io.IOException;
 
@@ -16,27 +20,14 @@ import java.io.IOException;
  */
 public class TagConverterTest extends WmaTestCase {
 
-    public final static String TEST_FILE = "test6.wma";
-
-    /**
-     * @param name
-     */
-    public TagConverterTest(String name) {
-        super(TEST_FILE, name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+    private final static String TEST_FILE = "test6.wma";
 
     /**
      * Test method for
      * {@link ealvatag.audio.asf.util.TagConverter#distributeMetadata(ealvatag.tag.asf.AsfTag)}
      * .
      */
+    @Test
     public void testDistributeMetadata() throws IOException {
         AsfHeader header = AsfHeaderReader.readHeader(prepareTestFile(null));
         MetadataContainer contentDesc = header
@@ -52,4 +43,7 @@ public class TagConverterTest extends WmaTestCase {
         assertTrue(MetadataContainerUtils.equals(extContentDesc, distributeMetadata[2]));
     }
 
+    @Override String getTestFile() {
+        return TEST_FILE;
+    }
 }

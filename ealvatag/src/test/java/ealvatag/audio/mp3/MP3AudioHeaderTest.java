@@ -442,7 +442,7 @@ public class MP3AudioHeaderTest extends TestCase
         {
             exceptionCaught = e;
         }
-        assertTrue(exceptionCaught instanceof InvalidAudioFrameException);
+        assertTrue(exceptionCaught.getClass().toString(), exceptionCaught instanceof InvalidAudioFrameException);
     }
 
 

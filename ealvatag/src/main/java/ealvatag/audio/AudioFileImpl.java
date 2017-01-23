@@ -18,7 +18,6 @@
  */
 package ealvatag.audio;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.io.Files;
@@ -128,11 +127,10 @@ public class AudioFileImpl implements AudioFile {
     }
 
     @Override public Tag setNewDefaultTag() throws UnsupportedFileType {
-        return setAndReturn(makeDefaultTag());
+        return setTag(makeDefaultTag());
     }
 
-    @VisibleForTesting
-    public Tag setAndReturn(Tag tag) {
+    protected Tag setTag(Tag tag) {
         this.tag = (TagFieldContainer)tag;
         return this.tag;
     }
@@ -155,9 +153,9 @@ public class AudioFileImpl implements AudioFile {
         Tag tag = getTagOrSetNewDefault();
 
         if (tag instanceof AbstractID3v2Tag) {
-            return setAndReturn(convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version()));
+            return setTag(convertID3Tag((AbstractID3v2Tag)tag, TagOptionSingleton.getInstance().getID3V2Version()));
         } else {
-            return setAndReturn(tag);
+            return setTag(tag);
         }
     }
 
@@ -286,7 +284,7 @@ public class AudioFileImpl implements AudioFile {
 
     private class MakeDefaultTagSupplier implements Supplier<Tag> {
         @Override public Tag get() {
-            return setAndReturn(makeDefaultTag());
+            return setTag(makeDefaultTag());
         }
     }
 }

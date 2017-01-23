@@ -9,6 +9,10 @@ import ealvatag.audio.asf.data.MetadataContainerUtils;
 import ealvatag.audio.asf.io.AsfHeaderUtils;
 import ealvatag.audio.asf.io.MetadataReader;
 import ealvatag.audio.asf.util.Utils;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,12 +26,11 @@ import java.util.Arrays;
  */
 public class WmaContainerTest extends WmaTestCase {
 
-    public final static String TEST_FILE = "test6.wma";
+    private final static String TEST_FILE = "test6.wma";
 
-    public WmaContainerTest() {
-        super(TEST_FILE);
-    }
 
+
+    @Test
     public void testExtContentAfterWrite() throws Exception {
         File prepareTestFile = prepareTestFile(null);
         AudioFile read = AudioFileIO.read(prepareTestFile);
@@ -39,6 +42,7 @@ public class WmaContainerTest extends WmaTestCase {
 //        assertEquals(ext, ext2);
     }
 
+    @Test
     public void testReadWriteEquality() throws IOException {
         File prepareTestFile = prepareTestFile(null);
         byte[] tmp = AsfHeaderUtils.getFirstChunk(prepareTestFile, GUID.GUID_EXTENDED_CONTENT_DESCRIPTION);
@@ -65,4 +69,7 @@ public class WmaContainerTest extends WmaTestCase {
                 (MetadataContainer) read1, (MetadataContainer) read2));
     }
 
+    @Override String getTestFile() {
+        return TEST_FILE;
+    }
 }

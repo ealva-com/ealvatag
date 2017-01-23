@@ -47,7 +47,7 @@ public final class AsfTag extends AbstractTag {
     /**
      * @see #isCopyingFields()
      */
-    private final boolean copyFields;
+    private boolean copyFields;
 
     /**
      * Creates an empty instance.
@@ -64,6 +64,10 @@ public final class AsfTag extends AbstractTag {
     public AsfTag(final boolean copy) {
         super();
         this.copyFields = copy;
+    }
+
+    public void setCopyFields(final boolean copyFields) {
+        this.copyFields = copyFields;
     }
 
     /**

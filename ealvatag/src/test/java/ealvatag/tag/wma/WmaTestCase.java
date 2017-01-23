@@ -7,6 +7,9 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.tag.Tag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 
 import java.io.File;
 
@@ -15,8 +18,7 @@ import java.io.File;
  *
  * @author Christian Laireiter
  */
-public abstract class WmaTestCase extends TestCase
-{
+public abstract class WmaTestCase {
     /**
      * Stores the audio file instance of {@link #testFile}.<br>
      */
@@ -31,26 +33,6 @@ public abstract class WmaTestCase extends TestCase
      * The file on which tests should be performed.<br>
      */
     private File testFile;
-
-    /**
-     * Creates an instance, that would perform tests on the given <code>sourceFile</code>.
-     * @param sourceFile The filename of the file to perform tests on. ({@linkplain AbstractTestCase#copyAudioToTmp(String) copy} will be created)
-     */
-    public WmaTestCase(final String sourceFile)
-    {
-        this.sourceTestFile = sourceFile;
-    }
-
-    /**
-     * Creates an instance, that would perform tests on the given <code>sourceFile</code>.
-     * @param sourceFile The filename of the file to perform tests on. ({@linkplain AbstractTestCase#copyAudioToTmp(String) copy} will be created)
-     * @param name name of the test.
-     */
-    public WmaTestCase(final String sourceFile, final String name)
-    {
-        super(name);
-        this.sourceTestFile = sourceFile;
-    }
 
     /**
      * Returns the audio file to perform the tests on.<br>
@@ -82,7 +64,7 @@ public abstract class WmaTestCase extends TestCase
      */
     public File prepareTestFile(String fileName)
     {
-        assertNotNull(sourceTestFile);
+        Assert.assertNotNull(sourceTestFile);
         File result = null;
         if (!Utils.isBlank(fileName)) {
             result = AbstractTestCase.copyAudioToTmp(sourceTestFile, new File(fileName));
@@ -95,20 +77,21 @@ public abstract class WmaTestCase extends TestCase
     /**
      * Creates the file copy.
      */
-    protected void setUp() throws Exception
+    @Before public void setUp() throws Exception
     {
-        super.setUp();
-        assertNotNull(sourceTestFile);
+        sourceTestFile = getTestFile();
+        Assert.assertNotNull(sourceTestFile);
         this.testFile = prepareTestFile(null);
     }
+
+    abstract String getTestFile();
 
 
     /**
      * Deletes the copy.
      */
-    protected void tearDown() throws Exception
+    @After public void tearDown() throws Exception
     {
-        super.tearDown();
         //        this.testFile.deleteField();
     }
 

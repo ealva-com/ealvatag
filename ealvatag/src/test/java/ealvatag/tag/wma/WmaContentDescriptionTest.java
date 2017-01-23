@@ -9,6 +9,11 @@ import ealvatag.audio.asf.util.TagConverter;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.asf.AsfFieldKey;
 import ealvatag.tag.asf.AsfTag;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 
 /**
  * This testcase tests the handling of the content description chunk.
@@ -18,25 +23,14 @@ import ealvatag.tag.asf.AsfTag;
 public class WmaContentDescriptionTest extends WmaTestCase
 {
 
-    /**
-     * Testfile to use as source.
-     */
-    public final static String TEST_FILE = "test1.wma"; //$NON-NLS-1$
-
-    /**
-     * Creates an instance.
-     */
-    public WmaContentDescriptionTest()
-    {
-        super(TEST_FILE);
-    }
+    private final static String TEST_FILE = "test1.wma"; //$NON-NLS-1$
 
     /**
      * tests whether the content description chunk will disappear if not
      * necessary.<br>
      * @throws Exception On I/O Errors
      */
-    public void testContentDescriptionRemoval() throws Exception
+    @Test public void testContentDescriptionRemoval() throws Exception
     {
         AudioFile file = getAudioFile();
         AsfTag tag = (AsfTag) file.getTag().or(NullTag.INSTANCE);
@@ -46,6 +40,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
         }
         file.save();
         AsfHeader header = AsfHeaderReader.readHeader(file.getFile());
+
         assertNull(header.getContentDescription());
         for (String currKey : ContentDescription.ALLOWED)
         {
@@ -65,4 +60,7 @@ public class WmaContentDescriptionTest extends WmaTestCase
         }
     }
 
+    @Override String getTestFile() {
+        return TEST_FILE;
+    }
 }

@@ -15,6 +15,11 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.asf.AsfFieldKey;
 import ealvatag.tag.asf.AsfTag;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,23 +39,12 @@ public class WmaDescriptionLocationTest extends WmaTestCase
     /**
      * Test file to use as source.
      */
-    public final static String TEST_FILE = "test1.wma"; //$NON-NLS-1$
+    private final static String TEST_FILE = "test1.wma"; //$NON-NLS-1$
 
     /**
      * Will hold a tag instance for writing some values.
      */
-    private final AsfTag testTag;
-
-    /**
-     * Creates an instance.
-     */
-    public WmaDescriptionLocationTest()   throws Exception
-    {
-        super(TEST_FILE);
-        this.testTag = new AsfTag(true);
-        this.testTag.setField(FieldKey.ARTIST,"TheArtist");
-        this.testTag.setField(this.testTag.createField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
-    }
+    private AsfTag testTag;
 
 
     /**
@@ -97,15 +91,14 @@ public class WmaDescriptionLocationTest extends WmaTestCase
         }
         headerMods.add(new AsfExtHeaderModifier(extHeaderMods));
         File destination = prepareTestFile("chunkloc.wma");
-        new AsfStreamer()
-                        .createModifiedCopy(new FileInputStream(testFile), new FileOutputStream(destination), headerMods);
-        checkExcpectations(destination, hcd, hecd, !hcd, !hecd);
+        new AsfStreamer().createModifiedCopy(new FileInputStream(testFile), new FileOutputStream(destination), headerMods);
+        checkExpectations(destination, hcd, hecd, !hcd, !hecd);
 
     }
 
     /**
      * Tests whether the audio file contains artist and variable bitrate as specified in the
-     * {@linkplain #WmaDescriptionLocationTest() constructor}, and if a content description object as well
+     * tag, and if a content description object as well
      * as an extended content description is available.
      * @param testFile file to test
      * @param hcd <code>true</code> if a content description is expected in the ASF header.
@@ -114,7 +107,7 @@ public class WmaDescriptionLocationTest extends WmaTestCase
      * @param ehecd <code>true</code> if an extended content description is expected in the ASF header extension.
      * @throws Exception on I/O Errors
      */
-    private void checkExcpectations(File testFile, boolean hcd, boolean hecd, boolean ehcd, boolean ehecd) throws Exception
+    private void checkExpectations(File testFile, boolean hcd, boolean hecd, boolean ehcd, boolean ehecd) throws Exception
     {
         AudioFile read = AudioFileIO.read(testFile);
         assertTrue(read.getAudioHeader().isVariableBitRate());
@@ -136,18 +129,26 @@ public class WmaDescriptionLocationTest extends WmaTestCase
      *
      * @throws Exception On I/O Errors
      */
+    @Test
     public void testChunkLocations() throws Exception
     {
         File testFile = prepareTestFile(null);
         AudioFileImpl read = (AudioFileImpl)AudioFileIO.read(testFile);
         read.deleteFileTag();
-        read.setAndReturn(testTag);
+        testTag = (AsfTag)read.setNewDefaultTag();
+        this.testTag.setField(FieldKey.ARTIST,"TheArtist");
+        this.testTag.setField(this.testTag.createField(AsfFieldKey.ISVBR, Boolean.TRUE.toString()));
+        testTag.setCopyFields(true);
         read.save();
-        checkExcpectations(testFile, true, true, false, false);
+        checkExpectations(testFile, true, true, false, false);
+
         applyTag(testFile, false, false);
         applyTag(testFile, false, true);
         applyTag(testFile, true, false);
         applyTag(testFile, true, true);
     }
 
+    @Override String getTestFile() {
+        return TEST_FILE;
+    }
 }

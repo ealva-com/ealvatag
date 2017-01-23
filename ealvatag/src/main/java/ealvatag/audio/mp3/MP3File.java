@@ -21,7 +21,7 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.UnsupportedFileType;
@@ -51,6 +51,10 @@ import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.lyrics3.AbstractLyrics3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.google.common.base.Preconditions.checkState;
+import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -173,6 +177,9 @@ public class MP3File extends AudioFileImpl {
             } else if (id3v1tag != null) {
                 tag = id3v1tag;
             }
+            checkState(file != null);
+            checkState(!Strings.isNullOrEmpty(extension));
+            checkState(audioHeader != null);
         } finally {
             if (newFile != null) {
                 newFile.close();
@@ -944,7 +951,7 @@ public class MP3File extends AudioFileImpl {
      *
      * @param tag
      */
-    public Tag setAndReturn(Tag tag) {
+    public Tag setTag(Tag tag) {
         this.tag = (TagFieldContainer)tag;
         if (tag instanceof ID3v1Tag) {
             setID3v1Tag((ID3v1Tag)tag);
@@ -983,7 +990,7 @@ public class MP3File extends AudioFileImpl {
     public Tag getTagOrSetNewDefault() throws UnsupportedFileType {
         Tag tag = getID3v2Tag();
         if (tag == null) {
-            tag = setAndReturn(makeDefaultTag());
+            tag = setTag(makeDefaultTag());
         }
         return tag;
     }
@@ -997,8 +1004,8 @@ public class MP3File extends AudioFileImpl {
      */
     @Override
     public Tag getConvertedTagOrSetNewDefault() {
-        return setAndReturn(convertID3Tag((AbstractID3v2Tag)getTagOrSetNewDefault(),
-                                          TagOptionSingleton.getInstance().getID3V2Version()));
+        return setTag(convertID3Tag((AbstractID3v2Tag)getTagOrSetNewDefault(),
+                                    TagOptionSingleton.getInstance().getID3V2Version()));
     }
 
     /**
