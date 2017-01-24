@@ -44,6 +44,7 @@ import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 
 /**
  * <p>This is the main object manipulated by the user representing an audiofile, its properties and its tag.
@@ -230,7 +231,9 @@ public class AudioFileImpl implements AudioFile {
         // These exists(), can read, can write checks are sprinkled around the code. Are these necessary? Why not
         // just treat them as
         // exceptional conditions. They have to be handled anyway.
-        checkFileExists(file);
+        if (!file.exists()) {
+            throw new FileNotFoundException(file.getAbsolutePath());
+        }
         if (readOnly) {
             if (!file.canRead()) {
                 LOG.error("Unable to read file:{}", file);
@@ -249,19 +252,31 @@ public class AudioFileImpl implements AudioFile {
         return newFile;
     }
 
-    /**
-     * Check does file exist
-     *
-     * @param file
-     *
-     * @throws FileNotFoundException if file not found
-     */
-    public void checkFileExists(File file) throws FileNotFoundException {
-        LOG.trace("Reading file:{}", file);
+    protected FileChannel getFileChannel(File file, boolean readOnly) throws ReadOnlyFileException,
+                                                                             FileNotFoundException,
+                                                                             CannotReadException {
+        FileChannel channel;
+
         if (!file.exists()) {
-            LOG.error("Unable to find:{}", file);
-            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
+            throw new FileNotFoundException(file.getAbsolutePath());
         }
+
+        if (readOnly) {
+            if (!file.canRead()) {
+                LOG.error("Unable to read file:{}", file);
+                throw new NoReadPermissionsException(ErrorMessage
+                                                             .GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
+                                                             .getMsg(file));
+            }
+            channel = new RandomAccessFile(file, "r").getChannel();
+        } else {
+            if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite()) {
+                LOG.error("Unable to write file:{}", file);
+                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
+            }
+            channel = new RandomAccessFile(file, "rw").getChannel();
+        }
+        return channel;
     }
 
     /**

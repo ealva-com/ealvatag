@@ -11,8 +11,11 @@ package ealvatag.audio.mp3;
 import ealvatag.FileConstants;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.AbstractTagDisplayFormatter;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -853,7 +856,7 @@ public class MPEGFrameHeader
      * @return
      * @throws InvalidAudioFrameException if there is no header at this point
      */
-    public static MPEGFrameHeader parseMPEGHeader(ByteBuffer bb) throws InvalidAudioFrameException
+    static MPEGFrameHeader parseMPEGHeader(ByteBuffer bb) throws InvalidAudioFrameException
     {
         int position = bb.position();
         bb.get(header, 0, HEADER_SIZE);
@@ -861,6 +864,15 @@ public class MPEGFrameHeader
         MPEGFrameHeader frameHeader = new MPEGFrameHeader(header);
 
         return frameHeader;
+    }
+
+
+    static MPEGFrameHeader parseMPEGHeader(final Buffer buffer) throws EOFException, InvalidAudioFrameException {
+        byte[] headerBytes = new byte[HEADER_SIZE];
+        for (int i = 0, size = Math.min(headerBytes.length, HEADER_SIZE); i < size; i++) {
+            headerBytes[i] = buffer.getByte(i);
+        }
+        return new MPEGFrameHeader(headerBytes);
     }
 
     /**
@@ -883,6 +895,13 @@ public class MPEGFrameHeader
     public String toString()
     {
         return " mpeg frameheader:" + " frame length:" + getFrameLength() + " version:" + versionAsString + " layer:" + layerAsString + " channelMode:" + channelModeAsString + " noOfSamples:" + getNoOfSamples() + " samplingRate:" + samplingRate + " isPadding:" + isPadding + " isProtected:" + isProtected + " isPrivate:" + isPrivate + " isCopyrighted:" + isCopyrighted + " isOriginal:" + isCopyrighted + " isVariableBitRate" + this.isVariableBitRate() + " header as binary:" + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_1]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_2]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_3]) + " " + AbstractTagDisplayFormatter.displayAsBinary(mpegBytes[BYTE_4]);
+    }
+
+    static boolean isMPEGFrame(final Buffer bb) {
+        int position = 0;
+        return (((bb.getByte(position) & SYNC_BYTE1) == SYNC_BYTE1)
+                && ((bb.getByte(position + 1) & SYNC_BYTE2) == SYNC_BYTE2)
+                && ((bb.getByte(position + 2) & SYNC_BIT_ANDSAMPING_BYTE3) != SYNC_BIT_ANDSAMPING_BYTE3));
     }
 }
 

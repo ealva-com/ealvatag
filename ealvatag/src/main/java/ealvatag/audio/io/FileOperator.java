@@ -49,6 +49,10 @@ public final class FileOperator {
         this.fileChannel = fileChannel;
     }
 
+    public FileChannel getFileChannel() {
+        return fileChannel;
+    }
+
     /** Write {@code byteCount} bytes from {@code source} to the file at {@code pos}. */
     public void write(long pos, Buffer source, long byteCount) throws IOException {
         if (byteCount < 0 || byteCount > source.size()) {

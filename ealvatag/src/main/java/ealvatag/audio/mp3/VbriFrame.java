@@ -1,9 +1,10 @@
 package ealvatag.audio.mp3;
 
-import ealvatag.audio.exceptions.InvalidAudioFrameException;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -81,6 +82,13 @@ public class VbriFrame {
         setFrameCount();
     }
 
+    private VbriFrame(final Buffer header) throws EOFException {
+
+        header.skip(10);
+        setAudioSize(header);
+        setFrameCount(header);
+    }
+
     /**
      * Set size of AudioData
      */
@@ -92,6 +100,15 @@ public class VbriFrame {
                 (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
     }
 
+    private void setAudioSize(Buffer header) {
+        byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
+        for (int i = 0; i < frameSizeBuffer.length; i++) {
+            frameSizeBuffer[i] = header.readByte();
+        }
+        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
+                (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
+    }
+
     /**
      * Set count of frames
      */
@@ -99,6 +116,15 @@ public class VbriFrame {
         byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
         header.get(frameCountBuffer);
         boolean frameCountEnabled = true;
+        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
+                (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
+    }
+
+    private void setFrameCount(Buffer header) {
+        byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
+        for (int i = 0; i < frameCountBuffer.length; i++) {
+            frameCountBuffer[i] = header.readByte();
+        }
         frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
                 (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
     }
@@ -123,21 +149,22 @@ public class VbriFrame {
      * this is a VBRIFrame
      *
      * @return
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
      */
-    public static VbriFrame parseVBRIFrame(ByteBuffer header) throws InvalidAudioFrameException {
-        VbriFrame VBRIFrame = new VbriFrame(header);
-        return VBRIFrame;
+    public static VbriFrame parseVBRIFrame(ByteBuffer header)  {
+        return new VbriFrame(header);
+    }
+
+    static VbriFrame parseVBRIFrame(final Buffer header) throws EOFException {
+        return new VbriFrame(header);
     }
 
     /**
      * IS this a VBRI frame
      *
      * @param bb
-     * @param mpegFrameHeader
      * @return raw header if this is a VBRI frame
      */
-    public static ByteBuffer isVbriFrame(ByteBuffer bb, MPEGFrameHeader mpegFrameHeader) {
+    public static ByteBuffer isVbriFrame(ByteBuffer bb) {
 
         //We store this so can return here after scanning through buffer
         int startPosition = bb.position();
@@ -159,6 +186,21 @@ public class VbriFrame {
         }
         LOG.trace("Found VBRI Frame");
         return header;
+    }
+
+    public static Buffer isVbriFrame(Buffer buffer) throws EOFException {
+        buffer.skip(VBRI_OFFSET);
+
+        //Check Identifier
+        byte[] identifier = new byte[VBRI_IDENTIFIER_BUFFER_SIZE];
+        for (int i = 0; i < identifier.length; i++) {
+            identifier[i] = buffer.getByte(i);
+        }
+        if ((!Arrays.equals(identifier, VBRI_VBR_ID))) {
+            return null;
+        }
+        LOG.trace("Found VBRI Frame");
+        return buffer;
     }
 
     /**

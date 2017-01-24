@@ -25,6 +25,7 @@ package ealvatag.tag.id3;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldKey;
@@ -222,6 +223,19 @@ public class ID3v11Tag extends ID3v1Tag {
 
         fc = file.getChannel();
         fc.position(file.length() - TAG_LENGTH);
+
+        fc.read(byteBuffer);
+        byteBuffer.flip();
+        read(byteBuffer);
+
+    }
+
+    public ID3v11Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {
+        FileChannel fc = fileOperator.getFileChannel();
+        setLoggingFilename(loggingFilename);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+
+        fc.position(fc.size() - TAG_LENGTH);
 
         fc.read(byteBuffer);
         byteBuffer.flip();

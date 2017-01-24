@@ -23,6 +23,7 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.UnableToCreateFileException;
 import ealvatag.audio.exceptions.UnableToModifyFileException;
 import ealvatag.audio.exceptions.UnableToRenameFileException;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.FileSystemMessage;
@@ -42,6 +43,7 @@ import ealvatag.tag.id3.valuepair.StandardIPLSKey;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.PictureTypes;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -263,6 +265,86 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             if (fis != null) {
                 fis.close();
             }
+        }
+
+        //ID3 identifier
+        byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
+        bb.get(tagIdentifier, 0, FIELD_TAGID_LENGTH);
+        if (!(Arrays.equals(tagIdentifier, TAG_ID))) {
+            return 0;
+        }
+
+        //Is it valid Major Version
+        byte majorVersion = bb.get();
+        if ((majorVersion != ID3v22Tag.MAJOR_VERSION) && (majorVersion != ID3v23Tag.MAJOR_VERSION) &&
+                (majorVersion != ID3v24Tag.MAJOR_VERSION)) {
+            return 0;
+        }
+
+        //Skip Minor Version
+        bb.get();
+
+        //Skip Flags
+        bb.get();
+
+        //Get size as recorded in frame header
+        int frameSize = ID3SyncSafeInteger.bufferToValue(bb);
+
+        //addField header size to frame size
+        frameSize += TAG_HEADER_LENGTH;
+        return frameSize;
+    }
+
+    public static long getV2TagSizeIfExists(FileOperator fileOperator) throws IOException {
+        try (Buffer buffer = new Buffer()) {
+            fileOperator.read(0, buffer, TAG_HEADER_LENGTH);
+
+            for (int i = 0; i < TAG_ID.length; i++) {
+                if (buffer.readByte() != TAG_ID[i]) {
+                    return 0;
+                }
+            }
+
+            //Is it valid Major Version
+            byte majorVersion = buffer.readByte();
+            if ((majorVersion != ID3v22Tag.MAJOR_VERSION) && (majorVersion != ID3v23Tag.MAJOR_VERSION) &&
+                    (majorVersion != ID3v24Tag.MAJOR_VERSION)) {
+                return 0;
+            }
+
+            //Skip Minor Version
+            buffer.readByte();
+
+            //Skip Flags
+            buffer.readByte();
+
+            //Get size as recorded in frame header
+            int frameSize = ID3SyncSafeInteger.bufferToValue(buffer);
+
+            //addField header size to frame size
+            frameSize += TAG_HEADER_LENGTH;
+            return frameSize;
+        }
+    }
+
+    /**
+     * Checks to see if the file contains an ID3tag and if so return its size as reported in
+     * the tag header  and return the size of the tag (including header), if no such tag exists return
+     * zero.
+     *
+     * @param fc channel from which to read
+     *
+     * @return the end of the tag in the file or zero if no tag exists.
+     *
+     * @throws IOException if a read error occurs
+     */
+    public static long getV2TagSizeIfExists(FileChannel fc) throws IOException {
+        //Read possible Tag header  Byte Buffer
+        ByteBuffer bb = ByteBuffer.allocate(TAG_HEADER_LENGTH);
+        fc.read(bb);
+        bb.flip();
+        if (bb.limit() < (TAG_HEADER_LENGTH)) {
+            return 0;
         }
 
         //ID3 identifier
@@ -1049,7 +1131,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * <p/>
      * Only textual data supported at the moment, should only be used with frames that
      * support a simple string argument.
-     *
      */
     TagField doCreateTagField(FrameAndSubId formatKey, String... values) throws IllegalArgumentException,
                                                                                 UnsupportedFieldException,
@@ -1535,7 +1616,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      */
     public void write(OutputStream outputStream, int currentTagSize) throws IOException {
         write(Channels.newChannel(outputStream), currentTagSize);
-    }    /**
+    }
+
+    /**
      * Does a tag of the correct version exist in this file.
      *
      * @param byteBuffer to search through
@@ -1573,7 +1656,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         if (padding > 0) {
             channel.write(ByteBuffer.wrap(new byte[padding]));
         }
-    }    /**
+    }
+
+    /**
      * Write tag to file.
      *
      * @param file
@@ -1603,7 +1688,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
          *  as well increase it more than neccessary for future changes
          */
         return tagSize + TAG_SIZE_INCREMENT;
-    }    /**
+    }
+
+    /**
      * Delete Tag
      *
      * @param file to delete the tag from
@@ -1695,7 +1782,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                 fc.close();
             }
         }
-    }    /**
+    }
+
+    /**
      * Is this tag equivalent to another
      *
      * @param obj to test for equivalence
@@ -1744,7 +1833,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             throw new IOException(ErrorMessage.GENERAL_WRITE_FAILED_FILE_LOCKED.getMsg(filePath));
         }
         return fileLock;
-    }    /**
+    }
+
+    /**
      * Return the frames in the order they were added
      *
      * @return and iterator of the frmaes/list of multi value frames
@@ -2209,7 +2300,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * @param formatKey frame and sub-id
      *
      * @return the list of values
-     *
      */
     protected List<String> doGetValues(FrameAndSubId formatKey) {
         List<String> values = new ArrayList<String>();
@@ -2303,9 +2393,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * @param index     the index specified by the user
      *
      * @return
-     *
      */
-    String doGetValueAtIndex(FrameAndSubId formatKey, int index)  {
+    String doGetValueAtIndex(FrameAndSubId formatKey, int index) {
         List<String> values = doGetValues(formatKey);
         if (values.size() > index) {
             return values.get(index);
@@ -2545,15 +2634,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         }
 
     }
-
-
-
-
-
-
-
-
-
 
 
 }

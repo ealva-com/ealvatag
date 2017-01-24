@@ -17,7 +17,9 @@
 package ealvatag.audio;
 
 import com.google.common.io.Files;
+import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.FileTypeUtil;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,10 +232,19 @@ public class Utils {
         return new String(b, 0, length, encoding);
     }
 
+    public static String getString(final Buffer buffer, final int offset, final int length, final Charset encoding, final byte[] tempBuf) {
+        final byte[] b = tempBuf.length >= length ? ArrayUtil.fill(tempBuf, ArrayUtil.ZERO, length)
+                                                  : new byte[length];
+        for (int i = offset, size = b.length; i < size; i++) {
+            b[i] = buffer.getByte(i);
+        }
+        return new String(b, 0, length, encoding);
+    }
+
     /**
      * Reads bytes from a ByteBuffer as if they were encoded in the specified CharSet.
      *
-     * @param buffer read from
+     * @param buffer   read from
      * @param encoding {@link Charset} encoded in buffer
      *
      * @return read result
@@ -317,7 +328,7 @@ public class Utils {
      * Rename file, and if normal rename fails, try copy and delete instead.
      *
      * @param fromFile source
-     * @param toFile destination
+     * @param toFile   destination
      *
      * @return true if successful, else false
      */
@@ -418,7 +429,6 @@ public class Utils {
     /**
      * Used to convert (signed byte) to an integer as if signed byte was unsigned hence allowing
      * it to represent values 0 -> 255 rather than -128 -> 127.
-     *
      */
     public static int u(final byte n) {
         return n & 0xff;

@@ -50,6 +50,7 @@ import static ealvatag.tag.mp4.Mp4FieldKey.GENRE_CUSTOM;
 import static ealvatag.tag.mp4.Mp4FieldKey.KEY_OLD;
 import static ealvatag.tag.mp4.Mp4FieldKey.TRACK;
 import static ealvatag.utils.Check.checkArgNotNull;
+import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
@@ -229,15 +230,13 @@ public class Mp4Tag extends AbstractTag {
      * <p>If the content can be parsed to one of the known values use the genre field otherwise
      * use the custom field.
      *
-     * @param content
+     * @param genre the genre string
      *
-     * @return
+     * @return TagField for the genre
      */
-    @SuppressWarnings({"JavaDoc"})
-    private TagField createGenreField(String content) {
-        if (content == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
+    @SuppressWarnings("unused")
+    private TagField createGenreField(String genre) {
+        String content = checkArgNotNullOrEmpty(genre);
 
         //Always write as text
         if (TagOptionSingleton.getInstance().isWriteMp4GenresAsText()) {

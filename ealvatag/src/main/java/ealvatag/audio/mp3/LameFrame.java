@@ -19,16 +19,18 @@
 package ealvatag.audio.mp3;
 
 import ealvatag.audio.Utils;
+import ealvatag.utils.ArrayUtil;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 /**
  * The first frame can sometimes contain a LAME frame at the end of the Xing frame
- *
+ * <p>
  * <p>This useful to the library because it allows the encoder to be identified, full specification
  * can be found at http://gabriel.mp3-tech.org/mp3infotag.html
- *
+ * <p>
  * Summarized here:
  * 4 bytes:LAME
  * 5 bytes:LAME Encoder Version
@@ -45,8 +47,7 @@ import java.nio.charset.StandardCharsets;
  * 2 bytes:Music CRC
  * 2 bytes:CRC Tag
  */
-public class LameFrame
-{
+public class LameFrame {
     public static final int LAME_HEADER_BUFFER_SIZE = 36;
     public static final int ENCODER_SIZE = 9;   //Includes LAME ID
     public static final int LAME_ID_SIZE = 4;
@@ -55,38 +56,51 @@ public class LameFrame
 
     /**
      * Initilise a Lame Mpeg Frame
+     *
      * @param lameHeader
      */
-    private LameFrame(ByteBuffer lameHeader)
-    {
+    private LameFrame(ByteBuffer lameHeader) {
         encoder = Utils.getString(lameHeader, 0, ENCODER_SIZE, StandardCharsets.ISO_8859_1);
     }
 
     /**
      * Parse frame
      *
-     * @param bb
+     * @param bb to read from
+     *
      * @return frame or null if not exists
      */
-    public static LameFrame parseLameFrame(ByteBuffer bb)
-    {
+    static LameFrame parseLameFrame(ByteBuffer bb) {
         ByteBuffer lameHeader = bb.slice();
         String id = Utils.getString(lameHeader, 0, LAME_ID_SIZE, StandardCharsets.ISO_8859_1);
         lameHeader.rewind();
-        if (id.equals(LAME_ID))
-        {
-            LameFrame lameFrame = new LameFrame(lameHeader);
-            return lameFrame;
+        if (id.equals(LAME_ID)) {
+            return new LameFrame(lameHeader);
         }
         return null;
+    }
+
+    private LameFrame(final String encoder) {
+        this.encoder = encoder;
     }
 
     /**
      * @return encoder
      */
-    public String getEncoder()
-    {
+    public String getEncoder() {
         return encoder;
+    }
+
+    static LameFrame parseLameFrame(final Buffer header, final byte[] tempBuf) {
+        String encoder = Utils.getString(header,
+                                         0,
+                                         ENCODER_SIZE,
+                                         StandardCharsets.ISO_8859_1,
+                                         tempBuf);
+        if (encoder.startsWith(LAME_ID)) {
+           return new LameFrame(encoder);
+        }
+        return null;
     }
 }
 

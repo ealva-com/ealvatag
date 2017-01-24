@@ -26,6 +26,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -182,6 +183,18 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         fc.position(file.length() - TAG_LENGTH);
         byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
         fc.read(byteBuffer);
+        byteBuffer.flip();
+        read(byteBuffer);
+    }
+
+    public ID3v1Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {
+        FileChannel fileChannel = fileOperator.getFileChannel();
+        setLoggingFilename(loggingFilename);
+        ByteBuffer byteBuffer;
+
+        fileChannel.position(fileChannel.size() - TAG_LENGTH);
+        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+        fileChannel.read(byteBuffer);
         byteBuffer.flip();
         read(byteBuffer);
     }

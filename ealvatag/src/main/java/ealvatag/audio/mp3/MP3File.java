@@ -31,6 +31,7 @@ import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.audio.exceptions.UnableToModifyFileException;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.AbstractTagDisplayFormatter;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
@@ -53,8 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkState;
-import static ealvatag.utils.Check.checkArgNotNull;
-import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,8 +62,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -75,17 +72,19 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MP3File extends AudioFileImpl {
     /* Load ID3V1tag if exists */
-    public static final int LOAD_IDV1TAG = 2;
+    static final int LOAD_IDV1TAG = 2;
     /* Load ID3V2tag if exists */
-    public static final int LOAD_IDV2TAG = 4;
+    static final int LOAD_IDV2TAG = 4;
     /**
      * This option is currently ignored
      */
-    public static final int LOAD_LYRICS3 = 8;
-    public static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
+    private static final int LOAD_LYRICS3 = 8;
+
+    private static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
     private static final Logger LOG = LoggerFactory.getLogger(MP3File.class);
     private static final int MINIMUM_FILESIZE = 150;
-    protected static AbstractTagDisplayFormatter tagFormatter;
+
+    private static AbstractTagDisplayFormatter tagFormatter;
     /**
      * the ID3v2 tag that this file contains.
      */
@@ -143,30 +142,33 @@ public class MP3File extends AudioFileImpl {
      * @throws ealvatag.audio.exceptions.ReadOnlyFileException
      * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
      */
-    public MP3File(File file, final String extension, int loadOptions, boolean readOnly)
-            throws IOException, TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException {
+    public MP3File(File file, final String extension, int loadOptions, boolean readOnly) throws IOException,
+                                                                                                TagException,
+                                                                                                ReadOnlyFileException,
+                                                                                                CannotReadException,
+                                                                                                InvalidAudioFrameException {
         super(file, extension);
-        RandomAccessFile newFile = null;
-        try {
-            //Check File accessibility
-            newFile = checkFilePermissions(file, readOnly);
+        try (FileChannel fileChannel = getFileChannel(file, readOnly)) {
+            FileOperator fileOperator = new FileOperator(fileChannel);
 
             //Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
-            long tagSizeReportedByHeader = AbstractID3v2Tag.getV2TagSizeIfExists(file);
+            long tagSizeReportedByHeader = AbstractID3v2Tag.getV2TagSizeIfExists(fileOperator);
             LOG.trace("TagHeaderSize:" + Hex.asHex(tagSizeReportedByHeader));
-            audioHeader = new MP3AudioHeader(file, tagSizeReportedByHeader);
+            MP3AudioHeader mp3AudioHeader = new MP3AudioHeader(fileOperator, tagSizeReportedByHeader, file.getPath());
 
             //If the audio header is not straight after the end of the tag then search from start of file
-            if (tagSizeReportedByHeader != ((MP3AudioHeader)audioHeader).getMp3StartByte()) {
-                LOG.trace("First header found after tag:" + audioHeader);
-                audioHeader = checkAudioStart(tagSizeReportedByHeader, (MP3AudioHeader)audioHeader);
+            if (tagSizeReportedByHeader != mp3AudioHeader.getMp3StartByte()) {
+                LOG.trace("First header found after tag:" + mp3AudioHeader);
+                mp3AudioHeader = checkAudioStart(tagSizeReportedByHeader, mp3AudioHeader);
             }
 
             //Read v1 tags (if any)
-            readV1Tag(file, newFile, loadOptions);
+            readV1Tag(file.getPath(), fileOperator, loadOptions);
 
             //Read v2 tags (if any)
-            readV2Tag(file, loadOptions, (int)((MP3AudioHeader)audioHeader).getMp3StartByte());
+            readV2Tag(fileOperator, file.getPath(), loadOptions, (int)mp3AudioHeader.getMp3StartByte());
+
+            audioHeader = mp3AudioHeader;
 
             //If we have a v2 tag use that, if we do not but have v1 tag use that
             //otherwise use nothing
@@ -177,37 +179,23 @@ public class MP3File extends AudioFileImpl {
             } else if (id3v1tag != null) {
                 tag = id3v1tag;
             }
-            checkState(file != null);
             checkState(!Strings.isNullOrEmpty(extension));
-            checkState(audioHeader != null);
-        } finally {
-            if (newFile != null) {
-                newFile.close();
-            }
+            checkState(mp3AudioHeader != null);
         }
     }
 
-    /**
-     * Read v1 tag
-     *
-     * @param file
-     * @param newFile
-     * @param loadOptions
-     *
-     * @throws IOException
-     */
-    private void readV1Tag(File file, RandomAccessFile newFile, int loadOptions) throws IOException {
+    private void readV1Tag(String fileName, FileOperator newFile, int loadOptions) throws IOException {
         if ((loadOptions & LOAD_IDV1TAG) != 0) {
             LOG.debug("Attempting to read id3v1tags");
             try {
-                id3v1tag = new ID3v11Tag(newFile, file.getName());
+                id3v1tag = new ID3v11Tag(newFile, fileName);
             } catch (TagNotFoundException ex) {
                 LOG.trace("No ids3v11 tag found");
             }
 
             try {
                 if (id3v1tag == null) {
-                    id3v1tag = new ID3v1Tag(newFile, file.getName());
+                    id3v1tag = new ID3v1Tag(newFile, fileName);
                 }
             } catch (TagNotFoundException ex) {
                 LOG.trace("No id3v1 tag found");
@@ -220,90 +208,42 @@ public class MP3File extends AudioFileImpl {
      * <p>
      * TODO:shouldn't we be handing TagExceptions:when will they be thrown
      *
-     * @param file
+     * @param fileOperator
      * @param loadOptions
      *
      * @throws IOException
      * @throws TagException
      */
-    private void readV2Tag(File file, int loadOptions, int startByte) throws IOException, TagException {
+    private void readV2Tag(FileOperator fileOperator, String fileName, int loadOptions, int startByte) throws IOException, TagException {
         //We know where the actual Audio starts so load all the file from start to that point into
         //a buffer then we can read the IDv2 information without needing any more File I/O
         if (startByte >= AbstractID3v2Tag.TAG_HEADER_LENGTH) {
             LOG.debug("Attempting to read id3v2tags");
-            FileInputStream fis = null;
-            FileChannel fc = null;
-            ByteBuffer bb;
-            try {
-                fis = new FileInputStream(file);
-                fc = fis.getChannel();
-                bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, startByte);
-            }
-            //#JAUDIOTAGGER-419:If reading networked file map can fail so just copy bytes instead
-            catch (IOException ioe) {
-                bb = ByteBuffer.allocate(startByte);
-                fc.read(bb, 0);
-            } finally {
-                if (fc != null) {
-                    fc.close();
+            ByteBuffer bb = fileOperator.getFileChannel().map(FileChannel.MapMode.READ_ONLY, 0, startByte);
+            bb.rewind();
+
+            if ((loadOptions & LOAD_IDV2TAG) != 0) {
+                LOG.trace("Attempting to read id3v2tags");
+                try {
+                    this.setID3v2Tag(new ID3v24Tag(bb, fileName));
+                } catch (TagNotFoundException ex) {
+                    LOG.trace("No id3v24 tag found");
                 }
 
-                if (fis != null) {
-                    fis.close();
+                try {
+                    if (id3v2tag == null) {
+                        this.setID3v2Tag(new ID3v23Tag(bb, fileName));
+                    }
+                } catch (TagNotFoundException ex) {
+                    LOG.trace("No id3v23 tag found");
                 }
-            }
 
-            try {
-                bb.rewind();
-
-                if ((loadOptions & LOAD_IDV2TAG) != 0) {
-                    LOG.trace("Attempting to read id3v2tags");
-                    try {
-                        this.setID3v2Tag(new ID3v24Tag(bb, file.getName()));
-                    } catch (TagNotFoundException ex) {
-                        LOG.trace("No id3v24 tag found");
+                try {
+                    if (id3v2tag == null) {
+                        this.setID3v2Tag(new ID3v22Tag(bb, fileName));
                     }
-
-                    try {
-                        if (id3v2tag == null) {
-                            this.setID3v2Tag(new ID3v23Tag(bb, file.getName()));
-                        }
-                    } catch (TagNotFoundException ex) {
-                        LOG.trace("No id3v23 tag found");
-                    }
-
-                    try {
-                        if (id3v2tag == null) {
-                            this.setID3v2Tag(new ID3v22Tag(bb, file.getName()));
-                        }
-                    } catch (TagNotFoundException ex) {
-                        LOG.trace("No id3v22 tag found");
-                    }
-                }
-            } finally {
-                //Workaround for 4724038 on Windows
-                bb.clear();
-                if (bb.isDirect() && !TagOptionSingleton.getInstance().isAndroid()) {
-                    // Reflection substitute for following code:
-                    //    ((sun.nio.ch.DirectBuffer) bb).cleaner().clean();
-                    // which causes exception on Android - Sun NIO classes are not available
-                    try {
-                        Class<?> clazz = Class.forName("sun.nio.ch.DirectBuffer");
-                        Method cleanerMethod = clazz.getMethod("cleaner");
-                        Object cleaner = cleanerMethod.invoke(bb);  // cleaner = bb.cleaner()
-                        if (cleaner != null) {
-                            Method cleanMethod = cleaner.getClass().getMethod("clean");
-                            cleanMethod.invoke(cleaner);   // cleaner.clean()
-                        }
-                    } catch (ClassNotFoundException e) {
-                        LOG.error("Could not load sun.nio.ch.DirectBuffer.");
-                    } catch (NoSuchMethodException e) {
-                        LOG.error("Could not invoke DirectBuffer method - " + e.getMessage());
-                    } catch (InvocationTargetException e) {
-                        LOG.error("Could not invoke DirectBuffer method - target exception");
-                    } catch (IllegalAccessException e) {
-                        LOG.error("Could not invoke DirectBuffer method - illegal access");
-                    }
+                } catch (TagNotFoundException ex) {
+                    LOG.trace("No id3v22 tag found");
                 }
             }
         } else {
