@@ -15,7 +15,6 @@
  */
 package ealvatag.tag.id3;
 
-import ealvatag.FileConstants;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Hex;
 import ealvatag.tag.EmptyFrameException;

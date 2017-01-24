@@ -16,7 +16,6 @@
 package ealvatag.tag.id3;
 
 import com.google.common.collect.ImmutableSet;
-import ealvatag.FileConstants;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.EmptyFrameException;
