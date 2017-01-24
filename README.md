@@ -22,25 +22,28 @@ Quick Start
 
     File inputFile = new File("MyFavoriteSong.mp3");
     AudioFile audioFile = AudioFileIO.read(inputFile);
-    
+
     final AudioHeader audioHeader = audioFile.getAudioHeader();
     final String channels = audioHeader.getChannels();
     final String bitRate = audioHeader.getBitRate();
     final String encodingType = audioHeader.getEncodingType();
-    
-    final Tag tag = audioFile.getTag();
-    if (tag.hasField(FieldKey.TITLE)) {
-        final String title = tag.getFirst(FieldKey.TITLE);
-    }
-    
+
+    Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
+    final String title = tag.getFirst(FieldKey.TITLE);
+    if ("".equals(title)) {
+        if (tag == NullTag.INSTANCE) {
+            // there was no tag. set a new default tag for the file type
+            tag = audioFile.setNewDefaultTag();
+        }
+    } 
+
     tag.setField(FieldKey.TITLE, "My New Title");
-    audioFile.commit();
-    
+    audioFile.save();
+
     final ImmutableSet<FieldKey> supportedFields = tag.getSupportedFields();
     if (supportedFields.contains(FieldKey.COVER_ART)) {
         System.out.println("File type supports Artwork");
     }
-
 
 Android
 -------
