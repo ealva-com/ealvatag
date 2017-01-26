@@ -17,6 +17,7 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -25,8 +26,8 @@ import java.nio.ByteBuffer;
  * <p>The 'Composer(s)' frame is intended for the name of the composer(s).
  * They are separated with the "/" character in ID3v23.
  * Null separated as is the norm in ID3v24
- *
- *
+ * <p>
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -36,17 +37,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyTCOM datatype.
      */
-    public FrameBodyTCOM()
-    {
+    public FrameBodyTCOM() {
     }
 
-    public FrameBodyTCOM(FrameBodyTCOM body)
-    {
+    public FrameBodyTCOM(FrameBodyTCOM body) {
         super(body);
     }
 
@@ -56,8 +54,7 @@ public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTCOM(byte textEncoding, String text)
-    {
+    public FrameBodyTCOM(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -66,10 +63,14 @@ public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyTCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTCOM(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -79,8 +80,7 @@ public class FrameBodyTCOM extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_COMPOSER;
     }
 }

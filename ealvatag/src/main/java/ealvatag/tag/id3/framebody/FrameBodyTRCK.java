@@ -19,20 +19,21 @@ import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.PartOfSet;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Track number/position in set Text Information frame.
- *
+ * <p>
  * <p>The 'Track number/Position in set' frame is a numeric string containing the order number of the audio-file on its original recording.
- *
+ * <p>
  * This may be extended with a "/" character and a numeric string containing the total number of tracks/elements on the original recording.
- *  e.g. "4/9".
- *
+ * e.g. "4/9".
+ * <p>
  * Some applications like to prepend the track number with a zero to aid sorting, (i.e 02 comes before 10)
- *
- *
+ * <p>
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -42,18 +43,15 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTRCK extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTRCK extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTRCK datatype.
      */
-    public FrameBodyTRCK()
-    {
+    public FrameBodyTRCK() {
         super();
     }
 
-    public FrameBodyTRCK(FrameBodyTRCK body)
-    {
+    public FrameBodyTRCK(FrameBodyTRCK body) {
         super(body);
     }
 
@@ -63,13 +61,11 @@ public class FrameBodyTRCK extends AbstractFrameBodyNumberTotal implements ID3v2
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTRCK(byte textEncoding, String text)
-    {
+    public FrameBodyTRCK(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
-    public FrameBodyTRCK(byte textEncoding, Integer trackNo,Integer trackTotal)
-    {
+    public FrameBodyTRCK(byte textEncoding, Integer trackNo, Integer trackTotal) {
         super(textEncoding, trackNo, trackTotal);
     }
 
@@ -78,11 +74,15 @@ public class FrameBodyTRCK extends AbstractFrameBodyNumberTotal implements ID3v2
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTRCK(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTRCK(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTRCK(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -91,54 +91,44 @@ public class FrameBodyTRCK extends AbstractFrameBodyNumberTotal implements ID3v2
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_TRACK;
     }
 
-    public Integer getTrackNo()
-    {
+    public Integer getTrackNo() {
         return getNumber();
     }
 
-    public String getTrackNoAsText()
-    {
+    public String getTrackNoAsText() {
         return getNumberAsText();
     }
 
-    public void setTrackNo(Integer trackNo)
-    {
+    public void setTrackNo(Integer trackNo) {
         setNumber(trackNo);
     }
 
-    public void setTrackNo(String trackNo)
-    {
+    public void setTrackNo(String trackNo) {
         setNumber(trackNo);
     }
 
-    public Integer getTrackTotal()
-    {
+    public Integer getTrackTotal() {
         return getTotal();
     }
 
-    public String getTrackTotalAsText()
-    {
+    public String getTrackTotalAsText() {
         return getTotalAsText();
     }
 
 
-    public void setTrackTotal(Integer trackTotal)
-    {
+    public void setTrackTotal(Integer trackTotal) {
         setTotal(trackTotal);
     }
 
-    public void setTrackTotal(String trackTotal)
-    {
+    public void setTrackTotal(String trackTotal) {
         setTotal(trackTotal);
     }
 
-    public void setText(String text)
-    {
+    public void setText(String text) {
         setObjectValue(DataTypes.OBJ_TEXT, new PartOfSet.PartOfSetValue(text));
     }
 }

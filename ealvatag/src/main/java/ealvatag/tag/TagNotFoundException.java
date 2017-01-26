@@ -43,4 +43,7 @@ public class TagNotFoundException extends TagException {
         super(msg);
     }
 
+    public TagNotFoundException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

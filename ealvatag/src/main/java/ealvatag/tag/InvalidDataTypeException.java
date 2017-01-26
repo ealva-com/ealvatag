@@ -17,27 +17,19 @@ package ealvatag.tag;
  * Indicates there was a problem parsing this datatype due to a problem with the data
  * such as the array being empty when trying to read from a file.
  *
- * @version $Revision$
  */
-public class InvalidDataTypeException extends InvalidTagException
-{
-    /**
-     * Creates a new InvalidDataTypeException datatype.
-     *
-     * @param ex the cause.
-     */
-    public InvalidDataTypeException(Throwable ex)
-    {
+public class InvalidDataTypeException extends InvalidTagException {
+    private static final long serialVersionUID = -7361525721486799573L;
+
+    public InvalidDataTypeException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    public InvalidDataTypeException(Throwable ex) {
         super(ex);
     }
 
-    /**
-     * Creates a new InvalidDataTypeException datatype.
-     *
-     * @param msg the detail message.
-     */
-    public InvalidDataTypeException(String msg)
-    {
+    public InvalidDataTypeException(String msg) {
         super(msg);
     }
 

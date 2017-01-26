@@ -44,9 +44,9 @@ import ealvatag.tag.reference.PictureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL_OR_EMPTY;
+import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
@@ -159,18 +159,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     public ID3v22Tag(ByteBuffer buffer, String loggingFilename) throws TagException {
         setLoggingFilename(loggingFilename);
         this.read(buffer);
-    }
-
-    /**
-     * Creates a new ID3v2_2 datatype.
-     *
-     * @param buffer
-     *
-     * @throws TagException
-     * @deprecated use {@link #ID3v22Tag(ByteBuffer, String)} instead
-     */
-    public ID3v22Tag(ByteBuffer buffer) throws TagException {
-        this(buffer, "");
     }
 
     /**
@@ -506,7 +494,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     /**
      * {@inheritDoc}
      */
-    @Override
+//    @Override
     public void read(ByteBuffer byteBuffer) throws TagException {
         int size;
         if (!seek(byteBuffer)) {

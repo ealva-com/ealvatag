@@ -45,7 +45,7 @@ import ealvatag.tag.id3.framebody.FrameBodyTRCK;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.io.IOException;
@@ -208,28 +208,6 @@ public class ID3v11Tag extends ID3v1Tag {
         }
     }
 
-    /**
-     * Creates a new ID3v11 datatype.
-     *
-     * @param file
-     * @param loggingFilename
-     * @throws TagNotFoundException
-     * @throws IOException
-     */
-    public ID3v11Tag(RandomAccessFile file, String loggingFilename) throws TagNotFoundException, IOException {
-        setLoggingFilename(loggingFilename);
-        FileChannel fc;
-        ByteBuffer byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-
-        fc = file.getChannel();
-        fc.position(file.length() - TAG_LENGTH);
-
-        fc.read(byteBuffer);
-        byteBuffer.flip();
-        read(byteBuffer);
-
-    }
-
     public ID3v11Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {
         FileChannel fc = fileOperator.getFileChannel();
         setLoggingFilename(loggingFilename);
@@ -240,19 +218,6 @@ public class ID3v11Tag extends ID3v1Tag {
         fc.read(byteBuffer);
         byteBuffer.flip();
         read(byteBuffer);
-
-    }
-
-    /**
-     * Creates a new ID3v11 datatype.
-     *
-     * @param file
-     * @throws TagNotFoundException
-     * @throws IOException
-     * @deprecated use {@link #ID3v11Tag(RandomAccessFile, String)} instead
-     */
-    public ID3v11Tag(RandomAccessFile file) throws TagNotFoundException, IOException {
-        this(file, "");
 
     }
 

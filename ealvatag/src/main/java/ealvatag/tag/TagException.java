@@ -22,11 +22,12 @@
 package ealvatag.tag;
 
 /**
- *
  * @author Eric Farng
  * @version $Revision$
  */
 public class TagException extends Exception {
+    private static final long serialVersionUID = 3342610748627079463L;
+
     public TagException(Throwable cause) {
         super(cause);
     }

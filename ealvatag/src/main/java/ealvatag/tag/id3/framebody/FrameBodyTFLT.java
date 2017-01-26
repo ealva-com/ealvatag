@@ -17,12 +17,13 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * File type Text information frame.
- *
+ * <p>
  * <p>The 'File type' frame indicates which type of audio this tag defines.
  * The following type and refinements are defined:
  * <p><table border=0 width="70%">
@@ -39,8 +40,8 @@ import java.nio.ByteBuffer;
  * in a similar way to the predefined types in the "TMED" frame, but
  * without parentheses. If this frame is not present audio type is
  * assumed to be "MPG".
- *
- *
+ * <p>
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -50,17 +51,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyTFLT datatype.
      */
-    public FrameBodyTFLT()
-    {
+    public FrameBodyTFLT() {
     }
 
-    public FrameBodyTFLT(FrameBodyTFLT body)
-    {
+    public FrameBodyTFLT(FrameBodyTFLT body) {
         super(body);
     }
 
@@ -70,8 +68,7 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTFLT(byte textEncoding, String text)
-    {
+    public FrameBodyTFLT(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -80,10 +77,14 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTFLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTFLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTFLT(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -92,8 +93,7 @@ public class FrameBodyTFLT extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_FILE_TYPE;
     }
 }

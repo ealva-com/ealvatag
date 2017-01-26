@@ -109,7 +109,7 @@ public class UnsynchronizationTest extends AbstractTestCase
         mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
-        assertFalse(v23tag.isUnsynchronization());
+        assertFalse(v23tag.isUnsynchronized());
         assertEquals(AbstractID3v2Tag.getV2TagSizeIfExists(testFile), mp3File.getMP3AudioHeader().getMp3StartByte());
 
         //Enable unsynchronization and write mp3 back to file, only APIC requires unsynchronization
@@ -117,7 +117,7 @@ public class UnsynchronizationTest extends AbstractTestCase
         mp3File.saveMp3();
         mp3File = new MP3File(testFile);
         v23tag = (ID3v23Tag) mp3File.getID3v2Tag();
-        assertTrue(v23tag.isUnsynchronization());
+        assertTrue(v23tag.isUnsynchronized());
         assertEquals(AbstractID3v2Tag.getV2TagSizeIfExists(testFile), mp3File.getMP3AudioHeader().getMp3StartByte());
 
 
@@ -178,7 +178,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             af.setNewDefaultTag();
             ID3v23Tag v23TagUnsynced = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
-            assertFalse(v23TagUnsynced.isUnsynchronization());
+            assertFalse(v23TagUnsynced.isUnsynchronized());
             Tag unsyncedTag = af.getTag().or(NullTag.INSTANCE);
             Artwork artworkUnsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             unsyncedTag.setArtwork(artworkUnsynced);
@@ -189,7 +189,7 @@ public class UnsynchronizationTest extends AbstractTestCase
             af = AudioFileIO.read(testFile2);
             af.setNewDefaultTag();
             ID3v23Tag  v23TagNotsynced = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
-            assertFalse(v23TagNotsynced.isUnsynchronization());
+            assertFalse(v23TagNotsynced.isUnsynchronized());
             Tag notSyncedTag = af.getTag().or(NullTag.INSTANCE);
             Artwork artworkNotsynced = ArtworkFactory.createArtworkFromFile(new File("testdata/coverart_large.jpg"));
             notSyncedTag.setArtwork(artworkNotsynced);
@@ -214,7 +214,7 @@ public class UnsynchronizationTest extends AbstractTestCase
 
             unsyncedTag = af.getTag().or(NullTag.INSTANCE);
             v23TagUnsynced = (ID3v23Tag)unsyncedTag;
-            assertTrue(v23TagUnsynced.isUnsynchronization());
+            assertTrue(v23TagUnsynced.isUnsynchronized());
             assertEquals(1,unsyncedTag.getArtworkList().size());
             artworkUnsynced = unsyncedTag.getArtworkList().get(0);
 

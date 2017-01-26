@@ -16,10 +16,17 @@
 package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
-import ealvatag.tag.datatype.*;
+import ealvatag.tag.datatype.AbstractString;
+import ealvatag.tag.datatype.ByteArraySizeTerminated;
+import ealvatag.tag.datatype.DataTypes;
+import ealvatag.tag.datatype.NumberHashMap;
+import ealvatag.tag.datatype.StringDate;
+import ealvatag.tag.datatype.StringNullTerminated;
+import ealvatag.tag.datatype.TextEncodedStringNullTerminated;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.ReceivedAsTypes;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import okio.Buffer;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -142,8 +149,11 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param frameSize
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCOMR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyCOMR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyCOMR(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 

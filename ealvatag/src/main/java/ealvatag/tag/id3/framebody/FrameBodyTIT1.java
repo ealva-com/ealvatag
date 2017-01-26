@@ -17,6 +17,7 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -25,7 +26,7 @@ import java.nio.ByteBuffer;
  * Content group description Text information frame.
  * <p>The 'Content group description' frame is used if the sound belongs to a larger category of sounds/music.
  * For example, classical music is often sorted in different musical sections (e.g. "Piano Concerto", "Weather - Hurricane").
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -35,17 +36,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyTIT1 datatype.
      */
-    public FrameBodyTIT1()
-    {
+    public FrameBodyTIT1() {
     }
 
-    public FrameBodyTIT1(FrameBodyTIT1 body)
-    {
+    public FrameBodyTIT1(FrameBodyTIT1 body) {
         super(body);
     }
 
@@ -55,8 +53,7 @@ public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTIT1(byte textEncoding, String text)
-    {
+    public FrameBodyTIT1(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -65,10 +62,14 @@ public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTIT1(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTIT1(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTIT1(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -77,8 +78,7 @@ public class FrameBodyTIT1 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_CONTENT_GROUP_DESC;
     }
 }

@@ -17,33 +17,30 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
- * Original lyricist(s)/text writer(s) Text information frame.
- * <p>The 'Original lyricist(s)/text writer(s)' frame is intended for the text writer(s) of the original recording, if for example the music in the file should be a cover of a previously released song. The text writers are seperated with the "/" character.
- *
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * Original lyricist(s)/text writer(s) Text information frame. <p>The 'Original lyricist(s)/text writer(s)' frame is intended for the text
+ * writer(s) of the original recording, if for example the music in the file should be a cover of a previously released song. The text
+ * writers are seperated with the "/" character.
+ * <p>
+ * <p>For more details, please refer to the ID3 specifications: <ul> <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
-{
+public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTOLY datatype.
      */
-    public FrameBodyTOLY()
-    {
+    public FrameBodyTOLY() {
     }
 
-    public FrameBodyTOLY(FrameBodyTOLY body)
-    {
+    public FrameBodyTOLY(FrameBodyTOLY body) {
         super(body);
     }
 
@@ -53,8 +50,7 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTOLY(byte textEncoding, String text)
-    {
+    public FrameBodyTOLY(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -63,10 +59,14 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTOLY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTOLY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTOLY(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +75,7 @@ public class FrameBodyTOLY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_ORIG_LYRICIST;
     }
 }

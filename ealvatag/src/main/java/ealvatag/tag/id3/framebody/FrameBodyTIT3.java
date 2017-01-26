@@ -17,33 +17,29 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
- * Subtitle/Description refinement Text information frame.
- * <p>The 'Subtitle/Description refinement' frame is used for information directly related to the contents title (e.g. "Op. 16" or "Performed live at Wembley").
- *
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * Subtitle/Description refinement Text information frame. <p>The 'Subtitle/Description refinement' frame is used for information directly
+ * related to the contents title (e.g. "Op. 16" or "Performed live at Wembley").
+ * <p>
+ * <p>For more details, please refer to the ID3 specifications: <ul> <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyTIT3 datatype.
      */
-    public FrameBodyTIT3()
-    {
+    public FrameBodyTIT3() {
     }
 
-    public FrameBodyTIT3(FrameBodyTIT3 body)
-    {
+    public FrameBodyTIT3(FrameBodyTIT3 body) {
         super(body);
     }
 
@@ -53,8 +49,7 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTIT3(byte textEncoding, String text)
-    {
+    public FrameBodyTIT3(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -63,10 +58,14 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTIT3(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTIT3(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +74,7 @@ public class FrameBodyTIT3 extends AbstractFrameBodyTextInfo implements ID3v24Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_TITLE_REFINEMENT;
     }
 }

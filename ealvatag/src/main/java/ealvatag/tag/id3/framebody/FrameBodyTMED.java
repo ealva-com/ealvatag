@@ -17,6 +17,7 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -99,7 +100,7 @@ import java.nio.ByteBuffer;
  * <tr><td align=right>/III</td><td>Type III cassette (ferric chrome)</td></tr>
  * <tr><td align=right>/IV<br>&nbsp;</td><td>Type IV cassette (metal)</td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -109,17 +110,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTMED datatype.
      */
-    public FrameBodyTMED()
-    {
+    public FrameBodyTMED() {
     }
 
-    public FrameBodyTMED(FrameBodyTMED body)
-    {
+    public FrameBodyTMED(FrameBodyTMED body) {
         super(body);
     }
 
@@ -129,8 +127,7 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTMED(byte textEncoding, String text)
-    {
+    public FrameBodyTMED(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -139,21 +136,23 @@ public class FrameBodyTMED extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTMED(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
+    public FrameBodyTMED(Buffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
 
     /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_MEDIA_TYPE;
     }
 }

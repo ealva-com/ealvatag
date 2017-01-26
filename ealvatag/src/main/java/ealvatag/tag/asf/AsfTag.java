@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.AbstractTag;
-import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
@@ -17,8 +16,9 @@ import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.PictureTypes;
+import ealvatag.utils.Check;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
@@ -582,7 +582,7 @@ public final class AsfTag extends AbstractTag {
                                                                                                UnsupportedFieldException,
                                                                                                FieldDataInvalidException {
         return createField(getAsfFieldKey(checkArgNotNull(fieldKey, CANNOT_BE_NULL, "fieldKey")),
-                           checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value"));
+                           checkVarArg0NotNull(values, Check.AT_LEAST_ONE_REQUIRED, "value"));
     }
 
     /**

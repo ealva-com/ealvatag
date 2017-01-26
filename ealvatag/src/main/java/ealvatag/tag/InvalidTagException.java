@@ -29,24 +29,18 @@ package ealvatag.tag;
  * <code>TagNotFoundException</code> is thrown. If the ID string exists, then
  * any other error while reading throws an <code>InvalidTagException</code>.
  *
- * @version $Revision$
  */
 public class InvalidTagException extends TagException {
+    private static final long serialVersionUID = -8549493141672134395L;
 
-    /**
-     * Creates a new InvalidTagException datatype.
-     *
-     * @param ex the cause.
-     */
+    public InvalidTagException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
     public InvalidTagException(Throwable ex) {
         super(ex);
     }
 
-    /**
-     * Creates a new InvalidTagException datatype.
-     *
-     * @param msg the detail message.
-     */
     public InvalidTagException(String msg) {
         super(msg);
     }

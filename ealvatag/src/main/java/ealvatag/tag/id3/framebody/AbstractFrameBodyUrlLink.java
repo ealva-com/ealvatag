@@ -24,6 +24,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.StringSizeTerminated;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +73,10 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     protected AbstractFrameBodyUrlLink(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    protected AbstractFrameBodyUrlLink(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 

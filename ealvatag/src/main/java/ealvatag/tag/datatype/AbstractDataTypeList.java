@@ -18,7 +18,9 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +99,19 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
             data.setBody(frameBody);
             getValue().add(data);
             currentOffset += data.getSize();
+        }
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        if (buffer.size() == 0) {
+            getValue().clear();
+            return;
+        }
+        while (buffer.size() > 0) {
+            final T data = createListElement();
+            data.read(buffer, size);
+            data.setBody(frameBody);
+            getValue().add(data);
         }
     }
 

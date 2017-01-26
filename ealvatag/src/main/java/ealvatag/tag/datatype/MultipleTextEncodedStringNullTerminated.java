@@ -2,8 +2,10 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +105,22 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
             }
         }
         LOG.debug("Read  MultipleTextEncodedStringNullTerminated:" + value + " size:" + size);
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        int runningSize = getSize();
+        while (runningSize > 0) {
+            final TextEncodedStringNullTerminated next = new TextEncodedStringNullTerminated(identifier, frameBody);
+            if (next.getSize() == 0) {
+                break;
+            } else {
+                //Add to value
+                ((Values)value).add((String)next.getValue());
+
+                //Add to size calculation
+                runningSize -= next.getSize();
+            }
+        }
     }
 
     /**

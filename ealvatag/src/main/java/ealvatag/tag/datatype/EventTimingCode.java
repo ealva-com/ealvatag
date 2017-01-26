@@ -16,6 +16,9 @@ package ealvatag.tag.datatype;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
+import okio.Buffer;
+
+import java.io.EOFException;
 
 /**
  * A single event timing code. Part of a list of timing codes ({@link EventTimingCodeList}), that are contained in
@@ -96,6 +99,11 @@ public class EventTimingCode extends AbstractDataType implements Cloneable {
         localOffset += this.type.getSize();
         this.timestamp.readByteArray(buffer, localOffset);
         localOffset += this.timestamp.getSize();
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        type.read(buffer, size);
+        timestamp.read(buffer, size);
     }
 
     @Override

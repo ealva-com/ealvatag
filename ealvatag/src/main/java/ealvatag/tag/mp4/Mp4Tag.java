@@ -42,8 +42,8 @@ import ealvatag.tag.mp4.field.Mp4TagTextField;
 import ealvatag.tag.mp4.field.Mp4TagTextNumberField;
 import ealvatag.tag.mp4.field.Mp4TrackField;
 
-import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.tag.mp4.Mp4FieldKey.DISCNUMBER;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE_CUSTOM;

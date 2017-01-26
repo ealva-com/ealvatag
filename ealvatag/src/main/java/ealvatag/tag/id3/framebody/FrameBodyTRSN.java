@@ -17,13 +17,14 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Internet radio station name Text information frame.
  * <p>The 'Internet radio station name' frame contains the name of the internet radio station from which the audio is streamed.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -33,17 +34,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTRSN datatype.
      */
-    public FrameBodyTRSN()
-    {
+    public FrameBodyTRSN() {
     }
 
-    public FrameBodyTRSN(FrameBodyTRSN body)
-    {
+    public FrameBodyTRSN(FrameBodyTRSN body) {
         super(body);
     }
 
@@ -53,8 +51,7 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTRSN(byte textEncoding, String text)
-    {
+    public FrameBodyTRSN(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -63,11 +60,15 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTRSN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTRSN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTRSN(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -76,8 +77,7 @@ public class FrameBodyTRSN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_RADIO_NAME;
     }
 }

@@ -17,29 +17,26 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 
 /**
  * Apple defined Movement frame works the same way as regular Text Frames
- *
+ * <p>
  * This is not an official standard frame, but Apple makes its own rules !
- *
  */
-public class FrameBodyMVNM extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyMVNM extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
 
     /**
      * Creates a new FrameBodyMVNM datatype.
      */
-    public FrameBodyMVNM()
-    {
+    public FrameBodyMVNM() {
         super();
     }
 
-    public FrameBodyMVNM(FrameBodyMVNM body)
-    {
+    public FrameBodyMVNM(FrameBodyMVNM body) {
         super(body);
     }
 
@@ -49,8 +46,7 @@ public class FrameBodyMVNM extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyMVNM(byte textEncoding, String text)
-    {
+    public FrameBodyMVNM(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -60,11 +56,15 @@ public class FrameBodyMVNM extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws java.io.IOException
      * @throws ealvatag.tag.InvalidTagException
      */
-    public FrameBodyMVNM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyMVNM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyMVNM(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -74,8 +74,7 @@ public class FrameBodyMVNM extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_MOVEMENT;
     }
 

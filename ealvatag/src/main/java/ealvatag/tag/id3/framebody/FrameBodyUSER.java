@@ -16,18 +16,23 @@
 package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
-import ealvatag.tag.datatype.*;
+import ealvatag.tag.datatype.AbstractString;
+import ealvatag.tag.datatype.DataTypes;
+import ealvatag.tag.datatype.NumberHashMap;
+import ealvatag.tag.datatype.StringHashMap;
+import ealvatag.tag.datatype.StringSizeTerminated;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.Languages;
+import okio.Buffer;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 /**
  * Terms of use frame.
- *
- *
+ * <p>
+ * <p>
  * This frame contains a brief description of the terms of use and
  * ownership of the file. More detailed information concerning the legal
  * terms might be available through the "WCOP" frame. Newlines are
@@ -38,7 +43,7 @@ import java.nio.ByteBuffer;
  * <tr><td>Language       </td><td>$xx xx xx</td></tr>
  * <tr><td>The actual text</td><td>&lt;text string according to encoding&gt;</td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -48,20 +53,17 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyUSER datatype.
      */
-    public FrameBodyUSER()
-    {
+    public FrameBodyUSER() {
         //        setObject("Text Encoding", new Byte((byte) 0));
         //        setObject("Language", "");
         //        setObject("Text", "");
     }
 
-    public FrameBodyUSER(FrameBodyUSER body)
-    {
+    public FrameBodyUSER(FrameBodyUSER body) {
         super(body);
     }
 
@@ -72,8 +74,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param language
      * @param text
      */
-    public FrameBodyUSER(byte textEncoding, String language, String text)
-    {
+    public FrameBodyUSER(byte textEncoding, String language, String text) {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
         setObjectValue(DataTypes.OBJ_TEXT, text);
@@ -85,10 +86,14 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyUSER(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyUSER(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -97,24 +102,21 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_TERMS_OF_USE;
     }
 
     /**
      * @return lanaguage
      */
-    public String getLanguage()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_LANGUAGE);
+    public String getLanguage() {
+        return (String)getObjectValue(DataTypes.OBJ_LANGUAGE);
     }
 
     /**
      * @param language
      */
-    public void setOwner(String language)
-    {
+    public void setOwner(String language) {
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
     }
 
@@ -122,12 +124,11 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
      * If the text cannot be encoded using current encoder, change the encoder
      *
      * @param tagBuffer
+     *
      * @throws java.io.IOException
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-    {
-        if (!((AbstractString) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
-        {
+    public void write(ByteArrayOutputStream tagBuffer) {
+        if (!((AbstractString)getObject(DataTypes.OBJ_TEXT)).canBeEncoded()) {
             this.setTextEncoding(TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
@@ -136,8 +137,7 @@ public class FrameBodyUSER extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      *
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
         objectList.add(new StringSizeTerminated(DataTypes.OBJ_TEXT, this));

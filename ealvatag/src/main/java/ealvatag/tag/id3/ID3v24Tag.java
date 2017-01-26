@@ -31,10 +31,11 @@ import ealvatag.tag.lyrics3.Lyrics3v2;
 import ealvatag.tag.lyrics3.Lyrics3v2Field;
 import ealvatag.tag.reference.GenreTypes;
 import ealvatag.tag.reference.PictureTypes;
+import ealvatag.utils.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
@@ -596,19 +597,6 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         this.read(buffer);
     }
 
-
-    /**
-     * Creates a new ID3v2_4 datatype.
-     *
-     * @param buffer
-     *
-     * @throws TagException
-     * @deprecated use {@link #ID3v24Tag(ByteBuffer, String)} instead
-     */
-    public ID3v24Tag(ByteBuffer buffer) throws TagException {
-        this(buffer, "");
-    }
-
     /**
      * @return identifier
      */
@@ -1113,7 +1101,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
     }
 
     public Tag deleteField(String id) throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNullOrEmpty(id, ErrorMessage.CANNOT_BE_NULL_OR_EMPTY, "id");
+        checkArgNotNullOrEmpty(id, Check.CANNOT_BE_NULL_OR_EMPTY, "id");
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
         return this;
     }
@@ -1209,7 +1197,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
                                                                                     FieldDataInvalidException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
-            String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "value");
+            String value = checkVarArg0NotNull(values, Check.AT_LEAST_ONE_REQUIRED, "value");
 
             FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
             AbstractID3v2Frame frame = createFrame(formatKey.getFrameId());

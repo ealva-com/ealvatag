@@ -15,14 +15,16 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.ByteArraySizeTerminated;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 /**
  * MPEG location lookup table frame.
- *
- *
+ * <p>
+ * <p>
  * To increase performance and accuracy of jumps within a MPEG
  * audio file, frames with timecodes in different locations in the file
  * might be useful. The ID3v2 frame includes references that the
@@ -56,7 +58,7 @@ import ealvatag.tag.id3.ID3v24Frames;
  * <tr><td>Deviation in bytes</td><td width="80%">%xxx....</td></tr>
  * <tr><td>Deviation in milliseconds</td><td>%xxx....</td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -66,18 +68,19 @@ import ealvatag.tag.id3.ID3v24Frames;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyMLLT datatype.
      */
-    public FrameBodyMLLT()
-    {
+    public FrameBodyMLLT() {
     }
 
-    public FrameBodyMLLT(FrameBodyMLLT body)
-    {
+    public FrameBodyMLLT(FrameBodyMLLT body) {
         super(body);
+    }
+
+    public FrameBodyMLLT(Buffer buffer, int frameSize) throws InvalidTagException {
+        super(buffer, frameSize);
     }
 
     /**
@@ -85,8 +88,7 @@ public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_MPEG_LOCATION_LOOKUP_TABLE;
     }
 
@@ -94,8 +96,7 @@ public class FrameBodyMLLT extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * TODO:proper mapping
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 

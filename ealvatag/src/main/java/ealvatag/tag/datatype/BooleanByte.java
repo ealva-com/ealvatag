@@ -25,6 +25,7 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
 /**
  * Represents a bit flag within a byte
@@ -114,6 +115,13 @@ public class BooleanByte extends AbstractDataType
 
         byte newValue = arr[offset];
 
+        newValue >>= bitPosition;
+        newValue &= 0x1;
+        this.value = newValue == 1;
+    }
+
+    @Override public void read(final Buffer buffer, final int size) {
+        byte newValue = buffer.readByte();
         newValue >>= bitPosition;
         newValue &= 0x1;
         this.value = newValue == 1;

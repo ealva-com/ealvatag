@@ -16,7 +16,6 @@
  */
 package ealvatag.audio;
 
-import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -268,7 +267,7 @@ public abstract class AudioFileWriter {
     // TODO Creates temp file in same folder as the original file, this is safe
     // but would impose a performance overhead if the original file is on a networked drive
     public void write(AudioFileImpl audioFile) throws CannotWriteException {
-        Check.checkArgNotNull(audioFile, ErrorMessage.CANNOT_BE_NULL, "audioFile");
+        Check.checkArgNotNull(audioFile, Check.CANNOT_BE_NULL, "audioFile");
         LOG.trace("Started writing tag data for file:" + audioFile.getFile().getName());
 
         // Prechecks

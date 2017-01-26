@@ -20,8 +20,8 @@ import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL_OR_EMPTY;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;

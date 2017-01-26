@@ -99,7 +99,7 @@ public class AudioFileImpl implements AudioFile {
     }
 
     @Override public void saveAs(final String fullPathWithoutExtension) throws IllegalArgumentException, CannotWriteException {
-        Check.checkArgNotNullOrEmpty(fullPathWithoutExtension, ErrorMessage.CANNOT_BE_NULL_OR_EMPTY, "fullPathWithoutExtension");
+        Check.checkArgNotNullOrEmpty(fullPathWithoutExtension, Check.CANNOT_BE_NULL_OR_EMPTY, "fullPathWithoutExtension");
         AudioFileIO.instance().writeFileAs(this, fullPathWithoutExtension);
     }
 

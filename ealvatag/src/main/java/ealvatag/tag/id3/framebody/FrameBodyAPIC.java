@@ -17,11 +17,17 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.TagOptionSingleton;
-import ealvatag.tag.datatype.*;
+import ealvatag.tag.datatype.AbstractString;
+import ealvatag.tag.datatype.ByteArraySizeTerminated;
+import ealvatag.tag.datatype.DataTypes;
+import ealvatag.tag.datatype.NumberHashMap;
+import ealvatag.tag.datatype.StringNullTerminated;
+import ealvatag.tag.datatype.TextEncodedStringNullTerminated;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.PictureTypes;
+import okio.Buffer;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -29,8 +35,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Attached picture frame.
- *
- *
+ * <p>
+ * <p>
  * This frame contains a picture directly related to the audio file.
  * Image format is the MIME type and subtype for the image. In
  * the event that the MIME media type name is omitted, "image/" will be
@@ -78,7 +84,7 @@ import java.nio.charset.StandardCharsets;
  * <tr><td>$13 </td><td>Band/artist logotype                 </td></tr>
  * <tr><td>$14 </td><td>Publisher/Studio logotype            </td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -88,32 +94,30 @@ import java.nio.charset.StandardCharsets;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     public static final String IMAGE_IS_URL = "-->";
 
     /**
      * Creates a new FrameBodyAPIC datatype.
      */
-    public FrameBodyAPIC()
-    {
+    public FrameBodyAPIC() {
         //Initilise default text encoding
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
-    public FrameBodyAPIC(FrameBodyAPIC body)
-    {
+    public FrameBodyAPIC(FrameBodyAPIC body) {
         super(body);
     }
 
     /**
      * Conversion from v2 PIC to v3/v4 APIC
+     *
      * @param body
      */
-    public FrameBodyAPIC(FrameBodyPIC body)
-    {
+    public FrameBodyAPIC(FrameBodyPIC body) {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, body.getTextEncoding());
-        this.setObjectValue(DataTypes.OBJ_MIME_TYPE, ImageFormats.getMimeTypeForFormat((String) body.getObjectValue(DataTypes.OBJ_IMAGE_FORMAT)));
+        this.setObjectValue(DataTypes.OBJ_MIME_TYPE,
+                            ImageFormats.getMimeTypeForFormat((String)body.getObjectValue(DataTypes.OBJ_IMAGE_FORMAT)));
         this.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, body.getObjectValue(DataTypes.OBJ_PICTURE_TYPE));
         this.setObjectValue(DataTypes.OBJ_DESCRIPTION, body.getDescription());
         this.setObjectValue(DataTypes.OBJ_PICTURE_DATA, body.getObjectValue(DataTypes.OBJ_PICTURE_DATA));
@@ -129,8 +133,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param description
      * @param data
      */
-    public FrameBodyAPIC(byte textEncoding, String mimeType, byte pictureType, String description, byte[] data)
-    {
+    public FrameBodyAPIC(byte textEncoding, String mimeType, byte pictureType, String description, byte[] data) {
         this.setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         this.setMimeType(mimeType);
         this.setPictureType(pictureType);
@@ -143,21 +146,21 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyAPIC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyAPIC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
-    public String getUserFriendlyValue()
-    {
-        if(getImageData()!=null)
-        {
+    public FrameBodyAPIC(Buffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public String getUserFriendlyValue() {
+        if (getImageData() != null) {
             return getMimeType() + ":" + getDescription() + ":" + getImageData().length;
-        }
-        else
-        {
+        } else {
             return getMimeType() + ":" + getDescription() + ":0";
         }
     }
@@ -168,8 +171,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param description
      */
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         setObjectValue(DataTypes.OBJ_DESCRIPTION, description);
     }
 
@@ -178,9 +180,8 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return a description of the image
      */
-    public String getDescription()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
+    public String getDescription() {
+        return (String)getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
     /**
@@ -188,8 +189,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param mimeType
      */
-    public void setMimeType(String mimeType)
-    {
+    public void setMimeType(String mimeType) {
         setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
     }
 
@@ -198,9 +198,8 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return a description of the image
      */
-    public String getMimeType()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_MIME_TYPE);
+    public String getMimeType() {
+        return (String)getObjectValue(DataTypes.OBJ_MIME_TYPE);
     }
 
     /**
@@ -208,8 +207,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param imageData
      */
-    public void setImageData(byte[] imageData)
-    {
+    public void setImageData(byte[] imageData) {
         setObjectValue(DataTypes.OBJ_PICTURE_DATA, imageData);
     }
 
@@ -218,9 +216,8 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return
      */
-    public byte[] getImageData()
-    {
-        return (byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA);
+    public byte[] getImageData() {
+        return (byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA);
     }
 
     /**
@@ -228,17 +225,15 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param pictureType
      */
-    public void setPictureType(byte pictureType)
-    {
+    public void setPictureType(byte pictureType) {
         setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
     }
 
     /**
      * @return picturetype
      */
-    public int getPictureType()
-    {
-        return ((Long) getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
+    public int getPictureType() {
+        return ((Long)getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
     }
 
     /**
@@ -246,8 +241,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_ATTACHED_PICTURE;
     }
 
@@ -255,20 +249,14 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * If the description cannot be encoded using current encoder, change the encoder
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-    {
-        if(TagOptionSingleton.getInstance().isAPICDescriptionITunesCompatible())
-        {
+    public void write(ByteArrayOutputStream tagBuffer) {
+        if (TagOptionSingleton.getInstance().isAPICDescriptionITunesCompatible()) {
             this.setTextEncoding(TextEncoding.ISO_8859_1);
-            if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
-            {
+            if (!((AbstractString)getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded()) {
                 setDescription("");
             }
-        }
-        else
-        {
-            if (!((AbstractString) getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded())
-            {
+        } else {
+            if (!((AbstractString)getObject(DataTypes.OBJ_DESCRIPTION)).canBeEncoded()) {
                 this.setTextEncoding(TextEncoding.UTF_16);
             }
         }
@@ -278,8 +266,7 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      *
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
         objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, PictureTypes.PICTURE_TYPE_FIELD_SIZE));
@@ -290,22 +277,20 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     /**
      * @return true if imagedata  is held as a url rather than actually being imagedata
      */
-    public boolean isImageUrl()
-    {
+    public boolean isImageUrl() {
         return getMimeType() != null && getMimeType().equals(IMAGE_IS_URL);
     }
 
     /**
      * @return the image url if there is otherwise return an empty String
      */
-    public String getImageUrl()
-    {
-        if (isImageUrl())
-        {
-            return new String(((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)), 0, ((byte[]) getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length, StandardCharsets.ISO_8859_1);
-        }
-        else
-        {
+    public String getImageUrl() {
+        if (isImageUrl()) {
+            return new String(((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)),
+                              0,
+                              ((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length,
+                              StandardCharsets.ISO_8859_1);
+        } else {
             return "";
         }
     }

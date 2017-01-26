@@ -26,12 +26,16 @@ import ealvatag.tag.TagTextField;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyEncrypted;
 import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
+import ealvatag.tag.id3.framebody.FrameIdentifierException;
+import ealvatag.tag.id3.framebody.Id3FrameBodyFactories;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.utils.EqualsUtil;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -44,7 +48,7 @@ import java.nio.charset.Charset;
  * @author : Eric Farng
  * @version $Id$
  */
-public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
+@SuppressWarnings("Duplicates") public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2Frame.class);
 
     protected static final String TYPE_FRAME = "frame";
@@ -202,13 +206,27 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * @param identifier
      * @param byteBuffer
      * @param frameSize
+     *
      * @return
+     *
      * @throws InvalidFrameException
      * @throws InvalidDataTypeException
      * @throws InvalidTagException
      */
     protected AbstractID3v2FrameBody readEncryptedBody(String identifier, ByteBuffer byteBuffer, int frameSize)
             throws InvalidFrameException, InvalidDataTypeException {
+        try {
+            AbstractID3v2FrameBody frameBody = new FrameBodyEncrypted(identifier, byteBuffer, frameSize);
+            frameBody.setHeader(this);
+            return frameBody;
+        } catch (InvalidTagException ite) {
+            throw new InvalidDataTypeException(ite);
+        }
+    }
+
+    protected AbstractID3v2FrameBody readEncryptedBody(String identifier,
+                                                       Buffer byteBuffer,
+                                                       int frameSize) throws InvalidFrameException, InvalidDataTypeException {
         try {
             AbstractID3v2FrameBody frameBody = new FrameBodyEncrypted(identifier, byteBuffer, frameSize);
             frameBody.setHeader(this);
@@ -236,7 +254,9 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      * @param identifier the frame identifier
      * @param byteBuffer to read the frame body from
      * @param frameSize
+     *
      * @return a newly created FrameBody
+     *
      * @throws InvalidFrameException unable to construct a framebody from the data
      */
     @SuppressWarnings("unchecked")
@@ -308,11 +328,26 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return frameBody;
     }
 
+    protected AbstractID3v2FrameBody readBody(String identifier, Buffer buffer, int frameSize) throws InvalidTagException {
+        // Stop using reflection. Frame types very rare will be added or changed. Performance penalty for no good reason.
+        AbstractID3v2FrameBody frameBody;
+        try {
+            frameBody = Id3FrameBodyFactories.instance().make(identifier, buffer, frameSize);
+        } catch (FrameIdentifierException e) {
+            frameBody = new FrameBodyUnsupported(buffer, frameSize);
+        }
+        LOG.trace(getLoggingFilename() + ":" + "Created framebody:end" + frameBody.getIdentifier());
+        frameBody.setHeader(this);
+        return frameBody;
+    }
+
     /**
      * Get the next frame id, throwing an exception if unable to do this and check against just having padded data
      *
      * @param byteBuffer
+     *
      * @return
+     *
      * @throws PaddingException
      * @throws InvalidFrameException
      */
@@ -339,6 +374,22 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return identifier;
     }
 
+    protected String readIdentifier(Buffer buffer) throws InvalidFrameException, EOFException {
+        identifier = buffer.readString(getFrameIdSize(), Charset.defaultCharset());
+
+        if (identifier.isEmpty()) {
+            throw new PaddingException(getLoggingFilename() + ":only padding found");
+        }
+
+        if ((getFrameHeaderSize() - getFrameIdSize()) > buffer.size()) {
+            LOG.warn(getLoggingFilename() + ":" + "No space to find another frame:");
+            throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
+        }
+
+        LOG.info("Identifier is {} -  {}", identifier, getLoggingFilename());
+        return identifier;
+    }
+
     /**
      * This creates a new body based of type identifier but populated by the data
      * in the body. This is a different type to the body being created which is why
@@ -353,7 +404,9 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
      *
      * @param identifier to determine type of the frame
      * @param body
+     *
      * @return newly created framebody for this type
+     *
      * @throws InvalidFrameException if unable to construct a framebody for the identifier and body provided.
      */
     @SuppressWarnings("unchecked")
@@ -473,7 +526,9 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         }
 
         public boolean equals(Object obj) {
-            if (this == obj) { return true; }
+            if (this == obj) {
+                return true;
+            }
 
             if (!(obj instanceof StatusFlags)) {
                 return false;
@@ -517,7 +572,9 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         }
 
         public boolean equals(Object obj) {
-            if (this == obj) { return true; }
+            if (this == obj) {
+                return true;
+            }
 
             if (!(obj instanceof EncodingFlags)) {
                 return false;
@@ -539,7 +596,9 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     }
 
     public boolean equals(Object obj) {
-        if (this == obj) { return true; }
+        if (this == obj) {
+            return true;
+        }
         if (!(obj instanceof AbstractID3v2Frame)) {
             return false;
         }

@@ -16,6 +16,9 @@ package ealvatag.tag.datatype;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
+import okio.Buffer;
+
+import java.io.EOFException;
 
 /**
  * A single synchronized tempo code. Part of a list of temnpo codes
@@ -95,10 +98,15 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
             throw new InvalidDataTypeException("Invalid size for FrameBody");
         }
 
-        this.tempo.readByteArray(buffer, localOffset);
-        localOffset += this.tempo.getSize();
-        this.timestamp.readByteArray(buffer, localOffset);
-        localOffset += this.timestamp.getSize();
+        tempo.readByteArray(buffer, localOffset);
+        localOffset += tempo.getSize();
+        timestamp.readByteArray(buffer, localOffset);
+        localOffset += timestamp.getSize();
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        tempo.read(buffer, size);
+        timestamp.read(buffer, size);
     }
 
     @Override

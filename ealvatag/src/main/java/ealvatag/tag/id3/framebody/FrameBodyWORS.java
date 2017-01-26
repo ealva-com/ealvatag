@@ -17,13 +17,14 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Official internet radio station homepage URL link frames.
  * <p>The 'Official internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -33,13 +34,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyWORS datatype.
      */
-    public FrameBodyWORS()
-    {
+    public FrameBodyWORS() {
     }
 
     /**
@@ -47,13 +46,11 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param urlLink
      */
-    public FrameBodyWORS(String urlLink)
-    {
+    public FrameBodyWORS(String urlLink) {
         super(urlLink);
     }
 
-    public FrameBodyWORS(FrameBodyWORS body)
-    {
+    public FrameBodyWORS(FrameBodyWORS body) {
         super(body);
     }
 
@@ -62,10 +59,14 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyWORS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyWORS(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -74,8 +75,7 @@ public class FrameBodyWORS extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_URL_OFFICIAL_RADIO;
     }
 }

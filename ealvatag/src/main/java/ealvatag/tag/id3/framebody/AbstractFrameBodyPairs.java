@@ -1,26 +1,22 @@
 /**
- *  @author : Paul Taylor
- *  @author : Eric Farng
- *
- *  Version @version:$Id$
- *
- *  MusicTag Copyright (C)2003,2004
- *
- *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- *  or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- *  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
- * Description:
- * People List
- *
+ * @author : Paul Taylor
+ * @author : Eric Farng
+ * <p>
+ * Version @version:$Id$
+ * <p>
+ * MusicTag Copyright (C)2003,2004
+ * <p>
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ * <p>
+ * Description: People List
  */
 package ealvatag.tag.id3.framebody;
 
@@ -30,6 +26,7 @@ import ealvatag.tag.datatype.NumberHashMap;
 import ealvatag.tag.datatype.Pair;
 import ealvatag.tag.datatype.PairedTextEncodedStringNullTerminated;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import okio.Buffer;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -40,14 +37,12 @@ import java.util.StringTokenizer;
  * Used by frames that take a pair of values such as TIPL, IPLS and TMCL
  *
  */
-public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID3v24FrameBody
-{
+public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody implements ID3v24FrameBody {
 
     /**
      * Creates a new AbstractFrameBodyPairs datatype.
      */
-    public AbstractFrameBodyPairs()
-    {
+    public AbstractFrameBodyPairs() {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
     }
 
@@ -57,8 +52,7 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * @param textEncoding
      * @param text
      */
-    public AbstractFrameBodyPairs(byte textEncoding, String text)
-    {
+    public AbstractFrameBodyPairs(byte textEncoding, String text) {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setText(text);
     }
@@ -70,8 +64,11 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * @param frameSize
      * @throws ealvatag.tag.InvalidTagException
      */
-    public AbstractFrameBodyPairs(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public AbstractFrameBodyPairs(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public AbstractFrameBodyPairs(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -87,16 +84,13 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      *
      * @param text
      */
-    public void setText(String text)
-    {
+    public void setText(String text) {
         PairedTextEncodedStringNullTerminated.ValuePairs value = new PairedTextEncodedStringNullTerminated.ValuePairs();
         StringTokenizer stz = new StringTokenizer(text, "\0");
 
-        while (stz.hasMoreTokens())
-        {
-            String key =stz.nextToken();
-            if(stz.hasMoreTokens())
-            {
+        while (stz.hasMoreTokens()) {
+            String key = stz.nextToken();
+            if (stz.hasMoreTokens()) {
                 value.add(key, stz.nextToken());
             }
 
@@ -109,15 +103,11 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      *
      * @param text
      */
-    public void addPair(String text)
-    {
+    public void addPair(String text) {
         StringTokenizer stz = new StringTokenizer(text, "\0");
-        if (stz.countTokens()==2)
-        {
-            addPair(stz.nextToken(),stz.nextToken());
-        }
-        else
-        {
+        if (stz.countTokens() == 2) {
+            addPair(stz.nextToken(), stz.nextToken());
+        } else {
             addPair("", text);
         }
     }
@@ -128,9 +118,10 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * @param function
      * @param name
      */
-    public void addPair(String function,String name)
-    {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
+    public void addPair(String function, String name) {
+        PairedTextEncodedStringNullTerminated.ValuePairs
+                value =
+                ((PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT)).getValue();
         value.add(function, name);
 
     }
@@ -138,9 +129,10 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
     /**
      * Remove all Pairs
      */
-    public void resetPairs()
-    {
-        PairedTextEncodedStringNullTerminated.ValuePairs value = ((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).getValue();
+    public void resetPairs() {
+        PairedTextEncodedStringNullTerminated.ValuePairs
+                value =
+                ((PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT)).getValue();
         value.getMapping().clear();
     }
 
@@ -148,10 +140,8 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * Because have a text encoding we need to check the data values do not contain characters that cannot be encoded in
      * current encoding before we write data. If they do change the encoding.
      */
-    public void write(ByteArrayOutputStream tagBuffer)
-    {
-        if (!((PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT)).canBeEncoded())
-        {
+    public void write(ByteArrayOutputStream tagBuffer) {
+        if (!((PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT)).canBeEncoded()) {
             this.setTextEncoding(TextEncoding.UTF_16);
         }
         super.write(tagBuffer);
@@ -161,15 +151,13 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * Consists of a text encoding , and then a series of null terminated Strings, there should be an even number
      * of Strings as they are paired as involvement/involvee
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
     }
 
-    public PairedTextEncodedStringNullTerminated.ValuePairs getPairing()
-    {
-        return (PairedTextEncodedStringNullTerminated.ValuePairs) getObject(DataTypes.OBJ_TEXT).getValue();
+    public PairedTextEncodedStringNullTerminated.ValuePairs getPairing() {
+        return (PairedTextEncodedStringNullTerminated.ValuePairs)getObject(DataTypes.OBJ_TEXT).getValue();
     }
 
     /**
@@ -178,9 +166,8 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * @param index
      * @return value at index
      */
-    public String getKeyAtIndex(int index)
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+    public String getKeyAtIndex(int index) {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT);
         return text.getValue().getMapping().get(index).getKey();
     }
 
@@ -190,31 +177,26 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * @param index
      * @return value at index
      */
-    public String getValueAtIndex(int index)
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+    public String getValueAtIndex(int index) {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT);
         return text.getValue().getMapping().get(index).getValue();
     }
 
     /**
      * @return number of text pairs
      */
-    public int getNumberOfPairs()
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+    public int getNumberOfPairs() {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT);
         return text.getValue().getNumberOfPairs();
     }
 
-    public String getText()
-    {
-        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated) getObject(DataTypes.OBJ_TEXT);
+    public String getText() {
+        PairedTextEncodedStringNullTerminated text = (PairedTextEncodedStringNullTerminated)getObject(DataTypes.OBJ_TEXT);
         StringBuilder sb = new StringBuilder();
         int count = 1;
-        for (Pair entry : text.getValue().getMapping())
-        {
+        for (Pair entry : text.getValue().getMapping()) {
             sb.append(entry.getKey() + '\0' + entry.getValue());
-            if (count != getNumberOfPairs())
-            {
+            if (count != getNumberOfPairs()) {
                 sb.append('\0');
             }
             count++;
@@ -222,8 +204,7 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
         return sb.toString();
     }
 
-    public String getUserFriendlyValue()
-    {
+    public String getUserFriendlyValue() {
         return getText();
     }
 }

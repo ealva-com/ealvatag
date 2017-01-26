@@ -17,17 +17,18 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Part of a set Text information frame.
- *
+ * <p>
  * <p>The 'Part of a set' frame is a numeric string that describes which part of a set the audio came from.
  * This frame is used if the source described in the "TALB" frame is divided into several mediums, e.g. a double CD.
  * The value may be extended with a "/" character and a numeric string containing the total number of parts in the set.
  * e.g. "1/2".
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -37,18 +38,15 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTRCK datatype.
      */
-    public FrameBodyTPOS()
-    {
+    public FrameBodyTPOS() {
         super();
     }
 
-    public FrameBodyTPOS(FrameBodyTPOS body)
-    {
+    public FrameBodyTPOS(FrameBodyTPOS body) {
         super(body);
     }
 
@@ -58,13 +56,11 @@ public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v2
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTPOS(byte textEncoding, String text)
-    {
+    public FrameBodyTPOS(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
-    public FrameBodyTPOS(byte textEncoding, Integer discNo,Integer discTotal)
-    {
+    public FrameBodyTPOS(byte textEncoding, Integer discNo, Integer discTotal) {
         super(textEncoding, discNo, discTotal);
     }
 
@@ -73,11 +69,15 @@ public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v2
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyTPOS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTPOS(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTPOS(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -86,50 +86,41 @@ public class FrameBodyTPOS extends AbstractFrameBodyNumberTotal implements ID3v2
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_SET;
     }
 
-    public Integer getDiscNo()
-    {
+    public Integer getDiscNo() {
         return getNumber();
     }
 
-    public String getDiscNoAsText()
-    {
+    public String getDiscNoAsText() {
         return getNumberAsText();
     }
 
-    public void setDiscNo(Integer discNo)
-    {
+    public void setDiscNo(Integer discNo) {
         setNumber(discNo);
     }
 
-    public void setDiscNo(String discNo)
-    {
+    public void setDiscNo(String discNo) {
         setNumber(discNo);
     }
 
 
-    public Integer getDiscTotal()
-    {
+    public Integer getDiscTotal() {
         return getTotal();
     }
 
-    public String getDiscTotalAsText()
-    {
+    public String getDiscTotalAsText() {
         return getTotalAsText();
     }
 
-    public void setDiscTotal(Integer discTotal)
-    {
-         setTotal(discTotal);
+    public void setDiscTotal(Integer discTotal) {
+        setTotal(discTotal);
     }
 
-    public void setDiscTotal(String discTotal)
-    {
-         setTotal(discTotal);
+    public void setDiscTotal(String discTotal) {
+        setTotal(discTotal);
     }
 
 }

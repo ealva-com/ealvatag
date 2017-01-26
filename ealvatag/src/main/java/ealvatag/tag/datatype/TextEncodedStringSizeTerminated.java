@@ -2,8 +2,11 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -112,6 +115,23 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
         setSize(arr.length - offset);
         LOG.trace("Read SizeTerminatedString:" + value + " size:" + size);
 
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        try {
+            Charset decoder = getCorrectDecoder(buffer);
+            String outBuffer = buffer.readString(size, decoder);
+
+            //If using UTF16 with BOM we then search through the text removing any BOMs that could exist
+            //for multiple values, BOM could be Big Endian or Little Endian
+            if (StandardCharsets.UTF_16.equals(getTextEncodingCharSet())) {
+                value = outBuffer.replace("\ufeff", "").replace("\ufffe", "");
+            } else {
+                value = outBuffer;
+            }
+        } catch (IllegalCharsetException e) {
+            throw new InvalidDataTypeException("Bad charset id", e);
+        }
     }
 
     /**

@@ -21,13 +21,14 @@ import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.NumberFixedLength;
 import ealvatag.tag.datatype.StringNullTerminated;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Encryption method registration frame.
- *
- *
+ * <p>
+ * <p>
  * To identify with which method a frame has been encrypted the
  * encryption method must be registered in the tag with this frame. The
  * 'Owner identifier' is a null-terminated string with a URL
@@ -48,7 +49,7 @@ import java.nio.ByteBuffer;
  * <tr><td>Method symbol   </td><td>$xx                           </td></tr>
  * <tr><td>Encryption data </td><td>&lt;binary data&gt;           </td></tr>
  * </table>
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -58,20 +59,17 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyENCR datatype.
      */
-    public FrameBodyENCR()
-    {
+    public FrameBodyENCR() {
         this.setObjectValue(DataTypes.OBJ_OWNER, "");
-        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, (byte) 0);
+        this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, (byte)0);
         this.setObjectValue(DataTypes.OBJ_ENCRYPTION_INFO, new byte[0]);
     }
 
-    public FrameBodyENCR(FrameBodyENCR body)
-    {
+    public FrameBodyENCR(FrameBodyENCR body) {
         super(body);
     }
 
@@ -82,8 +80,7 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param methodSymbol
      * @param data
      */
-    public FrameBodyENCR(String owner, byte methodSymbol, byte[] data)
-    {
+    public FrameBodyENCR(String owner, byte methodSymbol, byte[] data) {
         this.setObjectValue(DataTypes.OBJ_OWNER, owner);
         this.setObjectValue(DataTypes.OBJ_METHOD_SYMBOL, methodSymbol);
         this.setObjectValue(DataTypes.OBJ_ENCRYPTION_INFO, data);
@@ -94,10 +91,14 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyENCR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyENCR(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyENCR(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -106,32 +107,28 @@ public class FrameBodyENCR extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_ENCRYPTION;
     }
 
     /**
      * @param owner
      */
-    public void setOwner(String owner)
-    {
+    public void setOwner(String owner) {
         setObjectValue(DataTypes.OBJ_OWNER, owner);
     }
 
     /**
      * @return
      */
-    public String getOwner()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_OWNER);
+    public String getOwner() {
+        return (String)getObjectValue(DataTypes.OBJ_OWNER);
     }
 
     /**
      *
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
         objectList.add(new NumberFixedLength(DataTypes.OBJ_METHOD_SYMBOL, this, 1));
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_ENCRYPTION_INFO, this));

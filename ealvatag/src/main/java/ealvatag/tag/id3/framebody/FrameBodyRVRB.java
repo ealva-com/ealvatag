@@ -19,6 +19,7 @@ import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.NumberFixedLength;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -132,6 +133,10 @@ public class FrameBodyRVRB extends AbstractID3v2FrameBody implements ID3v24Frame
      * @throws InvalidTagException if unable to create framebody from buffer
      */
     public FrameBodyRVRB(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyRVRB(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 

@@ -17,35 +17,31 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v23Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
- * Time Text information frame.
- * <p>The 'Time' frame is a numeric string in the HHMM format containing the time for the recording. This field is always four characters long.
- * <p>Deprecated in v2.4.0
- *
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * Time Text information frame. <p>The 'Time' frame is a numeric string in the HHMM format containing the time for the recording. This field
+ * is always four characters long. <p>Deprecated in v2.4.0
+ * <p>
+ * <p>For more details, please refer to the ID3 specifications: <ul> <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
-{
+public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23FrameBody {
     private boolean hoursOnly;
+
     /**
      * Creates a new FrameBodyTIME datatype.
      */
-    public FrameBodyTIME()
-    {
+    public FrameBodyTIME() {
     }
 
-    public FrameBodyTIME(FrameBodyTIME body)
-    {
+    public FrameBodyTIME(FrameBodyTIME body) {
         super(body);
     }
 
@@ -55,8 +51,7 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTIME(byte textEncoding, String text)
-    {
+    public FrameBodyTIME(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -65,10 +60,14 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTIME(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTIME(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -77,18 +76,15 @@ public class FrameBodyTIME extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v23Frames.FRAME_ID_V3_TIME;
     }
 
-    public boolean isHoursOnly()
-    {
+    public boolean isHoursOnly() {
         return hoursOnly;
     }
 
-    public void setHoursOnly(boolean hoursOnly)
-    {
+    public void setHoursOnly(boolean hoursOnly) {
         this.hoursOnly = hoursOnly;
     }
 }

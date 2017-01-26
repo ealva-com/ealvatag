@@ -17,13 +17,14 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * File owner/licensee Text information frame.
  * <p>The 'File owner/licensee' frame contains the name of the owner or licensee of the file and it's contents.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -33,17 +34,14 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTOWN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTOWN extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTOWN datatype.
      */
-    public FrameBodyTOWN()
-    {
+    public FrameBodyTOWN() {
     }
 
-    public FrameBodyTOWN(FrameBodyTOWN body)
-    {
+    public FrameBodyTOWN(FrameBodyTOWN body) {
         super(body);
     }
 
@@ -53,8 +51,7 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTOWN(byte textEncoding, String text)
-    {
+    public FrameBodyTOWN(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -63,10 +60,14 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTOWN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTOWN(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTOWN(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +76,7 @@ public class FrameBodyTOWN extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_FILE_OWNER;
     }
 }

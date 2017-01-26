@@ -38,8 +38,8 @@ import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
 
-import static ealvatag.logging.ErrorMessage.AT_LEAST_ONE_REQUIRED;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;

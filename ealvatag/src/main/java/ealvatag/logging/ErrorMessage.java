@@ -5,8 +5,7 @@ import java.text.MessageFormat;
 /**
  * Defines Error Messages
  */
-public enum ErrorMessage
-{
+public enum ErrorMessage {
     GENERAL_READ("File {0} being read"),
     MP4_FILE_NOT_CONTAINER("This file does not appear to be an Mp4  file"),
     MP4_FILE_NOT_AUDIO("This file does not appear to be an Mp4 Audio file, could be corrupted or video "),
@@ -30,9 +29,11 @@ public enum ErrorMessage
     GENERAL_WRITE_FAILED("Cannot make changes to file {0}"),
     GENERAL_WRITE_FAILED_FILE_LOCKED("Cannot make changes to file {0} because it is being used by another application"),
     GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL("Cannot make changes to file {0} because too small to be an audio file"),
-    GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE("Cannot make changes to file {0} because unable to delete the original file ready for updating from temporary file {1}"),
+    GENERAL_WRITE_FAILED_TO_DELETE_ORIGINAL_FILE(
+            "Cannot make changes to file {0} because unable to delete the original file ready for updating from temporary file {1}"),
     GENERAL_WRITE_FAILED_TO_RENAME_TO_ORIGINAL_FILE("Cannot make changes to file {0} because unable to rename from temporary file {1}"),
-    GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP("Cannot make changes to file {0} because unable to rename the original file to {1}"),
+    GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_FILE_TO_BACKUP(
+            "Cannot make changes to file {0} because unable to rename the original file to {1}"),
     GENERAL_WRITE_FAILED_TO_RENAME_ORIGINAL_BACKUP_TO_ORIGINAL("Unable to rename backup {0} back to file {1}"),
     GENERAL_WRITE_FAILED_NEW_FILE_DOESNT_EXIST("New file {0} does not appear to exist"),
     GENERAL_WRITE_FAILED_BECAUSE("Cannot make changes to file {0} because {1}"),
@@ -57,8 +58,10 @@ public enum ErrorMessage
     MP3_REFERENCE_KEY_INVALID("{0}:No key could be found with the value of:{1}"),
     MP3_UNABLE_TO_ADJUST_PADDING("Problem adjusting padding in large file, expecting to write:{0} only wrote:{1}"),
     GENERAL_WRITE_FAILED_TO_DELETE_TEMPORARY_FILE("Unable to delete the temporary file {0}"),
-    GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER("Cannot modify {0} because do not have permissions to create files in the folder {1}"),
-    GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER("Cannot modify {0} because do not have permissions to modify files in the folder {1}"),
+    GENERAL_WRITE_FAILED_TO_CREATE_TEMPORARY_FILE_IN_FOLDER(
+            "Cannot modify {0} because do not have permissions to create files in the folder {1}"),
+    GENERAL_WRITE_FAILED_TO_MODIFY_TEMPORARY_FILE_IN_FOLDER(
+            "Cannot modify {0} because do not have permissions to modify files in the folder {1}"),
     GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING("Cannot modify {0} because do not have permissions to modify file"),
     NULL_PADDING_FOUND_AT_END_OF_MP4("Null Padding found at end of file starting at offset {0}"),
     OGG_VORBIS_NO_SETUP_BLOCK("Could not find the Ogg Setup block"),
@@ -78,14 +81,16 @@ public enum ErrorMessage
     MP3_FRAME_IS_DATA_LENGTH_INDICATOR("Filename {0}:{1} has a data length indicator"),
     MP4_FILE_HAS_NO_METADATA("This file does not currently contain any metadata"),
     MP4_FILE_META_ATOM_CHILD_DATA_NOT_NULL("Expect data in meta box to be null"),
-    WMA_INVALID_FIELD_NAME ("The field name {0} is not allowed for {1}"),
-    WMA_INVALID_LANGUAGE_USE ("The use of language {0} ist not allowed for {1} (only {2} allowed)"),
-    WMA_INVALID_STREAM_REFERNCE ("The stream number {0} is invalid. Only {1} allowed for {2}."),
-    WMA_INVALID_GUID_USE ("The use of GUID ist not allowed for {0}"),
-    WMA_LENGTH_OF_DATA_IS_TOO_LARGE("Trying to create field with {0} bytes of data but the maximum data allowed in WMA files is {1} for {2}."),
-    WMA_LENGTH_OF_LANGUAGE_IS_TOO_LARGE("Trying to create language entry, but UTF-16LE representation is {0} and exceeds maximum allowed of 255."),
+    WMA_INVALID_FIELD_NAME("The field name {0} is not allowed for {1}"),
+    WMA_INVALID_LANGUAGE_USE("The use of language {0} ist not allowed for {1} (only {2} allowed)"),
+    WMA_INVALID_STREAM_REFERNCE("The stream number {0} is invalid. Only {1} allowed for {2}."),
+    WMA_INVALID_GUID_USE("The use of GUID ist not allowed for {0}"),
+    WMA_LENGTH_OF_DATA_IS_TOO_LARGE(
+            "Trying to create field with {0} bytes of data but the maximum data allowed in WMA files is {1} for {2}."),
+    WMA_LENGTH_OF_LANGUAGE_IS_TOO_LARGE(
+            "Trying to create language entry, but UTF-16LE representation is {0} and exceeds maximum allowed of 255."),
     WMA_LENGTH_OF_STRING_IS_TOO_LARGE("Trying to create field but UTF-16LE representation is {0} and exceeds maximum allowed of 65535."),
-    WMA_ONLY_STRING_IN_CD ("Only Strings are allowed in content description objects"),
+    WMA_ONLY_STRING_IN_CD("Only Strings are allowed in content description objects"),
     ID3_EXTENDED_HEADER_SIZE_INVALID("{0} Invalid Extended Header Size of {0} assuming no extended header after all"),
     ID3_EXTENDED_HEADER_SIZE_TOO_SMALL("{0} Invalid Extended Header Size of {0} is too smal to be valid"),
     ID3_INVALID_OR_UNKNOWN_FLAG_SET("{0} Invalid or unknown bit flag 0x{1} set in ID3 tag header"),
@@ -122,24 +127,61 @@ public enum ErrorMessage
     NOT_STANDARD_MP$_GENRE("This is not a standard genre value, use custom genre field instead"),
     FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}");
 
-    public static final String CANNOT_BE_NULL = "%s cannot be null";
-    public static final String CANNOT_BE_NULL_OR_EMPTY = "%s cannot be null or the empty string";
-    public static final String AT_LEAST_ONE_REQUIRED = "At least one %s required";
+    public static final String INVALID_DATATYPE = "Problem reading {} in {}. {}";
+
+    /**
+     * Format a log message for an exception.
+     *
+     * Why is this necessary? slf4j uses "{}" markers for some stupid reason.
+     *
+     * @param msgFormat format the same as slf4j uses
+     * @param args arguments for substitution
+     * @return message suitable for an exception
+     */
+    public static String exceptionMsg(final String msgFormat, Object... args) {
+        final String template = String.valueOf(msgFormat); // null to "null" string
+        StringBuilder builder = new StringBuilder(template.length() + 16 * args.length);
+        int templateStart = 0;
+
+        int i;
+        int placeholderStart;
+        for (i = 0; i < args.length; templateStart = placeholderStart + 2) {
+            placeholderStart = template.indexOf("{}", templateStart);
+            if (placeholderStart == -1) {
+                break;
+            }
+
+            builder.append(template, templateStart, placeholderStart);
+            builder.append(args[i++]);
+        }
+
+        builder.append(template, templateStart, template.length());
+        if (i < args.length) {
+            builder.append(" [");
+            builder.append(args[i++]);
+
+            while (i < args.length) {
+                builder.append(", ");
+                builder.append(args[i++]);
+            }
+
+            builder.append(']');
+        }
+
+        return builder.toString();
+    }
 
     String msg;
 
-    ErrorMessage(String msg)
-    {
+    ErrorMessage(String msg) {
         this.msg = msg;
     }
 
-    public String getMsg()
-    {
+    public String getMsg() {
         return msg;
     }
 
-    public String getMsg(Object... args)
-    {
+    public String getMsg(Object... args) {
         return MessageFormat.format(getMsg(), args);
     }
 

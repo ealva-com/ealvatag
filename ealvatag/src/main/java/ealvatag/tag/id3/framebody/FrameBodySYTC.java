@@ -23,6 +23,7 @@ import ealvatag.tag.datatype.SynchronisedTempoCode;
 import ealvatag.tag.datatype.SynchronisedTempoCodeList;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,9 +108,14 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
     public FrameBodySYTC(final ByteBuffer byteBuffer, final int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodySYTC(final Buffer byteBuffer, final int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -128,6 +134,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * A value of {@code 2} means absolute time (32 bit) using milliseconds as unit.
      *
      * @return timestamp format
+     *
      * @see #MILLISECONDS
      * @see #MPEG_FRAMES
      */
@@ -139,6 +146,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * Sets the timestamp format.
      *
      * @param timestampFormat 1 for MPEG frames or 2 for milliseconds
+     *
      * @see #getTimestampFormat()
      */
     public void setTimestampFormat(final int timestampFormat) {
@@ -206,6 +214,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      * Removes a tempo at a given timestamp.
      *
      * @param timestamp timestamp
+     *
      * @return {@code true}, if any timestamps were removed
      */
     public boolean removeTempo(final long timestamp) {

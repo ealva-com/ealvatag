@@ -42,8 +42,8 @@ import ealvatag.tag.reference.GenreTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL_OR_EMPTY;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
@@ -150,41 +150,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
             this.year = convertedTag.year;
             this.genre = convertedTag.genre;
         }
-    }
-
-    /**
-     * Creates a new ID3v1 datatype.
-     *
-     * @param file
-     *
-     * @throws TagNotFoundException
-     * @throws IOException
-     * @deprecated use {@link #ID3v1Tag(RandomAccessFile, String)} instead
-     */
-    public ID3v1Tag(RandomAccessFile file) throws TagNotFoundException, IOException {
-        this(file, "");
-    }
-
-    /**
-     * Creates a new ID3v1 datatype.
-     *
-     * @param file
-     * @param loggingFilename
-     *
-     * @throws TagNotFoundException
-     * @throws IOException
-     */
-    public ID3v1Tag(RandomAccessFile file, String loggingFilename) throws TagNotFoundException, IOException {
-        setLoggingFilename(loggingFilename);
-        FileChannel fc;
-        ByteBuffer byteBuffer;
-
-        fc = file.getChannel();
-        fc.position(file.length() - TAG_LENGTH);
-        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fc.read(byteBuffer);
-        byteBuffer.flip();
-        read(byteBuffer);
     }
 
     public ID3v1Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {

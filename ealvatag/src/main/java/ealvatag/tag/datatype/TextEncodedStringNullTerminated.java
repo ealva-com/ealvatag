@@ -1,10 +1,14 @@
 package ealvatag.tag.datatype;
 
+import com.google.common.annotations.VisibleForTesting;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -22,6 +26,8 @@ import java.nio.charset.StandardCharsets;
  * upon the text encoding of the frame that it belongs to.
  */
 public class TextEncodedStringNullTerminated extends AbstractString {
+    private static final byte NULL_BYTE = (byte)0x00;
+
     /**
      * Creates a new TextEncodedStringNullTerminated datatype.
      *
@@ -172,6 +178,70 @@ public class TextEncodedStringNullTerminated extends AbstractString {
         LOG.debug("Read NullTerminatedString:" + value + " size inc terminator:" + size);
     }
 
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        try {
+            final Charset charset = getTextEncodingCharSet();
+            final boolean nullIsOneByte = StandardCharsets.ISO_8859_1 == charset || StandardCharsets.UTF_8 == charset;
+            final int indexOfNull = getNullIndex(buffer, nullIsOneByte);
+
+            if (indexOfNull < 0) {
+                throw new InvalidDataTypeException("Can't find null string terminator");
+            }
+            setSize(indexOfNull + 1);
+            int byteCount = nullIsOneByte ? indexOfNull : indexOfNull - 1;
+            value = buffer.readString(byteCount, charset);
+            buffer.readByte();
+            if (!nullIsOneByte) {
+                buffer.readByte();
+            }
+        } catch (IllegalCharsetException e) {
+            throw new InvalidDataTypeException("Bad charset Id", e);
+        }
+    }
+
+
+    /**
+     * Finds the index of the first null byte in {@code buffer}. If null may be multi-byte, it's the index of the second null byte.
+     *
+     * @param buffer        buffer to search, position is not moved
+     * @param nullIsOneByte indicates if null is a single byte or 2 bytes
+     *
+     * @return the index of the null character (if multi-byte, the index of the second null byte)
+     */
+    @VisibleForTesting
+    public static int getNullIndex(final Buffer buffer, final boolean nullIsOneByte) {
+        try {
+            if (nullIsOneByte) {
+                return (int)buffer.indexOf(NULL_BYTE);
+            }
+            long indexSecondByte = -1;
+            long indexFirstByte = getNullEvenIndex(buffer, 0);
+            while (-1 == indexSecondByte && -1 != indexFirstByte) {
+                if (buffer.getByte(indexFirstByte + 1) == NULL_BYTE) {
+                    indexSecondByte = indexFirstByte + 1;
+                } else {
+                    indexFirstByte = getNullEvenIndex(buffer, indexFirstByte + 2);
+                }
+            }
+            return (int)indexSecondByte;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // Let's assume most data is properly null terminated, so this will be rare
+            return -1;
+        }
+    }
+
+    private static long getNullEvenIndex(final Buffer buffer, final long fromIndex) {
+        long index = buffer.indexOf(NULL_BYTE, fromIndex);
+        while (-1 != index && !isEven(index)) {
+            index = buffer.indexOf(NULL_BYTE, index + 1);
+        }
+        return index;
+    }
+
+    private static boolean isEven(final long num) {
+        return ((num % 2) == 0);
+    }
+
     /**
      * Write String into byte array, adding a null character to the end of the String
      *
@@ -221,12 +291,5 @@ public class TextEncodedStringNullTerminated extends AbstractString {
         }
         setSize(data.length);
         return data;
-    }
-
-    protected Charset getTextEncodingCharSet() {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-        LOG.trace("text encoding:" + textEncoding + " charset:" + charset.name());
-        return charset;
     }
 }

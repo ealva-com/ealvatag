@@ -23,9 +23,11 @@ package ealvatag.tag.datatype;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -197,6 +199,8 @@ public abstract class AbstractDataType {
      * @param array byte array to read from
      *
      * @throws InvalidDataTypeException of the data cannot be parsed
+     * @deprecated Just don't. Please. Seriously, stop. Read from {@link Buffer}
+     * @see #read(Buffer, int)
      */
     final public void readByteArray(byte[] array) throws InvalidDataTypeException {
         readByteArray(array, 0);
@@ -287,9 +291,22 @@ public abstract class AbstractDataType {
      *
      * @throws InvalidDataTypeException if can't be parsed
      * @throws IllegalArgumentException if array is null or offset is not inside the bounds of the array
+     * @deprecated New philosophy, stop creating so many temporary byte[] AND let's use {@link Buffer} and cut the GC a break
+     * @see #read(Buffer, int)
      */
     public abstract void readByteArray(byte[] array, int offset) throws InvalidDataTypeException, IllegalArgumentException;
 
+    /**
+     * Read the data for this type from the {@link Buffer}
+     *
+     * @param buffer read here
+     * @param size   the remaining size of the buffer to read for this tag. Do not read past this size (I'm talking to you null terminated
+     *               strings)
+     *
+     * @throws EOFException             if data is unavailable in the buffer
+     * @throws InvalidDataTypeException if error parsing this data type
+     */
+    public abstract void read(Buffer buffer, final int size) throws EOFException, InvalidDataTypeException;
 
     /**
      * Starting point write ID3 Datatype back to array of bytes.

@@ -17,34 +17,29 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
- * Original album/movie/show title Text information frame.
- * <p>The 'Original album/movie/show title' frame is intended for the title of the original recording (or source of sound), if for example the music
- * in the file should be a cover of a previously released song.
- *
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * Original album/movie/show title Text information frame. <p>The 'Original album/movie/show title' frame is intended for the title of the
+ * original recording (or source of sound), if for example the music in the file should be a cover of a previously released song.
+ * <p>
+ * <p>For more details, please refer to the ID3 specifications: <ul> <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23FrameBody,ID3v24FrameBody
-{
+public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTOAL datatype.
      */
-    public FrameBodyTOAL()
-    {
+    public FrameBodyTOAL() {
     }
 
-    public FrameBodyTOAL(FrameBodyTOAL body)
-    {
+    public FrameBodyTOAL(FrameBodyTOAL body) {
         super(body);
     }
 
@@ -54,8 +49,7 @@ public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTOAL(byte textEncoding, String text)
-    {
+    public FrameBodyTOAL(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -64,10 +58,14 @@ public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTOAL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTOAL(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTOAL(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -76,8 +74,7 @@ public class FrameBodyTOAL extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_ORIG_TITLE;
     }
 }

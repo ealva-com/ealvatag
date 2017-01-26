@@ -19,13 +19,14 @@ import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.ByteArraySizeTerminated;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.ID3v2ChapterFrames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Table of content frame.
- *
- *
+ * <p>
+ * <p>
  * The purpose of "CTOC" frames is to allow a table of contents to be
  * defined. In the simplest case, a single "CTOC" frame can be used to
  * provide a flat (single-level) table of contents. However, multiple
@@ -39,7 +40,7 @@ import java.nio.ByteBuffer;
  * Each "CTOC" frame represents one level or element of a table of contents
  * by providing a list of Child Element IDs. These match the Element IDs of
  * other "CHAP" and "CTOC" frames in the tag.
- *
+ * <p>
  * <table border="0" width="70%" align="center">
  * <tr><td nowrap="nowrap">&lt;ID3v2.3 or ID3v2.4 frame header, ID: "CTOC"&gt;</td><td rowspan="7">&nbsp;&nbsp;</td><td>(10 bytes)</td></tr>
  * <tr><td>Element ID</td><td width="70%">&lt;text string&gt; $00</td></tr>
@@ -48,7 +49,7 @@ import java.nio.ByteBuffer;
  * <tr><td>&lt;Child Element ID list&gt;</td></tr>
  * <tr><td>&lt;Optional embedded sub-frames&gt;</td></tr>
  * </table>
- *
+ * <p>
  * The Element ID uniquely identifies the frame. It is not intended to
  * be human readable and should not be presented to the end-user.
  * <p>
@@ -68,11 +69,11 @@ import java.nio.ByteBuffer;
  * The Entry count is the number of entries in the Child Element ID list
  * that follows and must be greater than zero. Each entry in the list
  * consists of:
- *
+ * <p>
  * <table border="0" width="70%" align="center">
  * <tr><td nowrap="nowrap">Child Element ID</td><td>&nbsp;&nbsp;</td><td width="70%">&lt;text string&gt; $00</td></tr>
  * </table>
- *
+ * <p>
  * The last entry in the child Element ID list is followed by a sequence
  * of optional frames that are embedded within the "CTOC" frame and which
  * describe this element of the table of contents (e.g. a "TIT2" frame
@@ -84,8 +85,8 @@ import java.nio.ByteBuffer;
  * If a parser does not recognise "CTOC" frames it can skip them using
  * the size field in the frame header. When it does this it will skip
  * any embedded sub-frames carried within the frame.
- *
- *
+ * <p>
+ * <p>
  * <p>For more details, please refer to the ID3 Chapter Frame specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2-chapters-1.0.txt">ID3 v2 Chapter Frame Spec</a>
@@ -94,13 +95,11 @@ import java.nio.ByteBuffer;
  * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
-public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2ChapterFrameBody
-{
+public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2ChapterFrameBody {
     /**
      * Creates a new FrameBodyCTOC datatype.
      */
-    public FrameBodyCTOC()
-    {
+    public FrameBodyCTOC() {
     }
 
     /**
@@ -108,8 +107,7 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      * @param body
      */
-    public FrameBodyCTOC(FrameBodyCTOC body)
-    {
+    public FrameBodyCTOC(FrameBodyCTOC body) {
         super(body);
     }
 
@@ -118,10 +116,14 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyCTOC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyCTOC(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -130,16 +132,14 @@ public class FrameBodyCTOC extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v2ChapterFrames.FRAME_ID_TABLE_OF_CONTENT;
     }
 
     /**
      * TODO:proper mapping
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

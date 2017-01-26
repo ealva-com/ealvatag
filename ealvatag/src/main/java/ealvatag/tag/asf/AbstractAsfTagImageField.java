@@ -14,14 +14,12 @@ import java.io.IOException;
  *
  * @author Christian Laireiter
  */
-abstract class AbstractAsfTagImageField extends AsfTagField
-{
+abstract class AbstractAsfTagImageField extends AsfTagField {
 
     /**
      * Creates a image tag field.
      *
-     * @param field
-     *            the ASF field that should be represented.
+     * @param field the ASF field that should be represented.
      */
     public AbstractAsfTagImageField(final AsfFieldKey field) {
         super(field);
@@ -30,9 +28,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
     /**
      * Creates an instance.
      *
-     * @param source
-     *            The descriptor which should be represented as a
-     *            {@link TagField}.
+     * @param source The descriptor which should be represented as a {@link TagField}.
      */
     public AbstractAsfTagImageField(final MetadataDescriptor source) {
         super(source);
@@ -41,8 +37,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
     /**
      * Creates a tag field.
      *
-     * @param fieldKey
-     *            The field identifier to use.
+     * @param fieldKey The field identifier to use.
      */
     public AbstractAsfTagImageField(final String fieldKey) {
         super(fieldKey);
@@ -53,6 +48,7 @@ abstract class AbstractAsfTagImageField extends AsfTagField
      * {@linkplain #getRawImageData() image content}.
      *
      * @return the image instance
+     *
      * @throws IOException
      */
     public BufferedImage getImage() throws IOException {

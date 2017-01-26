@@ -50,6 +50,7 @@ import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.lyrics3.AbstractLyrics3;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,6 +223,8 @@ public class MP3File extends AudioFileImpl {
             ByteBuffer bb = fileOperator.getFileChannel().map(FileChannel.MapMode.READ_ONLY, 0, startByte);
             bb.rewind();
 
+
+
             if ((loadOptions & LOAD_IDV2TAG) != 0) {
                 LOG.trace("Attempting to read id3v2tags");
                 try {
@@ -232,7 +235,7 @@ public class MP3File extends AudioFileImpl {
 
                 try {
                     if (id3v2tag == null) {
-                        this.setID3v2Tag(new ID3v23Tag(bb, fileName));
+                        this.setID3v2Tag(new ID3v23Tag(fileOperator, startByte, fileName));
                     }
                 } catch (TagNotFoundException ex) {
                     LOG.trace("No id3v23 tag found");

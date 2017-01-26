@@ -9,6 +9,10 @@ import com.google.common.base.Strings;
  */
 public class Check {
 
+    public static final String CANNOT_BE_NULL = "%s cannot be null";
+    public static final String CANNOT_BE_NULL_OR_EMPTY = "%s cannot be null or the empty string";
+    public static final String AT_LEAST_ONE_REQUIRED = "At least one %s required";
+
     public static <T> T checkArgNotNull(T reference) {
         if (reference == null) {
             throw new IllegalArgumentException();

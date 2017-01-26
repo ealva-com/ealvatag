@@ -23,6 +23,7 @@ import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.ID3V2ExtendedGenreTypes;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.GenreTypes;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -100,6 +101,10 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * @throws InvalidTagException
      */
     public FrameBodyTCON(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTCON(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 

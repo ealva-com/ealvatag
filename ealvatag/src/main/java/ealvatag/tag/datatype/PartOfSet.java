@@ -2,11 +2,14 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.options.PadNumberOption;
 import ealvatag.utils.EqualsUtil;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -107,6 +110,14 @@ public class PartOfSet extends AbstractString {
         LOG.debug("Read SizeTerminatedString:" + value + " size:" + size);
     }
 
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        try {
+            value = new PartOfSetValue(buffer.readString(size, getTextEncodingCharSet()));
+        } catch (IllegalCharsetException e) {
+            throw new InvalidDataTypeException("Bad charset Id", e);
+        }
+    }
+
     /**
      * Write String into byte array
      * <p>
@@ -154,20 +165,6 @@ public class PartOfSet extends AbstractString {
         }
         setSize(data.length);
         return data;
-    }
-
-    /**
-     * Get the text encoding being used.
-     * <p>
-     * The text encoding is defined by the frame body that the text field belongs to.
-     *
-     * @return the text encoding charset
-     */
-    protected Charset getTextEncodingCharSet() {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-        LOG.trace("text encoding:" + textEncoding + " charset:" + charset.name());
-        return charset;
     }
 
     /**

@@ -17,13 +17,14 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Copyright/Legal information URL link frames.
  * <p>The 'Copyright/Legal information' frame is a URL pointing at a webpage where the terms of use and ownership of the file is described.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -33,13 +34,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyWCOP datatype.
      */
-    public FrameBodyWCOP()
-    {
+    public FrameBodyWCOP() {
     }
 
     /**
@@ -47,13 +46,11 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param urlLink
      */
-    public FrameBodyWCOP(String urlLink)
-    {
+    public FrameBodyWCOP(String urlLink) {
         super(urlLink);
     }
 
-    public FrameBodyWCOP(FrameBodyWCOP body)
-    {
+    public FrameBodyWCOP(FrameBodyWCOP body) {
         super(body);
     }
 
@@ -62,11 +59,15 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws java.io.IOException
      * @throws InvalidTagException
      */
-    public FrameBodyWCOP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyWCOP(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyWCOP(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +76,7 @@ public class FrameBodyWCOP extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_URL_COPYRIGHT;
     }
 }

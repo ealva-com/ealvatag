@@ -17,33 +17,30 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
- * Software/Hardware and settings used for encoding Text information frame.
- * <p>The 'Software/Hardware and settings used for encoding' frame includes the used audio encoder and its settings when the file was encoded. Hardware refers to hardware encoders, not the computer on which a program was run.
- *
- * <p>For more details, please refer to the ID3 specifications:
- * <ul>
- * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
+ * Software/Hardware and settings used for encoding Text information frame. <p>The 'Software/Hardware and settings used for encoding' frame
+ * includes the used audio encoder and its settings when the file was encoded. Hardware refers to hardware encoders, not the computer on
+ * which a program was run.
+ * <p>
+ * <p>For more details, please refer to the ID3 specifications: <ul> <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
  * </ul>
  *
  * @author : Paul Taylor
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody
-{
+public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v23FrameBody, ID3v24FrameBody {
     /**
      * Creates a new FrameBodyTSSE datatype.
      */
-    public FrameBodyTSSE()
-    {
+    public FrameBodyTSSE() {
     }
 
-    public FrameBodyTSSE(FrameBodyTSSE body)
-    {
+    public FrameBodyTSSE(FrameBodyTSSE body) {
         super(body);
     }
 
@@ -53,8 +50,7 @@ public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTSSE(byte textEncoding, String text)
-    {
+    public FrameBodyTSSE(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
@@ -63,10 +59,14 @@ public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTSSE(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTSSE(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTSSE(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +75,7 @@ public class FrameBodyTSSE extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_HW_SW_SETTINGS;
     }
 }

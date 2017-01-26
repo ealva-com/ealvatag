@@ -25,7 +25,9 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.charset.StandardCharsets;
 
 public class ID3v2LyricLine extends AbstractDataType
@@ -136,6 +138,15 @@ public class ID3v2LyricLine extends AbstractDataType
         {
             timeStamp <<= 8;
             timeStamp += arr[i];
+        }
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException {
+        text = buffer.readString(buffer.size() - 4, StandardCharsets.ISO_8859_1);
+        timeStamp = 0;
+        for (int i = 0; i < 4; i++) {
+            timeStamp <<= 8;
+            timeStamp += buffer.readByte();
         }
     }
 

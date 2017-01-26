@@ -43,11 +43,12 @@ import ealvatag.tag.id3.valuepair.StandardIPLSKey;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.PictureTypes;
+import ealvatag.utils.Check;
 import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.CANNOT_BE_NULL;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
@@ -95,6 +96,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
     public static final int FIELD_TAGID_LENGTH = 3;
+    static final int TAGID_VERSIONS_FLAGS_SIZE_LENGTH = FIELD_TAGID_LENGTH + 7;  // Major, minor, flags 1 byte each, size 4
     public static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
     public static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
     public static final int FIELD_TAG_FLAG_LENGTH = 1;
@@ -879,7 +881,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                                                                               UnsupportedFieldException,
                                                                               FieldDataInvalidException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
-        String value = checkVarArg0NotNull(values, ErrorMessage.AT_LEAST_ONE_REQUIRED, "values");
+        String value = checkVarArg0NotNull(values, Check.AT_LEAST_ONE_REQUIRED, "values");
 
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
@@ -1643,6 +1645,21 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         //Minor Version
         return byteBuffer.get() == getRevision();
     }
+
+    public boolean seek(Buffer buffer) {
+        byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
+        buffer.read(tagIdentifier, 0, FIELD_TAGID_LENGTH);
+        if (!(Arrays.equals(tagIdentifier, TAG_ID))) {
+            return false;
+        }
+        //Major Version
+        if (buffer.readByte() != getMajorVersion()) {
+            return false;
+        }
+        //Minor Version
+        return buffer.readByte() == getRevision();
+    }
+
 
     /**
      * Write paddings byte to the channel

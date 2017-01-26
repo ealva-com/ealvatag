@@ -17,14 +17,15 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Commercial information URL link frames.
  * <p>The 'Commercial information' frame is a URL pointing at a webpage with information such as where the album can be
- *  bought. There may be more than one "WCOM" frame in a tag, but not with the same content.
- *
+ * bought. There may be more than one "WCOM" frame in a tag, but not with the same content.
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -34,13 +35,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyWCOM datatype.
      */
-    public FrameBodyWCOM()
-    {
+    public FrameBodyWCOM() {
     }
 
     /**
@@ -48,13 +47,11 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param urlLink
      */
-    public FrameBodyWCOM(String urlLink)
-    {
+    public FrameBodyWCOM(String urlLink) {
         super(urlLink);
     }
 
-    public FrameBodyWCOM(FrameBodyWCOM body)
-    {
+    public FrameBodyWCOM(FrameBodyWCOM body) {
         super(body);
     }
 
@@ -63,10 +60,14 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyWCOM(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyWCOM(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -75,8 +76,7 @@ public class FrameBodyWCOM extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_URL_COMMERCIAL;
     }
 }

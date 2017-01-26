@@ -24,6 +24,9 @@ import com.google.common.base.Preconditions;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.ID3Tags;
+import okio.Buffer;
+
+import java.io.EOFException;
 
 
 /**
@@ -117,6 +120,14 @@ public class NumberFixedLength extends AbstractDataType {
         LOG.debug("Read NumberFixedlength:" + value);
     }
 
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        long lvalue = 0;
+        for (int i = 0; i < this.size; i++) {
+            lvalue <<= 8;
+            lvalue += (buffer.readByte() & 0xff);
+        }
+        value = lvalue;
+    }
 
     /**
      * @return String representation of this datatype

@@ -23,9 +23,12 @@
 package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
+import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -103,6 +106,14 @@ public class StringFixedLength extends AbstractString {
             value = "";
         }
         LOG.debug("Read StringFixedLength:" + value);
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+        try {
+            value = buffer.readString(this.size, getTextEncodingCharSet());
+        } catch (IllegalCharsetException e) {
+            throw new InvalidDataTypeException("Bad charset Id", e);
+        }
     }
 
     /**
@@ -194,13 +205,4 @@ public class StringFixedLength extends AbstractString {
         }
     }
 
-    /**
-     * @return the encoding of the frame body this datatype belongs to
-     */
-    protected Charset getTextEncodingCharSet() {
-        final byte textEncoding = this.getBody().getTextEncoding();
-        final Charset charset = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-        LOG.trace("text encoding:" + textEncoding + " charset:" + charset.name());
-        return charset;
-    }
 }

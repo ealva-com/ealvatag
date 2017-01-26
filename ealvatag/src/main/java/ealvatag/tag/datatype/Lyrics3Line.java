@@ -25,7 +25,9 @@ package ealvatag.tag.datatype;
 
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -219,6 +221,10 @@ public class Lyrics3Line extends AbstractDataType
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException
     {
         readString(arr.toString(), offset);
+    }
+
+    @Override public void read(final Buffer buffer, final int size) throws EOFException {
+        readString(buffer.readByteArray().toString(), 0);
     }
 
     public byte[] writeByteArray()

@@ -16,19 +16,24 @@
 package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
-import ealvatag.tag.datatype.*;
+import ealvatag.tag.datatype.ByteArraySizeTerminated;
+import ealvatag.tag.datatype.DataTypes;
+import ealvatag.tag.datatype.NumberHashMap;
+import ealvatag.tag.datatype.StringHashMap;
+import ealvatag.tag.datatype.StringNullTerminated;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
 import ealvatag.tag.id3.valuepair.SynchronisedLyricsContentType;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.Languages;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Synchronised lyrics/text frame.
- *
- *
+ * <p>
+ * <p>
  * This is another way of incorporating the words, said or sung lyrics,
  * in the audio file as text, this time, however, in sync with the
  * audio. It might also be used to describing events e.g. occurring on a
@@ -56,7 +61,7 @@ import java.nio.ByteBuffer;
  * <tr><td>$05</td><td>is chord (e.g. "Bb F Fsus")</td></tr>
  * <tr><td>$06</td><td>is trivia/'pop up' information</td></tr>
  * </table></center>
- *
+ * <p>
  * Time stamp format is:
  * <p>
  * $01 Absolute time, 32 bit sized, using MPEG frames as unit<br>
@@ -76,7 +81,7 @@ import java.nio.ByteBuffer;
  * <tr><td nowrap>Sync identifier (terminator to above string)</td><td width="80%">$00 (00)</td></tr>
  * <tr><td>Time stamp</td><td>$xx (xx ...)</td></tr>
  * </table>
- *
+ * <p>
  * The 'time stamp' is set to zero or the whole sync is omitted if
  * located directly at the beginning of the sound. All time stamps
  * should be sorted in chronological order. The sync can be considered
@@ -103,7 +108,7 @@ import java.nio.ByteBuffer;
  * xx "glan" $00 xx xx "ces" $00 xx xx
  * <p>There may be more than one "SYLT" frame in each tag, but only one
  * with the same language and content descriptor.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -113,14 +118,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodySYLT datatype.
      */
-    public FrameBodySYLT()
-    {
-
+    public FrameBodySYLT() {
     }
 
     /**
@@ -128,8 +130,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param body
      */
-    public FrameBodySYLT(FrameBodySYLT body)
-    {
+    public FrameBodySYLT(FrameBodySYLT body) {
         super(body);
     }
 
@@ -143,8 +144,7 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * @param description
      * @param lyrics
      */
-    public FrameBodySYLT(int textEncoding, String language, int timeStampFormat, int contentType, String description, byte[] lyrics)
-    {
+    public FrameBodySYLT(int textEncoding, String language, int timeStampFormat, int contentType, String description, byte[] lyrics) {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, textEncoding);
         setObjectValue(DataTypes.OBJ_LANGUAGE, language);
         setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timeStampFormat);
@@ -158,83 +158,79 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException if unable to create framebody from buffer
      */
-    public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodySYLT(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodySYLT(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
     /**
      * @return language code
      */
-    public String getLanguage()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_LANGUAGE);
+    public String getLanguage() {
+        return (String)getObjectValue(DataTypes.OBJ_LANGUAGE);
     }
 
     /**
      * @return timestamp format key
      */
-    public int getTimeStampFormat()
-    {
-        return ((Number) getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
+    public int getTimeStampFormat() {
+        return ((Number)getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
     }
 
     /**
      * @return content type key
      */
-    public int getContentType()
-    {
-        return ((Number) getObjectValue(DataTypes.OBJ_CONTENT_TYPE)).intValue();
+    public int getContentType() {
+        return ((Number)getObjectValue(DataTypes.OBJ_CONTENT_TYPE)).intValue();
     }
 
     /**
      * @return description
      */
-    public String getDescription()
-    {
-        return (String) getObjectValue(DataTypes.OBJ_DESCRIPTION);
+    public String getDescription() {
+        return (String)getObjectValue(DataTypes.OBJ_DESCRIPTION);
     }
 
     /**
      * @return frame identifier
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_SYNC_LYRIC;
     }
 
 
     /**
      * Set lyrics
-     *
+     * <p>
      * TODO:provide a more user friendly way of adding lyrics
      *
      * @param data
      */
-    public void setLyrics(byte[] data)
-    {
+    public void setLyrics(byte[] data) {
         this.setObjectValue(DataTypes.OBJ_DATA, data);
     }
 
     /**
      * Get lyrics
-     *
+     * <p>
      * TODO:better format
      *
      * @return lyrics
      */
-    public byte[] getLyrics()
-    {
-        return (byte[]) this.getObjectValue(DataTypes.OBJ_DATA);
+    public byte[] getLyrics() {
+        return (byte[])this.getObjectValue(DataTypes.OBJ_DATA);
     }
 
     /**
      * Setup Object List
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
         objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
         objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));

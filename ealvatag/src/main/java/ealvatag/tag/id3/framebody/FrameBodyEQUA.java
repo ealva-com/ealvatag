@@ -15,14 +15,16 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.ByteArraySizeTerminated;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.ID3v23Frames;
+import okio.Buffer;
 
 /**
  * Equalisation frame.
- *
- *
+ * <p>
+ * <p>
  * This is another subjective, alignment frame. It allows the user to
  * predefine an equalisation curve within the audio file. There may only
  * be one "EQUA" frame in each tag.
@@ -50,8 +52,8 @@ import ealvatag.tag.id3.ID3v23Frames;
  * between the values in this frame. Three equal adjustments for three
  * subsequent frequencies. A frequency should only be described once in
  * the frame.
- *
- *
+ * <p>
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -61,18 +63,19 @@ import ealvatag.tag.id3.ID3v23Frames;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23FrameBody
-{
+public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23FrameBody {
     /**
      * Creates a new FrameBodyEQUA dataType.
      */
-    public FrameBodyEQUA()
-    {
+    public FrameBodyEQUA() {
     }
 
-    public FrameBodyEQUA(FrameBodyEQUA body)
-    {
+    public FrameBodyEQUA(FrameBodyEQUA body) {
         super(body);
+    }
+
+    public FrameBodyEQUA(Buffer buffer, int frameSize) throws InvalidTagException {
+        super(buffer, frameSize);
     }
 
     /**
@@ -80,16 +83,14 @@ public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23Frame
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v23Frames.FRAME_ID_V3_EQUALISATION;
     }
 
     /**
      * TODO:proper mapping
      */
-    protected void setupObjectList()
-    {
+    protected void setupObjectList() {
         objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

@@ -17,13 +17,14 @@ package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.ID3v24Frames;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
 /**
  * Official audio file webpage URL link frames.
  * <p>The 'Official audio file webpage' frame is a URL pointing at a file specific webpage.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -33,13 +34,11 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody
-{
+public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyWOAF datatype.
      */
-    public FrameBodyWOAF()
-    {
+    public FrameBodyWOAF() {
     }
 
     /**
@@ -47,13 +46,11 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param urlLink
      */
-    public FrameBodyWOAF(String urlLink)
-    {
+    public FrameBodyWOAF(String urlLink) {
         super(urlLink);
     }
 
-    public FrameBodyWOAF(FrameBodyWOAF body)
-    {
+    public FrameBodyWOAF(FrameBodyWOAF body) {
         super(body);
     }
 
@@ -62,10 +59,14 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyWOAF(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyWOAF(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyWOAF(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -74,8 +75,7 @@ public class FrameBodyWOAF extends AbstractFrameBodyUrlLink implements ID3v24Fra
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v24Frames.FRAME_ID_URL_FILE_WEB;
     }
 }

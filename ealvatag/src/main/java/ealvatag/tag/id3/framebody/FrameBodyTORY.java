@@ -19,6 +19,7 @@ import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import okio.Buffer;
 
 import java.nio.ByteBuffer;
 
@@ -27,7 +28,7 @@ import java.nio.ByteBuffer;
  * <p>The 'Original release year' frame is intended for the year when the original recording, if for example the music
  * in the file should be a cover of a previously released song, was released. The field is formatted as in the "TYER"
  * frame.
- *
+ * <p>
  * <p>For more details, please refer to the ID3 specifications:
  * <ul>
  * <li><a href="http://www.id3.org/id3v2.3.0.txt">ID3 v2.3.0 Spec</a>
@@ -37,19 +38,16 @@ import java.nio.ByteBuffer;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23FrameBody
-{
+public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23FrameBody {
     private static final int NUMBER_OF_DIGITS_IN_YEAR = 4;
 
     /**
      * Creates a new FrameBodyTORY datatype.
      */
-    public FrameBodyTORY()
-    {
+    public FrameBodyTORY() {
     }
 
-    public FrameBodyTORY(FrameBodyTORY body)
-    {
+    public FrameBodyTORY(FrameBodyTORY body) {
         super(body);
     }
 
@@ -59,22 +57,20 @@ public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      * @param textEncoding
      * @param text
      */
-    public FrameBodyTORY(byte textEncoding, String text)
-    {
+    public FrameBodyTORY(byte textEncoding, String text) {
         super(textEncoding, text);
     }
 
     /**
      * When converting v4 TDOR to v3 TORY frame
+     *
      * @param body
      */
-    public FrameBodyTORY(FrameBodyTDOR body)
-    {
+    public FrameBodyTORY(FrameBodyTDOR body) {
         setObjectValue(DataTypes.OBJ_TEXT_ENCODING, TextEncoding.ISO_8859_1);
-        String year=body.getText();
-        if(body.getText().length()> NUMBER_OF_DIGITS_IN_YEAR)
-        {
-            year=body.getText().substring(0, NUMBER_OF_DIGITS_IN_YEAR);
+        String year = body.getText();
+        if (body.getText().length() > NUMBER_OF_DIGITS_IN_YEAR) {
+            year = body.getText().substring(0, NUMBER_OF_DIGITS_IN_YEAR);
         }
         setObjectValue(DataTypes.OBJ_TEXT, year);
     }
@@ -84,10 +80,14 @@ public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @param byteBuffer
      * @param frameSize
+     *
      * @throws InvalidTagException
      */
-    public FrameBodyTORY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException
-    {
+    public FrameBodyTORY(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+        super(byteBuffer, frameSize);
+    }
+
+    public FrameBodyTORY(Buffer byteBuffer, int frameSize) throws InvalidTagException {
         super(byteBuffer, frameSize);
     }
 
@@ -96,8 +96,7 @@ public class FrameBodyTORY extends AbstractFrameBodyTextInfo implements ID3v23Fr
      *
      * @return the ID3v2 frame identifier  for this frame type
      */
-    public String getIdentifier()
-    {
+    public String getIdentifier() {
         return ID3v23Frames.FRAME_ID_V3_TORY;
     }
 }
