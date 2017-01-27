@@ -46,7 +46,7 @@ import java.io.IOException;
     }
 
     /**
-     * This is a {@link ForwardingSink} which transforms the stream of bytes substituting every occupancy of [0xFF, 0x00] with [0xFF]. This
+     * This is a {@link ForwardingSink} which transforms the stream of bytes substituting every occurrence of [0xFF, 0x00] with [0xFF]. This
      * is synchronizing an ID3 tag
      *
      * @param delegate the {@link BufferedSink} the transformed bytes written to

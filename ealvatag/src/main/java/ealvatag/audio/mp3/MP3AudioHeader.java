@@ -233,11 +233,7 @@ public class MP3AudioHeader implements AudioHeader {
                     }
                 }
 
-                //noinspection unused
-                final byte ignore = buffer.readByte();  // move 1 byte further in
-                Buffer clone = buffer.clone();
-                buffer.skip(buffer.size());
-                buffer = clone;
+                buffer.readByte();  // move 1 byte further in
                 filePointerCount++;
 
 

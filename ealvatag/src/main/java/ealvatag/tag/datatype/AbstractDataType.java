@@ -300,13 +300,12 @@ public abstract class AbstractDataType {
      * Read the data for this type from the {@link Buffer}
      *
      * @param buffer read here
-     * @param size   the remaining size of the buffer to read for this tag. Do not read past this size (I'm talking to you null terminated
-     *               strings)
+     * @param size   the remaining size to read for this tag. Do not read past this size (I'm talking to you null terminated strings)
      *
      * @throws EOFException             if data is unavailable in the buffer
      * @throws InvalidDataTypeException if error parsing this data type
      */
-    public abstract void read(Buffer buffer, final int size) throws EOFException, InvalidDataTypeException;
+    public abstract void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException;
 
     /**
      * Starting point write ID3 Datatype back to array of bytes.

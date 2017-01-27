@@ -202,7 +202,7 @@ public class Lyrics3TimeStamp extends AbstractDataType {
         readString(arr.toString(), offset);
     }
 
-    @Override public void read(final Buffer buffer, final int size) throws EOFException {
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         readString(buffer.readByteArray().toString(), 0);
     }
 

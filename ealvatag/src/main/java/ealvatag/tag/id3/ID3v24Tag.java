@@ -16,12 +16,38 @@
 package ealvatag.tag.id3;
 
 import com.google.common.collect.ImmutableSet;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.*;
+import ealvatag.tag.EmptyFrameException;
+import ealvatag.tag.FieldDataInvalidException;
+import ealvatag.tag.FieldKey;
+import ealvatag.tag.InvalidDataTypeException;
+import ealvatag.tag.InvalidFrameException;
+import ealvatag.tag.InvalidFrameIdentifierException;
+import ealvatag.tag.InvalidTagException;
+import ealvatag.tag.PaddingException;
+import ealvatag.tag.Tag;
+import ealvatag.tag.TagException;
+import ealvatag.tag.TagField;
+import ealvatag.tag.TagNotFoundException;
+import ealvatag.tag.TagOptionSingleton;
+import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.Pair;
-import ealvatag.tag.id3.framebody.*;
+import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
+import ealvatag.tag.id3.framebody.FrameBodyAPIC;
+import ealvatag.tag.id3.framebody.FrameBodyCOMM;
+import ealvatag.tag.id3.framebody.FrameBodyIPLS;
+import ealvatag.tag.id3.framebody.FrameBodyTALB;
+import ealvatag.tag.id3.framebody.FrameBodyTCON;
+import ealvatag.tag.id3.framebody.FrameBodyTDRC;
+import ealvatag.tag.id3.framebody.FrameBodyTIPL;
+import ealvatag.tag.id3.framebody.FrameBodyTIT2;
+import ealvatag.tag.id3.framebody.FrameBodyTMCL;
+import ealvatag.tag.id3.framebody.FrameBodyTPE1;
+import ealvatag.tag.id3.framebody.FrameBodyTRCK;
+import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
 import ealvatag.tag.id3.valuepair.MusicianCredits;
 import ealvatag.tag.id3.valuepair.StandardIPLSKey;
 import ealvatag.tag.images.Artwork;
@@ -32,6 +58,7 @@ import ealvatag.tag.lyrics3.Lyrics3v2Field;
 import ealvatag.tag.reference.GenreTypes;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.Check;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +85,7 @@ import java.util.List;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v24Tag extends AbstractID3v2Tag {
+@SuppressWarnings("Duplicates") public class ID3v24Tag extends AbstractID3v2Tag {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v24Tag.class);
 
     protected static final String TYPE_FOOTER = "footer";
@@ -318,8 +345,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      * Creates a new empty ID3v2_4 datatype.
      */
     public ID3v24Tag() {
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
     }
 
@@ -483,8 +509,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      */
     public ID3v24Tag(BaseID3Tag mp3tag) {
         LOG.debug("Creating tag from a tag of a different version");
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
         if (mp3tag != null) {
             //Should use simpler copy constructor
@@ -590,11 +615,21 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      * @throws TagException
      */
     public ID3v24Tag(ByteBuffer buffer, String loggingFilename) throws TagException {
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
-
+        ensureFrameMapsAndClear();
         setLoggingFilename(loggingFilename);
         this.read(buffer);
+    }
+
+    public ID3v24Tag(final FileOperator fileOperator, final int startByte, final String loggingFilename) throws TagException {
+        ensureFrameMapsAndClear();
+        setLoggingFilename(loggingFilename);
+        read(fileOperator, startByte);
+    }
+
+    public ID3v24Tag(final Buffer buffer, final Id3v2Header header, final String loggingFilename) throws TagException {
+        ensureFrameMapsAndClear();
+        setLoggingFilename(loggingFilename);
+        read(buffer, header);
     }
 
     /**
@@ -663,18 +698,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         return this.updateTag == object.updateTag && super.equals(obj);
     }
 
-    /**
-     * Read header flags
-     * <p>
-     * <p>Log info messages for falgs that have been set and log warnings when bits have been set for unknown flags
-     *
-     * @param byteBuffer
-     *
-     * @throws TagException
-     */
-    private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException {
-        //Flags
-        byte flags = byteBuffer.get();
+    private void readHeaderFlags(byte flags) throws TagException {
         unsynchronization = (flags & MASK_V24_UNSYNCHRONIZATION) != 0;
         extended = (flags & MASK_V24_EXTENDED_HEADER) != 0;
         experimental = (flags & MASK_V24_EXPERIMENTAL) != 0;
@@ -776,10 +800,54 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         }
     }
 
+    private int readExtendedHeader(Buffer buffer) throws InvalidTagException {
+        int extendedHeaderSize = buffer.readInt();
 
-    /**
-     * {@inheritDoc}
-     */
+        // the extended header must be at least 6 bytes
+        if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH) {
+            throw new InvalidTagException(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_TOO_SMALL.getMsg(getLoggingFilename(), extendedHeaderSize));
+        }
+
+        //Number of bytes
+        buffer.readByte();
+
+        // Read the extended flag bytes
+        byte extFlag = buffer.readByte();
+        updateTag = (extFlag & MASK_V24_TAG_UPDATE) != 0;
+        crcDataFlag = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
+        tagRestriction = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
+
+        // read the length byte if the flag is set
+        // this tag should always be zero but just in case
+        // read this information.
+        if (updateTag) {
+            buffer.readByte();
+        }
+
+        //CRC-32
+        if (crcDataFlag) {
+            // the CRC has a variable length
+            buffer.readByte();
+            crcData = 0;
+            for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++) {
+                crcData <<= 8;
+                crcData += buffer.readByte();
+            }
+        }
+
+        //Tag Restriction
+        if (tagRestriction) {
+            buffer.readByte();
+            byte flags = buffer.readByte();
+            tagSizeRestriction = (byte)((flags & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
+            textEncodingRestriction = (byte)((flags & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
+            textFieldSizeRestriction = (byte)((flags & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
+            imageEncodingRestriction = (byte)((flags & MASK_V24_IMAGE_ENCODING) >> 2);
+            imageSizeRestriction = (byte)(flags & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
+        }
+        return extendedHeaderSize;
+    }
+
     @Override
     public void read(ByteBuffer byteBuffer) throws TagException {
         int size;
@@ -788,7 +856,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
             throw new TagNotFoundException(getLoggingFilename() + ":" + getIdentifier() + " tag not found");
         }
         LOG.debug(getLoggingFilename() + ":" + "Reading ID3v24 tag");
-        readHeaderFlags(byteBuffer);
+        readHeaderFlags(byteBuffer.get());
 
         // Read the size, this is size of tag apart from tag header
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
@@ -803,18 +871,49 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         readFrames(byteBuffer, size);
     }
 
-    /**
-     * Read frames from tag
-     *
-     * @param byteBuffer
-     * @param size
-     */
-    protected void readFrames(ByteBuffer byteBuffer, int size) {
+    public void read(FileOperator fileOperator, final int startByte) throws TagException {
+        try {
+            Buffer buffer = new Buffer();
+            fileOperator.read(0, buffer, startByte);
+            if (!seek(buffer)) {
+                throw new TagNotFoundException(getIdentifier() + " tag not found");
+            }
+
+            readHeaderFlags(buffer.readByte());
+
+            // Read the size, this is size of tag not including the tag header
+            int size = ID3SyncSafeInteger.bufferToValue(buffer);
+            LOG.debug(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(), size));
+
+            //Extended Header
+            if (extended) {
+                size -= readExtendedHeader(buffer);
+            }
+
+            readFrames(buffer, size);
+            LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
+        } catch (IOException e) {
+            throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
+        }
+    }
+
+    public void read(final Buffer buffer, final Id3v2Header header) throws TagException {
+        readHeaderFlags(header.getFlags());
+
+        //Extended Header
+        if (extended) {
+            readExtendedHeader(buffer);
+        }
+
+        readFrames(buffer, header.getTagSize());
+        LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
+    }
+
+    private void readFrames(ByteBuffer byteBuffer, int size) {
         LOG.trace(getLoggingFilename() + ":" + "Start of frame body at" + byteBuffer.position());
         //Now start looking for frames
         ID3v24Frame next;
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
         //Read the size from the Tag Header
         this.fileReadSize = size;
@@ -859,6 +958,60 @@ public class ID3v24Tag extends AbstractID3v2Tag {
                 continue;
             }
         }
+    }
+
+    private void readFrames(Buffer buffer, int size) {
+        ensureFrameMapsAndClear();
+        fileReadSize = size;
+        while (buffer.size() > 0) {
+            try {
+                ID3v24Frame next = new ID3v24Frame(buffer, getLoggingFilename());
+                loadFrameIntoMap(next.getIdentifier(), next);
+            } catch (PaddingException ex) {
+                //Found Padding, no more frames
+                LOG.debug("Found padding with {} remaining. {}", buffer.size(), getLoggingFilename());
+                break;
+            } catch (EmptyFrameException ex) {
+                //Found Empty Frame, log it - empty frames should not exist
+                LOG.warn(getLoggingFilename() + ":Empty Frame:" + ex.getMessage());
+                this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
+            } catch (InvalidFrameIdentifierException ifie) {
+                LOG.warn(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
+                break;
+            } catch (InvalidFrameException ife) {
+                //Problem trying to find frame, often just occurs because frameHeader includes padding
+                //and we have reached padding
+                LOG.warn(getLoggingFilename() + ":Invalid Frame:" + ife.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
+                break;
+            } catch (InvalidDataTypeException idete) {
+                //Failed reading frame but may just have invalid data but correct length so lets carry on
+                //in case we can read the next frame
+                LOG.warn(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+            } catch (IOException e) {
+                LOG.warn("Unexpectedly reached end of frame" + e);
+                this.invalidFrames++;
+            } catch (@SuppressWarnings("TryWithIdenticalCatches") InvalidTagException e) {  // TODO: 1/25/17 get exceptions straightened out
+                LOG.warn(getLoggingFilename() + ":Corrupt Frame:" + e.getMessage());
+                this.invalidFrames++;
+            }
+        }
+    }
+
+    private void ensureFrameMapsAndClear() {
+        if (frameMap == null) {
+            frameMap = new LinkedHashMap<>();
+        }
+        if (encryptedFrameMap == null) {
+            encryptedFrameMap = new LinkedHashMap<>();
+        }
+
+        frameMap.clear();
+        encryptedFrameMap.clear();
     }
 
     /**

@@ -129,6 +129,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
             } else {
                 value = outBuffer;
             }
+            setSize(value.toString().length());
         } catch (IllegalCharsetException e) {
             throw new InvalidDataTypeException("Bad charset id", e);
         }

@@ -21,6 +21,7 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import ealvatag.audio.AudioFileImpl;
@@ -49,6 +50,7 @@ import ealvatag.tag.id3.ID3v1Tag;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
+import ealvatag.tag.id3.Id3v2Header;
 import ealvatag.tag.lyrics3.AbstractLyrics3;
 import okio.Buffer;
 import org.slf4j.Logger;
@@ -152,24 +154,51 @@ public class MP3File extends AudioFileImpl {
         try (FileChannel fileChannel = getFileChannel(file, readOnly)) {
             FileOperator fileOperator = new FileOperator(fileChannel);
 
-            //Read ID3v2 tag size (if tag exists) to allow audioHeader parsing to skip over tag
-            long tagSizeReportedByHeader = AbstractID3v2Tag.getV2TagSizeIfExists(fileOperator);
-            LOG.trace("TagHeaderSize:" + Hex.asHex(tagSizeReportedByHeader));
-            MP3AudioHeader mp3AudioHeader = new MP3AudioHeader(fileOperator, tagSizeReportedByHeader, file.getPath());
+            long audioStart = 0;
+            final Optional<Id3v2Header> v2HeaderOptional = getV2Header(fileOperator);
+            final int v2TagHeaderSize = AbstractID3v2Tag.TAG_HEADER_LENGTH;
+            if (v2HeaderOptional.isPresent()) {
+                audioStart = v2HeaderOptional.get().getTagSize() + v2TagHeaderSize;
+            }
+
+            LOG.trace("TagHeaderSize:" + Hex.asHex(audioStart));
+            MP3AudioHeader mp3AudioHeader = new MP3AudioHeader(fileOperator, audioStart, file.getPath());
 
             //If the audio header is not straight after the end of the tag then search from start of file
-            if (tagSizeReportedByHeader != mp3AudioHeader.getMp3StartByte()) {
+            if (audioStart != mp3AudioHeader.getMp3StartByte()) {
                 LOG.trace("First header found after tag:" + mp3AudioHeader);
-                mp3AudioHeader = checkAudioStart(tagSizeReportedByHeader, mp3AudioHeader);
+                mp3AudioHeader = checkAudioStart(audioStart, mp3AudioHeader);
+                audioStart = mp3AudioHeader.getMp3StartByte();
+            }
+
+            audioHeader = mp3AudioHeader;
+
+            if (v2HeaderOptional.isPresent() &&
+                    (v2HeaderOptional.get().getMajorVersion() == ID3v23Tag.MAJOR_VERSION
+                            ||v2HeaderOptional.get().getMajorVersion() == ID3v24Tag.MAJOR_VERSION
+                    )) {
+                if ((loadOptions & LOAD_IDV2TAG) != 0) {
+                    final Id3v2Header header = v2HeaderOptional.get();
+                    Buffer buffer = new Buffer();
+                    // TODO: 1/26/17 Remove the "- v2TaqHeaderSize" from the number of bytes read to see about some tag data reading too far
+                    fileOperator.read(v2TagHeaderSize, buffer, audioStart - v2TagHeaderSize);
+                    switch (header.getMajorVersion()) {
+                        case ID3v23Tag.MAJOR_VERSION:
+                            setID3v2Tag(new ID3v23Tag(buffer, header, file.getPath()));
+                            break;
+                        case ID3v24Tag.MAJOR_VERSION:
+                            setID3v2Tag(new ID3v24Tag(buffer, header, file.getPath()));
+                            break;
+                    }
+                }
             }
 
             //Read v1 tags (if any)
             readV1Tag(file.getPath(), fileOperator, loadOptions);
 
             //Read v2 tags (if any)
-            readV2Tag(fileOperator, file.getPath(), loadOptions, (int)mp3AudioHeader.getMp3StartByte());
+            readV2Tag(fileOperator, file.getPath(), loadOptions, (int)audioStart);
 
-            audioHeader = mp3AudioHeader;
 
             //If we have a v2 tag use that, if we do not but have v1 tag use that
             //otherwise use nothing
@@ -180,14 +209,24 @@ public class MP3File extends AudioFileImpl {
             } else if (id3v1tag != null) {
                 tag = id3v1tag;
             }
+
+
             checkState(!Strings.isNullOrEmpty(extension));
-            checkState(mp3AudioHeader != null);
+            checkState(audioHeader != null);
         }
+    }
+
+    private Optional<Id3v2Header> getV2Header(final FileOperator fileOperator) throws IOException {
+        Buffer buffer = new Buffer();
+        fileOperator.read(0, buffer, AbstractID3v2Tag.TAG_HEADER_LENGTH);
+        return AbstractID3v2Tag.getHeader(buffer);
     }
 
     private void readV1Tag(String fileName, FileOperator newFile, int loadOptions) throws IOException {
         if ((loadOptions & LOAD_IDV1TAG) != 0) {
             LOG.debug("Attempting to read id3v1tags");
+
+
             try {
                 id3v1tag = new ID3v11Tag(newFile, fileName);
             } catch (TagNotFoundException ex) {
@@ -223,23 +262,7 @@ public class MP3File extends AudioFileImpl {
             ByteBuffer bb = fileOperator.getFileChannel().map(FileChannel.MapMode.READ_ONLY, 0, startByte);
             bb.rewind();
 
-
-
             if ((loadOptions & LOAD_IDV2TAG) != 0) {
-                LOG.trace("Attempting to read id3v2tags");
-                try {
-                    this.setID3v2Tag(new ID3v24Tag(bb, fileName));
-                } catch (TagNotFoundException ex) {
-                    LOG.trace("No id3v24 tag found");
-                }
-
-                try {
-                    if (id3v2tag == null) {
-                        this.setID3v2Tag(new ID3v23Tag(fileOperator, startByte, fileName));
-                    }
-                } catch (TagNotFoundException ex) {
-                    LOG.trace("No id3v23 tag found");
-                }
 
                 try {
                     if (id3v2tag == null) {
@@ -248,6 +271,12 @@ public class MP3File extends AudioFileImpl {
                 } catch (TagNotFoundException ex) {
                     LOG.trace("No id3v22 tag found");
                 }
+
+//                try {
+//                    this.setID3v2Tag(new ID3v24Tag(bb, fileName));
+//                } catch (TagNotFoundException ex) {
+//                    LOG.trace("No id3v24 tag found");
+//                }
             }
         } else {
             LOG.trace("Not enough room for valid id3v2 tag:" + startByte);

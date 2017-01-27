@@ -53,6 +53,13 @@ public class ID3SyncSafeInteger {
                 ((buffer.readByte()) &0xff);
     }
 
+    public static int peekBufferToValue(Buffer buffer) {
+        return ((buffer.getByte(0) & 0xff) << 21) +
+                ((buffer.getByte(1) & 0xff) << 14) +
+                ((buffer.getByte(2) & 0xff) << 7) +
+                ((buffer.getByte(3)) &0xff);
+    }
+
     /**
      * Read syncsafe value from buffer in format specified in spec and convert to int.
      * <p>
@@ -89,6 +96,17 @@ public class ID3SyncSafeInteger {
         //Check Bit7 not set
         for (int i = 0; i < INTEGRAL_SIZE; i++) {
             byte nextByte = buffer.get(position + i);
+            if ((nextByte & 0x80) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected static boolean peekIsBufferNotSyncSafe(Buffer buffer) {
+        //Check Bit7 not set
+        for (int i = 0; i < INTEGRAL_SIZE; i++) {
+            byte nextByte = buffer.getByte(i);
             if ((nextByte & 0x80) > 0) {
                 return true;
             }

@@ -45,6 +45,7 @@ import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.Check;
 import okio.Buffer;
+import okio.InflaterSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,7 @@ import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -80,6 +82,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
+import java.util.zip.Inflater;
 
 
 /**
@@ -150,6 +153,22 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     private Long startLocationInFile = null;
     //End location of this chunk
     private Long endLocationInFile = null;
+
+    public static Optional<Id3v2Header> getHeader(Buffer buffer) throws EOFException {
+        buffer.require(10);
+
+        for (int i = 0; i < TAG_ID.length; i++) {
+            if (buffer.readByte() != TAG_ID[i]) {
+                return Optional.absent();
+            }
+        }
+
+        return Optional.of(new Id3v2Header(buffer.readByte(),
+                                           buffer.readByte(),
+                                           buffer.readByte(),
+                                           ID3SyncSafeInteger.bufferToValue(buffer)));
+    }
+
 
     /**
      * Determines if file contain an id3 tag and if so positions the file pointer just after the end
@@ -1659,7 +1678,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         //Minor Version
         return buffer.readByte() == getRevision();
     }
-
 
     /**
      * Write paddings byte to the channel

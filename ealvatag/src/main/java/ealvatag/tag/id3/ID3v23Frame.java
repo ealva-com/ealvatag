@@ -29,13 +29,10 @@ import ealvatag.tag.id3.framebody.ID3v23FrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
-import okio.GzipSource;
-import okio.InflaterSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -43,7 +40,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.Inflater;
 
 /**
  * Represents an ID3v2.3 frame.
@@ -281,8 +277,7 @@ import java.util.zip.Inflater;
         read(byteBuffer);
     }
 
-    public ID3v23Frame(final Buffer buffer, final String loggingFilename) throws InvalidTagException,
-                                                                                 IOException {
+    public ID3v23Frame(final Buffer buffer, final String loggingFilename) throws InvalidTagException, IOException {
         setLoggingFilename(loggingFilename);
         read(buffer);
     }
@@ -488,7 +483,6 @@ import java.util.zip.Inflater;
         String identifier = readIdentifier(buffer);
         if (!isValidID3v2FrameIdentifier(identifier)) {
             LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
-//            byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
             throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
         }
         //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
@@ -590,7 +584,7 @@ import java.util.zip.Inflater;
         //Read the body data
 //        try {
             if (((EncodingFlags)encodingFlags).isCompression()) {
-                final Buffer decompressBuffer = decompressBuffer(identifier, buffer, decompressedFrameSize, realFrameSize);
+                final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize);
                 LOG.info("Bufer.size={} expected:{}", decompressBuffer.size(), decompressedFrameSize);
                 if (((EncodingFlags)encodingFlags).isEncryption()) {
                     frameBody = readEncryptedBody(frameId, decompressBuffer, decompressedFrameSize);
@@ -615,17 +609,6 @@ import java.util.zip.Inflater;
             //Update position of main buffer, so no attempt is made to reread these bytes
 //            byteBuffer.position(byteBuffer.position() + realFrameSize);
 //        }
-    }
-
-    private Buffer decompressBuffer(final String identifier, Buffer buffer, final int decompressedFrameSize, int frameSize)
-            throws IOException, InvalidFrameException {
-//        return ID3Compression.uncompress(identifier, getLoggingFilename(), buffer, decompressedFrameSize, frameSize);
-        final Buffer clone = buffer.clone();
-        buffer.skip(frameSize);
-        Buffer decompressedBuffer = new Buffer();
-        InflaterSource inflater = new InflaterSource(clone, new Inflater());
-        inflater.read(decompressedBuffer, frameSize);
-        return decompressedBuffer;
     }
 
     /**

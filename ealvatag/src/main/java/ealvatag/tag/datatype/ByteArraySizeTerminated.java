@@ -81,7 +81,7 @@ public class ByteArraySizeTerminated extends AbstractDataType {
         System.arraycopy(arr, offset, value, 0, len);
     }
 
-    @Override public void read(final Buffer buffer, final int size) throws InvalidDataTypeException, EOFException {
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         value = buffer.readByteArray(size);
     }
 

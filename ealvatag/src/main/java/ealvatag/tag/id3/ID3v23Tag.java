@@ -133,8 +133,7 @@ import java.util.List;
      * Creates a new empty ID3v2_3 datatype.
      */
     public ID3v23Tag() {
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
     }
 
     /**
@@ -158,8 +157,7 @@ import java.util.List;
      */
     public ID3v23Tag(BaseID3Tag mp3tag) {
         LOG.debug("Creating tag from a tag of a different version");
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
         if (mp3tag != null) {
             ID3v24Tag convertedTag;
@@ -191,6 +189,11 @@ import java.util.List;
     public ID3v23Tag(FileOperator fileOperator, int startByte, String loggingFilename) throws TagException {
         setLoggingFilename(loggingFilename);
         read(fileOperator, startByte);
+    }
+
+    public ID3v23Tag(Buffer buffer, Id3v2Header header, String loggingFilename) throws TagException {
+        setLoggingFilename(loggingFilename);
+        read(buffer, header);
     }
 
     public int getCrc32() {
@@ -705,7 +708,7 @@ import java.util.List;
         return REVISION;
     }
 
-    private void readHeaderFlags(Byte flags) throws TagException {
+    private void readHeaderFlags(byte flags) throws TagException {
         //Allowable Flags
         unsynchronization = (flags & MASK_V23_UNSYNCHRONIZATION) != 0;
         extended = (flags & MASK_V23_EXTENDED_HEADER) != 0;
@@ -800,7 +803,7 @@ import java.util.List;
         }
     }
 
-    private void readExtendedHeader(Buffer buffer, int size) throws InvalidTagHeaderException {
+    private int readExtendedHeader(Buffer buffer) throws InvalidTagHeaderException {
         // Int is 4 bytes.
         int extendedHeaderSize = buffer.readInt();
         // Extended header without CRC Data
@@ -819,7 +822,6 @@ import java.util.List;
             if (paddingSize > 0) {
                 LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(), paddingSize));
             }
-            size = size - (paddingSize + TAG_EXT_HEADER_LENGTH);
         } else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH) {
             LOG.debug(ErrorMessage.ID3_TAG_CRC.getMsg(getLoggingFilename()));
 
@@ -836,7 +838,6 @@ import java.util.List;
             if (paddingSize > 0) {
                 LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE.getMsg(getLoggingFilename(), paddingSize));
             }
-            size = size - (paddingSize + TAG_EXT_HEADER_LENGTH + TAG_EXT_HEADER_CRC_LENGTH);
             //CRC Data
             crc32 = buffer.readInt();
             LOG.debug(ErrorMessage.ID3_TAG_CRC_SIZE.getMsg(getLoggingFilename(), crc32));
@@ -847,6 +848,7 @@ import java.util.List;
             LOG.warn(msg);
             throw new InvalidTagHeaderException(msg);
         }
+        return extendedHeaderSize;
     }
 
     /**
@@ -883,14 +885,13 @@ import java.util.List;
 
     }
 
-    public void read(FileOperator fileOperator, int startByte) throws TagException {
+    private void read(FileOperator fileOperator, int startByte) throws TagException {
         try {
             Buffer buffer = new Buffer();
             fileOperator.read(0, buffer, startByte);
             if (!seek(buffer)) {
                 throw new TagNotFoundException(getIdentifier() + " tag not found");
             }
-            LOG.debug(getLoggingFilename() + ":" + "Reading ID3v23 tag");
 
             readHeaderFlags(buffer.readByte());
 
@@ -898,16 +899,40 @@ import java.util.List;
             int size = ID3SyncSafeInteger.bufferToValue(buffer);
             LOG.debug(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(), size));
 
-            //Extended Header
             if (extended) {
                 try {
-                    readExtendedHeader(buffer, size);
+                    size -= readExtendedHeader(buffer);
                 } catch (InvalidTagHeaderException e) {
                     // Try to carry on because the original code did? // TODO: 1/24/17 is this correct?
                     buffer.skip(buffer.size());
                     buffer = new Buffer();
                     fileOperator.read(TAGID_VERSIONS_FLAGS_SIZE_LENGTH, buffer, startByte - TAGID_VERSIONS_FLAGS_SIZE_LENGTH);
                 }
+            }
+
+            Buffer bufferWithoutHeader = buffer;
+            //We need to synchronize the buffer
+            if (isUnsynchronized()) {
+                bufferWithoutHeader = Id3SynchronizingSink.synchronizeBuffer(buffer);
+            }
+
+            readFrames(bufferWithoutHeader, size);
+            LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
+        } catch (IOException e) {
+            throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
+        }
+
+    }
+
+    private void read(Buffer buffer, Id3v2Header header) throws TagException {
+        try {
+            readHeaderFlags(header.getFlags());
+
+            int size = header.getTagSize();
+            LOG.debug(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(), size));
+
+            if (extended) {
+                readExtendedHeader(buffer);
             }
 
             Buffer bufferWithoutHeader = buffer;
@@ -935,8 +960,7 @@ import java.util.List;
     protected void readFrames(ByteBuffer byteBuffer, int size) {
         //Now start looking for frames
         ID3v23Frame next;
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
 
         //Read the size from the Tag Header
@@ -991,12 +1015,7 @@ import java.util.List;
     }
 
     private void readFrames(Buffer buffer, int size) {
-        //Now start looking for frames
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
-
-
-        //Read the size from the Tag Header
+        ensureFrameMapsAndClear();
         fileReadSize = size;
         LOG.trace("Frame data is size:{}", size);
 
@@ -1006,13 +1025,11 @@ import java.util.List;
             try {
                 ID3v23Frame next = new ID3v23Frame(buffer, getLoggingFilename());
                 loadFrameIntoMap(next.getIdentifier(), next);
-            }
-            catch (PaddingException ex) {
+            } catch (PaddingException ex) {
                 //Found Padding, no more frames
                 LOG.debug("Found padding with {} remaining. {}", buffer.size(), getLoggingFilename());
                 break;
-            }
-            catch (EmptyFrameException ex) {
+            } catch (EmptyFrameException ex) {
                 //Found Empty Frame, log it - empty frames should not exist
                 LOG.warn(getLoggingFilename() + ":Empty Frame:" + ex.getMessage());
                 this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
@@ -1021,16 +1038,14 @@ import java.util.List;
                 this.invalidFrames++;
                 //Don't try and find any more frames
                 break;
-            }
-            catch (InvalidFrameException ife) {
+            } catch (InvalidFrameException ife) {
                 //Problem trying to find frame, often just occurs because frameHeader includes padding
                 //and we have reached padding
                 LOG.warn(getLoggingFilename() + ":Invalid Frame:" + ife.getMessage());
                 this.invalidFrames++;
                 //Don't try and find any more frames
                 break;
-            }
-            catch (InvalidDataTypeException idete) {
+            } catch (InvalidDataTypeException idete) {
                 //Failed reading frame but may just have invalid data but correct length so lets carry on
                 //in case we can read the next frame
                 LOG.warn(getLoggingFilename() + ":Corrupt Frame:" + idete.getMessage());
@@ -1043,6 +1058,18 @@ import java.util.List;
                 this.invalidFrames++;
             }
         }
+    }
+
+    private void ensureFrameMapsAndClear() {
+        if (frameMap == null) {
+            frameMap = new LinkedHashMap<>();
+        }
+        if (encryptedFrameMap == null) {
+            encryptedFrameMap = new LinkedHashMap<>();
+        }
+
+        frameMap.clear();
+        encryptedFrameMap.clear();
     }
 
     /**

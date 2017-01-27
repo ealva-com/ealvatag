@@ -136,42 +136,38 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         int runningSize = size;
         while (runningSize > 0) {  // loop until no more null terminated strings
+            final TextEncodedStringNullTerminated key = new TextEncodedStringNullTerminated(identifier, frameBody);
+            key.read(buffer, runningSize);
+            final int keySize = key.getSize();
+            if (keySize == 0) {
+                break;
+            }
+            this.size += keySize;
+            runningSize -= keySize;
             try {
-                final TextEncodedStringNullTerminated key = new TextEncodedStringNullTerminated(identifier, frameBody);
-                key.read(buffer, runningSize);
-                final int keySize = key.getSize();
-                if (keySize == 0) {
+                // TODO: 1/25/17 do we really need to fall back to non null terminated?? Means we have to clone the buffer.
+                TextEncodedStringNullTerminated result = new TextEncodedStringNullTerminated(identifier, frameBody);
+                result.read(buffer.clone(), size);  // clone so we can try again if InvalidDataTypeException case: read to end instead of null
+                final int resultSize = result.getSize();
+                buffer.skip(resultSize);  // we cloned, so skip the amount read from the clone.
+                this.size += resultSize;
+                runningSize -= resultSize;
+                if (resultSize == 0) {
                     break;
                 }
-                this.size += keySize;
-                runningSize -= keySize;
-                try {
-                    // TODO: 1/25/17 do we really need to fall back to non null terminated?? Means we have to clone the buffer.
-                    TextEncodedStringNullTerminated result = new TextEncodedStringNullTerminated(identifier, frameBody);
-                    result.read(buffer.clone(), size);  // clone so we can try again if InvalidDataTypeException case: read to end instead of null
-                    final int resultSize = result.getSize();
-                    buffer.skip(resultSize);  // we cloned, so skip the amount read from the clone.
-                    this.size += resultSize;
-                    runningSize -= resultSize;
-                    if (resultSize == 0) {
-                        break;
-                    }
-                    //Add to value
-                    ((ValuePairs)value).add((String)key.getValue(), (String)result.getValue());
-                } catch (InvalidDataTypeException e) {
-                    TextEncodedStringSizeTerminated result = new TextEncodedStringSizeTerminated(identifier, frameBody);
-                    result.read(buffer, size);
-                    final int resultSize = result.getSize();
-                    this.size += resultSize;
-                    runningSize -= resultSize;
-                    if (resultSize == 0) {
-                        break;
-                    }
-                    //Add to value
-                    ((ValuePairs)value).add((String)key.getValue(), (String)result.getValue());
+                //Add to value
+                ((ValuePairs)value).add((String)key.getValue(), (String)result.getValue());
+            } catch (InvalidDataTypeException e) {
+                TextEncodedStringSizeTerminated result = new TextEncodedStringSizeTerminated(identifier, frameBody);
+                result.read(buffer, size);
+                final int resultSize = result.getSize();
+                this.size += resultSize;
+                runningSize -= resultSize;
+                if (resultSize == 0) {
                     break;
                 }
-            }  catch (InvalidDataTypeException e) {
+                //Add to value
+                ((ValuePairs)value).add((String)key.getValue(), (String)result.getValue());
                 break;
             }
 

@@ -5,7 +5,6 @@ import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
-import ealvatag.tag.id3.valuepair.TextEncoding;
 import okio.Buffer;
 
 import java.io.EOFException;

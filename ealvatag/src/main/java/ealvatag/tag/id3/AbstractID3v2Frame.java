@@ -31,15 +31,19 @@ import ealvatag.tag.id3.framebody.Id3FrameBodyFactories;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
+import okio.InflaterSource;
+import okio.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.zip.Inflater;
 
 /**
  * This abstract class is each frame header inside a ID3v2 tag.
@@ -374,7 +378,7 @@ import java.nio.charset.Charset;
         return identifier;
     }
 
-    protected String readIdentifier(Buffer buffer) throws InvalidFrameException, EOFException {
+    String readIdentifier(Buffer buffer) throws InvalidFrameException, EOFException {
         identifier = buffer.readString(getFrameIdSize(), Charset.defaultCharset());
 
         if (identifier.isEmpty()) {
@@ -492,6 +496,23 @@ import java.nio.charset.Charset;
 
     public EncodingFlags getEncodingFlags() {
         return encodingFlags;
+    }
+
+    static Buffer decompressPartOfBuffer(Buffer source, int frameSize) throws IOException, InvalidFrameException {
+        final Buffer sink = new Buffer();
+        source.readFully(sink, frameSize);
+        return decompressEntireBuffer(sink);
+    }
+
+    static Buffer decompressEntireBuffer(final Source source) throws IOException {
+        Buffer result = new Buffer();
+        final InflaterSource inflaterSource = new InflaterSource(source, new Inflater());
+        try {
+            //noinspection StatementWithEmptyBody
+            while (inflaterSource.read(result, Integer.MAX_VALUE) != -1){}
+        } catch (IOException ignored) {
+        }
+        return result;
     }
 
     public class StatusFlags {

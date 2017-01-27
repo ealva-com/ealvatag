@@ -223,7 +223,7 @@ public class Lyrics3Line extends AbstractDataType
         readString(arr.toString(), offset);
     }
 
-    @Override public void read(final Buffer buffer, final int size) throws EOFException {
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         readString(buffer.readByteArray().toString(), 0);
     }
 

@@ -128,6 +128,7 @@ public enum ErrorMessage {
     FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}");
 
     public static final String INVALID_DATATYPE = "Problem reading {} in {}. {}";
+    public static final String NOT_ENOUGH_DATA_FOR = "Not enough data for {}. Required:{} Available{}";
 
     /**
      * Format a log message for an exception.

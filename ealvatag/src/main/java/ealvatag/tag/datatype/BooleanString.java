@@ -27,6 +27,8 @@ import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
+import java.io.EOFException;
+
 public class BooleanString extends AbstractDataType
 {
     /**
@@ -70,7 +72,7 @@ public class BooleanString extends AbstractDataType
         value = b != '0';
     }
 
-    @Override public void read(final Buffer buffer, final int size) {
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         value = '0' != buffer.readByte();
     }
 

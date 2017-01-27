@@ -192,54 +192,24 @@ import java.nio.ByteBuffer;
 
     public void read(Buffer buffer) throws InvalidTagException {
         int size = getSize();
-        LOG.debug("Reading body for" + this.getIdentifier() + ":" + size);
+        final String identifier = getIdentifier();
 
         for (AbstractDataType object : objectList) {
-            checkSize(size, object.getClass().getName());
+            checkSize(size, object.getClass().getName(), identifier);
             try {
                 object.read(buffer, size);
             } catch (EOFException | ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
                                                            object.getClass(),
-                                                           getIdentifier(),
-                                                           e.getMessage()));
+                                                           identifier,
+                                                           e.getMessage()),
+                                              e);
             }
             size -= object.getSize();
         }
-        checkFinalSize(buffer, size);
-    }
 
-    /**
-     * Log and skip if we didn't read enough, throw if we read too much
-     *
-     * @throws InvalidTagException if tag read too much data
-     */
-    @SuppressWarnings("unused")   // not using "buffer" right now because we aren't skipping. Let's leave until we can investigate
-    private void checkFinalSize(final Buffer buffer, final int size) throws InvalidTagException {
-        if (size > 0) {
-            LOG.warn("Tag {} did not read it's entire expected size.", getIdentifier());
-            // TODO: 1/26/17 I'm unsure why this could happen other than an error. However, skipping bytes causes problems for ensuing
-            // frames. Why isn't size not exactly matching total frames size?
-//            try {
-//                buffer.skip(Math.min(size, buffer.size()));
-//            } catch (EOFException e) {
-//                // should never happen
-//                LOG.error("EOF skipping unread tag data. ?");
-//            }
-        } else {
-            checkSize(size, "Past last");
-        }
+        checkFinalSize(size, identifier);
     }
-
-    private void checkSize(final int size, final String objectType) throws InvalidTagException {
-        if (size < 0) {
-            throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                       objectType,
-                                                       getIdentifier(),
-                                                       "Not enough data. Maybe previous data type read past it's size"));
-        }
-    }
-
     /**
      * Write the contents of this datatype to the byte array
      *
@@ -274,4 +244,26 @@ import java.nio.ByteBuffer;
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
     }
+
+    // static so more easily optimized. In a time critical loop
+    private static void checkFinalSize(final int size, final String identifier) throws InvalidTagException {
+        if (size > 0) {
+            LOG.warn("Tag {} did not read it's entire expected size.", identifier);
+            // TODO: 1/26/17 I'm unsure why this could happen other than an error. However, skipping bytes causes problems for ensuing
+            // frames. Why isn't size not exactly matching total frames size?
+        } else {
+            checkSize(size, "Past last", identifier);
+        }
+    }
+
+    // static so more easily optimized. In a time critical loop
+    private static void checkSize(final int size, final String objectType, final String identifier) throws InvalidTagException {
+        if (size < 0) {
+            throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
+                                                       objectType,
+                                                       identifier,
+                                                       "Not enough data. Maybe previous data type read past it's size"));
+        }
+    }
+
 }

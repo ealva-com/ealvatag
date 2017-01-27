@@ -4,7 +4,6 @@ import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
-import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.options.PadNumberOption;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
@@ -113,6 +112,7 @@ public class PartOfSet extends AbstractString {
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         try {
             value = new PartOfSetValue(buffer.readString(size, getTextEncodingCharSet()));
+            setSize(value.toString().length());
         } catch (IllegalCharsetException e) {
             throw new InvalidDataTypeException("Bad charset Id", e);
         }

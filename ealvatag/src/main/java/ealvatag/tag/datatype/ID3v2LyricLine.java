@@ -141,7 +141,7 @@ public class ID3v2LyricLine extends AbstractDataType
         }
     }
 
-    @Override public void read(final Buffer buffer, final int size) throws EOFException {
+    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         text = buffer.readString(buffer.size() - 4, StandardCharsets.ISO_8859_1);
         timeStamp = 0;
         for (int i = 0; i < 4; i++) {
