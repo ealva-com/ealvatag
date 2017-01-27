@@ -24,6 +24,7 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.InvalidFrameIdentifierException;
+import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.PaddingException;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
@@ -41,6 +42,7 @@ import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.PictureTypes;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +70,7 @@ import java.util.List;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v22Tag extends AbstractID3v2Tag {
+@SuppressWarnings("Duplicates") public class ID3v22Tag extends AbstractID3v2Tag {
     /**
      * Bit mask to indicate tag is Unsychronization
      */
@@ -97,8 +99,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * Creates a new empty ID3v2_2 tag.
      */
     public ID3v22Tag() {
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
     }
 
     /**
@@ -120,8 +121,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * @param mp3tag
      */
     public ID3v22Tag(BaseID3Tag mp3tag) {
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
         LOG.debug("Creating tag from a tag of a different version");
         //Default Superclass constructor does nothing
         if (mp3tag != null) {
@@ -159,6 +159,11 @@ public class ID3v22Tag extends AbstractID3v2Tag {
     public ID3v22Tag(ByteBuffer buffer, String loggingFilename) throws TagException {
         setLoggingFilename(loggingFilename);
         this.read(buffer);
+    }
+
+    public ID3v22Tag(Buffer buffer, Id3v2Header header, String loggingFilename) throws TagException {
+        setLoggingFilename(loggingFilename);
+        read(buffer, header);
     }
 
     /**
@@ -449,16 +454,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         return REVISION;
     }
 
-    /**
-     * Read tag Header Flags
-     *
-     * @param byteBuffer
-     *
-     * @throws TagException
-     */
-    private void readHeaderFlags(ByteBuffer byteBuffer) throws TagException {
-        //Flags
-        byte flags = byteBuffer.get();
+    private void readHeaderFlags(byte flags) throws TagException {
         unsynchronization = (flags & MASK_V22_UNSYNCHRONIZATION) != 0;
         compression = (flags & MASK_V22_COMPRESSION) != 0;
 
@@ -491,10 +487,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-//    @Override
+    @Override
     public void read(ByteBuffer byteBuffer) throws TagException {
         int size;
         if (!seek(byteBuffer)) {
@@ -503,7 +496,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         LOG.debug(getLoggingFilename() + ":" + "Reading tag from file");
 
         //Read the flags
-        readHeaderFlags(byteBuffer);
+        readHeaderFlags(byteBuffer.get());
 
         // Read the size
         size = ID3SyncSafeInteger.bufferToValue(byteBuffer);
@@ -519,17 +512,88 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         LOG.debug(getLoggingFilename() + ":" + "Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
-    /**
-     * Read frames from tag
-     *
-     * @param byteBuffer
-     * @param size
-     */
-    protected void readFrames(ByteBuffer byteBuffer, int size) {
+    public void read(Buffer buffer, final Id3v2Header header) throws TagException {
+        try {
+            readHeaderFlags(header.getFlags());
+
+            int size = header.getTagSize();
+
+            Buffer bufferWithoutHeader = buffer;
+            //We need to synchronize the buffer
+            if (unsynchronization) {
+                bufferWithoutHeader = Id3SynchronizingSink.synchronizeBuffer(buffer);
+            }
+
+            readFrames(bufferWithoutHeader, size);
+            LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
+        } catch (IOException e) {
+            throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
+        }
+    }
+
+    private void readFrames(Buffer buffer, int size) {
+        ensureFrameMapsAndClear();
+        fileReadSize = size;
+        LOG.trace("Frame data is size:{}", size);
+
+        // Read the frames until got to up to the size as specified in header or until
+        // we hit an invalid frame identifier or padding
+        while (buffer.size() > 0) {
+            final String logName = getLoggingFilename();
+            try {
+                ID3v22Frame next = new ID3v22Frame(buffer, logName);
+                loadFrameIntoMap(next.getIdentifier(), next);
+            } catch (PaddingException ex) {
+                //Found Padding, no more frames
+                LOG.debug("Found padding with {} remaining. {}", buffer.size(), logName);
+                break;
+            } catch (EmptyFrameException ex) {
+                //Found Empty Frame, log it - empty frames should not exist
+                LOG.warn(logName + ":Empty Frame:" + ex.getMessage());
+                this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
+            } catch (InvalidFrameIdentifierException ifie) {
+                LOG.warn(logName + ":Invalid Frame Identifier:" + ifie.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
+                break;
+            } catch (InvalidFrameException ife) {
+                //Problem trying to find frame, often just occurs because frameHeader includes padding
+                //and we have reached padding
+                LOG.warn(logName + ":Invalid Frame:" + ife.getMessage());
+                this.invalidFrames++;
+                //Don't try and find any more frames
+                break;
+            } catch (InvalidDataTypeException idete) {
+                //Failed reading frame but may just have invalid data but correct length so lets carry on
+                //in case we can read the next frame
+                LOG.warn(logName + ":Corrupt Frame:" + idete.getMessage());
+                this.invalidFrames++;
+            } catch (IOException e) {
+                LOG.warn("Unexpectedly reached end of frame" + e);
+                this.invalidFrames++;
+            } catch (@SuppressWarnings("TryWithIdenticalCatches") InvalidTagException e) {  // TODO: 1/25/17 get exceptions straightened out
+                LOG.warn(logName + ":Corrupt Frame:" + e.getMessage());
+                this.invalidFrames++;
+            }
+        }
+    }
+
+    private void ensureFrameMapsAndClear() {
+        if (frameMap == null) {
+            frameMap = new LinkedHashMap<>();
+        }
+        if (encryptedFrameMap == null) {
+            encryptedFrameMap = new LinkedHashMap<>();
+        }
+
+        frameMap.clear();
+        encryptedFrameMap.clear();
+    }
+
+    private void readFrames(ByteBuffer byteBuffer, int size) {
         //Now start looking for frames
         ID3v22Frame next;
-        frameMap = new LinkedHashMap<>();
-        encryptedFrameMap = new LinkedHashMap<>();
+        ensureFrameMapsAndClear();
 
         //Read the size from the Tag Header
         this.fileReadSize = size;

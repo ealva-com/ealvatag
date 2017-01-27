@@ -946,7 +946,6 @@ import java.util.List;
         } catch (IOException e) {
             throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
         }
-
     }
 
     /**

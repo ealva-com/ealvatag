@@ -155,7 +155,10 @@ public class MP3File extends AudioFileImpl {
             FileOperator fileOperator = new FileOperator(fileChannel);
 
             long audioStart = 0;
-            final Optional<Id3v2Header> v2HeaderOptional = getV2Header(fileOperator);
+            Optional<Id3v2Header> v2HeaderOptional = Optional.absent();
+            if ((loadOptions & LOAD_IDV2TAG) != 0) {
+                v2HeaderOptional = getV2Header(fileOperator);
+            }
             final int v2TagHeaderSize = AbstractID3v2Tag.TAG_HEADER_LENGTH;
             if (v2HeaderOptional.isPresent()) {
                 audioStart = v2HeaderOptional.get().getTagSize() + v2TagHeaderSize;
@@ -173,32 +176,26 @@ public class MP3File extends AudioFileImpl {
 
             audioHeader = mp3AudioHeader;
 
-            if (v2HeaderOptional.isPresent() &&
-                    (v2HeaderOptional.get().getMajorVersion() == ID3v23Tag.MAJOR_VERSION
-                            ||v2HeaderOptional.get().getMajorVersion() == ID3v24Tag.MAJOR_VERSION
-                    )) {
-                if ((loadOptions & LOAD_IDV2TAG) != 0) {
-                    final Id3v2Header header = v2HeaderOptional.get();
-                    Buffer buffer = new Buffer();
-                    // TODO: 1/26/17 Remove the "- v2TaqHeaderSize" from the number of bytes read to see about some tag data reading too far
-                    fileOperator.read(v2TagHeaderSize, buffer, audioStart - v2TagHeaderSize);
-                    switch (header.getMajorVersion()) {
-                        case ID3v23Tag.MAJOR_VERSION:
-                            setID3v2Tag(new ID3v23Tag(buffer, header, file.getPath()));
-                            break;
-                        case ID3v24Tag.MAJOR_VERSION:
-                            setID3v2Tag(new ID3v24Tag(buffer, header, file.getPath()));
-                            break;
-                    }
+            if (v2HeaderOptional.isPresent()) {
+                final Id3v2Header header = v2HeaderOptional.get();
+                Buffer buffer = new Buffer();
+                // TODO: 1/26/17 Remove the "- v2TaqHeaderSize" from the number of bytes read to see about some tag data reading too far
+                fileOperator.read(v2TagHeaderSize, buffer, audioStart - v2TagHeaderSize);
+                switch (header.getMajorVersion()) {
+                    case ID3v22Tag.MAJOR_VERSION:
+                        setID3v2Tag(new ID3v22Tag(buffer, header, file.getPath()));
+                        break;
+                    case ID3v23Tag.MAJOR_VERSION:
+                        setID3v2Tag(new ID3v23Tag(buffer, header, file.getPath()));
+                        break;
+                    case ID3v24Tag.MAJOR_VERSION:
+                        setID3v2Tag(new ID3v24Tag(buffer, header, file.getPath()));
+                        break;
                 }
             }
 
             //Read v1 tags (if any)
             readV1Tag(file.getPath(), fileOperator, loadOptions);
-
-            //Read v2 tags (if any)
-            readV2Tag(fileOperator, file.getPath(), loadOptions, (int)audioStart);
-
 
             //If we have a v2 tag use that, if we do not but have v1 tag use that
             //otherwise use nothing
@@ -243,45 +240,6 @@ public class MP3File extends AudioFileImpl {
         }
     }
 
-    /**
-     * Read V2tag if exists
-     * <p>
-     * TODO:shouldn't we be handing TagExceptions:when will they be thrown
-     *
-     * @param fileOperator
-     * @param loadOptions
-     *
-     * @throws IOException
-     * @throws TagException
-     */
-    private void readV2Tag(FileOperator fileOperator, String fileName, int loadOptions, int startByte) throws IOException, TagException {
-        //We know where the actual Audio starts so load all the file from start to that point into
-        //a buffer then we can read the IDv2 information without needing any more File I/O
-        if (startByte >= AbstractID3v2Tag.TAG_HEADER_LENGTH) {
-            LOG.debug("Attempting to read id3v2tags");
-            ByteBuffer bb = fileOperator.getFileChannel().map(FileChannel.MapMode.READ_ONLY, 0, startByte);
-            bb.rewind();
-
-            if ((loadOptions & LOAD_IDV2TAG) != 0) {
-
-                try {
-                    if (id3v2tag == null) {
-                        this.setID3v2Tag(new ID3v22Tag(bb, fileName));
-                    }
-                } catch (TagNotFoundException ex) {
-                    LOG.trace("No id3v22 tag found");
-                }
-
-//                try {
-//                    this.setID3v2Tag(new ID3v24Tag(bb, fileName));
-//                } catch (TagNotFoundException ex) {
-//                    LOG.trace("No id3v24 tag found");
-//                }
-            }
-        } else {
-            LOG.trace("Not enough room for valid id3v2 tag:" + startByte);
-        }
-    }
 
     /**
      * Regets the audio header starting from start of file, and write appropriate logging to indicate
@@ -556,10 +514,7 @@ public class MP3File extends AudioFileImpl {
      */
 
     public byte[] getHash(String algorithm) throws NoSuchAlgorithmException, InvalidAudioFrameException, IOException {
-
         return getHash(algorithm, 32768);
-
-
     }
 
     /**

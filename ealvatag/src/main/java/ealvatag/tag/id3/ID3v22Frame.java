@@ -20,15 +20,18 @@ import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.InvalidFrameIdentifierException;
+import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyDeprecated;
 import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.utils.EqualsUtil;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -45,7 +48,7 @@ import java.util.regex.Pattern;
  * @author : Eric Farng
  * @version $Id$
  */
-public class ID3v22Frame extends AbstractID3v2Frame {
+@SuppressWarnings("Duplicates") public class ID3v22Frame extends AbstractID3v2Frame {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v22Frame.class);
 
     private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{2}");
@@ -265,6 +268,11 @@ public class ID3v22Frame extends AbstractID3v2Frame {
         read(byteBuffer);
     }
 
+    public ID3v22Frame(Buffer buffer, String loggingFilename) throws InvalidTagException, EOFException {
+        setLoggingFilename(loggingFilename);
+        read(buffer);
+    }
+
     /**
      * Creates a new ID3v23Frame datatype by reading from byteBuffer.
      *
@@ -298,12 +306,6 @@ public class ID3v22Frame extends AbstractID3v2Frame {
         return false;
     }
 
-    /**
-     * Read frame from file.
-     * Read the frame header then delegate reading of data to frame body.
-     *
-     * @param byteBuffer
-     */
     public void read(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
         String identifier = readIdentifier(byteBuffer);
 
@@ -362,6 +364,54 @@ public class ID3v22Frame extends AbstractID3v2Frame {
         }
     }
 
+    public void read(Buffer buffer) throws InvalidTagException, EOFException {
+        final String fileName = getLoggingFilename();
+        String identifier = readIdentifier(buffer);
+        if (!isValidID3v2FrameIdentifier(identifier)) {
+            LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
+            throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
+        }
+        //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
+        frameSize = decodeSize(buffer);
+
+        if (frameSize < 0) {
+            throw new InvalidFrameException(identifier + " has invalid size of:" + frameSize);
+        } else if (frameSize == 0) {
+            //We dont process this frame or add to framemap becuase contains no useful information
+            LOG.warn("Empty Frame:" + identifier);
+            throw new EmptyFrameException(identifier + " is empty frame");
+        } else if (frameSize > buffer.size()) {
+            LOG.warn("Invalid Frame size larger than size before mp3 audio:" + identifier);
+            throw new InvalidFrameException(identifier + " is invalid frame");
+        }
+
+        LOG.debug("Frame Size Is:" + frameSize);
+
+        //Convert v2.2 to v2.4 id just for reading the data
+        String id = ID3Tags.convertFrameID22To24(identifier);
+        if (id == null) {
+            //OK,it may be convertable to a v.3 id even though not valid v.4
+            id = ID3Tags.convertFrameID22To23(identifier);
+            if (id == null) {
+                // Is it a valid v22 identifier so should be able to find a
+                // frame body for it.
+                if (ID3Tags.isID3v22FrameIdentifier(identifier)) {
+                    id = identifier;
+                }
+                // Unknown so will be created as FrameBodyUnsupported
+                else {
+                    id = UNSUPPORTED_ID;
+                }
+            }
+        }
+        LOG.debug("Identifier was:" + identifier + " reading using:" + id);
+
+        Buffer frameBodyBuffer = new Buffer();
+        buffer.readFully(frameBodyBuffer, frameSize); // maybe do this in other frame versions? Not very expensive
+
+        frameBody = readBody(id, frameBodyBuffer, frameSize);
+    }
+
     /**
      * Read Frame Size, which has to be decoded
      *
@@ -371,6 +421,23 @@ public class ID3v22Frame extends AbstractID3v2Frame {
      */
     private int decodeSize(byte[] buffer) {
         BigInteger bi = new BigInteger(buffer);
+        int tmpSize = bi.intValue();
+        if (tmpSize < 0) {
+            LOG.warn("Invalid Frame Size of:" + tmpSize + "Decoded from bin:" + Integer.toBinaryString(tmpSize) +
+                             "Decoded from hex:" + Integer.toHexString(tmpSize));
+        }
+        return tmpSize;
+    }
+
+    private int decodeSize(Buffer buffer) throws EOFException {
+        final int size = getFrameSizeSize();
+        byte[] encodedSize = new byte[size];
+        buffer.require(size);
+        for (int i = 0; i < encodedSize.length; i++) {
+            encodedSize[i] = buffer.readByte();
+        }
+
+        BigInteger bi = new BigInteger(encodedSize);
         int tmpSize = bi.intValue();
         if (tmpSize < 0) {
             LOG.warn("Invalid Frame Size of:" + tmpSize + "Decoded from bin:" + Integer.toBinaryString(tmpSize) +
