@@ -1,7 +1,7 @@
 package ealvatag.audio.dsf;
 
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
@@ -13,35 +13,41 @@ import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.reference.ID3V2Version;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
-public class DsfAudioFileTest extends TestCase {
+public class DsfAudioFileTest {
 
-    public void testReadDsfTag() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-        AudioFile f = AudioFileIO.read(testFile);
-        AudioHeader ah = f.getAudioHeader();
-        assertEquals("DSF", ah.getEncodingType());
-        assertEquals("5644800", ah.getBitRate());
-        assertEquals(5644800, ah.getBitRateAsNumber());
-        assertEquals("2", ah.getChannels());
-        assertEquals("2822400", ah.getSampleRate());
-        assertEquals(5, ah.getTrackLength());
-        assertFalse(ah.isLossless());
-        Tag tag = f.getTag().or(NullTag.INSTANCE);
-        System.out.println(tag);
-        assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
-        assertEquals("test3", tag.getFirst(FieldKey.TITLE));
-        assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
-        assertEquals("Album Artist", tag.getFirst(FieldKey.ALBUM_ARTIST));
-        assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
-        assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
-        assertEquals("Publisher", tag.getFirst(FieldKey.RECORD_LABEL));
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
     }
 
-    public void testWriteDsfTag() {
+    @Test public void testReadDsfTag() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
+        AudioFile f = AudioFileIO.read(testFile);
+        AudioHeader ah = f.getAudioHeader();
+        Assert.assertEquals("DSF", ah.getEncodingType());
+        Assert.assertEquals("5644800", ah.getBitRate());
+        Assert.assertEquals(5644800, ah.getBitRateAsNumber());
+        Assert.assertEquals("2", ah.getChannels());
+        Assert.assertEquals("2822400", ah.getSampleRate());
+        Assert.assertEquals(5, ah.getTrackLength());
+        Assert.assertFalse(ah.isLossless());
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
+        System.out.println(tag);
+        Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+        Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+        Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+        Assert.assertEquals("Album Artist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+        Assert.assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
+        Assert.assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+        Assert.assertEquals("Publisher", tag.getFirst(FieldKey.RECORD_LABEL));
+    }
+
+    @Test public void testWriteDsfTag() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test122.dsf");
@@ -50,7 +56,7 @@ public class DsfAudioFileTest extends TestCase {
             return;
         }
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122write.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122write.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
@@ -62,25 +68,25 @@ public class DsfAudioFileTest extends TestCase {
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
-            assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("test3", tag.getFirst(FieldKey.TITLE));
-            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
-            assertEquals("Album Artist", tag.getFirst(FieldKey.ALBUM_ARTIST));
-            assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
-            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
-            assertEquals("Publisher", tag.getFirst(FieldKey.RECORD_LABEL));
+            Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+            Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            Assert.assertEquals("Album Artist", tag.getFirst(FieldKey.ALBUM_ARTIST));
+            Assert.assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            Assert.assertEquals("Publisher", tag.getFirst(FieldKey.RECORD_LABEL));
 
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
 
 
     }
 
-    public void testDeleteDsfTag() {
+    @Test public void testDeleteDsfTag() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test122.dsf");
@@ -89,7 +95,7 @@ public class DsfAudioFileTest extends TestCase {
             return;
         }
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122delete.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122delete.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
@@ -105,12 +111,12 @@ public class DsfAudioFileTest extends TestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
 
 
     }
 
-    public void testReadDsfNoTag() {
+    @Test public void testReadDsfNoTag() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test156.dsf");
@@ -120,29 +126,29 @@ public class DsfAudioFileTest extends TestCase {
         }
 
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test156.dsf", new File("test156read.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test156.dsf", new File("test156read.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             System.out.println(ah);
-            assertEquals("5644800", ah.getBitRate());
-            assertEquals(5644800, ah.getBitRateAsNumber());
-            assertEquals("2", ah.getChannels());
-            assertEquals("2822400", ah.getSampleRate());
-            assertEquals(5, ah.getTrackLength());
-            assertFalse(ah.isLossless());
+            Assert.assertEquals("5644800", ah.getBitRate());
+            Assert.assertEquals(5644800, ah.getBitRateAsNumber());
+            Assert.assertEquals("2", ah.getChannels());
+            Assert.assertEquals("2822400", ah.getSampleRate());
+            Assert.assertEquals(5, ah.getTrackLength());
+            Assert.assertFalse(ah.isLossless());
             Tag tag = f.getTag().orNull();
-            assertNull(tag);
+            Assert.assertNull(tag);
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
 
 
     }
 
-    public void testWriteDsfNoTag() {
+    @Test public void testWriteDsfNoTag() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test156.dsf");
@@ -151,10 +157,10 @@ public class DsfAudioFileTest extends TestCase {
             return;
         }
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test156.dsf", new File("test156write.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test156.dsf", new File("test156write.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            assertNull(f.getTag().orNull());
+            Assert.assertNull(f.getTag().orNull());
             f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
@@ -164,19 +170,19 @@ public class DsfAudioFileTest extends TestCase {
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
-            assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
 
 
     }
 
-    public void testDeleteDsfNoTag() {
+    @Test public void testDeleteDsfNoTag() {
         Exception exceptionCaught = null;
 
         File orig = new File("testdata", "test156.dsf");
@@ -185,10 +191,10 @@ public class DsfAudioFileTest extends TestCase {
             return;
         }
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test156.dsf", new File("test156delete.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test156.dsf", new File("test156delete.dsf"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
-            assertNull(f.getTag().orNull());
+            Assert.assertNull(f.getTag().orNull());
             f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
@@ -202,10 +208,10 @@ public class DsfAudioFileTest extends TestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
-    public void testCreateDefaultTag() throws Exception {
+    @Test public void testCreateDefaultTag() throws Exception {
         File orig = new File("testdata", "test122.dsf");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
@@ -216,20 +222,20 @@ public class DsfAudioFileTest extends TestCase {
 
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
-            File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v24Tag);
+            File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
+            Assert.assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v24Tag);
         }
 
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-            File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v23Tag);
+            File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
+            Assert.assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v23Tag);
         }
 
         {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
-            File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
-            assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v22Tag);
+            File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122read.dsf"));
+            Assert.assertTrue(AudioFileIO.read(testFile).setNewDefaultTag() instanceof ID3v22Tag);
         }
 
         TagOptionSingleton.getInstance().setToDefault();

@@ -1,45 +1,46 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test deletions of ID3v1 tag
  */
-public class Issue383Test extends AbstractTestCase
-{
+public class Issue383Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     /**
      * This song is incorrectly shown as 6:08 when should be 3:34 but all apps (Media Monkey, iTunes)
      * also report incorrect length, however think problem is audio does continue until 6:08 but is just quiet sound
      *
      * @throws Exception
      */
-    public void testIssueIncorrectTrackLength() throws Exception
-    {
+    @Test public void testIssueIncorrectTrackLength() throws Exception {
         Exception caught = null;
-        try
-        {
+        try {
             File orig = new File("testdata", "test106.mp3");
-            if (!orig.isFile())
-            {
+            if (!orig.isFile()) {
                 System.err.println("Unable to test file - not available");
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test106.mp3");
+            File testFile = TestUtil.copyAudioToTmp("test106.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(af.getAudioHeader().getTrackLength(),368);
+            Assert.assertEquals(af.getAudioHeader().getTrackLength(), 368);
+        } catch (Exception e) {
+            caught = e;
         }
-        catch(Exception e)
-        {
-            caught=e;
-        }
-        assertNull(caught);
+        Assert.assertNull(caught);
     }
 
     /**
@@ -48,27 +49,22 @@ public class Issue383Test extends AbstractTestCase
      *
      * @throws Exception
      */
-    public void testIssue() throws Exception
-    {
+    @Test public void testIssue() throws Exception {
         Exception caught = null;
-        try
-        {
+        try {
             File orig = new File("testdata", "test107.mp3");
-            if (!orig.isFile())
-            {
+            if (!orig.isFile()) {
                 System.err.println("Unable to test file - not available");
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test107.mp3");
+            File testFile = TestUtil.copyAudioToTmp("test107.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            assertEquals(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TRACK), "01");
-            assertEquals(af.getAudioHeader().getTrackLength(),4372);
+            Assert.assertEquals(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TRACK), "01");
+            Assert.assertEquals(af.getAudioHeader().getTrackLength(), 4372);
+        } catch (Exception e) {
+            caught = e;
         }
-        catch(Exception e)
-        {
-            caught=e;
-        }
-        assertNull(caught);
+        Assert.assertNull(caught);
     }
 }

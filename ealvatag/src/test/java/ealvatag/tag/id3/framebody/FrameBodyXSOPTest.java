@@ -1,61 +1,52 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test TSOTFrameBody
  */
-public class FrameBodyXSOPTest extends AbstractTestCase
-{
+public class FrameBodyXSOPTest {
     public static final String ARTIST_SORT = "artistsort";
 
-    public static FrameBodyXSOP getInitialisedBody()
-    {
+    public static FrameBodyXSOP getInitialisedBody() {
         FrameBodyXSOP fb = new FrameBodyXSOP();
         fb.setText(FrameBodyXSOPTest.ARTIST_SORT);
         return fb;
     }
 
-    public void testCreateFrameBody()
-    {
+    @Test public void testCreateFrameBody() {
         Exception exceptionCaught = null;
         FrameBodyXSOP fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyXSOP(TextEncoding.ISO_8859_1, FrameBodyXSOPTest.ARTIST_SORT);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
 
     }
 
-    public void testCreateFrameBodyEmptyConstructor()
-    {
+    @Test public void testCreateFrameBodyEmptyConstructor() {
         Exception exceptionCaught = null;
         FrameBodyXSOP fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyXSOP();
             fb.setText(FrameBodyXSOPTest.ARTIST_SORT);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v23Frames.FRAME_ID_V3_ARTIST_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyXSOPTest.ARTIST_SORT, fb.getText());
 
     }
 

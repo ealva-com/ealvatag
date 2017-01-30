@@ -1,26 +1,32 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.id3.ID3v23Frame;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.framebody.FrameBodyIPLS;
 import ealvatag.tag.id3.framebody.FrameBodyTXXX;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test trying to read non existent mp3 file
  */
-public class Issue001Test extends AbstractTestCase
-{
-    public void testHandlingOfUnmappedChars()
+public class Issue001Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testHandlingOfUnmappedChars()
     {
         Exception ex=null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("test1001.mp3"));
+            File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("test1001.mp3"));
             MP3File mp3File = new MP3File(testFile);
 
             //Create and Save
@@ -39,15 +45,15 @@ public class Issue001Test extends AbstractTestCase
             e.printStackTrace();
             ex=e;
         }
-        assertNull(ex);
+        Assert.assertNull(ex);
     }
 
-    public void testHandlingOfUnmappedChars2()
+    @Test public void testHandlingOfUnmappedChars2()
     {
         Exception ex=null;
         try
         {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("test1001.mp3"));
+            File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("test1001.mp3"));
             MP3File mp3File = new MP3File(testFile);
 
             //Create and Save
@@ -65,7 +71,7 @@ public class Issue001Test extends AbstractTestCase
             e.printStackTrace();
             ex=e;
         }
-        assertNull(ex);
+        Assert.assertNull(ex);
     }
 
 }

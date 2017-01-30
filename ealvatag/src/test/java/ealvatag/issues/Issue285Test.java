@@ -1,10 +1,13 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
@@ -12,24 +15,23 @@ import java.io.File;
  * Converting FrameBodyUnsupported with known identifier to FrameBodyIPLS (v23) causing NoSuchMethodException.
  * Not really sure why this is happening but we should check and take action instead of failing as we currently do
  */
-public class Issue285Test extends AbstractTestCase
-{
-    public void testSavingOggFile()
-    {
+public class Issue285Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testSavingOggFile() {
         File orig = new File("testdata", "test57.ogg");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
 
-
         File testFile = null;
         Exception exceptionCaught = null;
-        try
-        {
-            testFile = AbstractTestCase.copyAudioToTmp("test57.ogg");
+        try {
+            testFile = TestUtil.copyAudioToTmp("test57.ogg");
 
             //OggFileReader ofr = new OggFileReader();
             //ofr.summarizeOggPageHeaders(testFile);
@@ -38,14 +40,12 @@ public class Issue285Test extends AbstractTestCase
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.COMMENT, "TEST");
             af.save();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 

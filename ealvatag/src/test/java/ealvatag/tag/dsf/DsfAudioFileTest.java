@@ -1,7 +1,7 @@
 package ealvatag.tag.dsf;
 
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.FilePermissionsTest;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
@@ -18,7 +18,7 @@ import java.io.File;
 public class DsfAudioFileTest {
 
     @Test public void testReadDsfMetadata() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test122.dsf", new File("test122readmetadata.dsf"));
+        File testFile = TestUtil.copyAudioToTmp("test122.dsf", new File("test122readmetadata.dsf"));
         AudioFile f = AudioFileIO.read(testFile);
         System.out.println(f.getTag().or(NullTag.INSTANCE));
         Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof ID3v24Tag);

@@ -1,6 +1,6 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
@@ -14,6 +14,9 @@ import ealvatag.tag.id3.framebody.FrameBodyCOMM;
 import ealvatag.tag.reference.ID3V2Version;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.PerformerHelper;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Iterator;
@@ -21,15 +24,19 @@ import java.util.Iterator;
 /**
  * Support For Custom fields
  */
-public class Issue298Test extends AbstractTestCase {
+public class Issue298Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     /**
      * Test writing Custom fields
      */
-    public void testWriteFieldsToMp3ID3v24() {
+    @Test public void testWriteFieldsToMp3ID3v24() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -127,185 +134,199 @@ public class Issue298Test extends AbstractTestCase {
             tag.setField(FieldKey.ITUNES_GROUPING, "ITUNESGROUPING");
 
 
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
-            assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
 
 
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM1).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
             }
             af.save();
             af = AudioFileIO.read(testFile);
             tag = af.getTag().or(NullTag.INSTANCE);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
             tag.setField(FieldKey.CHOIR_SORT, "ChoirSort");
             tag.setField(FieldKey.ENSEMBLE_SORT, "EnsembleSort");
             tag.setField(FieldKey.PERFORMER_NAME, "PerformerName");
             tag.setField(FieldKey.PERFORMER_NAME_SORT, "PerformerNameSort");
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM1).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body = (FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
-                assertEquals(FrameBodyCOMM.MM_CUSTOM1, body.getDescription());
-                assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
+                Assert.assertEquals(FrameBodyCOMM.MM_CUSTOM1, body.getDescription());
+                Assert.assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
             }
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM2).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body = (FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
-                assertEquals(FrameBodyCOMM.MM_CUSTOM2, body.getDescription());
-                assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
+                Assert.assertEquals(FrameBodyCOMM.MM_CUSTOM2, body.getDescription());
+                Assert.assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
             }
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM3).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body = (FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
-                assertEquals(FrameBodyCOMM.MM_CUSTOM3, body.getDescription());
-                assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
+                Assert.assertEquals(FrameBodyCOMM.MM_CUSTOM3, body.getDescription());
+                Assert.assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
             }
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM4).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body = (FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
-                assertEquals(FrameBodyCOMM.MM_CUSTOM4, body.getDescription());
-                assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
+                Assert.assertEquals(FrameBodyCOMM.MM_CUSTOM4, body.getDescription());
+                Assert.assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
             }
             {
                 TagField tagField = af.getTag().or(NullTag.INSTANCE).getFirstField(FieldKey.CUSTOM5).or(NullTagField.INSTANCE);
-                assertTrue(tagField instanceof ID3v24Frame);
-                assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
+                Assert.assertTrue(tagField instanceof ID3v24Frame);
+                Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyCOMM);
                 FrameBodyCOMM body = (FrameBodyCOMM)((ID3v24Frame)tagField).getBody();
-                assertEquals(FrameBodyCOMM.MM_CUSTOM5, body.getDescription());
-                assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
+                Assert.assertEquals(FrameBodyCOMM.MM_CUSTOM5, body.getDescription());
+                Assert.assertEquals(Languages.MEDIA_MONKEY_ID, body.getLanguage());
             }
 
         } catch (Exception e) {
@@ -313,17 +334,17 @@ public class Issue298Test extends AbstractTestCase {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing Custom fields
      */
-    public void testWriteFieldsToMp3ID3v23() {
+    @Test public void testWriteFieldsToMp3ID3v23() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -422,13 +443,13 @@ public class Issue298Test extends AbstractTestCase {
             tag.setField(FieldKey.MUSICBRAINZ_WORK, "MusicBrainzWork");
             tag.setField(FieldKey.ITUNES_GROUPING, "ITUNESGROUPING");
 
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
 
             Iterator<TagField> i = af.getTag().or(NullTag.INSTANCE).getFields();
             while (i.hasNext()) {
@@ -438,121 +459,132 @@ public class Issue298Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
 
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
 
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("Producer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
-            assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("Producer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PRODUCER));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
             i = af.getTag().or(NullTag.INSTANCE).getFields();
             while (i.hasNext()) {
                 TagField tf = i.next();
                 System.out.println(tf.getId() + ":" + tf.toString());
             }
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing Custom fields to Mp3 ID3v23
      */
-    public void testWriteFieldsToMp3ID3v22() {
+    @Test public void testWriteFieldsToMp3ID3v22() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -655,113 +687,124 @@ public class Issue298Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Performer", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
 
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
-            assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("ITUNESGROUPING", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ITUNES_GROUPING));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing Custom fields to Ogg Vorbis
      */
-    public void testWriteFieldsToOggVorbis() {
+    @Test public void testWriteFieldsToOggVorbis() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
+            testFile = TestUtil.copyAudioToTmp("test.ogg");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -860,112 +903,123 @@ public class Issue298Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
 
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing Custom fields to Flac
      */
-    public void testWriteFieldsToFlac() {
+    @Test public void testWriteFieldsToFlac() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.flac");
+            testFile = TestUtil.copyAudioToTmp("test.flac");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -1063,136 +1117,154 @@ public class Issue298Test extends AbstractTestCase {
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
 
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("CompositionType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("CompositionType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
 
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 
     /**
      * Test writing Custom fields to Wma
      */
-    public void testWriteFieldsToWma() {
+    @Test public void testWriteFieldsToWma() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
+            testFile = TestUtil.copyAudioToTmp("test1.wma");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -1289,114 +1361,125 @@ public class Issue298Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
             tag.setField(FieldKey.ARTISTS_SORT, "ArtistsSort");
             tag.setField(FieldKey.ALBUM_ARTISTS, "AlbumArtists");
             tag.setField(FieldKey.ALBUM_ARTISTS_SORT, "AlbumArtistsSort");
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing Custom fields to Mp4
      */
-    public void testWriteFieldsToMp4() {
+    @Test public void testWriteFieldsToMp4() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            testFile = TestUtil.copyAudioToTmp("test.m4a");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -1496,102 +1579,113 @@ public class Issue298Test extends AbstractTestCase {
 
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
-            assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
-            assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
-            assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
-            assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
-            assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
-            assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
-            assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
-            assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
-            assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
-            assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
-            assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
-            assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
-            assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
-            assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
-            assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
-            assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
-            assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
-            assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
-            assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
-            assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
-            assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
-            assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
-            assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
-            assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
-            assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
-            assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
-            assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
-            assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
-            assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
-            assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
-            assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
-            assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
-            assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
-            assertEquals("MusicBrainzWorkComposition", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
-            assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
-            assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
-            assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
-            assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
-            assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
-            assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
-            assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
-            assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
-            assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
-            assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
-            assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
-            assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
-            assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
-            assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
-            assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
-            assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
-            assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
-            assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
-            assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
+            Assert.assertEquals("custom1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            Assert.assertEquals("custom2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM2));
+            Assert.assertEquals("custom3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM3));
+            Assert.assertEquals("custom4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM4));
+            Assert.assertEquals("custom5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM5));
+            Assert.assertEquals("155.5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.FBPM));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94f",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID));
+            Assert.assertEquals("0410c22a-0b2b-4793-9f18-5f1fab36338e",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_ID));
+            Assert.assertEquals("Occasion", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OCCASION));
+            Assert.assertEquals("original_album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ALBUM));
+            Assert.assertEquals("original_lyricist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_LYRICIST));
+            Assert.assertEquals("original_artist", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_ARTIST));
+            Assert.assertEquals("2012", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORIGINAL_YEAR));
+            Assert.assertEquals("quality", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.QUALITY));
+            Assert.assertEquals("latin", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SCRIPT));
+            Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TAGS));
+            Assert.assertEquals("Mellow", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TEMPO));
+            Assert.assertEquals("Bad Mood", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD));
+            Assert.assertEquals("60", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AGGRESSIVE));
+            Assert.assertEquals("61", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_RELAXED));
+            Assert.assertEquals("62", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_SAD));
+            Assert.assertEquals("63", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_HAPPY));
+            Assert.assertEquals("64", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_PARTY));
+            Assert.assertEquals("65", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_DANCEABILITY));
+            Assert.assertEquals("66", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_VALENCE));
+            Assert.assertEquals("67", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_AROUSAL));
+            Assert.assertEquals("68", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ACOUSTIC));
+            Assert.assertEquals("69", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_ELECTRONIC));
+            Assert.assertEquals("70", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOOD_INSTRUMENTAL));
+            Assert.assertEquals("71", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TIMBRE));
+            Assert.assertEquals("72", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TONALITY));
+            Assert.assertEquals("Am", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("Orchestra", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA));
+            Assert.assertEquals("Part", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("Nigel Kennedy (violinist)", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER));
+            Assert.assertEquals("WorkType", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK_TYPE));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION_ID));
+            Assert.assertEquals("Composition Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_TYPE));
+            Assert.assertEquals("MusicBrainzWorkComposition",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_COMPOSITION));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94g",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94h",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94i",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94j",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94k",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_ID));
+            Assert.assertEquals("c1f657ba-8177-3cbb-b84a-f62bc684a94l",
+                                af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_ID));
+            Assert.assertEquals("Level1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1));
+            Assert.assertEquals("Level2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2));
+            Assert.assertEquals("Level3", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3));
+            Assert.assertEquals("Level4", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4));
+            Assert.assertEquals("Level5", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5));
+            Assert.assertEquals("Level6", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6));
+            Assert.assertEquals("Level1Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL1_TYPE));
+            Assert.assertEquals("Level2Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL2_TYPE));
+            Assert.assertEquals("Level3Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL3_TYPE));
+            Assert.assertEquals("Level4Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL4_TYPE));
+            Assert.assertEquals("Level5Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL5_TYPE));
+            Assert.assertEquals("Level6Type", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK_PART_LEVEL6_TYPE));
+            Assert.assertEquals("Work", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.WORK));
+            Assert.assertEquals("PartNumber", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PART_NUMBER));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("ConductorSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CONDUCTOR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("OrchestraSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ORCHESTRA_SORT));
+            Assert.assertEquals("ArrangerSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARRANGER_SORT));
+            Assert.assertEquals("Opus", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.OPUS));
+            Assert.assertEquals("Ranking", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.RANKING));
+            Assert.assertEquals("Choir", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR));
 
-            assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
-            assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
-            assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
-            assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
-            assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
-            assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
-            assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
-            assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
-            assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
-            assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
-            assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
-            assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
-            assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
-            assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
-            assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
-            assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
-            assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
-            assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
+            Assert.assertEquals("SingleDiscTrackNo", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.SINGLE_DISC_TRACK_NO));
+            Assert.assertEquals("Period", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERIOD));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_CLASSICAL));
+            Assert.assertEquals("true", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_SOUNDTRACK));
+            Assert.assertEquals("ChoirSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CHOIR_SORT));
+            Assert.assertEquals("EnsembleSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE_SORT));
+            Assert.assertEquals("PerformerName", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME));
+            Assert.assertEquals("PerformerNameSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.PERFORMER_NAME_SORT));
+            Assert.assertEquals("ensemble", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ENSEMBLE));
+            Assert.assertEquals("classicalcatalog", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_CATALOG));
+            Assert.assertEquals("classicalnickname", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CLASSICAL_NICKNAME));
+            Assert.assertEquals("Movement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT));
+            Assert.assertEquals("1", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_NO));
+            Assert.assertEquals("2", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MOVEMENT_TOTAL));
+            Assert.assertEquals("ArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTISTS_SORT));
+            Assert.assertEquals("AlbumArtists", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS));
+            Assert.assertEquals("AlbumArtistsSort", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTISTS_SORT));
+            Assert.assertEquals("TitleMovement", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE_MOVEMENT));
+            Assert.assertEquals("MusicBrainzWork", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_WORK));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 }

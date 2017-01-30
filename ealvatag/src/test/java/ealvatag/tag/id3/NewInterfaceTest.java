@@ -1,6 +1,6 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
@@ -55,12 +55,13 @@ public class NewInterfaceTest {
     }
 
     @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
     }
 
     @Test public void testBasicWrite() {
         Exception ex = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
+            File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
             AudioFile audioFile = AudioFileIO.read(testFile);
             ealvatag.tag.Tag newTag = audioFile.getTag().orNull();
             if (newTag == null) {
@@ -124,7 +125,7 @@ public class NewInterfaceTest {
 
     @Test public void testNewInterfaceBasicReadandWriteID3v1() throws Exception {
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v1.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v1.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Has no tag at this point
@@ -173,7 +174,7 @@ public class NewInterfaceTest {
 
     @Test public void testNewInterfaceBasicReadandWriteID3v24() throws Exception {
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v24.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v24.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Has no tag at this point
@@ -517,7 +518,7 @@ public class NewInterfaceTest {
     */
     @Test public void testNewInterfaceBasicReadandWriteID3v23() throws Exception {
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v23.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v23.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Has no tag at this point
@@ -756,7 +757,7 @@ public class NewInterfaceTest {
 
     @Test public void testNewInterfaceBasicReadandWriteID3v22() throws Exception {
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v22.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v22.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
         //Has no tag at this point
@@ -995,7 +996,7 @@ public class NewInterfaceTest {
      */
     @Test public void testSettingMultipleFramesofSameType() throws Exception {
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testSetMultiple.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testSetMultiple.mp3"));
         AudioFile af = AudioFileIO.read(testFile);
         MP3File mp3File = (MP3File)af;
         ID3v24Tag tag = new ID3v24Tag();
@@ -1142,7 +1143,7 @@ public class NewInterfaceTest {
         }
 
         Exception e = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test26.mp3");
+        File testFile = TestUtil.copyAudioToTmp("test26.mp3");
         MP3File mp3File = new MP3File(testFile);
 
 
@@ -1194,7 +1195,7 @@ public class NewInterfaceTest {
     @Test public void testGenres() {
         Exception ex = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
+            File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testBasicWrite.mp3"));
             AudioFile audioFile = AudioFileIO.read(testFile);
             ealvatag.tag.Tag newTag = audioFile.getTag().orNull();
             Assert.assertTrue(newTag == null);
@@ -1231,7 +1232,7 @@ public class NewInterfaceTest {
         }
 
         Exception exceptionCaught = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test30.mp3");
+        File testFile = TestUtil.copyAudioToTmp("test30.mp3");
         MP3File mp3file;
         try {
             mp3file = new MP3File(testFile);

@@ -1,47 +1,49 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
-/** Flac Reading
+/**
+ * Flac Reading
  */
-public class Issue274Test extends AbstractTestCase
-{
+public class Issue274Test {
+
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
 
     /**
      * Test Flac
      */
-    public void testReadFlac()
-    {
+    @Test public void testReadFlac() {
         File orig = new File("testdata", "test54.flac");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
         File testFile = null;
         Exception exceptionCaught = null;
-        try
-        {
-            testFile = AbstractTestCase.copyAudioToTmp("test54.flac");
+        try {
+            testFile = TestUtil.copyAudioToTmp("test54.flac");
 
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
 
 
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
 
     }
 

@@ -1,8 +1,9 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.audio.AudioFileFilter;
 import ealvatag.audio.AudioFileIO;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Date;
@@ -11,8 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Test hasField() methods
  */
-public class NetworkTest extends AbstractTestCase
-{
+public class NetworkTest {
     private static AtomicInteger count = new AtomicInteger(0);
     private void loadFiles(final File dir) throws Exception
     {
@@ -42,7 +42,7 @@ public class NetworkTest extends AbstractTestCase
         }
     }
 
-    public void testNetworkSpeed() throws Exception
+    @Test public void testNetworkSpeed() throws Exception
     {
         Exception caught = null;
         try
@@ -60,7 +60,7 @@ public class NetworkTest extends AbstractTestCase
             caught=e;
             e.printStackTrace();
         }
-        assertNull(caught);
+        Assert.assertNull(caught);
     }
 
     /*

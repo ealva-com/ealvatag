@@ -16,10 +16,15 @@ import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagOptionSingleton;
+import org.junit.After;
 
 import static junit.framework.TestCase.*;
 
 public class FilePermissionsTest {
+
+	@After public void tearDown() {
+		TestUtil.deleteTestDataTemp();
+	}
 
 	public static void runWriteWriteProtectedFileWithCheckDisabled(String sourceFile) throws Exception {
 		File testFile = createFile(sourceFile);
@@ -73,7 +78,7 @@ public class FilePermissionsTest {
 
 	private static File createFile(String sourceFile) {
 		String[] baseNameAndExt = sourceFile.split("\\.(?=[^\\.]+$)");
-		File testFile = AbstractTestCase
+		File testFile = TestUtil
 				.copyAudioToTmp(sourceFile, new File(baseNameAndExt[0] + "WriteProtected." + baseNameAndExt[1]));
 		return testFile;
 	}

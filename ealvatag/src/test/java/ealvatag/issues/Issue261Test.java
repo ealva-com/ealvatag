@@ -1,36 +1,39 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test read m4a without udta/meta atom
  */
-public class Issue261Test extends AbstractTestCase
-{
+public class Issue261Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
 
     /**
      * Test write mp4 ok without any udta/meta atoms
      */
-    public void testWriteMp4()
-    {
+    @Test public void testWriteMp4() {
         File orig = new File("testdata", "test45.m4a");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
         File testFile = null;
         Exception exceptionCaught = null;
-        try
-        {
-            testFile = AbstractTestCase.copyAudioToTmp("test45.m4a");
+        try {
+            testFile = TestUtil.copyAudioToTmp("test45.m4a");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -40,18 +43,15 @@ public class Issue261Test extends AbstractTestCase
             af.save();
 
             af = AudioFileIO.read(testFile);
-            assertEquals("2007",af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.YEAR));
+            Assert.assertEquals("2007", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.YEAR));
 
 
-
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught=e;
+            exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 }

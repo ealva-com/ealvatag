@@ -1,6 +1,6 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
@@ -10,14 +10,16 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v1Tag;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Testing that adding large artwork doesn't overwrite mp3 audio data
  */
-public class Issue374Test extends AbstractTestCase {
-    public void testIssue() throws Exception {
+public class Issue374Test {
+    @Test public void testIssue() throws Exception {
         File testdatadir = new File("testdata");
         int count = 0;
         for (File next : testdatadir.listFiles(new MP3FileFilter())) {
@@ -33,8 +35,8 @@ public class Issue374Test extends AbstractTestCase {
 
                 File
                         testFile =
-                        AbstractTestCase.copyAudioToTmp(next.getName(),
-                                                        new File(next.getName().substring(0, next.getName().length() - 4) +
+                        TestUtil.copyAudioToTmp(next.getName(),
+                                                new File(next.getName().substring(0, next.getName().length() - 4) +
                                                                          count +
                                                                          ".mp3"));
 
@@ -57,15 +59,15 @@ public class Issue374Test extends AbstractTestCase {
                 String s22 = String.valueOf(af.getAudioHeader().getTrackLength());
                 String s33 = String.valueOf(af.getAudioHeader().isVariableBitRate());
 
-                assertEquals(s1, s11);
-                assertEquals(s2, s22);
-                assertEquals(s3, s33);
-                assertTrue(af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COVER_ART).size() > 0);
+                Assert.assertEquals(s1, s11);
+                Assert.assertEquals(s2, s22);
+                Assert.assertEquals(s3, s33);
+                Assert.assertTrue(af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COVER_ART).size() > 0);
 
             } catch (Exception e) {
                 caught = e;
                 e.printStackTrace();
-                assertNull(caught);
+                Assert.assertNull(caught);
             }
         }
         System.out.println("Checked " + count + " files");

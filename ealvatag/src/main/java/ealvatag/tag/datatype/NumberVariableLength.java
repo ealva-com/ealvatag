@@ -191,7 +191,7 @@ public class NumberVariableLength extends AbstractDataType {
         //Read the bytes (starting from offset), the most significant byte of the number being constructed is read first,
         //we then shift the resulting long one byte over to make room for the next byte
         long lvalue = 0;
-        while (buffer.size() > 0) {
+        for (int i = 0, readSize = (int)Math.min(size, buffer.size()); i < readSize; i++) {
             lvalue <<= 8;
             lvalue += (buffer.readByte() & 0xff);
         }

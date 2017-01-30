@@ -1,94 +1,88 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3File;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * testing of reading compressed frames
  */
-public class FileClosingTest extends AbstractTestCase
-{
+public class FileClosingTest {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     /**
      * This tests checks files are closed after reading attempt
      */
-    public void testClosingFileAfterFailedRead()
-    {
+    @Test public void testClosingFileAfterFailedRead() {
         Exception exception = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("corrupt.mp3");
+        File testFile = TestUtil.copyAudioToTmp("corrupt.mp3");
 
         //Try and Read
-        try
-        {
+        try {
             MP3File mp3File = new MP3File(testFile);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exception = e;
         }
 
         //Error Should have occured
-        assertTrue(exception != null);
+        Assert.assertTrue(exception != null);
 
         //Should be able to deleteField
         boolean deleted = testFile.delete();
-        assertTrue(deleted);
+        Assert.assertTrue(deleted);
     }
 
     /**
      * This tests checks files are closed after succesful reading attempt
      */
-    public void testClosingFileAfterSuccessfulRead()
-    {
+    @Test public void testClosingFileAfterSuccessfulRead() {
         Exception exception = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
         //Try and Read
-        try
-        {
+        try {
             MP3File mp3File = new MP3File(testFile);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exception = e;
         }
 
         //No Error Should have occured
-        assertTrue(exception == null);
+        Assert.assertTrue(exception == null);
 
         //Should be able to deleteField
         boolean deleted = testFile.delete();
-        assertTrue(deleted);
+        Assert.assertTrue(deleted);
     }
 
     /**
      * This tests checks files are closed after failed reading attempt (read only)
      */
-    public void testClosingFileAfterFailedReadOnly()
-    {
+    @Test public void testClosingFileAfterFailedReadOnly() {
         Exception exception = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
         boolean readonly = testFile.setReadOnly();
-        assertTrue(readonly);
+        Assert.assertTrue(readonly);
 
         //Try and Read
-        try
-        {
+        try {
             MP3File mp3File = new MP3File(testFile);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exception = e;
         }
 
         //Error Should have occured
-        assertTrue(exception != null);
+        Assert.assertTrue(exception != null);
 
         //Should be able to deleteField
         boolean deleted = testFile.delete();
-        assertTrue(deleted);
+        Assert.assertTrue(deleted);
     }
 
 }

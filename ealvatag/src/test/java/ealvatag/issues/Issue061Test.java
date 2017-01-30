@@ -1,6 +1,5 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.audio.wav.WavOptions;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
@@ -12,12 +11,14 @@ import ealvatag.tag.mp4.Mp4Tag;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test
  */
-public class Issue061Test extends AbstractTestCase {
-    public void testMp3SetNull1() throws Exception {
+public class Issue061Test {
+    @Test public void testMp3SetNull1() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new ID3v23Tag();
@@ -26,10 +27,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testMp3SetNull2() throws Exception {
+    @Test public void testMp3SetNull2() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new ID3v23Tag();
@@ -38,10 +39,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testMp3SetFieldKeyNull() throws Exception {
+    @Test public void testMp3SetFieldKeyNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new ID3v23Tag();
@@ -50,10 +51,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetMp4Null() throws Exception {
+    @Test public void testSetMp4Null() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new Mp4Tag();
@@ -62,10 +63,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetFlacNull() throws Exception {
+    @Test public void testSetFlacNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new FlacTag();
@@ -74,10 +75,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetOggNull() throws Exception {
+    @Test public void testSetOggNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new VorbisCommentTag();
@@ -86,10 +87,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetAifNull() throws Exception {
+    @Test public void testSetAifNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new AiffTag();
@@ -99,10 +100,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetWavNull() throws Exception {
+    @Test public void testSetWavNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new WavTag(WavOptions.READ_ID3_ONLY);
@@ -112,10 +113,10 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetWavInfoNull() throws Exception {
+    @Test public void testSetWavInfoNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new WavTag(WavOptions.READ_INFO_ONLY);
@@ -125,11 +126,11 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertNotNull(ex);
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertNotNull(ex);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 
-    public void testSetWmaNull() throws Exception {
+    @Test public void testSetWmaNull() throws Exception {
         Exception ex = null;
         try {
             Tag tag = new AsfTag();
@@ -138,6 +139,6 @@ public class Issue061Test extends AbstractTestCase {
             e.printStackTrace();
             ex = e;
         }
-        assertTrue(ex instanceof IllegalArgumentException);
+        Assert.assertTrue(ex instanceof IllegalArgumentException);
     }
 }

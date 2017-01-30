@@ -1,6 +1,10 @@
 package ealvatag.audio.asf.data;
 
 import ealvatag.logging.ErrorMessage;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static ealvatag.TestUtil.assertErrorMessage;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -11,8 +15,7 @@ import java.util.List;
  *
  * @author Christian Laireiter
  */
-public class ContentDescriptionTest extends
-        AbstractMetadataContainer<ContentDescription> {
+public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDescription> {
 
     /**
      * {@inheritDoc}
@@ -53,7 +56,7 @@ public class ContentDescriptionTest extends
      */
     @Override
     protected ContentDescription[] createTestContainers() {
-        return new ContentDescription[] { new ContentDescription() };
+        return new ContentDescription[]{new ContentDescription()};
     }
 
     /**
@@ -61,22 +64,22 @@ public class ContentDescriptionTest extends
      * {@link ealvatag.audio.asf.data.ContentDescription#setAuthor(java.lang.String)}
      * .
      */
-    public void testSetAuthor() {
+    @Test public void testSetAuthor() {
         final ContentDescription chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getAuthor());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getAuthor());
         chunk.setAuthor("");
-        assertTrue(chunk.isEmpty());
+        Assert.assertTrue(chunk.isEmpty());
         chunk.setAuthor("author");
-        assertEquals("author", chunk.getAuthor());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("author", chunk.getAuthor());
+        Assert.assertFalse(chunk.isEmpty());
         try {
             chunk.setAuthor(AbstractChunk
-                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
-            fail("Exception expected");
+                                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
+            Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
             assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                    iae.getMessage());
+                               iae.getMessage());
         }
     }
 
@@ -85,22 +88,22 @@ public class ContentDescriptionTest extends
      * {@link ealvatag.audio.asf.data.ContentDescription#setComment(java.lang.String)}
      * .
      */
-    public void testSetComment() {
+    @Test public void testSetComment() {
         final ContentDescription chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getComment());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getComment());
         chunk.setComment("");
-        assertTrue(chunk.isEmpty());
+        Assert.assertTrue(chunk.isEmpty());
         chunk.setComment("comment");
-        assertEquals("comment", chunk.getComment());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("comment", chunk.getComment());
+        Assert.assertFalse(chunk.isEmpty());
         try {
             chunk.setComment(AbstractChunk
-                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
-            fail("Exception expected");
+                                     .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
+            Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
             assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                    iae.getMessage());
+                               iae.getMessage());
         }
     }
 
@@ -109,22 +112,22 @@ public class ContentDescriptionTest extends
      * {@link ealvatag.audio.asf.data.ContentDescription#setCopyright(java.lang.String)}
      * .
      */
-    public void testSetCopyRight() {
+    @Test public void testSetCopyRight() {
         final ContentDescription chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getCopyRight());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getCopyRight());
         chunk.setCopyright("");
-        assertTrue(chunk.isEmpty());
+        Assert.assertTrue(chunk.isEmpty());
         chunk.setCopyright("copyright");
-        assertEquals("copyright", chunk.getCopyRight());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("copyright", chunk.getCopyRight());
+        Assert.assertFalse(chunk.isEmpty());
         try {
             chunk.setCopyright(AbstractChunk
-                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
-            fail("Exception expected");
+                                       .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
+            Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
             assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                    iae.getMessage());
+                               iae.getMessage());
         }
     }
 
@@ -133,22 +136,22 @@ public class ContentDescriptionTest extends
      * {@link ealvatag.audio.asf.data.ContentDescription#setRating(java.lang.String)}
      * .
      */
-    public void testSetRating() {
+    @Test public void testSetRating() {
         final ContentDescription chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getRating());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getRating());
         chunk.setRating("");
-        assertTrue(chunk.isEmpty());
+        Assert.assertTrue(chunk.isEmpty());
         chunk.setRating("rating");
-        assertEquals("rating", chunk.getRating());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("rating", chunk.getRating());
+        Assert.assertFalse(chunk.isEmpty());
         try {
             chunk.setRating(AbstractChunk
-                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
-            fail("Exception expected");
+                                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
+            Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
             assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                    iae.getMessage());
+                               iae.getMessage());
         }
     }
 
@@ -157,22 +160,22 @@ public class ContentDescriptionTest extends
      * {@link ealvatag.audio.asf.data.ContentDescription#setTitle(java.lang.String)}
      * .
      */
-    public void testSetTitle() {
+    @Test public void testSetTitle() {
         final ContentDescription chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getTitle());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getTitle());
         chunk.setTitle("");
-        assertTrue(chunk.isEmpty());
+        Assert.assertTrue(chunk.isEmpty());
         chunk.setTitle("title");
-        assertEquals("title", chunk.getTitle());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("title", chunk.getTitle());
+        Assert.assertFalse(chunk.isEmpty());
         try {
             chunk.setTitle(AbstractChunk
-                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
-            fail("Exception expected");
+                                   .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
+            Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
             assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                    iae.getMessage());
+                               iae.getMessage());
         }
     }
 

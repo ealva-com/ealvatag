@@ -1,8 +1,9 @@
 package ealvatag.audio;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,13 +27,16 @@ public class AudioFileWriteAsTest {
     private File sourceFile;
 
     @Before public void setUp() throws Exception {
-        File orig = new File("testdata", "01.mp3");
         try {
-            sourceFile = AbstractTestCase.copyAudioToTmp(orig.getName());
+            sourceFile = TestUtil.copyAudioToTmp("01.mp3");
             af = AudioFileIO.read(sourceFile);
         } catch (Throwable e) {
             throw new RuntimeException("Can't setUp test.", e);
         }
+    }
+
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
     }
 
     @Test public void testWriteAs() throws Exception {

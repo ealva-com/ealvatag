@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Strings;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.InvalidDataTypeException;
@@ -366,50 +367,57 @@ import java.util.regex.Pattern;
 
     public void read(Buffer buffer) throws InvalidTagException, EOFException {
         final String fileName = getLoggingFilename();
-        String identifier = readIdentifier(buffer);
-        if (!isValidID3v2FrameIdentifier(identifier)) {
-            LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
-            throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
-        }
-        //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
-        frameSize = decodeSize(buffer);
+        try {
+            String identifier = readIdentifier(buffer);
+            if (!isValidID3v2FrameIdentifier(identifier)) {
+                LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
+                throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
+            }
+            //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
+            frameSize = decodeSize(buffer);
 
-        if (frameSize < 0) {
-            throw new InvalidFrameException(identifier + " has invalid size of:" + frameSize);
-        } else if (frameSize == 0) {
-            //We dont process this frame or add to framemap becuase contains no useful information
-            LOG.warn("Empty Frame:" + identifier);
-            throw new EmptyFrameException(identifier + " is empty frame");
-        } else if (frameSize > buffer.size()) {
-            LOG.warn("Invalid Frame size larger than size before mp3 audio:" + identifier);
-            throw new InvalidFrameException(identifier + " is invalid frame");
-        }
+            if (frameSize < 0) {
+                throw new InvalidFrameException(identifier + " has invalid size of:" + frameSize);
+            } else if (frameSize == 0) {
+                //We dont process this frame or add to framemap becuase contains no useful information
+                LOG.warn("Empty Frame:" + identifier);
+                throw new EmptyFrameException(identifier + " is empty frame");
+            } else if (frameSize > buffer.size()) {
+                LOG.warn("Invalid Frame size larger than size before mp3 audio:" + identifier);
+                throw new InvalidFrameException(identifier + " is invalid frame");
+            }
 
-        LOG.debug("Frame Size Is:" + frameSize);
+            LOG.debug("Frame Size Is:" + frameSize);
 
-        //Convert v2.2 to v2.4 id just for reading the data
-        String id = ID3Tags.convertFrameID22To24(identifier);
-        if (id == null) {
-            //OK,it may be convertable to a v.3 id even though not valid v.4
-            id = ID3Tags.convertFrameID22To23(identifier);
+            //Convert v2.2 to v2.4 id just for reading the data
+            String id = ID3Tags.convertFrameID22To24(identifier);
             if (id == null) {
-                // Is it a valid v22 identifier so should be able to find a
-                // frame body for it.
-                if (ID3Tags.isID3v22FrameIdentifier(identifier)) {
-                    id = identifier;
-                }
-                // Unknown so will be created as FrameBodyUnsupported
-                else {
-                    id = UNSUPPORTED_ID;
+                //OK,it may be convertable to a v.3 id even though not valid v.4
+                id = ID3Tags.convertFrameID22To23(identifier);
+                if (id == null) {
+                    // Is it a valid v22 identifier so should be able to find a
+                    // frame body for it.
+                    if (ID3Tags.isID3v22FrameIdentifier(identifier)) {
+                        id = identifier;
+                    }
+                    // Unknown so will be created as FrameBodyUnsupported
+                    else {
+                        id = UNSUPPORTED_ID;
+                    }
                 }
             }
+            LOG.debug("Identifier was:" + identifier + " reading using:" + id);
+
+            Buffer frameBodyBuffer = new Buffer();
+            buffer.readFully(frameBodyBuffer, frameSize); // maybe do this in other frame versions? Not very expensive
+
+            frameBody = readBody(id, frameBodyBuffer, frameSize);
+        }  catch (RuntimeException e) {
+            LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
+            throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +
+                                                    " not valid ID3v2.30 frame " + fileName,
+                                            e);
         }
-        LOG.debug("Identifier was:" + identifier + " reading using:" + id);
-
-        Buffer frameBodyBuffer = new Buffer();
-        buffer.readFully(frameBodyBuffer, frameSize); // maybe do this in other frame versions? Not very expensive
-
-        frameBody = readBody(id, frameBodyBuffer, frameSize);
     }
 
     /**

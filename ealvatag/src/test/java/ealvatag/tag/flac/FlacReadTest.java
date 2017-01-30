@@ -1,10 +1,11 @@
 package ealvatag.tag.flac;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.flac.FlacInfoReader;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,8 +15,12 @@ import java.io.File;
  * basic Flac tests
  */
 public class FlacReadTest {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     @Test public void testReadTwoChannelFile() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test2.flac", new File("test2read.flac"));
+        File testFile = TestUtil.copyAudioToTmp("test2.flac", new File("test2read.flac"));
         AudioFile f = AudioFileIO.read(testFile);
 
         Assert.assertEquals("192", f.getAudioHeader().getBitRate());
@@ -26,7 +31,7 @@ public class FlacReadTest {
     }
 
     @Test public void testReadSingleChannelFile() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test3.flac", new File("test3read.flac"));
+        File testFile = TestUtil.copyAudioToTmp("test3.flac", new File("test3read.flac"));
         AudioFile f = AudioFileIO.read(testFile);
 
         Assert.assertEquals("FLAC 8 bits", f.getAudioHeader().getEncodingType());
@@ -38,7 +43,7 @@ public class FlacReadTest {
 
     @Test(expected = CannotReadException.class)
     public void testNotFlac() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testV1noFlac.flac"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testV1noFlac.flac"));
         AudioFileIO.read(testFile);
     }
 
@@ -46,7 +51,7 @@ public class FlacReadTest {
      * Reading file that contains cuesheet
      */
     @Test public void testReadCueSheet() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test3.flac");
+        File testFile = TestUtil.copyAudioToTmp("test3.flac");
         AudioFile f = AudioFileIO.read(testFile);
         FlacInfoReader infoReader = new FlacInfoReader();
         Assert.assertEquals(5, infoReader.countMetaBlocks(f.getFile()));

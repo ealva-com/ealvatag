@@ -1,6 +1,7 @@
 package ealvatag.audio.asf.data;
 
-import ealvatag.AbstractTestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Locale;
 
@@ -9,19 +10,19 @@ import java.util.Locale;
  *
  * @author Christian Laireiter
  */
-public class GUIDTest extends AbstractTestCase {
+public class GUIDTest {
 
     /**
      * Test method for
      * {@link ealvatag.audio.asf.data.GUID#getConfigured(ealvatag.audio.asf.data.GUID)}
      * .
      */
-    public void testGetConfigured() {
+    @Test public void testGetConfigured() {
         for (GUID curr : GUID.KNOWN_GUIDS) {
             // Loose all information except GUID raw data
             GUID newOne = new GUID(curr.getBytes());
             // assert that the configured GUID instance is returned.
-            assertSame(curr, GUID.getConfigured(newOne));
+            Assert.assertSame(curr, GUID.getConfigured(newOne));
         }
     }
 
@@ -29,34 +30,34 @@ public class GUIDTest extends AbstractTestCase {
      * Test method for
      * {@link ealvatag.audio.asf.data.GUID#parseGUID(java.lang.String)}.
      */
-    public void testParseGUID() {
+    @Test public void testParseGUID() {
         for (GUID curr : GUID.KNOWN_GUIDS) {
-            assertSame(curr, GUID
+            Assert.assertSame(curr, GUID
                     .getConfigured(GUID.parseGUID(curr.toString())));
         }
         final String toParse = "f8699e40-5b4d-11cf-a8fd-00805f5c442b";
         GUID parsed = GUID.parseGUID(toParse);
-        assertEquals(GUID.GUID_AUDIOSTREAM, parsed);
+        Assert.assertEquals(GUID.GUID_AUDIOSTREAM, parsed);
         parsed = GUID.parseGUID(toParse.toUpperCase(Locale.getDefault()));
-        assertEquals(GUID.GUID_AUDIOSTREAM, parsed);
+        Assert.assertEquals(GUID.GUID_AUDIOSTREAM, parsed);
     }
 
     /**
      * Test method for {@link ealvatag.audio.asf.data.GUID#toString()}.
      */
-    public void testToString() {
-        assertEquals("f8699e40-5b4d-11cf-a8fd-00805f5c442b",
-                GUID.GUID_AUDIOSTREAM.toString());
+    @Test public void testToString() {
+        Assert.assertEquals("f8699e40-5b4d-11cf-a8fd-00805f5c442b",
+                            GUID.GUID_AUDIOSTREAM.toString());
     }
 
     /**
      * This method tests creation attempts of invalid GUIDs.<br>
      */
-    public void testFailures() {
+    @Test public void testFailures() {
         try {
             new GUID(new byte[0]);
-            fail ("Exception expected");
-        } catch (IllegalArgumentException iae){
+            Assert.fail("Exception expected");
+        } catch (IllegalArgumentException iae) {
             // expected
         }
     }

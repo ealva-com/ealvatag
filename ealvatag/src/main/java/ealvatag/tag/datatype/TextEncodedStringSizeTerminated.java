@@ -119,6 +119,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
 
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         try {
+            final long bufferStartSize = buffer.size();
             Charset decoder = getCorrectDecoder(buffer);
             String outBuffer = buffer.readString(size, decoder);
 
@@ -129,7 +130,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
             } else {
                 value = outBuffer;
             }
-            setSize(value.toString().length());
+            setSize((int)(bufferStartSize - buffer.size()));
         } catch (IllegalCharsetException e) {
             throw new InvalidDataTypeException("Bad charset id", e);
         }

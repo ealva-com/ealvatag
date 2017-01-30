@@ -1,9 +1,12 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.id3.framebody.FrameBodyWXXX;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -12,8 +15,7 @@ import java.net.URLEncoder;
 /**
  * Test WXXX Frame
  */
-public class FrameWXXXTest extends AbstractTestCase
-{
+public class FrameWXXXTest {
     public static final String NORMAL_LINK = "http:www.btinternet.com/~birdpoo/kots.htm";
 
     //Note cant put Japanese chars directly into code because the source code is not a UTF8 file
@@ -23,12 +25,10 @@ public class FrameWXXXTest extends AbstractTestCase
     public static final String UNICODE_LINK = "http://ja.wikipedia.com/wiki/\u5742\u672c\u4e5d";
 
 
-     /**
-      *
-      */
-     protected void tearDown()
-     {
-     }
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
 
     public static ID3v24Frame getInitialisedFrame()
     {
@@ -57,7 +57,7 @@ public class FrameWXXXTest extends AbstractTestCase
         return frame;
     }
 
-    public void testCreateID3v24Frame()
+    @Test public void testCreateID3v24Frame()
     {
         Exception exceptionCaught = null;
         ID3v24Frame frame = null;
@@ -69,18 +69,18 @@ public class FrameWXXXTest extends AbstractTestCase
         {
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
-        assertTrue(frame.getBody() instanceof FrameBodyWXXX);
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
-        assertEquals(NORMAL_LINK, ((FrameBodyWXXX) frame.getBody()).getUrlLink());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertTrue(frame.getBody() instanceof FrameBodyWXXX);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertEquals(NORMAL_LINK, ((FrameBodyWXXX)frame.getBody()).getUrlLink());
     }
 
-    public void testSaveToFile() throws Exception
+    @Test public void testSaveToFile() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -92,15 +92,15 @@ public class FrameWXXXTest extends AbstractTestCase
         //Reload
         mp3File = new MP3File(testFile);
         ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_USER_DEFINED_URL);
-        assertTrue(frame.getBody() instanceof FrameBodyWXXX);
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
-        assertEquals(NORMAL_LINK, ((FrameBodyWXXX) frame.getBody()).getUrlLink());
+        Assert.assertTrue(frame.getBody() instanceof FrameBodyWXXX);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertEquals(NORMAL_LINK, ((FrameBodyWXXX)frame.getBody()).getUrlLink());
     }
 
-    public void testCreateID3v24UnicodeFrame()
+    @Test public void testCreateID3v24UnicodeFrame()
     {
         Exception exceptionCaught = null;
         ID3v24Frame frame = null;
@@ -112,13 +112,13 @@ public class FrameWXXXTest extends AbstractTestCase
         {
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
-        assertTrue(frame.getBody() instanceof FrameBodyWXXX);
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
-        assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX) frame.getBody()).getUrlLink());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertTrue(frame.getBody() instanceof FrameBodyWXXX);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX)frame.getBody()).getUrlLink());
     }
 
     /**
@@ -126,9 +126,9 @@ public class FrameWXXXTest extends AbstractTestCase
      *
      * @throws Exception
      */
-    public void testSaveUnicodeToFile() throws Exception
+    @Test public void testSaveUnicodeToFile() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -140,12 +140,12 @@ public class FrameWXXXTest extends AbstractTestCase
         //Reload
         mp3File = new MP3File(testFile);
         ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_USER_DEFINED_URL);
-        assertTrue(frame.getBody() instanceof FrameBodyWXXX);
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
-        assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX) frame.getBody()).getUrlLink());
+        Assert.assertTrue(frame.getBody() instanceof FrameBodyWXXX);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX)frame.getBody()).getUrlLink());
     }
 
     /**
@@ -153,9 +153,9 @@ public class FrameWXXXTest extends AbstractTestCase
      *
      * @throws Exception
      */
-    public void testSaveUnicodeToFile2() throws Exception
+    @Test public void testSaveUnicodeToFile2() throws Exception
     {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -167,16 +167,16 @@ public class FrameWXXXTest extends AbstractTestCase
         //Reload
         mp3File = new MP3File(testFile);
         ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_USER_DEFINED_URL);
-        assertTrue(frame.getBody() instanceof FrameBodyWXXX);
-        assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
-        assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX) frame.getBody()).getUrlLink());
+        Assert.assertTrue(frame.getBody() instanceof FrameBodyWXXX);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, frame.getBody().getTextEncoding());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertEquals(UNICODE_ENCODED, ((FrameBodyWXXX)frame.getBody()).getUrlLink());
     }
 
 
-    public void testEncodeURL() throws UnsupportedEncodingException
+    @Test public void testEncodeURL() throws UnsupportedEncodingException
     {
         String url = UNICODE_LINK;
         final String[] splitURL = url.split("(?<!/)/(?!/)", -1);
@@ -185,7 +185,7 @@ public class FrameWXXXTest extends AbstractTestCase
         {
             sb.append("/").append(URLEncoder.encode(splitURL[i], "utf-8"));
         }
-        assertEquals(UNICODE_ENCODED, sb.toString());
+        Assert.assertEquals(UNICODE_ENCODED, sb.toString());
     }
 
 }

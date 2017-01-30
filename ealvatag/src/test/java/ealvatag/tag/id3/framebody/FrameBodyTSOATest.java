@@ -1,14 +1,14 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test TSOAFrameBody
  */
-public class FrameBodyTSOATest extends AbstractTestCase
-{
+public class FrameBodyTSOATest {
     public static final String ALBUM_SORT = "albumsort";
 
     public static FrameBodyTSOA getInitialisedBody()
@@ -18,7 +18,7 @@ public class FrameBodyTSOATest extends AbstractTestCase
         return fb;
     }
 
-    public void testCreateFrameBody()
+    @Test public void testCreateFrameBody()
     {
         Exception exceptionCaught = null;
         FrameBodyTSOA fb = null;
@@ -31,14 +31,14 @@ public class FrameBodyTSOATest extends AbstractTestCase
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
 
     }
 
-    public void testCreateFrameBodyEmptyConstructor()
+    @Test public void testCreateFrameBodyEmptyConstructor()
     {
         Exception exceptionCaught = null;
         FrameBodyTSOA fb = null;
@@ -52,10 +52,10 @@ public class FrameBodyTSOATest extends AbstractTestCase
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_ALBUM_SORT_ORDER, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyTSOATest.ALBUM_SORT, fb.getText());
 
     }
 

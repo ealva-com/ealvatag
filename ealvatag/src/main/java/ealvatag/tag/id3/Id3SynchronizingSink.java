@@ -38,7 +38,7 @@ import java.io.IOException;
     private boolean lastByteWasFF = false;
     private BufferedSink sink;
 
-    public static final Buffer synchronizeBuffer(Buffer buffer) throws IOException {
+    public static Buffer synchronizeBuffer(Buffer buffer) throws IOException {
         Buffer syncBuffer = new Buffer();
         final Id3SynchronizingSink sink = new Id3SynchronizingSink(syncBuffer);
         buffer.readAll(sink);

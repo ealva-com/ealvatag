@@ -1,8 +1,6 @@
 package ealvatag.tag.mp4;
 
-import ealvatag.tag.NullTag;
-import junit.framework.TestCase;
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -13,12 +11,16 @@ import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.mp4.field.Mp4FieldType;
 import ealvatag.tag.mp4.field.Mp4TagCoverField;
 import ealvatag.tag.mp4.field.Mp4TagTextNumberField;
 import ealvatag.utils.tree.DefaultMutableTreeNode;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +33,11 @@ import java.util.List;
  *
  * @author <a href="mailto:hs@tagtraum.com">Hendrik Schreiber</a>
  */
-public class Mp4StemWriteTagTest extends TestCase {
+public class Mp4StemWriteTagTest {
 
     private static final int TEST_FILE1_SIZE = 1450197;
 
-    @Override
-    public void setUp()
-    {
+    @Before public void setUp() {
         TagOptionSingleton.getInstance().setToDefault();
     }
 
@@ -45,15 +45,16 @@ public class Mp4StemWriteTagTest extends TestCase {
      * Test to write tag data, new tagdata is a larger size than existing data, and too
      * large to fit into the space already allocated to {@code meta} ({@code ilst} + {@code free} atom).
      */
-    public void testWriteOneFieldALotLargerSize() throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, CannotWriteException {
+    @Test public void testWriteOneFieldALotLargerSize()
+            throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, CannotWriteException {
 
-        final File testFile = AbstractTestCase.copyAudioToTmp("test.stem.mp4", new File("testWriteOneFieldALotLarger.stem.mp4"));
+        final File testFile = TestUtil.copyAudioToTmp("test.stem.mp4", new File("testWriteOneFieldALotLarger.stem.mp4"));
 
         final Mp4AtomTree treeBefore = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         final List<Mp4StcoBox> beforeStcos = treeBefore.getStcos();
         System.out.println("Chunk Offsets before (stco atoms): " + beforeStcos.size());
         // verify that all five tracks were recognized
-        assertEquals(5, beforeStcos.size());
+        Assert.assertEquals(5, beforeStcos.size());
         int freeSpace = 0;
         for (final DefaultMutableTreeNode node : treeBefore.getFreeNodes()) {
             freeSpace += ((Mp4BoxHeader)node.getUserObject()).getDataLength();
@@ -70,16 +71,18 @@ public class Mp4StemWriteTagTest extends TestCase {
         final Mp4AtomTree treeAfter = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         final List<Mp4StcoBox> afterStcos = treeAfter.getStcos();
         System.out.println("Chunk Offsets after (stco atoms): " + afterStcos.size());
-        assertEquals(beforeStcos.size(), afterStcos.size());
+        Assert.assertEquals(beforeStcos.size(), afterStcos.size());
 
         // verify constant shift
         int shift = -1;
-        for (int i=0; i<beforeStcos.size(); i++) {
+        for (int i = 0; i < beforeStcos.size(); i++) {
             final Mp4StcoBox before = beforeStcos.get(i);
             final Mp4StcoBox after = afterStcos.get(i);
-            if (shift == -1) shift = getOffsetShift(before, after);
-            assertFalse(0 == shift);
-            assertEquals(shift, getOffsetShift(before, after));
+            if (shift == -1) {
+                shift = getOffsetShift(before, after);
+            }
+            Assert.assertFalse(0 == shift);
+            Assert.assertEquals(shift, getOffsetShift(before, after));
         }
     }
 
@@ -92,73 +95,69 @@ public class Mp4StemWriteTagTest extends TestCase {
      * large to fit into the space already allocated to meta (ilst + free atom), but can fit into
      * the second free atom.
      */
-    public void testWriteFileAlotLargerSize()
-    {
+    @Test public void testWriteFileAlotLargerSize() {
         Exception exceptionCaught = null;
-        try
-        {
-            final File testFile = AbstractTestCase.copyAudioToTmp("test.stem.mp4", new File("testWriteFileALot.stem.mp4"));
+        try {
+            final File testFile = TestUtil.copyAudioToTmp("test.stem.mp4", new File("testWriteFileALot.stem.mp4"));
 
             //Starting filesize
-            assertEquals(TEST_FILE1_SIZE, testFile.length());
+            Assert.assertEquals(TEST_FILE1_SIZE, testFile.length());
 
             AudioFile f = AudioFileIO.read(testFile);
-            Mp4Tag tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
+            Mp4Tag tag = (Mp4Tag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart_small.png"), "r");
-            byte[] imagedata = new byte[(int) imageFile.length()];
+            byte[] imagedata = new byte[(int)imageFile.length()];
             imageFile.read(imagedata);
             tag.addField(tag.createArtworkField(imagedata));
 
             //Save changes and reread from disk
             f.save();
             f = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) f.getTag().or(NullTag.INSTANCE);
+            tag = (Mp4Tag)f.getTag().or(NullTag.INSTANCE);
 
             //Total FileSize must be larger, as the free atom in meta is only 844 big
-            assertEquals(1450641, testFile.length());
+            Assert.assertEquals(1450641, testFile.length());
 
             //AudioInfo
             //Time in seconds
-            assertEquals(13, f.getAudioHeader().getTrackLength());
-            assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(13, f.getAudioHeader().getTrackLength());
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
 
             //Ease of use methods for common fields
-            assertEquals("tagtraum", tag.getFirst(FieldKey.ARTIST));
-            assertEquals("stem_test_track", tag.getFirst(FieldKey.TITLE));
-            assertEquals("1", tag.getFirst(FieldKey.TRACK));
-            assertEquals("1", tag.getFirst(FieldKey.TRACK_TOTAL));
+            Assert.assertEquals("tagtraum", tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals("stem_test_track", tag.getFirst(FieldKey.TITLE));
+            Assert.assertEquals("1", tag.getFirst(FieldKey.TRACK));
+            Assert.assertEquals("1", tag.getFirst(FieldKey.TRACK_TOTAL));
 
             //Lookup by mp4 key
-            assertEquals("tagtraum", tag.getFirst(Mp4FieldKey.ARTIST));
-            assertEquals("stem_test_track", tag.getFirst(Mp4FieldKey.TITLE));
+            Assert.assertEquals("tagtraum", tag.getFirst(Mp4FieldKey.ARTIST));
+            Assert.assertEquals("stem_test_track", tag.getFirst(Mp4FieldKey.TITLE));
             //Not sure why there are 4 values, only understand 2nd and third
-            assertEquals("1/1", tag.getFirst(Mp4FieldKey.TRACK));
-            assertEquals(new Short("0"), ((Mp4TagTextNumberField) tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            assertEquals(new Short("1"), ((Mp4TagTextNumberField) tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            assertEquals(new Short("1"), ((Mp4TagTextNumberField) tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            assertEquals(new Short("0"), ((Mp4TagTextNumberField) tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals("1/1", tag.getFirst(Mp4FieldKey.TRACK));
+            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
 
             List coverart = tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
-            assertEquals(1, coverart.size());
+            Assert.assertEquals(1, coverart.size());
 
-            Mp4TagCoverField coverArtField = (Mp4TagCoverField) coverart.get(0);
+            Mp4TagCoverField coverArtField = (Mp4TagCoverField)coverart.get(0);
             //Check type png
-            assertEquals(Mp4FieldType.COVERART_PNG, coverArtField.getFieldType());
+            Assert.assertEquals(Mp4FieldType.COVERART_PNG, coverArtField.getFieldType());
             //Just check png signature
-            assertEquals(0x89, coverArtField.getData()[0] & 0xff);
-            assertEquals(0x50, coverArtField.getData()[1] & 0xff);
-            assertEquals(0x4e, coverArtField.getData()[2] & 0xff);
-            assertEquals(0x47, coverArtField.getData()[3] & 0xff);
+            Assert.assertEquals(0x89, coverArtField.getData()[0] & 0xff);
+            Assert.assertEquals(0x50, coverArtField.getData()[1] & 0xff);
+            Assert.assertEquals(0x4e, coverArtField.getData()[2] & 0xff);
+            Assert.assertEquals(0x47, coverArtField.getData()[3] & 0xff);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 }

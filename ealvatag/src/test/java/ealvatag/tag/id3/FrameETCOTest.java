@@ -1,12 +1,15 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.id3.framebody.FrameBodyETCO;
 import ealvatag.tag.id3.framebody.FrameBodyETCOTest;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +20,13 @@ import java.util.Map;
 /**
  * Testing Etco (Issue 187)
  */
-public class FrameETCOTest extends AbstractTestCase
-{
+public class FrameETCOTest {
 
-    public static ID3v24Frame getInitialisedFrame()
-    {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    private static ID3v24Frame getInitialisedFrame() {
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
         FrameBodyETCO fb = FrameBodyETCOTest.getInitialisedBody();
         frame.setBody(fb);
@@ -33,68 +38,63 @@ public class FrameETCOTest extends AbstractTestCase
      *
      * @throws Exception
      */
-    public void testReadFile() throws Exception
-    {
+    @Test public void testReadFile() throws Exception {
         File orig = new File("testdata", "test20.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             return;
         }
         Exception exceptionCaught = null;
-        try
-        {
-            File testFile = AbstractTestCase.copyAudioToTmp("test20.mp3");
+        try {
+            File testFile = TestUtil.copyAudioToTmp("test20.mp3");
             AudioFile f = AudioFileIO.read(testFile);
-            final ID3v23Frame frame = ((ID3v23Frame) ((ID3v23Tag) f.getTag().or(NullTag.INSTANCE)).getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES));
-            FrameBodyETCO body = (FrameBodyETCO) frame.getBody();
-            assertEquals(2, body.getTimestampFormat());
-            assertEquals(1, body.getTimingCodes().size());
+            final ID3v23Frame
+                    frame =
+                    ((ID3v23Frame)((ID3v23Tag)f.getTag().or(NullTag.INSTANCE)).getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES));
+            FrameBodyETCO body = (FrameBodyETCO)frame.getBody();
+            Assert.assertEquals(2, body.getTimestampFormat());
+            Assert.assertEquals(1, body.getTimingCodes().size());
             final Map.Entry<Long, int[]> entry = body.getTimingCodes().entrySet().iterator().next();
-            assertEquals(224, entry.getValue()[0]);
-            assertEquals(56963L, (long)entry.getKey());
-        }
-        catch (IOException e)
-        {
+            Assert.assertEquals(224, entry.getValue()[0]);
+            Assert.assertEquals(56963L, (long)entry.getKey());
+        } catch (IOException e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
-    public void testSaveToFile() throws Exception
-    {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+    @Test public void testSaveToFile() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
         ID3v24Tag tag = new ID3v24Tag();
         final ID3v24Frame referenceFrame = FrameETCOTest.getInitialisedFrame();
-        final FrameBodyETCO referenceBody = (FrameBodyETCO) referenceFrame.getBody();
+        final FrameBodyETCO referenceBody = (FrameBodyETCO)referenceFrame.getBody();
         tag.setFrame(referenceFrame);
         mp3File.setID3v2Tag(tag);
         mp3File.saveMp3();
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
-        FrameBodyETCO body = (FrameBodyETCO) frame.getBody();
-        assertEquals(referenceBody.getTimestampFormat(), body.getTimestampFormat());
+        ID3v24Frame frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
+        FrameBodyETCO body = (FrameBodyETCO)frame.getBody();
+        Assert.assertEquals(referenceBody.getTimestampFormat(), body.getTimestampFormat());
 
-        final Iterator<Map.Entry<Long,int[]>> reference = referenceBody.getTimingCodes().entrySet().iterator();
-        final Iterator<Map.Entry<Long,int[]>> loaded = body.getTimingCodes().entrySet().iterator();
+        final Iterator<Map.Entry<Long, int[]>> reference = referenceBody.getTimingCodes().entrySet().iterator();
+        final Iterator<Map.Entry<Long, int[]>> loaded = body.getTimingCodes().entrySet().iterator();
         while (reference.hasNext() && loaded.hasNext()) {
             final Map.Entry<Long, int[]> refEntry = reference.next();
             final Map.Entry<Long, int[]> loadedEntry = loaded.next();
-            assertEquals(refEntry.getKey(), loadedEntry.getKey());
-            assertTrue(Arrays.equals(refEntry.getValue(), loadedEntry.getValue()));
+            Assert.assertEquals(refEntry.getKey(), loadedEntry.getKey());
+            Assert.assertTrue(Arrays.equals(refEntry.getValue(), loadedEntry.getValue()));
         }
-        assertFalse(reference.hasNext());
-        assertFalse(loaded.hasNext());
+        Assert.assertFalse(reference.hasNext());
+        Assert.assertFalse(loaded.hasNext());
     }
 
-    public void testSaveEmptyFrameToFile() throws Exception
-    {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+    @Test public void testSaveEmptyFrameToFile() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
@@ -109,9 +109,9 @@ public class FrameETCOTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
-        FrameBodyETCO body = (FrameBodyETCO) frame.getBody();
-        assertEquals(referenceBody.getTimestampFormat(), body.getTimestampFormat());
-        assertEquals(referenceBody.getTimingCodes(), body.getTimingCodes());
+        frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES);
+        FrameBodyETCO body = (FrameBodyETCO)frame.getBody();
+        Assert.assertEquals(referenceBody.getTimestampFormat(), body.getTimestampFormat());
+        Assert.assertEquals(referenceBody.getTimingCodes(), body.getTimingCodes());
     }
 }

@@ -1,54 +1,55 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3AudioHeader;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.audio.mp3.MPEGFrameHeader;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test reading Version 2 Layer III file correctly
  */
-public class Issue028Test extends AbstractTestCase
-{
-    public void testReadV2L3Stereo()
-    {
+public class Issue028Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testReadV2L3Stereo() {
         File orig = new File("testdata", "test97.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
 
         Exception exceptionCaught = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test97.mp3");
+        File testFile = TestUtil.copyAudioToTmp("test97.mp3");
         MP3AudioHeader mp3AudioHeader = null;
-        try
-        {
+        try {
             mp3AudioHeader = new MP3File(testFile).getMP3AudioHeader();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
-        assertEquals("22050", mp3AudioHeader.getSampleRate());
-        assertEquals("08:06", mp3AudioHeader.getTrackLengthAsString());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals("22050", mp3AudioHeader.getSampleRate());
+        Assert.assertEquals("08:06", mp3AudioHeader.getTrackLengthAsString());
         //TODO This is incorrect but same as Winamp, the correct value is 4:37 probably
         //http://java.net/jira/browse/JAUDIOTAGGER-453
-        assertFalse(mp3AudioHeader.isVariableBitRate());
-        assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_2)), mp3AudioHeader.getMpegVersion());
-        assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
-        assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_JOINT_STEREO)), mp3AudioHeader.getChannels());
-        assertFalse(mp3AudioHeader.isOriginal());
-        assertFalse(mp3AudioHeader.isCopyrighted());
-        assertFalse(mp3AudioHeader.isPrivate());
-        assertFalse(mp3AudioHeader.isProtected());
-        assertEquals("32", mp3AudioHeader.getBitRate());
-        assertEquals("mp3", mp3AudioHeader.getEncodingType());
+        Assert.assertFalse(mp3AudioHeader.isVariableBitRate());
+        Assert.assertEquals(MPEGFrameHeader.mpegVersionMap.get(new Integer(MPEGFrameHeader.VERSION_2)), mp3AudioHeader.getMpegVersion());
+        Assert.assertEquals(MPEGFrameHeader.mpegLayerMap.get(new Integer(MPEGFrameHeader.LAYER_III)), mp3AudioHeader.getMpegLayer());
+        Assert.assertEquals(MPEGFrameHeader.modeMap.get(new Integer(MPEGFrameHeader.MODE_JOINT_STEREO)), mp3AudioHeader.getChannels());
+        Assert.assertFalse(mp3AudioHeader.isOriginal());
+        Assert.assertFalse(mp3AudioHeader.isCopyrighted());
+        Assert.assertFalse(mp3AudioHeader.isPrivate());
+        Assert.assertFalse(mp3AudioHeader.isProtected());
+        Assert.assertEquals("32", mp3AudioHeader.getBitRate());
+        Assert.assertEquals("mp3", mp3AudioHeader.getEncodingType());
 
     }
 }

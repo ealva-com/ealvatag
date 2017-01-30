@@ -1,60 +1,51 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.tag.id3.ID3v22Frames;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test PICFrameBody
  */
-public class FrameBodyPICTest extends AbstractTestCase
-{
+public class FrameBodyPICTest {
     public static String DESCRIPTION = "ImageTestv22";
 
-    public static FrameBodyPIC getInitialisedBody()
-    {
+    public static FrameBodyPIC getInitialisedBody() {
         FrameBodyPIC fb = new FrameBodyPIC();
         fb.setDescription(FrameBodyPICTest.DESCRIPTION);
         return fb;
     }
 
 
-    public void testCreateFrameBody()
-    {
+    @Test public void testCreateFrameBody() {
         Exception exceptionCaught = null;
         FrameBodyPIC fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyPIC();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
-        assertTrue(fb.getDescription() == null);
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
+        Assert.assertTrue(fb.getDescription() == null);
 
     }
 
-    public void testCreateFrameBodyEmptyConstructor()
-    {
+    @Test public void testCreateFrameBodyEmptyConstructor() {
 
         Exception exceptionCaught = null;
         FrameBodyPIC fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyPIC();
             fb.setDescription(FrameBodyPICTest.DESCRIPTION);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
-        assertEquals(FrameBodyPICTest.DESCRIPTION, fb.getDescription());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE, fb.getIdentifier());
+        Assert.assertEquals(FrameBodyPICTest.DESCRIPTION, fb.getDescription());
 
 
     }

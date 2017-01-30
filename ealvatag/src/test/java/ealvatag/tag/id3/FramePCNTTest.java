@@ -1,76 +1,72 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.id3.framebody.FrameBodyPCNT;
 import ealvatag.tag.id3.framebody.FrameBodyPCNTTest;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test PCNTFrameBody
  */
-public class FramePCNTTest extends AbstractTestCase
-{
-    public static ID3v24Frame getInitialisedFrame()
-    {
+public class FramePCNTTest {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    private static ID3v24Frame getInitialisedFrame() {
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
         FrameBodyPCNT fb = FrameBodyPCNTTest.getInitialisedBody();
         frame.setBody(fb);
         return frame;
     }
 
-    public void testCreateID3v24Frame()
-    {
+    @Test public void testCreateID3v24Frame() {
         Exception exceptionCaught = null;
         ID3v24Frame frame = null;
         FrameBodyPCNT fb = null;
-        try
-        {
+        try {
             frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
             fb = FrameBodyPCNTTest.getInitialisedBody();
             frame.setBody(fb);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, ((FrameBodyPCNT) frame.getBody()).getCounter());
-        assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
-        assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, ((FrameBodyPCNT)frame.getBody()).getCounter());
+        Assert.assertFalse(ID3v24Frames.getInstanceOf().isExtensionFrames(frame.getIdentifier()));
+        Assert.assertTrue(ID3v24Frames.getInstanceOf().isSupportedFrames(frame.getIdentifier()));
     }
 
 
-    public void testCreateID3v23Frame()
-    {
+    @Test public void testCreateID3v23Frame() {
         Exception exceptionCaught = null;
         ID3v23Frame frame = null;
         FrameBodyPCNT fb = null;
-        try
-        {
+        try {
             frame = new ID3v23Frame(ID3v23Frames.FRAME_ID_V3_PLAY_COUNTER);
             fb = FrameBodyPCNTTest.getInitialisedBody();
             frame.setBody(fb);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_PLAY_COUNTER, frame.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, ((FrameBodyPCNT) frame.getBody()).getCounter());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v23Frames.FRAME_ID_V3_PLAY_COUNTER, frame.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, ((FrameBodyPCNT)frame.getBody()).getCounter());
     }
 
-    public void testSaveToFile() throws Exception
-    {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+    @Test public void testSaveToFile() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create and Save
@@ -81,15 +77,14 @@ public class FramePCNTTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        ID3v24Frame frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
-        FrameBodyPCNT body = (FrameBodyPCNT) frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, body.getCounter());
+        ID3v24Frame frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
+        FrameBodyPCNT body = (FrameBodyPCNT)frame.getBody();
+        Assert.assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
+        Assert.assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, body.getCounter());
     }
 
-    public void testSaveEmptyFrameToFile() throws Exception
-    {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+    @Test public void testSaveEmptyFrameToFile() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
@@ -103,9 +98,9 @@ public class FramePCNTTest extends AbstractTestCase
 
         //Reload
         mp3File = new MP3File(testFile);
-        frame = (ID3v24Frame) mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
-        FrameBodyPCNT body = (FrameBodyPCNT) frame.getBody();
-        assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
-        assertEquals(0, body.getCounter());
+        frame = (ID3v24Frame)mp3File.getID3v2Tag().getFrame(ID3v24Frames.FRAME_ID_PLAY_COUNTER);
+        FrameBodyPCNT body = (FrameBodyPCNT)frame.getBody();
+        Assert.assertEquals(TextEncoding.ISO_8859_1, body.getTextEncoding());
+        Assert.assertEquals(0, body.getCounter());
     }
 }

@@ -1,5 +1,8 @@
 package ealvatag.audio.asf.data;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,7 +44,7 @@ public class ChunkContainerTest extends AbstractChunk<ChunkContainer> {
      * {@link ealvatag.audio.asf.data.ChunkContainer#addChunk(ealvatag.audio.asf.data.Chunk)}
      * .
      */
-    public void testAddChunk() {
+    @Test public void testAddChunk() {
         final ChunkContainer container = createFilledChunk();
         long position = container.getChunks().size() + 1;
         for (GUID curr : GUID.KNOWN_GUIDS) {
@@ -49,37 +52,37 @@ public class ChunkContainerTest extends AbstractChunk<ChunkContainer> {
                 container
                         .addChunk(new Chunk(curr, position++, BigInteger.ZERO));
                 if (!curr.equals(GUID.GUID_STREAM)) {
-                    fail("Only stream chunks may be added multiple times.");
+                    Assert.fail("Only stream chunks may be added multiple times.");
                 }
             } catch (IllegalArgumentException iae) {
                 // expected
             }
         }
-        assertTrue(ChunkContainer.chunkstartsUnique(container));
+        Assert.assertTrue(ChunkContainer.chunkstartsUnique(container));
         try {
             container.addChunk(new Chunk(GUID.GUID_STREAM, 0, BigInteger.ZERO));
         } catch (AssertionError ae) {
             // expected, if assertions enabled
         }
-        assertFalse(ChunkContainer.chunkstartsUnique(container));
+        Assert.assertFalse(ChunkContainer.chunkstartsUnique(container));
     }
 
     /**
      * Test method for
      * {@link ealvatag.audio.asf.data.ChunkContainer#getChunks()}.
      */
-    public void testGetChunks() {
+    @Test public void testGetChunks() {
         /*
          * We know createFilledChunk(), so we work with all GUIDs
          */
         final ChunkContainer container = createFilledChunk();
         final Collection<Chunk> chunks = container.getChunks();
         final Set<GUID> known = new HashSet<GUID>(Arrays
-                .asList(GUID.KNOWN_GUIDS));
+                                                          .asList(GUID.KNOWN_GUIDS));
         for (Chunk curr : chunks) {
             known.remove(curr.getGuid());
         }
-        assertTrue(known.isEmpty());
+        Assert.assertTrue(known.isEmpty());
     }
 
     /**
@@ -87,22 +90,22 @@ public class ChunkContainerTest extends AbstractChunk<ChunkContainer> {
      * {@link ealvatag.audio.asf.data.ChunkContainer#getFirst(ealvatag.audio.asf.data.GUID, java.lang.Class)}
      * .
      */
-    public void testGetFirst() {
+    @Test public void testGetFirst() {
         final AudioStreamChunk audio = new AudioStreamChunk(BigInteger.ZERO);
         final VideoStreamChunk video = new VideoStreamChunk(BigInteger.ZERO);
         video.setPosition(1);
         ChunkContainer container = createChunk(0, BigInteger.ZERO);
         container.addChunk(audio);
         container.addChunk(video);
-        assertSame(audio, container.getFirst(GUID.GUID_STREAM,
-                AudioStreamChunk.class));
-        assertNull(container.getFirst(GUID.GUID_STREAM, VideoStreamChunk.class));
+        Assert.assertSame(audio, container.getFirst(GUID.GUID_STREAM,
+                                                    AudioStreamChunk.class));
+        Assert.assertNull(container.getFirst(GUID.GUID_STREAM, VideoStreamChunk.class));
         container = createChunk(0, BigInteger.ZERO);
         container.addChunk(video);
         container.addChunk(audio);
-        assertSame(video, container.getFirst(GUID.GUID_STREAM,
-                VideoStreamChunk.class));
-        assertNull(container.getFirst(GUID.GUID_STREAM, AudioStreamChunk.class));
+        Assert.assertSame(video, container.getFirst(GUID.GUID_STREAM,
+                                                    VideoStreamChunk.class));
+        Assert.assertNull(container.getFirst(GUID.GUID_STREAM, AudioStreamChunk.class));
     }
 
     /**
@@ -110,12 +113,12 @@ public class ChunkContainerTest extends AbstractChunk<ChunkContainer> {
      * {@link ealvatag.audio.asf.data.ChunkContainer#hasChunkByGUID(ealvatag.audio.asf.data.GUID)}
      * .
      */
-    public void testHasChunkByGUID() {
+    @Test public void testHasChunkByGUID() {
         final ChunkContainer container = createChunk(0, BigInteger.ZERO);
         final ChunkContainer container2 = createFilledChunk();
         for (GUID curr : GUID.KNOWN_GUIDS) {
-            assertFalse(container.hasChunkByGUID(curr));
-            assertTrue(container2.hasChunkByGUID(curr));
+            Assert.assertFalse(container.hasChunkByGUID(curr));
+            Assert.assertTrue(container2.hasChunkByGUID(curr));
         }
     }
 

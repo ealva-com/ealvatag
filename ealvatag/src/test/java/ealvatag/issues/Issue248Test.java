@@ -1,36 +1,34 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.mp3.MP3File;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 
-public class Issue248Test extends AbstractTestCase
-{
-    public static int countExceptions =0;
-    public void testMultiThreadedMP3HeaderAccess() throws Exception
-    {
-        final File testFile = AbstractTestCase.copyAudioToTmp("testV1vbrOld0.mp3");
+public class Issue248Test {
+    private static int countExceptions = 0;
+
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testMultiThreadedMP3HeaderAccess() throws Exception {
+        final File testFile = TestUtil.copyAudioToTmp("testV1vbrOld0.mp3");
         final MP3File mp3File = new MP3File(testFile);
         final Thread[] threads = new Thread[1000];
-        for(int i = 0; i < 1000; i++)
-        {
-            threads[i] = new Thread(new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                         //System.out.println("Output is"+mp3File.getMP3AudioHeader().getTrackLengthAsString());
-                    }
-                    catch (RuntimeException e)
-                    {
+        for (int i = 0; i < 1000; i++) {
+            threads[i] = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        //System.out.println("Output is"+mp3File.getMP3AudioHeader().getTrackLengthAsString());
+                    } catch (RuntimeException e) {
                         e.printStackTrace();
                         countExceptions++;
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         countExceptions++;
                     }
@@ -38,11 +36,10 @@ public class Issue248Test extends AbstractTestCase
             });
         }
 
-        for(int i = 0; i < 1000; i++)
-        {
+        for (int i = 0; i < 1000; i++) {
             threads[i].start();
         }
 
-        assertEquals(0, countExceptions);
+        Assert.assertEquals(0, countExceptions);
     }
 }

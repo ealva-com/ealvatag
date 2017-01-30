@@ -1,18 +1,25 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test
  */
-public class Issue455Test extends AbstractTestCase {
-    public void testMp4IsCompilationTrue() throws Exception {
+public class Issue455Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testMp4IsCompilationTrue() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
@@ -20,7 +27,7 @@ public class Issue455Test extends AbstractTestCase {
         }
 
         AudioFile mp4File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
+        File testFile = TestUtil.copyAudioToTmp("test1.m4a");
 
         Exception e = null;
         try {
@@ -31,18 +38,18 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp4File.save();
         mp4File = AudioFileIO.read(testFile);
-        assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
     }
 
 
-    public void testMp4IsCompilationTrue2() throws Exception {
+    @Test public void testMp4IsCompilationTrue2() throws Exception {
 
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
@@ -51,7 +58,7 @@ public class Issue455Test extends AbstractTestCase {
         }
 
         AudioFile mp4File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
+        File testFile = TestUtil.copyAudioToTmp("test1.m4a");
 
         Exception e = null;
         try {
@@ -62,18 +69,18 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp4File.save();
         mp4File = AudioFileIO.read(testFile);
-        assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("1", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
     }
 
 
-    public void testMp4IsCompilationFalse() throws Exception {
+    @Test public void testMp4IsCompilationFalse() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
@@ -81,7 +88,7 @@ public class Issue455Test extends AbstractTestCase {
         }
 
         AudioFile mp4File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
+        File testFile = TestUtil.copyAudioToTmp("test1.m4a");
         Exception e = null;
         try {
 
@@ -91,16 +98,16 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp4File.save();
         mp4File = AudioFileIO.read(testFile);
-        assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
     }
 
-    public void testMp4IsCompilationFalse2() throws Exception {
+    @Test public void testMp4IsCompilationFalse2() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
@@ -108,7 +115,7 @@ public class Issue455Test extends AbstractTestCase {
         }
 
         AudioFile mp4File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("test1.m4a");
+        File testFile = TestUtil.copyAudioToTmp("test1.m4a");
         Exception e = null;
         try {
 
@@ -118,20 +125,20 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp4File.save();
         mp4File = AudioFileIO.read(testFile);
-        
-        assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+
+        Assert.assertEquals("0", mp4File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
     }
 
-    public void testMp3IsCompilationTrue() throws Exception {
+    @Test public void testMp3IsCompilationTrue() throws Exception {
 
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue.mp3"));
 
         Exception e = null;
         try {
@@ -142,22 +149,22 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("true", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("true", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp3File.save();
         mp3File = AudioFileIO.read(testFile);
-        assertEquals("true", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("true", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
 
     }
 
     /**
      * set properly when use function
      */
-    public void testMp3IsCompilationTrue2() throws Exception {
+    @Test public void testMp3IsCompilationTrue2() throws Exception {
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue2.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationTrue2.mp3"));
 
         Exception e = null;
         try {
@@ -169,20 +176,20 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("1", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("1", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp3File.save();
         mp3File = AudioFileIO.read(testFile);
-        assertEquals("1", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("1", mp3File.getTagOrSetNewDefault().getFirst(FieldKey.IS_COMPILATION));
 
     }
 
 
-    public void testMp3IsCompilationFalse() throws Exception {
+    @Test public void testMp3IsCompilationFalse() throws Exception {
         AudioFile mp3File = null;
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationFalse.mp3"));
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testMp3IsCompilationFalse.mp3"));
         Exception e = null;
         try {
 
@@ -192,13 +199,13 @@ public class Issue455Test extends AbstractTestCase {
             ex.printStackTrace();
             e = ex;
         }
-        assertNull(e);
-        assertEquals("false", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertNull(e);
+        Assert.assertEquals("false", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
 
         //After Save
         mp3File.save();
         mp3File = AudioFileIO.read(testFile);
-        assertEquals("false", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
+        Assert.assertEquals("false", mp3File.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.IS_COMPILATION));
     }
 
 }

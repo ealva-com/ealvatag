@@ -43,6 +43,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @SuppressWarnings("unused")
 public class TagOptionSingleton {
@@ -51,6 +53,7 @@ public class TagOptionSingleton {
     private static String DEFAULT = "default";
     private static String defaultOptions = DEFAULT;
 
+    private static final Lock tagOptionTableLock = new ReentrantLock();
 
     private boolean isWriteWavForTwonky = false;
     private WavOptions wavOptions = WavOptions.READ_ID3_ONLY;
@@ -263,14 +266,19 @@ public class TagOptionSingleton {
     }
 
     public static TagOptionSingleton getInstance(String instanceKey) {
-        TagOptionSingleton tagOptions = tagOptionTable.get(instanceKey);
+        tagOptionTableLock.lock();
+        try {
+            TagOptionSingleton tagOptions = tagOptionTable.get(instanceKey);
 
-        if (tagOptions == null) {
-            tagOptions = new TagOptionSingleton();
-            tagOptionTable.put(instanceKey, tagOptions);
+            if (tagOptions == null) {
+                tagOptions = new TagOptionSingleton();
+                tagOptionTable.put(instanceKey, tagOptions);
+            }
+
+            return tagOptions;
+        } finally {
+            tagOptionTableLock.unlock();
         }
-
-        return tagOptions;
     }
 
     public static String getInstanceKey() {
@@ -282,7 +290,7 @@ public class TagOptionSingleton {
     }
 
     /**
-     * Creates a new TagOptions datatype. All Options are set to their default
+     * Creates a new TagOptions data type. All Options are set to their default
      * values
      */
     private TagOptionSingleton() {
@@ -464,44 +472,26 @@ public class TagOptionSingleton {
         }
     }
 
-    /**
-     * @return
-     */
     public boolean isLyrics3KeepEmptyFieldIfRead() {
         return lyrics3KeepEmptyFieldIfRead;
     }
 
-    /**
-     * @param lyrics3KeepEmptyFieldIfRead
-     */
     public void setLyrics3KeepEmptyFieldIfRead(boolean lyrics3KeepEmptyFieldIfRead) {
         this.lyrics3KeepEmptyFieldIfRead = lyrics3KeepEmptyFieldIfRead;
     }
 
-    /**
-     * @return
-     */
     public boolean isLyrics3Save() {
         return lyrics3Save;
     }
 
-    /**
-     * @param lyrics3Save
-     */
     public void setLyrics3Save(boolean lyrics3Save) {
         this.lyrics3Save = lyrics3Save;
     }
 
-    /**
-     * @return
-     */
     public boolean isLyrics3SaveEmptyField() {
         return lyrics3SaveEmptyField;
     }
 
-    /**
-     * @param lyrics3SaveEmptyField
-     */
     public void setLyrics3SaveEmptyField(boolean lyrics3SaveEmptyField) {
         this.lyrics3SaveEmptyField = lyrics3SaveEmptyField;
     }
@@ -528,18 +518,10 @@ public class TagOptionSingleton {
         return lyrics3SaveFieldMap.get(id);
     }
 
-    /**
-     * @return
-     */
     public HashMap<String, Boolean> getLyrics3SaveFieldMap() {
         return lyrics3SaveFieldMap;
     }
 
-    /**
-     * @param oldWord
-     *
-     * @return
-     */
     public String getNewReplaceWord(String oldWord) {
         return replaceWordMap.get(oldWord);
     }
@@ -568,39 +550,22 @@ public class TagOptionSingleton {
         this.numberMP3SyncFrame = numberMP3SyncFrame;
     }
 
-    /**
-     * @return
-     */
     public Iterator<String> getOldReplaceWordIterator() {
         return replaceWordMap.keySet().iterator();
     }
 
-    /**
-     * @param open
-     *
-     * @return
-     */
     public boolean isOpenParenthesis(String open) {
         return parenthesisMap.containsKey(open);
     }
 
-    /**
-     * @return
-     */
     public Iterator<String> getOpenParenthesisIterator() {
         return parenthesisMap.keySet().iterator();
     }
 
-    /**
-     * @return
-     */
     public boolean isOriginalSavedAfterAdjustingID3v2Padding() {
         return originalSavedAfterAdjustingID3v2Padding;
     }
 
-    /**
-     * @param originalSavedAfterAdjustingID3v2Padding
-     */
     public void setOriginalSavedAfterAdjustingID3v2Padding(boolean originalSavedAfterAdjustingID3v2Padding) {
         this.originalSavedAfterAdjustingID3v2Padding = originalSavedAfterAdjustingID3v2Padding;
     }
@@ -642,7 +607,7 @@ public class TagOptionSingleton {
         isWriteWavForTwonky = false;
         wavOptions = WavOptions.READ_ID3_UNLESS_ONLY_INFO;
         wavSaveOptions = WavSaveOptions.SAVE_BOTH;
-        keywordMap = new HashMap<Class<? extends ID3v24FrameBody>, LinkedList<String>>();
+        keywordMap = new HashMap<>();
         filenameTagSave = false;
         id3v1Save = true;
         id3v1SaveAlbum = true;
@@ -659,10 +624,10 @@ public class TagOptionSingleton {
         lyrics3KeepEmptyFieldIfRead = false;
         lyrics3Save = true;
         lyrics3SaveEmptyField = false;
-        lyrics3SaveFieldMap = new HashMap<String, Boolean>();
+        lyrics3SaveFieldMap = new HashMap<>();
         numberMP3SyncFrame = 3;
-        parenthesisMap = new HashMap<String, String>();
-        replaceWordMap = new HashMap<String, String>();
+        parenthesisMap = new HashMap<>();
+        replaceWordMap = new HashMap<>();
         timeStampFormat = 2;
         unsyncTags = false;
         removeTrailingTerminatorOnWrite = true;
@@ -758,12 +723,6 @@ public class TagOptionSingleton {
     }
 
 
-    /**
-     * @param id3v2FrameBodyClass
-     * @param keyword
-     *
-     * @throws TagException
-     */
     public void addKeyword(Class<? extends ID3v24FrameBody> id3v2FrameBodyClass, String keyword) throws TagException {
         if (!AbstractID3v2FrameBody.class.isAssignableFrom(id3v2FrameBodyClass)) {
             throw new TagException("Invalid class type. Must be AbstractId3v2FrameBody " + id3v2FrameBodyClass);
@@ -773,7 +732,7 @@ public class TagOptionSingleton {
             LinkedList<String> keywordList;
 
             if (!keywordMap.containsKey(id3v2FrameBodyClass)) {
-                keywordList = new LinkedList<String>();
+                keywordList = new LinkedList<>();
                 keywordMap.put(id3v2FrameBodyClass, keywordList);
             } else {
                 keywordList = keywordMap.get(id3v2FrameBodyClass);
@@ -783,18 +742,10 @@ public class TagOptionSingleton {
         }
     }
 
-    /**
-     * @param open
-     * @param close
-     */
     public void addParenthesis(String open, String close) {
         parenthesisMap.put(open, close);
     }
 
-    /**
-     * @param oldWord
-     * @param newWord
-     */
     public void addReplaceWord(String oldWord, String newWord) {
         replaceWordMap.put(oldWord, newWord);
     }
@@ -827,7 +778,6 @@ public class TagOptionSingleton {
     /**
      * Remove unnecessary trailing null characters on write
      *
-     * @param removeTrailingTerminatorOnWrite
      */
     public void setRemoveTrailingTerminatorOnWrite(boolean removeTrailingTerminatorOnWrite) {
         this.removeTrailingTerminatorOnWrite = removeTrailingTerminatorOnWrite;
@@ -837,7 +787,6 @@ public class TagOptionSingleton {
      * Get the default text encoding to use for new v23 frames, when unicode is required
      * UTF16 will always be used because that is the only valid option for v23/v22
      *
-     * @return
      */
     public byte getId3v23DefaultTextEncoding() {
         return id3v23DefaultTextEncoding;
@@ -847,7 +796,6 @@ public class TagOptionSingleton {
      * Set the default text encoding to use for new v23 frames, when unicode is required
      * UTF16 will always be used because that is the only valid option for v23/v22
      *
-     * @param id3v23DefaultTextEncoding
      */
     public void setId3v23DefaultTextEncoding(byte id3v23DefaultTextEncoding) {
         if ((id3v23DefaultTextEncoding == TextEncoding.ISO_8859_1) || (id3v23DefaultTextEncoding == TextEncoding.UTF_16)) {
@@ -859,7 +807,6 @@ public class TagOptionSingleton {
      * Get the default text encoding to use for new v24 frames, it defaults to simple ISO8859
      * but by changing this value you could always used UTF8 for example whether you needed to or not
      *
-     * @return
      */
     public byte getId3v24DefaultTextEncoding() {
         return id3v24DefaultTextEncoding;
@@ -869,7 +816,6 @@ public class TagOptionSingleton {
      * Set the default text encoding to use for new v24 frames, it defaults to simple ISO8859
      * but by changing this value you could always used UTF8 for example whether you needed to or not
      *
-     * @param id3v24DefaultTextEncoding
      */
     public void setId3v24DefaultTextEncoding(byte id3v24DefaultTextEncoding) {
         if ((id3v24DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
@@ -885,7 +831,6 @@ public class TagOptionSingleton {
      * Get the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
      * because this encoding is understand by all ID3 versions
      *
-     * @return
      */
     public byte getId3v24UnicodeTextEncoding() {
         return id3v24UnicodeTextEncoding;
@@ -895,7 +840,6 @@ public class TagOptionSingleton {
      * Set the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
      * because this encoding is understand by all ID3 versions
      *
-     * @param id3v24UnicodeTextEncoding
      */
     public void setId3v24UnicodeTextEncoding(byte id3v24UnicodeTextEncoding) {
         if ((id3v24UnicodeTextEncoding == TextEncoding.UTF_16) ||
@@ -910,7 +854,6 @@ public class TagOptionSingleton {
      * using the defaults disregarding the text encoding originally used to create
      * the frame.
      *
-     * @return
      */
     public boolean isResetTextEncodingForExistingFrames() {
         return resetTextEncodingForExistingFrames;
@@ -921,24 +864,15 @@ public class TagOptionSingleton {
      * using the defaults disregarding the text encoding originally used to create
      * the frame.
      *
-     * @param resetTextEncodingForExistingFrames
      */
     public void setResetTextEncodingForExistingFrames(boolean resetTextEncodingForExistingFrames) {
         this.resetTextEncodingForExistingFrames = resetTextEncodingForExistingFrames;
     }
 
-    /**
-     * @return truncate without errors
-     */
     public boolean isTruncateTextWithoutErrors() {
         return truncateTextWithoutErrors;
     }
 
-    /**
-     * Set truncate without errors
-     *
-     * @param truncateTextWithoutErrors
-     */
     public void setTruncateTextWithoutErrors(boolean truncateTextWithoutErrors) {
         this.truncateTextWithoutErrors = truncateTextWithoutErrors;
     }

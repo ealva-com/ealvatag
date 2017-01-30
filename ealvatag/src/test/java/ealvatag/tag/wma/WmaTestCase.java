@@ -1,11 +1,10 @@
 package ealvatag.tag.wma;
 
-import ealvatag.tag.NullTag;
-import junit.framework.TestCase;
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.asf.util.Utils;
+import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import org.junit.After;
 import org.junit.Assert;
@@ -34,66 +33,60 @@ public abstract class WmaTestCase {
      */
     private File testFile;
 
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    /**
+     * Returns the tag of the {@linkplain #audioFile}.<br>
+     *
+     * @return the tag of the {@linkplain #audioFile}.<br>
+     *
+     * @throws Exception from call of  {@link #getAudioFile()}.
+     */
+    public Tag getTag() throws Exception {
+        return getAudioFile().getTag().or(NullTag.INSTANCE);
+    }
+
     /**
      * Returns the audio file to perform the tests on.<br>
+     *
      * @return audio file to perform the tests on.<br>
+     *
      * @throws Exception Upon IO errors, or ASF parsing faults.
      */
-    public AudioFile getAudioFile() throws Exception
-    {
-        if (this.audioFile == null)
-        {
+    public AudioFile getAudioFile() throws Exception {
+        if (this.audioFile == null) {
             this.audioFile = AudioFileIO.read(this.testFile);
         }
         return this.audioFile;
     }
 
     /**
-     * Returns the tag of the {@linkplain #audioFile}.<br>
-     * @return the tag of the {@linkplain #audioFile}.<br>
-     * @throws Exception from call of  {@link #getAudioFile()}.
-     */
-    public Tag getTag() throws Exception
-    {
-        return getAudioFile().getTag().or(NullTag.INSTANCE);
-    }
-
-    /**
-     * Returns a file for testing purposes.
-     * @return file for testing.
-     */
-    public File prepareTestFile(String fileName)
-    {
-        Assert.assertNotNull(sourceTestFile);
-        File result = null;
-        if (!Utils.isBlank(fileName)) {
-            result = AbstractTestCase.copyAudioToTmp(sourceTestFile, new File(fileName));
-        } else {
-            result = AbstractTestCase.copyAudioToTmp(sourceTestFile);
-        }
-        return result;
-    }
-
-    /**
      * Creates the file copy.
      */
-    @Before public void setUp() throws Exception
-    {
+    @Before public void setUp() throws Exception {
         sourceTestFile = getTestFile();
         Assert.assertNotNull(sourceTestFile);
         this.testFile = prepareTestFile(null);
     }
 
-    abstract String getTestFile();
-
-
     /**
-     * Deletes the copy.
+     * Returns a file for testing purposes.
+     *
+     * @return file for testing.
      */
-    @After public void tearDown() throws Exception
-    {
-        //        this.testFile.deleteField();
+    public File prepareTestFile(String fileName) {
+        Assert.assertNotNull(sourceTestFile);
+        File result = null;
+        if (!Utils.isBlank(fileName)) {
+            result = TestUtil.copyAudioToTmp(sourceTestFile, new File(fileName));
+        } else {
+            result = TestUtil.copyAudioToTmp(sourceTestFile);
+        }
+        return result;
     }
 
+    abstract String getTestFile();
 
 }

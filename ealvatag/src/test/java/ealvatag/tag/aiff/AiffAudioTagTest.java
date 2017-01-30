@@ -1,7 +1,7 @@
 package ealvatag.tag.aiff;
 
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.FilePermissionsTest;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
@@ -19,6 +19,7 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,10 +32,14 @@ import java.util.List;
 
 public class AiffAudioTagTest {
 
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
 
     @Test public void testReadAiff1() throws Exception {
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -49,7 +54,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testReadAiffChangeDefault() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test119.aif", new File("test119ReadAiffWithoutTag.aif"));
         TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
@@ -65,7 +70,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testReadAiff2() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test120.aif", new File("test120ReadAiffWithTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test120.aif", new File("test120ReadAiffWithTag.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -87,7 +92,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testReadAiff3() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test121.aif", new File("test121ReadAiffWithoutItunesTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test121.aif", new File("test121ReadAiffWithoutItunesTag.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -117,7 +122,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testReadAiff4() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124ReadAiffWithoutItunesTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test124.aif", new File("test124ReadAiffWithoutItunesTag.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -147,7 +152,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testWriteAiff3() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test121.aif", new File("test121WriteAiffWithTagAddPadding.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test121.aif", new File("test121WriteAiffWithTagAddPadding.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -191,7 +196,7 @@ public class AiffAudioTagTest {
             return;
         }
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif", new File("test119WriteAiffWithoutTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test119.aif", new File("test119WriteAiffWithoutTag.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
@@ -215,7 +220,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testDeleteAiff3() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test121.aif", new File("test121DeleteTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test121.aif", new File("test121DeleteTag.aif"));
         final int oldSize = readAIFFFormSize(testFile);
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
@@ -239,7 +244,7 @@ public class AiffAudioTagTest {
 
     @Test public void testDeleteAiff4() throws Exception {
         // test124.aif is special in that the ID3 chunk is right at the beginning, not the end.
-        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124DeleteTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test124.aif", new File("test124DeleteTag.aif"));
         final List<String> oldChunkIds = readChunkIds(testFile);
         Assert.assertEquals(AiffChunkType.TAG.getCode(), oldChunkIds.get(0));
         Assert.assertEquals(AiffChunkType.COMMON.getCode(), oldChunkIds.get(1));
@@ -273,7 +278,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testWriteNotLastChunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124WriteAiffWithChunkNotAtEnd.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test124.aif", new File("test124WriteAiffWithChunkNotAtEnd.aif"));
         final List<String> oldChunkIds = readChunkIds(testFile);
         Assert.assertEquals(AiffChunkType.TAG.getCode(), oldChunkIds.get(0));
         Assert.assertEquals(AiffChunkType.COMMON.getCode(), oldChunkIds.get(1));
@@ -341,7 +346,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testWriteMetadataAifcWhenSSNDBeforeCOMMChunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test135SSNDBeforeCOMMChunk.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test136.aif", new File("test135SSNDBeforeCOMMChunk.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -358,7 +363,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testWriteMetadataAifcWithUnknonwExtraChunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunk.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunk.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -381,7 +386,7 @@ public class AiffAudioTagTest {
      * start of ID3 chunk
      */
     @Test public void testWriteMetadataAifcWithJunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test137.aif", new File("test137WriteMetadataWithJunkAtEnd.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test137.aif", new File("test137WriteMetadataWithJunkAtEnd.aif"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -398,7 +403,7 @@ public class AiffAudioTagTest {
     }
 
     @Test public void testWriteMetadataAiffWithNameAndAuthorChunks() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test138.aiff", new File("test138WriteMetadataWithNameAuthorChunks.aiff"));
+        File testFile = TestUtil.copyAudioToTmp("test138.aiff", new File("test138WriteMetadataWithNameAuthorChunks.aiff"));
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -430,7 +435,7 @@ public class AiffAudioTagTest {
 
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
-        File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144Odd.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test144.aif", new File("test144Odd.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_ID);
@@ -463,7 +468,7 @@ public class AiffAudioTagTest {
 
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_ONLY_AND_SYNC);
         TagOptionSingleton.getInstance().setWavSaveOptions(WavSaveOptions.SAVE_BOTH_AND_SYNC);
-        File testFile = AbstractTestCase.copyAudioToTmp("test144.aif", new File("test144OddDelete.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test144.aif", new File("test144OddDelete.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ACOUSTID_ID);
@@ -496,7 +501,7 @@ public class AiffAudioTagTest {
         }
 
         // test124.aif is special in that the ID3 chunk is right at the beginning, not the end.
-        File testFile = AbstractTestCase.copyAudioToTmp("test124.aif", new File("test124DeleteOddTag.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test124.aif", new File("test124DeleteOddTag.aif"));
 
         try {
             final List<String> oldChunkIds = readChunkIds(testFile);
@@ -549,7 +554,7 @@ public class AiffAudioTagTest {
 
         File
                 testFile =
-                AbstractTestCase.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunkID3DatSizeOdd.aif"));
+                TestUtil.copyAudioToTmp("test136.aif", new File("test136WriteMetadataWithUnknownExtraChunkID3DatSizeOdd.aif"));
         try {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             AudioFile f = AudioFileIO.read(testFile);
@@ -613,7 +618,7 @@ public class AiffAudioTagTest {
         }
 
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test157.aif", new File("testDeleteArtworkField.aif"));
+        File testFile = TestUtil.copyAudioToTmp("test157.aif", new File("testDeleteArtworkField.aif"));
         try {
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);

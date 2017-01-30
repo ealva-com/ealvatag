@@ -7,6 +7,8 @@ import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.asf.AsfFieldKey;
 import ealvatag.tag.asf.AsfTag;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * This test covers some mistakes that could be made by changing the implementation.<br>
@@ -14,32 +16,31 @@ import ealvatag.tag.asf.AsfTag;
  *
  * @author Christian Laireiter
  */
-public class AsfCodeCheckTest extends TestCase
-{
+public class AsfCodeCheckTest {
 
     /**
      * Tests the correct implementation of {@link AsfTag}.<br>
      * For example if {@link Tag#createArtwork(Artwork)} (String)} returns a field whose {@link ealvatag.tag.TagField#getId()}
      * equals {@link ealvatag.tag.asf.AsfFieldKey#ALBUM}s }.
      */
-    public void testAsfTagImpl() throws Exception
+    @Test public void testAsfTagImpl() throws Exception
     {
         final AsfTag asfTag = new AsfTag();
-        assertEquals(asfTag.createField(FieldKey.ALBUM, "").getId(), AsfFieldKey.ALBUM.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.ARTIST, "").getId(), AsfFieldKey.AUTHOR.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.COMMENT, "").getId(), AsfFieldKey.DESCRIPTION.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.GENRE, "").getId(), AsfFieldKey.GENRE.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.TITLE, "").getId(), AsfFieldKey.TITLE.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.TRACK, "").getId(), AsfFieldKey.TRACK.getFieldName());
-        assertEquals(asfTag.createField(FieldKey.YEAR, "").getId(), AsfFieldKey.YEAR.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.ALBUM, "").getId(), AsfFieldKey.ALBUM.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.ARTIST, "").getId(), AsfFieldKey.AUTHOR.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.COMMENT, "").getId(), AsfFieldKey.DESCRIPTION.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.GENRE, "").getId(), AsfFieldKey.GENRE.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.TITLE, "").getId(), AsfFieldKey.TITLE.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.TRACK, "").getId(), AsfFieldKey.TRACK.getFieldName());
+        Assert.assertEquals(asfTag.createField(FieldKey.YEAR, "").getId(), AsfFieldKey.YEAR.getFieldName());
     }
 
     /**
      * Tests some constants which must have values.
      */
-    public void testConstants()
+    @Test public void testConstants()
     {
         // UTF16-LE by specification
-        assertEquals("ONLY \"UTF-16LE\" text encoding specified", "UTF-16LE", AsfHeader.ASF_CHARSET.name()); // $NON-NLS-1$ //$NON-NLS-2$
+        Assert.assertEquals("ONLY \"UTF-16LE\" text encoding specified", "UTF-16LE", AsfHeader.ASF_CHARSET.name()); // $NON-NLS-1$ //$NON-NLS-2$
     }
 }

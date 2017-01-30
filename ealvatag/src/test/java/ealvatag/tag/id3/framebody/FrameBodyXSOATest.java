@@ -1,61 +1,52 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test TSOAFrameBody
  */
-public class FrameBodyXSOATest extends AbstractTestCase
-{
+public class FrameBodyXSOATest {
     public static final String ALBUM_SORT = "albumsort";
 
-    public static FrameBodyXSOA getInitialisedBody()
-    {
+    public static FrameBodyXSOA getInitialisedBody() {
         FrameBodyXSOA fb = new FrameBodyXSOA();
         fb.setText(FrameBodyXSOATest.ALBUM_SORT);
         return fb;
     }
 
-    public void testCreateFrameBody()
-    {
+    @Test public void testCreateFrameBody() {
         Exception exceptionCaught = null;
         FrameBodyXSOA fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyXSOA(TextEncoding.ISO_8859_1, FrameBodyXSOATest.ALBUM_SORT);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyXSOATest.ALBUM_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyXSOATest.ALBUM_SORT, fb.getText());
 
     }
 
-    public void testCreateFrameBodyEmptyConstructor()
-    {
+    @Test public void testCreateFrameBodyEmptyConstructor() {
         Exception exceptionCaught = null;
         FrameBodyXSOA fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyXSOA();
             fb.setText(FrameBodyXSOATest.ALBUM_SORT);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyXSOATest.ALBUM_SORT, fb.getText());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v23Frames.FRAME_ID_V3_ALBUM_SORT_ORDER_MUSICBRAINZ, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyXSOATest.ALBUM_SORT, fb.getText());
 
     }
 

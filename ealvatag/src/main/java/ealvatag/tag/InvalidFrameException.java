@@ -28,13 +28,11 @@ package ealvatag.tag;
  * @version $Revision$
  */
 public class InvalidFrameException extends InvalidTagException {
-    /**
-     * Creates a new InvalidFrameException datatype.
-     *
-     * @param msg the detail message.
-     */
     public InvalidFrameException(String msg) {
         super(msg);
     }
 
+    public InvalidFrameException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

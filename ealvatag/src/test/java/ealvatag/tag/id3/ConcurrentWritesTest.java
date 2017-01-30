@@ -2,10 +2,17 @@ package ealvatag.tag.id3;
 
 import ealvatag.tag.NullTag;
 import junit.framework.TestCase;
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,29 +22,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class ConcurrentWritesTest extends TestCase
-{
+public class ConcurrentWritesTest {
 
     private static final int THREADS = 100;
     private final File[] files = new File[THREADS];
 
-    @Override
-    public void setUp()
+    @Before public void setUp()
     {
         for (int counter = 0; counter < THREADS; counter++)
         {
-            files[counter] = AbstractTestCase.copyAudioToTmp("testV25.mp3",
-                    new File(ConcurrentWritesTest.class.getSimpleName() + "-" + counter + ".mp3"));
+            files[counter] = TestUtil.copyAudioToTmp("testV25.mp3",
+                                                     new File(ConcurrentWritesTest.class.getSimpleName() + "-" + counter + ".mp3"));
         }
     }
 
-    @Override
-    public void tearDown()
+    @After public void tearDown()
     {
         for (File file : files) file.delete();
     }
 
-    public void testConcurrentWrites() throws Exception
+    @Test public void testConcurrentWrites() throws Exception
     {
 
         final ExecutorService executor = Executors.newCachedThreadPool();
@@ -49,7 +53,7 @@ public class ConcurrentWritesTest extends TestCase
 
         for (Future<Boolean> result : results)
         {
-            assertTrue(result.get());
+            Assert.assertTrue(result.get());
         }
     }
 
@@ -68,7 +72,7 @@ public class ConcurrentWritesTest extends TestCase
             audiofile.getTagOrSetNewDefault().setField(FieldKey.CUSTOM1, file.getName());
             audiofile.save();
             audiofile = AudioFileIO.read(file);
-            assertEquals(file.getName(),audiofile.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1));
+            assertThat(audiofile.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.CUSTOM1), is(file.getName()));
             return true;
         }
     }

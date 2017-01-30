@@ -6,8 +6,9 @@ import ealvatag.audio.asf.data.ChunkContainer;
 import ealvatag.audio.asf.data.ContainerType;
 import ealvatag.audio.asf.data.GUID;
 import ealvatag.audio.asf.data.MetadataContainer;
-import junit.framework.TestCase;
 import ealvatag.audio.asf.util.Utils;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +19,9 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- *
  * @author Christian Laireiter
  */
-public final class AsfHeaderUtils extends TestCase
-{
+public final class AsfHeaderUtils {
 
     public final static int BINARY_PRINT_COLUMNS = 20;
 
@@ -68,22 +67,19 @@ public final class AsfHeaderUtils extends TestCase
     public static byte[] getFirstChunk(File file, GUID chunkGUID)
             throws IOException {
         RandomAccessFile asfFile = null;
-        try
-        {
-            asfFile = new RandomAccessFile(file,"r");
+        try {
+            asfFile = new RandomAccessFile(file, "r");
             byte[] result = new byte[0];
             AsfHeader readHeader = AsfHeaderReader.readHeader(asfFile);
             Chunk found = findChunk(readHeader.getChunks(), chunkGUID);
             if (found != null) {
-                byte[] tmp = new byte[(int) found.getChunkLength().longValue()];
+                byte[] tmp = new byte[(int)found.getChunkLength().longValue()];
                 asfFile.seek(found.getPosition());
                 asfFile.readFully(tmp);
                 result = tmp;
             }
             return result;
-        }
-        finally
-        {
+        } finally {
             asfFile.close();
         }
     }
@@ -99,21 +95,19 @@ public final class AsfHeaderUtils extends TestCase
      */
     //TODO we dont know this is correct because need an independent way of checking our figures with an ASF file,
     //the previous calculation appeard incorrect.
-    public void testDateHeaderConversion()
-    {
+    @Test public void testDateHeaderConversion() {
         Calendar cal = ealvatag.audio.asf.util.Utils.getDateOf(BigInteger.valueOf(1964448000));
         System.out.println(cal.getTime());
-        assertEquals(-11644273555200l,cal.getTimeInMillis());
+        Assert.assertEquals(-11644273555200l, cal.getTimeInMillis());
     }
 
     /**
      * Test to show the calculation done to derive the DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE constant
      */
-    public void testConversionDateConstant()
-    {
-        Date date1 = new Date((1601-1900),0,1);
-        Date date2 = new Date((1970-1900),0,1);
-        assertEquals(11644473600000l,date2.getTime() - date1.getTime());
+    @Test public void testConversionDateConstant() {
+        Date date1 = new Date((1601 - 1900), 0, 1);
+        Date date2 = new Date((1970 - 1900), 0, 1);
+        Assert.assertEquals(11644473600000l, date2.getTime() - date1.getTime());
     }
 
 }

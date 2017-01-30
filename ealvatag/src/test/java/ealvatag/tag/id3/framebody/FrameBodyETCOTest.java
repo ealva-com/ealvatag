@@ -1,6 +1,7 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -8,11 +9,9 @@ import java.util.Map;
 /**
  * FrameBodyETCOTest.
  */
-public class FrameBodyETCOTest extends AbstractTestCase
-{
+public class FrameBodyETCOTest {
 
-    public static FrameBodyETCO getInitialisedBody()
-    {
+    public static FrameBodyETCO getInitialisedBody() {
         FrameBodyETCO fb = new FrameBodyETCO();
         fb.addTimingCode(0, 1, 2);
         fb.addTimingCode(5, 1);
@@ -20,31 +19,28 @@ public class FrameBodyETCOTest extends AbstractTestCase
         return fb;
     }
 
-    public void testAddTimingCode()
-    {
+    @Test public void testAddTimingCode() {
         final FrameBodyETCO body = new FrameBodyETCO();
         body.addTimingCode(10, 0);
         body.addTimingCode(5, 0);
         body.addTimingCode(5, 1);
         body.addTimingCode(11, 1, 2);
-        final Map<Long,int[]> timingCodes = body.getTimingCodes();
+        final Map<Long, int[]> timingCodes = body.getTimingCodes();
 
         // verify content
-        assertTrue(Arrays.equals(new int[]{0}, timingCodes.get(10L)));
-        assertTrue(Arrays.equals(new int[]{0, 1}, timingCodes.get(5L)));
-        assertTrue(Arrays.equals(new int[]{1, 2}, timingCodes.get(11L)));
+        Assert.assertTrue(Arrays.equals(new int[]{0}, timingCodes.get(10L)));
+        Assert.assertTrue(Arrays.equals(new int[]{0, 1}, timingCodes.get(5L)));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2}, timingCodes.get(11L)));
 
         // verify order
         long lastTimestamp = 0;
-        for (final Long timestamp : timingCodes.keySet())
-        {
-            assertTrue(timestamp >= lastTimestamp);
+        for (final Long timestamp : timingCodes.keySet()) {
+            Assert.assertTrue(timestamp >= lastTimestamp);
             lastTimestamp = timestamp;
         }
     }
 
-    public void testRemoveTimingCode()
-    {
+    @Test public void testRemoveTimingCode() {
         final FrameBodyETCO body = new FrameBodyETCO();
         body.addTimingCode(10, 0);
         body.addTimingCode(5, 0);
@@ -53,14 +49,13 @@ public class FrameBodyETCOTest extends AbstractTestCase
 
         body.removeTimingCode(5, 0);
 
-        final Map<Long,int[]> timingCodes = body.getTimingCodes();
-        assertTrue(Arrays.equals(new int[]{0}, timingCodes.get(10L)));
-        assertTrue(Arrays.equals(new int[]{1}, timingCodes.get(5L)));
-        assertTrue(Arrays.equals(new int[]{1, 2}, timingCodes.get(11L)));
+        final Map<Long, int[]> timingCodes = body.getTimingCodes();
+        Assert.assertTrue(Arrays.equals(new int[]{0}, timingCodes.get(10L)));
+        Assert.assertTrue(Arrays.equals(new int[]{1}, timingCodes.get(5L)));
+        Assert.assertTrue(Arrays.equals(new int[]{1, 2}, timingCodes.get(11L)));
     }
 
-    public void testClearTimingCode()
-    {
+    @Test public void testClearTimingCode() {
         final FrameBodyETCO body = new FrameBodyETCO();
         body.addTimingCode(10, 0);
         body.addTimingCode(5, 0);
@@ -69,8 +64,8 @@ public class FrameBodyETCOTest extends AbstractTestCase
 
         body.clearTimingCodes();
 
-        final Map<Long,int[]> timingCodes = body.getTimingCodes();
-        assertTrue(timingCodes.isEmpty());
+        final Map<Long, int[]> timingCodes = body.getTimingCodes();
+        Assert.assertTrue(timingCodes.isEmpty());
     }
 
 }

@@ -1,19 +1,23 @@
 package ealvatag.audio.aiff;
 
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 
 public class AiffAudioFileTest {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
 
     @Test public void testReadAifcNotCompressed() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test119.aif");
+        File testFile = TestUtil.copyAudioToTmp("test119.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -36,7 +40,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAiff2() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test120.aif");
+        File testFile = TestUtil.copyAudioToTmp("test120.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -60,7 +64,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAiff3() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test121.aif");
+        File testFile = TestUtil.copyAudioToTmp("test121.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -84,7 +88,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcCompressedAlaw() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test132.aif");
+        File testFile = TestUtil.copyAudioToTmp("test132.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -107,7 +111,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcCompressedUlaw() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test133.aif");
+        File testFile = TestUtil.copyAudioToTmp("test133.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -130,7 +134,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcFloating64() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test134.aif");
+        File testFile = TestUtil.copyAudioToTmp("test134.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -154,7 +158,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcSSNDBeforeCOMMChunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test135.aif");
+        File testFile = TestUtil.copyAudioToTmp("test135.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -176,7 +180,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcWithOddChunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test136.aif");
+        File testFile = TestUtil.copyAudioToTmp("test136.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -198,7 +202,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAifcWithJunk() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test137.aif");
+        File testFile = TestUtil.copyAudioToTmp("test137.aif");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);
@@ -220,7 +224,7 @@ public class AiffAudioFileTest {
     }
 
     @Test public void testReadAiffUnknownCompressionAndNameChunkAndCopyrightChunks() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test138.aiff");
+        File testFile = TestUtil.copyAudioToTmp("test138.aiff");
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertTrue(ah instanceof AiffAudioHeader);

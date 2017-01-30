@@ -1,33 +1,31 @@
 package ealvatag.tag.reference;
 
-import ealvatag.AbstractTestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Testing of ISCountries
  */
-public class ISOCountryTest extends AbstractTestCase
-{
+public class ISOCountryTest {
     /**
      * This tests lower case genre names identifications
      */
-    public void testCountryMatches()
-    {
+    @Test public void testCountryMatches() {
         //Find by Code
-        assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByCode("GB"));
+        Assert.assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByCode("GB"));
 
         //Find by Description - case senstive
-        assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByDescription("United Kingdom"));
-        assertNull(ISOCountry.getCountryByDescription("united kingdom"));
+        Assert.assertEquals(ISOCountry.Country.UNITED_KINGDOM, ISOCountry.getCountryByDescription("United Kingdom"));
+        Assert.assertNull(ISOCountry.getCountryByDescription("united kingdom"));
 
         //Doesnt exist
-        assertNull(ISOCountry.getCountryByCode("GBE"));
-        assertNull(ISOCountry.getCountryByDescription("england"));
+        Assert.assertNull(ISOCountry.getCountryByCode("GBE"));
+        Assert.assertNull(ISOCountry.getCountryByDescription("england"));
 
         //All values can be found
-        for (ISOCountry.Country country : ISOCountry.Country.values())
-        {
-            assertNotNull(ISOCountry.getCountryByCode(country.getCode()));
-            assertNotNull(ISOCountry.getCountryByDescription(country.getDescription()));
+        for (ISOCountry.Country country : ISOCountry.Country.values()) {
+            Assert.assertNotNull(ISOCountry.getCountryByCode(country.getCode()));
+            Assert.assertNotNull(ISOCountry.getCountryByDescription(country.getDescription()));
         }
     }
 }

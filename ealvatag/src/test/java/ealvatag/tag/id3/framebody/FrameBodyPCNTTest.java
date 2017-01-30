@@ -1,59 +1,50 @@
 package ealvatag.tag.id3.framebody;
 
-import ealvatag.AbstractTestCase;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test PCNTFrameBody
  */
-public class FrameBodyPCNTTest extends AbstractTestCase
-{
+public class FrameBodyPCNTTest {
     public static final long PCNT_COUNTER = 1000;
 
-    public static FrameBodyPCNT getInitialisedBody()
-    {
+    public static FrameBodyPCNT getInitialisedBody() {
         FrameBodyPCNT fb = new FrameBodyPCNT(FrameBodyPCNTTest.PCNT_COUNTER);
         return fb;
     }
 
-    public void testCreateFrameBody()
-    {
+    @Test public void testCreateFrameBody() {
         Exception exceptionCaught = null;
         FrameBodyPCNT fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyPCNT(FrameBodyPCNTTest.PCNT_COUNTER);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
     }
 
-    public void testCreateFrameBodyEmptyConstructor()
-    {
+    @Test public void testCreateFrameBodyEmptyConstructor() {
         Exception exceptionCaught = null;
         FrameBodyPCNT fb = null;
-        try
-        {
+        try {
             fb = new FrameBodyPCNT();
             fb.setCounter(FrameBodyPCNTTest.PCNT_COUNTER);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
-        assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
-        assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
-        assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
+        Assert.assertNull(exceptionCaught);
+        Assert.assertEquals(ID3v24Frames.FRAME_ID_PLAY_COUNTER, fb.getIdentifier());
+        Assert.assertEquals(TextEncoding.ISO_8859_1, fb.getTextEncoding());
+        Assert.assertEquals(FrameBodyPCNTTest.PCNT_COUNTER, fb.getCounter());
     }
 
 

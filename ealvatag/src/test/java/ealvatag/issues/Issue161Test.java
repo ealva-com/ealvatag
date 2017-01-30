@@ -1,39 +1,33 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.NullTag;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test reading an uncompressed encrpted frame, shjoudl slice buffer and then go to correct place for next frame
  */
-public class Issue161Test extends AbstractTestCase
-{
-    public void testReadID3() throws Exception
-    {
+public class Issue161Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testReadID3() throws Exception {
         File orig = new File("testdata", "test159.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        Exception ex=null;
-        try
-        {
-            File testFile = AbstractTestCase.copyAudioToTmp("test159.mp3");
-            AudioFile af = AudioFileIO.read(testFile);
-            assertNotNull(af.getTag().orNull());
-            System.out.println(af.getTag().or(NullTag.INSTANCE));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            ex=e;
-        }
-        assertNull(ex);
+        File testFile = TestUtil.copyAudioToTmp("test159.mp3");
+        AudioFile af = AudioFileIO.read(testFile);
+        Assert.assertNotNull(af.getTag().orNull());
+        System.out.println(af.getTag().or(NullTag.INSTANCE));
     }
 }

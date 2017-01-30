@@ -1,6 +1,6 @@
 package ealvatag.tag.flac;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
@@ -27,8 +27,8 @@ public class ConcurrentWritesTest {
 
     @Before public void setUp() {
         for (int counter = 0; counter < THREADS; counter++) {
-            files[counter] = AbstractTestCase.copyAudioToTmp("test2.flac",
-                                                             new File(ConcurrentWritesTest.class.getSimpleName() +
+            files[counter] = TestUtil.copyAudioToTmp("test2.flac",
+                                                     new File(ConcurrentWritesTest.class.getSimpleName() +
                                                                               "-" +
                                                                               counter +
                                                                               ".flac"));

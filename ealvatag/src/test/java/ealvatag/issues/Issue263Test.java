@@ -1,6 +1,6 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
@@ -9,21 +9,28 @@ import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Cannot cretaeTagField for creating artwork field
  */
-public class Issue263Test extends AbstractTestCase {
+public class Issue263Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     /**
      * Test writing Artwork  to Mp3 ID3v24
      */
-    public void testWriteArtworkFieldsToMp3ID3v24() {
+    @Test public void testWriteArtworkFieldsToMp3ID3v24() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -36,18 +43,18 @@ public class Issue263Test extends AbstractTestCase {
         }
 
 
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
      * Test writing Artwork  to Mp3 ID3v22
      */
-    public void testWriteArtworkFieldsToMp3ID3v22() {
+    @Test public void testWriteArtworkFieldsToMp3ID3v22() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -61,18 +68,18 @@ public class Issue263Test extends AbstractTestCase {
         }
 
 
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
      * Test writing Artwork  to Mp3 ID3v23
      */
-    public void testWriteArtworkFieldsToMp3ID3v23() {
+    @Test public void testWriteArtworkFieldsToMp3ID3v23() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -85,20 +92,20 @@ public class Issue263Test extends AbstractTestCase {
         }
 
 
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
     /**
      * Test reading/writing artwork to Ogg
      */
-    public void testReadWriteArtworkFieldsToOggVorbis() {
+    @Test public void testReadWriteArtworkFieldsToOggVorbis() {
 
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test3.ogg");
+            testFile = TestUtil.copyAudioToTmp("test3.ogg");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -108,17 +115,17 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test reading/writing artwork to Flac
      */
-    public void testReadWriteArtworkFieldsToFlac() {
+    @Test public void testReadWriteArtworkFieldsToFlac() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.flac");
+            testFile = TestUtil.copyAudioToTmp("test.flac");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -128,19 +135,19 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
     /**
      * Test reading/writing artwork to Wma
      */
-    public void testReadWriteArtworkFieldsToWma() {
+    @Test public void testReadWriteArtworkFieldsToWma() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test5.wma");
+            testFile = TestUtil.copyAudioToTmp("test5.wma");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -150,18 +157,18 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
      * Test reading/writing artwork to Mp4
      */
-    public void testReadWriteArtworkFieldsToMp4() {
+    @Test public void testReadWriteArtworkFieldsToMp4() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test2.m4a");
+            testFile = TestUtil.copyAudioToTmp("test2.m4a");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -171,19 +178,19 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 
     /**
      * Test Artwork cannot be written to Wav
      */
-    public void testReadWriteArtworkFieldsToWav() {
+    @Test public void testReadWriteArtworkFieldsToWav() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.wav");
+            testFile = TestUtil.copyAudioToTmp("test.wav");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -193,18 +200,18 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
     /**
      * Test Artwork cannot be written to Real
      */
-    public void testReadWriteArtworkFieldsToReal() {
+    @Test public void testReadWriteArtworkFieldsToReal() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test01.ra");
+            testFile = TestUtil.copyAudioToTmp("test01.ra");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -214,8 +221,8 @@ public class Issue263Test extends AbstractTestCase {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNotNull(exceptionCaught);
-        assertTrue(exceptionCaught instanceof UnsupportedFieldException);
+        Assert.assertNotNull(exceptionCaught);
+        Assert.assertTrue(exceptionCaught instanceof UnsupportedFieldException);
     }
 
 }

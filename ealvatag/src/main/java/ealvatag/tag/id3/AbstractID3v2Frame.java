@@ -31,8 +31,9 @@ import ealvatag.tag.id3.framebody.Id3FrameBodyFactories;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
+import okio.BufferedSource;
 import okio.InflaterSource;
-import okio.Source;
+import okio.Okio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -333,7 +334,7 @@ import java.util.zip.Inflater;
     }
 
     protected AbstractID3v2FrameBody readBody(String identifier, Buffer buffer, int frameSize) throws InvalidTagException {
-        // Stop using reflection. Frame types very rare will be added or changed. Performance penalty for no good reason.
+        // Stop using reflection. Frame types added/changed rarely. Performance penalty for no good reason.
         AbstractID3v2FrameBody frameBody;
         try {
             frameBody = Id3FrameBodyFactories.instance().make(identifier, buffer, frameSize);
@@ -379,13 +380,17 @@ import java.util.zip.Inflater;
     }
 
     String readIdentifier(Buffer buffer) throws InvalidFrameException, EOFException {
-        identifier = buffer.readString(getFrameIdSize(), Charset.defaultCharset());
+        final int frameIdSize = getFrameIdSize();
+        if (frameIdSize > buffer.size()) {
+            return "";
+        }
+        identifier = buffer.readString(frameIdSize, Charset.defaultCharset());
 
         if (identifier.isEmpty()) {
             throw new PaddingException(getLoggingFilename() + ":only padding found");
         }
 
-        if ((getFrameHeaderSize() - getFrameIdSize()) > buffer.size()) {
+        if ((getFrameHeaderSize() - frameIdSize) > buffer.size()) {
             LOG.warn(getLoggingFilename() + ":" + "No space to find another frame:");
             throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
         }
@@ -498,20 +503,12 @@ import java.util.zip.Inflater;
         return encodingFlags;
     }
 
-    static Buffer decompressPartOfBuffer(Buffer source, int frameSize) throws IOException, InvalidFrameException {
+    static Buffer decompressPartOfBuffer(Buffer source, int frameSize, final int decompressedFrameSize) throws IOException, InvalidFrameException {
         final Buffer sink = new Buffer();
         source.readFully(sink, frameSize);
-        return decompressEntireBuffer(sink);
-    }
-
-    static Buffer decompressEntireBuffer(final Source source) throws IOException {
         Buffer result = new Buffer();
-        final InflaterSource inflaterSource = new InflaterSource(source, new Inflater());
-        try {
-            //noinspection StatementWithEmptyBody
-            while (inflaterSource.read(result, Integer.MAX_VALUE) != -1){}
-        } catch (IOException ignored) {
-        }
+        final BufferedSource inflaterSource = Okio.buffer(new InflaterSource(sink, new Inflater()));
+        inflaterSource.readFully(result, decompressedFrameSize);
         return result;
     }
 

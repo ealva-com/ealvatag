@@ -103,15 +103,17 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
     }
 
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
-        if (buffer.size() == 0) {
+        final int bufferSize = (int)buffer.size();
+        if (bufferSize == 0) {
             getValue().clear();
             return;
         }
-        while (buffer.size() > 0) {
+        for (int i = 0, readSize = Math.min(size, bufferSize); i < readSize; i++) {
             final T data = createListElement();
             data.read(buffer, size);
             data.setBody(frameBody);
             getValue().add(data);
+            readSize -= data.getSize();
         }
     }
 

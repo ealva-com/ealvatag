@@ -1,6 +1,6 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.logging.ErrorMessage;
@@ -15,481 +15,454 @@ import ealvatag.tag.id3.framebody.FrameBodyTCON;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.Mp4Tag;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
 
-/**
- * Test
- */
-public class Issue173Test extends AbstractTestCase
-{
-    public void testMp4GenresUsingGenericInterface()
-    {
+public class Issue173Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testMp4GenresUsingGenericInterface() {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
         File orig = new File("testdata", "test.m4a");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        try
-        {
+        try {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = TestUtil.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) mp4File.getTag().or(NullTag.INSTANCE);
+            tag = (Mp4Tag)mp4File.getTag().or(NullTag.INSTANCE);
             //Set valid value
             tag.setField(FieldKey.GENRE, "Rock");
             //mapped correctly otherwise would not be value for Mp4Fieldkey
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             mp4File.save();
 
             //Rereads as value
             mp4File = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) mp4File.getTag().or(NullTag.INSTANCE);
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            tag = (Mp4Tag)mp4File.getTag().or(NullTag.INSTANCE);
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
 
             //Set Genre using integer
             tag.setField(FieldKey.GENRE, "1");
             //Read back as integer
             //TODO should read back as Blues here I think
-            assertEquals("1", tag.getFirst(FieldKey.GENRE));
-            assertEquals("1", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("1", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("1", tag.getFirst(Mp4FieldKey.GENRE));
             mp4File.save();
             //On fresh reread shows as mapped value
             mp4File = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) mp4File.getTag().or(NullTag.INSTANCE);
-            assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            tag = (Mp4Tag)mp4File.getTag().or(NullTag.INSTANCE);
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFirst(Mp4FieldKey.GENRE));
 
             //Set value that can only be stored as a custom
             //because using generic interface the genre field is removed automtically
             tag.setField(FieldKey.GENRE, "FlapFlap");
             //mapped correctly otherwise would not be value for Mp4Fieldkey
-            assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
-            assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
             mp4File.save();
-            assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
-            assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("FlapFlap", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("FlapFlap", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
 
             tag.setField(FieldKey.GENRE, "Rock");
             //mapped correctly otherwise would not be value for Mp4Fieldkey
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             mp4File.save();
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
 
             //Always use custom
             TagOptionSingleton.getInstance().setWriteMp4GenresAsText(true);
             tag.setField(FieldKey.GENRE, "Rock");
             //mapped correctly otherwise would not be value for Mp4Fieldkey
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
             mp4File.save();
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
-        }
-        catch (Exception ex)
-        {
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("", tag.getFirst(Mp4FieldKey.GENRE));
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void testMp4GenresUsingMp4Interface()
-    {
+    @Test public void testMp4GenresUsingMp4Interface() {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
         File orig = new File("testdata", "test.m4a");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        try
-        {
+        try {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = TestUtil.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) mp4File.getTag().or(NullTag.INSTANCE);
+            tag = (Mp4Tag)mp4File.getTag().or(NullTag.INSTANCE);
             //Set valid value
             tag.setField(Mp4FieldKey.GENRE, "Rock");
             //mapped correctly otherwise would not be value for Mp4Fieldkey
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             //Doesnt remove CUSTOM field as we are using mp4 interface
-            assertEquals("Genre", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+            Assert.assertEquals("Genre", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             mp4File.save();
-            assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(Mp4FieldKey.GENRE));
             //Doesnt remove CUSTOM field as we are using mp4 interface
-            assertEquals("Genre", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-        }
-        catch (Exception ex)
-        {
+            Assert.assertEquals("Genre", tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void testMp4InvalidGenresUsingMp4Interface()
-    {
+    @Test public void testMp4InvalidGenresUsingMp4Interface() {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
 
         File orig = new File("testdata", "test.m4a");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        try
-        {
+        try {
             System.out.println(TagOptionSingleton.getInstance().isWriteMp4GenresAsText());
             AudioFile mp4File = null;
             Mp4Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            File testFile = TestUtil.copyAudioToTmp("test.m4a");
             mp4File = AudioFileIO.read(testFile);
-            tag = (Mp4Tag) mp4File.getTag().or(NullTag.INSTANCE);
+            tag = (Mp4Tag)mp4File.getTag().or(NullTag.INSTANCE);
             //Set valid value
             tag.setField(Mp4FieldKey.GENRE, "Rocky");
-        }
-        catch (Exception ex)
-        {
-            assertTrue(ex instanceof IllegalArgumentException);
-            assertTrue(ex.getMessage().equals(ErrorMessage.NOT_STANDARD_MP$_GENRE.getMsg()));
+        } catch (Exception ex) {
+            Assert.assertTrue(ex instanceof IllegalArgumentException);
+            Assert.assertTrue(ex.getMessage().equals(ErrorMessage.NOT_STANDARD_MP$_GENRE.getMsg()));
         }
     }
 
-    public void testMp3ID3v24sGenresUsingGenericInterface()
-    {
+    @Test public void testMp3ID3v24sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        try
-        {
+        try {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V24);
             TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
             AudioFile mp3File = null;
             ID3v24Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            File testFile = TestUtil.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
             mp3File.getTagOrSetNewDefault();
-            tag = (ID3v24Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v24Tag)mp3File.getTag().or(NullTag.INSTANCE);
 
             //Set string  representation of standard value
             tag.setField(FieldKey.GENRE, "Rock");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             FrameBodyTCON body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("17",body.getText());
+            Assert.assertEquals("17", body.getText());
 
             //Set Integral value directly, gets converted
             tag.setField(FieldKey.GENRE, "1");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("1",body.getText());
+            Assert.assertEquals("1", body.getText());
 
             //Set Integral value > 125 directly, gets converted
             tag.setField(FieldKey.GENRE, "127");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             // because we explicitly set integer value, use it
-            assertEquals("127",body.getText());
+            Assert.assertEquals("127", body.getText());
 
             //Set string representation of Integral value > 125
             tag.setField(FieldKey.GENRE, "Drum & Bass");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             // because we actually set string, write string instead of integer
-            assertEquals("Drum & Bass",body.getText());
+            Assert.assertEquals("Drum & Bass", body.getText());
 
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
-            assertEquals("250",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("250", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("250",body.getText());
+            Assert.assertEquals("250", body.getText());
 
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Musical", tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("17\u000077",body.getText());
+            Assert.assertEquals("17\u000077", body.getText());
             tag.setField(FieldKey.GENRE, "1");
-            tag.addField(FieldKey.GENRE,"2");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
+            tag.addField(FieldKey.GENRE, "2");
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Country", tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country", results.get(1));
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("1\u00002",body.getText());
+            Assert.assertEquals("1\u00002", body.getText());
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v24Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v24Tag)mp3File.getTag().or(NullTag.INSTANCE);
             results = tag.getAll(FieldKey.GENRE);
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country",results.get(1));
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("1\u00002",body.getText());
+            Assert.assertEquals("1\u00002", body.getText());
 
             tag.setField(FieldKey.GENRE, "Remix");
             tag.addField(FieldKey.GENRE, "CR");
-            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("Remix", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Remix", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Cover", tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("RX\u0000CR",body.getText());
+            Assert.assertEquals("RX\u0000CR", body.getText());
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v24Tag) mp3File.getTag().or(NullTag.INSTANCE);
-            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
+            tag = (ID3v24Tag)mp3File.getTag().or(NullTag.INSTANCE);
+            Assert.assertEquals("Remix", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Remix", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Cover", tag.getFieldAt(FieldKey.GENRE, 1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("RX\u0000CR",body.getText());
-            tag.addField(FieldKey.GENRE,"67");
-            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
-            assertEquals("RX\u0000CR\u000067",body.getText());
-        }
-        catch (Exception ex)
-        {
+            Assert.assertEquals("RX\u0000CR", body.getText());
+            tag.addField(FieldKey.GENRE, "67");
+            Assert.assertEquals("Cover", tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("RX\u0000CR\u000067", body.getText());
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
 
-    public void testMp3ID3v22sGenresUsingGenericInterface()
-    {
+    @Test public void testMp3ID3v22sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        Exception e=null;
-        try
-        {
+        Exception e = null;
+        try {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V22);
             AudioFile mp3File = null;
             ID3v22Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            File testFile = TestUtil.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
             mp3File.getTagOrSetNewDefault();
-            tag = (ID3v22Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v22Tag)mp3File.getTag().or(NullTag.INSTANCE);
 
             //Set string  representation of standard value
             tag.setField(FieldKey.GENRE, "Rock");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             FrameBodyTCON body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(17)",body.getText());
+            Assert.assertEquals("(17)", body.getText());
 
             //Set Integral value directly, gets converted
             tag.setField(FieldKey.GENRE, "1");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(1)",body.getText());
+            Assert.assertEquals("(1)", body.getText());
 
             //Set Integral value > 125 directly, gets converted
             tag.setField(FieldKey.GENRE, "127");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             // because we explicitly set integer value, use it
-            assertEquals("(127)",body.getText());
+            Assert.assertEquals("(127)", body.getText());
 
             //Set string representation of Integral value > 125
             tag.setField(FieldKey.GENRE, "Drum & Bass");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             // because we actually set string, write string instead of integer
-            assertEquals("Drum & Bass",body.getText());
+            Assert.assertEquals("Drum & Bass", body.getText());
 
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
-            assertEquals("250",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("250", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("250",body.getText());
+            Assert.assertEquals("250", body.getText());
 
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Musical", tag.getFieldAt(FieldKey.GENRE, 1));
 
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(17)(77)",body.getText());
+            Assert.assertEquals("(17)(77)", body.getText());
             tag.setField(FieldKey.GENRE, "1");
-            tag.addField(FieldKey.GENRE,"2");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
+            tag.addField(FieldKey.GENRE, "2");
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Country", tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country", results.get(1));
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(1)(2)",body.getText());
+            Assert.assertEquals("(1)(2)", body.getText());
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v22Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v22Tag)mp3File.getTag().or(NullTag.INSTANCE);
             results = tag.getAll(FieldKey.GENRE);
-            assertEquals("(1)(2)",body.getText());
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country",results.get(1));
+            Assert.assertEquals("(1)(2)", body.getText());
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
             tag.setField(FieldKey.GENRE, "Remix");
             tag.addField(FieldKey.GENRE, "CR");
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(RX)(CR)",body.getText());
+            Assert.assertEquals("(RX)(CR)", body.getText());
 //            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
 //            assertEquals("Remix",tag.getValue(FieldKey.GENRE, 0));
 //            assertEquals("Cover",tag.getValue(FieldKey.GENRE, 1));
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v22Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v22Tag)mp3File.getTag().or(NullTag.INSTANCE);
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCO")).getBody();
-            assertEquals("(RX)(CR)",body.getText());
+            Assert.assertEquals("(RX)(CR)", body.getText());
+        } catch (Exception ex) {
+            e = ex;
         }
-        catch (Exception ex)
-        {
-            e=ex;
-        }
-        assertNull(e);
+        Assert.assertNull(e);
     }
 
-    public void testMp3ID3v23sGenresUsingGenericInterface()
-    {
+    @Test public void testMp3ID3v23sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
-        if (!orig.isFile())
-        {
+        if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
             return;
         }
 
-        Exception e=null;
-        try
-        {
+        Exception e = null;
+        try {
             TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
             TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
             AudioFile mp3File = null;
             ID3v23Tag tag = null;
-            File testFile = AbstractTestCase.copyAudioToTmp("01.mp3");
+            File testFile = TestUtil.copyAudioToTmp("01.mp3");
             mp3File = AudioFileIO.read(testFile);
             mp3File.getTagOrSetNewDefault();
-            tag = (ID3v23Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v23Tag)mp3File.getTag().or(NullTag.INSTANCE);
 
             //Set string  representation of standard value
             tag.setField(FieldKey.GENRE, "Rock");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
             FrameBodyTCON body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(17)",body.getText());
+            Assert.assertEquals("(17)", body.getText());
 
             //Set Integral value directly, gets converted
             tag.setField(FieldKey.GENRE, "1");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(1)",body.getText());
+            Assert.assertEquals("(1)", body.getText());
 
             //Set Integral value > 125 directly, gets converted
             tag.setField(FieldKey.GENRE, "127");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             // because we explicitly set integer value, use it
-            assertEquals("(127)",body.getText());
+            Assert.assertEquals("(127)", body.getText());
 
             //Set string representation of Integral value > 125
             tag.setField(FieldKey.GENRE, "Drum & Bass");
-            assertEquals("Drum & Bass",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Drum & Bass", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             // because we actually set string, write string instead of integer
-            assertEquals("Drum & Bass",body.getText());
+            Assert.assertEquals("Drum & Bass", body.getText());
 
             //Set Invalid Integral value directly,taken literally
             tag.setField(FieldKey.GENRE, "250");
-            assertEquals("250",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("250", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("250",body.getText());
+            Assert.assertEquals("250", body.getText());
 
             tag.setField(FieldKey.GENRE, "Rock");
             tag.addField(FieldKey.GENRE, "Musical");
-            assertEquals("Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Musical",tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Musical", tag.getFieldAt(FieldKey.GENRE, 1));
 
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(17)(77)",body.getText());
+            Assert.assertEquals("(17)(77)", body.getText());
             tag.setField(FieldKey.GENRE, "1");
-            tag.addField(FieldKey.GENRE,"2");
-            assertEquals("Classic Rock",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Classic Rock",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Country",tag.getFieldAt(FieldKey.GENRE, 1));
+            tag.addField(FieldKey.GENRE, "2");
+            Assert.assertEquals("Classic Rock", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Classic Rock", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Country", tag.getFieldAt(FieldKey.GENRE, 1));
             List<String> results = tag.getAll(FieldKey.GENRE);
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country", results.get(1));
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(1)(2)",body.getText());
+            Assert.assertEquals("(1)(2)", body.getText());
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v23Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v23Tag)mp3File.getTag().or(NullTag.INSTANCE);
             results = tag.getAll(FieldKey.GENRE);
-            assertEquals("(1)(2)",body.getText());
-            assertEquals("Classic Rock",results.get(0));
-            assertEquals("Country",results.get(1));
+            Assert.assertEquals("(1)(2)", body.getText());
+            Assert.assertEquals("Classic Rock", results.get(0));
+            Assert.assertEquals("Country", results.get(1));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             tag.setField(FieldKey.GENRE, "Remix");
             tag.addField(FieldKey.GENRE, "CR");
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(RX)(CR)",body.getText());
-            assertEquals("Remix",tag.getFirst(FieldKey.GENRE));
-            assertEquals("Remix",tag.getFieldAt(FieldKey.GENRE, 0));
-            assertEquals("Cover",tag.getFieldAt(FieldKey.GENRE, 1));
+            Assert.assertEquals("(RX)(CR)", body.getText());
+            Assert.assertEquals("Remix", tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Remix", tag.getFieldAt(FieldKey.GENRE, 0));
+            Assert.assertEquals("Cover", tag.getFieldAt(FieldKey.GENRE, 1));
             mp3File.save();
             mp3File = AudioFileIO.read(testFile);
-            tag = (ID3v23Tag) mp3File.getTag().or(NullTag.INSTANCE);
+            tag = (ID3v23Tag)mp3File.getTag().or(NullTag.INSTANCE);
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(RX)(CR)",body.getText());
+            Assert.assertEquals("(RX)(CR)", body.getText());
 
             tag.setField(FieldKey.GENRE, "Cover");
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(CR)",body.getText());
+            Assert.assertEquals("(CR)", body.getText());
             tag.addField(FieldKey.GENRE, "FlapFlap");
-            assertEquals("Cover",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Cover", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
-            assertEquals("(CR)\u0000FlapFlap",body.getText());
+            Assert.assertEquals("(CR)\u0000FlapFlap", body.getText());
             tag.setField(FieldKey.GENRE, "Country Shoegaze");
-            assertEquals("Country Shoegaze",tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals("Country Shoegaze", tag.getFirst(FieldKey.GENRE));
             body = (FrameBodyTCON)((AbstractID3v2Frame)tag.getFrame("TCON")).getBody();
             //TODO cannot handle setting v23 refinements in generic interface, but does that really matter
             //ID3v24Tag doesnt really have the convcept OutOfMemoryError refinements just multiple values
-            assertEquals("Country Shoegaze",body.getText());
+            Assert.assertEquals("Country Shoegaze", body.getText());
+        } catch (Exception ex) {
+            e = ex;
         }
-        catch (Exception ex)
-        {
-            e=ex;
-        }
-        assertNull(e);
+        Assert.assertNull(e);
     }
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>

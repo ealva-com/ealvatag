@@ -1,6 +1,6 @@
 package ealvatag.tag.id3;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp3.MP3File;
@@ -11,6 +11,7 @@ import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.TagTextField;
 import ealvatag.tag.UnsupportedFieldException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,10 @@ public class ID3v1TagTest {
         TagOptionSingleton.getInstance().setToDefault();
     }
 
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     @Test public void testCreateID3v1Tag() {
         ID3v1Tag v1Tag = getInitialisedTag();
 
@@ -76,7 +81,7 @@ public class ID3v1TagTest {
     }
 
     @Test public void testSaveID3v1TagToFile() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create v1 Tag
@@ -99,7 +104,7 @@ public class ID3v1TagTest {
 
     @Test(expected = UnsupportedFieldException.class)
     public void testUnsupportedField() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
 
         //Create v1 Tag
@@ -128,7 +133,7 @@ public class ID3v1TagTest {
 
 
     @Test public void testSaveID3v1TagToFileUsingTagInterface() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
         AudioFile file = AudioFileIO.read(testFile);
 
         //Create v1 Tag

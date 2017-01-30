@@ -1,20 +1,27 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Test writing of new files
  */
-public class Issue373Test extends AbstractTestCase {
-    public void testIssue() throws Exception {
+public class Issue373Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test public void testIssue() throws Exception {
         Exception caught = null;
         try {
             File orig = new File("testdata", "test94.mp3");
@@ -23,7 +30,7 @@ public class Issue373Test extends AbstractTestCase {
                 return;
             }
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test94.mp3");
+            File testFile = TestUtil.copyAudioToTmp("test94.mp3");
 
 
             AudioFile af = AudioFileIO.read(testFile);
@@ -41,6 +48,6 @@ public class Issue373Test extends AbstractTestCase {
             caught = e;
             e.printStackTrace();
         }
-        assertNull(caught);
+        Assert.assertNull(caught);
     }
 }

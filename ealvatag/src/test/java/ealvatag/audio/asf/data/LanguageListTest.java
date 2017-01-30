@@ -1,5 +1,8 @@
 package ealvatag.audio.asf.data;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.math.BigInteger;
 
 /**
@@ -22,19 +25,19 @@ public class LanguageListTest extends AbstractChunk<LanguageList> {
      * {@link ealvatag.audio.asf.data.LanguageList#addLanguage(java.lang.String)}
      * .
      */
-    public void testLanguage() {
+    @Test public void testLanguage() {
         final LanguageList chunk = createChunk(0, BigInteger.ZERO);
         chunk.addLanguage("language");
-        assertEquals("language", chunk.getLanguage(0));
-        assertEquals(1, chunk.getLanguageCount());
+        Assert.assertEquals("language", chunk.getLanguage(0));
+        Assert.assertEquals(1, chunk.getLanguageCount());
         chunk.removeLanguage(0);
-        assertEquals(0, chunk.getLanguageCount());
+        Assert.assertEquals(0, chunk.getLanguageCount());
         for (int i = 0; i < MetadataDescriptor.MAX_LANG_INDEX; i++) {
             chunk.addLanguage("lang" + i);
-            assertEquals("lang" + i, chunk.getLanguage(i));
-            assertEquals(i + 1, chunk.getLanguageCount());
-            assertEquals(i + 1, chunk.getLanguages().size());
-            assertTrue(chunk.getLanguages().contains("lang" + i));
+            Assert.assertEquals("lang" + i, chunk.getLanguage(i));
+            Assert.assertEquals(i + 1, chunk.getLanguageCount());
+            Assert.assertEquals(i + 1, chunk.getLanguages().size());
+            Assert.assertTrue(chunk.getLanguages().contains("lang" + i));
         }
     }
 

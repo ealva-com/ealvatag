@@ -1,6 +1,6 @@
 package ealvatag.tag.vorbiscomment;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.ogg.OggFileReader;
@@ -10,6 +10,8 @@ import ealvatag.tag.NullTag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,8 +23,7 @@ import java.util.List;
 /**
  * Vorbis Write tsgs
  */
-public class VorbisWriteTagTest
-        extends AbstractTestCase {
+public class VorbisWriteTagTest {
 
     private static final String AUTHOR = "AUTHOR";
     private static final String ALBUM = "ALBUM";
@@ -66,11 +67,11 @@ public class VorbisWriteTagTest
     /**
      * Can summarize file
      */
-    public void testSummarizeFile() {
+    @Test public void testSummarizeFile() {
         Exception exceptionCaught = null;
         try {
 //Can summarize file
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testSummarizeFile.ogg"));
+            File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testSummarizeFile.ogg"));
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
             oggFileReader.summarizeOggPageHeaders(testFile);
@@ -79,13 +80,13 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Testing of writing various fields
      */
-    public void testWriteTagToFile() {
+    @Test public void testWriteTagToFile() {
         final String testFileName = "testWriteTagTest.ogg";
         TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_ALBUMARTIST);
         TagOptionSingleton.getInstance().setVorbisAlbumArtistSaveOptions(VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST);
@@ -95,10 +96,10 @@ public class VorbisWriteTagTest
             //noinspection ResultOfMethodCallIgnored
             copyDestination.delete();
 
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", copyDestination);
+            File testFile = TestUtil.copyAudioToTmp("test.ogg", copyDestination);
             AudioFile f = AudioFileIO.read(testFile);
 
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //These have methods coz common over all formats
@@ -143,7 +144,7 @@ public class VorbisWriteTagTest
 
             //tag.setField(tag.createField(FieldKey.ENCODER,"encoder"));
             tag.setVendor(ENCODER);
-            assertEquals(ENCODER, tag.getVendor());
+            Assert.assertEquals(ENCODER, tag.getVendor());
 
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
             RandomAccessFile imageFile = new RandomAccessFile(new File("testdata", "coverart.png"), "r");
@@ -156,114 +157,114 @@ public class VorbisWriteTagTest
 
             //key not known to ealvatag
             tag.setField(VIOLINIST, SARAH_CURTIS);
-            assertEquals(IMAGE_SLASH_PNG, tag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
+            Assert.assertEquals(IMAGE_SLASH_PNG, tag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
 
             f.save();
 
             f = AudioFileIO.read(testFile);
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
-            assertEquals(AUTHOR, tag.getFirst(FieldKey.ARTIST));
-            assertEquals(ALBUM, tag.getFirst(FieldKey.ALBUM));
-            assertEquals(TITLE, tag.getFirst(FieldKey.TITLE));
-            assertEquals(COMMENTS, tag.getFirst(FieldKey.COMMENT));
-            assertEquals(YEAR, tag.getFirst(FieldKey.YEAR));
-            assertEquals(TRACK, tag.getFirst(FieldKey.TRACK));
-            assertEquals(GENRE, tag.getFirst(FieldKey.GENRE));
-            assertEquals(AUTHOR, tag.getFirst(FieldKey.ARTIST));
-            assertEquals(ALBUM, tag.getFirst(FieldKey.ALBUM));
-            assertEquals(TITLE, tag.getFirst(FieldKey.TITLE));
-            assertEquals(COMMENTS, tag.getFirst(FieldKey.COMMENT));
-            assertEquals(TRACK, tag.getFirst(FieldKey.TRACK));
-            assertEquals(DISC, tag.getFirst(FieldKey.DISC_NO));
-            assertEquals(COMPOSER, tag.getFirst(FieldKey.COMPOSER));
-            assertEquals(SORTARTIST, tag.getFirst(FieldKey.ARTIST_SORT));
-            assertEquals(LYRICS, tag.getFirst(FieldKey.LYRICS));
-            assertEquals(BPM, tag.getFirst(FieldKey.BPM));
-            assertEquals(ALBUMARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST));
-            assertEquals(SORTALBUMARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
-            assertEquals(SORTALBUM, tag.getFirst(FieldKey.ALBUM_SORT));
-            assertEquals(GROUPING, tag.getFirst(FieldKey.GROUPING));
-            assertEquals(SORTCOMPOSER, tag.getFirst(FieldKey.COMPOSER_SORT));
-            assertEquals(SORTTITLE, tag.getFirst(FieldKey.TITLE_SORT));
-            assertEquals(IS_COMPILATION, tag.getFirst(FieldKey.IS_COMPILATION));
-            assertEquals(MUSICIP_ID, tag.getFirst(FieldKey.MUSICIP_ID));
-            assertEquals(MUSICBRAINZ_TRACK_ID, tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
-            assertEquals(MUSICBRAINZ_ARTIST_ID, tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals(MUSICBRAINZ_RELEASE_ARTIST_ID, tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
-            assertEquals(MUSICBRAINZ_RELEASE_ID, tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
-            assertEquals(TRACK_COUNT, tag.getFirst(FieldKey.TRACK_TOTAL));
-            assertEquals(DISC_COUNT, tag.getFirst(FieldKey.DISC_TOTAL));
+            Assert.assertEquals(AUTHOR, tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals(ALBUM, tag.getFirst(FieldKey.ALBUM));
+            Assert.assertEquals(TITLE, tag.getFirst(FieldKey.TITLE));
+            Assert.assertEquals(COMMENTS, tag.getFirst(FieldKey.COMMENT));
+            Assert.assertEquals(YEAR, tag.getFirst(FieldKey.YEAR));
+            Assert.assertEquals(TRACK, tag.getFirst(FieldKey.TRACK));
+            Assert.assertEquals(GENRE, tag.getFirst(FieldKey.GENRE));
+            Assert.assertEquals(AUTHOR, tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals(ALBUM, tag.getFirst(FieldKey.ALBUM));
+            Assert.assertEquals(TITLE, tag.getFirst(FieldKey.TITLE));
+            Assert.assertEquals(COMMENTS, tag.getFirst(FieldKey.COMMENT));
+            Assert.assertEquals(TRACK, tag.getFirst(FieldKey.TRACK));
+            Assert.assertEquals(DISC, tag.getFirst(FieldKey.DISC_NO));
+            Assert.assertEquals(COMPOSER, tag.getFirst(FieldKey.COMPOSER));
+            Assert.assertEquals(SORTARTIST, tag.getFirst(FieldKey.ARTIST_SORT));
+            Assert.assertEquals(LYRICS, tag.getFirst(FieldKey.LYRICS));
+            Assert.assertEquals(BPM, tag.getFirst(FieldKey.BPM));
+            Assert.assertEquals(ALBUMARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST));
+            Assert.assertEquals(SORTALBUMARTIST, tag.getFirst(FieldKey.ALBUM_ARTIST_SORT));
+            Assert.assertEquals(SORTALBUM, tag.getFirst(FieldKey.ALBUM_SORT));
+            Assert.assertEquals(GROUPING, tag.getFirst(FieldKey.GROUPING));
+            Assert.assertEquals(SORTCOMPOSER, tag.getFirst(FieldKey.COMPOSER_SORT));
+            Assert.assertEquals(SORTTITLE, tag.getFirst(FieldKey.TITLE_SORT));
+            Assert.assertEquals(IS_COMPILATION, tag.getFirst(FieldKey.IS_COMPILATION));
+            Assert.assertEquals(MUSICIP_ID, tag.getFirst(FieldKey.MUSICIP_ID));
+            Assert.assertEquals(MUSICBRAINZ_TRACK_ID, tag.getFirst(FieldKey.MUSICBRAINZ_TRACK_ID));
+            Assert.assertEquals(MUSICBRAINZ_ARTIST_ID, tag.getFirst(FieldKey.MUSICBRAINZ_ARTISTID));
+            Assert.assertEquals(MUSICBRAINZ_RELEASE_ARTIST_ID, tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEARTISTID));
+            Assert.assertEquals(MUSICBRAINZ_RELEASE_ID, tag.getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
+            Assert.assertEquals(TRACK_COUNT, tag.getFirst(FieldKey.TRACK_TOTAL));
+            Assert.assertEquals(DISC_COUNT, tag.getFirst(FieldKey.DISC_TOTAL));
 
             VorbisCommentTag vorbisTag = tag;
-            assertEquals(AUTHOR, vorbisTag.getFirst(VorbisCommentFieldKey.ARTIST));
-            assertEquals(ALBUM, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUM));
-            assertEquals(TITLE, vorbisTag.getFirst(VorbisCommentFieldKey.TITLE));
-            assertEquals(COMMENTS, vorbisTag.getFirst(VorbisCommentFieldKey.COMMENT));
-            assertEquals(YEAR, vorbisTag.getFirst(VorbisCommentFieldKey.DATE));
-            assertEquals(TRACK, vorbisTag.getFirst(VorbisCommentFieldKey.TRACKNUMBER));
-            assertEquals(DISC, vorbisTag.getFirst(VorbisCommentFieldKey.DISCNUMBER));
-            assertEquals(COMPOSER, vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSER));
-            assertEquals(SORTARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ARTISTSORT));
-            assertEquals(LYRICS, vorbisTag.getFirst(VorbisCommentFieldKey.LYRICS));
-            assertEquals(BPM, vorbisTag.getFirst(VorbisCommentFieldKey.BPM));
-            assertEquals(ALBUMARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMARTIST));
-            assertEquals(SORTALBUMARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMARTISTSORT));
-            assertEquals(SORTALBUM, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMSORT));
-            assertEquals(GROUPING, vorbisTag.getFirst(VorbisCommentFieldKey.GROUPING));
-            assertEquals(SORTCOMPOSER, vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSERSORT));
-            assertEquals(SORTTITLE, vorbisTag.getFirst(VorbisCommentFieldKey.TITLESORT));
-            assertEquals(IS_COMPILATION, vorbisTag.getFirst(VorbisCommentFieldKey.COMPILATION));
-            assertEquals(MUSICIP_ID, vorbisTag.getFirst(VorbisCommentFieldKey.MUSICIP_PUID));
-            assertEquals(MUSICBRAINZ_TRACK_ID, vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_TRACKID));
-            assertEquals(MUSICBRAINZ_ARTIST_ID,
-                         vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
-            assertEquals(MUSICBRAINZ_RELEASE_ARTIST_ID,
-                         vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
-            assertEquals(MUSICBRAINZ_RELEASE_ID,
-                         vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));
-            assertEquals(URL_LYRICS_SITE, tag.getFirst(VorbisCommentFieldKey.URL_LYRICS_SITE));
-            assertEquals(URL_DISCOGS_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE));
-            assertEquals(URL_DISCOGS_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE));
-            assertEquals(URL_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE));
-            assertEquals(URL_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE));
-            assertEquals(URL_WIKIPEDIA_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
-            assertEquals(URL_WIKIPEDIA_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
-            assertEquals(TRACK_COUNT, tag.getFirst(VorbisCommentFieldKey.TRACKTOTAL));
-            assertEquals(DISC_COUNT, tag.getFirst(VorbisCommentFieldKey.DISCTOTAL));
+            Assert.assertEquals(AUTHOR, vorbisTag.getFirst(VorbisCommentFieldKey.ARTIST));
+            Assert.assertEquals(ALBUM, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUM));
+            Assert.assertEquals(TITLE, vorbisTag.getFirst(VorbisCommentFieldKey.TITLE));
+            Assert.assertEquals(COMMENTS, vorbisTag.getFirst(VorbisCommentFieldKey.COMMENT));
+            Assert.assertEquals(YEAR, vorbisTag.getFirst(VorbisCommentFieldKey.DATE));
+            Assert.assertEquals(TRACK, vorbisTag.getFirst(VorbisCommentFieldKey.TRACKNUMBER));
+            Assert.assertEquals(DISC, vorbisTag.getFirst(VorbisCommentFieldKey.DISCNUMBER));
+            Assert.assertEquals(COMPOSER, vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSER));
+            Assert.assertEquals(SORTARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ARTISTSORT));
+            Assert.assertEquals(LYRICS, vorbisTag.getFirst(VorbisCommentFieldKey.LYRICS));
+            Assert.assertEquals(BPM, vorbisTag.getFirst(VorbisCommentFieldKey.BPM));
+            Assert.assertEquals(ALBUMARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMARTIST));
+            Assert.assertEquals(SORTALBUMARTIST, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMARTISTSORT));
+            Assert.assertEquals(SORTALBUM, vorbisTag.getFirst(VorbisCommentFieldKey.ALBUMSORT));
+            Assert.assertEquals(GROUPING, vorbisTag.getFirst(VorbisCommentFieldKey.GROUPING));
+            Assert.assertEquals(SORTCOMPOSER, vorbisTag.getFirst(VorbisCommentFieldKey.COMPOSERSORT));
+            Assert.assertEquals(SORTTITLE, vorbisTag.getFirst(VorbisCommentFieldKey.TITLESORT));
+            Assert.assertEquals(IS_COMPILATION, vorbisTag.getFirst(VorbisCommentFieldKey.COMPILATION));
+            Assert.assertEquals(MUSICIP_ID, vorbisTag.getFirst(VorbisCommentFieldKey.MUSICIP_PUID));
+            Assert.assertEquals(MUSICBRAINZ_TRACK_ID, vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_TRACKID));
+            Assert.assertEquals(MUSICBRAINZ_ARTIST_ID,
+                                vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ARTISTID));
+            Assert.assertEquals(MUSICBRAINZ_RELEASE_ARTIST_ID,
+                                vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMARTISTID));
+            Assert.assertEquals(MUSICBRAINZ_RELEASE_ID,
+                                vorbisTag.getFirst(VorbisCommentFieldKey.MUSICBRAINZ_ALBUMID));
+            Assert.assertEquals(URL_LYRICS_SITE, tag.getFirst(VorbisCommentFieldKey.URL_LYRICS_SITE));
+            Assert.assertEquals(URL_DISCOGS_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_ARTIST_SITE));
+            Assert.assertEquals(URL_DISCOGS_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_DISCOGS_RELEASE_SITE));
+            Assert.assertEquals(URL_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_ARTIST_SITE));
+            Assert.assertEquals(URL_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_OFFICIAL_RELEASE_SITE));
+            Assert.assertEquals(URL_WIKIPEDIA_ARTIST_SITE, tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_ARTIST_SITE));
+            Assert.assertEquals(URL_WIKIPEDIA_RELEASE_SITE, tag.getFirst(VorbisCommentFieldKey.URL_WIKIPEDIA_RELEASE_SITE));
+            Assert.assertEquals(TRACK_COUNT, tag.getFirst(VorbisCommentFieldKey.TRACKTOTAL));
+            Assert.assertEquals(DISC_COUNT, tag.getFirst(VorbisCommentFieldKey.DISCTOTAL));
 
-            assertEquals(SARAH_CURTIS, vorbisTag.getFirst(VIOLINIST));
+            Assert.assertEquals(SARAH_CURTIS, vorbisTag.getFirst(VIOLINIST));
 
-            assertEquals(ENCODER, vorbisTag.getVendor());
+            Assert.assertEquals(ENCODER, vorbisTag.getVendor());
 
             //List methods
             List<TagField> list = tag.getFields(FieldKey.ARTIST);
-            assertEquals(1, list.size());
+            Assert.assertEquals(1, list.size());
             for (TagField field : list) {
-                assertEquals(AUTHOR, field.toString());
+                Assert.assertEquals(AUTHOR, field.toString());
             }
 
             //Vorbis keys that have no mapping to generic key
-            assertEquals(DESCRIPTION, vorbisTag.getFirst(VorbisCommentFieldKey.DESCRIPTION));
+            Assert.assertEquals(DESCRIPTION, vorbisTag.getFirst(VorbisCommentFieldKey.DESCRIPTION));
 
             //VorbisImage base64 image, and reconstruct
-            assertEquals(IMAGE_SLASH_PNG, vorbisTag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
-            assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
+            Assert.assertEquals(IMAGE_SLASH_PNG, vorbisTag.getFirst(VorbisCommentFieldKey.COVERARTMIME));
+            Assert.assertEquals(base64image, vorbisTag.getFirst(VorbisCommentFieldKey.COVERART));
             BufferedImage bi = ImageIO.read(ImageIO
                                                     .createImageInputStream(new ByteArrayInputStream(Base64Coder.
                                                                                                                         decode(vorbisTag
                                                                                                                                        .getFirst(
                                                                                                                                                VorbisCommentFieldKey.COVERART)
                                                                                                                                        .toCharArray()))));
-            assertNotNull(bi);
+            Assert.assertNotNull(bi);
 
 
             OggFileReader ofr = new OggFileReader();
             OggPageHeader oph = ofr.readOggPageHeader(new RandomAccessFile(testFile, "r"), 0);
-            assertEquals(30, oph.getPageLength());
-            assertEquals(0, oph.getPageSequence());
-            assertEquals(559748870, oph.getSerialNumber());
-            assertEquals(-2111591604, oph.getCheckSum());
-            assertEquals(2, oph.getHeaderType());
+            Assert.assertEquals(30, oph.getPageLength());
+            Assert.assertEquals(0, oph.getPageSequence());
+            Assert.assertEquals(559748870, oph.getSerialNumber());
+            Assert.assertEquals(-2111591604, oph.getCheckSum());
+            Assert.assertEquals(2, oph.getHeaderType());
 
 
         } catch (Exception e) {
@@ -272,13 +273,13 @@ public class VorbisWriteTagTest
         } finally {
             new File(testFileName).delete();
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing to file, comments too large to fit on single page anymore
      */
-    public void testWriteToFileMuchLarger() {
+    @Test public void testWriteToFileMuchLarger() {
         File orig = new File("testdata", "test.ogg");
         if (!orig.isFile()) {
             return;
@@ -287,10 +288,10 @@ public class VorbisWriteTagTest
         Exception exceptionCaught = null;
         try {
             File testFile =
-                    AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteTagTestRequiresTwoPages.ogg"));
+                    TestUtil.copyAudioToTmp("test.ogg", new File("testWriteTagTestRequiresTwoPages.ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
@@ -310,8 +311,8 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -326,13 +327,13 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing to file, comments too large to fit on single page anymore, and also setup header gets split
      */
-    public void testWriteToFileMuchLargerSetupHeaderSplit() {
+    @Test public void testWriteToFileMuchLargerSetupHeaderSplit() {
         File orig = new File("testdata", "test.ogg");
         if (!orig.isFile()) {
             return;
@@ -340,12 +341,12 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",
-                                                            new File("testWriteTagTestRequiresTwoPagesHeaderSplit" +
+            File testFile = TestUtil.copyAudioToTmp("test.ogg",
+                                                    new File("testWriteTagTestRequiresTwoPagesHeaderSplit" +
                                                                              ".ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new pretend image to force split of setup header
@@ -364,8 +365,8 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -383,14 +384,14 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit so
      * comment data is changed but size of comment header is same length
      */
-    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeader() {
+    @Test public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeader() {
         File orig = new File("testdata", "test2.ogg");
         if (!orig.isFile()) {
             return;
@@ -398,8 +399,8 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg",
-                                                            new File("testWriteTagWithExtraPacketsHeaderSameSize.ogg"));
+            File testFile = TestUtil.copyAudioToTmp("test2.ogg",
+                                                    new File("testWriteTagWithExtraPacketsHeaderSameSize.ogg"));
 
             OggFileReader oggFileReader = new OggFileReader();
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
@@ -408,7 +409,7 @@ public class VorbisWriteTagTest
             raf.close();
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //These have methods coz common over all formats
@@ -422,28 +423,28 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
 
             //Check 2nd page has same number of packets, this is only the case for this specific test, so check
             //in test not code itself.
             raf = new RandomAccessFile(testFile, "r");
             pageHeader = oggFileReader.readOggPageHeader(raf, 1);
             raf.close();
-            assertEquals(packetsInSecondPageCount, pageHeader.getPacketList().size());
+            Assert.assertEquals(packetsInSecondPageCount, pageHeader.getPacketList().size());
 
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit enough
      * so that comment is larger, but the comment, header and extra packets can still all fit on page 2
      */
-    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderLarger() {
+    @Test public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderLarger() {
         File orig = new File("testdata", "test2.ogg");
         if (!orig.isFile()) {
             return;
@@ -451,8 +452,8 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg",
-                                                            new File("testWriteTagWithExtraPacketsHeaderLargerSize" +
+            File testFile = TestUtil.copyAudioToTmp("test2.ogg",
+                                                    new File("testWriteTagWithExtraPacketsHeaderLargerSize" +
                                                                              ".ogg"));
 
             OggFileReader oggFileReader = new OggFileReader();
@@ -462,7 +463,7 @@ public class VorbisWriteTagTest
             raf.close();
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //These have methods coz common over all formats
@@ -476,27 +477,27 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals("ARTISTIC", tag.getFirst(FieldKey.ARTIST));
+            Assert.assertEquals("ARTISTIC", tag.getFirst(FieldKey.ARTIST));
 
             //Check 2nd page has same number of packets, this is only the case for this specific test, so check
             //in test not code itself.
             raf = new RandomAccessFile(testFile, "r");
             pageHeader = oggFileReader.readOggPageHeader(raf, 1);
             raf.close();
-            assertEquals(packetsInSecondPageCount, pageHeader.getPacketList().size());
+            Assert.assertEquals(packetsInSecondPageCount, pageHeader.getPacketList().size());
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Issue 197, test writing to file when audio packet come straight after setup packet on same oggPage, edit enough
      * so that comment is much larger, so that comment, header and extra packets can no longer fit on page 2
      */
-    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLarger() {
+    @Test public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLarger() {
         File orig = new File("testdata", "test2.ogg");
         if (!orig.isFile()) {
             return;
@@ -504,13 +505,13 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test.ogg",
-                                                            new File(
+            File testFile = TestUtil.copyAudioToTmp("test.ogg",
+                                                    new File(
                                                                     "testWriteTagWithExtraPacketsHeaderMuchLargerSize" +
                                                                             ".ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new image, requires two fields in oggVorbis with data in  base64 encoded form
@@ -530,8 +531,8 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(1, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -546,7 +547,7 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
@@ -554,7 +555,7 @@ public class VorbisWriteTagTest
      * so that comment is much larger, so that comment, header and extra packets can no longer fit on page 2 AND
      * setup header is also split over two
      */
-    public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLargerAndSplit() {
+    @Test public void testWriteToFileWithExtraPacketsOnSamePageAsSetupHeaderMuchLargerAndSplit() {
         File orig = new File("testdata", "test2.ogg");
         if (!orig.isFile()) {
             return;
@@ -562,12 +563,12 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test2.ogg",
-                                                            new File(
+            File testFile = TestUtil.copyAudioToTmp("test2.ogg",
+                                                    new File(
                                                                     "testWriteTagWithExtraPacketsHeaderMuchLargerSizeAndSplit.ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Add new pretend image to force split of setup header
@@ -607,13 +608,13 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing to file, comments was too large for one page but not anymore
      */
-    public void testWriteToFileNoLongerRequiresTwoPages() {
+    @Test public void testWriteToFileNoLongerRequiresTwoPages() {
         File orig = new File("testdata", "test3.ogg");
         if (!orig.isFile()) {
             return;
@@ -621,11 +622,11 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test3.ogg",
-                                                            new File("testWriteTagTestNoLongerRequiresTwoPages.ogg"));
+            File testFile = TestUtil.copyAudioToTmp("test3.ogg",
+                                                    new File("testWriteTagTestNoLongerRequiresTwoPages.ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Delete Large Image
@@ -640,8 +641,8 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -656,14 +657,14 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 
     /**
      * Test writing to file, comments was too large for one page and setup header split but not anymore
      */
-    public void testWriteToFileNoLongerRequiresTwoPagesNorSplit() {
+    @Test public void testWriteToFileNoLongerRequiresTwoPagesNorSplit() {
         File orig = new File("testdata", "test5.ogg");
         if (!orig.isFile()) {
             return;
@@ -671,13 +672,13 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test5.ogg",
-                                                            new File(
+            File testFile = TestUtil.copyAudioToTmp("test5.ogg",
+                                                    new File(
                                                                     "testWriteTagTestNoLongerRequiresTwoPagesNorSplit" +
                                                                             ".ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Delete Large Image
@@ -692,8 +693,8 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -708,13 +709,13 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing to file, comments was too large for one page but not anymore
      */
-    public void testWriteToFileWriteToFileWithExtraPacketsNoLongerRequiresTwoPages() {
+    @Test public void testWriteToFileWriteToFileWithExtraPacketsNoLongerRequiresTwoPages() {
         File orig = new File("testdata", "test4.ogg");
         if (!orig.isFile()) {
             return;
@@ -722,12 +723,12 @@ public class VorbisWriteTagTest
 
         Exception exceptionCaught = null;
         try {
-            File testFile = AbstractTestCase.copyAudioToTmp("test4.ogg",
-                                                            new File(
+            File testFile = TestUtil.copyAudioToTmp("test4.ogg",
+                                                    new File(
                                                                     "testWriteTagTestWithPacketsNoLongerRequiresTwoPages.ogg"));
 
             AudioFile f = AudioFileIO.read(testFile);
-            assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
+            Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof VorbisCommentTag);
             VorbisCommentTag tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Delete Large Image
@@ -743,9 +744,9 @@ public class VorbisWriteTagTest
             tag = (VorbisCommentTag)f.getTag().or(NullTag.INSTANCE);
 
             //Check changes
-            assertEquals(0, tag.get(VorbisCommentFieldKey.ARTIST).size());
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
-            assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.ARTIST).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERART).size());
+            Assert.assertEquals(0, tag.get(VorbisCommentFieldKey.COVERARTMIME).size());
 
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
@@ -760,75 +761,75 @@ public class VorbisWriteTagTest
             e.printStackTrace();
             exceptionCaught = e;
         }
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
-    public void testDeleteTag() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDelete.ogg"));
+    @Test public void testDeleteTag() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testDelete.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
         f.setNewDefaultTag();
         f.save();
 
         f = AudioFileIO.read(testFile);
-        assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
-        assertEquals("ealvatag", ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getVendor());
+        Assert.assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
+        Assert.assertEquals("ealvatag", ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getVendor());
     }
 
-    public void testDeleteTag2() throws Exception {
-        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDelete2.ogg"));
+    @Test public void testDeleteTag2() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testDelete2.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
         f.deleteFileTag();
 
         f = AudioFileIO.read(testFile);
-        assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
-        assertEquals("ealvatag", ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getVendor());
+        Assert.assertTrue(f.getTag().or(NullTag.INSTANCE).isEmpty());
+        Assert.assertEquals("ealvatag", ((VorbisCommentTag)f.getTag().or(NullTag.INSTANCE)).getVendor());
     }
 
-    public void testWriteMultipleFields() throws Exception {
+    @Test public void testWriteMultipleFields() throws Exception {
         TagOptionSingleton.getInstance().setVorbisAlbumArtistReadOptions(VorbisAlbumArtistReadOptions.READ_ALBUMARTIST);
         TagOptionSingleton.getInstance()
                           .setVorbisAlbumArtistSaveOptions(VorbisAlbumArtistSaveOptions.WRITE_ALBUMARTIST);
 
 
-        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testWriteMultiple.ogg"));
+        File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testWriteMultiple.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST, "artist1");
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST, "artist2");
         f.save();
         f = AudioFileIO.read(testFile);
         List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST);
-        assertEquals(tagFields.size(), 2);
+        Assert.assertEquals(tagFields.size(), 2);
     }
 
-    public void testDeleteFields() throws Exception {
+    @Test public void testDeleteFields() throws Exception {
         //Delete using generic key
-        File testFile = AbstractTestCase.copyAudioToTmp("test.ogg", new File("testDeleteFields.ogg"));
+        File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testDeleteFields.ogg"));
         AudioFile f = AudioFileIO.read(testFile);
         List<TagField> tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(0, tagFields.size());
+        Assert.assertEquals(0, tagFields.size());
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
         tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(2, tagFields.size());
+        Assert.assertEquals(2, tagFields.size());
         f.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.ALBUM_ARTIST_SORT);
         f.save();
 
         //Delete using flac id
         f = AudioFileIO.read(testFile);
         tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(0, tagFields.size());
+        Assert.assertEquals(0, tagFields.size());
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist1");
         f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ALBUM_ARTIST_SORT, "artist2");
         tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(2, tagFields.size());
+        Assert.assertEquals(2, tagFields.size());
         f.getTag().or(NullTag.INSTANCE).deleteField("ALBUMARTISTSORT");
         tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(0, tagFields.size());
+        Assert.assertEquals(0, tagFields.size());
         f.save();
 
         f = AudioFileIO.read(testFile);
         tagFields = f.getTag().or(NullTag.INSTANCE).getFields(FieldKey.ALBUM_ARTIST_SORT);
-        assertEquals(0, tagFields.size());
+        Assert.assertEquals(0, tagFields.size());
 
     }
 }

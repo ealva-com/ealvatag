@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Strings;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Hex;
 import ealvatag.tag.EmptyFrameException;
@@ -480,111 +481,112 @@ import java.util.regex.Pattern;
 
     private void read(final Buffer buffer) throws InvalidTagException, IOException {
         final String fileName = getLoggingFilename();
-        String identifier = readIdentifier(buffer);
-        if (!isValidID3v2FrameIdentifier(identifier)) {
-            LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
-            throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
-        }
-        //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
-        frameSize = buffer.readInt();
-        if (frameSize < 0) {
-            LOG.warn("Invalid Frame Size:{} Id:{} - {}", frameSize, identifier, fileName);
-            throw new InvalidFrameException(identifier + " is invalid frame:" + frameSize);
-        } else if (frameSize == 0) {
-            LOG.warn(fileName + ":Empty Frame Size:" + identifier);
-            //We don't process this frame or add to frameMap because contains no useful information
-            //Skip the two flag bytes so in correct position for subsequent frames
-            buffer.readByte();
-            buffer.readByte();
-            throw new EmptyFrameException(identifier + " is empty frame");
-        } else if (frameSize > buffer.size()) {
-            LOG.warn("Invalid Frame size of {} larger than size of {} before mp3 audio {} - {}",
-                     frameSize,
-                     buffer.size(),
-                     identifier,
-                     fileName);
-            throw new InvalidFrameException(identifier +
-                                                    " is invalid frame:" +
-                                                    frameSize +
-                                                    " larger than size of" +
-                                                    buffer.size() +
-                                                    " before mp3 audio:" +
-                                                    identifier);
-        }
-
-        //Read the flag bytes
-        statusFlags = new StatusFlags(buffer.readByte());
-        encodingFlags = new EncodingFlags(buffer.readByte());
-
-        //If this identifier is a valid v24 identifier or easily converted to v24
-        String frameId = ID3Tags.convertFrameID23To24(identifier);
-
-        // Cant easily be converted to v24 but is it a valid v23 identifier
-        if (frameId == null) {
-            // It is a valid v23 identifier so should be able to find a
-            //  frame body for it.
-            if (ID3Tags.isID3v23FrameIdentifier(identifier)) {
-                frameId = identifier;
+        try {
+            String identifier = readIdentifier(buffer);
+            if (!isValidID3v2FrameIdentifier(identifier)) {
+                LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
+                throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
             }
-            // Unknown so will be created as FrameBodyUnsupported
-            else {
-                frameId = UNSUPPORTED_ID;
-            }
-        }
-        LOG.info(fileName + ":Identifier was:" + identifier + " reading using:" + frameId + "with frame size:" + frameSize);
-
-        //Read extra bits appended to frame header for various encodings
-        //These are not included in header size but are included in frame size but won't be read when we actually
-        //try to read the frame body data
-        int extraHeaderBytesCount = 0;
-        int decompressedFrameSize = -1;
-
-        if (((EncodingFlags)encodingFlags).isCompression()) {
-            //Read the Decompressed Size
-            decompressedFrameSize = buffer.readInt();
-            extraHeaderBytesCount = FRAME_COMPRESSION_UNCOMPRESSED_SIZE;
-            LOG.info(fileName + ":Decompressed frame size is:" + decompressedFrameSize);
-        }
-
-        if (((EncodingFlags)encodingFlags).isEncryption()) {
-            //Consume the encryption byte
-            extraHeaderBytesCount += FRAME_ENCRYPTION_INDICATOR_SIZE;
-            encryptionMethod = buffer.readByte();
-        }
-
-        if (((EncodingFlags)encodingFlags).isGrouping()) {
-            //Read the Grouping byte, but do nothing with it
-            extraHeaderBytesCount += FRAME_GROUPING_INDICATOR_SIZE;
-            groupIdentifier = buffer.readByte();
-        }
-
-        if (((EncodingFlags)encodingFlags).isNonStandardFlags()) {
-            //Probably corrupt so treat as a standard frame
-            LOG.error(fileName + ":InvalidEncodingFlags:" + Hex.asHex(encodingFlags.getFlags()));
-        }
-
-        if (((EncodingFlags)encodingFlags).isCompression()) {
-            if (decompressedFrameSize > (100 * frameSize)) {
+            //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
+            frameSize = buffer.readInt();
+            if (frameSize < 0) {
+                LOG.warn("Invalid Frame Size:{} Id:{} - {}", frameSize, identifier, fileName);
+                throw new InvalidFrameException(identifier + " is invalid frame:" + frameSize);
+            } else if (frameSize == 0) {
+                LOG.warn(fileName + ":Empty Frame Size:" + identifier);
+                //We don't process this frame or add to frameMap because contains no useful information
+                //Skip the two flag bytes so in correct position for subsequent frames
+                buffer.readByte();
+                buffer.readByte();
+                throw new EmptyFrameException(identifier + " is empty frame");
+            } else if (frameSize > buffer.size()) {
+                LOG.warn("Invalid Frame size of {} larger than size of {} before mp3 audio {} - {}",
+                         frameSize,
+                         buffer.size(),
+                         identifier,
+                         fileName);
                 throw new InvalidFrameException(identifier +
-                                                        " is invalid frame, frame size " +
+                                                        " is invalid frame:" +
                                                         frameSize +
-                                                        " cannot be:" +
-                                                        decompressedFrameSize +
-                                                        " when uncompressed");
+                                                        " larger than size of" +
+                                                        buffer.size() +
+                                                        " before mp3 audio:" +
+                                                        identifier);
             }
-        }
 
-        //Work out the real size of the frameBody data
-        int realFrameSize = frameSize - extraHeaderBytesCount;
+            //Read the flag bytes
+            statusFlags = new StatusFlags(buffer.readByte());
+            encodingFlags = new EncodingFlags(buffer.readByte());
 
-        if (realFrameSize <= 0) {
-            throw new InvalidFrameException(identifier + " is invalid frame, realframeSize is:" + realFrameSize);
-        }
+            //If this identifier is a valid v24 identifier or easily converted to v24
+            String frameId = ID3Tags.convertFrameID23To24(identifier);
 
-        //Read the body data
+            // Cant easily be converted to v24 but is it a valid v23 identifier
+            if (frameId == null) {
+                // It is a valid v23 identifier so should be able to find a
+                //  frame body for it.
+                if (ID3Tags.isID3v23FrameIdentifier(identifier)) {
+                    frameId = identifier;
+                }
+                // Unknown so will be created as FrameBodyUnsupported
+                else {
+                    frameId = UNSUPPORTED_ID;
+                }
+            }
+            LOG.info(fileName + ":Identifier was:" + identifier + " reading using:" + frameId + "with frame size:" + frameSize);
+
+            //Read extra bits appended to frame header for various encodings
+            //These are not included in header size but are included in frame size but won't be read when we actually
+            //try to read the frame body data
+            int extraHeaderBytesCount = 0;
+            int decompressedFrameSize = -1;
+
+            if (((EncodingFlags)encodingFlags).isCompression()) {
+                //Read the Decompressed Size
+                decompressedFrameSize = buffer.readInt();
+                extraHeaderBytesCount = FRAME_COMPRESSION_UNCOMPRESSED_SIZE;
+                LOG.info(fileName + ":Decompressed frame size is:" + decompressedFrameSize);
+            }
+
+            if (((EncodingFlags)encodingFlags).isEncryption()) {
+                //Consume the encryption byte
+                extraHeaderBytesCount += FRAME_ENCRYPTION_INDICATOR_SIZE;
+                encryptionMethod = buffer.readByte();
+            }
+
+            if (((EncodingFlags)encodingFlags).isGrouping()) {
+                //Read the Grouping byte, but do nothing with it
+                extraHeaderBytesCount += FRAME_GROUPING_INDICATOR_SIZE;
+                groupIdentifier = buffer.readByte();
+            }
+
+            if (((EncodingFlags)encodingFlags).isNonStandardFlags()) {
+                //Probably corrupt so treat as a standard frame
+                LOG.error(fileName + ":InvalidEncodingFlags:" + Hex.asHex(encodingFlags.getFlags()));
+            }
+
+            if (((EncodingFlags)encodingFlags).isCompression()) {
+                if (decompressedFrameSize > (100 * frameSize)) {
+                    throw new InvalidFrameException(identifier +
+                                                            " is invalid frame, frame size " +
+                                                            frameSize +
+                                                            " cannot be:" +
+                                                            decompressedFrameSize +
+                                                            " when uncompressed");
+                }
+            }
+
+            //Work out the real size of the frameBody data
+            int realFrameSize = frameSize - extraHeaderBytesCount;
+
+            if (realFrameSize <= 0) {
+                throw new InvalidFrameException(identifier + " is invalid frame, realframeSize is:" + realFrameSize);
+            }
+
+            //Read the body data
 //        try {
             if (((EncodingFlags)encodingFlags).isCompression()) {
-                final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize);
+                final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize, decompressedFrameSize);
                 LOG.info("Bufer.size={} expected:{}", decompressBuffer.size(), decompressedFrameSize);
                 if (((EncodingFlags)encodingFlags).isEncryption()) {
                     frameBody = readEncryptedBody(frameId, decompressBuffer, decompressedFrameSize);
@@ -604,11 +606,17 @@ import java.util.regex.Pattern;
                 frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
             }
 //        }
-        // TODO: 1/25/17 throw an exception from here that causes buffering to be reset?? I'm not sure how far up we need to go
+            // TODO: 1/25/17 throw an exception from here that causes buffering to be reset?? I'm not sure how far up we need to go
 //        finally {
             //Update position of main buffer, so no attempt is made to reread these bytes
 //            byteBuffer.position(byteBuffer.position() + realFrameSize);
 //        }
+        } catch (RuntimeException e) {
+            LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
+            throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +
+                                                    " not valid ID3v2.30 frame " + fileName,
+                                            e);
+        }
     }
 
     /**

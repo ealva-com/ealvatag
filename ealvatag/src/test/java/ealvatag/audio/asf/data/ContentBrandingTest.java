@@ -1,5 +1,8 @@
 package ealvatag.audio.asf.data;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +12,7 @@ import java.util.List;
  *
  * @author Christian Laireiter
  */
-public class ContentBrandingTest extends
-        AbstractMetadataContainer<ContentBranding> {
+public class ContentBrandingTest extends AbstractMetadataContainer<ContentBranding> {
 
     /**
      * {@inheritDoc}
@@ -26,7 +28,7 @@ public class ContentBrandingTest extends
     @Override
     protected MetadataDescriptor[] createSupportedDescriptors(
             ContentBranding container) {
-        assertSame(ContainerType.CONTENT_BRANDING, container
+        Assert.assertSame(ContainerType.CONTENT_BRANDING, container
                 .getContainerType());
         final List<MetadataDescriptor> result = new ArrayList<MetadataDescriptor>();
         MetadataDescriptor curr = new MetadataDescriptor(
@@ -50,7 +52,7 @@ public class ContentBrandingTest extends
      */
     @Override
     protected ContentBranding[] createTestContainers() {
-        return new ContentBranding[] { createChunk(0, BigInteger.ZERO) };
+        return new ContentBranding[]{createChunk(0, BigInteger.ZERO)};
     }
 
     /**
@@ -58,37 +60,37 @@ public class ContentBrandingTest extends
      * {@link ealvatag.audio.asf.data.ContentBranding#isAddSupported(ealvatag.audio.asf.data.MetadataDescriptor)}
      * .
      */
-    public void testIsAddSupported() {
+    @Test public void testIsAddSupported() {
         final ContentBranding chunk = createChunk(0, BigInteger.ZERO);
-        assertFalse(chunk.isAddSupported(new MetadataDescriptor("arbitrary")));
-        assertTrue(chunk
-                .isAddSupported(new MetadataDescriptor(
-                        ContainerType.CONTENT_BRANDING,
-                        ContentBranding.KEY_BANNER_URL,
-                        MetadataDescriptor.TYPE_STRING)));
+        Assert.assertFalse(chunk.isAddSupported(new MetadataDescriptor("arbitrary")));
+        Assert.assertTrue(chunk
+                                  .isAddSupported(new MetadataDescriptor(
+                                          ContainerType.CONTENT_BRANDING,
+                                          ContentBranding.KEY_BANNER_URL,
+                                          MetadataDescriptor.TYPE_STRING)));
     }
 
     /**
      * Test method for {@link ContentBranding#setBannerImageURL(String)}.
      */
-    public void testSetBannerImageURL() {
+    @Test public void testSetBannerImageURL() {
         final ContentBranding chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getBannerImageURL());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getBannerImageURL());
         chunk.setBannerImageURL("banner image url");
-        assertEquals("banner image url", chunk.getBannerImageURL());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("banner image url", chunk.getBannerImageURL());
+        Assert.assertFalse(chunk.isEmpty());
     }
 
     /**
      * Test method for {@link ContentBranding#setCopyRightURL(String)}.
      */
-    public void testSetCopyrightURL() {
+    @Test public void testSetCopyrightURL() {
         final ContentBranding chunk = createChunk(0, BigInteger.ZERO);
-        assertTrue(chunk.isEmpty());
-        assertEquals("", chunk.getCopyRightURL());
+        Assert.assertTrue(chunk.isEmpty());
+        Assert.assertEquals("", chunk.getCopyRightURL());
         chunk.setCopyRightURL("copyright url");
-        assertEquals("copyright url", chunk.getCopyRightURL());
-        assertFalse(chunk.isEmpty());
+        Assert.assertEquals("copyright url", chunk.getCopyRightURL());
+        Assert.assertFalse(chunk.isEmpty());
     }
 }

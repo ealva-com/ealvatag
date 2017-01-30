@@ -1,6 +1,6 @@
 package ealvatag.issues;
 
-import ealvatag.AbstractTestCase;
+import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.tag.FieldKey;
@@ -16,21 +16,28 @@ import ealvatag.tag.id3.framebody.FrameBodyTLAN;
 import ealvatag.tag.reference.ID3V2Version;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.MusicalKey;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 
 /**
  * Support For LANGUAGE and INITIAL_KEY
  */
-public class Issue241Test extends AbstractTestCase {
+public class Issue241Test {
+    @After public void tearDown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
-    public void testWriteFieldsToMp3ID3v24() {
+    @Test public void testWriteFieldsToMp3ID3v24() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -43,34 +50,34 @@ public class Issue241Test extends AbstractTestCase {
             af.save();
             af = AudioFileIO.read(testFile);
             tag = af.getTag().or(NullTag.INSTANCE);
-            assertEquals("eng", tag.getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", tag.getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(tag.getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", tag.getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", tag.getFirst(FieldKey.KEY));
+            Assert.assertEquals("English", Languages.getInstanceOf().getValue(tag.getFirst(FieldKey.LANGUAGE)));
             TagField tagField = tag.getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName()).or(NullTagField.INSTANCE);
-            assertTrue(tagField instanceof ID3v24Frame);
-            assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
-            assertTrue(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
+            Assert.assertTrue(tagField instanceof ID3v24Frame);
+            Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
+            Assert.assertTrue(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
 
             tagField = tag.getFirstField(ID3v24FieldKey.KEY.getFieldName()).or(NullTagField.INSTANCE);
-            assertTrue(tagField instanceof ID3v24Frame);
-            assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
-            assertTrue(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());
+            Assert.assertTrue(tagField instanceof ID3v24Frame);
+            Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
+            Assert.assertTrue(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());
 
             tag.setField(FieldKey.LANGUAGE, "fred");
             af.save();
-            assertEquals("fred", tag.getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("fred", tag.getFirst(FieldKey.LANGUAGE));
             tagField = tag.getFirstField(ID3v24FieldKey.LANGUAGE.getFieldName()).or(NullTagField.INSTANCE);
-            assertTrue(tagField instanceof ID3v24Frame);
-            assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
-            assertFalse(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
+            Assert.assertTrue(tagField instanceof ID3v24Frame);
+            Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTLAN);
+            Assert.assertFalse(((FrameBodyTLAN)((ID3v24Frame)tagField).getBody()).isValid());
 
             tag.setField(FieldKey.KEY, "keys");
             af.save();
-            assertEquals("keys", tag.getFirst(FieldKey.KEY));
+            Assert.assertEquals("keys", tag.getFirst(FieldKey.KEY));
             tagField = tag.getFirstField(ID3v24FieldKey.KEY.getFieldName()).or(NullTagField.INSTANCE);
-            assertTrue(tagField instanceof ID3v24Frame);
-            assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
-            assertFalse(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());
+            Assert.assertTrue(tagField instanceof ID3v24Frame);
+            Assert.assertTrue(((ID3v24Frame)tagField).getBody() instanceof FrameBodyTKEY);
+            Assert.assertFalse(((FrameBodyTKEY)((ID3v24Frame)tagField).getBody()).isValid());
 
 
         } catch (Exception e) {
@@ -78,17 +85,17 @@ public class Issue241Test extends AbstractTestCase {
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
-    public void testWriteFieldsToMp3ID3v23() {
+    @Test public void testWriteFieldsToMp3ID3v23() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -98,25 +105,26 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Mp3 ID3v23
      */
-    public void testWriteFieldsToMp3ID3v22() {
+    @Test public void testWriteFieldsToMp3ID3v22() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -127,25 +135,26 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Ogg Vorbis
      */
-    public void testWriteFieldsToOggVorbis() {
+    @Test public void testWriteFieldsToOggVorbis() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.ogg");
+            testFile = TestUtil.copyAudioToTmp("test.ogg");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -154,25 +163,26 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Flac
      */
-    public void testWriteFieldsToFlac() {
+    @Test public void testWriteFieldsToFlac() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.flac");
+            testFile = TestUtil.copyAudioToTmp("test.flac");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -181,26 +191,27 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Wma
      */
-    public void testWriteFieldsToWma() {
+    @Test public void testWriteFieldsToWma() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test1.wma");
+            testFile = TestUtil.copyAudioToTmp("test1.wma");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -209,25 +220,26 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Test writing INITIAL_KEY and LANGUAGE to Mp4
      */
-    public void testWriteFieldsToMp4() {
+    @Test public void testWriteFieldsToMp4() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("test.m4a");
+            testFile = TestUtil.copyAudioToTmp("test.m4a");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -236,25 +248,26 @@ public class Issue241Test extends AbstractTestCase {
             tag.setField(FieldKey.KEY, "C#");
             af.save();
             af = AudioFileIO.read(testFile);
-            assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertEquals("English", Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
+            Assert.assertEquals("eng", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertEquals("English",
+                                Languages.getInstanceOf().getValue(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.LANGUAGE)));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
     /**
      * Key Validation
      */
-    public void testValidateMusicalKey() {
+    @Test public void testValidateMusicalKey() {
         File testFile = null;
         Exception exceptionCaught = null;
         try {
-            testFile = AbstractTestCase.copyAudioToTmp("testV1.mp3");
+            testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
             //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -264,47 +277,47 @@ public class Issue241Test extends AbstractTestCase {
 
 
             tag.setField(FieldKey.KEY, "G");
-            assertEquals("G", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("G", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "C#");
-            assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("C#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "Cm");
-            assertEquals("Cm", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("Cm", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "C#m");
-            assertEquals("C#m", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("C#m", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "C");
-            assertEquals("C", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("C", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "o");
-            assertEquals("o", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("o", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertTrue(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "R#");
-            assertEquals("R#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("R#", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "Cp");
-            assertEquals("Cp", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("Cp", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
             tag.setField(FieldKey.KEY, "C##");
-            assertEquals("C##", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
-            assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
+            Assert.assertEquals("C##", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.KEY));
+            Assert.assertFalse(MusicalKey.isValid(tag.getFirst(FieldKey.KEY)));
 
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
         }
 
-        assertNull(exceptionCaught);
+        Assert.assertNull(exceptionCaught);
     }
 
 
