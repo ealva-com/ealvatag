@@ -73,13 +73,13 @@ import java.util.regex.Pattern;
  * @version $Id$
  */
 @SuppressWarnings("Duplicates") public class ID3v24Frame extends AbstractID3v2Frame {
-    protected static final int FRAME_DATA_LENGTH_SIZE = 4;
-    protected static final int FRAME_ID_SIZE = 4;
-    protected static final int FRAME_FLAGS_SIZE = 2;
-    protected static final int FRAME_SIZE_SIZE = 4;
-    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
-    protected static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
-    protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
+    private static final int FRAME_DATA_LENGTH_SIZE = 4;
+    private static final int FRAME_ID_SIZE = 4;
+    private static final int FRAME_FLAGS_SIZE = 2;
+    private static final int FRAME_SIZE_SIZE = 4;
+    private static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
+    private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
+    private static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
     private static final Logger LOG = LoggerFactory.getLogger(ID3v24Frame.class);
     private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
     /**
@@ -113,8 +113,6 @@ import java.util.regex.Pattern;
 
     /**
      * Copy Constructor:Creates a new ID3v24 frame datatype based on another frame.
-     *
-     * @param frame
      */
     public ID3v24Frame(ID3v24Frame frame) {
         super(frame);
@@ -126,11 +124,6 @@ import java.util.regex.Pattern;
      * Partially construct ID3v24 Frame form an IS3v23Frame
      * <p>
      * Used for Special Cases
-     *
-     * @param frame
-     * @param identifier
-     *
-     * @throws InvalidFrameException
      */
     protected ID3v24Frame(ID3v23Frame frame, String identifier) throws InvalidFrameException {
         this.identifier = identifier;
@@ -145,8 +138,6 @@ import java.util.regex.Pattern;
      * is unknown.
      *
      * @param frame to construct a new frame from
-     *
-     * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v24Frame(AbstractID3v2Frame frame) throws InvalidFrameException {
         //Should not be called
@@ -227,66 +218,70 @@ import java.util.regex.Pattern;
 
     /**
      * Creates a new ID3v2_4Frame datatype based on Lyrics3.
-     *
-     * @param field
-     *
-     * @throws InvalidTagException
      */
     public ID3v24Frame(Lyrics3v2Field field) throws InvalidTagException {
         String id = field.getIdentifier();
         String value;
-        if (id.equals("IND")) {
-            throw new InvalidTagException("Cannot create ID3v2.40 frame from Lyrics3 indications field.");
-        } else if (id.equals("LYR")) {
-            FieldFrameBodyLYR lyric = (FieldFrameBodyLYR)field.getBody();
-            Lyrics3Line line;
-            Iterator<Lyrics3Line> iterator = lyric.iterator();
-            FrameBodySYLT sync;
-            FrameBodyUSLT unsync;
-            boolean hasTimeStamp = lyric.hasTimeStamp();
-            // we'll create only one frame here.
-            // if there is any timestamp at all, we will create a sync'ed frame.
-            sync = new FrameBodySYLT((byte)0, "ENG", (byte)2, (byte)1, "", new byte[0]);
-            unsync = new FrameBodyUSLT((byte)0, "ENG", "", "");
-            while (iterator.hasNext()) {
-                line = iterator.next();
-                if (hasTimeStamp) {
-                    // sync.addLyric(line);
-                } else {
-                    unsync.addLyric(line);
+        switch (id) {
+            case "IND":
+                throw new InvalidTagException("Cannot create ID3v2.40 frame from Lyrics3 indications field.");
+            case "LYR":
+                FieldFrameBodyLYR lyric = (FieldFrameBodyLYR)field.getBody();
+                Lyrics3Line line;
+                Iterator<Lyrics3Line> iterator = lyric.iterator();
+                FrameBodySYLT sync;
+                FrameBodyUSLT unsync;
+                boolean hasTimeStamp = lyric.hasTimeStamp();
+                // we'll create only one frame here.
+                // if there is any timestamp at all, we will create a sync'ed frame.
+                sync = new FrameBodySYLT((byte)0, "ENG", (byte)2, (byte)1, "", new byte[0]);
+                unsync = new FrameBodyUSLT((byte)0, "ENG", "", "");
+                while (iterator.hasNext()) {
+                    line = iterator.next();
+                    if (!hasTimeStamp) {
+                        unsync.addLyric(line);
+                    }
+//                    else {
+//                         sync.addLyric(line);
+//                    }
                 }
-            }
-            if (hasTimeStamp) {
-                this.frameBody = sync;
+                if (hasTimeStamp) {
+                    this.frameBody = sync;
+                    this.frameBody.setHeader(this);
+                } else {
+                    this.frameBody = unsync;
+                    this.frameBody.setHeader(this);
+                }
+                break;
+            case "INF":
+                value = ((FieldFrameBodyINF)field.getBody()).getAdditionalInformation();
+                this.frameBody = new FrameBodyCOMM((byte)0, "ENG", "", value);
                 this.frameBody.setHeader(this);
-            } else {
-                this.frameBody = unsync;
+                break;
+            case "AUT":
+                value = ((FieldFrameBodyAUT)field.getBody()).getAuthor();
+                this.frameBody = new FrameBodyTCOM((byte)0, value);
                 this.frameBody.setHeader(this);
-            }
-        } else if (id.equals("INF")) {
-            value = ((FieldFrameBodyINF)field.getBody()).getAdditionalInformation();
-            this.frameBody = new FrameBodyCOMM((byte)0, "ENG", "", value);
-            this.frameBody.setHeader(this);
-        } else if (id.equals("AUT")) {
-            value = ((FieldFrameBodyAUT)field.getBody()).getAuthor();
-            this.frameBody = new FrameBodyTCOM((byte)0, value);
-            this.frameBody.setHeader(this);
-        } else if (id.equals("EAL")) {
-            value = ((FieldFrameBodyEAL)field.getBody()).getAlbum();
-            this.frameBody = new FrameBodyTALB((byte)0, value);
-            this.frameBody.setHeader(this);
-        } else if (id.equals("EAR")) {
-            value = ((FieldFrameBodyEAR)field.getBody()).getArtist();
-            this.frameBody = new FrameBodyTPE1((byte)0, value);
-            this.frameBody.setHeader(this);
-        } else if (id.equals("ETT")) {
-            value = ((FieldFrameBodyETT)field.getBody()).getTitle();
-            this.frameBody = new FrameBodyTIT2((byte)0, value);
-            this.frameBody.setHeader(this);
-        } else if (id.equals("IMG")) {
-            throw new InvalidTagException("Cannot create ID3v2.40 frame from Lyrics3 image field.");
-        } else {
-            throw new InvalidTagException("Cannot caret ID3v2.40 frame from " + id + " Lyrics3 field");
+                break;
+            case "EAL":
+                value = ((FieldFrameBodyEAL)field.getBody()).getAlbum();
+                this.frameBody = new FrameBodyTALB((byte)0, value);
+                this.frameBody.setHeader(this);
+                break;
+            case "EAR":
+                value = ((FieldFrameBodyEAR)field.getBody()).getArtist();
+                this.frameBody = new FrameBodyTPE1((byte)0, value);
+                this.frameBody.setHeader(this);
+                break;
+            case "ETT":
+                value = ((FieldFrameBodyETT)field.getBody()).getTitle();
+                this.frameBody = new FrameBodyTIT2((byte)0, value);
+                this.frameBody.setHeader(this);
+                break;
+            case "IMG":
+                throw new InvalidTagException("Cannot create ID3v2.40 frame from Lyrics3 image field.");
+            default:
+                throw new InvalidTagException("Cannot caret ID3v2.40 frame from " + id + " Lyrics3 field");
         }
     }
 
@@ -451,9 +446,7 @@ import java.util.regex.Pattern;
                 // we're just before the frame size, we need ahead look 4 bytes for the size, 2 flag bytes, and the frame size
                 int peekFrameHeaderPosition = INTEGRAL_SIZE + getFrameFlagsSize() + frameSize;
 
-                if (buffer.size() - peekFrameHeaderPosition < getFrameIdSize()) {
-                    //There is no padding or framedata we are at end so assume syncsafe
-                } else {
+                if (buffer.size() - peekFrameHeaderPosition >= getFrameIdSize()) {
                     for (int i = 0, size = readAheadbuffer.length; i < size; i++) {
                         readAheadbuffer[i] = buffer.getByte(peekFrameHeaderPosition + i);
                     }
@@ -517,7 +510,7 @@ import java.util.regex.Pattern;
                             }
                         }
                     }
-                }
+                }//There is no padding or framedata we are at end so assume syncsafe
             }
         }
     }
@@ -638,13 +631,7 @@ import java.util.regex.Pattern;
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_FRAME);
     }
 
-    /**
-     * @param obj
-     *
-     * @return if obj is equivalent to this frame
-     */
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }
@@ -659,7 +646,7 @@ import java.util.regex.Pattern;
                 EqualsUtil.areEqual(this.encodingFlags, that.encodingFlags) && super.equals(that);
     }
 
-    protected int getFrameFlagsSize() {
+    private int getFrameFlagsSize() {
         return FRAME_FLAGS_SIZE;
     }
 
@@ -678,21 +665,9 @@ import java.util.regex.Pattern;
      *
      * @return whether the identifier is valid
      */
-    public boolean isValidID3v2FrameIdentifier(String identifier) {
+    private boolean isValidID3v2FrameIdentifier(String identifier) {
         Matcher m = ID3v24Frame.validFrameIdentifier.matcher(identifier);
         return m.matches();
-    }
-
-    /**
-     * Creates a new ID3v24Frame datatype by reading from byteBuffer.
-     *
-     * @param byteBuffer to read from
-     *
-     * @throws ealvatag.tag.InvalidFrameException
-     * @deprecated use {@link #ID3v24Frame(ByteBuffer, String)} instead
-     */
-    public ID3v24Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
-        this(byteBuffer, "");
     }
 
     public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename)
@@ -809,9 +784,6 @@ import java.util.regex.Pattern;
      * Read the frame size form the header, check okay , if not try to fix
      * or just throw exception
      *
-     * @param byteBuffer
-     *
-     * @throws InvalidFrameException
      */
     private void getFrameSize(ByteBuffer byteBuffer)
             throws InvalidFrameException {

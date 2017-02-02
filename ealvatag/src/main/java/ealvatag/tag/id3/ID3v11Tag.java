@@ -42,6 +42,7 @@ import ealvatag.tag.id3.framebody.FrameBodyTDRC;
 import ealvatag.tag.id3.framebody.FrameBodyTIT2;
 import ealvatag.tag.id3.framebody.FrameBodyTPE1;
 import ealvatag.tag.id3.framebody.FrameBodyTRCK;
+import ealvatag.tag.reference.GenreTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,9 +196,14 @@ public class ID3v11Tag extends ID3v1Tag {
                     try {
                         this.genre = (byte)ID3Tags.findNumber(text);
                     } catch (TagException ex) {
-                        LOG.warn(getLoggingFilename() + ":" +
-                                         "Unable to convert TCON frame to format suitable for v11 tag", ex);
-                        this.genre = (byte)ID3v1Tag.GENRE_UNDEFINED;
+                        Integer genreId = GenreTypes.getInstanceOf().getIdForValue(text);
+                        if (null!= genreId) {
+                            this.genre = genreId.byteValue();
+                        } else {
+                            LOG.warn(getLoggingFilename() + ":" + "Unable to convert TCON frame to format suitable for v11 " +
+                                    "tag", ex);
+                            this.genre = (byte) ID3v1Tag.GENRE_UNDEFINED;
+                        }
                     }
                 }
                 if (id3tag.hasFrame(ID3v24Frames.FRAME_ID_TRACK)) {

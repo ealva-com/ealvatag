@@ -11,6 +11,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 import java.io.File;
 
 /**
@@ -236,5 +240,15 @@ public class ID3v11TagTest {
         mp3File = new MP3File(testFile);
         tag = (ID3v11Tag)mp3File.getID3v1Tag();
         Assert.assertEquals("3", tag.getFirst(FieldKey.TRACK));
+    }
+
+    @Test
+    public void testCreateID3v11FromID3v23WithGenreWithHyphen() throws Exception {
+        TagOptionSingleton.getInstance().setWriteMp3GenresAsText(true);
+        ID3v23Tag v2Tag = new ID3v23Tag();
+        String genreName = "Hip-Hop";
+        v2Tag.setField(FieldKey.GENRE, genreName);
+        ID3v11Tag v1Tag = new ID3v11Tag(v2Tag);
+        assertThat(v1Tag.getFirstGenre(), is(equalTo(genreName)));
     }
 }

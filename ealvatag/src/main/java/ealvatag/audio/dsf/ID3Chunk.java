@@ -9,29 +9,25 @@ import java.nio.ByteBuffer;
 /**
  * Created by Paul on 28/01/2016.
  */
-public class ID3Chunk
-{
+@SuppressWarnings("DefaultFileTemplate") public class ID3Chunk {
     private static Logger LOG = LoggerFactory.getLogger(ID3Chunk.class);
 
     private ByteBuffer dataBuffer;
-    public static ID3Chunk readChunk(ByteBuffer dataBuffer)
-    {
+
+    public static ID3Chunk readChunk(ByteBuffer dataBuffer) {
         String type = Utils.readThreeBytesAsChars(dataBuffer);
-        if (DsfChunkType.ID3.getCode().equals(type))
-        {
+        if (DsfChunkType.ID3.getCode().equals(type)) {
             return new ID3Chunk(dataBuffer);
         }
         LOG.warn("Invalid type:{} where expected ID3 tag", type);
         return null;
     }
 
-    public ID3Chunk(ByteBuffer dataBuffer)
-    {
+    private ID3Chunk(ByteBuffer dataBuffer) {
         this.dataBuffer = dataBuffer;
     }
 
-    public ByteBuffer getDataBuffer()
-    {
+    public ByteBuffer getDataBuffer() {
         return dataBuffer;
     }
 }
