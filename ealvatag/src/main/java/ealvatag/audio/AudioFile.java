@@ -63,12 +63,12 @@ public interface AudioFile {
     AudioHeader getAudioHeader();
 
     /**
-     * <p>Returns the tag contained in this AudioFile, the <code>Tag</code> contains any useful meta-data, like
-     * artist, album, title, etc. If the file does not contain any tag the null is returned. Some audio formats do
+     * Returns the tag contained in this AudioFile. The {@link Tag} contains any useful metadata, like
+     * artist, album, title, etc. If the file does not contain any tag then the return will be absent. Some audio formats do
      * not allow there to be no tag so in this case the reader would return an empty tag whereas for others such
      * as mp3 it is purely optional.
      *
-     * @return Returns the tag contained in this AudioFile
+     * @return Returns the optional tag contained in this AudioFile, ie may be absent
      */
     Optional<Tag> getTag();
 
