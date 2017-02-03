@@ -33,6 +33,7 @@ import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
+import ealvatag.tag.id3.framebody.AbstractArtworkFrameBody;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.id3.framebody.FrameBodyPIC;
@@ -70,7 +71,7 @@ import java.util.List;
  * @author : Eric Farng
  * @version $Id$
  */
-@SuppressWarnings("Duplicates") public class ID3v22Tag extends AbstractID3v2Tag {
+public class ID3v22Tag extends AbstractID3v2Tag {
     /**
      * Bit mask to indicate tag is Unsychronization
      */
@@ -387,7 +388,7 @@ import java.util.List;
     /**
      * @return comparator used to order frames in preffrred order for writing to file so that most important frames are written first.
      */
-    public Comparator getPreferredFrameOrderComparator() {
+    public Comparator<String> getPreferredFrameOrderComparator() {
         return ID3v22PreferredFrameOrderComparator.getInstanceof();
     }
 
@@ -762,67 +763,15 @@ import java.util.List;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
-        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
-
-        for (TagField next : coverartList) {
-            FrameBodyPIC coverArt = (FrameBodyPIC)((AbstractID3v2Frame)next).getBody();
-            Artwork artwork = ArtworkFactory.getNew();
-            artwork.setMimeType(ImageFormats.getMimeTypeForFormat(coverArt.getFormatType()));
-            artwork.setPictureType(coverArt.getPictureType());
-            if (coverArt.isImageUrl()) {
-                artwork.setLinked(true);
-                artwork.setImageUrl(coverArt.getImageUrl());
-            } else {
-                artwork.setBinaryData(coverArt.getImageData());
-            }
-            artworkList.add(artwork);
-        }
-        return artworkList;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
-        if (!artwork.isLinked()) {
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(artwork.getMimeType()));
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        } else {
-            try {
-                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-            } catch (UnsupportedEncodingException uoe) {
-                throw new RuntimeException(uoe.getMessage());
-            }
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, FrameBodyAPIC.IMAGE_IS_URL);
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        }
-    }
-
     @Override public ImmutableSet<FieldKey> getSupportedFields() {
         return ID3v22Frames.getInstanceOf().getSupportedFields();
     }
 
-    public TagField createArtworkField(byte[] data, String mimeType) {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyPIC body = (FrameBodyPIC)frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
-        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
-        body.setObjectValue(DataTypes.OBJ_IMAGE_FORMAT, ImageFormats.getFormatForMimeType(mimeType));
-        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        return frame;
+    @Override protected String getArtworkMimeTypeDataType() {
+        return DataTypes.OBJ_IMAGE_FORMAT;
     }
 
-
+    @Override protected String getArtworkMimeType(final String mimeType) {
+        return ImageFormats.getFormatForMimeType(mimeType);
+    }
 }

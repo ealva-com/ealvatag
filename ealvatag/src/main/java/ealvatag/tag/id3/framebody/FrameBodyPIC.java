@@ -84,7 +84,7 @@ import java.nio.charset.StandardCharsets;
  * $13  Band/artist logotype
  * $14  Publisher/Studio logotype
  */
-public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameBody {
+public class FrameBodyPIC extends AbstractArtworkFrameBody implements ID3v22FrameBody {
     public static final String IMAGE_IS_URL = "-->";
 
     /**
@@ -175,7 +175,7 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      *
      * @return
      */
-    public byte[] getImageData() {
+    @Override public byte[] getImageData() {
         return (byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA);
     }
 
@@ -186,13 +186,6 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
      */
     public void setPictureType(byte pictureType) {
         setObjectValue(DataTypes.OBJ_PICTURE_TYPE, pictureType);
-    }
-
-    /**
-     * @return picturetype
-     */
-    public int getPictureType() {
-        return ((Long)getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
     }
 
 
@@ -225,23 +218,18 @@ public class FrameBodyPIC extends AbstractID3v2FrameBody implements ID3v22FrameB
         return (String)getObjectValue(DataTypes.OBJ_IMAGE_FORMAT);
     }
 
-    public boolean isImageUrl() {
+    @Override public boolean isImageUrl() {
         return getFormatType() != null && getFormatType().equals(IMAGE_IS_URL);
     }
 
-    /**
-     * Get mimetype
-     *
-     * @return a description of the image
-     */
-    public String getMimeType() {
-        return (String)getObjectValue(DataTypes.OBJ_MIME_TYPE);
+    @Override public String getMimeType() {
+        return ImageFormats.getMimeTypeForFormat(getFormatType());
     }
 
     /**
      * @return the image url if there is otherwise return an empty String
      */
-    public String getImageUrl() {
+    @Override public String getImageUrl() {
         if (isImageUrl()) {
             return new String(((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)),
                               0,

@@ -94,7 +94,7 @@ import java.nio.charset.StandardCharsets;
  * @author : Eric Farng
  * @version $Id$
  */
-public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
+public class FrameBodyAPIC extends AbstractArtworkFrameBody implements ID3v24FrameBody, ID3v23FrameBody {
     public static final String IMAGE_IS_URL = "-->";
 
     /**
@@ -230,13 +230,6 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
     }
 
     /**
-     * @return picturetype
-     */
-    public int getPictureType() {
-        return ((Long)getObjectValue(DataTypes.OBJ_PICTURE_TYPE)).intValue();
-    }
-
-    /**
      * The ID3v2 frame identifier
      *
      * @return the ID3v2 frame identifier  for this frame type
@@ -279,20 +272,6 @@ public class FrameBodyAPIC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public boolean isImageUrl() {
         return getMimeType() != null && getMimeType().equals(IMAGE_IS_URL);
-    }
-
-    /**
-     * @return the image url if there is otherwise return an empty String
-     */
-    public String getImageUrl() {
-        if (isImageUrl()) {
-            return new String(((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)),
-                              0,
-                              ((byte[])getObjectValue(DataTypes.OBJ_PICTURE_DATA)).length,
-                              StandardCharsets.ISO_8859_1);
-        } else {
-            return "";
-        }
     }
 
 }

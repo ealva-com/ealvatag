@@ -41,11 +41,11 @@ import ealvatag.tag.id3.framebody.*;
 import ealvatag.tag.id3.valuepair.ID3NumberTotalFields;
 import ealvatag.tag.id3.valuepair.StandardIPLSKey;
 import ealvatag.tag.images.Artwork;
+import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.Check;
 import okio.Buffer;
-import okio.InflaterSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +82,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
-import java.util.zip.Inflater;
 
 
 /**
@@ -2668,6 +2667,88 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             return subId;
         }
 
+    }
+
+    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
+        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
+        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+
+        for (TagField next : coverartList) {
+            AbstractArtworkFrameBody coverArt = (AbstractArtworkFrameBody)((AbstractID3v2Frame)next).getBody();
+            Artwork artwork = ArtworkFactory.getNew();
+            artwork.setMimeType(coverArt.getMimeType());
+            artwork.setPictureType(coverArt.getPictureType());
+            if (coverArt.isImageUrl()) {
+                artwork.setLinked(true);
+                artwork.setImageUrl(coverArt.getImageUrl());
+            } else {
+                artwork.setBinaryData(coverArt.getImageData());
+            }
+            artworkList.add(artwork);
+        }
+        return artworkList;
+    }
+
+    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
+        AbstractTagFrameBody body = frame.getBody();
+        if (!artwork.isLinked()) {
+            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(getArtworkMimeTypeDataType(), getArtworkMimeType(artwork.getMimeType()));
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        } else {
+            try {
+                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
+            } catch (UnsupportedEncodingException uoe) {
+                throw new RuntimeException(uoe.getMessage());
+            }
+            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
+            body.setObjectValue(getArtworkMimeTypeDataType(), FrameBodyAPIC.IMAGE_IS_URL);
+            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+            return frame;
+        }
+    }
+
+    /**
+     * Create an artwork field for either a FrameBodyPIC or FrameBodyAPIC.
+     *
+     * @param data     the raw image data
+     * @param mimeType image mime type
+     *
+     * @return an artwork TagField
+     *
+     * @see PictureTypes
+     */
+    public TagField createArtworkField(byte[] data, String mimeType) {
+        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
+        AbstractTagFrameBody body = frame.getBody();
+        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
+        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
+        body.setObjectValue(getArtworkMimeTypeDataType(), getArtworkMimeType(mimeType));
+        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
+        return frame;
+    }
+
+    /**
+     * Get the {@link DataTypes} type for artwork. Defaults to {@link DataTypes#OBJ_MIME_TYPE} but V22 overrides this
+     *
+     * @return the DataTypes mime type for the tag version
+     */
+    protected String getArtworkMimeTypeDataType() {
+        return DataTypes.OBJ_MIME_TYPE;
+    }
+
+    /**
+     * Be default simple returns the same mime type. Subclasses can map this to another values. V22 overrides this to map the value
+     *
+     * @param mimeType original mime type
+     *
+     * @return same mime type or a possible mapping
+     */
+    protected String getArtworkMimeType(final String mimeType) {
+        return mimeType;
     }
 
 

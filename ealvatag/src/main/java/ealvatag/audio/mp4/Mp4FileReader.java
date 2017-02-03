@@ -18,11 +18,15 @@
  */
 package ealvatag.audio.mp4;
 
+import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.AudioFileReader;
 import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.io.FileOperator;
 import ealvatag.tag.TagFieldContainer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -44,5 +48,13 @@ public class Mp4FileReader extends AudioFileReader
     protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException
     {
         return tr.read(raf);
+    }
+
+    @Override protected AudioFile makeAudioFile(final RandomAccessFile raf, final File file, final String extension)
+            throws CannotReadException, IOException {
+        FileOperator fileOperator = new FileOperator(raf.getChannel());
+        GenericAudioHeader info = ir.read(fileOperator);
+        fileOperator.getFileChannel().position(0);  // TODO: 2/2/17 remove this when sure it's not needed after refactor
+        return new AudioFileImpl(file, extension, info, tr.read(raf));
     }
 }

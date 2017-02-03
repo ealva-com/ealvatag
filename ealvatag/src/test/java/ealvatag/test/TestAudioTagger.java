@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -19,6 +19,7 @@
  */
 package ealvatag.test;
 
+import com.google.common.base.Stopwatch;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileFilter;
 import ealvatag.audio.AudioFileIO;
@@ -27,8 +28,9 @@ import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Simple class that will attempt to recusively read all files within a directory, flags
@@ -39,6 +41,10 @@ public class TestAudioTagger {
     private static int count = 0;
     private static int failed = 0;
 
+    /**
+     * Define a property to configure the log level at runtime.
+     * -Dorg.slf4j.simpleLogger.defaultLogLevel=off
+     */
     public static void main(final String[] args) {
         TestAudioTagger test = new TestAudioTagger();
 
@@ -52,76 +58,58 @@ public class TestAudioTagger {
             System.exit(1);
         }
         File rootDir = new File(args[0]);
-        if (!rootDir.isDirectory()) {
+        if (!rootDir.isDirectory() || rootDir.isHidden()) {
             System.err.println("usage TestAudioTagger Dirname");
-            System.err.println("      Directory " + args[0] + " could not be found");
+            System.err.println("      Directory " + args[0] + " could not be found or is hidden");
             System.exit(1);
         }
-        Date start = new Date();
-        System.out.println("Started to read from:" + rootDir.getPath() + " at " + DateFormat.getTimeInstance().format(start));
-        test.scanSingleDir(rootDir);
-        Date finish = new Date();
-        System.out.println("Started to read from:" + rootDir.getPath() + " at " + DateFormat.getTimeInstance().format(start));
-        System.out.println("Finished to read from:" + rootDir.getPath() + DateFormat.getTimeInstance().format(finish));
+        ArrayDeque<File> deque = new ArrayDeque<>(2600);
+        test.scanSingleDir(rootDir, deque);
+        count = deque.size();
+        System.out.println("Will read " + Integer.toString(count) + " files");
+        File file = null;
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        while (!deque.isEmpty()) {
+            try {
+                file = deque.pollLast();
+                final AudioFile audioFile = AudioFileIO.read(file);
+                final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
+                System.out.println("Title:  " + tag.getFirst(FieldKey.TITLE));
+                System.out.println("Artist: " + tag.getFirst(FieldKey.ARTIST));
+                System.out.println("Album:  " + tag.getFirst(FieldKey.ALBUM));
+                System.out.println();
+
+            } catch (Throwable t) {
+                System.err.println("Unable to read file:" + count + " path:" + (file != null ? file.getPath() : ""));
+                failed++;
+                t.printStackTrace();
+            }
+        }
+        System.out.println("Elapsed: " + Double.toString(stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) / 1000.0));
         System.out.println("Attempted  to read:" + count);
         System.out.println("Successful to read:" + (count - failed));
         System.out.println("Failed     to read:" + failed);
 
     }
 
-    /**
-     * Recursive function to scan directory
-     *
-     * @param dir
-     */
-    private void scanSingleDir(final File dir) {
-
+    private void scanSingleDir(final File dir, final ArrayDeque<File> deque) {
         final File[] files = dir.listFiles(new AudioFileFilter(false));
-        if (files.length > 0) {
-            for (File file : files) {
-                count++;
-                try {
-                    final AudioFile audioFile = AudioFileIO.read(file);
-                    final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
-                    System.out.println("Title=" + tag.getFirst(FieldKey.TITLE));
-                    System.out.println("Artist=" + tag.getFirst(FieldKey.ARTIST));
-
-                } catch (Throwable t) {
-                    System.err.println("Unable to read record:" + count + ":" + file.getPath());
-                    failed++;
-                    t.printStackTrace();
-                }
-            }
+        if (files != null) {
+            deque.addAll(Arrays.asList(files));
         }
 
         final File[] audioFileDirs = dir.listFiles(new DirFilter());
-        if (audioFileDirs.length > 0) {
+        if (audioFileDirs != null && audioFileDirs.length > 0) {
             for (File audioFileDir : audioFileDirs) {
-                scanSingleDir(audioFileDir);
+                scanSingleDir(audioFileDir, deque);
             }
         }
     }
 
 
     public final class DirFilter implements java.io.FileFilter {
-        public static final String IDENT = "$Id$";
-
-
-        public DirFilter() {
-
-        }
-
-        /**
-         * Determines whether or not the file is an mp3 file.  If the file is
-         * a directory, whether or not is accepted depends upon the
-         * allowDirectories flag passed to the constructor.
-         *
-         * @param file the file to test
-         *
-         * @return true if this file or directory should be accepted
-         */
         public final boolean accept(final java.io.File file) {
-            return file.isDirectory();
+            return file.isDirectory() && !file.isHidden();
         }
     }
 }

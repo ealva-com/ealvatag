@@ -47,8 +47,6 @@ public abstract class AudioFileReader {
     protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
 
-
-
     /*
     * Returns the encoding info object associated wih the current File.
     * The subclass can assume the RAF pointer is at the first byte of the file.
@@ -100,9 +98,7 @@ public abstract class AudioFileReader {
             raf = new RandomAccessFile(file, "r");
             raf.seek(0);
 
-            GenericAudioHeader info = getEncodingInfo(raf);
-            raf.seek(0);
-            return new AudioFileImpl(file, extension, info, getTag(raf));
+            return makeAudioFile(raf, file, extension);
 
         } catch (CannotReadException cre) {
             throw cre;
@@ -119,5 +115,26 @@ public abstract class AudioFileReader {
                                  .getMsg(file.getAbsolutePath()));
             }
         }
+    }
+
+    /**
+     * Put read header and read tag in one method so subclasses aren't forced into the 2 step process, but can optimize how the
+     * particular format is read.
+     *
+     * @param raf       the {@link RandomAccessFile} containing the data
+     * @param file      file information
+     * @param extension the file extension that was used to identify the file type
+     *
+     * @return an {@link AudioFile} containing the parsed header and tag
+     *
+     * @throws CannotReadException if there is some parsing error
+     * @throws IOException         if there is an error reading from the file
+     */
+    @SuppressWarnings("WeakerAccess")
+    protected AudioFile makeAudioFile(final RandomAccessFile raf, final File file, final String extension) throws CannotReadException,
+                                                                                                                  IOException {
+        GenericAudioHeader info = getEncodingInfo(raf);
+        raf.seek(0);
+        return new AudioFileImpl(file, extension, info, getTag(raf));
     }
 }

@@ -65,7 +65,7 @@ import java.util.List;
  * @author : Eric Farng
  * @version $Id$
  */
-@SuppressWarnings("Duplicates") public class ID3v23Tag extends AbstractID3v2Tag {
+public class ID3v23Tag extends AbstractID3v2Tag {
     /**
      * ID3v2.3 Header bit mask
      */
@@ -642,7 +642,7 @@ import java.util.List;
     /**
      * @return comparator used to order frames in preferred order for writing to file so that most important frames are written first.
      */
-    public Comparator getPreferredFrameOrderComparator() {
+    public Comparator<String> getPreferredFrameOrderComparator() {
         return ID3v23PreferredFrameOrderComparator.getInstanceof();
     }
 
@@ -1182,88 +1182,14 @@ import java.util.List;
         super.doDeleteTagField(new FrameAndSubId(null, id3v23FieldKey.getFrameId(), id3v23FieldKey.getSubId()));
     }
 
-    /**
-     * Delete fields with this (frame) id
-     *
-     * @param id
-     */
     public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY, "id");
         super.doDeleteTagField(new FrameAndSubId(null, id, null));
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
-        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
-
-        for (TagField next : coverartList) {
-            FrameBodyAPIC coverArt = (FrameBodyAPIC)((AbstractID3v2Frame)next).getBody();
-            Artwork artwork = ArtworkFactory.getNew();
-            artwork.setMimeType(coverArt.getMimeType());
-            artwork.setPictureType(coverArt.getPictureType());
-            if (coverArt.isImageUrl()) {
-                artwork.setLinked(true);
-                artwork.setImageUrl(coverArt.getImageUrl());
-            } else {
-                artwork.setBinaryData(coverArt.getImageData());
-            }
-            artworkList.add(artwork);
-        }
-        return artworkList;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
-        if (!artwork.isLinked()) {
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        } else {
-            try {
-                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-            } catch (UnsupportedEncodingException uoe) {
-                throw new RuntimeException(uoe.getMessage());
-            }
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        }
-    }
-
     @Override public ImmutableSet<FieldKey> getSupportedFields() {
         return ID3v23Frames.getInstanceOf().getSupportedFields();
-    }
-
-    /**
-     * Create Artwork
-     *
-     * @param data
-     * @param mimeType of the image
-     *
-     * @return
-     *
-     * @see PictureTypes
-     */
-    public TagField createArtworkField(byte[] data, String mimeType) {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
-
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
-        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
-        body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
-        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        return frame;
     }
 
     public int getPaddingSize() {

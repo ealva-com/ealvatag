@@ -35,6 +35,7 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.Pair;
+import ealvatag.tag.id3.framebody.AbstractArtworkFrameBody;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
@@ -85,7 +86,7 @@ import java.util.List;
  * @author : Eric Farng
  * @version $Id$
  */
-@SuppressWarnings("Duplicates") public class ID3v24Tag extends AbstractID3v2Tag {
+public class ID3v24Tag extends AbstractID3v2Tag {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v24Tag.class);
 
     protected static final String TYPE_FOOTER = "footer";
@@ -1274,70 +1275,8 @@ import java.util.List;
     /**
      * @return comparator used to order frames in preferred order for writing to file so that most important frames are written first.
      */
-    public Comparator getPreferredFrameOrderComparator() {
+    public Comparator<String> getPreferredFrameOrderComparator() {
         return ID3v24PreferredFrameOrderComparator.getInstanceof();
-    }
-
-    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
-        List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
-
-        for (TagField next : coverartList) {
-            FrameBodyAPIC coverArt = (FrameBodyAPIC)((AbstractID3v2Frame)next).getBody();
-            Artwork artwork = ArtworkFactory.getNew();
-            artwork.setMimeType(coverArt.getMimeType());
-            artwork.setPictureType(coverArt.getPictureType());
-            if (coverArt.isImageUrl()) {
-                artwork.setLinked(true);
-                artwork.setImageUrl(coverArt.getImageUrl());
-            } else {
-                artwork.setBinaryData(coverArt.getImageData());
-            }
-            artworkList.add(artwork);
-        }
-        return artworkList;
-    }
-
-    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
-        if (!artwork.isLinked()) {
-            body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getBinaryData());
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, artwork.getMimeType());
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        } else {
-            try {
-                body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, artwork.getImageUrl().getBytes("ISO-8859-1"));
-            } catch (UnsupportedEncodingException uoe) {
-                throw new RuntimeException(uoe.getMessage());
-            }
-            body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, artwork.getPictureType());
-            body.setObjectValue(DataTypes.OBJ_MIME_TYPE, FrameBodyAPIC.IMAGE_IS_URL);
-            body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-            return frame;
-        }
-    }
-
-    /**
-     * Create Artwork
-     *
-     * @param data
-     * @param mimeType of the image
-     *
-     * @return
-     *
-     * @see PictureTypes
-     */
-    public TagField createArtworkField(byte[] data, String mimeType) {
-        AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
-        FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
-        body.setObjectValue(DataTypes.OBJ_PICTURE_DATA, data);
-        body.setObjectValue(DataTypes.OBJ_PICTURE_TYPE, PictureTypes.DEFAULT_ID);
-        body.setObjectValue(DataTypes.OBJ_MIME_TYPE, mimeType);
-        body.setObjectValue(DataTypes.OBJ_DESCRIPTION, "");
-        return frame;
     }
 
     /**
