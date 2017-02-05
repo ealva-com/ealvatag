@@ -81,8 +81,8 @@ public class MetadataBlockDataStreamInfo
         }
         rawdata.flip();
 
-        minBlockSize = Utils.u(rawdata.getShort());
-        maxBlockSize = Utils.u(rawdata.getShort());
+        minBlockSize = Utils.convertUnsignedShortToInt(rawdata.getShort());
+        maxBlockSize = Utils.convertUnsignedShortToInt(rawdata.getShort());
         minFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
         maxFrameSize = readThreeByteInteger(rawdata.get(), rawdata.get(), rawdata.get());
         samplingRate = readSamplingRate();
@@ -177,7 +177,7 @@ public class MetadataBlockDataStreamInfo
      * @return
      */
     private int readThreeByteInteger(byte b1, byte b2, byte b3) {
-        return (Utils.u(b1) << 16) + (Utils.u(b2) << 8) + (Utils.u(b3));
+        return (Utils.convertUnsignedByteToInt(b1) << 16) + (Utils.convertUnsignedByteToInt(b2) << 8) + (Utils.convertUnsignedByteToInt(b3));
     }
 
     /**
@@ -186,22 +186,22 @@ public class MetadataBlockDataStreamInfo
      * @return
      */
     private int readSamplingRate() {
-        return (Utils.u(rawdata.get(10)) << 12) + (Utils.u(rawdata.get(11)) << 4) +
-                ((Utils.u(rawdata.get(12)) & 0xF0) >>> 4);
+        return (Utils.convertUnsignedByteToInt(rawdata.get(10)) << 12) + (Utils.convertUnsignedByteToInt(rawdata.get(11)) << 4) +
+                ((Utils.convertUnsignedByteToInt(rawdata.get(12)) & 0xF0) >>> 4);
     }
 
     /**
      * Stored in 5th to 7th bits of byte 12
      */
     private int readNoOfChannels() {
-        return ((Utils.u(rawdata.get(12)) & 0x0E) >>> 1) + 1;
+        return ((Utils.convertUnsignedByteToInt(rawdata.get(12)) & 0x0E) >>> 1) + 1;
     }
 
     /**
      * Stored in last bit of byte 12 and first 4 bits of byte 13
      */
     private int readBitsPerSample() {
-        return ((Utils.u(rawdata.get(12)) & 0x01) << 4) + ((Utils.u(rawdata.get(13)) & 0xF0) >>> 4) + 1;
+        return ((Utils.convertUnsignedByteToInt(rawdata.get(12)) & 0x01) << 4) + ((Utils.convertUnsignedByteToInt(rawdata.get(13)) & 0xF0) >>> 4) + 1;
     }
 
     /**
@@ -210,11 +210,11 @@ public class MetadataBlockDataStreamInfo
      * @return
      */
     private int readTotalNumberOfSamples() {
-        int nb = Utils.u(rawdata.get(17));
-        nb += Utils.u(rawdata.get(16)) << 8;
-        nb += Utils.u(rawdata.get(15)) << 16;
-        nb += Utils.u(rawdata.get(14)) << 24;
-        nb += (Utils.u(rawdata.get(13)) & 0x0F) << 32;
+        int nb = Utils.convertUnsignedByteToInt(rawdata.get(17));
+        nb += Utils.convertUnsignedByteToInt(rawdata.get(16)) << 8;
+        nb += Utils.convertUnsignedByteToInt(rawdata.get(15)) << 16;
+        nb += Utils.convertUnsignedByteToInt(rawdata.get(14)) << 24;
+        nb += (Utils.convertUnsignedByteToInt(rawdata.get(13)) & 0x0F) << 32;
         return nb;
     }
 }

@@ -1,13 +1,14 @@
 package ealvatag.audio.mp4;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * This a list of mp4boxes identifiers that can bwe found in a mp4 container. This list is by no means
  * exhaustive.
- *
+ * <p>
  * Only a limited number are of interest to Jaudiotagger
  */
-public enum Mp4AtomIdentifier
-{
+public enum Mp4AtomIdentifier {
     ALAC("alac", "Apple Lossless File"),
     ALBM("albm", "Album title and track number (user-data)"),
     AUTH("auth", "Media author name (user-data)"),
@@ -25,6 +26,7 @@ public enum Mp4AtomIdentifier
     CSLG("cslg", "Composition to decode timeline mapping"),
     CTTS("ctts", "(composition) time to sample"),
     CVRU("cvru", "OMA DRM Cover URI"),
+    DATA("data", ""),
     DCFD("dcfD", "Marlin DCF Duration, user-data atom type"),
     DINF("dinf", "Data information box, container"),
     DREF("dref", "Data reference box, declares source(s) of media data in track"),
@@ -164,15 +166,33 @@ public enum Mp4AtomIdentifier
     VWDI("vwdi", "Multiview Scene Information"),
     XML$20("xml$20", "a tool by which vendors can add XML formatted information"),
     YRRC("yrrc", "Year when media was recorded (user-data)"),
-    ;
+    UNKNOWN("", "Unknown");
+
+    // not sure why these are enums, but maybe they'll do something later, so I'll leave them. They should probably create the box or
+    // something
+    private final static ImmutableMap<String, Mp4AtomIdentifier> idStringToAtomIdentifier;
+
+    static {
+        ImmutableMap.Builder<String, Mp4AtomIdentifier> builder = ImmutableMap.builder();
+        final Mp4AtomIdentifier[] values = values();
+        for (int i = 0; i < values.length; i++) {
+            final Mp4AtomIdentifier value = values[i];
+            builder.put(value.getFieldName(), value);
+        }
+        idStringToAtomIdentifier = builder.build();
+    }
+
     private String fieldName;
     private String description;
 
-    Mp4AtomIdentifier(String fieldName, String description)
-    {
+    public static Mp4AtomIdentifier fromHeaderId(final String fieldName) {
+        final Mp4AtomIdentifier mp4AtomIdentifier = idStringToAtomIdentifier.get(fieldName);
+        return mp4AtomIdentifier == null ? UNKNOWN : mp4AtomIdentifier;
+    }
+
+    Mp4AtomIdentifier(String fieldName, String description) {
         this.fieldName = fieldName;
         this.description = description;
-
     }
 
     /**
@@ -180,16 +200,25 @@ public enum Mp4AtomIdentifier
      *
      * @return
      */
-    public String getFieldName()
-    {
+    public String getFieldName() {
         return fieldName;
+    }
+
+    /**
+     * Determines if this Atom (Box) Identifier matches {@code boxName}
+     *
+     * @param boxType the name of the box/atom parsed from the mp4 file
+     *
+     * @return true if an exact match (case sensitive).
+     */
+    public boolean matches(final String boxType) {
+        return fieldName.equals(boxType);
     }
 
     /**
      * @return description, human redable description of the atom
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 }

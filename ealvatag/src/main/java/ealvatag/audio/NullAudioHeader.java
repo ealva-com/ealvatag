@@ -32,7 +32,7 @@ public final class NullAudioHeader implements AudioHeader {
         return "";
     }
 
-    @Override public Integer getByteRate() {
+    @Override public int getByteRate() {
         return Integer.MIN_VALUE;
     }
 
@@ -44,15 +44,15 @@ public final class NullAudioHeader implements AudioHeader {
         return 0;
     }
 
-    @Override public Long getAudioDataLength() {
+    @Override public long getAudioDataLength() {
         return Long.MIN_VALUE;
     }
 
-    @Override public Long getAudioDataStartPosition() {
+    @Override public long getAudioDataStartPosition() {
         return Long.MIN_VALUE;
     }
 
-    @Override public Long getAudioDataEndPosition() {
+    @Override public long getAudioDataEndPosition() {
         return Long.MIN_VALUE;
     }
 
@@ -92,7 +92,7 @@ public final class NullAudioHeader implements AudioHeader {
         return false;
     }
 
-    @Override public Long getNoOfSamples() {
+    @Override public long getNoOfSamples() {
         return Long.MIN_VALUE;
     }
 }

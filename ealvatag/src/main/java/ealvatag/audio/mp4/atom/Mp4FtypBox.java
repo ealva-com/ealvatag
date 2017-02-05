@@ -1,21 +1,27 @@
 package ealvatag.audio.mp4.atom;
 
+import com.google.common.base.MoreObjects;
 import ealvatag.audio.exceptions.CannotReadException;
+import okio.BufferedSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Ftyp (File Type) is the first atom, can be used to help identify the mp4 container type
  */
-public class Mp4FtypBox extends AbstractMp4Box
-{
+public class Mp4FtypBox extends AbstractMp4Box {
+    private static final Logger LOG = LoggerFactory.getLogger(Mp4FtypBox.class);
     private String majorBrand;
     private int majorBrandVersion;
     private List<String> compatibleBrands = new ArrayList<String>();
@@ -30,42 +36,53 @@ public class Mp4FtypBox extends AbstractMp4Box
      * @param header     header info
      * @param dataBuffer data of box (doesnt include header data)
      */
-    public Mp4FtypBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
-    {
+    public Mp4FtypBox(Mp4BoxHeader header, ByteBuffer dataBuffer) {
         this.header = header;
         this.dataBuffer = dataBuffer;
         this.dataBuffer.order(ByteOrder.BIG_ENDIAN);
     }
 
-    public void processData() throws CannotReadException
-    {
-        CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
-        try
-        {
-            majorBrand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
+    public Mp4FtypBox(BufferedSource bufferedSource) throws IOException {
+        header = new Mp4BoxHeader(bufferedSource);
+        int dataSize = header.getDataLength();
+        majorBrand = bufferedSource.readString(MAJOR_BRAND_LENGTH, StandardCharsets.ISO_8859_1);
+        dataSize -= MAJOR_BRAND_LENGTH;
+        majorBrandVersion = bufferedSource.readInt();
+        dataSize -= MAJOR_BRAND_VERSION_LENGTH;
+        while (dataSize >= COMPATIBLE_BRAND_LENGTH) {
+            String compatibleBrand = bufferedSource.readString(COMPATIBLE_BRAND_LENGTH, StandardCharsets.ISO_8859_1);
+            dataSize -= COMPATIBLE_BRAND_LENGTH;
+            if (!"\u0000\u0000\u0000\u0000".equals(compatibleBrand)) {
+                compatibleBrands.add(compatibleBrand);
+            }
         }
-        catch (CharacterCodingException cee)
-        {
+        if (dataSize != 0) {
+            // malformed, but we'll try to press on
+            LOG.warn("{} has unrecognized trailing data size={}", getClass(), dataSize);
+            bufferedSource.skip(dataSize);
+        }
+    }
+
+    public void processData() throws CannotReadException {
+        CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
+        try {
+            majorBrand = decoder.decode((ByteBuffer)dataBuffer.slice().limit(MAJOR_BRAND_LENGTH)).toString();
+        } catch (CharacterCodingException cee) {
             //Ignore
 
         }
         dataBuffer.position(dataBuffer.position() + MAJOR_BRAND_LENGTH);
         majorBrandVersion = dataBuffer.getInt();
-        while ((dataBuffer.position() < dataBuffer.limit()) && (dataBuffer.limit() - dataBuffer.position() >= COMPATIBLE_BRAND_LENGTH))
-        {
+        while ((dataBuffer.position() < dataBuffer.limit()) && (dataBuffer.limit() - dataBuffer.position() >= COMPATIBLE_BRAND_LENGTH)) {
             decoder.onMalformedInput(CodingErrorAction.REPORT);
             decoder.onMalformedInput(CodingErrorAction.REPORT);
-            try
-            {
-                String brand = decoder.decode((ByteBuffer) dataBuffer.slice().limit(COMPATIBLE_BRAND_LENGTH)).toString();
+            try {
+                String brand = decoder.decode((ByteBuffer)dataBuffer.slice().limit(COMPATIBLE_BRAND_LENGTH)).toString();
                 //Sometimes just extra groups of four nulls
-                if (!brand.equals("\u0000\u0000\u0000\u0000"))
-                {
+                if (!brand.equals("\u0000\u0000\u0000\u0000")) {
                     compatibleBrands.add(brand);
                 }
-            }
-            catch (CharacterCodingException cee)
-            {
+            } catch (CharacterCodingException cee) {
                 //Ignore
             }
             dataBuffer.position(dataBuffer.position() + COMPATIBLE_BRAND_LENGTH);
@@ -73,37 +90,17 @@ public class Mp4FtypBox extends AbstractMp4Box
     }
 
 
-    public String toString()
-    {
-
-        String info = "Major Brand:" + majorBrand + "Version:" + majorBrandVersion;
-        if (compatibleBrands.size() > 0)
-        {
-            info += "Compatible:";
-            for (String brand : compatibleBrands)
-            {
-                info += brand;
-                info += ",";
-            }
-            return info.substring(0, info.length() - 1);
-        }
-        return info;
-    }
-
-    public String getMajorBrand()
-    {
+    public String getMajorBrand() {
         return majorBrand;
     }
 
 
-    public int getMajorBrandVersion()
-    {
+    public int getMajorBrandVersion() {
         return majorBrandVersion;
     }
 
 
-    public List<String> getCompatibleBrands()
-    {
+    public List<String> getCompatibleBrands() {
         return compatibleBrands;
     }
 
@@ -112,8 +109,7 @@ public class Mp4FtypBox extends AbstractMp4Box
      * but this is not an exhaustive list, so for that reason we don't force the values read from the file
      * to tie in with this enum.
      */
-    public static enum Brand
-    {
+    public static enum Brand {
         ISO14496_1_BASE_MEDIA("isom", "ISO 14496-1"),
         ISO14496_12_BASE_MEDIA("iso2", "ISO 14496-12"),
         ISO14496_1_VERSION_1("mp41", "ISO 14496-1"),
@@ -125,7 +121,8 @@ public class Mp4FtypBox extends AbstractMp4Box
         AES_ENCRYPTED_AUDIO("M4B ", "Apple encrypted Audio"),
         APPLE_AUDIO("mp71", "Apple Audio"),
         ISO14496_12_MPEG7_METADATA("mp71", "MAIN_SYNTHESIS"),
-        APPLE_AUDIO_ONLY("M4A ", "M4A Audio"), //SOmetimes used by protected mutli track audio
+        APPLE_AUDIO_ONLY("M4A ", "M4A Audio"),
+        //SOmetimes used by protected mutli track audio
         ;
 
         private String id;
@@ -135,21 +132,26 @@ public class Mp4FtypBox extends AbstractMp4Box
          * @param id          it is stored as in file
          * @param description human readable description
          */
-        Brand(String id, String description)
-        {
+        Brand(String id, String description) {
             this.id = id;
             this.description = description;
         }
 
-        public String getId()
-        {
+        public String getId() {
             return id;
         }
 
-        public String getDescription()
-        {
+        public String getDescription() {
             return description;
         }
 
+    }
+
+    @Override public String toString() {
+        return MoreObjects.toStringHelper(this)
+                          .add("majorBrand", majorBrand)
+                          .add("majorBrandVersion", majorBrandVersion)
+                          .add("compatibleBrands", compatibleBrands)
+                          .toString();
     }
 }

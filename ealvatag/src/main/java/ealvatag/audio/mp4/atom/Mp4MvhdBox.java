@@ -18,40 +18,49 @@
  */
 package ealvatag.audio.mp4.atom;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 import ealvatag.audio.Utils;
+import ealvatag.audio.mp4.Mp4AtomIdentifier;
+import ealvatag.audio.mp4.Mp4AudioHeader;
+import okio.BufferedSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
  * MvhdBox (movie (presentation) header box)
- *
+ * <p>
  * <p>This MP4Box contains important audio information we need. It can be used to calculate track length,
  * depending on the version field this can be in either short or long format
  */
-public class Mp4MvhdBox extends AbstractMp4Box
-{
-    public static final int VERSION_FLAG_POS = 0;
-    public static final int OTHER_FLAG_POS = 1;
-    public static final int CREATED_DATE_SHORT_POS = 4;
-    public static final int MODIFIED_DATE_SHORT_POS = 8;
-    public static final int TIMESCALE_SHORT_POS = 12;
-    public static final int DURATION_SHORT_POS = 16;
+public class Mp4MvhdBox extends AbstractMp4Box {
+    private static final Logger LOG = LoggerFactory.getLogger(Mp4MvhdBox.class);
 
-    public static final int CREATED_DATE_LONG_POS = 4;
-    public static final int MODIFIED_DATE_LONG_POS = 12;
-    public static final int TIMESCALE_LONG_POS = 20;
-    public static final int DURATION_LONG_POS = 24;
+    private static final int VERSION_FLAG_POS = 0;
+//    public static final int OTHER_FLAG_POS = 1;
+//    public static final int CREATED_DATE_SHORT_POS = 4;
+//    public static final int MODIFIED_DATE_SHORT_POS = 8;
+    private static final int TIMESCALE_SHORT_POS = 12;
+    private static final int DURATION_SHORT_POS = 16;
 
-    public static final int VERSION_FLAG_LENGTH = 1;
-    public static final int OTHER_FLAG_LENGTH = 3;
-    public static final int CREATED_DATE_SHORT_LENGTH = 4;
-    public static final int MODIFIED_DATE_SHORT_LENGTH = 4;
-    public static final int CREATED_DATE_LONG_LENGTH = 8;
-    public static final int MODIFIED_DATE_LONG_LENGTH = 8;
-    public static final int TIMESCALE_LENGTH = 4;
-    public static final int DURATION_SHORT_LENGTH = 4;
-    public static final int DURATION_LONG_LENGTH = 8;
+//    public static final int CREATED_DATE_LONG_POS = 4;
+//    public static final int MODIFIED_DATE_LONG_POS = 12;
+    private static final int TIMESCALE_LONG_POS = 20;
+    private static final int DURATION_LONG_POS = 24;
+
+//    public static final int VERSION_FLAG_LENGTH = 1;
+    private static final int OTHER_FLAG_LENGTH = 3;
+    private static final int CREATED_DATE_SHORT_LENGTH = 4;
+    private static final int MODIFIED_DATE_SHORT_LENGTH = 4;
+    private static final int CREATED_DATE_LONG_LENGTH = 8;
+    private static final int MODIFIED_DATE_LONG_LENGTH = 8;
+//    public static final int TIMESCALE_LENGTH = 4;
+//    public static final int DURATION_SHORT_LENGTH = 4;
+//    public static final int DURATION_LONG_LENGTH = 8;
 
     private static final int LONG_FORMAT = 1;
 
@@ -62,27 +71,56 @@ public class Mp4MvhdBox extends AbstractMp4Box
      * @param header     header info
      * @param dataBuffer data of box (doesnt include header data)
      */
-    public Mp4MvhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
-    {
+    Mp4MvhdBox(Mp4BoxHeader header, ByteBuffer dataBuffer) {
         this.header = header;
         dataBuffer.order(ByteOrder.BIG_ENDIAN);
         byte version = dataBuffer.get(VERSION_FLAG_POS);
 
-        if (version == LONG_FORMAT)
-        {
+        if (version == LONG_FORMAT) {
             timeScale = dataBuffer.getInt(TIMESCALE_LONG_POS);
             timeLength = dataBuffer.getLong(DURATION_LONG_POS);
 
-        }
-        else
-        {
+        } else {
             timeScale = dataBuffer.getInt(TIMESCALE_SHORT_POS);
-            timeLength = Utils.u(dataBuffer.getInt(DURATION_SHORT_POS));
+            timeLength = Utils.convertUnsignedIntToLong(dataBuffer.getInt(DURATION_SHORT_POS));
         }
     }
 
-    public int getLength()
-    {
-        return (int) (this.timeLength / this.timeScale);
+    public Mp4MvhdBox(Mp4BoxHeader mvhdBoxHeader, BufferedSource dataBuffer, final Mp4AudioHeader audioHeader) throws IOException {
+        Preconditions.checkArgument(Mp4AtomIdentifier.MVHD.matches(mvhdBoxHeader.getId()));
+        this.header = mvhdBoxHeader;
+        int dataSize = mvhdBoxHeader.getDataLength();
+        byte version = dataBuffer.readByte();
+        dataSize--; // read version byte
+        if (version == LONG_FORMAT) {
+            final int skipAmount = OTHER_FLAG_LENGTH + CREATED_DATE_LONG_LENGTH + MODIFIED_DATE_LONG_LENGTH;
+            dataBuffer.skip(skipAmount);
+            timeScale = dataBuffer.readInt();
+            timeLength = dataBuffer.readLong();
+            dataSize -= skipAmount + 4 + 8; // skip + int + long
+        } else {
+            final int skipAmount = OTHER_FLAG_LENGTH + CREATED_DATE_SHORT_LENGTH + MODIFIED_DATE_SHORT_LENGTH;
+            dataBuffer.skip(skipAmount);
+            timeScale = dataBuffer.readInt();
+            timeLength = Utils.convertUnsignedIntToLong(dataBuffer.readInt());
+            dataSize -= skipAmount + 8;  // skip amount + 2 ints
+        }
+        if (dataSize > 0) {
+            LOG.debug("Skipping remainder of {} count {}", getClass(), dataSize);
+            dataBuffer.skip(dataSize);
+        }
+        audioHeader.setPreciseLength(getLength());
+    }
+
+    public long getLength() {
+        return (int)(this.timeLength / this.timeScale);
+    }
+
+
+    @Override public String toString() {
+        return MoreObjects.toStringHelper(this)
+                          .add("timeScale", timeScale)
+                          .add("timeLength", timeLength)
+                          .toString();
     }
 }

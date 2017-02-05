@@ -1,5 +1,7 @@
 package ealvatag.audio.aiff;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import ealvatag.audio.GenericAudioHeader;
 
 import java.util.ArrayList;
@@ -183,51 +185,18 @@ public class AiffAudioHeader extends GenericAudioHeader
         comments.add(c);
     }
 
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder("\n");
 
-        if(name!=null && !name.isEmpty())
-        {
-            sb.append("\tName:"+name+"\n");
-        }
-
-        if(author!=null && !author.isEmpty())
-        {
-            sb.append("\tAuthor:"+author+"\n");
-        }
-
-        if(copyright!=null && !copyright.isEmpty())
-        {
-            sb.append("\tCopyright:"+copyright+"\n");
-        }
-
-        if(comments.size()>0)
-        {
-            sb.append("Comments:\n");
-            for(String next:comments)
-            {
-                sb.append("\t"+next+"\n");
-            }
-        }
-
-        if(applicationIdentifiers.size()>0)
-        {
-            sb.append("ApplicationIds:\n");
-            for(String next:applicationIdentifiers)
-            {
-                sb.append("\t"+next+"\n");
-            }
-        }
-
-        if(annotations.size()>0)
-        {
-            sb.append("Annotations:\n");
-            for(String next:annotations)
-            {
-                sb.append("\t"+next+"\n");
-            }
-        }
-        return super.toString() + sb.toString();
+    @Override protected ToStringHelper toStringHelper() {
+        return MoreObjects.toStringHelper(this)
+                          .add("fileType", fileType)
+                          .add("timestamp", timestamp)
+                          .add("endian", endian)
+                          .add("audioEncoding", audioEncoding)
+                          .add("name", name)
+                          .add("author", author)
+                          .add("copyright", copyright)
+                          .add("applicationIdentifiers", applicationIdentifiers)
+                          .add("comments", comments)
+                          .add("annotations", annotations);
     }
 }

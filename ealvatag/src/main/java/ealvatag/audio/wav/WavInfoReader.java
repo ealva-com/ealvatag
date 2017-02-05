@@ -73,7 +73,7 @@ public class WavInfoReader {
         //If we have fact chunk we can calculate accurately by taking total of samples (per channel) divided by the
         // number
         //of samples taken per second (per channel)
-        if (info.getNoOfSamples() != null) {
+        if (info.getNoOfSamples() != -1) {
             if (info.getSampleRateAsNumber() > 0) {
                 info.setPreciseLength((float)info.getNoOfSamples() / info.getSampleRateAsNumber());
             }

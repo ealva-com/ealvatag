@@ -14,7 +14,7 @@ public interface AudioHeader {
     /**
      * @return the ByteRate of the Audio, this is the total average amount of bytes of data sampled per second
      */
-    Integer getByteRate();
+    int getByteRate();
 
 
     /**
@@ -33,7 +33,7 @@ public interface AudioHeader {
      * <p>
      * TODO currently only used by Wav/Aiff/Flac/Mp4
      */
-    Long getAudioDataLength();
+    long getAudioDataLength();
 
 
     /**
@@ -41,7 +41,7 @@ public interface AudioHeader {
      * <p>
      * TODO currently only used by Wav/Aiff/Flac/Mp4
      */
-    Long getAudioDataStartPosition();
+    long getAudioDataStartPosition();
 
 
     /**
@@ -49,7 +49,7 @@ public interface AudioHeader {
      * <p>
      * TODO currently only used by Wav/Aiff/Flac/Mp4
      */
-    Long getAudioDataEndPosition();
+    long getAudioDataEndPosition();
 
 
     /**
@@ -100,5 +100,5 @@ public interface AudioHeader {
     /**
      * @return the total number of samples, this can usually be used in conjunction with the sample rate to determine the track duration
      */
-    Long getNoOfSamples();
+    long getNoOfSamples();
 }

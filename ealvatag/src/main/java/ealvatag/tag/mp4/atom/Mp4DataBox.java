@@ -1,18 +1,23 @@
 package ealvatag.tag.mp4.atom;
 
+import com.google.common.base.Preconditions;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.AbstractMp4Box;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.mp4.field.Mp4FieldType;
+import okio.Buffer;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 /**
  * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
- *
+ * <p>
  * <p>Format is as follows:
  * :length          (4 bytes)
  * :name 'Data'     (4 bytes)
@@ -21,13 +26,13 @@ import java.util.ListIterator;
  * :locale field    (4 bytes) //Currently always zero
  * :data
  */
-public class Mp4DataBox extends AbstractMp4Box
-{
+public class Mp4DataBox extends AbstractMp4Box {
     public static final String IDENTIFIER = "data";
 
     public static final int VERSION_LENGTH = 1;
     public static final int TYPE_LENGTH = 3;
     public static final int NULL_LENGTH = 4;
+    private static final int LOCALE_LENGTH = 4;
     public static final int PRE_DATA_LENGTH = VERSION_LENGTH + TYPE_LENGTH + NULL_LENGTH;
     public static final int DATA_HEADER_LENGTH = Mp4BoxHeader.HEADER_LENGTH + PRE_DATA_LENGTH;
 
@@ -51,12 +56,10 @@ public class Mp4DataBox extends AbstractMp4Box
      * @param header     parentHeader info
      * @param dataBuffer data of box (doesnt include parentHeader data)
      */
-    public Mp4DataBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
-    {
+    public Mp4DataBox(Mp4BoxHeader header, ByteBuffer dataBuffer) {
         this.header = header;
         //Double check
-        if (!header.getId().equals(IDENTIFIER))
-        {
+        if (!header.getId().equals(IDENTIFIER)) {
             throw new RuntimeException("Unable to process data box because identifier is:" + header.getId());
         }
 
@@ -66,35 +69,31 @@ public class Mp4DataBox extends AbstractMp4Box
         //Type
         type = Utils.getIntBE(this.dataBuffer, Mp4DataBox.TYPE_POS, Mp4DataBox.TYPE_POS + Mp4DataBox.TYPE_LENGTH - 1);
 
-        if (type == Mp4FieldType.TEXT.getFileClassId())
-        {
+        if (type == Mp4FieldType.TEXT.getFileClassId()) {
             content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
-        }
-        else if (type == Mp4FieldType.IMPLICIT.getFileClassId())
-        {
+        } else if (type == Mp4FieldType.IMPLICIT.getFileClassId()) {
             numbers = new ArrayList<Short>();
 
-            for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
-            {
-                short number = Utils.getShortBE(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+            for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++) {
+                short
+                        number =
+                        Utils.getShortBE(this.dataBuffer,
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
                 numbers.add(number);
             }
 
             //Make String representation  (separate values with slash)
             StringBuffer sb = new StringBuffer();
             ListIterator<Short> iterator = numbers.listIterator();
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 sb.append(iterator.next());
-                if (iterator.hasNext())
-                {
+                if (iterator.hasNext()) {
                     sb.append("/");
                 }
             }
             content = sb.toString();
-        }
-        else if (type == Mp4FieldType.INTEGER.getFileClassId())
-        {
+        } else if (type == Mp4FieldType.INTEGER.getFileClassId()) {
             //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
             //Create String representation for display
             content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
@@ -109,26 +108,93 @@ public class Mp4DataBox extends AbstractMp4Box
             //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
             //by the Mp4TrackField atom
             numbers = new ArrayList<Short>();
-            for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++)
-            {
-                short number = Utils.getShortBE(this.dataBuffer, PRE_DATA_LENGTH + (i * NUMBER_LENGTH), PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+            for (int i = 0; i < ((header.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++) {
+                short
+                        number =
+                        Utils.getShortBE(this.dataBuffer,
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
                 numbers.add(number);
             }
 
-        }
-        else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId())
-        {
+        } else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId()) {
             content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
         }
     }
 
-    public String getContent()
-    {
+    /**
+     * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
+     * <p>
+     * <p>Format is as follows:
+     * Mp4BoxHeader [
+     *      :length          (4 bytes)
+     *      :name 'Data'     (4 bytes)
+     * ]
+     *
+     * :atom version    (1 byte)
+     * :atom type flags (3 bytes)
+     * :locale field    (4 bytes) //Currently always zero
+     * :data
+     */
+    public Mp4DataBox(final Mp4BoxHeader dataBoxHeader, final Buffer buffer) throws IOException {
+        Preconditions.checkArgument(IDENTIFIER.equals(dataBoxHeader.getId()));
+        this.header = dataBoxHeader;
+
+        buffer.skip(VERSION_LENGTH);
+        type = Utils.read3ByteInt(buffer);
+
+        buffer.skip(LOCALE_LENGTH);
+
+        final int remainingDataSize = header.getDataLength() - PRE_DATA_LENGTH;
+        if (type == Mp4FieldType.TEXT.getFileClassId()) {
+            content = buffer.readString(remainingDataSize, header.getEncoding());
+        } else if (type == Mp4FieldType.IMPLICIT.getFileClassId()) {
+            numbers = new ArrayList<>();
+
+            final int shortsToRead = (remainingDataSize) / NUMBER_LENGTH;
+            for (int i = 0; i < shortsToRead; i++) {
+                numbers.add(buffer.readShort());
+            }
+
+            //Make String representation  (separate values with slash)
+            StringBuilder sb = new StringBuilder();
+            ListIterator<Short> iterator = numbers.listIterator();
+            while (iterator.hasNext()) {
+                sb.append(iterator.next());
+                if (iterator.hasNext()) {
+                    sb.append("/");
+                }
+            }
+            content = sb.toString();
+        } else if (type == Mp4FieldType.INTEGER.getFileClassId()) {
+            //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
+            bytedata = buffer.readByteArray(header.getDataLength() - 1);
+
+            //Create String representation for display
+            content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
+
+            //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
+            //by the Mp4TrackField atom
+            numbers = new ArrayList<Short>();
+            for (int i = 0; i < ((remainingDataSize) / NUMBER_LENGTH); i++) {
+                short
+                        number =
+                        Utils.getShortBE(this.dataBuffer,
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
+                                         PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
+                numbers.add(number);
+            }
+
+        } else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId()) {
+            content = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, remainingDataSize, header.getEncoding());
+        }
+    }
+
+    public String getContent() {
         return content;
     }
 
-    public int getType()
-    {
+    public int getType() {
 
         return type;
     }
@@ -140,8 +206,7 @@ public class Mp4DataBox extends AbstractMp4Box
      */
     //TODO this is only applicable for numeric databoxes, should we subclass dont know type until start
     //constructing and we also have Mp4tagTextNumericField class as well
-    public List<Short> getNumbers()
-    {
+    public List<Short> getNumbers() {
         return numbers;
     }
 
@@ -150,8 +215,7 @@ public class Mp4DataBox extends AbstractMp4Box
      *
      * @return byte data
      */
-    public byte[] getByteData()
-    {
+    public byte[] getByteData() {
         return bytedata;
     }
 }

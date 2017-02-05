@@ -5,7 +5,8 @@ import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AudioHeader;
-import ealvatag.audio.mp4.atom.Mp4EsdsBox;
+import ealvatag.audio.mp4.Mp4AudioProfile;
+import ealvatag.audio.mp4.Mp4Kind;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
@@ -52,8 +53,8 @@ public class M4aReadDrmTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             Assert.assertEquals("The King Of The Slums", tag.getFirst(FieldKey.ARTIST));

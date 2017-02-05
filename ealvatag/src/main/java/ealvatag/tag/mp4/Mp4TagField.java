@@ -77,6 +77,10 @@ public abstract class Mp4TagField implements TagField {
         build(data);
     }
 
+    protected Mp4TagField(Mp4BoxHeader parentHeader) {
+        this.parentHeader = parentHeader;
+    }
+
     protected Mp4TagField(String id, ByteBuffer data) throws UnsupportedEncodingException {
         this(id);
         build(data);

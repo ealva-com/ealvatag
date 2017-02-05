@@ -74,15 +74,15 @@ public class CommentsChunk extends Chunk
      */
     public boolean readChunk() throws IOException
     {
-        final int numComments = Utils.u(chunkData.getShort());
+        final int numComments = Utils.convertUnsignedShortToInt(chunkData.getShort());
 
         //For each comment
         for (int i = 0; i < numComments; i++)
         {
-            final long timestamp  = Utils.u(chunkData.getInt());
+            final long timestamp  = Utils.convertUnsignedIntToLong(chunkData.getInt());
             final Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            final int marker      = Utils.u(chunkData.getShort());
-            final int count       = Utils.u(chunkData.getShort());
+            final int marker      = Utils.convertUnsignedShortToInt(chunkData.getShort());
+            final int count       = Utils.convertUnsignedShortToInt(chunkData.getShort());
             // Append a timestamp to the comment
             final String text = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);
             if (count % 2 != 0) {

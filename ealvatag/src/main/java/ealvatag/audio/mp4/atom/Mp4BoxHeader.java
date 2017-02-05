@@ -18,10 +18,12 @@
  */
 package ealvatag.audio.mp4.atom;
 
+import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
-import ealvatag.audio.Utils;
+import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.logging.ErrorMessage;
+import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,8 +151,16 @@ public class Mp4BoxHeader {
             throw new InvalidBoxHeaderException(ErrorMessage
                                                         .MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID
                                                         .getMsg(
-                    id,
-                    length));
+                                                                id,
+                                                                length));
+        }
+    }
+
+    public Mp4BoxHeader(BufferedSource source) throws IOException {
+        length = source.readInt();
+        id = source.readString(IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
+        if ("\0\0\0\0".equals(id)) {
+            throw new NullBoxIdException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
         }
     }
 
@@ -159,6 +169,10 @@ public class Mp4BoxHeader {
      */
     public String getId() {
         return id;
+    }
+
+    public Mp4AtomIdentifier getIdentifier() {
+        return Mp4AtomIdentifier.fromHeaderId(id);
     }
 
     /**
@@ -242,7 +256,9 @@ public class Mp4BoxHeader {
      *
      * @param fc
      * @param id
+     *
      * @return
+     *
      * @throws java.io.IOException
      */
     public static Mp4BoxHeader seekWithinLevel(FileChannel fc, String id) throws IOException {
@@ -291,7 +307,9 @@ public class Mp4BoxHeader {
      *
      * @param data
      * @param id
+     *
      * @return
+     *
      * @throws java.io.IOException
      */
     public static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException {

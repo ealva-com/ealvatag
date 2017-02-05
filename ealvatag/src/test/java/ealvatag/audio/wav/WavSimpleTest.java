@@ -32,7 +32,7 @@ public class WavSimpleTest {
             System.out.println(f.getTag());
 
             Assert.assertEquals("176", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(22050, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(22050, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV PCM 8 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("1", f.getAudioHeader().getChannels());
             Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -62,7 +62,7 @@ public class WavSimpleTest {
 
 
             Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(66150, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(66150, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV PCM 24 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("1", f.getAudioHeader().getChannels());
             Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -97,9 +97,9 @@ public class WavSimpleTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength().longValue());
+            Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("128", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(16000, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("2", f.getAudioHeader().getChannels());
             Assert.assertEquals("8000", f.getAudioHeader().getSampleRate());
@@ -121,9 +121,9 @@ public class WavSimpleTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            Assert.assertEquals(4875, f.getAudioHeader().getAudioDataLength().longValue());
+            Assert.assertEquals(4875, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("13", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(1625, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(1625, f.getAudioHeader().getByteRate());
             Assert.assertEquals("GSM_COMPRESSED", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("1", f.getAudioHeader().getChannels());
             Assert.assertEquals("8000", f.getAudioHeader().getSampleRate());
@@ -145,9 +145,9 @@ public class WavSimpleTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength().longValue());
+            Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("128", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(16000, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(16000, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV A-LAW 8 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("2", f.getAudioHeader().getChannels());
             Assert.assertEquals("8000", f.getAudioHeader().getSampleRate());
@@ -169,9 +169,9 @@ public class WavSimpleTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            Assert.assertEquals(232128, f.getAudioHeader().getAudioDataLength().longValue());
+            Assert.assertEquals(232128, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("1411", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(176400, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV IEEE_FLOAT 32 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("2", f.getAudioHeader().getChannels());
             Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
@@ -194,9 +194,9 @@ public class WavSimpleTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag());
 
-            Assert.assertEquals(844056, f.getAudioHeader().getAudioDataLength().longValue());
+            Assert.assertEquals(844056, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("1411", f.getAudioHeader().getBitRate());
-            Assert.assertEquals(176400, f.getAudioHeader().getByteRate().intValue());
+            Assert.assertEquals(176400, f.getAudioHeader().getByteRate());
             Assert.assertEquals("WAV PCM 16 bits", f.getAudioHeader().getEncodingType());
             Assert.assertEquals("4", f.getAudioHeader().getChannels());
             Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());

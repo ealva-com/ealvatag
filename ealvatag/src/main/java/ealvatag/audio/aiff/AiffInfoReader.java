@@ -45,7 +45,7 @@ public class AiffInfoReader extends AiffChunkReader {
      * @throws CannotReadException
      */
     private void calculateBitRate(GenericAudioHeader info) throws CannotReadException {
-        if (info.getAudioDataLength() != null) {
+        if (info.getAudioDataLength() != -1) {
             info.setBitRate((int)(Math.round(info.getAudioDataLength()
                                                      * Utils.BITS_IN_BYTE_MULTIPLIER /
                                                      (info.getPreciseTrackLength() * Utils.KILOBYTE_MULTIPLIER))));

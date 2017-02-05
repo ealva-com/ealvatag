@@ -564,7 +564,7 @@ public class MP3AudioHeader implements AudioHeader {
     }
 
     @Override
-    public Long getNoOfSamples() {
+    public long getNoOfSamples() {
         return numberOfFrames;
     }
 
@@ -868,20 +868,20 @@ public class MP3AudioHeader implements AudioHeader {
      * TODO (Was originally added for Wavs)
      * @return
      */
-    public Integer getByteRate() {
-        return null;
+    public int getByteRate() {
+        return -1;
     }
 
     /**
      * TODO (Was origjnally added for Wavs)
      * @return
      */
-    public Long getAudioDataLength() {
-        return Long.valueOf(0);
+    public long getAudioDataLength() {
+        return 0;
     }
 
     @Override
-    public Long getAudioDataStartPosition() {
+    public long getAudioDataStartPosition() {
         return audioDataStartPosition;
     }
 
@@ -890,7 +890,7 @@ public class MP3AudioHeader implements AudioHeader {
     }
 
     @Override
-    public Long getAudioDataEndPosition() {
+    public long getAudioDataEndPosition() {
         return audioDataEndPosition;
     }
 

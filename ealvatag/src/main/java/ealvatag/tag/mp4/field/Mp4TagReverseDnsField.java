@@ -10,6 +10,7 @@ import ealvatag.tag.mp4.Mp4TagField;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.mp4.atom.Mp4MeanBox;
 import ealvatag.tag.mp4.atom.Mp4NameBox;
+import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
      *
      * @param parentHeader
      * @param data
+     *
      * @throws UnsupportedEncodingException
      */
     public Mp4TagReverseDnsField(Mp4BoxHeader parentHeader, ByteBuffer data) throws UnsupportedEncodingException {
@@ -91,6 +93,40 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
         this.issuer = issuer;
         this.descriptor = identifier;
         this.content = content;
+    }
+
+    public Mp4TagReverseDnsField(final Mp4BoxHeader header, final Buffer buffer) throws IOException {
+        super(header);
+        long enterSize = buffer.size();
+        //Read mean box, set the issuer and skip over data
+        Mp4BoxHeader meanBoxHeader = new Mp4BoxHeader(buffer);
+        Mp4MeanBox meanBox = new Mp4MeanBox(meanBoxHeader, buffer);
+        setIssuer(meanBox.getIssuer());
+
+        //Read name box, identify what type of field it is
+        Mp4BoxHeader nameBoxHeader = new Mp4BoxHeader(buffer);
+        Mp4NameBox nameBox = new Mp4NameBox(nameBoxHeader, buffer);
+        setDescriptor(nameBox.getName());
+
+        //Issue 198:There is not actually a data atom there cannot cant be because no room for one
+        if (parentHeader.getDataLength() == meanBoxHeader.getLength() + nameBoxHeader.getLength()) {
+            id = IDENTIFIER + ":" + issuer + ":" + descriptor;
+            setContent("");
+            LOG.warn(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));
+        } else {
+            //Usual Case
+            //Read data box, identify the data
+            Mp4BoxHeader dataBoxHeader = new Mp4BoxHeader(buffer);
+            Mp4DataBox dataBox = new Mp4DataBox(dataBoxHeader, buffer);
+            setContent(dataBox.getContent());
+            //Now calculate the id which in order to be unique needs to use all three values
+            id = IDENTIFIER + ":" + issuer + ":" + descriptor;
+        }
+        final long bytesRead = enterSize - buffer.size();
+        if (bytesRead < header.getDataLength()) {
+            // TODO: 2/4/17 LOG
+            buffer.skip(header.getDataLength() - bytesRead);
+        }
     }
 
     @Override
@@ -161,6 +197,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
      * Convert back to raw content, includes ----,mean,name and data atom as views as one thing externally
      *
      * @return
+     *
      * @throws UnsupportedEncodingException
      */
     @Override

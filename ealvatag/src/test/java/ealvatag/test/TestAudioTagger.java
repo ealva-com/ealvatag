@@ -20,26 +20,32 @@
 package ealvatag.test;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.io.Files;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileFilter;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.SupportedFileFormat;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 
+import static ealvatag.audio.SupportedFileFormat.fromExtension;
+
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Simple class that will attempt to recusively read all files within a directory, flags
+ * Simple class that will attempt to recursively read all files within a directory, flags
  * errors that occur.
  */
 public class TestAudioTagger {
 
-    private static int count = 0;
-    private static int failed = 0;
+    private static final EnumMap<SupportedFileFormat, Long> formatCountMap = new EnumMap<>(SupportedFileFormat.class);
 
     /**
      * Define a property to configure the log level at runtime.
@@ -65,9 +71,12 @@ public class TestAudioTagger {
         }
         ArrayDeque<File> deque = new ArrayDeque<>(2600);
         test.scanSingleDir(rootDir, deque);
-        count = deque.size();
+        int failed = 0;
+        final int count = deque.size();
         System.out.println("Will read " + Integer.toString(count) + " files");
         File file = null;
+
+        // Timed but don't overly rely on results. Run multiple times to get caches filled, etc. Remove println for slight improvement
         Stopwatch stopwatch = Stopwatch.createStarted();
         while (!deque.isEmpty()) {
             try {
@@ -85,17 +94,39 @@ public class TestAudioTagger {
                 t.printStackTrace();
             }
         }
+
+        final int processed = count - failed;
+
+        printFileTypes(processed);
+
         System.out.println("Elapsed: " + Double.toString(stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) / 1000.0));
         System.out.println("Attempted  to read:" + count);
-        System.out.println("Successful to read:" + (count - failed));
+        System.out.println("Successful to read:" + processed);
         System.out.println("Failed     to read:" + failed);
 
+    }
+
+    private static void printFileTypes(final int processed) {
+        System.out.println();
+        for (final Map.Entry<SupportedFileFormat, Long> entry : formatCountMap.entrySet()) {
+            final long count = entry.getValue();
+            final double percent = 100.0 * count / processed;
+            System.out.println(String.format("Type=%s %6d %.0f%%",
+                                             entry.getKey().toString(),
+                                             count,
+                                             percent));
+        }
+        System.out.println();
     }
 
     private void scanSingleDir(final File dir, final ArrayDeque<File> deque) {
         final File[] files = dir.listFiles(new AudioFileFilter(false));
         if (files != null) {
-            deque.addAll(Arrays.asList(files));
+            final List<File> fileList = Arrays.asList(files);
+            for (int i = 0, size = fileList.size(); i < size; i++) {
+                incrementFormatCount(fromExtension(Files.getFileExtension(fileList.get(i).getPath())));
+            }
+            deque.addAll(fileList);
         }
 
         final File[] audioFileDirs = dir.listFiles(new DirFilter());
@@ -103,6 +134,15 @@ public class TestAudioTagger {
             for (File audioFileDir : audioFileDirs) {
                 scanSingleDir(audioFileDir, deque);
             }
+        }
+    }
+
+    private void incrementFormatCount(final SupportedFileFormat supportedFileFormat) {
+        Long count = formatCountMap.get(supportedFileFormat);
+        if (count == null) {
+            formatCountMap.put(supportedFileFormat, 1L);
+        } else {
+            formatCountMap.put(supportedFileFormat, count + 1);
         }
     }
 

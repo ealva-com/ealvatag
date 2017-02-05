@@ -63,26 +63,26 @@ public class WavFormatChunk extends Chunk
 
     public boolean readChunk() throws IOException
     {
-        int subFormatCode = Utils.u(chunkData.getShort());
+        int subFormatCode = Utils.convertUnsignedShortToInt(chunkData.getShort());
         wsf = WavSubFormat.getByCode(subFormatCode);
-        info.setChannelNumber(Utils.u(chunkData.getShort()));
+        info.setChannelNumber(Utils.convertUnsignedShortToInt(chunkData.getShort()));
         info.setSamplingRate(chunkData.getInt());
         info.setByteRate(chunkData.getInt());
         info.setBitRate( info.getByteRate() * Utils.BITS_IN_BYTE_MULTIPLIER / Utils.KILOBYTE_MULTIPLIER); //AvgBytePerSec  converted to kb/sec
         info.setVariableBitRate(false);
-        blockAlign      = Utils.u(chunkData.getShort());
-        info.setBitsPerSample(Utils.u(chunkData.getShort()));
+        blockAlign      = Utils.convertUnsignedShortToInt(chunkData.getShort());
+        info.setBitsPerSample(Utils.convertUnsignedShortToInt(chunkData.getShort()));
         if (wsf!=null && wsf == WavSubFormat.FORMAT_EXTENSIBLE)
         {
-            int extensibleSize = Utils.u(chunkData.getShort());
+            int extensibleSize = Utils.convertUnsignedShortToInt(chunkData.getShort());
             if(extensibleSize == EXTENSIBLE_DATA_SIZE)
             {
-                info.setBitsPerSample(Utils.u(chunkData.getShort()));
+                info.setBitsPerSample(Utils.convertUnsignedShortToInt(chunkData.getShort()));
                 //We dont use this currently
                 channelMask = chunkData.getInt();
 
                 //If Extensible then the actual formatCode is held here
-                wsf = WavSubFormat.getByCode(Utils.u(chunkData.getShort()));
+                wsf = WavSubFormat.getByCode(Utils.convertUnsignedShortToInt(chunkData.getShort()));
             }
         }
         if(wsf!=null)

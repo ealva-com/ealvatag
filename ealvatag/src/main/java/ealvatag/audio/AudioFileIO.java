@@ -34,7 +34,7 @@ import ealvatag.audio.flac.FlacFileReader;
 import ealvatag.audio.flac.FlacFileWriter;
 import ealvatag.audio.mp3.MP3FileReader;
 import ealvatag.audio.mp3.MP3FileWriter;
-import ealvatag.audio.mp4.Mp4FileReader;
+import ealvatag.audio.mp4.Mp4AudioFileReader;
 import ealvatag.audio.mp4.Mp4FileWriter;
 import ealvatag.audio.ogg.OggFileReader;
 import ealvatag.audio.ogg.OggFileWriter;
@@ -206,10 +206,10 @@ public class AudioFileIO {
     }
 
     public AudioFile readFile(File f) throws CannotReadException,
-                                              IOException,
-                                              TagException,
-                                              ReadOnlyFileException,
-                                              InvalidAudioFrameException {
+                                             IOException,
+                                             TagException,
+                                             ReadOnlyFileException,
+                                             InvalidAudioFrameException {
         ensureFileExists(f);
         return readAudioFile(f, Files.getFileExtension(f.getName()));
     }
@@ -309,7 +309,7 @@ public class AudioFileIO {
         // Tag Readers
         final AudioFileReaderFactory mp4ReaderFactory = new CachingAudioFileReaderFactory() {
             @Override protected AudioFileReader doMake() {
-                return new Mp4FileReader();
+                return new Mp4AudioFileReader();
             }
         };
         final AudioFileReaderFactory aiffReaderFactory = new CachingAudioFileReaderFactory() {

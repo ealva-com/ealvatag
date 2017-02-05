@@ -35,9 +35,9 @@ public class CommonChunk extends Chunk
     public boolean readChunk() throws IOException
     {
 
-        int numChannels         = Utils.u(chunkData.getShort());
+        int numChannels         = Utils.convertUnsignedShortToInt(chunkData.getShort());
         long numSamples         = chunkData.getInt();
-        int bitsPerSample       = Utils.u(chunkData.getShort());
+        int bitsPerSample       = Utils.convertUnsignedShortToInt(chunkData.getShort());
         double sampleRate       = AiffUtil.read80BitDouble(chunkData);
         //Compression format, but not necessarily compressed
         String compressionType;

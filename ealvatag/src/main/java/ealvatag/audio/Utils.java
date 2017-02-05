@@ -20,6 +20,7 @@ import com.google.common.io.Files;
 import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.FileTypeUtil;
 import okio.Buffer;
+import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +98,20 @@ public class Utils {
         }
 
         return number;
+    }
+
+    /**
+     * Big-endian - everything should assume BE and only specify LE when necessary (which I cannot find as of yet)
+     *
+     * @return 3 bytes properly masked and shifted to form an int
+     *
+     * @throws IOException if a read error occurs
+     */
+    public static int read3ByteInt(final BufferedSource source) throws IOException {
+        return (source.readByte() & 0xff) << 16
+                | (source.readByte() & 0xff) << 8
+                | (source.readByte() & 0xff);
+
     }
 
     /**
@@ -209,7 +224,7 @@ public class Utils {
      * @throws IOException if error reading
      */
     public static String readPascalString(final ByteBuffer byteBuffer) throws IOException {
-        final int len = Utils.u(byteBuffer.get()); //Read as unsigned value
+        final int len = Utils.convertUnsignedByteToInt(byteBuffer.get()); //Read as unsigned value
         final byte[] buf = new byte[len];
         byteBuffer.get(buf);
         return new String(buf, 0, len, ISO_8859_1);
@@ -233,8 +248,8 @@ public class Utils {
     }
 
     public static String getString(final Buffer buffer, final int offset, final int length, final Charset encoding, final byte[] tempBuf) {
-        final byte[] b = tempBuf.length >= length ? ArrayUtil.fill(tempBuf, ArrayUtil.ZERO, length)
-                                                  : new byte[length];
+        final byte[] b = tempBuf != null && tempBuf.length >= length ? ArrayUtil.fill(tempBuf, ArrayUtil.ZERO, length)
+                                                                     : new byte[length];
         for (int i = offset, size = b.length; i < size; i++) {
             b[i] = buffer.getByte(i);
         }
@@ -414,7 +429,7 @@ public class Utils {
      * Used to convert (signed integer) to an long as if signed integer was unsigned hence allowing
      * it to represent full range of integral values.
      */
-    public static long u(final int n) {
+    public static long convertUnsignedIntToLong(final int n) {
         return n & 0xffffffffL;
     }
 
@@ -422,7 +437,7 @@ public class Utils {
      * Used to convert (signed short) to an integer as if signed short was unsigned hence allowing
      * it to represent values 0 -> 65536 rather than -32786 -> 32786
      */
-    public static int u(final short n) {
+    public static int convertUnsignedShortToInt(final short n) {
         return n & 0xffff;
     }
 
@@ -430,7 +445,7 @@ public class Utils {
      * Used to convert (signed byte) to an integer as if signed byte was unsigned hence allowing
      * it to represent values 0 -> 255 rather than -128 -> 127.
      */
-    public static int u(final byte n) {
+    public static int convertUnsignedByteToInt(final byte n) {
         return n & 0xff;
     }
 

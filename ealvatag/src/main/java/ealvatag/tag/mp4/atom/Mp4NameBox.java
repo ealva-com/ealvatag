@@ -3,14 +3,15 @@ package ealvatag.tag.mp4.atom;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.AbstractMp4Box;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
+import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 
 /**
  * This box is used within ---- boxes to hold the data name/descriptor
  */
-public class Mp4NameBox extends AbstractMp4Box
-{
+public class Mp4NameBox extends AbstractMp4Box {
     public static final String IDENTIFIER = "name";
 
     private String name;
@@ -24,13 +25,11 @@ public class Mp4NameBox extends AbstractMp4Box
      * @param header     parentHeader info
      * @param dataBuffer data of box (doesnt include parentHeader data)
      */
-    public Mp4NameBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
-    {
+    public Mp4NameBox(Mp4BoxHeader header, ByteBuffer dataBuffer) {
         this.header = header;
 
         //Double check
-        if (!header.getId().equals(IDENTIFIER))
-        {
+        if (!header.getId().equals(IDENTIFIER)) {
             throw new RuntimeException("Unable to process name box because identifier is:" + header.getId());
         }
 
@@ -41,8 +40,21 @@ public class Mp4NameBox extends AbstractMp4Box
         this.name = Utils.getString(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
     }
 
-    public String getName()
-    {
+    public Mp4NameBox(final Mp4BoxHeader nameBoxHeader, final Buffer buffer) throws EOFException {
+        header = nameBoxHeader;
+
+        //Double check
+        if (!header.getId().equals(IDENTIFIER)) {
+            throw new RuntimeException("Unable to process name box because identifier is:" + header.getId());
+        }
+
+        buffer.skip(PRE_DATA_LENGTH);
+
+        //descriptor
+        name = buffer.readString(header.getDataLength() - PRE_DATA_LENGTH, header.getEncoding());
+    }
+
+    public String getName() {
         return name;
     }
 }

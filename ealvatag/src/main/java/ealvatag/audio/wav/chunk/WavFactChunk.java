@@ -45,7 +45,7 @@ public class WavFactChunk extends Chunk
 
     public boolean readChunk() throws IOException
     {
-        info.setNoOfSamples(Utils.u(chunkData.getInt()));
+        info.setNoOfSamples(Utils.convertUnsignedIntToLong(chunkData.getInt()));
         return true;
     }
 

@@ -4,7 +4,8 @@ import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.mp4.Mp4AudioHeader;
-import ealvatag.audio.mp4.atom.Mp4EsdsBox;
+import ealvatag.audio.mp4.Mp4AudioProfile;
+import ealvatag.audio.mp4.Mp4Kind;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
@@ -35,13 +36,7 @@ public class M4aWriteDrmTagTest {
             File testFile = TestUtil.copyAudioToTmp("test8.m4a", new File("test8ReadStco"));
 
 
-            //Stco ouput
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
-            Mp4StcoBox.debugShowStcoInfo(raf);
-            raf.close();
-
-            //and test
-            raf = new RandomAccessFile(testFile, "r");
             Mp4StcoBox stco = Mp4StcoBox.getStco(raf);
             Assert.assertEquals(496, stco.getNoOfOffSets());
             Assert.assertEquals(56589, stco.getFirstOffSet());
@@ -86,8 +81,8 @@ public class M4aWriteDrmTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             Assert.assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));

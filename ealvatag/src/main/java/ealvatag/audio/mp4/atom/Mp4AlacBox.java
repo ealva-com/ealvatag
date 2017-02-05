@@ -1,133 +1,69 @@
 package ealvatag.audio.mp4.atom;
 
-import ealvatag.audio.exceptions.CannotReadException;
+import com.google.common.base.Preconditions;
 import ealvatag.audio.Utils;
+import ealvatag.audio.mp4.EncoderType;
+import ealvatag.audio.mp4.Mp4AtomIdentifier;
+import ealvatag.audio.mp4.Mp4AudioHeader;
+import okio.BufferedSource;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.io.IOException;
 
 /**
  * AlacBox ( Apple Lossless Codec information description box),
- *
+ * <p>
  * Normally occurs twice, the first ALAC contains the default  values, the second ALAC within contains the real
  * values for this audio.
  */
-public class Mp4AlacBox extends AbstractMp4Box
-{
-    public static final int OTHER_FLAG_LENGTH = 4;
+class Mp4AlacBox extends AbstractMp4Box {
+    private static final int OTHER_FLAG_LENGTH = 4;
 
-    private int maxSamplePerFrame; // 32bit
-    private int unknown1; // 8bit
-    private int sampleSize; // 8bit
-    private int historyMult; // 8bit
-    private int initialHistory; // 8bit
-    private int kModifier; // 8bit
-    private int channels; // 8bit
-    private int unknown2; // 16bit
-    private int maxCodedFrameSize; // 32bit
-    private int bitRate; // 32bit
-    private int sampleRate; // 32bit
+    // Some vars not used. I'm keeping as comments and let the optimizer deal with them. Yes, a few more machine cycles.
+    @SuppressWarnings("unused") Mp4AlacBox(final Mp4BoxHeader alacBoxHeader,
+                                           final BufferedSource bufferedSource,
+                                           final Mp4AudioHeader audioHeader,
+                                           final boolean isInner) throws IOException {
+        Preconditions.checkArgument(Mp4AtomIdentifier.ALAC.matches(alacBoxHeader.getId()));
 
+        int dataSize = alacBoxHeader.getDataLength();
+        bufferedSource.skip(OTHER_FLAG_LENGTH);
+        final int maxSamplePerFrame = bufferedSource.readInt();
+        final int unknown1 = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int sampleSize = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int historyMult = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int initialHistory = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int kModifier = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int channels = Utils.convertUnsignedByteToInt(bufferedSource.readByte());
+        final int unknown2 = bufferedSource.readShort();
+        final int maxCodedFrameSize = bufferedSource.readInt();
+        final int bitRate = bufferedSource.readInt();
+        final int sampleRate = bufferedSource.readInt();
+        dataSize -= OTHER_FLAG_LENGTH + 24;  // int + 6 bytes + short + 3 ints
 
-    /**
-     * DataBuffer must start from from the start of the body
-     *
-     * @param header     header info
-     * @param dataBuffer data of box (doesnt include header data)
-     */
-    public Mp4AlacBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
-    {
-        this.header     = header;
-        this.dataBuffer = dataBuffer;
-    }
+        if (isInner) {
+            audioHeader.setEncodingType(EncoderType.APPLE_LOSSLESS.getDescription());
+            audioHeader.setChannelNumber(channels);
+            audioHeader.setBitRate(bitRate / 1000);
+            audioHeader.setBitsPerSample(sampleSize);
 
-    public void processData() throws CannotReadException
-    {
-        //Skip version/other flags
-        dataBuffer.position(dataBuffer.position() + OTHER_FLAG_LENGTH);
-        dataBuffer.order(ByteOrder.BIG_ENDIAN);
-
-        maxSamplePerFrame   = dataBuffer.getInt();
-        unknown1            = Utils.u(dataBuffer.get());
-        sampleSize          = Utils.u(dataBuffer.get());
-        historyMult         = Utils.u(dataBuffer.get());
-        initialHistory      = Utils.u(dataBuffer.get());
-        kModifier           = Utils.u(dataBuffer.get());
-        channels            = Utils.u(dataBuffer.get());
-        unknown2            = dataBuffer.getShort();
-        maxCodedFrameSize   = dataBuffer.getInt();
-        bitRate             = dataBuffer.getInt();
-        sampleRate          = dataBuffer.getInt();
-    }
-
-    public int getMaxSamplePerFrame()
-    {
-        return maxSamplePerFrame;
-    }
-
-    public int getUnknown1()
-    {
-        return unknown1;
-    }
-
-    public int getSampleSize()
-    {
-        return sampleSize;
-    }
-
-    public int getHistoryMult()
-    {
-        return historyMult;
-    }
-
-    public int getInitialHistory()
-    {
-        return initialHistory;
-    }
-
-    public int getKModifier()
-    {
-        return kModifier;
-    }
-
-    public int getChannels()
-    {
-        return channels;
-    }
-
-    public int getUnknown2()
-    {
-        return unknown2;
-    }
-
-    public int getMaxCodedFrameSize()
-    {
-        return maxCodedFrameSize;
-    }
-
-    public int getBitRate()
-    {
-        return bitRate;
-    }
-
-    public int getSampleRate()
-    {
-        return sampleRate;
-    }
-
-    public String toString()
-    {
-        String s = "maxSamplePerFrame:" + maxSamplePerFrame
-                    + "unknown1:"+ unknown1
-                    + "sampleSize:"+sampleSize
-                    + "historyMult:"+historyMult
-                    + "initialHistory:"+initialHistory
-                    + "kModifier:"+kModifier
-                    + "channels:"+channels
-                    + "unknown2 :"+unknown2
-                    + "maxCodedFrameSize:"+maxCodedFrameSize
-                    + "bitRate:"+bitRate
-                    + "sampleRate:"+sampleRate;
-        return s;
+            bufferedSource.skip(dataSize);
+        } else {
+            Mp4AlacBox alacBox = null;
+            while (dataSize >= Mp4BoxHeader.HEADER_LENGTH && alacBox == null) {
+                Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
+                switch (childHeader.getIdentifier()) {
+                    case ALAC:
+                        alacBox = new Mp4AlacBox(childHeader, bufferedSource, audioHeader, true);
+                        break;
+                    default:
+                        bufferedSource.skip(childHeader.getDataLength());
+                }
+                dataSize -= childHeader.getLength();
+            }
+            if (dataSize > 0) {
+                // TODO: 2/4/17
+                bufferedSource.skip(dataSize);
+            }
+        }
     }
 }

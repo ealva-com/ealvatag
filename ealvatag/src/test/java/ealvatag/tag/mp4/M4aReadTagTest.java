@@ -7,8 +7,8 @@ import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.audio.mp4.Mp4AudioHeader;
-import ealvatag.audio.mp4.Mp4TagReader;
-import ealvatag.audio.mp4.atom.Mp4EsdsBox;
+import ealvatag.audio.mp4.Mp4AudioProfile;
+import ealvatag.audio.mp4.Mp4Kind;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
@@ -67,8 +67,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
@@ -226,8 +226,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
 
             //Lookup by generickey
@@ -381,8 +381,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
 
             //Lookup by generickey
@@ -444,8 +444,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             Assert.assertEquals("Artist\u01fft", tag.getFirst(FieldKey.ARTIST));
@@ -614,8 +614,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //Ease of use methods for common fields
             Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
@@ -843,8 +843,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -880,8 +880,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
 
             //These shouldn't be any values for these. because they have invalid fieldtype of 15 instead of 21
             Assert.assertEquals("", tag.getFirst(FieldKey.BPM));
@@ -993,8 +993,8 @@ public class M4aReadTagTest {
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
-            Assert.assertEquals(Mp4EsdsBox.Kind.MPEG4_AUDIO, audioheader.getKind());
-            Assert.assertEquals(Mp4EsdsBox.AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
+            Assert.assertEquals(Mp4Kind.MPEG4_AUDIO, audioheader.getKind());
+            Assert.assertEquals(Mp4AudioProfile.LOW_COMPLEXITY, audioheader.getProfile());
             Assert.assertEquals(1, tag.getFields(Mp4NonStandardFieldKey.AAPR.getFieldName()).size());
             Assert.assertNotNull(tag.getFirst(Mp4NonStandardFieldKey.AAPR.getFieldName()));
             TagField tagField = tag.getFirstField(Mp4NonStandardFieldKey.AAPR.getFieldName()).orNull();
@@ -1226,8 +1226,8 @@ public class M4aReadTagTest {
 
             //Read Image
             File testFile = TestUtil.copyAudioToTmp("test75.m4a");
-            RandomAccessFile raf = new RandomAccessFile(testFile, "r");
-            Mp4Tag tagReader = new Mp4TagReader().read(raf);
+            final AudioFile audioFile = AudioFileIO.read(testFile);
+            Tag tagReader = audioFile.getTag().or(NullTag.INSTANCE);
             Assert.assertEquals("Rock", tagReader.getFirst(FieldKey.GENRE));
         } catch (IOException e) {
             e.printStackTrace();

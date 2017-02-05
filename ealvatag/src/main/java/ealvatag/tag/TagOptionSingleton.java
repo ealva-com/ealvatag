@@ -253,6 +253,12 @@ public class TagOptionSingleton {
     private boolean preserveFileIdentity = true;
 
     /**
+     * Should the entire moov box be immediately read into memory to minimize IO. Can very large (I've seen 500K or more) but improves
+     * performance.
+     */
+    private boolean readAheadMp4 = true;
+
+    /**
      * Default based on user option
      *
      * @return the ID3v2 tag type specified by {@link #setID3V2Version(ID3V2Version)}
@@ -440,6 +446,32 @@ public class TagOptionSingleton {
 
     public void setId3v2Save(boolean id3v2Save) {
         this.id3v2Save = id3v2Save;
+    }
+
+    /**
+     * If this true, the entire moov box is read into buffers before parsing all it's contents. This may be very large (>500K) depending
+     * on the file metadata, number of tracks, etc.
+     * <p>
+     * <b>Default is true</b>
+     *
+     * @return true if mp4 parsing should aggressively cache file contents
+     */
+    public boolean shouldReadAheadMp4() {
+        return readAheadMp4;
+    }
+
+    /**
+     * Determines if a large initial read is performed of the entire moov box. If set to true it could increase performance. Settings to
+     * false <b>may</b> decrease heap footprint during processing, depending on many factors.
+     * <p>
+     * <b>Default is true</b>
+     *
+     * @param readAheadMp4 if true mp4 parsing aggressively caches file contents
+     *
+     * @see #shouldReadAheadMp4()
+     */
+    public void setReadAheadMp4(final boolean readAheadMp4) {
+        this.readAheadMp4 = readAheadMp4;
     }
 
     public Iterator<Class<? extends ID3v24FrameBody>> getKeywordIterator() {
@@ -777,7 +809,6 @@ public class TagOptionSingleton {
 
     /**
      * Remove unnecessary trailing null characters on write
-     *
      */
     public void setRemoveTrailingTerminatorOnWrite(boolean removeTrailingTerminatorOnWrite) {
         this.removeTrailingTerminatorOnWrite = removeTrailingTerminatorOnWrite;
@@ -786,7 +817,6 @@ public class TagOptionSingleton {
     /**
      * Get the default text encoding to use for new v23 frames, when unicode is required
      * UTF16 will always be used because that is the only valid option for v23/v22
-     *
      */
     public byte getId3v23DefaultTextEncoding() {
         return id3v23DefaultTextEncoding;
@@ -795,7 +825,6 @@ public class TagOptionSingleton {
     /**
      * Set the default text encoding to use for new v23 frames, when unicode is required
      * UTF16 will always be used because that is the only valid option for v23/v22
-     *
      */
     public void setId3v23DefaultTextEncoding(byte id3v23DefaultTextEncoding) {
         if ((id3v23DefaultTextEncoding == TextEncoding.ISO_8859_1) || (id3v23DefaultTextEncoding == TextEncoding.UTF_16)) {
@@ -806,7 +835,6 @@ public class TagOptionSingleton {
     /**
      * Get the default text encoding to use for new v24 frames, it defaults to simple ISO8859
      * but by changing this value you could always used UTF8 for example whether you needed to or not
-     *
      */
     public byte getId3v24DefaultTextEncoding() {
         return id3v24DefaultTextEncoding;
@@ -815,7 +843,6 @@ public class TagOptionSingleton {
     /**
      * Set the default text encoding to use for new v24 frames, it defaults to simple ISO8859
      * but by changing this value you could always used UTF8 for example whether you needed to or not
-     *
      */
     public void setId3v24DefaultTextEncoding(byte id3v24DefaultTextEncoding) {
         if ((id3v24DefaultTextEncoding == TextEncoding.ISO_8859_1) ||
@@ -830,7 +857,6 @@ public class TagOptionSingleton {
     /**
      * Get the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
      * because this encoding is understand by all ID3 versions
-     *
      */
     public byte getId3v24UnicodeTextEncoding() {
         return id3v24UnicodeTextEncoding;
@@ -839,7 +865,6 @@ public class TagOptionSingleton {
     /**
      * Set the text encoding to use for new v24 frames when unicode is required, it defaults to UTF16 just
      * because this encoding is understand by all ID3 versions
-     *
      */
     public void setId3v24UnicodeTextEncoding(byte id3v24UnicodeTextEncoding) {
         if ((id3v24UnicodeTextEncoding == TextEncoding.UTF_16) ||
@@ -853,7 +878,6 @@ public class TagOptionSingleton {
      * When writing frames if this is set to true then the frame will be written
      * using the defaults disregarding the text encoding originally used to create
      * the frame.
-     *
      */
     public boolean isResetTextEncodingForExistingFrames() {
         return resetTextEncodingForExistingFrames;
@@ -863,7 +887,6 @@ public class TagOptionSingleton {
      * When writing frames if this is set to true then the frame will be written
      * using the defaults disregarding the text encoding originally used to create
      * the frame.
-     *
      */
     public void setResetTextEncodingForExistingFrames(boolean resetTextEncodingForExistingFrames) {
         this.resetTextEncodingForExistingFrames = resetTextEncodingForExistingFrames;
