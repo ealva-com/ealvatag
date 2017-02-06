@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -27,11 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,17 +35,17 @@ import java.util.Locale;
 
 /**
  * Represents the audio header of an MP3 File
- *
+ * <p>
  * <p>The audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
  * identified them as audio frames and extracted the metadata we reuire.
- *
+ * <p>
  * <p>Start of Audio id 0xFF (11111111) and then second byte anded with 0xE0(11100000).
  * For example 2nd byte doesnt have to be 0xE0 is just has to have the top 3 signicant
  * bits set. For example 0xFB (11111011) is a common occurence of the second match. The 2nd byte
  * defines flags to indicate various mp3 values.
- *
+ * <p>
  * <p>Having found these two values we then read the header which comprises these two bytes plus a further
  * two to ensure this really is a MP3Header, sometimes the first frame is actually a dummy frame with summary
  * information
@@ -59,10 +55,10 @@ import java.util.Locale;
  * Layer III file but MP2 Layer II), MP1 Layer I) and MPEG-2 files are sometimes used and named with
  * the .mp3 suffix so this library attempts to supports all these formats.
  */
-public class MP3AudioHeader implements AudioHeader {
-    protected MPEGFrameHeader mp3FrameHeader;
-    protected XingFrame mp3XingFrame;
-    protected VbriFrame mp3VbriFrame;
+@SuppressWarnings("unused") public class MP3AudioHeader implements AudioHeader {
+    MPEGFrameHeader mp3FrameHeader;
+    private XingFrame mp3XingFrame;
+    private VbriFrame mp3VbriFrame;
 
     private Long audioDataStartPosition;
     private Long audioDataEndPosition;
@@ -96,48 +92,6 @@ public class MP3AudioHeader implements AudioHeader {
             MPEGFrameHeader.HEADER_SIZE + XingFrame.MAX_BUFFER_SIZE_NEEDED_TO_READ_XING;
     private static final int NO_SECONDS_IN_HOUR = 3600;
 
-    public MP3AudioHeader() {
-    }
-
-    /**
-     * Search for the first MP3Header in the file
-     *
-     * The search starts from the start of the file, it is usually safer to use the alternative constructor that
-     * allows you to provide the length of the tag header as a parameter so the tag can be skipped over.
-     *
-     * @param seekFile
-     * @throws IOException
-     * @throws InvalidAudioFrameException
-     */
-    public MP3AudioHeader(final File seekFile) throws IOException, InvalidAudioFrameException {
-        if (!seek(seekFile, 0)) {
-            throw new InvalidAudioFrameException("No audio header found within" + seekFile.getName());
-        }
-    }
-
-    /**
-     * Search for the first MP3Header in the file
-     *
-     * Starts searching from location startByte, this is because there is likely to be an ID3TagHeader
-     * before the start of the audio. If this tagHeader contains unsynchronized information there is a
-     * possibility that it might be inaccurately identified as the start of the Audio data. Various checks
-     * are done in this code to prevent this happening but it cannot be guaranteed.
-     *
-     * Of course if the startByte provided overstates the length of the tag header, this could mean the
-     * start of the MP3AudioHeader is missed, further checks are done within the MP3 class to recognize
-     * if this has occurred and take appropriate action.
-     *
-     * @param seekFile
-     * @param startByte
-     * @throws IOException
-     * @throws InvalidAudioFrameException
-     */
-    public MP3AudioHeader(final File seekFile, long startByte) throws IOException, InvalidAudioFrameException {
-        if (!seek(seekFile, startByte)) {
-            throw new InvalidAudioFrameException(ErrorMessage.NO_AUDIO_HEADER_FOUND.getMsg(seekFile.getName()));
-        }
-    }
-
     MP3AudioHeader(final FileOperator fileOperator, final long startByte, final String fileName) throws IOException,
                                                                                                         InvalidAudioFrameException {
         if (!seek(fileOperator, startByte, fileName)) {
@@ -147,15 +101,17 @@ public class MP3AudioHeader implements AudioHeader {
 
     /**
      * Returns true if the first MP3 frame can be found for the MP3 file
-     *
+     * <p>
      * This is the first byte of  music data and not the ID3 Tag Frame.     *
      *
-     * @param fileOperator
-     * @param startByte if there is an ID3v2tag we dont want to start reading from the start of the tag
+     * @param fileOperator for reading source file
+     * @param startByte    if there is an ID3v2tag we dont want to start reading from the start of the tag
+     *
      * @return true if the first MP3 frame can be found
+     *
      * @throws IOException on any I/O error
      */
-    @SuppressWarnings("Duplicates") public boolean seek(final FileOperator fileOperator, final long startByte, final String fileName)
+    public boolean seek(final FileOperator fileOperator, final long startByte, final String fileName)
             throws IOException {
         //This is substantially faster than updating the filechannels position
         long fileSize = fileOperator.getFileChannel().size();
@@ -169,9 +125,9 @@ public class MP3AudioHeader implements AudioHeader {
         long byteCount = Math.max(Math.min(FILE_BUFFER_SIZE, fileSize - filePointerCount), 0);
         fileOperator.read(filePointerCount, buffer, byteCount);
 
-        boolean syncFound = false;
+        boolean syncFound;
         try {
-            do {
+            while (true) {
                 if (buffer.size() <= MIN_BUFFER_REMAINING_REQUIRED) {
                     buffer.clear();
                     byteCount = Math.max(Math.min(FILE_BUFFER_SIZE, fileSize - filePointerCount), 0);
@@ -238,13 +194,11 @@ public class MP3AudioHeader implements AudioHeader {
 
 
             }
-            while (!syncFound);
         } catch (EOFException ex) {
             LOG.warn("Reached end of file without finding sync match", ex);
             syncFound = false;
         } catch (IOException iox) {
-            LOG.error("IOException occurred whilst trying to find sync", iox);
-            syncFound = false;
+            LOG.error("IOException occurred while trying to find sync", iox);
             throw iox;
         }
 
@@ -257,218 +211,7 @@ public class MP3AudioHeader implements AudioHeader {
         setTrackLength();
         setBitRate();
         setEncoder();
-        /*if((filePointerCount - startByte )>0)
-        {
-            logger.severe(seekFile.getName()+"length:"+startByte+"Difference:"+(filePointerCount - startByte));
-        }
-        */
         return syncFound;
-    }
-
-    /**
-     * Returns true if the first MP3 frame can be found for the MP3 file
-     *
-     * This is the first byte of  music data and not the ID3 Tag Frame.     *
-     *
-     * @param seekFile  MP3 file to seek
-     * @param startByte if there is an ID3v2tag we dont want to start reading from the start of the tag
-     * @return true if the first MP3 frame can be found
-     * @throws IOException on any I/O error
-     */
-    public boolean seek(final File seekFile, long startByte) throws IOException {
-        //References to Xing/VRbi Header
-        ByteBuffer header;
-
-        //This is substantially faster than updating the filechannels position
-        long filePointerCount;
-
-        final FileInputStream fis = new FileInputStream(seekFile);
-        final FileChannel fc = fis.getChannel();
-
-        //Read into Byte Buffer in Chunks
-        ByteBuffer bb = ByteBuffer.allocateDirect(FILE_BUFFER_SIZE);
-
-        //Move FileChannel to the starting position (skipping over tag if any)
-        fc.position(startByte);
-
-        //Update filePointerCount
-        filePointerCount = startByte;
-
-        //Read from here into the byte buffer , doesn't move location of filepointer
-        fc.read(bb, startByte);
-        bb.flip();
-
-        boolean syncFound = false;
-        try {
-            do {
-                //TODO remaining() is quite an expensive operation, isn't there a way we can work this out without
-                //interrogating the bytebuffer. Also this is rarely going to be true, and could be made less true
-                //by increasing FILE_BUFFER_SIZE
-                if (bb.remaining() <= MIN_BUFFER_REMAINING_REQUIRED) {
-                    bb.clear();
-                    fc.position(filePointerCount);
-                    fc.read(bb, fc.position());
-                    bb.flip();
-                    if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED) {
-                        //No mp3 exists
-                        return false;
-                    }
-                }
-                //MP3File.logger.finest("fc:"+fc.position() + "bb"+bb.position());
-                if (MPEGFrameHeader.isMPEGFrame(bb)) {
-                    try {
-                        LOG.trace("Found Possible header at:" + filePointerCount);
-
-                        mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(bb);
-                        syncFound = true;
-                        //if(2==1) use this line when you want to test getting the next frame without using xing
-
-                        if ((header = XingFrame.isXingFrame(bb, mp3FrameHeader)) != null) {
-                            LOG.trace("Found Possible XingHeader");
-                            try {
-                                //Parses Xing frame without modifying position of main buffer
-                                mp3XingFrame = XingFrame.parseXingFrame(header);
-                            } catch (InvalidAudioFrameException ex) {
-                                // We Ignore because even if Xing Header is corrupted
-                                //doesn't mean file is corrupted
-                            }
-                            break;
-                        } else if ((header = VbriFrame.isVbriFrame(bb)) != null) {
-                            LOG.trace("Found Possible VbriHeader");
-                            //Parses Vbri frame without modifying position of main buffer
-                            mp3VbriFrame = VbriFrame.parseVBRIFrame(header);
-                            break;
-                        }
-                        // There is a small but real chance that an unsynchronised ID3 Frame could fool the MPEG
-                        // Parser into thinking it was an MPEG Header. If this happens the chances of the next bytes
-                        // forming a Xing frame header are very remote. On the basis that  most files these days have
-                        // Xing headers we do an additional check for when an apparent frame header has been found
-                        // but is not followed by a Xing Header:We check the next header this wont impose a large
-                        // overhead because wont apply to most Mpegs anyway ( Most likely to occur if audio
-                        // has an  APIC frame which should have been unsynchronised but has not been) , or if the frame
-                        // has been encoded with as Unicode LE because these have a BOM of 0xFF 0xFE
-                        else {
-                            syncFound = isNextFrameValid(filePointerCount, bb, fc, seekFile.getName());
-                            if (syncFound) {
-                                break;
-                            }
-                        }
-
-                    } catch (InvalidAudioFrameException ex) {
-                        // We Ignore because likely to be incorrect sync bits ,
-                        // will just continue in loop
-                    }
-                }
-
-                //TODO position() is quite an expensive operation, isn't there a way we can work this out without
-                //interrogating the bytebuffer
-                bb.position(bb.position() + 1);
-                filePointerCount++;
-
-
-            }
-            while (!syncFound);
-        } catch (EOFException ex) {
-            LOG.warn("Reached end of file without finding sync match", ex);
-            syncFound = false;
-        } catch (IOException iox) {
-            LOG.error("IOException occurred whilst trying to find sync", iox);
-            syncFound = false;
-            throw iox;
-        } finally {
-            if (fc != null) {
-                fc.close();
-            }
-
-            if (fis != null) {
-                fis.close();
-            }
-        }
-
-        //Return to start of audio header
-        LOG.trace("Return found matching mp3 header starting at" + filePointerCount);
-        setFileSize(seekFile.length());
-        setMp3StartByte(filePointerCount);
-        setTimePerFrame();
-        setNumberOfFrames();
-        setTrackLength();
-        setBitRate();
-        setEncoder();
-        /*if((filePointerCount - startByte )>0)
-        {
-            logger.severe(seekFile.getName()+"length:"+startByte+"Difference:"+(filePointerCount - startByte));
-        }
-        */
-        return syncFound;
-    }
-
-    /**
-     * Called in some circumstances to check the next frame to ensure we have the correct audio header
-     *
-     * @param filePointerCount
-     * @param bb
-     * @param fc
-     * @param seekFileName
-     * @return true if frame is valid
-     * @throws java.io.IOException
-     */
-    private boolean isNextFrameValid(long filePointerCount, ByteBuffer bb, FileChannel fc, final String seekFileName)
-            throws IOException {
-        LOG.trace("Checking next frame" + seekFileName + ":fpc:" + filePointerCount + "skipping to:" +
-                          (filePointerCount + mp3FrameHeader.getFrameLength()));
-        boolean result = false;
-
-        int currentPosition = bb.position();
-
-        //Our buffer is not large enough to fit in the whole of this frame, something must
-        //have gone wrong because frames are not this large, so just return false
-        //bad frame header
-        if (mp3FrameHeader.getFrameLength() > (FILE_BUFFER_SIZE - MIN_BUFFER_REMAINING_REQUIRED)) {
-            LOG.debug("Frame size is too large to be a frame:" + mp3FrameHeader.getFrameLength());
-            return false;
-        }
-
-        //Check for end of buffer if not enough room get some more
-        if (bb.remaining() <= MIN_BUFFER_REMAINING_REQUIRED + mp3FrameHeader.getFrameLength()) {
-            LOG.debug("Buffer too small, need to reload, buffer size:" + bb.remaining());
-            bb.clear();
-            fc.position(filePointerCount);
-            fc.read(bb, fc.position());
-            bb.flip();
-            //So now original buffer has been replaced, so set current position to start of buffer
-            currentPosition = 0;
-            //Not enough left
-            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED) {
-                //No mp3 exists
-                LOG.debug("Nearly at end of file, no header found:");
-                return false;
-            }
-
-            //Still Not enough left for next alleged frame size so giving up
-            if (bb.limit() <= MIN_BUFFER_REMAINING_REQUIRED + mp3FrameHeader.getFrameLength()) {
-                //No mp3 exists
-                LOG.debug("Nearly at end of file, no room for next frame, no header found:");
-                return false;
-            }
-        }
-
-        //Position bb to the start of the alleged next frame
-        bb.position(bb.position() + mp3FrameHeader.getFrameLength());
-        if (MPEGFrameHeader.isMPEGFrame(bb)) {
-            try {
-                MPEGFrameHeader.parseMPEGHeader(bb);
-                LOG.debug("Check next frame confirms is an audio header ");
-                result = true;
-            } catch (InvalidAudioFrameException ex) {
-                LOG.debug("Check next frame has identified this is not an audio header");
-                result = false;
-            }
-        } else {
-            LOG.debug("isMPEGFrame has identified this is not an audio header");
-        }
-        //Set back to the start of the previous frame
-        bb.position(currentPosition);
-        return result;
     }
 
     private boolean isNextFrameValid(long filePointerCount, Buffer bb, FileOperator fileOperator, final String seekFileName)
@@ -520,10 +263,8 @@ public class MP3AudioHeader implements AudioHeader {
 
     /**
      * Set the location of where the Audio file begins in the file
-     *
-     * @param startByte
      */
-    protected void setMp3StartByte(final long startByte) {
+    void setMp3StartByte(final long startByte) {
         this.startByte = startByte;
     }
 
@@ -543,7 +284,7 @@ public class MP3AudioHeader implements AudioHeader {
     /**
      * Set number of frames in this file, use Xing if exists otherwise ((File Size - Non Audio Part)/Frame Size)
      */
-    protected void setNumberOfFrames() {
+    private void setNumberOfFrames() {
         numberOfFramesEstimate = (fileSize - startByte) / mp3FrameHeader.getFrameLength();
 
         if (mp3XingFrame != null && mp3XingFrame.isFrameCountEnabled()) {
@@ -559,7 +300,7 @@ public class MP3AudioHeader implements AudioHeader {
     /**
      * @return The number of frames within the Audio File, calculated as accurately as possible
      */
-    public long getNumberOfFrames() {
+    long getNumberOfFrames() {
         return numberOfFrames;
     }
 
@@ -569,8 +310,8 @@ public class MP3AudioHeader implements AudioHeader {
     }
 
     /**
-     * @return The number of frames within the Audio File, calculated by dividing the filesize by
-     *         the number of frames, this may not be the most accurate method available.
+     * @return The number of frames within the Audio File, calculated by dividing the filesize by the number of frames, this may not be the
+     * most accurate method available.
      */
     public long getNumberOfFramesEstimate() {
         return numberOfFramesEstimate;
@@ -581,7 +322,7 @@ public class MP3AudioHeader implements AudioHeader {
      * the sampling rate the shorter the audio segment provided by the frame,
      * the number of samples is fixed by the MPEG Version and Layer
      */
-    protected void setTimePerFrame() {
+    private void setTimePerFrame() {
         timePerFrame = mp3FrameHeader.getNoOfSamples() / mp3FrameHeader.getSamplingRate().doubleValue();
 
         //Because when calculating framelength we may have altered the calculation slightly for MPEGVersion2
@@ -612,7 +353,7 @@ public class MP3AudioHeader implements AudioHeader {
      * is going
      * to be.
      */
-    protected void setTrackLength() {
+    private void setTrackLength() {
         trackLength = numberOfFrames * getTimePerFrame();
     }
 
@@ -630,7 +371,7 @@ public class MP3AudioHeader implements AudioHeader {
 
     /**
      * Return the length in user friendly format
-     * @return
+     *
      */
     public String getTrackLengthAsString() {
         final Date timeIn;
@@ -688,7 +429,7 @@ public class MP3AudioHeader implements AudioHeader {
         }
     }
 
-    protected void setEncoder() {
+    private void setEncoder() {
         if (mp3XingFrame != null) {
             if (mp3XingFrame.getLameFrame() != null) {
                 encoder = mp3XingFrame.getLameFrame().getEncoder();
@@ -706,8 +447,7 @@ public class MP3AudioHeader implements AudioHeader {
     }
 
     /**
-     * @return the BitRate of the Audio, to distinguish cbr from vbr we add a '~'
-     *         for vbr.
+     * @return the BitRate of the Audio, to distinguish cbr from vbr we add a '~' for vbr.
      */
     public String getBitRate() {
         if (mp3XingFrame != null && mp3XingFrame.isVbr()) {
@@ -824,9 +564,8 @@ public class MP3AudioHeader implements AudioHeader {
     /**
      * Set the size of the file, required in some calculations
      *
-     * @param fileSize
      */
-    protected void setFileSize(long fileSize) {
+    private void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -866,7 +605,6 @@ public class MP3AudioHeader implements AudioHeader {
 
     /**
      * TODO (Was originally added for Wavs)
-     * @return
      */
     public int getByteRate() {
         return -1;
@@ -874,7 +612,7 @@ public class MP3AudioHeader implements AudioHeader {
 
     /**
      * TODO (Was origjnally added for Wavs)
-     * @return
+     *
      */
     public long getAudioDataLength() {
         return 0;

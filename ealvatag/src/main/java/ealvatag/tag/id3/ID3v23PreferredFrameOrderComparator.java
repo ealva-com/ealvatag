@@ -5,14 +5,13 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Orders frame Ids so that the most important frames are writtne first
+ * Orders frame Ids so that the most important frames are written first
  */
-public class ID3v23PreferredFrameOrderComparator implements Comparator<String>
-{
+public class ID3v23PreferredFrameOrderComparator implements Comparator<String> {
     private static ID3v23PreferredFrameOrderComparator comparator;
-    private static List frameIdsInPreferredOrder = new ArrayList<String>();
-    static
-    {
+    private static List<String> frameIdsInPreferredOrder = new ArrayList<>();
+
+    static {
         //these are the key ones we want at the top
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_UNIQUE_FILE_ID);
         frameIdsInPreferredOrder.add(ID3v23Frames.FRAME_ID_V3_TITLE);
@@ -110,51 +109,43 @@ public class ID3v23PreferredFrameOrderComparator implements Comparator<String>
     }
 
 
-    private ID3v23PreferredFrameOrderComparator()
-    {
+    private ID3v23PreferredFrameOrderComparator() {
 
     }
 
-    public static ID3v23PreferredFrameOrderComparator getInstanceof()
-    {
-        if(comparator==null)
-        {
-            comparator=new  ID3v23PreferredFrameOrderComparator();
+    public static ID3v23PreferredFrameOrderComparator getInstanceof() {
+        if (comparator == null) {
+            comparator = new ID3v23PreferredFrameOrderComparator();
         }
         return comparator;
     }
 
     /**
-     *
      * @param frameId1
      * @param frameId2
+     *
      * @return
      */
-    public int compare(String frameId1,String frameId2)
-    {
-        int frameId1Index= frameIdsInPreferredOrder.indexOf(frameId1);
-        if(frameId1Index==-1)
-        {
-            frameId1Index=Integer.MAX_VALUE;
+    public int compare(String frameId1, String frameId2) {
+        int frameId1Index = frameIdsInPreferredOrder.indexOf(frameId1);
+        if (frameId1Index == -1) {
+            frameId1Index = Integer.MAX_VALUE;
         }
-        int frameId2Index= frameIdsInPreferredOrder.indexOf(frameId2);
+        int frameId2Index = frameIdsInPreferredOrder.indexOf(frameId2);
 
         //Because othwerwise returns -1 whihc would be tags in list went to top of list
-        if(frameId2Index==-1)
-        {
-            frameId2Index=Integer.MAX_VALUE;
+        if (frameId2Index == -1) {
+            frameId2Index = Integer.MAX_VALUE;
         }
 
         //To have determinable ordering AND because if returns equal Treese considers as equal
-        if(frameId1Index==frameId2Index)
-        {
+        if (frameId1Index == frameId2Index) {
             return frameId1.compareTo(frameId2);
         }
         return frameId1Index - frameId2Index;
     }
 
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj instanceof ID3v23PreferredFrameOrderComparator;
     }
 
