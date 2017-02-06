@@ -48,7 +48,7 @@ public class AiffInfoReader extends AiffChunkReader {
         if (info.getAudioDataLength() != -1) {
             info.setBitRate((int)(Math.round(info.getAudioDataLength()
                                                      * Utils.BITS_IN_BYTE_MULTIPLIER /
-                                                     (info.getPreciseTrackLength() * Utils.KILOBYTE_MULTIPLIER))));
+                                                     (info.getDurationAsDouble() * Utils.KILOBYTE_MULTIPLIER))));
         }
     }
 

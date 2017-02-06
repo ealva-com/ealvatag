@@ -68,10 +68,10 @@ public class Mp4AudioHeader extends GenericAudioHeader {
      * If some fields have been set make sure they're set to default values
      */
     public void ensureFieldsSet() {
-        if (getChannelNumber() == -1) {
+        if (getChannelCount() == -1) {
             setChannelNumber(2);
         }
-        if (getBitRateAsNumber() == -1) {
+        if (getBitRate() == -1) {
             setBitRate(128);
         }
         if (getBitsPerSample() == -1) {

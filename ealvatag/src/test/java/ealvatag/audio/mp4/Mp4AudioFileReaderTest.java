@@ -27,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Tests for parsing an mp4 file
@@ -75,8 +76,8 @@ public class Mp4AudioFileReaderTest {
         Mp4AudioFileReader reader = new Mp4AudioFileReader();
         final AudioFile m4a = reader.read(testFile, "m4a");
         assertThat(m4a.getTag().isPresent(), is(true));
-        Assert.assertEquals(30, m4a.getAudioHeader().getTrackLength());
-        Assert.assertEquals(44100, m4a.getAudioHeader().getSampleRateAsNumber());
+        Assert.assertEquals(30, m4a.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+        Assert.assertEquals(44100, m4a.getAudioHeader().getSampleRate());
 
     }
 

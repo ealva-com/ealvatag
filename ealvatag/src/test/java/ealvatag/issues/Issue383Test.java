@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Test deletions of ID3v1 tag
@@ -36,7 +37,7 @@ public class Issue383Test {
 
             File testFile = TestUtil.copyAudioToTmp("test106.mp3");
             AudioFile af = AudioFileIO.read(testFile);
-            Assert.assertEquals(af.getAudioHeader().getTrackLength(), 368);
+            Assert.assertEquals(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true), 368);
         } catch (Exception e) {
             caught = e;
         }
@@ -61,7 +62,7 @@ public class Issue383Test {
             File testFile = TestUtil.copyAudioToTmp("test107.mp3");
             AudioFile af = AudioFileIO.read(testFile);
             Assert.assertEquals(af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TRACK), "01");
-            Assert.assertEquals(af.getAudioHeader().getTrackLength(), 4372);
+            Assert.assertEquals(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true), 4372);
         } catch (Exception e) {
             caught = e;
         }

@@ -27,7 +27,7 @@ public class Issue409Test {
         File testFile = TestUtil.copyAudioToTmp("test111.mp3");
         MP3File mp3File = new MP3File(testFile);
         System.out.println("AudioHeaderBefore" + mp3File.getMP3AudioHeader());
-        Assert.assertEquals(44100, mp3File.getMP3AudioHeader().getSampleRateAsNumber());
+        Assert.assertEquals(44100, mp3File.getMP3AudioHeader().getSampleRate());
     }
 
 

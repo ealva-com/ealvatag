@@ -3,6 +3,7 @@ package ealvatag.tag.mp4;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomTree;
@@ -36,6 +37,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class M4aReadTagTest {
     @After public void tearDown() {
@@ -60,10 +62,10 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals(128, f.getAudioHeader().getBitRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -219,10 +221,10 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals(128, f.getAudioHeader().getBitRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -374,10 +376,10 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals(126, f.getAudioHeader().getBitRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals(126, f.getAudioHeader().getBitRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -439,8 +441,8 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -609,8 +611,8 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -836,10 +838,10 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(14, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            Assert.assertEquals(new String("1"), f.getAudioHeader().getChannels());
-            Assert.assertEquals(64, f.getAudioHeader().getBitRateAsNumber());
+            Assert.assertEquals(14, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
+            Assert.assertEquals(new String("1"), String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals(64, f.getAudioHeader().getBitRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -875,8 +877,8 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(219, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(219, f.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -988,8 +990,8 @@ public class M4aReadTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //MPEG Specific
             Mp4AudioHeader audioheader = (Mp4AudioHeader)f.getAudioHeader();
@@ -1175,10 +1177,10 @@ public class M4aReadTagTest {
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            Assert.assertEquals("344", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
+            Assert.assertEquals("344", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
 
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
             Assert.assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(), f.getAudioHeader().getEncodingType());
 
         } catch (IOException e) {
@@ -1200,10 +1202,10 @@ public class M4aReadTagTest {
             System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("188", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("188", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
 
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
             Assert.assertEquals(EncoderType.APPLE_LOSSLESS.getDescription(), f.getAudioHeader().getEncodingType());
 
         } catch (IOException e) {

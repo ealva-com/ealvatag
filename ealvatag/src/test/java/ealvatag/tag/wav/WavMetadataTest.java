@@ -4,6 +4,7 @@ import ealvatag.FilePermissionsTest;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.wav.WavCleaner;
 import ealvatag.audio.wav.WavOptions;
@@ -50,9 +51,9 @@ public class WavMetadataTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -103,9 +104,9 @@ public class WavMetadataTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -167,9 +168,9 @@ public class WavMetadataTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
 
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -236,9 +237,9 @@ public class WavMetadataTest {
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
 
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -307,9 +308,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123DeleteMetadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
             WavTag tag = (WavTag)f.getTag().or(NullTag.INSTANCE);
@@ -365,9 +366,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test126.wav", new File("test126DeleteId3Metadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
             WavTag tag = (WavTag)f.getTag().or(NullTag.INSTANCE);
@@ -425,9 +426,9 @@ public class WavMetadataTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -492,9 +493,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test125.wav", new File("test125DeleteMetadata.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -692,9 +693,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -755,9 +756,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123ModifyMoreMetadataSaveActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -815,9 +816,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActive.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -879,9 +880,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveExistingActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -943,9 +944,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test123.wav", new File("test123ModifyMetadataSaveActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -1012,9 +1013,9 @@ public class WavMetadataTest {
             File testFile = TestUtil.copyAudioToTmp("test126.wav", new File("test126ModifyMetadataSaveActiveId3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
@@ -1080,9 +1081,9 @@ public class WavMetadataTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
             WavTag tag = (WavTag)f.getTag().or(NullTag.INSTANCE);
@@ -1128,9 +1129,9 @@ public class WavMetadataTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
             System.out.println(f.getTag().or(NullTag.INSTANCE));
-            Assert.assertEquals("529", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("1", f.getAudioHeader().getChannels());
-            Assert.assertEquals("22050", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("22050", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof WavTag);
             WavTag tag = (WavTag)f.getTag().or(NullTag.INSTANCE);

@@ -3,6 +3,7 @@ package ealvatag.tag.wma;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.NullTagField;
@@ -64,10 +65,10 @@ public class WmaSimpleTest {
             File testFile = TestUtil.copyAudioToTmp("test1.wma");
             AudioFile f = AudioFileIO.read(testFile);
 
-            Assert.assertEquals("32", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("32", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("32000", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("32000", String.valueOf(f.getAudioHeader().getSampleRate()));
             Assert.assertFalse(f.getAudioHeader().isVariableBitRate());
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);
@@ -150,10 +151,10 @@ public class WmaSimpleTest {
             File testFile = TestUtil.copyAudioToTmp("test2.wma");
             AudioFile f = AudioFileIO.read(testFile);
 
-            Assert.assertEquals("128", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("128", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals("ASF (audio): 0x0162 (Windows Media Audio 9 series (Professional))", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
             Assert.assertFalse(f.getAudioHeader().isVariableBitRate());
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);
@@ -260,10 +261,10 @@ public class WmaSimpleTest {
             File testFile = TestUtil.copyAudioToTmp("test1.wma", new File("testwrite1.wma"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            Assert.assertEquals("32", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("32", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals("ASF (audio): 0x0161 (Windows Media Audio (ver 7,8,9))", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("32000", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("32000", String.valueOf(f.getAudioHeader().getSampleRate()));
             Assert.assertFalse(f.getAudioHeader().isVariableBitRate());
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof AsfTag);

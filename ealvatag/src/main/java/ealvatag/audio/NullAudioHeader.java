@@ -17,6 +17,8 @@
 
 package ealvatag.audio;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * No-op implementation of {@link AudioHeader}
  *
@@ -36,11 +38,7 @@ public final class NullAudioHeader implements AudioHeader {
         return Integer.MIN_VALUE;
     }
 
-    @Override public String getBitRate() {
-        return "";
-    }
-
-    @Override public long getBitRateAsNumber() {
+    @Override public int getBitRate() {
         return 0;
     }
 
@@ -56,11 +54,7 @@ public final class NullAudioHeader implements AudioHeader {
         return Long.MIN_VALUE;
     }
 
-    @Override public String getSampleRate() {
-        return null;
-    }
-
-    @Override public int getSampleRateAsNumber() {
+    @Override public int getSampleRate() {
         return 0;
     }
 
@@ -68,19 +62,19 @@ public final class NullAudioHeader implements AudioHeader {
         return "";
     }
 
-    @Override public String getChannels() {
-        return "";
+    @Override public int getChannelCount() {
+        return 0;
     }
 
     @Override public boolean isVariableBitRate() {
         return false;
     }
 
-    @Override public int getTrackLength() {
+    @Override public long getDuration(final TimeUnit timeUnit, final boolean round) {
         return 0;
     }
 
-    @Override public double getPreciseTrackLength() {
+    @Override public double getDurationAsDouble() {
         return 0;
     }
 

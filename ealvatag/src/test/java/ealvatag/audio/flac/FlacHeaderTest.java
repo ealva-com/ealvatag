@@ -3,6 +3,7 @@ package ealvatag.audio.flac;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
@@ -12,10 +13,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 /**
  * basic Flac tests
@@ -33,82 +37,82 @@ public class FlacHeaderTest {
             AudioFile f = AudioFileIO.read(testFile);
             System.out.println(f.getAudioHeader());
 
-            Assert.assertEquals("192", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
-            Assert.assertEquals(5, f.getAudioHeader().getTrackLength());
+            assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
+            assertEquals(5, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
 
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
-            Assert.assertEquals(6, infoReader.countMetaBlocks(f.getFile()));
+            assertEquals(6, infoReader.countMetaBlocks(f.getFile()));
 
             //Ease of use methods for common fields
-            Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
-            Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
-            Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
-            Assert.assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
-            Assert.assertEquals("1971", tag.getFirst(FieldKey.YEAR));
-            Assert.assertEquals("4", tag.getFirst(FieldKey.TRACK));
-            Assert.assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Crossover", tag.getFirst(FieldKey.GENRE));
 
             //Lookup by generickey
-            Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
-            Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
-            Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
-            Assert.assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
-            Assert.assertEquals("1971", tag.getFirst(FieldKey.YEAR));
-            Assert.assertEquals("4", tag.getFirst(FieldKey.TRACK));
-            Assert.assertEquals("Composer", tag.getFirst(FieldKey.COMPOSER));
+            assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
+            assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
+            assertEquals("test3", tag.getFirst(FieldKey.TITLE));
+            assertEquals("comments", tag.getFirst(FieldKey.COMMENT));
+            assertEquals("1971", tag.getFirst(FieldKey.YEAR));
+            assertEquals("4", tag.getFirst(FieldKey.TRACK));
+            assertEquals("Composer", tag.getFirst(FieldKey.COMPOSER));
 
             //Images
-            Assert.assertEquals(2, tag.getFields(FieldKey.COVER_ART).size());
-            Assert.assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
-            Assert.assertEquals(2, tag.getImages().size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART).size());
+            assertEquals(2, tag.getFields(FieldKey.COVER_ART.name()).size());
+            assertEquals(2, tag.getImages().size());
 
             //Image
             MetadataBlockDataPicture image = tag.getImages().get(0);
-            Assert.assertEquals((int)PictureTypes.DEFAULT_ID, (int)image.getPictureType());
-            Assert.assertEquals("image/png", image.getMimeType());
+            assertEquals((int)PictureTypes.DEFAULT_ID, (int)image.getPictureType());
+            assertEquals("image/png", image.getMimeType());
             Assert.assertFalse(image.isImageUrl());
-            Assert.assertEquals("", image.getImageUrl());
-            Assert.assertEquals("", image.getDescription());
-            Assert.assertEquals(0, image.getWidth());
-            Assert.assertEquals(0, image.getHeight());
-            Assert.assertEquals(0, image.getColourDepth());
-            Assert.assertEquals(0, image.getIndexedColourCount());
-            Assert.assertEquals(18545, image.getImageData().length);
+            assertEquals("", image.getImageUrl());
+            assertEquals("", image.getDescription());
+            assertEquals(0, image.getWidth());
+            assertEquals(0, image.getHeight());
+            assertEquals(0, image.getColourDepth());
+            assertEquals(0, image.getIndexedColourCount());
+            assertEquals(18545, image.getImageData().length);
 
             //Image Link
             image = tag.getImages().get(1);
-            Assert.assertEquals(7, (int)image.getPictureType());
-            Assert.assertEquals("-->", image.getMimeType());
+            assertEquals(7, (int)image.getPictureType());
+            assertEquals("-->", image.getMimeType());
             Assert.assertTrue(image.isImageUrl());
-            Assert.assertEquals("coverart.gif",
+            assertEquals("coverart.gif",
                                 new String(image.getImageData(), 0, image.getImageData().length, StandardCharsets.ISO_8859_1));
-            Assert.assertEquals("coverart.gif", image.getImageUrl());
+            assertEquals("coverart.gif", image.getImageUrl());
 
             //Create Image Link
             tag.getImages().add((MetadataBlockDataPicture)tag.createLinkedArtworkField("../testdata/coverart.jpg"));
             f.save();
             f = AudioFileIO.read(testFile);
             image = tag.getImages().get(2);
-            Assert.assertEquals(3, (int)image.getPictureType());
-            Assert.assertEquals("-->", image.getMimeType());
+            assertEquals(3, (int)image.getPictureType());
+            assertEquals("-->", image.getMimeType());
             Assert.assertTrue(image.isImageUrl());
-            Assert.assertEquals("../testdata/coverart.jpg",
+            assertEquals("../testdata/coverart.jpg",
                                 new String(image.getImageData(), 0, image.getImageData().length, StandardCharsets.ISO_8859_1));
-            Assert.assertEquals("../testdata/coverart.jpg", image.getImageUrl());
+            assertEquals("../testdata/coverart.jpg", image.getImageUrl());
 
             //Can we actually createField Buffered Image from the url  of course remember url is relative to the audio file
             //not where we run the program from
             File file = TestUtil.getTestDataTmpFile(image.getImageUrl());
             Assert.assertTrue(file.exists());
             BufferedImage bi = ImageIO.read(file);
-            Assert.assertEquals(200, bi.getWidth());
-            Assert.assertEquals(200, bi.getHeight());
+            assertEquals(200, bi.getWidth());
+            assertEquals(200, bi.getHeight());
 
 
         } catch (Exception e) {
@@ -129,18 +133,18 @@ public class FlacHeaderTest {
             System.out.println(f.getAudioHeader());
 
 
-            Assert.assertEquals("192", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
-            Assert.assertEquals(5, f.getAudioHeader().getTrackLength());
+            assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
+            assertEquals(5, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
-            Assert.assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
+            assertEquals(4, infoReader.countMetaBlocks(f.getFile()));
             //No Images
-            Assert.assertEquals(0, tag.getImages().size());
+            assertEquals(0, tag.getImages().size());
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -162,18 +166,18 @@ public class FlacHeaderTest {
             System.out.println(f.getAudioHeader());
 
 
-            Assert.assertEquals("948", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
-            Assert.assertEquals(10, f.getAudioHeader().getTrackLength());
+            assertEquals("948", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
+            assertEquals(10, f.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
-            Assert.assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
+            assertEquals(2, infoReader.countMetaBlocks(f.getFile()));
             //No Images
-            Assert.assertEquals(0, tag.getImages().size());
+            assertEquals(0, tag.getImages().size());
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -195,18 +199,18 @@ public class FlacHeaderTest {
             System.out.println(f.getAudioHeader());
 
 
-            Assert.assertEquals("1004", f.getAudioHeader().getBitRate());
-            Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
-            Assert.assertEquals(289, f.getAudioHeader().getTrackLength());
+            assertEquals("1004", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
+            assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
+            assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
+            assertEquals(289, f.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             FlacInfoReader infoReader = new FlacInfoReader();
-            Assert.assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
+            assertEquals(5, infoReader.countMetaBlocks(f.getFile()));
             //No Images
-            Assert.assertEquals(1, tag.getImages().size());
+            assertEquals(1, tag.getImages().size());
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

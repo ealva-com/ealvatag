@@ -5,6 +5,7 @@ import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.AudioHeader;
+import ealvatag.audio.Utils;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
@@ -18,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class DsfAudioFileTest {
 
@@ -30,11 +32,11 @@ public class DsfAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         Assert.assertEquals("DSF", ah.getEncodingType());
-        Assert.assertEquals("5644800", ah.getBitRate());
-        Assert.assertEquals(5644800, ah.getBitRateAsNumber());
-        Assert.assertEquals("2", ah.getChannels());
-        Assert.assertEquals("2822400", ah.getSampleRate());
-        Assert.assertEquals(5, ah.getTrackLength());
+        Assert.assertEquals("5644800", Utils.formatBitRate(ah, ah.getBitRate()));
+        Assert.assertEquals(5644800, ah.getBitRate());
+        Assert.assertEquals("2", String.valueOf(ah.getChannelCount()));
+        Assert.assertEquals("2822400", String.valueOf(ah.getSampleRate()));
+        Assert.assertEquals(5, ah.getDuration(TimeUnit.SECONDS, true));
         Assert.assertFalse(ah.isLossless());
         Tag tag = f.getTag().or(NullTag.INSTANCE);
         System.out.println(tag);
@@ -131,11 +133,11 @@ public class DsfAudioFileTest {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
             System.out.println(ah);
-            Assert.assertEquals("5644800", ah.getBitRate());
-            Assert.assertEquals(5644800, ah.getBitRateAsNumber());
-            Assert.assertEquals("2", ah.getChannels());
-            Assert.assertEquals("2822400", ah.getSampleRate());
-            Assert.assertEquals(5, ah.getTrackLength());
+            Assert.assertEquals("5644800", Utils.formatBitRate(ah, ah.getBitRate()));
+            Assert.assertEquals(5644800, ah.getBitRate());
+            Assert.assertEquals("2", String.valueOf(ah.getChannelCount()));
+            Assert.assertEquals("2822400", String.valueOf(ah.getSampleRate()));
+            Assert.assertEquals(5, ah.getDuration(TimeUnit.SECONDS, true));
             Assert.assertFalse(ah.isLossless());
             Tag tag = f.getTag().orNull();
             Assert.assertNull(tag);

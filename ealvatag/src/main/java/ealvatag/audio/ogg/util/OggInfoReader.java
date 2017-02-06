@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Read encoding info, only implemented for vorbis streams
@@ -129,18 +130,18 @@ public class OggInfoReader {
             info.setVariableBitRate(true);
         } else {
             //TODO need to remove comment from raf.getLength()
-            info.setBitRate(computeBitrate(info.getTrackLength(), raf.length()));
+            info.setBitRate((int)computeBitrate(info.getDuration(TimeUnit.SECONDS, true), raf.length()));
             info.setVariableBitRate(true);
         }
         return info;
     }
 
-    private int computeBitrate(int length, long size) {
+    private long computeBitrate(long length, long size) {
         //Protect against audio less than 0.5 seconds that can be rounded to zero causing Arithmetic Exception
         if (length == 0) {
             length = 1;
         }
-        return (int)((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
+        return ((size / Utils.KILOBYTE_MULTIPLIER) * Utils.BITS_IN_BYTE_MULTIPLIER / length);
     }
 }
 

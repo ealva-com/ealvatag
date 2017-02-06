@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Write tags for a file which contains multiple tracks such as winamp encoder.
@@ -188,8 +189,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(30, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(30, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Stereo thing doesnt work
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());
@@ -269,8 +270,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(30, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(30, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Stereo thing doesnt work
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());
@@ -361,8 +362,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(30, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(30, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Stereo thing doesn't work
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());

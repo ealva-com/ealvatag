@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * M4a write tests.
@@ -73,8 +74,8 @@ public class M4aWriteTagTest {
             Assert.assertEquals(TEST_FILE1_SIZE, testFile.length());
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -206,8 +207,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -341,8 +342,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -484,8 +485,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
             Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
@@ -631,8 +632,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -820,8 +821,8 @@ public class M4aWriteTagTest {
             Assert.assertEquals(TEST_FILE2_SIZE, testFile.length());
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -955,8 +956,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -1089,8 +1090,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -1223,8 +1224,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -1358,8 +1359,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -1482,8 +1483,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
 
@@ -1628,8 +1629,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
             Assert.assertEquals("AR", tag.getFirst(FieldKey.ARTIST));
@@ -1692,8 +1693,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(321, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(321, f.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
             Assert.assertEquals("VERYLONGARTISTNAME", tag.getFirst(FieldKey.ARTIST));
@@ -1734,8 +1735,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(241, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(241, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
             Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
@@ -1913,8 +1914,8 @@ public class M4aWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(14, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(14, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Stereo thing doesnt work
             //assertEquals(new String("2"),f.getAudioHeader().getChannels());

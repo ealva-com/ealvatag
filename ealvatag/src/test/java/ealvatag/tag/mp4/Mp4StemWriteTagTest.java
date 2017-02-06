@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Mp4StemWriteTagTest.
@@ -122,8 +123,8 @@ public class Mp4StemWriteTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(13, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
+            Assert.assertEquals(13, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
 
             //Ease of use methods for common fields
             Assert.assertEquals("tagtraum", tag.getFirst(FieldKey.ARTIST));

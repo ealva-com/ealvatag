@@ -43,11 +43,18 @@ import java.nio.charset.Charset;
  * @author Raphael Slinckx
  */
 public class Utils {
+    public static final char VBR_IDENTIFIER_PREFIX = '~';
     public static int BITS_IN_BYTE_MULTIPLIER = 8;
     public static int KILOBYTE_MULTIPLIER = 1000;
 
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
     private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
+
+    public static String formatBitRate(final AudioHeader header, final int bitRate) {
+        return header.isVariableBitRate() ? VBR_IDENTIFIER_PREFIX + String.valueOf(bitRate)
+                                   : String.valueOf(bitRate);
+
+    }
 
     /**
      * Returns the extension of the given file based on the file signature.

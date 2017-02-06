@@ -3,6 +3,7 @@ package ealvatag.tag.flac;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.flac.FlacInfoReader;
 import org.junit.After;
@@ -10,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * basic Flac tests
@@ -23,11 +25,11 @@ public class FlacReadTest {
         File testFile = TestUtil.copyAudioToTmp("test2.flac", new File("test2read.flac"));
         AudioFile f = AudioFileIO.read(testFile);
 
-        Assert.assertEquals("192", f.getAudioHeader().getBitRate());
+        Assert.assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
         Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-        Assert.assertEquals("2", f.getAudioHeader().getChannels());
-        Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
-        Assert.assertEquals(5, f.getAudioHeader().getTrackLength());
+        Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+        Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
+        Assert.assertEquals(5, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
     }
 
     @Test public void testReadSingleChannelFile() throws Exception {
@@ -35,10 +37,10 @@ public class FlacReadTest {
         AudioFile f = AudioFileIO.read(testFile);
 
         Assert.assertEquals("FLAC 8 bits", f.getAudioHeader().getEncodingType());
-        Assert.assertEquals("1", f.getAudioHeader().getChannels());
-        Assert.assertEquals("16000", f.getAudioHeader().getSampleRate());
-        Assert.assertEquals(1, f.getAudioHeader().getTrackLength());
-        Assert.assertEquals("47", f.getAudioHeader().getBitRate());       //is this correct value
+        Assert.assertEquals("1", String.valueOf(f.getAudioHeader().getChannelCount()));
+        Assert.assertEquals("16000", String.valueOf(f.getAudioHeader().getSampleRate()));
+        Assert.assertEquals(1, f.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
+        Assert.assertEquals("47", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));       //is this correct value
     }
 
     @Test(expected = CannotReadException.class)

@@ -17,21 +17,21 @@
  */
 package ealvatag.audio.mp3;
 
+import com.google.common.base.MoreObjects;
 import ealvatag.audio.AudioHeader;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Hex;
+import ealvatag.utils.TimeUnits;
 import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 import java.io.EOFException;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents the audio header of an MP3 File
@@ -39,11 +39,11 @@ import java.util.Locale;
  * <p>The audio header consists of a number of
  * audio frames. Because we are not trying to play the audio but only extract some information
  * regarding the audio we only need to read the first  audio frames to ensure that we have correctly
- * identified them as audio frames and extracted the metadata we reuire.
+ * identified them as audio frames and extracted the metadata we require.
  * <p>
- * <p>Start of Audio id 0xFF (11111111) and then second byte anded with 0xE0(11100000).
- * For example 2nd byte doesnt have to be 0xE0 is just has to have the top 3 signicant
- * bits set. For example 0xFB (11111011) is a common occurence of the second match. The 2nd byte
+ * <p>Start of Audio id 0xFF (11111111) and then second byte and with 0xE0(11100000).
+ * For example 2nd byte doesn't have to be 0xE0 is just has to have the top 3 significant
+ * bits set. For example 0xFB (11111011) is a common occurrence of the second match. The 2nd byte
  * defines flags to indicate various mp3 values.
  * <p>
  * <p>Having found these two values we then read the header which comprises these two bytes plus a further
@@ -56,6 +56,7 @@ import java.util.Locale;
  * the .mp3 suffix so this library attempts to supports all these formats.
  */
 @SuppressWarnings("unused") public class MP3AudioHeader implements AudioHeader {
+    private static final double NANOSECONDS_IN_A_SECOND = 1000000000;
     MPEGFrameHeader mp3FrameHeader;
     private XingFrame mp3XingFrame;
     private VbriFrame mp3VbriFrame;
@@ -69,13 +70,9 @@ import java.util.Locale;
     private double trackLength;
     private long numberOfFrames;
     private long numberOfFramesEstimate;
-    private long bitrate;
+    private int bitrate;
     private String encoder = "";
 
-    private static final SimpleDateFormat timeInFormat = new SimpleDateFormat("ss", Locale.UK);
-    private static final SimpleDateFormat timeOutFormat = new SimpleDateFormat("mm:ss", Locale.UK);
-    private static final SimpleDateFormat timeOutOverAnHourFormat = new SimpleDateFormat("kk:mm:ss", Locale.UK);
-    private static final char isVbrIdentifier = '~';
     private static final int CONVERT_TO_KILOBITS = 1000;
     private static final String TYPE_MP3 = "mp3";
     private static final int CONVERTS_BYTE_TO_BITS = 8;
@@ -361,39 +358,13 @@ import java.util.Locale;
     /**
      * @return Track Length in seconds
      */
-    public double getPreciseTrackLength() {
+    @Override
+    public double getDurationAsDouble() {
         return trackLength;
     }
 
-    public int getTrackLength() {
-        return (int)getPreciseTrackLength();
-    }
-
-    /**
-     * Return the length in user friendly format
-     *
-     */
-    public String getTrackLengthAsString() {
-        final Date timeIn;
-        try {
-            final long lengthInSecs = getTrackLength();
-            synchronized (timeInFormat) {
-                timeIn = timeInFormat.parse(String.valueOf(lengthInSecs));
-            }
-
-            if (lengthInSecs < NO_SECONDS_IN_HOUR) {
-                synchronized (timeOutFormat) {
-                    return timeOutFormat.format(timeIn);
-                }
-            } else {
-                synchronized (timeOutOverAnHourFormat) {
-                    return timeOutOverAnHourFormat.format(timeIn);
-                }
-            }
-        } catch (ParseException pe) {
-            LOG.warn("Unable to parse:" + getPreciseTrackLength() + " failed with ParseException:" + pe.getMessage());
-            return "";
-        }
+    @Override public long getDuration(final TimeUnit timeUnit, final boolean round) {
+        return TimeUnits.convert(Math.round(trackLength * NANOSECONDS_IN_A_SECOND), NANOSECONDS, timeUnit, round);
     }
 
     /**
@@ -410,18 +381,18 @@ import java.util.Locale;
 
         if (mp3XingFrame != null && mp3XingFrame.isVbr()) {
             if (mp3XingFrame.isAudioSizeEnabled() && mp3XingFrame.getAudioSize() > 0) {
-                bitrate = (long)((mp3XingFrame.getAudioSize() * CONVERTS_BYTE_TO_BITS) /
+                bitrate = (int)((mp3XingFrame.getAudioSize() * CONVERTS_BYTE_TO_BITS) /
                         (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             } else {
-                bitrate = (long)(((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) /
+                bitrate = (int)(((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) /
                         (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             }
         } else if (mp3VbriFrame != null) {
             if (mp3VbriFrame.getAudioSize() > 0) {
-                bitrate = (long)((mp3VbriFrame.getAudioSize() * CONVERTS_BYTE_TO_BITS) /
+                bitrate = (int)((mp3VbriFrame.getAudioSize() * CONVERTS_BYTE_TO_BITS) /
                         (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             } else {
-                bitrate = (long)(((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) /
+                bitrate = (int)(((fileSize - startByte) * CONVERTS_BYTE_TO_BITS) /
                         (timePerFrame * getNumberOfFrames() * CONVERT_TO_KILOBITS));
             }
         } else {
@@ -442,28 +413,15 @@ import java.util.Locale;
     /**
      * @return bitrate in kbps, no indicator is provided as to whether or not it is vbr
      */
-    public long getBitRateAsNumber() {
+    public int getBitRate() {
         return bitrate;
-    }
-
-    /**
-     * @return the BitRate of the Audio, to distinguish cbr from vbr we add a '~' for vbr.
-     */
-    public String getBitRate() {
-        if (mp3XingFrame != null && mp3XingFrame.isVbr()) {
-            return isVbrIdentifier + String.valueOf(bitrate);
-        } else if (mp3VbriFrame != null) {
-            return isVbrIdentifier + String.valueOf(bitrate);
-        } else {
-            return String.valueOf(bitrate);
-        }
     }
 
 
     /**
      * @return the sampling rate in Hz
      */
-    public int getSampleRateAsNumber() {
+    public int getSampleRate() {
         return mp3FrameHeader.getSamplingRate();
     }
 
@@ -473,13 +431,6 @@ import java.util.Locale;
     public int getBitsPerSample() {
         //TODO: can it really be different in such an MP3 ? I think not.
         return 16;
-    }
-
-    /**
-     * @return the sampling rate as string
-     */
-    public String getSampleRate() {
-        return String.valueOf(mp3FrameHeader.getSamplingRate());
     }
 
     /**
@@ -503,11 +454,8 @@ import java.util.Locale;
         return mp3FrameHeader.getVersionAsString() + " " + mp3FrameHeader.getLayerAsString();
     }
 
-    /**
-     * @return the Channel Mode such as Stero or Mono
-     */
-    public String getChannels() {
-        return mp3FrameHeader.getChannelModeAsString();
+    @Override public int getChannelCount() {
+        return mp3FrameHeader.getNumberOfChannels();
     }
 
     /**
@@ -563,45 +511,11 @@ import java.util.Locale;
 
     /**
      * Set the size of the file, required in some calculations
-     *
      */
     private void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 
-
-    /**
-     * @return a string representation
-     */
-    public String toString() {
-        String s = "fileSize:" + fileSize
-                + " encoder:" + encoder
-                + " startByte:" + Hex.asHex(startByte)
-                + " numberOfFrames:" + numberOfFrames
-                + " numberOfFramesEst:" + numberOfFramesEstimate
-                + " timePerFrame:" + timePerFrame
-                + " bitrate:" + bitrate
-                + " trackLength:" + getTrackLengthAsString();
-
-        if (this.mp3FrameHeader != null) {
-            s += mp3FrameHeader.toString();
-        } else {
-            s += " mpegframeheader:false";
-        }
-
-        if (this.mp3XingFrame != null) {
-            s += mp3XingFrame.toString();
-        } else {
-            s += " mp3XingFrame:false";
-        }
-
-        if (this.mp3VbriFrame != null) {
-            s += mp3VbriFrame.toString();
-        } else {
-            s += " mp3VbriFrame:false";
-        }
-        return s;
-    }
 
     /**
      * TODO (Was originally added for Wavs)
@@ -612,7 +526,6 @@ import java.util.Locale;
 
     /**
      * TODO (Was origjnally added for Wavs)
-     *
      */
     public long getAudioDataLength() {
         return 0;
@@ -634,5 +547,23 @@ import java.util.Locale;
 
     public void setAudioDataEndPosition(Long audioDataEndPosition) {
         this.audioDataEndPosition = audioDataEndPosition;
+    }
+
+    @Override public String toString() {
+        return MoreObjects.toStringHelper(this)
+                          .add("mp3FrameHeader", mp3FrameHeader)
+                          .add("mp3XingFrame", mp3XingFrame)
+                          .add("mp3VbriFrame", mp3VbriFrame)
+                          .add("audioDataStartPosition", audioDataStartPosition)
+                          .add("audioDataEndPosition", audioDataEndPosition)
+                          .add("fileSize", fileSize)
+                          .add("startByte", startByte)
+                          .add("timePerFrame", timePerFrame)
+                          .add("trackLength", trackLength)
+                          .add("numberOfFrames", numberOfFrames)
+                          .add("numberOfFramesEstimate", numberOfFramesEstimate)
+                          .add("bitrate", bitrate)
+                          .add("encoder", encoder)
+                          .toString();
     }
 }

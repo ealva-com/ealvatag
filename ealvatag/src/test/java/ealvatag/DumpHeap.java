@@ -80,8 +80,8 @@ public class DumpHeap {
         if (inputFile.exists()) {
             AudioFile audioFile = AudioFileIO.read(inputFile);
             final AudioHeader audioHeader = audioFile.getAudioHeader();
-            final String channels = audioHeader.getChannels();
-            final String bitRate = audioHeader.getBitRate();
+            final int channels = audioHeader.getChannelCount();
+            final long bitRate = audioHeader.getBitRate();
             final String encodingType = audioHeader.getEncodingType();
             final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
             if (tag.hasField(FieldKey.TITLE)) {

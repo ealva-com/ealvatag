@@ -17,6 +17,11 @@
 package ealvatag.audio;
 
 import com.google.common.base.MoreObjects;
+import ealvatag.utils.TimeUnits;
+
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class represents a structure for storing and retrieving information
@@ -29,6 +34,7 @@ import com.google.common.base.MoreObjects;
  *
  * @author Raphael Slinckx
  */
+@SuppressWarnings("WeakerAccess")
 public class GenericAudioHeader implements AudioHeader {
     private long audioDataLength = -1;
     private long audioDataStartPosition = 1;
@@ -38,7 +44,7 @@ public class GenericAudioHeader implements AudioHeader {
     private int samplingRate = -1;
     private int bitsPerSample = -1;
     private String encodingType = "";
-    private boolean isVbr = true; //TODO this is a weird default
+    private boolean isVbr = false;
     private boolean isLossless = false;
     private double trackLength = 0.0;
     private long noOfSamples = -1;
@@ -46,33 +52,14 @@ public class GenericAudioHeader implements AudioHeader {
 
     public GenericAudioHeader() {}
 
-    public String getBitRate() {
-        return String.valueOf(bitRate);
-    }
-
-
     /**
      * This method returns the bitRate of the represented audio clip in
      * &quot;Kbps&quot;.<br>
      *
      * @return The bitRate in Kbps.
      */
-    public long getBitRateAsNumber() {
+    public int getBitRate() {
         return bitRate;
-    }
-
-    /**
-     * This method returns the number of audio channels the clip contains.<br>
-     * (The stereo, mono thing).
-     *
-     * @return The number of channels. (2 for stereo, 1 for mono)
-     */
-    public int getChannelNumber() {
-        return noOfChannels;
-    }
-
-    public String getChannels() {
-        return String.valueOf(getChannelNumber());
     }
 
     public String getEncodingType() {
@@ -88,41 +75,20 @@ public class GenericAudioHeader implements AudioHeader {
         return encodingType;
     }
 
-
-    /**
-     * This method returns the duration of the represented audio clip in
-     * seconds.<br>
-     *
-     * @return The duration to the nearest seconds.
-     *
-     * @see #getPreciseTrackLength()
-     */
-    public int getTrackLength() {
-        return (int)Math.round(getPreciseTrackLength());
+    @Override public int getChannelCount() {
+        return noOfChannels;
     }
 
-    /**
-     * This method returns the duration of the represented audio clip in seconds
-     * (single-precision).<br>
-     *
-     * @return The duration in seconds.
-     *
-     * @see #getTrackLength()
-     */
-    public double getPreciseTrackLength() {
+
+    @Override public long getDuration(final TimeUnit timeUnit, final boolean round) {
+        return TimeUnits.convert(Math.round(trackLength * 1000000000), NANOSECONDS, timeUnit, round);
+    }
+
+    public double getDurationAsDouble() {
         return trackLength;
     }
 
-    /**
-     * This method returns the sample rate, the audio clip was encoded with.<br>
-     *
-     * @return Sample rate of the audio clip in &quot;Hz&quot;.
-     */
-    public String getSampleRate() {
-        return String.valueOf(samplingRate);
-    }
-
-    public int getSampleRateAsNumber() {
+    public int getSampleRate() {
         return samplingRate;
     }
 

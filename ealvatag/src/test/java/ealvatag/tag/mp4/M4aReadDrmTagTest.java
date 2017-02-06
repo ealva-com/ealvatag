@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  */
@@ -45,10 +46,10 @@ public class M4aReadDrmTagTest {
 
             //AudioInfo
             //Time in seconds
-            Assert.assertEquals(329, f.getAudioHeader().getTrackLength());
-            Assert.assertEquals(44100, f.getAudioHeader().getSampleRateAsNumber());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals(128, f.getAudioHeader().getBitRateAsNumber());
+            Assert.assertEquals(329, f.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
+            Assert.assertEquals(44100, f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals(128, f.getAudioHeader().getBitRate());
             Assert.assertEquals(EncoderType.DRM_AAC.getDescription(), f.getAudioHeader().getEncodingType());
 
             //MPEG Specific

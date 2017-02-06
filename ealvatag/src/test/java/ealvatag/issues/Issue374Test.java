@@ -3,6 +3,7 @@ package ealvatag.issues;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
@@ -14,6 +15,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Testing that adding large artwork doesn't overwrite mp3 audio data
@@ -42,8 +44,8 @@ public class Issue374Test {
 
 
                 AudioFile af = AudioFileIO.read(testFile);
-                String s1 = af.getAudioHeader().getBitRate();
-                String s2 = String.valueOf(af.getAudioHeader().getTrackLength());
+                String s1 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
+                String s2 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
                 String s3 = String.valueOf(af.getAudioHeader().isVariableBitRate());
 
                 Tag tag = af.getTag().orNull();
@@ -55,8 +57,8 @@ public class Issue374Test {
                 af.save();
                 System.out.println("Checking:" + testFile);
                 af = AudioFileIO.read(testFile);
-                String s11 = af.getAudioHeader().getBitRate();
-                String s22 = String.valueOf(af.getAudioHeader().getTrackLength());
+                String s11 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
+                String s22 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
                 String s33 = String.valueOf(af.getAudioHeader().isVariableBitRate());
 
                 Assert.assertEquals(s1, s11);

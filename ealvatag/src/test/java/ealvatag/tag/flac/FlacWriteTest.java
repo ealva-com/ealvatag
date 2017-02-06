@@ -4,6 +4,7 @@ import ealvatag.FilePermissionsTest;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
+import ealvatag.audio.Utils;
 import ealvatag.audio.flac.FlacInfoReader;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.tag.FieldKey;
@@ -42,10 +43,10 @@ public class FlacWriteTest {
             File testFile = TestUtil.copyAudioToTmp("test2.flac", new File("test2write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            Assert.assertEquals("192", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
@@ -164,10 +165,10 @@ public class FlacWriteTest {
             File testFile = TestUtil.copyAudioToTmp("test2.flac", new File("test2write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            Assert.assertEquals("192", f.getAudioHeader().getBitRate());
+            Assert.assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-            Assert.assertEquals("2", f.getAudioHeader().getChannels());
-            Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+            Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+            Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
 
             Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
@@ -285,10 +286,10 @@ public class FlacWriteTest {
         File testFile = TestUtil.copyAudioToTmp("test.flac", new File("testdeletetag.flac"));
         AudioFile f = AudioFileIO.read(testFile);
 
-        Assert.assertEquals("192", f.getAudioHeader().getBitRate());
+        Assert.assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
         Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-        Assert.assertEquals("2", f.getAudioHeader().getChannels());
-        Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+        Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+        Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
         Assert.assertEquals(2, ((FlacTag)f.getTag().or(NullTag.INSTANCE)).getImages().size());
         Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
         Assert.assertFalse(f.getTag().or(NullTag.INSTANCE).isEmpty());
@@ -338,10 +339,10 @@ public class FlacWriteTest {
                 TestUtil.copyAudioToTmp("test2.flac", new File("testWriteFlacWithId3Shifted.flac"));
         AudioFile f = AudioFileIO.read(testFile);
 
-        Assert.assertEquals("192", f.getAudioHeader().getBitRate());
+        Assert.assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
         Assert.assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
-        Assert.assertEquals("2", f.getAudioHeader().getChannels());
-        Assert.assertEquals("44100", f.getAudioHeader().getSampleRate());
+        Assert.assertEquals("2", String.valueOf(f.getAudioHeader().getChannelCount()));
+        Assert.assertEquals("44100", String.valueOf(f.getAudioHeader().getSampleRate()));
 
         Assert.assertTrue(f.getTag().or(NullTag.INSTANCE) instanceof FlacTag);
         FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);

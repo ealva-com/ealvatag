@@ -1,5 +1,7 @@
 package ealvatag.audio;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Representation of AudioHeader
  * <p>
@@ -18,14 +20,9 @@ public interface AudioHeader {
 
 
     /**
-     * @return the BitRate of the Audio, this is the amount of kilobits of data sampled per second
-     */
-    String getBitRate();
-
-    /**
      * @return bitRate as a number, this is the amount of kilobits of data sampled per second
      */
-    long getBitRateAsNumber();
+    int getBitRate();
 
 
     /**
@@ -53,14 +50,9 @@ public interface AudioHeader {
 
 
     /**
-     * @return the Sampling rate, the number of samples taken per second
-     */
-    String getSampleRate();
-
-    /**
      * @return he Sampling rate, the number of samples taken per second
      */
-    int getSampleRateAsNumber();
+    int getSampleRate();
 
     /**
      * @return the format
@@ -68,9 +60,10 @@ public interface AudioHeader {
     String getFormat();
 
     /**
-     * @return the number of channels (i.e 1 = Mono, 2 = Stereo)
+     * Number of channels in the track, ie. mono=1 stereo=2
+     * @return number of channels
      */
-    String getChannels();
+    int getChannelCount();
 
     /**
      * @return if the sampling bitRate is variable or constant
@@ -78,14 +71,29 @@ public interface AudioHeader {
     boolean isVariableBitRate();
 
     /**
-     * @return track length in seconds
+     * Return the duration of the audio track in the given {@code timeUnit}, either rounded or truncated.
+     *
+     * If actual duration precision is more fine-grained than nanoseconds, the least significant nanosecond digit  will be rounded. eg.
+     * if nanoseconds is equivalent to 328979581.5 the result will always be the be rounded to 328979582 regardless of the {@code round}
+     * parameter.
+     *
+     * @param timeUnit the unit to return
+     * @param round    if true conversion rounded up at the TimeUnit boundary, otherwise truncated (which is the usual
+     * {@link TimeUnit#convert(long, TimeUnit)} result
+     *
+     * @return duration in {@code timeUnit}
      */
-    int getTrackLength();
+    long getDuration(TimeUnit timeUnit, final boolean round);
 
     /**
-     * @return track length as float
+     * Return the track duration in seconds. The {@link #getDuration(TimeUnit, boolean)} method should be preferred as it supports
+     * nanoseconds (results are format dependent). This will return seconds in the form of a double, but any precision at or below
+     * nanoseconds is generally not needed and probably not precise. Also, comparing doubles is problematic.
+     *
+     * @return track length as double
+     * @see #getDuration(TimeUnit, boolean)
      */
-    double getPreciseTrackLength();
+    double getDurationAsDouble();
 
     /**
      * @return the number of bits in each sample

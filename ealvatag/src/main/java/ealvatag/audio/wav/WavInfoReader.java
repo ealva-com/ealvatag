@@ -74,8 +74,8 @@ public class WavInfoReader {
         // number
         //of samples taken per second (per channel)
         if (info.getNoOfSamples() != -1) {
-            if (info.getSampleRateAsNumber() > 0) {
-                info.setPreciseLength((float)info.getNoOfSamples() / info.getSampleRateAsNumber());
+            if (info.getSampleRate() > 0) {
+                info.setPreciseLength((float)info.getNoOfSamples() / info.getSampleRate());
             }
         }
         //Otherwise adequate to divide the total number of sampling bytes by the average byte rate
