@@ -11,8 +11,11 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.ID3v1Tag;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.ID3V2Version;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -21,59 +24,50 @@ import java.util.concurrent.TimeUnit;
  * Testing that adding large artwork doesn't overwrite mp3 audio data
  */
 public class Issue374Test {
-    @Test public void testIssue() throws Exception {
+    @After
+    public void teardown() {
+        TestUtil.deleteTestDataTemp();
+    }
+
+    @Test
+    public void testIssue() throws Exception {
         File testdatadir = new File("testdata");
         int count = 0;
         for (File next : testdatadir.listFiles(new MP3FileFilter())) {
             count++;
-            System.out.println("Checking:" + next.getName());
-            Exception caught = null;
-            try {
-                File orig = new File("testdata", next.getName());
-                if (!orig.isFile()) {
-                    System.err.println("Unable to test file - not available");
-                    return;
-                }
-
-                File
-                        testFile =
-                        TestUtil.copyAudioToTmp(next.getName(),
-                                                new File(next.getName().substring(0, next.getName().length() - 4) +
-                                                                         count +
-                                                                         ".mp3"));
-
-
-                AudioFile af = AudioFileIO.read(testFile);
-                String s1 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
-                String s2 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
-                String s3 = String.valueOf(af.getAudioHeader().isVariableBitRate());
-
-                Tag tag = af.getTag().orNull();
-                if (tag == null || tag instanceof ID3v1Tag) {
-                    TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
-                    tag = af.setNewDefaultTag();
-                }
-                tag.addArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart_large.jpg")));
-                af.save();
-                System.out.println("Checking:" + testFile);
-                af = AudioFileIO.read(testFile);
-                String s11 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
-                String s22 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
-                String s33 = String.valueOf(af.getAudioHeader().isVariableBitRate());
-
-                Assert.assertEquals(s1, s11);
-                Assert.assertEquals(s2, s22);
-                Assert.assertEquals(s3, s33);
-                Assert.assertTrue(af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COVER_ART).size() > 0);
-
-            } catch (Exception e) {
-                caught = e;
-                e.printStackTrace();
-                Assert.assertNull(caught);
+            File orig = new File("testdata", next.getName());
+            if (!orig.isFile()) {
+                System.err.println("Unable to test file - not available");
+                return;
             }
-        }
-        System.out.println("Checked " + count + " files");
 
+            File testFile = TestUtil.copyAudioToTmp(next.getName(),
+                                            new File(next.getName().substring(0, next.getName().length() - 4) + count + ".mp3"));
+
+
+            AudioFile af = AudioFileIO.read(testFile);
+            String s1 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
+            String s2 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
+            String s3 = String.valueOf(af.getAudioHeader().isVariableBitRate());
+
+            Tag tag = af.getTag().orNull();
+            if (tag == null || tag instanceof ID3v1Tag) {
+                TagOptionSingleton.getInstance().setID3V2Version(ID3V2Version.ID3_V23);
+                tag = af.setNewDefaultTag();
+            }
+            tag.addArtwork(ArtworkFactory.createArtworkFromFile(new File("testdata", "coverart_large.jpg")));
+            af.save();
+            System.out.println("Checking:" + testFile);
+            af = AudioFileIO.read(testFile);
+            String s11 = Utils.formatBitRate(af.getAudioHeader(), af.getAudioHeader().getBitRate());
+            String s22 = String.valueOf(af.getAudioHeader().getDuration(TimeUnit.NANOSECONDS, true));
+            String s33 = String.valueOf(af.getAudioHeader().isVariableBitRate());
+
+            Assert.assertEquals(s1, s11);
+            Assert.assertEquals(s2, s22);
+            Assert.assertEquals(s3, s33);
+            Assert.assertTrue(af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.COVER_ART).size() > 0);
+        }
     }
 
     final class MP3FileFilter implements java.io.FileFilter {
@@ -112,16 +106,22 @@ public class Issue374Test {
          * @return true if this file or directory should be accepted
          */
         public final boolean accept(final File file) {
-            if (file.getName().equals("corrupt.mp3") ||
-                    file.getName().equals("Issue79.mp3") ||
-                    file.getName().equals("test22.mp3") ||
-                    file.getName().equals("test92.mp3") ||
-                    file.getName().equals("issue52.mp3") ||
-                    file.getName().equals("Issue81.mp3")) {
+            final String fileName = file.getName();
+            if ("corrupt.mp3".equals(fileName) ||
+                    "Issue79.mp3".equals(fileName) ||
+                    "test22.mp3".equals(fileName) ||
+                    "test92.mp3".equals(fileName) ||
+                    "issue52.mp3".equals(fileName) ||
+                    "Issue81.mp3".equals(fileName)) {
                 return false;
             }
 
-            return (((file.getName()).toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories)));
+            if (fileName.startsWith("testNon")) {
+                System.err.println("WTF? =" + fileName);
+                return false;
+            }
+
+            return ((fileName.toLowerCase().endsWith(".mp3")) || (file.isDirectory() && (this.allowDirectories)));
         }
 
     }

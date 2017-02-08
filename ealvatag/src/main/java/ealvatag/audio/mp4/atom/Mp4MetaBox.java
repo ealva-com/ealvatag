@@ -28,7 +28,10 @@ public class Mp4MetaBox extends AbstractMp4Box {
         this.dataBuffer = dataBuffer;
     }
 
-    public Mp4MetaBox(final Mp4BoxHeader metaBoxHeader, final BufferedSource bufferedSource, final Mp4Tag mp4Tag)
+    public Mp4MetaBox(final Mp4BoxHeader metaBoxHeader,
+                      final BufferedSource bufferedSource,
+                      final Mp4Tag mp4Tag,
+                      final boolean ignoreArtwork)
             throws IOException, CannotReadException {
         Preconditions.checkArgument(Mp4AtomIdentifier.META.matches(metaBoxHeader.getId()));
 
@@ -43,7 +46,7 @@ public class Mp4MetaBox extends AbstractMp4Box {
             Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
             switch (childHeader.getIdentifier()) {
                 case ILST:
-                    ilstBox = new Mp4IlstBox(childHeader, bufferedSource, mp4Tag);
+                    ilstBox = new Mp4IlstBox(childHeader, bufferedSource, mp4Tag, ignoreArtwork);
                     break;
                 default:
                     bufferedSource.skip(childHeader.getDataLength());

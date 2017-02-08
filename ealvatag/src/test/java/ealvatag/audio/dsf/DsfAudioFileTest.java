@@ -184,9 +184,8 @@ public class DsfAudioFileTest {
 
     }
 
-    @Test public void testDeleteDsfNoTag() {
-        Exception exceptionCaught = null;
-
+    @Test
+    public void testDeleteDsfNoTag() throws Exception {
         File orig = new File("testdata", "test156.dsf");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available");
@@ -194,23 +193,16 @@ public class DsfAudioFileTest {
         }
 
         File testFile = TestUtil.copyAudioToTmp("test156.dsf", new File("test156delete.dsf"));
-        try {
-            AudioFile f = AudioFileIO.read(testFile);
-            Assert.assertNull(f.getTag().orNull());
-            f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
-            f.deleteFileTag();
+        AudioFile f = AudioFileIO.read(testFile);
+        Assert.assertNull(f.getTag().orNull());
+        f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
+        Tag tag = f.getTag().or(NullTag.INSTANCE);
+        System.out.println(tag);
+        f.deleteFileTag();
 
-            f = AudioFileIO.read(testFile);
-            tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            exceptionCaught = e;
-        }
-        Assert.assertNull(exceptionCaught);
+        f = AudioFileIO.read(testFile);
+        tag = f.getTag().or(NullTag.INSTANCE);
+        System.out.println(tag);
     }
 
     @Test public void testCreateDefaultTag() throws Exception {

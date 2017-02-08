@@ -57,7 +57,8 @@ public class Mp4IlstBox {
 
     public Mp4IlstBox(final Mp4BoxHeader ilstBoxHeader,
                       final BufferedSource bufferedSource,
-                      final Mp4Tag mp4Tag) throws IOException, CannotReadException {
+                      final Mp4Tag mp4Tag,
+                      final boolean ignoreArtwork) throws IOException, CannotReadException {
         Preconditions.checkArgument(Mp4AtomIdentifier.ILST.matches(ilstBoxHeader.getId()));
 
         int dataSize = ilstBoxHeader.getDataLength();
@@ -65,14 +66,17 @@ public class Mp4IlstBox {
             Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
             if (childHeader.getDataLength() > 0) {        //Header with no data #JAUDIOTAGGER-463
                 // throwing it in a byte buffer and refactor createMp4Field when I'm lucid
-                createMp4Field(mp4Tag, childHeader, ByteBuffer.wrap(bufferedSource.readByteArray(childHeader.getDataLength())));
+                createMp4Field(mp4Tag,
+                               childHeader,
+                               ByteBuffer.wrap(bufferedSource.readByteArray(childHeader.getDataLength())),
+                               ignoreArtwork);
             }
             dataSize -= childHeader.getLength();
         }
         bufferedSource.skip(dataSize);
     }
 
-    private void createMp4Field(Mp4Tag tag, Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException {
+    private void createMp4Field(Mp4Tag tag, Mp4BoxHeader header, ByteBuffer raw, final boolean ignoreArtwork) throws UnsupportedEncodingException {
         //Header with no data #JAUDIOTAGGER-463. Just ignore boxes with no data
         if (header.getDataLength() != 0) {
             if (header.getId().equals(Mp4TagReverseDnsField.IDENTIFIER)) {  //Reverse Dns Atom
@@ -114,19 +118,23 @@ public class Mp4IlstBox {
                         int processedDataSize = 0;
                         int imageCount = 0;
                         //The loop should run for each image (each data atom)
-                        while (processedDataSize < header.getDataLength()) {
-                            //There maybe a mixture of PNG and JPEG images so have to check type
-                            //for each subimage (if there are more than one image)
-                            if (imageCount > 0) {
-                                type = Utils.getIntBE(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
-                                                      processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER +
-                                                              Mp4DataBox.TYPE_LENGTH - 1);
-                                fieldType = Mp4FieldType.getFieldType(type);
+                        if (!ignoreArtwork) {
+                            while (processedDataSize < header.getDataLength()) {
+                                //There maybe a mixture of PNG and JPEG images so have to check type
+                                //for each subimage (if there are more than one image)
+                                if (imageCount > 0) {
+                                    type = Utils.getIntBE(raw, processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER,
+                                                          processedDataSize + Mp4DataBox.TYPE_POS_INCLUDING_HEADER +
+                                                                  Mp4DataBox.TYPE_LENGTH - 1);
+                                    fieldType = Mp4FieldType.getFieldType(type);
+                                }
+                                Mp4TagCoverField field = new Mp4TagCoverField(raw, fieldType);
+                                tag.addField(field);
+                                processedDataSize += field.getDataAndHeaderSize();
+                                imageCount++;
                             }
-                            Mp4TagCoverField field = new Mp4TagCoverField(raw, fieldType);
-                            tag.addField(field);
-                            processedDataSize += field.getDataAndHeaderSize();
-                            imageCount++;
+                        } else {
+                            tag.markReadOnly();  // ignoring artwork and we found some. Mark this tag read only
                         }
                     } else if (fieldType == Mp4FieldType.TEXT) {
                         TagField field = new Mp4TagTextField(header.getId(), raw);

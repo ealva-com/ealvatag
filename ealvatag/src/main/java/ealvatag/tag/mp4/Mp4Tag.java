@@ -224,6 +224,10 @@ public class Mp4Tag extends AbstractTag {
         tagFieldToMp4Field = builder.build();
     }
 
+    protected Mp4Tag() {
+        super(false);
+    }
+
     /**
      * Create genre field
      * <p>
@@ -680,6 +684,14 @@ public class Mp4Tag extends AbstractTag {
 
     @Override public ImmutableSet<FieldKey> getSupportedFields() {
         return tagFieldToMp4Field.keySet();
+    }
+
+    public void markReadOnly() {
+        setReadOnly();
+    }
+
+    public static Mp4Tag makeEmpty() {
+        return new Mp4Tag();
     }
 
     private static class TagFieldSupplier implements Supplier<TagField> {

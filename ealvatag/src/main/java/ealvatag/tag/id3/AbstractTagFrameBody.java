@@ -247,8 +247,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
             return false;
         }
         AbstractTagFrameBody object = (AbstractTagFrameBody)obj;
-        boolean check = this.objectList.equals(object.objectList) && super.equals(obj);
-        return check;
+        return this.objectList.equals(object.objectList);
     }
 
     /**

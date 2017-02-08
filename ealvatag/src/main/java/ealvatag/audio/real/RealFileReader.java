@@ -61,7 +61,7 @@ public class RealFileReader extends AudioFileReader
     }
 
     @Override
-    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(RandomAccessFile raf, final boolean ignoreArtwork) throws CannotReadException, IOException
     {
         final RealChunk cont = findContChunk(raf);
         final DataInputStream dis = cont.getDataInputStream();

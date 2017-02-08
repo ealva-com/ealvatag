@@ -18,8 +18,6 @@ package ealvatag.audio;
 
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
-import ealvatag.audio.exceptions.NoReadPermissionsException;
-import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
@@ -69,52 +67,23 @@ public abstract class AudioFileReader {
       * manually)
       * @exception CannotReadException when an error occured during the parsing of the tag
       */
-    protected abstract TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException;
+    protected abstract TagFieldContainer getTag(RandomAccessFile raf, final boolean ignoreArtwork) throws CannotReadException, IOException;
 
-    /*
-      * Reads the given file, and return an AudioFile object containing the Tag
-      * and the encoding infos present in the file. If the file has no tag, an
-      * empty one is returned. If the encodinginfo is not valid , an exception is thrown.
-      *
-      * @param f The file to read
-      * @exception CannotReadException If anything went bad during the read of this file
-      */
-    public AudioFile read(File file, final String extension) throws CannotReadException, IOException, TagException, ReadOnlyFileException,
-                                                                    InvalidAudioFrameException {
+    public AudioFile read(File file,
+                          final String extension,
+                          final boolean ignoreArtwork) throws CannotReadException,
+                                                              IOException,
+                                                              TagException,
+                                                              InvalidAudioFrameException {
         LOG.trace(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()));
-
-        if (!file.canRead()) {
-            LOG.error(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg(file.getAbsolutePath()));
-            throw new NoReadPermissionsException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
-                                                         .getMsg(file.getAbsolutePath()));
-        }
-
-        if (file.length() <= MINIMUM_SIZE_FOR_VALID_AUDIO_FILE) {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_FILE_TOO_SMALL.getMsg(file.getAbsolutePath()));
-        }
-
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(file, "r");
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             raf.seek(0);
-
-            return makeAudioFile(raf, file, extension);
-
-        } catch (CannotReadException cre) {
-            throw cre;
-        } catch (Exception e) {
-            LOG.error(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()), e);
-            throw new CannotReadException(file.getAbsolutePath() + ":" + e.getMessage(), e);
-        } finally {
-            try {
-                if (raf != null) {
-                    raf.close();
-                }
-            } catch (Exception ex) {
-                LOG.warn(ErrorMessage.GENERAL_READ_FAILED_UNABLE_TO_CLOSE_RANDOM_ACCESS_FILE
-                                 .getMsg(file.getAbsolutePath()));
-            }
+            return makeAudioFile(raf, file, extension, ignoreArtwork);
         }
+//        catch (Exception e) {
+//            LOG.error(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()), e);
+//            throw new CannotReadException(file.getAbsolutePath() + ":" + e.getMessage(), e);
+//        }
     }
 
     /**
@@ -125,16 +94,18 @@ public abstract class AudioFileReader {
      * @param file      file information
      * @param extension the file extension that was used to identify the file type
      *
+     * @param ignoreArtwork
      * @return an {@link AudioFile} containing the parsed header and tag
      *
      * @throws CannotReadException if there is some parsing error
      * @throws IOException         if there is an error reading from the file
      */
-    @SuppressWarnings("WeakerAccess")
-    protected AudioFile makeAudioFile(final RandomAccessFile raf, final File file, final String extension) throws CannotReadException,
-                                                                                                                  IOException {
+    private AudioFile makeAudioFile(final RandomAccessFile raf,
+                                    final File file,
+                                    final String extension,
+                                    final boolean ignoreArtwork) throws CannotReadException, IOException {
         GenericAudioHeader info = getEncodingInfo(raf);
         raf.seek(0);
-        return new AudioFileImpl(file, extension, info, getTag(raf));
+        return new AudioFileImpl(file, extension, info, getTag(raf, ignoreArtwork));
     }
 }

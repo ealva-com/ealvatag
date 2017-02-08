@@ -23,59 +23,53 @@ public class Issue233Test {
         TestUtil.deleteTestDataTemp();
     }
 
-    @Test public void testDeletingID3v2Tag() {
-        Exception exceptionCaught = null;
-        try {
-            File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
+    @Test
+    public void testDeletingID3v2Tag() throws Exception {
+        File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
 
-            //No Tags
-            MP3File mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertFalse(mp3File.hasID3v2Tag());
+        //No Tags
+        MP3File mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertFalse(mp3File.hasID3v2Tag());
 
-            //Save and deleteField v24 tag
-            mp3File.setID3v2Tag(new ID3v24Tag());
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertTrue(mp3File.hasID3v2Tag());
+        //Save and deleteField v24 tag
+        mp3File.setID3v2Tag(new ID3v24Tag());
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertTrue(mp3File.hasID3v2Tag());
 
-            mp3File.setID3v2Tag(null);
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertFalse(mp3File.hasID3v2Tag());
+        mp3File.setID3v2Tag(null);
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertFalse(mp3File.hasID3v2Tag());
 
-            //Save and deleteField v23 tag
-            mp3File.setID3v2Tag(new ID3v23Tag());
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertTrue(mp3File.hasID3v2Tag());
+        //Save and deleteField v23 tag
+        mp3File.setID3v2Tag(new ID3v23Tag());
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertTrue(mp3File.hasID3v2Tag());
 
-            mp3File.setID3v2Tag(null);
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertFalse(mp3File.hasID3v2Tag());
+        mp3File.setID3v2Tag(null);
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertFalse(mp3File.hasID3v2Tag());
 
-            //Save and deleteField v22 tag
-            mp3File.setID3v2Tag(new ID3v22Tag());
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertTrue(mp3File.hasID3v2Tag());
+        //Save and deleteField v22 tag
+        mp3File.setID3v2Tag(new ID3v22Tag());
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertTrue(mp3File.hasID3v2Tag());
 
-            mp3File.setID3v2Tag(null);
-            mp3File.saveMp3();
-            mp3File = new MP3File(testFile);
-            Assert.assertFalse(mp3File.hasID3v1Tag());
-            Assert.assertFalse(mp3File.hasID3v2Tag());
-
-        } catch (Exception e) {
-            exceptionCaught = e;
-        }
-        Assert.assertNull(exceptionCaught);
+        mp3File.setID3v2Tag(null);
+        mp3File.saveMp3();
+        mp3File = new MP3File(testFile);
+        Assert.assertFalse(mp3File.hasID3v1Tag());
+        Assert.assertFalse(mp3File.hasID3v2Tag());
     }
 
     @Test public void testDeletingID3v1Tag() {

@@ -36,6 +36,10 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     public AiffTag() {
     }
 
+    @Override public boolean isReadOnly() {
+        return id3Tag.isReadOnly();
+    }
+
     public AiffTag(AbstractID3v2Tag t) {
         id3Tag = t;
     }

@@ -23,7 +23,7 @@ public class AiffFileReader extends AudioFileReader2
     }
 
     @Override
-    protected TagFieldContainer getTag(FileChannel channel, final String fileName) throws CannotReadException, IOException
+    protected TagFieldContainer getTag(FileChannel channel, final String fileName, final boolean ignoreArtwork) throws CannotReadException, IOException
     {
         return im.read(channel, fileName);
     }

@@ -154,7 +154,6 @@ public class FramePICAndAPICTest {
         ID3v23Frame frame = (ID3v23Frame)mp3File.getID3v2Tag().getFrame(ID3v23Frames.FRAME_ID_V3_ATTACHED_PICTURE);
         Assert.assertTrue(frame != null);
         FrameBodyAPIC body = (FrameBodyAPIC)frame.getBody();
-        Assert.assertTrue(body instanceof FrameBodyAPIC);
         Assert.assertEquals(FrameBodyAPICTest.DESCRIPTION, body.getDescription());
     }
 

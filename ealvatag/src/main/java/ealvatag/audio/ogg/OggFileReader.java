@@ -52,7 +52,7 @@ public class OggFileReader extends AudioFileReader {
         return ir.read(raf);
     }
 
-    protected TagFieldContainer getTag(RandomAccessFile raf) throws CannotReadException, IOException {
+    protected TagFieldContainer getTag(RandomAccessFile raf, final boolean ignoreArtwork) throws CannotReadException, IOException {
         return vtr.read(raf);
     }
 

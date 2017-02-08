@@ -57,7 +57,7 @@ public class Issue061Test {
     @Test public void testSetMp4Null() throws Exception {
         Exception ex = null;
         try {
-            Tag tag = new Mp4Tag();
+            Tag tag = Mp4Tag.makeEmpty();
             tag.setField(FieldKey.ARTIST, (String)null);
         } catch (Exception e) {
             e.printStackTrace();

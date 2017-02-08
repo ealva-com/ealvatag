@@ -56,6 +56,10 @@ public abstract class GenericTag extends AbstractTag {
         return supportedKeys;
     }
 
+    protected GenericTag() {
+        super(false);
+    }
+
     /**
      * Implementations of {@link TagTextField} for use with
      * &quot;ISO-8859-1&quot; strings.

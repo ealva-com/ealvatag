@@ -278,9 +278,9 @@ import java.util.regex.Pattern;
         read(byteBuffer);
     }
 
-    public ID3v23Frame(final Buffer buffer, final String loggingFilename) throws InvalidTagException, IOException {
+    public ID3v23Frame(final Buffer buffer, final String loggingFilename, final boolean ignoreArtwork) throws InvalidTagException, IOException {
         setLoggingFilename(loggingFilename);
-        read(buffer);
+        read(buffer, ignoreArtwork);
     }
 
     /**
@@ -479,7 +479,7 @@ import java.util.regex.Pattern;
         }
     }
 
-    private void read(final Buffer buffer) throws InvalidTagException, IOException {
+    private void read(final Buffer buffer, final boolean ignoreArtwork) throws InvalidTagException, IOException {
         final String fileName = getLoggingFilename();
         try {
             String identifier = readIdentifier(buffer);
@@ -487,7 +487,6 @@ import java.util.regex.Pattern;
                 LOG.debug("Invalid identifier:{} - {}", identifier, fileName);
                 throw new InvalidFrameIdentifierException(fileName + ":" + identifier + ":is not a valid ID3v2.30 frame");
             }
-            //Read the size field (as Big Endian Int - byte buffers always initialised to Big Endian order)
             frameSize = buffer.readInt();
             if (frameSize < 0) {
                 LOG.warn("Invalid Frame Size:{} Id:{} - {}", frameSize, identifier, fileName);
@@ -533,6 +532,7 @@ import java.util.regex.Pattern;
                     frameId = UNSUPPORTED_ID;
                 }
             }
+
             LOG.info(fileName + ":Identifier was:" + identifier + " reading using:" + frameId + "with frame size:" + frameSize);
 
             //Read extra bits appended to frame header for various encodings
@@ -583,34 +583,32 @@ import java.util.regex.Pattern;
                 throw new InvalidFrameException(identifier + " is invalid frame, realframeSize is:" + realFrameSize);
             }
 
-            //Read the body data
-//        try {
-            if (((EncodingFlags)encodingFlags).isCompression()) {
-                final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize, decompressedFrameSize);
-                LOG.info("Bufer.size={} expected:{}", decompressBuffer.size(), decompressedFrameSize);
-                if (((EncodingFlags)encodingFlags).isEncryption()) {
-                    frameBody = readEncryptedBody(frameId, decompressBuffer, decompressedFrameSize);
-                } else {
-                    frameBody = readBody(frameId, decompressBuffer, decompressedFrameSize);
-                }
-            } else if (((EncodingFlags)encodingFlags).isEncryption()) {
-                frameBody = readEncryptedBody(identifier, buffer, frameSize);
+            if (ignoreArtwork && AbstractID3v2Frame.isArtworkFrameId(frameId)) {
+                buffer.skip(realFrameSize);
+                frameBody = null;
             } else {
-                frameBody = readBody(frameId, buffer, realFrameSize);
+                //Read the body data
+                if (((EncodingFlags)encodingFlags).isCompression()) {
+                    final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize, decompressedFrameSize);
+                    LOG.info("Bufer.size={} expected:{}", decompressBuffer.size(), decompressedFrameSize);
+                    if (((EncodingFlags)encodingFlags).isEncryption()) {
+                        frameBody = readEncryptedBody(frameId, decompressBuffer, decompressedFrameSize);
+                    } else {
+                        frameBody = readBody(frameId, decompressBuffer, decompressedFrameSize);
+                    }
+                } else if (((EncodingFlags)encodingFlags).isEncryption()) {
+                    frameBody = readEncryptedBody(identifier, buffer, frameSize);
+                } else {
+                    frameBody = readBody(frameId, buffer, realFrameSize);
+                }
+                //TODO code seems to assume that if the frame created is not a v23FrameBody
+                //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn't
+                //it then be created as FrameBodyUnsupported
+                if (!(frameBody instanceof ID3v23FrameBody)) {
+                    LOG.debug(fileName + ":Converted frameBody with:" + identifier + " to deprecated frameBody");
+                    frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+                }
             }
-            //TODO code seems to assume that if the frame created is not a v23FrameBody
-            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn't
-            //it then be created as FrameBodyUnsupported
-            if (!(frameBody instanceof ID3v23FrameBody)) {
-                LOG.debug(fileName + ":Converted frameBody with:" + identifier + " to deprecated frameBody");
-                frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
-            }
-//        }
-            // TODO: 1/25/17 throw an exception from here that causes buffering to be reset?? I'm not sure how far up we need to go
-//        finally {
-            //Update position of main buffer, so no attempt is made to reread these bytes
-//            byteBuffer.position(byteBuffer.position() + realFrameSize);
-//        }
         } catch (RuntimeException e) {
             LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
             throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +

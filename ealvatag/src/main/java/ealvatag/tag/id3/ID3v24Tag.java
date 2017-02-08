@@ -35,9 +35,7 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.Pair;
-import ealvatag.tag.id3.framebody.AbstractArtworkFrameBody;
 import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
-import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.id3.framebody.FrameBodyCOMM;
 import ealvatag.tag.id3.framebody.FrameBodyIPLS;
 import ealvatag.tag.id3.framebody.FrameBodyTALB;
@@ -51,13 +49,10 @@ import ealvatag.tag.id3.framebody.FrameBodyTRCK;
 import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
 import ealvatag.tag.id3.valuepair.MusicianCredits;
 import ealvatag.tag.id3.valuepair.StandardIPLSKey;
-import ealvatag.tag.images.Artwork;
-import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.lyrics3.AbstractLyrics3;
 import ealvatag.tag.lyrics3.Lyrics3v2;
 import ealvatag.tag.lyrics3.Lyrics3v2Field;
 import ealvatag.tag.reference.GenreTypes;
-import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.Check;
 import okio.Buffer;
 import org.slf4j.Logger;
@@ -70,7 +65,6 @@ import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
@@ -347,7 +341,6 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      */
     public ID3v24Tag() {
         ensureFrameMapsAndClear();
-
     }
 
     /**
@@ -621,16 +614,13 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         this.read(buffer);
     }
 
-    public ID3v24Tag(final FileOperator fileOperator, final int startByte, final String loggingFilename) throws TagException {
+    public ID3v24Tag(final Buffer buffer,
+                     final Id3v2Header header,
+                     final String loggingFilename,
+                     final boolean ignoreArtwork) throws TagException {
         ensureFrameMapsAndClear();
         setLoggingFilename(loggingFilename);
-        read(fileOperator, startByte);
-    }
-
-    public ID3v24Tag(final Buffer buffer, final Id3v2Header header, final String loggingFilename) throws TagException {
-        ensureFrameMapsAndClear();
-        setLoggingFilename(loggingFilename);
-        read(buffer, header);
+        read(buffer, header, ignoreArtwork);
     }
 
     /**
@@ -849,7 +839,6 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         return extendedHeaderSize;
     }
 
-    @Override
     public void read(ByteBuffer byteBuffer) throws TagException {
         int size;
         byte[] buffer;
@@ -872,33 +861,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         readFrames(byteBuffer, size);
     }
 
-    public void read(FileOperator fileOperator, final int startByte) throws TagException {
-        try {
-            Buffer buffer = new Buffer();
-            fileOperator.read(0, buffer, startByte);
-            if (!seek(buffer)) {
-                throw new TagNotFoundException(getIdentifier() + " tag not found");
-            }
-
-            readHeaderFlags(buffer.readByte());
-
-            // Read the size, this is size of tag not including the tag header
-            int size = ID3SyncSafeInteger.bufferToValue(buffer);
-            LOG.debug(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(), size));
-
-            //Extended Header
-            if (extended) {
-                size -= readExtendedHeader(buffer);
-            }
-
-            readFrames(buffer, size);
-            LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
-        } catch (IOException e) {
-            throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
-        }
-    }
-
-    public void read(final Buffer buffer, final Id3v2Header header) throws TagException {
+    public void read(final Buffer buffer, final Id3v2Header header, final boolean ignoreArtwork) throws TagException {
         readHeaderFlags(header.getFlags());
 
         //Extended Header
@@ -906,7 +869,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
             readExtendedHeader(buffer);
         }
 
-        readFrames(buffer, header.getTagSize());
+        readFrames(buffer, header.getTagSize(), ignoreArtwork);
         LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
@@ -961,13 +924,17 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         }
     }
 
-    private void readFrames(Buffer buffer, int size) {
+    private void readFrames(Buffer buffer, int size, final boolean ignoreArtwork) {
         ensureFrameMapsAndClear();
         fileReadSize = size;
         while (buffer.size() > 0) {
             try {
-                ID3v24Frame next = new ID3v24Frame(buffer, getLoggingFilename());
-                loadFrameIntoMap(next.getIdentifier(), next);
+                ID3v24Frame next = new ID3v24Frame(buffer, getLoggingFilename(), ignoreArtwork);
+                if (ignoreArtwork && next.isArtworkFrame()) {
+                    setReadOnly();
+                } else {
+                    loadFrameIntoMap(next.getIdentifier(), next);
+                }
             } catch (PaddingException ex) {
                 //Found Padding, no more frames
                 LOG.debug("Found padding with {} remaining. {}", buffer.size(), getLoggingFilename());

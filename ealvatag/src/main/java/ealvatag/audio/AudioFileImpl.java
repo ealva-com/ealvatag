@@ -21,11 +21,7 @@ package ealvatag.audio;
 import com.google.common.base.Optional;
 import com.google.common.base.Supplier;
 import com.google.common.io.Files;
-import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.exceptions.NoReadPermissionsException;
-import ealvatag.audio.exceptions.ReadOnlyFileException;
-import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
@@ -35,14 +31,13 @@ import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.reference.ID3V2Version;
 import ealvatag.utils.Check;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 
@@ -60,8 +55,6 @@ import java.nio.channels.FileChannel;
  * @since v0.01
  */
 public class AudioFileImpl implements AudioFile {
-    private static Logger LOG = LoggerFactory.getLogger(AudioFileImpl.class);
-
     protected File file;
     protected AudioHeader audioHeader;
     protected TagFieldContainer tag;
@@ -87,23 +80,36 @@ public class AudioFileImpl implements AudioFile {
         this.tag = tag;
     }
 
-    protected AudioFileImpl(final File file, final String extension) {
+    protected AudioFileImpl(final File file, final String extension) throws FileNotFoundException {
         checkArgNotNull(file);
         checkArgNotNullOrEmpty(extension);
         this.file = file;
         this.extension = extension;
     }
 
+    @Override public boolean readOnly() {
+        return tag.isReadOnly();
+    }
+
     @Override public void save() throws CannotWriteException {
+        checkReadOnly();
         AudioFileIO.instance().writeFile(this);
     }
 
+    private void checkReadOnly() throws CannotWriteException {
+        if (tag != null && tag.isReadOnly()) {
+            throw new CannotWriteException("Opened read only");
+        }
+    }
+
     @Override public void saveAs(final String fullPathWithoutExtension) throws IllegalArgumentException, CannotWriteException {
+        checkReadOnly();
         Check.checkArgNotNullOrEmpty(fullPathWithoutExtension, Check.CANNOT_BE_NULL_OR_EMPTY, "fullPathWithoutExtension");
         AudioFileIO.instance().writeFileAs(this, fullPathWithoutExtension);
     }
 
     @Override public void deleteFileTag() throws CannotWriteException {
+        checkReadOnly();
         AudioFileIO.instance().deleteTag(this);
     }
 
@@ -140,11 +146,19 @@ public class AudioFileImpl implements AudioFile {
         return SupportedFileFormat.fromExtension(Files.getFileExtension(file.getName())).makeDefaultTag();
     }
 
-    @Override public Tag getTagOrSetNewDefault() throws UnsupportedFileType {
-        return getTag().or(new MakeDefaultTagSupplier());
+    @Override public Tag getTagOrSetNewDefault() throws UnsupportedFileType, CannotWriteException {
+        return getTag().or(makeTagSupplier());
     }
 
-    @Override public Tag getConvertedTagOrSetNewDefault() {
+    private Supplier<Tag> makeTagSupplier() throws CannotWriteException {
+        return new Supplier<Tag>() {
+            @Override public Tag get() {
+                return setTag(makeDefaultTag());
+            }
+        };
+    }
+
+    @Override public Tag getConvertedTagOrSetNewDefault() throws CannotWriteException {
         /* TODO Currently only works for Dsf We need additional check here for Wav and Aif because they wrap the ID3
         tag so never return
          * null for getTag() and the wrapper stores the location of the existing tag, would that be broken if tag set
@@ -165,7 +179,7 @@ public class AudioFileImpl implements AudioFile {
      *
      * @return the converted tag or the original if no conversion necessary
      */
-    public AbstractID3v2Tag convertID3Tag(AbstractID3v2Tag tag, ID3V2Version id3V2Version) {
+    protected AbstractID3v2Tag convertID3Tag(AbstractID3v2Tag tag, ID3V2Version id3V2Version) {
         if (tag instanceof ID3v24Tag) {
             switch (id3V2Version) {
                 case ID3_V22:
@@ -212,71 +226,16 @@ public class AudioFileImpl implements AudioFile {
                 "\n-------------------";
     }
 
-    /**
-     * Checks the file is accessible with the correct permissions, otherwise exception occurs
-     *
-     * @param file
-     * @param readOnly
-     *
-     * @return
-     *
-     * @throws ReadOnlyFileException
-     * @throws FileNotFoundException
-     */
-    protected RandomAccessFile checkFilePermissions(File file, boolean readOnly) throws ReadOnlyFileException,
-                                                                                        FileNotFoundException,
-                                                                                        CannotReadException {
-        RandomAccessFile newFile;
-
-        // These exists(), can read, can write checks are sprinkled around the code. Are these necessary? Why not
-        // just treat them as
-        // exceptional conditions. They have to be handled anyway.
-        if (!file.exists()) {
-            throw new FileNotFoundException(file.getAbsolutePath());
-        }
-        if (readOnly) {
-            if (!file.canRead()) {
-                LOG.error("Unable to read file:{}", file);
-                throw new NoReadPermissionsException(ErrorMessage
-                                                             .GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
-                                                             .getMsg(file));
+    protected FileChannel getReadFileChannel(File file) throws FileNotFoundException {
+        final FileChannel channel = new RandomAccessFile(file, "r").getChannel();
+        try {
+            if (channel.size() == 0) {
+                throw new FileNotFoundException("Not found or 0 size " + file.getPath());
             }
-            newFile = new RandomAccessFile(file, "r");
-        } else {
-            if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite()) {
-                LOG.error("Unable to write file:{}", file);
-                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
-            }
-            newFile = new RandomAccessFile(file, "rw");
+            return channel;
+        } catch (IOException e) {
+            throw new FileNotFoundException(file.getPath() + " " + e.getMessage());
         }
-        return newFile;
-    }
-
-    protected FileChannel getFileChannel(File file, boolean readOnly) throws ReadOnlyFileException,
-                                                                             FileNotFoundException,
-                                                                             CannotReadException {
-        FileChannel channel;
-
-        if (!file.exists()) {
-            throw new FileNotFoundException(file.getAbsolutePath());
-        }
-
-        if (readOnly) {
-            if (!file.canRead()) {
-                LOG.error("Unable to read file:{}", file);
-                throw new NoReadPermissionsException(ErrorMessage
-                                                             .GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE
-                                                             .getMsg(file));
-            }
-            channel = new RandomAccessFile(file, "r").getChannel();
-        } else {
-            if (TagOptionSingleton.getInstance().isCheckIsWritable() && file.canWrite()) {
-                LOG.error("Unable to write file:{}", file);
-                throw new ReadOnlyFileException(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE.getMsg(file));
-            }
-            channel = new RandomAccessFile(file, "rw").getChannel();
-        }
-        return channel;
     }
 
     /**
@@ -290,16 +249,10 @@ public class AudioFileImpl implements AudioFile {
 
     /**
      * Optional debugging method. Must override to do anything interesting.
-     *
-     * @return
      */
+    @SuppressWarnings("unused")
     public String displayStructureAsPlainText() {
         return "";
     }
 
-    private class MakeDefaultTagSupplier implements Supplier<Tag> {
-        @Override public Tag get() {
-            return setTag(makeDefaultTag());
-        }
-    }
 }

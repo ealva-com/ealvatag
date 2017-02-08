@@ -94,43 +94,43 @@ import java.util.TreeSet;
 public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFieldContainer {
     //Tag ID as held in file
     public static final byte[] TAG_ID = {'I', 'D', '3'};
-    public static final String TAGID = "ID3";
+    private static final String TAGID = "ID3";
     //The tag header is the same for ID3v2 versions
     public static final int TAG_HEADER_LENGTH = 10;
     public static final int FIELD_TAGID_LENGTH = 3;
     static final int TAGID_VERSIONS_FLAGS_SIZE_LENGTH = FIELD_TAGID_LENGTH + 7;  // Major, minor, flags 1 byte each, size 4
-    public static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
-    public static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
-    public static final int FIELD_TAG_FLAG_LENGTH = 1;
-    public static final int FIELD_TAG_SIZE_LENGTH = 4;
+    private static final int FIELD_TAG_MAJOR_VERSION_LENGTH = 1;
+    private static final int FIELD_TAG_MINOR_VERSION_LENGTH = 1;
+    private static final int FIELD_TAG_FLAG_LENGTH = 1;
+    private static final int FIELD_TAG_SIZE_LENGTH = 4;
     public static final int FIELD_TAG_MAJOR_VERSION_POS = 3;
-    protected static final String TYPE_HEADER = "header";
-    protected static final String TYPE_BODY = "body";
-    protected static final int FIELD_TAGID_POS = 0;
-    protected static final int FIELD_TAG_MINOR_VERSION_POS = 4;
-    protected static final int FIELD_TAG_FLAG_POS = 5;
-    protected static final int FIELD_TAG_SIZE_POS = 6;
-    protected static final int TAG_SIZE_INCREMENT = 100;
+    static final String TYPE_HEADER = "header";
+    private static final String TYPE_BODY = "body";
+//    protected static final int FIELD_TAGID_POS = 0;
+//    protected static final int FIELD_TAG_MINOR_VERSION_POS = 4;
+//    protected static final int FIELD_TAG_FLAG_POS = 5;
+//    protected static final int FIELD_TAG_SIZE_POS = 6;
+    private static final int TAG_SIZE_INCREMENT = 100;
     /**
      * Holds the ids of invalid duplicate frames
      */
-    protected static final String TYPE_DUPLICATEFRAMEID = "duplicateFrameId";
+    private static final String TYPE_DUPLICATEFRAMEID = "duplicateFrameId";
     /**
      * Holds count the number of bytes used up by invalid duplicate frames
      */
-    protected static final String TYPE_DUPLICATEBYTES = "duplicateBytes";
+    private static final String TYPE_DUPLICATEBYTES = "duplicateBytes";
     /**
      * Holds count the number bytes used up by empty frames
      */
-    protected static final String TYPE_EMPTYFRAMEBYTES = "emptyFrameBytes";
+    private static final String TYPE_EMPTYFRAMEBYTES = "emptyFrameBytes";
     /**
      * Holds the size of the tag as reported by the tag header
      */
-    protected static final String TYPE_FILEREADSIZE = "fileReadSize";
+    private static final String TYPE_FILEREADSIZE = "fileReadSize";
     /**
      * Holds count of invalid frames, (frames that could not be read)
      */
-    protected static final String TYPE_INVALIDFRAMES = "invalidFrames";
+    private static final String TYPE_INVALIDFRAMES = "invalidFrames";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2Tag.class);
     //The max size we try to write in one go to avoid out of memory errors (10mb)
     private static final long MAXIMUM_WRITABLE_CHUNK_SIZE = 10000000;
@@ -141,12 +141,12 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     /**
      * Map of all encrypted frames, these cannot be unencrypted by ealvatag
      */
-    public HashMap<String, Object> encryptedFrameMap = null;
-    protected String duplicateFrameId = "";
-    protected int duplicateBytes = 0;
-    protected int emptyFrameBytes = 0;
-    protected int fileReadSize = 0;
-    protected int invalidFrames = 0;
+    HashMap<String, Object> encryptedFrameMap = null;
+    String duplicateFrameId = "";
+    int duplicateBytes = 0;
+    int emptyFrameBytes = 0;
+    int fileReadSize = 0;
+    int invalidFrames = 0;
     //Start location of this chunk
     //TODO currently only used by ID3 embedded into Wav/Aiff but shoudl be extended to mp3s
     private Long startLocationInFile = null;
@@ -393,21 +393,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         //addField header size to frame size
         frameSize += TAG_HEADER_LENGTH;
         return frameSize;
-    }
-
-    /**
-     * Empty Constructor
-     */
-    public AbstractID3v2Tag() {
-    }
-
-    /**
-     * This constructor is used when a tag is created as a duplicate of another
-     * tag of the same type and version.
-     *
-     * @param copyObject
-     */
-    protected AbstractID3v2Tag(AbstractID3v2Tag copyObject) {
     }
 
     /**
@@ -2166,7 +2151,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * @param frameId
      * @param next
      */
-    protected void loadFrameIntoSpecifiedMap(HashMap map, String frameId, AbstractID3v2Frame next) {
+    protected void loadFrameIntoSpecifiedMap(HashMap<String, Object> map, String frameId, AbstractID3v2Frame next) {
         if ((ID3v24Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
                 (ID3v23Frames.getInstanceOf().isMultipleAllowed(frameId)) ||
                 (ID3v22Frames.getInstanceOf().isMultipleAllowed(frameId))) {
@@ -2244,9 +2229,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @return ByteBuffer Contains all the frames written within the tag ready for writing to file
      *
-     * @throws IOException
+     * @throws IOException if write error
      */
-    protected ByteArrayOutputStream writeFramesToBuffer() throws IOException {
+    ByteArrayOutputStream writeFramesToBuffer() throws IOException {
         ByteArrayOutputStream bodyBuffer = new ByteArrayOutputStream();
         writeFramesToBufferStream(frameMap, bodyBuffer);
         writeFramesToBufferStream(encryptedFrameMap, bodyBuffer);
@@ -2256,12 +2241,9 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     /**
      * Write frames in map to bodyBuffer
      *
-     * @param map
-     * @param bodyBuffer
-     *
-     * @throws IOException
+     * @throws IOException if write error
      */
-    private void writeFramesToBufferStream(Map map, ByteArrayOutputStream bodyBuffer) throws IOException {
+    private void writeFramesToBufferStream(Map<String, Object> map, ByteArrayOutputStream bodyBuffer) throws IOException {
         //Sort keys into Preferred Order
         TreeSet<String> sortedWriteOrder = new TreeSet<>(getPreferredFrameOrderComparator());
         sortedWriteOrder.addAll(map.keySet());
@@ -2299,7 +2281,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         createStructureBody();
     }
 
-    public void createStructureHeader() {
+    void createStructureHeader() {
         MP3File.getStructureFormatter().addElement(TYPE_DUPLICATEBYTES, this.duplicateBytes);
         MP3File.getStructureFormatter().addElement(TYPE_DUPLICATEFRAMEID, this.duplicateFrameId);
         MP3File.getStructureFormatter().addElement(TYPE_EMPTYFRAMEBYTES, this.emptyFrameBytes);
@@ -2307,7 +2289,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         MP3File.getStructureFormatter().addElement(TYPE_INVALIDFRAMES, this.invalidFrames);
     }
 
-    public void createStructureBody() {
+
+    void createStructureBody() {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
 
         AbstractID3v2Frame frame;
@@ -2335,15 +2318,14 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @return the list of values
      */
-    protected List<String> doGetValues(FrameAndSubId formatKey) {
-        List<String> values = new ArrayList<String>();
+    private List<String> doGetValues(FrameAndSubId formatKey) {
+        List<String> values = new ArrayList<>();
 
         if (formatKey.getSubId() != null) {
             //Get list of frames that this uses
             List<TagField> list = getFields(formatKey.getFrameId());
-            ListIterator<TagField> li = list.listIterator();
-            while (li.hasNext()) {
-                AbstractTagFrameBody next = ((AbstractID3v2Frame)li.next()).getBody();
+            for (final TagField aList : list) {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame)aList).getBody();
 
                 if (next instanceof FrameBodyTXXX) {
                     if (((FrameBodyTXXX)next).getDescription().equals(formatKey.getSubId())) {
@@ -2382,9 +2364,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                         (formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
                 ) {
             List<TagField> list = getFields(formatKey.getFrameId());
-            ListIterator<TagField> li = list.listIterator();
-            while (li.hasNext()) {
-                AbstractTagFrameBody next = ((AbstractID3v2Frame)li.next()).getBody();
+            for (final TagField aList : list) {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame)aList).getBody();
                 if (next instanceof AbstractFrameBodyPairs) {
                     for (Pair entry : ((AbstractFrameBodyPairs)next).getPairing().getMapping()) {
                         if (!StandardIPLSKey.isKey(entry.getKey())) {
@@ -2426,7 +2407,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * @param formatKey frame and sub id
      * @param index     the index specified by the user
      *
-     * @return
      */
     String doGetValueAtIndex(FrameAndSubId formatKey, int index) {
         List<String> values = doGetValues(formatKey);
@@ -2442,7 +2422,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      *
      * @param url specifies the link, it could be a local file or could be a full url
      *
-     * @return
      */
     public TagField createLinkedArtworkField(String url) {
         AbstractID3v2Frame frame = createFrame(getFrameAndSubIdFromGenericKey(FieldKey.COVER_ART).getFrameId());
@@ -2466,10 +2445,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
      * Some frames are used to store a number/total value, we have to consider both values when requested to delete a
      * key relating to one of them
      *
-     * @param formatKey
-     * @param numberFieldKey
-     * @param totalFieldKey
-     * @param deleteNumberFieldKey
      */
     private void deleteNumberTotalFrame(FrameAndSubId formatKey,
                                         FieldKey numberFieldKey,
@@ -2479,23 +2454,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             String total = this.getFirst(totalFieldKey);
             if (total.length() == 0) {
                 doDeleteTagField(formatKey);
-                return;
             } else {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
                 AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal)frame.getBody();
                 frameBody.setNumber(0);
-                return;
             }
         } else {
             String number = this.getFirst(numberFieldKey);
             if (number.length() == 0) {
                 doDeleteTagField(formatKey);
-                return;
             } else {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)this.getFrame(formatKey.getFrameId());
                 AbstractFrameBodyNumberTotal frameBody = (AbstractFrameBodyNumberTotal)frame.getBody();
                 frameBody.setTotal(0);
-                return;
             }
         }
     }
@@ -2579,9 +2550,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
                         (formatKey.getGenericKey() == FieldKey.INVOLVED_PERSON))
                 ) {
             List<TagField> list = getFields(formatKey.getFrameId());
-            ListIterator<TagField> li = list.listIterator();
-            while (li.hasNext()) {
-                AbstractTagFrameBody next = ((AbstractID3v2Frame)li.next()).getBody();
+            for (final TagField aList : list) {
+                AbstractTagFrameBody next = ((AbstractID3v2Frame)aList).getBody();
                 if (next instanceof AbstractFrameBodyPairs) {
                     PairedTextEncodedStringNullTerminated.ValuePairs pairs =
                             ((AbstractFrameBodyPairs)next).getPairing();
@@ -2649,7 +2619,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         private String frameId;
         private String subId;
 
-        public FrameAndSubId(FieldKey genericKey, String frameId, String subId) {
+        FrameAndSubId(FieldKey genericKey, String frameId, String subId) {
             this.genericKey = genericKey;
             this.frameId = frameId;
             this.subId = subId;
@@ -2663,7 +2633,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             return frameId;
         }
 
-        public String getSubId() {
+        String getSubId() {
             return subId;
         }
 
@@ -2671,7 +2641,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
     public List<Artwork> getArtworkList() throws UnsupportedFieldException {
         List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+        List<Artwork> artworkList = new ArrayList<>(coverartList.size());
 
         for (TagField next : coverartList) {
             AbstractArtworkFrameBody coverArt = (AbstractArtworkFrameBody)((AbstractID3v2Frame)next).getBody();

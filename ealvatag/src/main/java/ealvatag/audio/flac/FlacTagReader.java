@@ -45,7 +45,7 @@ public class FlacTagReader {
     private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 
 
-    public FlacTag read(FileChannel fc, final String path) throws CannotReadException, IOException {
+    public FlacTag read(FileChannel fc, final String path, final boolean ignoreArtwork) throws CannotReadException, IOException {
         FlacStreamReader flacStream = new FlacStreamReader(fc, path + " ");
         flacStream.findStream();
 
@@ -54,6 +54,7 @@ public class FlacTagReader {
         List<MetadataBlockDataPicture> images = new ArrayList<>();
 
         //Seems like we have a valid stream
+        boolean containsArtwork = false;
         boolean isLastBlock = false;
         while (!isLastBlock) {
             LOG.trace("{} Looking for MetaBlockHeader at:{}", path, fc.position());
@@ -79,16 +80,22 @@ public class FlacTagReader {
                         break;
 
                     case PICTURE:
-                        try {
-                            MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh, fc);
-                            images.add(mbdp);
-                        } catch (IOException | InvalidFrameException e) {
-                            LOG.warn("{} Unable to read picture metablock, ignoring:{}", path, e.getMessage());
+                        containsArtwork = true;
+                        if (ignoreArtwork) {
+                            LOG.trace("{} Ignoring MetadataBlock:{}", path, mbh.getBlockType());
+                            fc.position(fc.position() + mbh.getDataLength());
+                        } else {
+                            try {
+                                MetadataBlockDataPicture mbdp = new MetadataBlockDataPicture(mbh, fc);
+                                images.add(mbdp);
+                            } catch (IOException | InvalidFrameException e) {
+                                LOG.warn("{} Unable to read picture metablock, ignoring:{}", path, e.getMessage());
+                            }
                         }
                         break;
 
-                    //This is not a metadata block we are interested in so we skip to next block
                     default:
+                        //This is not a metadata block we are interested in so we skip to next block
                         LOG.trace("{} Ignoring MetadataBlock:{}", path, mbh.getBlockType());
                         fc.position(fc.position() + mbh.getDataLength());
                         break;
@@ -103,7 +110,7 @@ public class FlacTagReader {
         if (tag == null) {
             tag = VorbisCommentTag.createNewTag();
         }
-        return new FlacTag(tag, images);
+        return new FlacTag(tag, images, containsArtwork && ignoreArtwork);
     }
 }
 

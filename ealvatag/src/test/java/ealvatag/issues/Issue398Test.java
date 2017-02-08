@@ -138,7 +138,7 @@ public class Issue398Test {
     @Test public void testMp4() throws Exception {
         Exception caught = null;
         try {
-            Tag tag = new Mp4Tag();
+            Tag tag = Mp4Tag.makeEmpty();
             Assert.assertFalse(tag.hasField(FieldKey.ARTIST));
             Assert.assertFalse(tag.hasField("aRTIST"));
             Assert.assertFalse(((Mp4Tag)tag).hasField(Mp4FieldKey.ARTIST));
@@ -180,7 +180,7 @@ public class Issue398Test {
     @Test public void testMp4getValue() throws Exception {
         Exception caught = null;
         try {
-            Tag tag = new Mp4Tag();
+            Tag tag = Mp4Tag.makeEmpty();
 
             Assert.assertFalse(tag.hasField(FieldKey.TRACK));
             tag.setField(FieldKey.TRACK, "1");

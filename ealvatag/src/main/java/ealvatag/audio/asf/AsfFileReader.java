@@ -18,19 +18,28 @@
  */
 package ealvatag.audio.asf;
 
+import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
+import ealvatag.audio.AudioFileReader;
+import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.AudioStreamChunk;
 import ealvatag.audio.asf.data.MetadataContainer;
 import ealvatag.audio.asf.data.MetadataDescriptor;
-import ealvatag.audio.asf.io.*;
+import ealvatag.audio.asf.io.AsfExtHeaderReader;
+import ealvatag.audio.asf.io.AsfHeaderReader;
+import ealvatag.audio.asf.io.ChunkReader;
+import ealvatag.audio.asf.io.ContentBrandingReader;
+import ealvatag.audio.asf.io.ContentDescriptionReader;
+import ealvatag.audio.asf.io.FileHeaderReader;
+import ealvatag.audio.asf.io.FullRequestInputStream;
+import ealvatag.audio.asf.io.LanguageListReader;
+import ealvatag.audio.asf.io.MetadataReader;
+import ealvatag.audio.asf.io.StreamChunkReader;
 import ealvatag.audio.asf.util.TagConverter;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
-import ealvatag.audio.exceptions.ReadOnlyFileException;
-import ealvatag.audio.AudioFileReader;
-import ealvatag.audio.GenericAudioHeader;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagException;
 import ealvatag.tag.asf.AsfTag;
@@ -85,8 +94,8 @@ public class AsfFileReader extends AudioFileReader {
      * description.<br>
      *
      * @param header the header to look up.
-     * @return <code>true</code> if &quot;isVbr&quot; is present with a
-     * <code>true</code> value.
+     *
+     * @return <code>true</code> if &quot;isVbr&quot; is present with a <code>true</code> value.
      */
     private boolean determineVariableBitrate(final AsfHeader header) {
         assert header != null;
@@ -105,9 +114,10 @@ public class AsfFileReader extends AudioFileReader {
      * Creates a generic audio header instance with provided data from header.
      *
      * @param header ASF header which contains the information.
+     *
      * @return generic audio header representation.
-     * @throws CannotReadException If header does not contain mandatory information. (Audio
-     *                             stream chunk and file header chunk)
+     *
+     * @throws CannotReadException If header does not contain mandatory information. (Audio stream chunk and file header chunk)
      */
     private GenericAudioHeader getAudioHeader(final AsfHeader header) throws CannotReadException {
         final GenericAudioHeader info = new GenericAudioHeader();
@@ -160,6 +170,7 @@ public class AsfFileReader extends AudioFileReader {
      * Creates a tag instance with provided data from header.
      *
      * @param header ASF header which contains the information.
+     *
      * @return generic audio header representation.
      */
     private AsfTag getTag(final AsfHeader header) {
@@ -169,10 +180,10 @@ public class AsfFileReader extends AudioFileReader {
     /**
      * (overridden)
      *
-     * @see AudioFileReader#getTag(java.io.RandomAccessFile)
+     * @see AudioFileReader#getTag(RandomAccessFile, boolean)
      */
     @Override
-    protected AsfTag getTag(final RandomAccessFile raf) throws CannotReadException, IOException {
+    protected AsfTag getTag(final RandomAccessFile raf, final boolean ignoreArtwork) throws CannotReadException, IOException {
         raf.seek(0);
         AsfTag tag;
         try {
@@ -197,19 +208,10 @@ public class AsfFileReader extends AudioFileReader {
         return tag;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public AudioFileImpl read(final File f, final String extension)
-            throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
-        if (!f.canRead()) {
-            throw new CannotReadException(ErrorMessage.GENERAL_READ_FAILED_DO_NOT_HAVE_PERMISSION_TO_READ_FILE.getMsg
-                    (f.getAbsolutePath()));
-        }
-        InputStream stream = null;
-        try {
-            stream = new FullRequestInputStream(new BufferedInputStream(new FileInputStream(f)));
+    public AudioFile read(final File f, final String extension, final boolean ignoreArtwork)
+            throws CannotReadException, IOException, TagException, InvalidAudioFrameException {
+        try (InputStream stream = new FullRequestInputStream(new BufferedInputStream(new FileInputStream(f)))) {
             final AsfHeader header = HEADER_READER.read(Utils.readGUID(stream), stream, 0);
             if (header == null) {
                 throw new CannotReadException(ErrorMessage.ASF_HEADER_MISSING.getMsg(f.getAbsolutePath()));
@@ -221,26 +223,13 @@ public class AsfFileReader extends AudioFileReader {
             // Just log a warning because file seems to play okay
             if (header.getFileHeader().getFileSize().longValue() != f.length()) {
                 LOG.warn(ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE.getMsg(f.getAbsolutePath(),
-                                                                                                 header.getFileHeader()
-                                                                                                       .getFileSize()
-                                                                                                       .longValue(),
-                                                                                                 f.length()));
+                                                                                           header.getFileHeader()
+                                                                                                 .getFileSize()
+                                                                                                 .longValue(),
+                                                                                           f.length()));
             }
 
             return new AudioFileImpl(f, extension, getAudioHeader(header), getTag(header));
-
-        } catch (final CannotReadException e) {
-            throw e;
-        } catch (final Exception e) {
-            throw new CannotReadException("\"" + f + "\" :" + e, e);
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (final Exception ex) {
-                LOG.error("\"" + f + "\" :" + ex);
-            }
         }
     }
 

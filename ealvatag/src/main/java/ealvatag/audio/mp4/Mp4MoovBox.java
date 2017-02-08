@@ -39,15 +39,18 @@ public class Mp4MoovBox {
     private final Mp4BoxHeader boxHeader;
     private final Mp4AudioHeader audioHeader;
     private final Mp4Tag mp4Tag;
+    private final boolean ignoreArtwork;
 
     Mp4MoovBox(final Mp4BoxHeader moovBoxHeader,
                final BufferedSource bufferedSource,
                final Mp4FtypBox mp4FtypBox,
-               final long fileLength) throws CannotReadException, IOException {
+               final long fileLength,
+               final boolean ignoreArtwork) throws CannotReadException, IOException {
+        this.ignoreArtwork = ignoreArtwork;
         Preconditions.checkArgument(Mp4AtomIdentifier.MOOV.matches(moovBoxHeader.getId()));
         boxHeader = moovBoxHeader;
         audioHeader = new Mp4AudioHeader(fileLength);
-        mp4Tag = new Mp4Tag();
+        mp4Tag = Mp4Tag.makeEmpty();
         audioHeader.setBrand(mp4FtypBox.getMajorBrand());
         parse(bufferedSource);
     }
@@ -83,10 +86,10 @@ public class Mp4MoovBox {
                     trak = new Mp4TrakBox(childBoxHeader, bufferedSource, audioHeader, trak != null);
                     break;
                 case UDTA:
-                    udta = new Mp4UdtaBox(childBoxHeader, bufferedSource, mp4Tag);
+                    udta = new Mp4UdtaBox(childBoxHeader, bufferedSource, mp4Tag, ignoreArtwork);
                     break;
                 case META:
-                    meta = new Mp4MetaBox(childBoxHeader, bufferedSource, mp4Tag);
+                    meta = new Mp4MetaBox(childBoxHeader, bufferedSource, mp4Tag, ignoreArtwork);
                     break;
                 default:
                     bufferedSource.skip(childBoxHeader.getDataLength());

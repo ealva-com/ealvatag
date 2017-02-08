@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Strings;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
@@ -37,6 +38,9 @@ import okio.Okio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static ealvatag.tag.id3.ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE;
+import static ealvatag.tag.id3.ID3v24Frames.FRAME_ID_ATTACHED_PICTURE;
+
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
@@ -53,7 +57,8 @@ import java.util.zip.Inflater;
  * @author : Eric Farng
  * @version $Id$
  */
-@SuppressWarnings("Duplicates") public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
+@SuppressWarnings("Duplicates")
+public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2Frame.class);
 
     protected static final String TYPE_FRAME = "frame";
@@ -503,7 +508,8 @@ import java.util.zip.Inflater;
         return encodingFlags;
     }
 
-    static Buffer decompressPartOfBuffer(Buffer source, int frameSize, final int decompressedFrameSize) throws IOException, InvalidFrameException {
+    static Buffer decompressPartOfBuffer(Buffer source, int frameSize, final int decompressedFrameSize)
+            throws IOException, InvalidFrameException {
         final Buffer sink = new Buffer();
         source.readFully(sink, frameSize);
         Buffer result = new Buffer();
@@ -655,6 +661,21 @@ import java.util.zip.Inflater;
     public void setContent(String content) {
         throw new UnsupportedOperationException("Not implemented please use the generic tag methods for setting " +
                                                         "content");
+    }
+
+    boolean isArtworkFrame() {
+        return isArtworkFrameId(identifier);
+    }
+
+    static boolean isArtworkFrameId(final String identifier) {
+        switch (Strings.nullToEmpty(identifier)) {
+            case FRAME_ID_ATTACHED_PICTURE:
+            case FRAME_ID_V2_ATTACHED_PICTURE:
+                //case FRAME_ID_V3_ATTACHED_PICTURE: same as the V4 FRAME_ID_ATTACHED_PICTURE, this comment indicates we're not missing one
+                return true;
+            default:
+                return false;
+        }
     }
 
 }

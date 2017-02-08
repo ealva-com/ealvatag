@@ -120,7 +120,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
         try {
             final long bufferStartSize = buffer.size();
-            Charset decoder = getCorrectDecoder(buffer);
+            Charset decoder = peekCorrectDecoder(buffer);
             String outBuffer = buffer.readString(size, decoder);
 
             //If using UTF16 with BOM we then search through the text removing any BOMs that could exist

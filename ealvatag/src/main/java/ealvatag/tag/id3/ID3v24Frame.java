@@ -285,12 +285,12 @@ import java.util.regex.Pattern;
         }
     }
 
-    public ID3v24Frame(Buffer buffer, String loggingFilename) throws InvalidTagException, IOException {
+    public ID3v24Frame(Buffer buffer, String loggingFilename, final boolean ignoreArtwork) throws InvalidTagException, IOException {
         setLoggingFilename(loggingFilename);
-        read(buffer);
+        read(buffer, ignoreArtwork);
     }
 
-    public void read(Buffer buffer) throws InvalidTagException, IOException {
+    public void read(Buffer buffer, final boolean ignoreArtwork) throws InvalidTagException, IOException {
         long sizeBeforeRead = buffer.size();
         final String fileName = getLoggingFilename();
         try {
@@ -333,45 +333,51 @@ import java.util.regex.Pattern;
 
             //Work out the real size of the frameBody data
             int realFrameSize = frameSize - extraHeaderBytesCount;
-            //Read the body data
+
             try {
-                Buffer frameBodyBuffer = buffer;
-                //Do we need to synchronize the frame body
-                int syncSize = realFrameSize;
-                if (((EncodingFlags)encodingFlags).isUnsynchronised()) {
-                    //We only want to synchronize the buffer up to the end of this frame (remember this
-                    //buffer contains the remainder of this tag not just this frame)
-                    //Create Buffer that only contains the body of this frame rather than the remainder of tag
-                    frameBodyBuffer = new Buffer();
-                    buffer.read(frameBodyBuffer, realFrameSize);
-                    frameBodyBuffer = Id3SynchronizingSink.synchronizeBuffer(frameBodyBuffer);
-                    syncSize = (int)frameBodyBuffer.size();
-                    LOG.debug(fileName + ":" + "Frame Size After Syncing is:" + syncSize);
-                }
-
-
-                if (((EncodingFlags)encodingFlags).isCompression()) {
-                    frameBodyBuffer = decompressPartOfBuffer(frameBodyBuffer, syncSize, dataLengthSize);
-                    if (((EncodingFlags)encodingFlags).isEncryption()) {
-                        frameBody = readEncryptedBody(identifier, frameBodyBuffer, dataLengthSize);
-                    } else {
-                        frameBody = readBody(identifier, frameBodyBuffer, dataLengthSize);
-                    }
-                } else if (((EncodingFlags)encodingFlags).isEncryption()) {
-                    frameBody = readEncryptedBody(identifier, frameBodyBuffer, syncSize);
+                if (ignoreArtwork && AbstractID3v2Frame.isArtworkFrameId(identifier)) {
+                    buffer.skip(realFrameSize);
+                    frameBody = null;
                 } else {
-                    frameBody = readBody(identifier, frameBodyBuffer, syncSize);
-                }
-                if (!(frameBody instanceof ID3v24FrameBody)) {
-                    LOG.debug(fileName + ":" + "Converted frame body with:" + identifier +
-                                      " to deprecated framebody");
-                    frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+                    //Read the body data
+                    Buffer frameBodyBuffer = buffer;
+                    //Do we need to synchronize the frame body
+                    int syncSize = realFrameSize;
+                    if (((EncodingFlags)encodingFlags).isUnsynchronised()) {
+                        //We only want to synchronize the buffer up to the end of this frame (remember this
+                        //buffer contains the remainder of this tag not just this frame)
+                        //Create Buffer that only contains the body of this frame rather than the remainder of tag
+                        frameBodyBuffer = new Buffer();
+                        buffer.read(frameBodyBuffer, realFrameSize);
+                        frameBodyBuffer = Id3SynchronizingSink.synchronizeBuffer(frameBodyBuffer);
+                        syncSize = (int)frameBodyBuffer.size();
+                        LOG.debug(fileName + ":" + "Frame Size After Syncing is:" + syncSize);
+                    }
+
+
+                    if (((EncodingFlags)encodingFlags).isCompression()) {
+                        frameBodyBuffer = decompressPartOfBuffer(frameBodyBuffer, syncSize, dataLengthSize);
+                        if (((EncodingFlags)encodingFlags).isEncryption()) {
+                            frameBody = readEncryptedBody(identifier, frameBodyBuffer, dataLengthSize);
+                        } else {
+                            frameBody = readBody(identifier, frameBodyBuffer, dataLengthSize);
+                        }
+                    } else if (((EncodingFlags)encodingFlags).isEncryption()) {
+                        frameBody = readEncryptedBody(identifier, frameBodyBuffer, syncSize);
+                    } else {
+                        frameBody = readBody(identifier, frameBodyBuffer, syncSize);
+                    }
+                    if (!(frameBody instanceof ID3v24FrameBody)) {
+                        LOG.debug(fileName + ":" + "Converted frame body with:" + identifier +
+                                          " to deprecated framebody");
+                        frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
+                    }
                 }
             } finally {
                 //Update position of main buffer, so no attempt is made to reread these bytes
                 long desiredSize = sizeBeforeRead - realFrameSize;
                 if (buffer.size() > desiredSize) {
-                    buffer.skip(desiredSize - buffer.size());
+                    buffer.skip(buffer.size() - desiredSize);
                 }
             }
         } catch (RuntimeException e) {
@@ -783,7 +789,6 @@ import java.util.regex.Pattern;
     /**
      * Read the frame size form the header, check okay , if not try to fix
      * or just throw exception
-     *
      */
     private void getFrameSize(ByteBuffer byteBuffer)
             throws InvalidFrameException {

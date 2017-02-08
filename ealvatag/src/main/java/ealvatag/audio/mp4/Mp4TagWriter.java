@@ -855,7 +855,7 @@ public class Mp4TagWriter {
      * @throws IOException
      */
     public void delete(RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException {
-        Mp4Tag tag = new Mp4Tag();
+        Mp4Tag tag = Mp4Tag.makeEmpty();
 
         try {
             write(tag, raf, rafTemp);

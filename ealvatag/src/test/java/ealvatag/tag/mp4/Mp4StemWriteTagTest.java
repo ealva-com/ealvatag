@@ -6,7 +6,6 @@ import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
-import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.audio.mp4.Mp4AtomTree;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
@@ -47,7 +46,7 @@ public class Mp4StemWriteTagTest {
      * large to fit into the space already allocated to {@code meta} ({@code ilst} + {@code free} atom).
      */
     @Test public void testWriteOneFieldALotLargerSize()
-            throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException, CannotWriteException {
+            throws TagException, CannotReadException, InvalidAudioFrameException, IOException, CannotWriteException {
 
         final File testFile = TestUtil.copyAudioToTmp("test.stem.mp4", new File("testWriteOneFieldALotLarger.stem.mp4"));
 

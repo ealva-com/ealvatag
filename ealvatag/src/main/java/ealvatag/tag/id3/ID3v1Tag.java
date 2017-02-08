@@ -121,12 +121,9 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
      * Creates a new ID3v1 datatype.
      */
     public ID3v1Tag() {
-
     }
 
     public ID3v1Tag(ID3v1Tag copyObject) {
-        super(copyObject);
-
         this.album = copyObject.album;
         this.artist = copyObject.artist;
         this.comment = copyObject.comment;
@@ -136,7 +133,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     }
 
     public ID3v1Tag(BaseID3Tag mp3tag) {
-
         if (mp3tag != null) {
             ID3v11Tag convertedTag;
             if (mp3tag instanceof ID3v1Tag) {

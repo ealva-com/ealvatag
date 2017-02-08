@@ -65,6 +65,15 @@ import java.util.Map;
  * @author Raphaël Slinckx
  */
 public abstract class AbstractTag implements TagFieldContainer {
+
+    private boolean readOnly;
+
+    protected AbstractTag(final boolean readOnly) {
+        this.readOnly = readOnly;
+    }
+
+
+
     /**
      * Stores the amount of {@link TagField} with {@link TagField#isCommon()}
      * <code>true</code>.
@@ -95,6 +104,14 @@ public abstract class AbstractTag implements TagFieldContainer {
             return tagFieldList.get(index).toString();
         }
         return "";
+    }
+
+    @Override public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    protected void setReadOnly() {
+        readOnly = true;
     }
 
     /**

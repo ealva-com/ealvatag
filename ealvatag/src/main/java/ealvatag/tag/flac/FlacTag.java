@@ -43,14 +43,20 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
 
     private VorbisCommentTag tag = null;
     private List<MetadataBlockDataPicture> images = new ArrayList<>();
+    private final boolean readOnly;
 
     public FlacTag() {
-        this(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>());
+        this(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>(), false);
     }
 
-    public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images) {
+    public FlacTag(VorbisCommentTag tag, List<MetadataBlockDataPicture> images, final boolean readOnly) {
         this.tag = tag;
         this.images = images;
+        this.readOnly = readOnly;
+    }
+
+    @Override public boolean isReadOnly() {
+        return readOnly;
     }
 
     /**

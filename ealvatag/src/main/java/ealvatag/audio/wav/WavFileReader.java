@@ -44,7 +44,7 @@ public class WavFileReader extends AudioFileReader2
     }
 
     @Override
-    protected TagFieldContainer getTag(FileChannel channel, final String fileName) throws IOException, CannotReadException
+    protected TagFieldContainer getTag(FileChannel channel, final String fileName, final boolean ignoreArtwork) throws IOException, CannotReadException
     {
         WavTag tag =  new WavTagReader(fileName).read(channel);
         switch (TagOptionSingleton.getInstance().getWavOptions())

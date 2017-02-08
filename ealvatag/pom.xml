@@ -32,11 +32,16 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
         
+        <!--<dependency>-->
+            <!--<groupId>com.ealva</groupId>-->
+            <!--<artifactId>okio-ealva</artifactId>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>com.squareup.okio</groupId>
             <artifactId>okio</artifactId>
         </dependency>
-
+    
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
+import ealvatag.utils.Buffers;
 import okio.Buffer;
 import okio.BufferedSource;
 import org.slf4j.Logger;
@@ -28,8 +29,7 @@ class Mp4DrmsBox extends AbstractMp4Box {
         Preconditions.checkArgument(Mp4AtomIdentifier.DRMS.matches(drmsBoxHeader.getId()));
 
         int dataSize = drmsBoxHeader.getDataLength();
-        Buffer buffer = new Buffer();
-        bufferedSource.readFully(buffer, dataSize);
+        Buffer buffer = Buffers.makeBufferFrom(bufferedSource, dataSize);
 
         // have no idea where next block starts so look for identifier and step back to beginning of box to read the header
         try {

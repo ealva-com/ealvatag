@@ -37,6 +37,10 @@ public final class NullAudioFile implements AudioFile {
     private NullAudioFile() {
     }
 
+    @Override public boolean readOnly() {
+        return true;
+    }
+
     @Override public void save() throws CannotWriteException {}
 
     @Override public void saveAs(final String fullPathWithoutExtension) throws IllegalArgumentException, CannotWriteException {}

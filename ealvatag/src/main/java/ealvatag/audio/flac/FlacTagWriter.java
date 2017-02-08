@@ -63,7 +63,7 @@ public class FlacTagWriter {
      */
     public void delete(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException {
         //This will save the file without any Comment or PictureData blocks
-        FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>());
+        FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>(), false);
         write(emptyTag, channel, fileName);
     }
 

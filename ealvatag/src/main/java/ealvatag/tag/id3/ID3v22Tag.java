@@ -109,8 +109,6 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * @param copyObject
      */
     public ID3v22Tag(ID3v22Tag copyObject) {
-        //This doesnt do anything.
-        super(copyObject);
         LOG.debug("Creating tag from another tag of same type");
         copyPrimitives(copyObject);
         copyFrames(copyObject);
@@ -162,9 +160,9 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         this.read(buffer);
     }
 
-    public ID3v22Tag(Buffer buffer, Id3v2Header header, String loggingFilename) throws TagException {
+    public ID3v22Tag(Buffer buffer, Id3v2Header header, String loggingFilename, final boolean ignoreArtwork) throws TagException {
         setLoggingFilename(loggingFilename);
-        read(buffer, header);
+        read(buffer, header, ignoreArtwork);
     }
 
     /**
@@ -356,6 +354,9 @@ public class ID3v22Tag extends AbstractID3v2Tag {
      * @return equality
      */
     public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (!(obj instanceof ID3v22Tag)) {
             return false;
         }
@@ -513,7 +514,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         LOG.debug(getLoggingFilename() + ":" + "Loaded Frames,there are:" + frameMap.keySet().size());
     }
 
-    public void read(Buffer buffer, final Id3v2Header header) throws TagException {
+    public void read(Buffer buffer, final Id3v2Header header, final boolean ignoreArtwork) throws TagException {
         try {
             readHeaderFlags(header.getFlags());
 
@@ -525,14 +526,14 @@ public class ID3v22Tag extends AbstractID3v2Tag {
                 bufferWithoutHeader = Id3SynchronizingSink.synchronizeBuffer(buffer);
             }
 
-            readFrames(bufferWithoutHeader, size);
+            readFrames(bufferWithoutHeader, size, ignoreArtwork);
             LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
         } catch (IOException e) {
             throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
         }
     }
 
-    private void readFrames(Buffer buffer, int size) {
+    private void readFrames(Buffer buffer, int size, final boolean ignoreArtwork) {
         ensureFrameMapsAndClear();
         fileReadSize = size;
         LOG.trace("Frame data is size:{}", size);
@@ -542,8 +543,12 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         while (buffer.size() > 0) {
             final String logName = getLoggingFilename();
             try {
-                ID3v22Frame next = new ID3v22Frame(buffer, logName);
-                loadFrameIntoMap(next.getIdentifier(), next);
+                ID3v22Frame next = new ID3v22Frame(buffer, logName, ignoreArtwork);
+                if (next.isArtworkFrame() && ignoreArtwork) {
+                    setReadOnly();
+                } else {
+                    loadFrameIntoMap(next.getIdentifier(), next);
+                }
             } catch (PaddingException ex) {
                 //Found Padding, no more frames
                 LOG.debug("Found padding with {} remaining. {}", buffer.size(), logName);

@@ -22,18 +22,18 @@
 package ealvatag.audio.exceptions;
 
 /**
- * This is the exception when try and access a read only file
+ * Thrown when trying to write to a read only AudioFile or Tag
  */
-public class ReadOnlyFileException extends Exception
+public class ReadOnlyExcpeption extends RuntimeException
 {
     /**
      * Creates a new ReadOnlyException datatype.
      */
-    public ReadOnlyFileException()
+    public ReadOnlyExcpeption()
     {
     }
 
-    public ReadOnlyFileException(Throwable ex)
+    public ReadOnlyExcpeption(Throwable ex)
     {
         super(ex);
     }
@@ -43,12 +43,12 @@ public class ReadOnlyFileException extends Exception
      *
      * @param msg the detail message.
      */
-    public ReadOnlyFileException(String msg)
+    public ReadOnlyExcpeption(String msg)
     {
         super(msg);
     }
 
-    public ReadOnlyFileException(String msg, Throwable ex)
+    public ReadOnlyExcpeption(String msg, Throwable ex)
     {
         super(msg, ex);
     }

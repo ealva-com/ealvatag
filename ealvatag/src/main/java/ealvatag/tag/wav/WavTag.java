@@ -71,6 +71,10 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return TagOptionSingleton.createDefaultID3Tag();
     }
 
+    @Override public boolean isReadOnly() {
+        return getActiveTag().isReadOnly();
+    }
+
     public WavTag(WavOptions wavOptions) {
         this.wavOptions = wavOptions;
     }

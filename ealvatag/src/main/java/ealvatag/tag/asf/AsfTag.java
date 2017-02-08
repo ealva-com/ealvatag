@@ -61,7 +61,7 @@ public final class AsfTag extends AbstractTag {
      * @param copy look at {@link #isCopyingFields()}.
      */
     public AsfTag(final boolean copy) {
-        super();
+        super(false);
         this.copyFields = copy;
     }
 
@@ -414,7 +414,7 @@ public final class AsfTag extends AbstractTag {
 
     public List<Artwork> getArtworkList() throws UnsupportedFieldException {
         final List<TagField> coverartList = getFields(FieldKey.COVER_ART);
-        final List<Artwork> artworkList = new ArrayList<Artwork>(coverartList.size());
+        final List<Artwork> artworkList = new ArrayList<>(coverartList.size());
 
         for (final TagField next : coverartList) {
             final AsfTagCoverField coverArt = (AsfTagCoverField)next;
@@ -599,7 +599,7 @@ public final class AsfTag extends AbstractTag {
      *
      * @return state of field conversion.
      */
-    public boolean isCopyingFields() {
+    private boolean isCopyingFields() {
         return this.copyFields;
     }
 
@@ -616,18 +616,10 @@ public final class AsfTag extends AbstractTag {
             return false;
         }
 
-        if (!(field instanceof AsfTagField)) {
-            return false;
-        }
+        return field instanceof AsfTagField && !field.isEmpty();
 
-        return !field.isEmpty();
     }
 
-    /**
-     * @param asfFieldKey
-     *
-     * @return
-     */
     public boolean hasField(AsfFieldKey asfFieldKey) {
         return getFields(asfFieldKey.getFieldName()).size() != 0;
     }
@@ -651,7 +643,7 @@ public final class AsfTag extends AbstractTag {
          *
          * @param iterator iterator to read from.
          */
-        public AsfFieldIterator(final Iterator<TagField> iterator) {
+        AsfFieldIterator(final Iterator<TagField> iterator) {
             assert iterator != null;
             this.fieldIterator = iterator;
         }

@@ -53,6 +53,14 @@ import java.util.List;
  * @author Paul Taylor
  */
 public interface Tag {
+
+    /**
+     * A tag instance may be marked read-only during an initial read to prevent changes or as an optimization of some sort.
+     *
+     * @return true if this instance cannot be modified
+     */
+    boolean isReadOnly();
+
     /**
      * Get all the {@link FieldKey}s this tag supports
      *

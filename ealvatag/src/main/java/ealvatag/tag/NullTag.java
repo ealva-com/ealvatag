@@ -37,6 +37,10 @@ public final class NullTag implements Tag {
     private NullTag() {
     }
 
+    @Override public boolean isReadOnly() {
+        return true;
+    }
+
     @Override public ImmutableSet<FieldKey> getSupportedFields() {
         return ImmutableSet.of();
     }

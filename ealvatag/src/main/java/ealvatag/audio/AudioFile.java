@@ -32,6 +32,15 @@ import java.io.File;
  * Created by Eric A. Snell on 1/21/17.
  */
 public interface AudioFile {
+
+    /**
+     * Indicates if the audio file was opened read only. Opening read only allows for some optimizations. If some tags are ignored during
+     * reading, the AudioFile is automatically marked read-only. Just this instance, not any underlying file or storage.
+     *
+     * @return true if file was opened only to read tags
+     */
+    boolean readOnly();
+
     /**
      * Write the tag contained in this AudioFile in the actual file on the disk
      *
@@ -90,7 +99,7 @@ public interface AudioFile {
      * @see #getTag()
      * @see #setNewDefaultTag()
      */
-    Tag getTagOrSetNewDefault() throws UnsupportedFileType;
+    Tag getTagOrSetNewDefault() throws UnsupportedFileType, CannotWriteException;
 
     /**
      * If a current {@link Tag} exists, convert to the default type and return it. If none exists, set a new default type {@link Tag}
@@ -104,5 +113,5 @@ public interface AudioFile {
      * @see #getTag()
      * @see #setNewDefaultTag()
      */
-    Tag getConvertedTagOrSetNewDefault();
+    Tag getConvertedTagOrSetNewDefault() throws CannotWriteException;
 }

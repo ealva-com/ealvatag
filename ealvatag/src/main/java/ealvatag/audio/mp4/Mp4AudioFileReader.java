@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -107,11 +108,13 @@ public class Mp4AudioFileReader extends AudioFileReader {
         throw new UnsupportedOperationException("");
     }
 
-    @Override protected TagFieldContainer getTag(final RandomAccessFile raf) throws CannotReadException, IOException {
+    @Override protected TagFieldContainer getTag(final RandomAccessFile raf, final boolean ignoreArtwork) throws CannotReadException, IOException {
         throw new UnsupportedOperationException("");
     }
 
-    public AudioFile read(final File file, final String extension) throws CannotReadException {
+    public AudioFile read(final File file,
+                          final String extension,
+                          final boolean ignoreArtwork) throws CannotReadException, FileNotFoundException {
         try (BufferedSource bufferedSource = Okio.buffer(Okio.source(file))) {
             Mp4FtypBox mp4FtypBox = new Mp4FtypBox(bufferedSource);
             LOG.debug("{}", mp4FtypBox);
@@ -122,8 +125,10 @@ public class Mp4AudioFileReader extends AudioFileReader {
                 bufferedSource.skip(boxHeader.getDataLength());
                 boxHeader = new Mp4BoxHeader(bufferedSource);
             }
-            Mp4MoovBox moovBox = new Mp4MoovBox(boxHeader, bufferedSource, mp4FtypBox, file.length());
+            Mp4MoovBox moovBox = new Mp4MoovBox(boxHeader, bufferedSource, mp4FtypBox, file.length(), ignoreArtwork);
             return new AudioFileImpl(file, extension, moovBox.getAudioHeader(), moovBox.getMp4Tag());
+        } catch (FileNotFoundException e) {
+            throw e;
         } catch (IOException e) {
             throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_CONTAINER.getMsg(), e);
         }

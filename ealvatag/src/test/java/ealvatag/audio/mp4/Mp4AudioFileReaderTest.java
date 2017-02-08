@@ -45,7 +45,7 @@ public class Mp4AudioFileReaderTest {
         File testFile = TestUtil.copyAudioToTmp("test.m4a");
 
         Mp4AudioFileReader reader = new Mp4AudioFileReader();
-        final AudioFile m4a = reader.read(testFile, "m4a");
+        final AudioFile m4a = reader.read(testFile, "m4a", false);
         assertThat(m4a.getTag().isPresent(), is(true));
     }
 
@@ -55,7 +55,7 @@ public class Mp4AudioFileReaderTest {
         File testFile = TestUtil.copyAudioToTmp("test33.m4a");
 
         Mp4AudioFileReader reader = new Mp4AudioFileReader();
-        final AudioFile m4a = reader.read(testFile, "m4a");
+        final AudioFile m4a = reader.read(testFile, "m4a", false);
         assertThat(m4a.getTag().isPresent(), is(true));
     }
 
@@ -65,7 +65,7 @@ public class Mp4AudioFileReaderTest {
         File testFile = TestUtil.copyAudioToTmp("test44.m4a");
 
         Mp4AudioFileReader reader = new Mp4AudioFileReader();
-        final AudioFile m4a = reader.read(testFile, "m4a");
+        final AudioFile m4a = reader.read(testFile, "m4a", false);
         assertThat(m4a.getTag().isPresent(), is(true));
     }
 
@@ -74,7 +74,7 @@ public class Mp4AudioFileReaderTest {
         File testFile = TestUtil.copyAudioToTmp("test21.m4a");
 
         Mp4AudioFileReader reader = new Mp4AudioFileReader();
-        final AudioFile m4a = reader.read(testFile, "m4a");
+        final AudioFile m4a = reader.read(testFile, "m4a", false);
         assertThat(m4a.getTag().isPresent(), is(true));
         Assert.assertEquals(30, m4a.getAudioHeader().getDuration(TimeUnit.SECONDS, true));
         Assert.assertEquals(44100, m4a.getAudioHeader().getSampleRate());

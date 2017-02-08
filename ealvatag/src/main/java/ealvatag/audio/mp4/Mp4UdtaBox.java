@@ -36,7 +36,7 @@ class Mp4UdtaBox {
 
     Mp4UdtaBox(final Mp4BoxHeader udtaBoxHeader,
                final BufferedSource bufferedSource,
-               final Mp4Tag mp4Tag) throws IOException, CannotReadException {
+               final Mp4Tag mp4Tag, final boolean ignoreArtwork) throws IOException, CannotReadException {
         Preconditions.checkArgument(Mp4AtomIdentifier.UDTA.matches(udtaBoxHeader.getId()));
         int dataSize = udtaBoxHeader.getDataLength();
 
@@ -45,7 +45,7 @@ class Mp4UdtaBox {
             Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
             switch (childHeader.getIdentifier()) {
                 case META:
-                    metaBox = new Mp4MetaBox(childHeader, bufferedSource, mp4Tag);
+                    metaBox = new Mp4MetaBox(childHeader, bufferedSource, mp4Tag, ignoreArtwork);
                     break;
                 default:
                     bufferedSource.skip(childHeader.getDataLength());

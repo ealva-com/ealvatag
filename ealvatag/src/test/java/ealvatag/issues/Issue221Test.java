@@ -19,7 +19,7 @@ public class Issue221Test {
     @Test public void testCreateNullMp4FrameTitle() {
         Exception exceptionCaught = null;
         try {
-            Mp4Tag tag = new Mp4Tag();
+            Mp4Tag tag = Mp4Tag.makeEmpty();
             tag.setField(FieldKey.TITLE, (String)null);
         } catch (Exception e) {
             e.printStackTrace();

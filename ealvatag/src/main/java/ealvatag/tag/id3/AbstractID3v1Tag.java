@@ -41,17 +41,7 @@ import java.util.regex.Pattern;
  * @author : Paul Taylor
  */
 abstract public class AbstractID3v1Tag extends AbstractID3Tag {
-
-    //Logger
     private static Logger LOG = LoggerFactory.getLogger(AbstractID3v1Tag.class);
-
-
-    public AbstractID3v1Tag() {
-    }
-
-    public AbstractID3v1Tag(AbstractID3v1Tag copyObject) {
-        super(copyObject);
-    }
 
     //If field is less than maximum field length this is how it is terminated
     protected static final byte END_OF_FIELD = (byte)0;

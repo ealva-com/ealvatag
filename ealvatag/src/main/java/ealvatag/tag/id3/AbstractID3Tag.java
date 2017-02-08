@@ -31,10 +31,8 @@ package ealvatag.tag.id3;
  * @author : Paul Taylor
  */
 public abstract class AbstractID3Tag extends BaseID3Tag {
-    public AbstractID3Tag() {
-    }
 
-    protected static final String TAG_RELEASE = "ID3v";
+    private static final String TAG_RELEASE = "ID3v";
 
     //The purpose of this is to provide the filename that should be used when writing debug messages
     //when problems occur reading or writing to file, otherwise it is difficult to track down the error
@@ -69,12 +67,6 @@ public abstract class AbstractID3Tag extends BaseID3Tag {
      * @return
      */
     public abstract byte getRevision();
-
-
-    public AbstractID3Tag(AbstractID3Tag copyObject) {
-        super(copyObject);
-    }
-
 
     /**
      * Retrieve the logging filename to be used in debugging

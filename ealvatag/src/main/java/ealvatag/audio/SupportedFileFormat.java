@@ -37,25 +37,25 @@ public enum SupportedFileFormat {
     FLAC("flac") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>());
+            return new FlacTag(VorbisCommentTag.createNewTag(), new ArrayList<MetadataBlockDataPicture>(), false);
         }
     },
     MP4("mp4") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new Mp4Tag();
+            return Mp4Tag.makeEmpty();
         }
     },
     M4A("m4a") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new Mp4Tag();
+            return Mp4Tag.makeEmpty();
         }
     },
     M4P("m4p") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new Mp4Tag();
+            return Mp4Tag.makeEmpty();
         }
     },
     WMA("wma") {
@@ -85,7 +85,7 @@ public enum SupportedFileFormat {
     M4B("m4b") {
         @Override
         public Tag makeDefaultTag() throws UnsupportedFileType {
-            return new Mp4Tag();
+            return Mp4Tag.makeEmpty();
         }
     },
     AIF("aif") {

@@ -1,25 +1,22 @@
-/**
- *  @author : Paul Taylor
- *  @author : Eric Farng
- *
- *  Version @version:$Id$
- *
- *  MusicTag Copyright (C)2003,2004
- *
- *  This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser
- *  General Public  License as published by the Free Software Foundation; either version 2.1 of the License,
- *  or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- *  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License along with this library; if not,
- *  you can get a copy from http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- *
- * Description:This class represents any type of tag in an MP3 file, including ID3 and
- * Lyrics and the file name.
+/*
+ * @author : Paul Taylor
+ * @author : Eric Farng
+ * <p>
+ * Version @version:$Id$
+ * <p>
+ * MusicTag Copyright (C)2003,2004
+ * <p>
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public  License as
+ * published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * <p>
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, you can get a copy from
+ * http://www.opensource.org/licenses/lgpl-license.php or write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ * <p>
+ * Description:This class represents any type of tag in an MP3 file, including ID3 and Lyrics and the file name.
  */
 package ealvatag.tag.id3;
 
@@ -31,24 +28,23 @@ import java.util.Iterator;
 /**
  * A tag is term given to a container that holds audio metadata
  */
-public abstract class BaseID3Tag extends AbstractTagItem
-{
-    protected static final String TYPE_TAG = "tag";
+public abstract class BaseID3Tag extends AbstractTagItem {
+    static final String TYPE_TAG = "tag";
+
+    private boolean readOnly;
 
 
-    public BaseID3Tag()
-    {
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
-    public BaseID3Tag(BaseID3Tag copyObject)
-    {
-        super(copyObject);
+    void setReadOnly() {
+        readOnly = true;
     }
 
     /**
      * Looks for this tag in the buffer
      *
-     * @param byteBuffer
      * @return returns true if found, false otherwise.
      */
     abstract public boolean seek(ByteBuffer byteBuffer);
@@ -56,8 +52,7 @@ public abstract class BaseID3Tag extends AbstractTagItem
     /**
      * Writes the tag to the file
      *
-     * @param file
-     * @throws IOException
+     * @throws IOException if write error
      */
     public abstract void write(RandomAccessFile file) throws IOException;
 
@@ -66,6 +61,7 @@ public abstract class BaseID3Tag extends AbstractTagItem
      * Removes the specific tag from the file
      *
      * @param file MP3 file to append to.
+     *
      * @throws IOException on any I/O error
      */
     abstract public void delete(RandomAccessFile file) throws IOException;
@@ -76,17 +72,13 @@ public abstract class BaseID3Tag extends AbstractTagItem
      * if they are the same class, then calls <code>super.equals(obj)</code>.
      *
      * @param obj The object to compare
+     *
      * @return if they are equal
      */
-    public boolean equals(Object obj)
-    {
-        return (obj instanceof BaseID3Tag) && super.equals(obj);
-
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof BaseID3Tag && readOnly == ((BaseID3Tag)obj).readOnly;
     }
 
-    /**
-     * @return
-     */
     abstract public Iterator iterator();
 }
 

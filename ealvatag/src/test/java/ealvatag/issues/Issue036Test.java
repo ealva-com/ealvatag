@@ -146,11 +146,9 @@ public class Issue036Test {
         tag5.addField(FieldKey.ALBUM, "Porcupine");
         tag5.addField(FieldKey.ARTIST, "Echo & the Bunnymen");
 
-        Assert.assertTrue(tag1.equals(tag1));
         Assert.assertTrue(tag1.equals(tag2));
         Assert.assertFalse(tag1.equals(tag3));
 
-        Assert.assertTrue(tag3.equals(tag3));
         Assert.assertTrue(tag3.equals(tag4));
         Assert.assertFalse(tag3.equals(tag5));
     }

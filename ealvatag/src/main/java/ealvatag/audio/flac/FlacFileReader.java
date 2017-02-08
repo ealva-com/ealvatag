@@ -18,9 +18,9 @@
  */
 package ealvatag.audio.flac;
 
-import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.AudioFileReader2;
 import ealvatag.audio.GenericAudioHeader;
+import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.tag.TagFieldContainer;
 
 import java.io.IOException;
@@ -29,19 +29,17 @@ import java.nio.channels.FileChannel;
 /**
  * Read encoding and tag info for Flac file (open source lossless encoding)
  */
-public class FlacFileReader extends AudioFileReader2
-{
+public class FlacFileReader extends AudioFileReader2 {
 
     private FlacInfoReader ir = new FlacInfoReader();
     private FlacTagReader tr = new FlacTagReader();
 
-    protected GenericAudioHeader  getEncodingInfo(FileChannel channel, final String fileName) throws CannotReadException, IOException
-    {
+    protected GenericAudioHeader getEncodingInfo(FileChannel channel, final String fileName) throws CannotReadException, IOException {
         return ir.read(channel, fileName);
     }
 
-    protected TagFieldContainer getTag(FileChannel channel, final String fileName) throws CannotReadException, IOException
-    {
-        return tr.read(channel, fileName);
+    protected TagFieldContainer getTag(FileChannel channel, final String fileName, final boolean ignoreArtwork)
+            throws CannotReadException, IOException {
+        return tr.read(channel, fileName, ignoreArtwork);
     }
 }

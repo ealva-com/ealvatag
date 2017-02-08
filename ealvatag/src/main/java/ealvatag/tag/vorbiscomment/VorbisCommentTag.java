@@ -77,7 +77,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
      * which should be done when created by end user
      */
     public VorbisCommentTag() {
-
+        super(false);
     }
 
     private static ImmutableMap<FieldKey, VorbisCommentFieldKey> makeFieldMap() {

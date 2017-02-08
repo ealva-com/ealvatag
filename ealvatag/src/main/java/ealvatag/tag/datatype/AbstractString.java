@@ -142,18 +142,17 @@ public abstract class AbstractString extends AbstractDataType {
      *
      * @throws IllegalCharsetException if {@link #getTextEncodingCharSet()} throws this
      */
-    Charset getCorrectDecoder(Buffer buffer) {
+    Charset peekCorrectDecoder(Buffer buffer) {
         if (buffer.size() <= 2) {
             return getTextEncodingCharSet();
         }
 
-        Buffer inBuffer = buffer.clone();
         if (getTextEncodingCharSet() == StandardCharsets.UTF_16) {
             final int firstCodePoint = getShort(buffer);  // doesn't move position
             if (firstCodePoint == 0xfffe || firstCodePoint == 0xfeff) {
                 return StandardCharsets.UTF_16;
             } else {
-                if (inBuffer.getByte(0) == 0) {
+                if (buffer.getByte(0) == 0) {
                     return StandardCharsets.UTF_16BE;
                 } else {
                     return StandardCharsets.UTF_16LE;

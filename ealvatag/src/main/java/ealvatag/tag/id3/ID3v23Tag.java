@@ -21,11 +21,9 @@ import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.*;
-import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.Pair;
 import ealvatag.tag.datatype.PairedTextEncodedStringNullTerminated;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
-import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.id3.framebody.FrameBodyIPLS;
 import ealvatag.tag.id3.framebody.FrameBodyTCON;
 import ealvatag.tag.id3.framebody.FrameBodyTDAT;
@@ -34,9 +32,6 @@ import ealvatag.tag.id3.framebody.FrameBodyTIME;
 import ealvatag.tag.id3.framebody.FrameBodyTIPL;
 import ealvatag.tag.id3.framebody.FrameBodyTMCL;
 import ealvatag.tag.id3.framebody.FrameBodyTYER;
-import ealvatag.tag.images.Artwork;
-import ealvatag.tag.images.ArtworkFactory;
-import ealvatag.tag.reference.PictureTypes;
 import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +44,6 @@ import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
@@ -142,8 +136,6 @@ public class ID3v23Tag extends AbstractID3v2Tag {
      * @param copyObject
      */
     public ID3v23Tag(ID3v23Tag copyObject) {
-        //This doesn't do anything.
-        super(copyObject);
         LOG.debug("Creating tag from another tag of same type");
         copyPrimitives(copyObject);
         copyFrames(copyObject);
@@ -186,14 +178,9 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         this.read(buffer);
     }
 
-    public ID3v23Tag(FileOperator fileOperator, int startByte, String loggingFilename) throws TagException {
+    public ID3v23Tag(Buffer buffer, Id3v2Header header, String loggingFilename, final boolean ignoreArtwork) throws TagException {
         setLoggingFilename(loggingFilename);
-        read(fileOperator, startByte);
-    }
-
-    public ID3v23Tag(Buffer buffer, Id3v2Header header, String loggingFilename) throws TagException {
-        setLoggingFilename(loggingFilename);
-        read(buffer, header);
+        read(buffer, header, ignoreArtwork);
     }
 
     public int getCrc32() {
@@ -318,7 +305,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
-            List<String> convertedGenres = new ArrayList<String>();
+            List<String> convertedGenres = new ArrayList<>();
             if (fields != null && fields.size() > 0) {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
@@ -330,7 +317,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
             return convertedGenres;
         } else if (genericKey == FieldKey.YEAR) {
             List<TagField> fields = getFields(genericKey);
-            List<String> results = new ArrayList<String>();
+            List<String> results = new ArrayList<>();
             if (fields != null && fields.size() > 0) {
                 for (TagField next : fields) {
                     if (next instanceof TagTextField) {
@@ -457,7 +444,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
      *
      * @param file The file to write to
      *
-     * @throws IOException
+     * @throws IOException if write error
      */
     public long write(File file, long audioStartLocation) throws IOException {
         setLoggingFilename(file.getName());
@@ -506,7 +493,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
 
         int padding = 0;
         if (currentTagSize > 0) {
-            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)currentTagSize);
+            int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, currentTagSize);
             padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
             LOG.debug(getLoggingFilename() + ":Padding:" + padding);
         }
@@ -517,13 +504,6 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         writePadding(channel, padding);
     }
 
-    /**
-     * Is Tag Equivalent to another tag
-     *
-     * @param obj
-     *
-     * @return true if tag is equivalent to another
-     */
     public boolean equals(Object obj) {
         if (!(obj instanceof ID3v23Tag)) {
             return false;
@@ -547,8 +527,6 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     /**
      * Override to merge TIPL/TMCL into single IPLS frame
      *
-     * @param newFrame
-     * @param existingFrame
      */
     @Override
     protected void processDuplicateFrame(AbstractID3v2Frame newFrame, AbstractID3v2Frame existingFrame) {
@@ -561,7 +539,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
                 oldVps.add(next);
             }
         } else {
-            List<AbstractID3v2Frame> list = new ArrayList<AbstractID3v2Frame>();
+            List<AbstractID3v2Frame> list = new ArrayList<>();
             list.add(existingFrame);
             list.add(newFrame);
             frameMap.put(newFrame.getIdentifier(), list);
@@ -575,7 +553,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         super.loadFrameIntoMap(frameId, next);
     }
 
-    protected void loadFrameIntoSpecifiedMap(HashMap map, String frameId, AbstractID3v2Frame frame) {
+    protected void loadFrameIntoSpecifiedMap(HashMap<String, Object> map, String frameId, AbstractID3v2Frame frame) {
         if (!(frameId.equals(ID3v23Frames.FRAME_ID_V3_TYER)) && !(frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT))) {
             super.loadFrameIntoSpecifiedMap(map, frameId, frame);
             return;
@@ -851,10 +829,6 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         return extendedHeaderSize;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void read(ByteBuffer buffer) throws TagException {
         int size;
         if (!seek(buffer)) {
@@ -885,46 +859,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
 
     }
 
-    private void read(FileOperator fileOperator, int startByte) throws TagException {
-        try {
-            Buffer buffer = new Buffer();
-            fileOperator.read(0, buffer, startByte);
-            if (!seek(buffer)) {
-                throw new TagNotFoundException(getIdentifier() + " tag not found");
-            }
-
-            readHeaderFlags(buffer.readByte());
-
-            // Read the size, this is size of tag not including the tag header
-            int size = ID3SyncSafeInteger.bufferToValue(buffer);
-            LOG.debug(ErrorMessage.ID_TAG_SIZE.getMsg(getLoggingFilename(), size));
-
-            if (extended) {
-                try {
-                    size -= readExtendedHeader(buffer);
-                } catch (InvalidTagHeaderException e) {
-                    // Try to carry on because the original code did? // TODO: 1/24/17 is this correct?
-                    buffer.skip(buffer.size());
-                    buffer = new Buffer();
-                    fileOperator.read(TAGID_VERSIONS_FLAGS_SIZE_LENGTH, buffer, startByte - TAGID_VERSIONS_FLAGS_SIZE_LENGTH);
-                }
-            }
-
-            Buffer bufferWithoutHeader = buffer;
-            //We need to synchronize the buffer
-            if (isUnsynchronized()) {
-                bufferWithoutHeader = Id3SynchronizingSink.synchronizeBuffer(buffer);
-            }
-
-            readFrames(bufferWithoutHeader, size);
-            LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
-        } catch (IOException e) {
-            throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
-        }
-
-    }
-
-    private void read(Buffer buffer, Id3v2Header header) throws TagException {
+    private void read(Buffer buffer, Id3v2Header header, final boolean ignoreArtwork) throws TagException {
         try {
             readHeaderFlags(header.getFlags());
 
@@ -941,7 +876,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
                 bufferWithoutHeader = Id3SynchronizingSink.synchronizeBuffer(buffer);
             }
 
-            readFrames(bufferWithoutHeader, size);
+            readFrames(bufferWithoutHeader, size, ignoreArtwork);
             LOG.debug(getLoggingFilename() + ":Loaded Frames,there are:" + frameMap.keySet().size());
         } catch (IOException e) {
             throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
@@ -1013,7 +948,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         }
     }
 
-    private void readFrames(Buffer buffer, int size) {
+    private void readFrames(Buffer buffer, int size, final boolean ignoreArtwork) {
         ensureFrameMapsAndClear();
         fileReadSize = size;
         LOG.trace("Frame data is size:{}", size);
@@ -1022,8 +957,12 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         // we hit an invalid frame identifier or padding
         while (buffer.size() > 0) {
             try {
-                ID3v23Frame next = new ID3v23Frame(buffer, getLoggingFilename());
-                loadFrameIntoMap(next.getIdentifier(), next);
+                ID3v23Frame next = new ID3v23Frame(buffer, getLoggingFilename(), ignoreArtwork);
+                if (next.isArtworkFrame() && ignoreArtwork) {
+                    setReadOnly();
+                } else {
+                    loadFrameIntoMap(next.getIdentifier(), next);
+                }
             } catch (PaddingException ex) {
                 //Found Padding, no more frames
                 LOG.debug("Found padding with {} remaining. {}", buffer.size(), getLoggingFilename());

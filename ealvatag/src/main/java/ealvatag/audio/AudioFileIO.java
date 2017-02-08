@@ -29,7 +29,6 @@ import ealvatag.audio.dsf.DsfFileWriter;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
-import ealvatag.audio.exceptions.ReadOnlyFileException;
 import ealvatag.audio.flac.FlacFileReader;
 import ealvatag.audio.flac.FlacFileWriter;
 import ealvatag.audio.mp3.MP3FileReader;
@@ -43,11 +42,8 @@ import ealvatag.audio.wav.WavFileReader;
 import ealvatag.audio.wav.WavFileWriter;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.TagException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -58,31 +54,6 @@ import java.util.Locale;
  * <p>
  * It selects the appropriate reader/writer based on the file extension (case
  * ignored).
- * <p>
- * <p>
- * Here is an simple example of use:
- * <p>
- * <p>
- * <code>
- * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3")); //Reads the given file.
- * int bitrate = audioFile.getBitrate(); //Retreives the bitrate of the file.
- * String artist = audioFile.getTag().getFirst(TagFieldKey.ARTIST); //Retreive the artist name.
- * audioFile.getTag().setGenre("Progressive Rock"); //Sets the genre to Prog. Rock, note the file on disk is still
- * unmodified.
- * AudioFileIO.write(audioFile); //Write the modifications in the file on disk.
- * </code>
- * <p>
- * <p>
- * You can also use the <code>commit()</code> method defined for
- * <code>AudioFile</code>s to achieve the same goal as
- * <code>AudioFileIO.write(File)</code>, like this:
- * <p>
- * <p>
- * <code>
- * AudioFile audioFile = AudioFileIO.read(new File("audiofile.mp3"));
- * audioFile.getTag().setGenre("Progressive Rock");
- * audioFile.commit(); //Write the modifications in the file on disk.
- * </code>
  *
  * @author Raphael Slinckx
  * @version $Id$
@@ -90,16 +61,14 @@ import java.util.Locale;
  * @see ealvatag.tag.Tag
  * @since v0.01
  */
-public class AudioFileIO {
-
-    private static Logger LOG = LoggerFactory.getLogger(AudioFileIO.class);
+@SuppressWarnings("unused") public class AudioFileIO {
 
     private static AudioFileIO defaultInstance;
     private final ModificationHandler modificationHandler;
     private final ImmutableMap<String, AudioFileReaderFactory> readerFactories;
     private final ImmutableMap<String, AudioFileWriterFactory> writerFactories;
 
-    public static AudioFileIO instance() {
+    static AudioFileIO instance() {
         if (defaultInstance == null) {
             synchronized (AudioFileIO.class) {
                 if (defaultInstance == null) {
@@ -110,9 +79,6 @@ public class AudioFileIO {
         return defaultInstance;
     }
 
-    // TODO: 1/21/17 Most of these methods should be package scope or moved totally into AudioFileImpl
-    // TODO: 1/21/17 First step is to stop clients from calling them and have them directly call on AudioFile to do these things
-
     /**
      * Read the tag contained in the given file.
      *
@@ -120,19 +86,40 @@ public class AudioFileIO {
      *
      * @return The AudioFile with the file tag and the file encoding info.
      *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     * @throws CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO error occurred during the
+     *                                    read.
+     * @throws TagException               various tag exceptions (to be refactored)
+     * @throws java.io.IOException        if error reading
+     * @throws InvalidAudioFrameException if audio frame is corrupted
      */
     public static AudioFile read(File f) throws CannotReadException,
                                                 IOException,
                                                 TagException,
-                                                ReadOnlyFileException,
                                                 InvalidAudioFrameException {
-        return instance().readFile(f);
+        return instance().readFile(f, false);
+    }
+
+    /**
+     * Read the tag contained in the given file, but ignore any artwork fields. In a memory constrained environment (Android) doing batch
+     * reads, this is a very large performance improvement.
+     *
+     * However, the resulting Tag is read-only to prevent unintended lost artwork. Dont use this method when editing tags.
+     *
+     * @param f The file to read.
+     *
+     * @return A read-only AudioFile
+     *
+     * @throws CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO error occurred during the
+     *                                    read.
+     * @throws TagException               various tag exceptions (to be refactored)
+     * @throws java.io.IOException        if error reading
+     * @throws InvalidAudioFrameException if audio frame is corrupted
+     */
+    public static AudioFile readIgnoreArtwork(File f) throws CannotReadException,
+                                                             IOException,
+                                                             TagException,
+                                                             InvalidAudioFrameException {
+        return instance().readFile(f, true);
     }
 
     /**
@@ -143,17 +130,15 @@ public class AudioFileIO {
      *
      * @return The AudioFile with the file tag and the file encoding info.
      *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     * @throws CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO error occurred during the
+     *                                    read.
+     * @throws TagException               various tag exceptions (to be refactored)
+     * @throws java.io.IOException        if error reading
+     * @throws InvalidAudioFrameException if audio frame is corrupted
      */
     public static AudioFile readAs(File f, String ext) throws CannotReadException,
                                                               IOException,
                                                               TagException,
-                                                              ReadOnlyFileException,
                                                               InvalidAudioFrameException {
         return instance().readFileAs(f, ext.toLowerCase());
     }
@@ -166,20 +151,17 @@ public class AudioFileIO {
      *
      * @return The AudioFile with the file tag and the file encoding info.
      *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     * @throws CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO error occurred during the
+     *                                    read.
+     * @throws TagException               various tag exceptions (to be refactored)
+     * @throws java.io.IOException        if error reading
+     * @throws InvalidAudioFrameException if audio frame is corrupted
      */
-    public AudioFile readFileAs(File f, String ext) throws CannotReadException,
-                                                           IOException,
-                                                           TagException,
-                                                           ReadOnlyFileException,
-                                                           InvalidAudioFrameException {
-        ensureFileExists(f);
-        return readAudioFile(f, ext);
+    private AudioFile readFileAs(File f, String ext) throws CannotReadException,
+                                                            IOException,
+                                                            TagException,
+                                                            InvalidAudioFrameException {
+        return readAudioFile(f, ext, true);
     }
 
     /**
@@ -189,29 +171,24 @@ public class AudioFileIO {
      *
      * @return The AudioFile with the file tag and the file encoding info.
      *
-     * @throws ealvatag.audio.exceptions.CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO
-     *                                                              error occurred during the read.
-     * @throws ealvatag.tag.TagException
-     * @throws ealvatag.audio.exceptions.ReadOnlyFileException
-     * @throws java.io.IOException
-     * @throws ealvatag.audio.exceptions.InvalidAudioFrameException
+     * @throws CannotReadException        If the file could not be read, the extension wasn't recognized, or an IO error occurred during the
+     *                                    read.
+     * @throws TagException               various tag exceptions (to be refactored)
+     * @throws java.io.IOException        if error reading
+     * @throws InvalidAudioFrameException if audio frame is corrupted
      */
     public AudioFile readFileMagic(File file) throws CannotReadException,
                                                      IOException,
                                                      TagException,
-                                                     ReadOnlyFileException,
                                                      InvalidAudioFrameException {
-        ensureFileExists(file);
-        return readAudioFile(file, Utils.getMagicExtension(file));
+        return readAudioFile(file, Utils.getMagicExtension(file), false);
     }
 
-    public AudioFile readFile(File f) throws CannotReadException,
-                                             IOException,
-                                             TagException,
-                                             ReadOnlyFileException,
-                                             InvalidAudioFrameException {
-        ensureFileExists(f);
-        return readAudioFile(f, Files.getFileExtension(f.getName()));
+    private AudioFile readFile(File file, final boolean ignoreArtwork) throws CannotReadException,
+                                                                              IOException,
+                                                                              TagException,
+                                                                              InvalidAudioFrameException {
+        return readAudioFile(file, Files.getFileExtension(file.getName()), ignoreArtwork);
     }
 
     /**
@@ -238,13 +215,12 @@ public class AudioFileIO {
         return factory.make().setAudioFileModificationListener(modificationHandler);
     }
 
-    private AudioFile readAudioFile(final File f, final String ext) throws CannotReadException,
-                                                                           IOException,
-                                                                           TagException,
-                                                                           ReadOnlyFileException,
-                                                                           InvalidAudioFrameException {
+    private AudioFile readAudioFile(final File f, final String ext, final boolean ignoreArtwork) throws CannotReadException,
+                                                                                                        IOException,
+                                                                                                        TagException,
+                                                                                                        InvalidAudioFrameException {
         final String extension = ext.toLowerCase(Locale.ROOT);
-        return getReaderForExtension(extension).read(f, extension);
+        return getReaderForExtension(extension).read(f, extension, ignoreArtwork);
     }
 
     private AudioFileReader getReaderForExtension(final String ext) throws CannotReadException {
@@ -253,13 +229,6 @@ public class AudioFileIO {
             throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
         }
         return factory.make();
-    }
-
-    private void ensureFileExists(File file) throws FileNotFoundException {
-        if (!file.exists()) {
-            LOG.error("Unable to find:{}" + file);
-            throw new FileNotFoundException(ErrorMessage.UNABLE_TO_FIND_FILE.getMsg(file.getPath()));
-        }
     }
 
     /**

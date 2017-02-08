@@ -86,8 +86,6 @@ public class TestAudioTagger {
                 System.out.println("Title:  " + tag.getFirst(FieldKey.TITLE));
                 System.out.println("Artist: " + tag.getFirst(FieldKey.ARTIST));
                 System.out.println("Album:  " + tag.getFirst(FieldKey.ALBUM));
-                System.out.println();
-
             } catch (Throwable t) {
                 System.err.println("Unable to read file:" + count + " path:" + (file != null ? file.getPath() : ""));
                 failed++;

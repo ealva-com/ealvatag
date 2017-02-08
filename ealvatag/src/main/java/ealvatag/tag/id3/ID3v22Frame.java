@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.EmptyFrameException;
@@ -105,9 +106,8 @@ import java.util.regex.Pattern;
         ID3v22Frame that = (ID3v22Frame)obj;
 
 
-        return
-                EqualsUtil.areEqual(this.statusFlags, that.statusFlags) &&
-                        EqualsUtil.areEqual(this.encodingFlags, that.encodingFlags) &&
+        return Objects.equal(this.statusFlags, that.statusFlags) &&
+                        Objects.equal(this.encodingFlags, that.encodingFlags) &&
                         super.equals(that);
 
     }
@@ -269,9 +269,9 @@ import java.util.regex.Pattern;
         read(byteBuffer);
     }
 
-    public ID3v22Frame(Buffer buffer, String loggingFilename) throws InvalidTagException, EOFException {
+    public ID3v22Frame(Buffer buffer, String loggingFilename, final boolean ignoreArtwork) throws InvalidTagException, EOFException {
         setLoggingFilename(loggingFilename);
-        read(buffer);
+        read(buffer, ignoreArtwork);
     }
 
     /**
@@ -365,7 +365,7 @@ import java.util.regex.Pattern;
         }
     }
 
-    public void read(Buffer buffer) throws InvalidTagException, EOFException {
+    public void read(Buffer buffer, final boolean ignoreArtwork) throws InvalidTagException, EOFException {
         final String fileName = getLoggingFilename();
         try {
             String identifier = readIdentifier(buffer);
@@ -408,10 +408,15 @@ import java.util.regex.Pattern;
             }
             LOG.debug("Identifier was:" + identifier + " reading using:" + id);
 
-            Buffer frameBodyBuffer = new Buffer();
-            buffer.readFully(frameBodyBuffer, frameSize); // maybe do this in other frame versions? Not very expensive
+            if (ignoreArtwork && AbstractID3v2Frame.isArtworkFrameId(id)) {
+                buffer.skip(frameSize);
+                frameBody = null;
+            } else {
+                Buffer frameBodyBuffer = new Buffer();
+                buffer.readFully(frameBodyBuffer, frameSize); // maybe do this in other frame versions? Not very expensive
 
-            frameBody = readBody(id, frameBodyBuffer, frameSize);
+                frameBody = readBody(id, frameBodyBuffer, frameSize);
+            }
         }  catch (RuntimeException e) {
             LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
             throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +
