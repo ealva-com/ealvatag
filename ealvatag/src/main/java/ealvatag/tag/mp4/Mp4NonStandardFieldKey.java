@@ -37,6 +37,10 @@ public enum Mp4NonStandardFieldKey
         return fieldName;
     }
 
+    public boolean matchesIdentifier(final String id) {
+        return fieldName.equals(id);
+    }
+
     /**
      * @return description, human redable description of the atom
      */

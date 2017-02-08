@@ -326,6 +326,10 @@ public enum Mp4FieldKey
         return fieldName;
     }
 
+    public boolean fieldMatchesId(final String id) {
+        return fieldName.equals(id);
+    }
+
     /**
      * @return fieldtype
      */

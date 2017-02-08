@@ -103,7 +103,10 @@ import java.util.Locale;
      * Read the tag contained in the given file, but ignore any artwork fields. In a memory constrained environment (Android) doing batch
      * reads, this is a very large performance improvement.
      *
-     * However, the resulting Tag is read-only to prevent unintended lost artwork. Dont use this method when editing tags.
+     * However, iff the file contained artwork the resulting Tag is read-only to prevent unintended lost artwork. Don't use this method
+     * when editing tags as you can't save any editing results.
+     *
+     * This is not fully supported or tested across all file types.
      *
      * @param f The file to read.
      *

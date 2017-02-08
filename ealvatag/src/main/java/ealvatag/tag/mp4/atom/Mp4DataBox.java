@@ -5,18 +5,17 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.AbstractMp4Box;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.mp4.field.Mp4FieldType;
+import ealvatag.utils.Buffers;
 import okio.Buffer;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 /**
- * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
+ * This box is used within both normal metadata boxes and ---- boxes to hold the actual data.
  * <p>
  * <p>Format is as follows:
  * :length          (4 bytes)
@@ -141,7 +140,7 @@ public class Mp4DataBox extends AbstractMp4Box {
         this.header = dataBoxHeader;
 
         buffer.skip(VERSION_LENGTH);
-        type = Utils.read3ByteInt(buffer);
+        type = Buffers.read3ByteInt(buffer);
 
         buffer.skip(LOCALE_LENGTH);
 

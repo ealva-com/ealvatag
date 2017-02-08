@@ -108,20 +108,6 @@ public class Utils {
     }
 
     /**
-     * Big-endian - everything should assume BE and only specify LE when necessary (which I cannot find as of yet)
-     *
-     * @return 3 bytes properly masked and shifted to form an int
-     *
-     * @throws IOException if a read error occurs
-     */
-    public static int read3ByteInt(final BufferedSource source) throws IOException {
-        return (source.readByte() & 0xff) << 16
-                | (source.readByte() & 0xff) << 8
-                | (source.readByte() & 0xff);
-
-    }
-
-    /**
      * Computes a number whereby the 1st byte is the least significant and the last
      * byte is the most significant. This version doesn't take a length,
      * and it returns an int rather than a long.
