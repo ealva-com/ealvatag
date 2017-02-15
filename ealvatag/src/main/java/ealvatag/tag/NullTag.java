@@ -57,7 +57,7 @@ public final class NullTag implements Tag {
         return false;
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return 0;
     }
 
@@ -80,6 +80,14 @@ public final class NullTag implements Tag {
     @Override public String getFirst(final FieldKey genericKey)
             throws IllegalArgumentException, UnsupportedFieldException {
         return "";
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return Optional.absent();
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        return Optional.absent();
     }
 
     @Override public String getFirst(final String id) throws IllegalArgumentException, UnsupportedFieldException {

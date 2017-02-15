@@ -27,6 +27,7 @@ import ealvatag.audio.wav.WavOptions;
 import ealvatag.logging.Hex;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -237,8 +238,8 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
         return getActiveTag().hasField(id);
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey.name()).size();
     }
 
     public int getFieldCount() {
@@ -272,6 +273,14 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
     public String getFieldAt(FieldKey genericKey, int index)
             throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFieldAt(genericKey, index);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return getActiveTag().getFieldValue(key);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        return getActiveTag().getFieldValue(key, index);
     }
 
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {

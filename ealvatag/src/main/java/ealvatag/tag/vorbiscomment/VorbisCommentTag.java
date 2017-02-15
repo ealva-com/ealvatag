@@ -29,6 +29,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -260,6 +261,45 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return tagFieldToOggField.keySet();
     }
 
+    // Overriding this just in case super class implementation changes
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return getFieldValue(key, 0);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        checkArgNotNull(key, CANNOT_BE_NULL, "key");
+        try {
+            FieldKey genericKey = FieldKey.valueOf(key.name());
+            if (genericKey == FieldKey.ALBUM_ARTIST) {
+                switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
+                    case READ_ALBUMARTIST:
+                        return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
+                    case READ_JRIVER_ALBUMARTIST:
+                        return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
+                    case READ_ALBUMARTIST_THEN_JRIVER: {
+                        final Optional<String> value = getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
+                        if (!value.isPresent()) {
+                            return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
+                        } else {
+                            return value;
+                        }
+                    }
+                    case READ_JRIVER_THEN_ALBUMARTIST: {
+                        final Optional<String> value = getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
+                        if (!value.isPresent()) {
+                            return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
+                        } else {
+                            return value;
+                        }
+                    }
+                }
+            }
+            return getFieldAtIndex(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
+        } catch (IllegalArgumentException e) {
+           return Optional.absent();
+        }
+    }
+
     public String getFieldAt(FieldKey genericKey, int index)
             throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
@@ -355,7 +395,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     public List<TagField> get(VorbisCommentFieldKey vorbisCommentKey) throws IllegalArgumentException {
-        return super.getFields(checkArgNotNull(vorbisCommentKey).getFieldName());
+        return getFieldList(checkArgNotNull(vorbisCommentKey).getFieldName());
     }
 
     /**
@@ -473,7 +513,7 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
     }
 
     public boolean hasField(VorbisCommentFieldKey vorbisFieldKey) {
-        return getFields(vorbisFieldKey.getFieldName()).size() != 0;
+        return getFieldList(vorbisFieldKey.getFieldName()).size() != 0;
     }
 
     /**
@@ -485,11 +525,11 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
      * @see ealvatag.tag.Tag#isEmpty()
      */
     public boolean isEmpty() {
-        return fields.size() <= 1;
+        return getFieldsMapSize() <= 1;
     }
 
     public boolean hasField(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(getVorbisCommentFieldKey(genericKey).getFieldName()).size() != 0;
+        return getFieldList(getVorbisCommentFieldKey(genericKey).getFieldName()).size() != 0;
     }
 
     @Override

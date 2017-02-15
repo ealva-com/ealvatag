@@ -5,7 +5,7 @@ package ealvatag.tag;
  * <p>
  * This enumeration is used by subclasses to map from the common key to their implementation key
  */
-public enum FieldKey {
+public enum FieldKey implements Key {
     ACOUSTID_FINGERPRINT,
     ACOUSTID_ID,
     ALBUM,

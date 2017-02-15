@@ -18,31 +18,12 @@ package ealvatag.tag.id3;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.EmptyFrameException;
-import ealvatag.tag.FieldDataInvalidException;
-import ealvatag.tag.FieldKey;
-import ealvatag.tag.InvalidDataTypeException;
-import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.InvalidFrameIdentifierException;
-import ealvatag.tag.InvalidTagException;
-import ealvatag.tag.PaddingException;
-import ealvatag.tag.Tag;
-import ealvatag.tag.TagException;
-import ealvatag.tag.TagField;
-import ealvatag.tag.TagNotFoundException;
-import ealvatag.tag.TagOptionSingleton;
-import ealvatag.tag.UnsupportedFieldException;
+import ealvatag.tag.*;
 import ealvatag.tag.datatype.DataTypes;
-import ealvatag.tag.id3.framebody.AbstractArtworkFrameBody;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
-import ealvatag.tag.id3.framebody.FrameBodyAPIC;
-import ealvatag.tag.id3.framebody.FrameBodyPIC;
 import ealvatag.tag.id3.framebody.FrameBodyTCON;
 import ealvatag.tag.id3.framebody.FrameBodyTDRC;
 import ealvatag.tag.id3.valuepair.ImageFormats;
-import ealvatag.tag.images.Artwork;
-import ealvatag.tag.images.ArtworkFactory;
-import ealvatag.tag.reference.PictureTypes;
 import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +37,6 @@ import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayList;
@@ -267,8 +247,8 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         }
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey.name()).size();
     }
 
     public TagField createField(FieldKey genericKey, String... values) throws IllegalArgumentException,

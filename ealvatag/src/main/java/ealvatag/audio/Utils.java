@@ -20,7 +20,6 @@ import com.google.common.io.Files;
 import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.FileTypeUtil;
 import okio.Buffer;
-import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +51,7 @@ public class Utils {
 
     public static String formatBitRate(final AudioHeader header, final int bitRate) {
         return header.isVariableBitRate() ? VBR_IDENTIFIER_PREFIX + String.valueOf(bitRate)
-                                   : String.valueOf(bitRate);
+                                          : String.valueOf(bitRate);
 
     }
 
@@ -70,7 +69,7 @@ public class Utils {
     }
 
     /**
-     * Computes a number whereby the 1st byte is the least signifcant and the last
+     * Computes a number whereby the 1st byte is the least significant and the last
      * byte is the most significant.
      * So if storing a number which only requires one byte it will be stored in the first
      * byte.

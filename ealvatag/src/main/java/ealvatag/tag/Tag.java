@@ -55,7 +55,9 @@ import java.util.List;
 public interface Tag {
 
     /**
-     * A tag instance may be marked read-only during an initial read to prevent changes or as an optimization of some sort.
+     * A tag instance may be marked read-only during an initial read to prevent changes or as an optimization of some sort. For example,
+     * if a read excludes artwork as an optimization, the tag is marked read only to prevent it being accidentally written without the
+     * artwork.
      *
      * @return true if this instance cannot be modified
      */
@@ -97,7 +99,7 @@ public interface Tag {
      */
     boolean hasField(String id);
 
-    int getFieldCount(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+    int getFieldCount(Key genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
      * Return the number of fields
@@ -155,6 +157,32 @@ public interface Tag {
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
      */
     String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Get the value of the first field for the key
+     *
+     * @param key the specific field to get. Typically this is a {@link FieldKey}, but another {@link Key} implementation can be used if the
+     *            field type is not within {@link FieldKey}
+     *
+     * @return the String value if the field exists in this tag, else {@link Optional#absent()}
+     *
+     * @throws IllegalArgumentException if {@code key} is null
+     */
+    Optional<String> getFieldValue(Key key) throws IllegalArgumentException;
+
+    /**
+     * Get the value of the field for the key at the given index
+     *
+     * @param key   the specific field to get. Typically this is a {@link FieldKey}, but another {@link Key} implementation can be used if
+     *              the field type is not within {@link FieldKey}
+     * @param index the index into the list of values for the given key
+     *
+     * @return the String value if the field exists in this tag at the given index, else {@link Optional#absent()}
+     *
+     * @throws IllegalArgumentException if {@code key} is null
+     * @see #getFieldCount(Key)
+     */
+    Optional<String> getFieldValue(Key key, int index) throws IllegalArgumentException;
 
     /**
      * Retrieve String value of the first field that exists for this format specific key

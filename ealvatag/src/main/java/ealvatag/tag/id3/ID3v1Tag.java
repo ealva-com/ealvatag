@@ -31,6 +31,7 @@ import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -568,8 +569,8 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         }
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(FieldKey.valueOf(genericKey.name())).size();
     }
 
     public int getFieldCount() {
@@ -624,6 +625,38 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         // parameters checked later in chain // TODO: 1/20/17 refactor into public and private methods
         setField(genericKey, values);
         return this;
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        try {
+            FieldKey fieldKey = FieldKey.valueOf(key.name());
+            switch (fieldKey) {
+                case ARTIST:
+                    return Optional.of(getFirstArtist());
+                case ALBUM:
+                    return Optional.of(getFirstAlbum());
+                case TITLE:
+                    return Optional.of(getFirstTitle());
+                case GENRE:
+                    return Optional.of(getFirstGenre());
+                case YEAR:
+                    return Optional.of(getFirstYear());
+                case COMMENT:
+                    return Optional.of(getFirstComment());
+                default:
+                    return Optional.absent();
+            }
+        } catch (IllegalArgumentException e) {
+            return Optional.absent();
+        }
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        checkArgNotNull(key);
+        if (index == 0) {
+            return getFieldValue(key);
+        }
+        return Optional.absent();
     }
 
     /**

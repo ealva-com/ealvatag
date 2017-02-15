@@ -38,6 +38,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -66,6 +67,8 @@ import java.util.Map;
  */
 public abstract class AbstractTag implements TagFieldContainer {
 
+    private static final List<TagField> EMPTY_TAG_FIELD_LIST = ImmutableList.of();
+
     private boolean readOnly;
 
     protected AbstractTag(final boolean readOnly) {
@@ -86,11 +89,11 @@ public abstract class AbstractTag implements TagFieldContainer {
      * that they are added in is preserved, the only exception to this rule is when two fields of the same id
      * exist, both will be returned according to when the first item was added to the file. <br>
      */
-    protected Map<String, List<TagField>> fields = new LinkedHashMap<>();
+    private Map<String, List<TagField>> fields = new LinkedHashMap<>();
 
     public List<String> getAll(String id) {
         List<String> fields = new ArrayList<>();
-        List<TagField> tagFields = getFields(id);
+        List<TagField> tagFields = getFieldList(id);
         for (int i = 0, size = tagFields.size(); i < size; i++) {
             fields.add(tagFields.get(i).toString());
         }
@@ -99,7 +102,7 @@ public abstract class AbstractTag implements TagFieldContainer {
 
 
     protected String getItem(String id, int index) {
-        List<TagField> tagFieldList = getFields(id);
+        List<TagField> tagFieldList = getFieldList(id);
         if (tagFieldList.size() > index) {
             return tagFieldList.get(index).toString();
         }
@@ -124,6 +127,20 @@ public abstract class AbstractTag implements TagFieldContainer {
         return fields.size() == 0;
     }
 
+    protected int getFieldsMapSize() {
+        return fields.size();
+    }
+
+    /**
+     * Returns the list of {@link TagField}s for the given key
+     * @param id the tag field key
+     * @return associated list. Empty if no such field exists
+     */
+    protected List<TagField> getFieldList(final String id) {
+        final List<TagField> list = fields.get(id);
+        return list == null ? EMPTY_TAG_FIELD_LIST : list;
+    }
+
     @Override
     public boolean hasField(FieldKey genericKey) {
         return hasField(genericKey.name());
@@ -136,11 +153,11 @@ public abstract class AbstractTag implements TagFieldContainer {
      */
     @Override
     public boolean hasField(String id) {
-        return getFields(id).size() != 0;
+        return getFieldList(id).size() != 0;
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFieldList(genericKey.name()).size();
     }
 
     /**
@@ -195,9 +212,27 @@ public abstract class AbstractTag implements TagFieldContainer {
         return getFieldAt(genericKey, 0);
     }
 
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        checkArgNotNull(key);
+        return getFieldAtIndex(key.name(), 0);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        checkArgNotNull(key);
+        return getFieldAtIndex(key.name(), index);
+    }
+
+    protected Optional<String> getFieldAtIndex(final String key, final int index) {
+        final List<TagField> fieldList = getFieldList(key);
+        if (fieldList.size() > index) {
+            return Optional.of(fieldList.get(index).toString());
+        }
+        return Optional.absent();
+    }
+
     @Override
     public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
-        List<TagField> l = getFields(id);
+        List<TagField> l = getFieldList(id);
         return (l.size() != 0) ? l.get(0).toString() : "";
     }
 
@@ -322,9 +357,11 @@ public abstract class AbstractTag implements TagFieldContainer {
         return ImmutableList.copyOf(tagFields);
     }
 
+
+
     @Override
     public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
-        List<TagField> l = getFields(id);
+        List<TagField> l = getFieldList(id);
         return l.size() != 0 ? Optional.fromNullable(l.get(0)) : Optional.<TagField>absent();
     }
 
@@ -387,4 +424,9 @@ public abstract class AbstractTag implements TagFieldContainer {
     }
 
 
+    @Override
+    public ImmutableList<TagField> getFields(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        return ImmutableList.copyOf(getFieldList(genericKey.name()));
+    }
 }

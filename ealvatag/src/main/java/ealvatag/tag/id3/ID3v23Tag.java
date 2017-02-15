@@ -17,7 +17,6 @@ package ealvatag.tag.id3;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.*;
@@ -271,8 +270,8 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         return ID3v23Frames.getInstanceOf();
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return getFields(genericKey.name()).size();
     }
 
     /**

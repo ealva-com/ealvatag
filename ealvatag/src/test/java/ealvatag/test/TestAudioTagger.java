@@ -81,7 +81,7 @@ public class TestAudioTagger {
         while (!deque.isEmpty()) {
             try {
                 file = deque.pollLast();
-                final AudioFile audioFile = AudioFileIO.read(file);
+                final AudioFile audioFile = AudioFileIO.readIgnoreArtwork(file);
                 final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
                 System.out.println("Title:  " + tag.getFirst(FieldKey.TITLE));
                 System.out.println("Artist: " + tag.getFirst(FieldKey.ARTIST));

@@ -8,6 +8,7 @@ import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.logging.Hex;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -93,8 +94,8 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
         return id3Tag.hasField(id);
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        return id3Tag.getFieldCount(genericKey);
     }
 
     @Override
@@ -134,6 +135,14 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
     public String getFieldAt(FieldKey genericKey, int index)
             throws IllegalArgumentException, UnsupportedFieldException {
         return id3Tag.getFieldAt(genericKey, index);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return id3Tag.getFieldValue(key);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        return id3Tag.getFieldValue(key);
     }
 
     @Override
@@ -221,7 +230,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
 
     @Override
     public ImmutableList<TagField> getFields(String id) {
-        return ImmutableList.copyOf(id3Tag.getFields(id));
+        return id3Tag.getFields(id);
     }
 
     @Override

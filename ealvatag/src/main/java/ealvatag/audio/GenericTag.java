@@ -175,25 +175,12 @@ public abstract class GenericTag extends AbstractTag {
     }
 
     @Override
-    public String getFieldAt(final FieldKey genericKey, final int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
+    public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException, UnsupportedFieldException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (getSupportedFields().contains(genericKey)) {
             return getItem(genericKey.name(), index);
         } else {
             throw new UnsupportedFieldException(genericKey.name());
-        }
-    }
-
-    @Override
-    public ImmutableList<TagField> getFields(final FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
-        final List<TagField> tagFields = fields.get(genericKey.name());
-        if (tagFields == null) {
-            return ImmutableList.of();
-        } else {
-            return ImmutableList.copyOf(tagFields);
         }
     }
 

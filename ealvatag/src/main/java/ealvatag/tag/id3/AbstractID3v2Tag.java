@@ -30,6 +30,7 @@ import ealvatag.logging.FileSystemMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -685,6 +686,29 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         return getFieldAt(genericKey, 0);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return getFieldAtIndex(key.name(), 0);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        return getFieldAtIndex(key.name(), index);
+    }
+
+    private Optional<String> getFieldAtIndex(final String key, final int index) {
+        Object obj = getFrame(key);
+        if (obj == null) {
+            return Optional.absent();
+        }
+        if (obj instanceof List) {
+            List fieldList = (List)obj;
+            if (fieldList.size() > index) {
+                return Optional.of(fieldList.get(index).toString());
+            }
+            return Optional.absent();
+        }
+        return Optional.of(obj.toString());
     }
 
     /**

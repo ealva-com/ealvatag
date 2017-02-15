@@ -1,12 +1,14 @@
 package ealvatag.tag.flac;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
+import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -179,6 +181,16 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         } else {
             return tag.getFieldAt(genericKey, index);
         }
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
+        return getFieldValue(key, 0);
+    }
+
+    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
+        checkArgNotNull(key);
+        Preconditions.checkArgument(!FieldKey.COVER_ART.name().equals(key.name()), "Use getFirstArtwork() or getArtworkList() methods");
+        return tag.getFieldValue(key, index);
     }
 
     public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
@@ -437,8 +449,11 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
         return "FLAC " + getVorbisCommentTag();
     }
 
-    @Override public int getFieldCount(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(genericKey).size();
+    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+        if (FieldKey.COVER_ART.name().equals(genericKey.name())) {
+            return images.size();
+        }
+        return tag.getFieldCount(genericKey);
     }
 
 }

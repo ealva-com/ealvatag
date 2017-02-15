@@ -267,7 +267,7 @@ public class Mp4Tag extends AbstractTag {
     }
 
     public boolean hasField(Mp4FieldKey mp4FieldKey) {
-        return getFields(mp4FieldKey.getFieldName()).size() != 0;
+        return getFieldList(mp4FieldKey.getFieldName()).size() != 0;
     }
 
     public ImmutableList<TagField> getFields(FieldKey genericKey)
@@ -353,7 +353,7 @@ public class Mp4Tag extends AbstractTag {
 
     public List<TagField> get(Mp4FieldKey mp4FieldKey) throws IllegalArgumentException {
         checkArgNotNull(mp4FieldKey, CANNOT_BE_NULL, "mp4FieldKey");
-        return super.getFields(mp4FieldKey.getFieldName());
+        return getFieldList(mp4FieldKey.getFieldName());
     }
 
     public String getFieldAt(FieldKey genericKey, int index)
@@ -559,8 +559,8 @@ public class Mp4Tag extends AbstractTag {
         }
 
         if (field.getId().equals(TRACK.getFieldName())) {
-            List<TagField> list = fields.get(field.getId());
-            if (list == null || list.size() == 0) {
+            List<TagField> list = getFieldList(field.getId());
+            if (list.size() == 0) {
                 super.setField(field);
             } else {
                 Mp4TrackField existingTrackField = (Mp4TrackField)list.get(0);
@@ -578,8 +578,8 @@ public class Mp4Tag extends AbstractTag {
                 super.setField(mergedTrackField);
             }
         } else if (field.getId().equals(DISCNUMBER.getFieldName())) {
-            List<TagField> list = fields.get(field.getId());
-            if (list == null || list.size() == 0) {
+            List<TagField> list = getFieldList(field.getId());
+            if (list.size() == 0) {
                 super.setField(field);
             } else {
                 Mp4DiscNoField existingDiscNoField = (Mp4DiscNoField)list.get(0);
