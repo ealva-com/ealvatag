@@ -13,8 +13,9 @@ import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.id3.framebody.AbstractFrameBodyTextInfo;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
@@ -38,21 +39,21 @@ public class Issue335Test {
         //TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(false);
         File testFile = TestUtil.copyAudioToTmp("test79.mp3");
         MP3File f = (MP3File)AudioFileIO.read(testFile);
-        Assert.assertEquals("Familial", f.getID3v2Tag().getFirst("TALB"));
+        assertEquals("Familial", f.getID3v2Tag().getValue(FieldKey.ALBUM).or(""));
         AbstractID3v2Frame frame = (AbstractID3v2Frame)f.getID3v2Tag().getFrame("TALB");
         AbstractTagFrameBody body = frame.getBody();
-        Assert.assertEquals(3, body.getTextEncoding());
+        assertEquals(3, body.getTextEncoding());
 
         ID3v23Tag tag = new ID3v23Tag(f.getID3v2Tag());
-        Assert.assertEquals(3, body.getTextEncoding());
+        assertEquals(3, body.getTextEncoding());
         f.setID3v2Tag(tag);
         f.save();
 
         f = (MP3File)AudioFileIO.read(testFile);
-        Assert.assertEquals("Familial", f.getID3v2Tag().getFirst("TALB"));
+        assertEquals("Familial", f.getID3v2Tag().getValue(FieldKey.ALBUM).or(""));
         frame = (AbstractID3v2Frame)f.getID3v2Tag().getFrame("TALB");
         body = frame.getBody();
-        Assert.assertEquals(0, body.getTextEncoding());
+        assertEquals(0, body.getTextEncoding());
 
     }
 
@@ -66,28 +67,28 @@ public class Issue335Test {
         //TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(false);
         File testFile = TestUtil.copyAudioToTmp("test79.mp3");
         MP3File f = (MP3File)AudioFileIO.read(testFile);
-        Assert.assertEquals("Familial", f.getID3v2Tag().getFirst("TALB"));
-        Assert.assertEquals(4, f.getID3v2Tag().getMajorVersion());
+        assertEquals("Familial", f.getID3v2Tag().getValue(FieldKey.ALBUM).or(""));
+        assertEquals(4, f.getID3v2Tag().getMajorVersion());
         AbstractID3v2Frame frame = (AbstractID3v2Frame)f.getID3v2Tag().getFrame("TALB");
         AbstractFrameBodyTextInfo body = (AbstractFrameBodyTextInfo)frame.getBody();
         body.setText("ǿ");
         //It was UTF8
-        Assert.assertEquals(3, body.getTextEncoding());
+        assertEquals(3, body.getTextEncoding());
 
         ID3v23Tag tag = new ID3v23Tag(f.getID3v2Tag());
         frame = (AbstractID3v2Frame)tag.getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //We default to 0
-        Assert.assertEquals(0, body.getTextEncoding());
+        assertEquals(0, body.getTextEncoding());
         f.setID3v2Tag(tag);
         f.save();
 
         f = (MP3File)AudioFileIO.read(testFile);
-        Assert.assertEquals("ǿ", f.getID3v2Tag().getFirst("TALB"));
+        assertEquals("ǿ", f.getID3v2Tag().getValue(FieldKey.ALBUM).or(""));
         frame = (AbstractID3v2Frame)f.getID3v2Tag().getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //But need UTF16 to store this value
-        Assert.assertEquals(1, body.getTextEncoding());
+        assertEquals(1, body.getTextEncoding());
 
     }
 
@@ -101,19 +102,19 @@ public class Issue335Test {
         //TagOptionSingleton.getInstance().setResetTextEncodingForExistingFrames(false);
         File testFile = TestUtil.copyAudioToTmp("test79.mp3");
         MP3File f = (MP3File)AudioFileIO.read(testFile);
-        Assert.assertEquals("Familial", f.getID3v2Tag().getFirst("TALB"));
-        Assert.assertEquals(4, f.getID3v2Tag().getMajorVersion());
+        assertEquals("Familial", f.getID3v2Tag().getValue(FieldKey.ALBUM).or(""));
+        assertEquals(4, f.getID3v2Tag().getMajorVersion());
         AbstractID3v2Frame frame = (AbstractID3v2Frame)f.getID3v2Tag().getFrame("TALB");
         AbstractFrameBodyTextInfo body = (AbstractFrameBodyTextInfo)frame.getBody();
         body.setText("ǿ");
         //It was UTF8
-        Assert.assertEquals(3, body.getTextEncoding());
+        assertEquals(3, body.getTextEncoding());
 
         ID3v23Tag tag = new ID3v23Tag(f.getID3v2Tag());
         frame = (AbstractID3v2Frame)tag.getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //We default to 0
-        Assert.assertEquals(0, body.getTextEncoding());
+        assertEquals(0, body.getTextEncoding());
         f.setID3v2Tag(tag);
         f.save();
 
@@ -122,19 +123,19 @@ public class Issue335Test {
         frame = (AbstractID3v2Frame)tag.getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //It got converted to UTF16 at previous commit stage in order to store the value
-        Assert.assertEquals(1, body.getTextEncoding());
+        assertEquals(1, body.getTextEncoding());
 
         ID3v24Tag v24tag = f.getID3v2TagAsv24();
         frame = (AbstractID3v2Frame)v24tag.getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //And not lost when convert to v24
-        Assert.assertEquals(1, body.getTextEncoding());
+        assertEquals(1, body.getTextEncoding());
 
         tag = new ID3v23Tag(v24tag);
         frame = (AbstractID3v2Frame)tag.getFrame("TALB");
         body = (AbstractFrameBodyTextInfo)frame.getBody();
         //or if convert from v24 view back down to v23 view
-        Assert.assertEquals(1, body.getTextEncoding());
+        assertEquals(1, body.getTextEncoding());
 
     }
 

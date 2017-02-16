@@ -5,6 +5,8 @@ import ealvatag.tag.FieldKey;
 import java.util.EnumSet;
 
 /**
+ * Test if field is a number or total type
+ *
  * Created by Paul on 09/11/2016.
  */
 public class ID3NumberTotalFields

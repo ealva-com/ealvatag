@@ -123,7 +123,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
 
     @Override
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
     }
 
     @Override
@@ -131,18 +131,17 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
         return id3Tag.getFirst(id);
     }
 
+    @Override public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return id3Tag.getValue(genericKey);
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        return id3Tag.getValue(genericKey, index);
+    }
+
     @Override
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return id3Tag.getFieldAt(genericKey, index);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return id3Tag.getFieldValue(key);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        return id3Tag.getFieldValue(key);
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return id3Tag.getValue(genericKey, 0).or("");
     }
 
     @Override

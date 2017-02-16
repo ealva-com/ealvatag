@@ -41,10 +41,13 @@ public class Issue086Test {
                 f = AudioFileIO.read(testFile);
                 tag = f.getTag().or(NullTag.INSTANCE);
                 Assert.assertEquals("fred", ((WavTag)tag).getID3Tag().getFirst(FieldKey.ARTIST));
+                Assert.assertEquals("fred", ((WavTag)tag).getID3Tag().getValue(FieldKey.ARTIST).or(""));
                 Assert.assertTrue(((WavTag)tag).isExistingInfoTag());
                 Assert.assertTrue(((WavTag)tag).isExistingId3Tag());
                 Assert.assertEquals("fred", ((WavTag)tag).getInfoTag().getFirst(FieldKey.ARTIST));
+                Assert.assertEquals("fred", ((WavTag)tag).getInfoTag().getValue(FieldKey.ARTIST).or(""));
                 Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
+                Assert.assertEquals("fred", tag.getValue(FieldKey.ARTIST).or(""));
 
             }
         } catch (Exception e) {

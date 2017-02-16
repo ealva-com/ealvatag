@@ -15,6 +15,7 @@
  */
 package ealvatag.tag.id3;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
@@ -230,20 +231,18 @@ public class ID3v22Tag extends AbstractID3v2Tag {
         }
     }
 
-    @Override
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.GENRE) {
             List<TagField> fields = getFields(genericKey);
             if (fields != null && fields.size() > 0) {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
                 FrameBodyTCON body = (FrameBodyTCON)frame.getBody();
-                return FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index));
+                return Optional.of(FrameBodyTCON.convertID3v22GenreToGeneric(body.getValues().get(index)));
             }
-            return "";
+            return Optional.absent();
         } else {
-            return super.getFieldAt(genericKey, index);
+            return super.getValue(genericKey, index);
         }
     }
 

@@ -1,7 +1,6 @@
 package ealvatag.tag.flac;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
@@ -166,7 +165,19 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
     }
 
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return getValue(genericKey, 0);
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        if (FieldKey.COVER_ART.equals(genericKey)) {
+            throw new UnsupportedFieldException(genericKey.name());
+        } else {
+            return tag.getValue(genericKey, index);
+        }
     }
 
     /**
@@ -174,27 +185,12 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
      *
      * @throws UnsupportedFieldException if the {@link FieldKey} is {@link FieldKey#COVER_ART}
      */
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        if (genericKey.equals(FieldKey.COVER_ART)) {
-            throw new UnsupportedFieldException(genericKey.name());
-        } else {
-            return tag.getFieldAt(genericKey, index);
-        }
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return getFieldValue(key, 0);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        checkArgNotNull(key);
-        Preconditions.checkArgument(!FieldKey.COVER_ART.name().equals(key.name()), "Use getFirstArtwork() or getArtworkList() methods");
-        return tag.getFieldValue(key, index);
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, index).or("");
     }
 
     public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
-        if (id.equals(FieldKey.COVER_ART.name())) {
+        if (FieldKey.COVER_ART.name().equals(id)) {
             if (images.size() > 0) {
                 return Optional.<TagField>fromNullable(images.get(0));
             } else {

@@ -30,7 +30,6 @@ import ealvatag.logging.FileSystemMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagFieldContainer;
@@ -685,30 +684,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     }
 
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return getFieldAtIndex(key.name(), 0);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        return getFieldAtIndex(key.name(), index);
-    }
-
-    private Optional<String> getFieldAtIndex(final String key, final int index) {
-        Object obj = getFrame(key);
-        if (obj == null) {
-            return Optional.absent();
-        }
-        if (obj instanceof List) {
-            List fieldList = (List)obj;
-            if (fieldList.size() > index) {
-                return Optional.of(fieldList.get(index).toString());
-            }
-            return Optional.absent();
-        }
-        return Optional.of(obj.toString());
+        return getValue(genericKey, 0).or("");
     }
 
     /**
@@ -737,35 +713,27 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
         return frame.getBody().getUserFriendlyValue();
     }
 
-    /**
-     * Retrieve the value that exists for this generic key and this index
-     * <p/>
-     * Have to do some special mapping for certain generic keys because they share frame
-     * with another generic key.
-     *
-     * @param genericKey
-     *
-     * @return
-     */
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+    @Override public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return getValue(genericKey, 0);
+    }
 
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         //Special case here because the generic key to frameid/subid mapping is identical for trackno versus tracktotal
         //and discno versus disctotal so we have to handle here, also want to ignore index parameter.
         if (ID3NumberTotalFields.isNumber(genericKey) || ID3NumberTotalFields.isTotal(genericKey)) {
             List<TagField> fields = getFields(genericKey);
-            if (fields != null && fields.size() > 0) {
+            if (fields.size() > 0) {
                 //Should only be one frame so ignore index value, and we ignore multiple values within the frame
                 //it would make no sense if it existed.
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(0);
                 if (ID3NumberTotalFields.isNumber(genericKey)) {
-                    return ((AbstractFrameBodyNumberTotal)frame.getBody()).getNumberAsText();
+                    return Optional.of(((AbstractFrameBodyNumberTotal)frame.getBody()).getNumberAsText());
                 } else if (ID3NumberTotalFields.isTotal(genericKey)) {
-                    return ((AbstractFrameBodyNumberTotal)frame.getBody()).getTotalAsText();
+                    return Optional.of(((AbstractFrameBodyNumberTotal)frame.getBody()).getTotalAsText());
                 }
             } else {
-                return "";
+                return Optional.absent();
             }
         } else if (genericKey == FieldKey.RATING) {
             //Special Case, TODO may be possible to put into doGetValueAtIndex but getUserFriendlyValue in POPMGFrameBody
@@ -773,14 +741,17 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             List<TagField> fields = getFields(genericKey);
             if (fields != null && fields.size() > index) {
                 AbstractID3v2Frame frame = (AbstractID3v2Frame)fields.get(index);
-                return String.valueOf(((FrameBodyPOPM)frame.getBody()).getRating());
+                return Optional.of(String.valueOf(((FrameBodyPOPM)frame.getBody()).getRating()));
             } else {
-                return "";
+                return Optional.absent();
             }
         }
 
-        FrameAndSubId frameAndSubId = getFrameAndSubIdFromGenericKey(genericKey);
-        return doGetValueAtIndex(frameAndSubId, index);
+        return doGetFieldValueAtIndex(getFrameAndSubIdFromGenericKey(genericKey), index);
+    }
+
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, index).or("");
     }
 
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
@@ -2438,6 +2409,23 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
             return values.get(index);
         }
         return "";
+    }
+
+    /**
+     * Get the value at the index, we massage the values so that the index as used in the generic interface rather
+     * than simply taking the frame index. For example if two composers have been added then then they can be retrieved
+     * individually using index=0, index=1 despite the fact that both internally will be stored in a single TCOM frame.
+     *
+     * @param formatKey frame and sub id
+     * @param index     the index specified by the user
+     *
+     */
+    Optional<String> doGetFieldValueAtIndex(FrameAndSubId formatKey, int index) {
+        List<String> values = doGetValues(formatKey);
+        if (values.size() > index) {
+            return Optional.of(values.get(index));
+        }
+        return Optional.absent();
     }
 
     /**

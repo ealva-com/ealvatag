@@ -159,32 +159,6 @@ public interface Tag {
     String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException;
 
     /**
-     * Get the value of the first field for the key
-     *
-     * @param key the specific field to get. Typically this is a {@link FieldKey}, but another {@link Key} implementation can be used if the
-     *            field type is not within {@link FieldKey}
-     *
-     * @return the String value if the field exists in this tag, else {@link Optional#absent()}
-     *
-     * @throws IllegalArgumentException if {@code key} is null
-     */
-    Optional<String> getFieldValue(Key key) throws IllegalArgumentException;
-
-    /**
-     * Get the value of the field for the key at the given index
-     *
-     * @param key   the specific field to get. Typically this is a {@link FieldKey}, but another {@link Key} implementation can be used if
-     *              the field type is not within {@link FieldKey}
-     * @param index the index into the list of values for the given key
-     *
-     * @return the String value if the field exists in this tag at the given index, else {@link Optional#absent()}
-     *
-     * @throws IllegalArgumentException if {@code key} is null
-     * @see #getFieldCount(Key)
-     */
-    Optional<String> getFieldValue(Key key, int index) throws IllegalArgumentException;
-
-    /**
      * Retrieve String value of the first field that exists for this format specific key
      * <p>
      * Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
@@ -195,8 +169,33 @@ public interface Tag {
      *
      * @throws IllegalArgumentException  if {@code id} is null or empty
      * @throws UnsupportedFieldException if the Tag instance doesn't support the field specified by {@code id}
+     * @deprecated use {@link #getValue(FieldKey)}. eg. {@code getValue(ALBUM).or("")}
      */
     String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException;
+
+    /**
+     * Get the value of the first field for the key. Convenience method for {@link #getValue(FieldKey, int)} with 0 index.
+     *
+     * @param genericKey the specific field to get
+     *
+     * @return the String value if the field exists in this tag, else {@link Optional#absent()}
+     *
+     * @throws IllegalArgumentException if {@code key} is null
+     */
+    Optional<String> getValue(FieldKey genericKey) throws IllegalArgumentException;
+
+    /**
+     * Get the value of the field for the key at the given index
+     *
+     * @param genericKey the specific field to get
+     * @param index      the index into the list of values for the given key
+     *
+     * @return the String value if the field exists in this tag at the given index, else {@link Optional#absent()}
+     *
+     * @throws IllegalArgumentException if {@code key} is null
+     * @see #getFieldCount(Key)
+     */
+    Optional<String> getValue(FieldKey genericKey, int index) throws IllegalArgumentException;
 
     /**
      * Retrieve String value of the nth tag field that exists for this generic key
@@ -208,6 +207,7 @@ public interface Tag {
      *
      * @throws IllegalArgumentException  if {@code genericKey} is null
      * @throws UnsupportedFieldException if the Tag instance doesn't support the {@link FieldKey}
+     * @deprecated use {@link #getValue(FieldKey, int)} eg. {@code getValue(PERFORMER, 1).or("")}
      */
     String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException;
 

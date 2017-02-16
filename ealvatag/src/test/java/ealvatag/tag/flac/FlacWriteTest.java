@@ -137,15 +137,15 @@ public class FlacWriteTest {
             Assert.assertEquals(24, pic.getColourDepth());
             Assert.assertEquals(0, pic.getIndexedColourCount());
 
-            Assert.assertEquals("http://www.lyrics.fly.com", tag.getFirst(FieldKey.URL_LYRICS_SITE));
+            Assert.assertEquals("http://www.lyrics.fly.com", tag.getValue(FieldKey.URL_LYRICS_SITE).or(""));
             Assert.assertEquals("http://www.discogs1.com", tag.getFirst(FieldKey.URL_DISCOGS_ARTIST_SITE));
             Assert.assertEquals("http://www.discogs2.com", tag.getFirst(FieldKey.URL_DISCOGS_RELEASE_SITE));
             Assert.assertEquals("http://www.discogs3.com", tag.getFirst(FieldKey.URL_OFFICIAL_ARTIST_SITE));
             Assert.assertEquals("http://www.discogs4.com", tag.getFirst(FieldKey.URL_OFFICIAL_RELEASE_SITE));
             Assert.assertEquals("http://www.discogs5.com", tag.getFirst(FieldKey.URL_WIKIPEDIA_ARTIST_SITE));
             Assert.assertEquals("http://www.discogs6.com", tag.getFirst(FieldKey.URL_WIKIPEDIA_RELEASE_SITE));
-            Assert.assertEquals("11", tag.getFirst(FieldKey.TRACK_TOTAL));
-            Assert.assertEquals("3", tag.getFirst(FieldKey.DISC_TOTAL));
+            Assert.assertEquals("11", tag.getValue(FieldKey.TRACK_TOTAL, 0).or(""));
+            Assert.assertEquals("3", tag.getValue(FieldKey.DISC_TOTAL).or(""));
             Assert.assertEquals("Sarah Curtis", tag.getFirst("VIOLINIST"));
 
         } catch (Exception e) {

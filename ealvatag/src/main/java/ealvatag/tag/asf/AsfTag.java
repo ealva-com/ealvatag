@@ -407,9 +407,12 @@ public final class AsfTag extends AbstractTag {
         return super.getAll(getAsfFieldKey(checkArgNotNull(genericKey)).getFieldName());
     }
 
-    public String getFieldAt(final FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return super.getItem(getAsfFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")).getFieldName(), index);
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        return getValue(getAsfFieldKey(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey")).getFieldName(), index);
+    }
+
+    public String getFieldAt(final FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, index).or("");
     }
 
     public List<Artwork> getArtworkList() throws UnsupportedFieldException {
@@ -542,7 +545,7 @@ public final class AsfTag extends AbstractTag {
 
     @Override
     public String getFirst(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
     }
 
     @Override

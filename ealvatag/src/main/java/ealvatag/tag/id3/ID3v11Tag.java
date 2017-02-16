@@ -25,6 +25,8 @@ package ealvatag.tag.id3;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
@@ -314,6 +316,10 @@ public class ID3v11Tag extends ID3v1Tag {
         }
     }
 
+    @Override public ImmutableSet<FieldKey> getSupportedFields() {
+        return tagFieldToID3v11Field.keySet();
+    }
+
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
         switch (genericKey) {
             case ARTIST:
@@ -370,6 +376,10 @@ public class ID3v11Tag extends ID3v1Tag {
             super.deleteField(genericKey);
         }
         return this;
+    }
+
+    @Override protected ImmutableMap<FieldKey, ID3v1FieldKey> getFieldMap() {
+        return tagFieldToID3v11Field;
     }
 
     /**

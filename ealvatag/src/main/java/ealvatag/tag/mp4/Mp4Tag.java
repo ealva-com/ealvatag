@@ -42,13 +42,13 @@ import ealvatag.tag.mp4.field.Mp4TagTextField;
 import ealvatag.tag.mp4.field.Mp4TagTextNumberField;
 import ealvatag.tag.mp4.field.Mp4TrackField;
 
-import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
-import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.tag.mp4.Mp4FieldKey.DISCNUMBER;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE;
 import static ealvatag.tag.mp4.Mp4FieldKey.GENRE_CUSTOM;
 import static ealvatag.tag.mp4.Mp4FieldKey.KEY_OLD;
 import static ealvatag.tag.mp4.Mp4FieldKey.TRACK;
+import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
+import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
@@ -356,24 +356,28 @@ public class Mp4Tag extends AbstractTag {
         return getFieldList(mp4FieldKey.getFieldName());
     }
 
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
         List<TagField> fields = getFields(genericKey);
         if (fields.size() > index) {
             TagField field = fields.get(index);
-            if (genericKey == FieldKey.TRACK) {
-                return ((Mp4TrackField)field).getTrackNo().toString();
-            } else if (genericKey == FieldKey.DISC_NO) {
-                return ((Mp4DiscNoField)field).getDiscNo().toString();
-            } else if (genericKey == FieldKey.TRACK_TOTAL) {
-                return ((Mp4TrackField)field).getTrackTotal().toString();
-            } else if (genericKey == FieldKey.DISC_TOTAL) {
-                return ((Mp4DiscNoField)field).getDiscTotal().toString();
-            } else {
-                return field.toString();
+            switch (genericKey) {
+                case TRACK:
+                    return Optional.of(((Mp4TrackField)field).getTrackNoString());
+                case TRACK_TOTAL:
+                    return Optional.of(((Mp4TrackField)field).getTrackTotalString());
+                case DISC_NO:
+                    return Optional.of(((Mp4DiscNoField)field).getDiscNoString());
+                case DISC_TOTAL:
+                    return Optional.of(((Mp4DiscNoField)field).getDiscTotalString());
+                default:
+                    return Optional.of(field.toString());
             }
         }
-        return "";
+        return Optional.absent();
+    }
+
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, 0).or("");
     }
 
     public String getFirst(Mp4FieldKey mp4Key) throws IllegalArgumentException {
@@ -455,7 +459,7 @@ public class Mp4Tag extends AbstractTag {
         super.deleteField(mp4Key.getFieldName());
     }
 
-    public TagField createArtworkField(byte[] data) {
+    TagField createArtworkField(byte[] data) {
         return new Mp4TagCoverField(data);
     }
 

@@ -263,24 +263,23 @@ public class WavTag implements TagFieldContainer, Id3SupportingTag {
     }
 
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
     }
 
     public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
         return getActiveTag().getFirst(id);
     }
 
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return getActiveTag().getFieldAt(genericKey, index);
+    @Override public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return getValue(genericKey, 0);
     }
 
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return getActiveTag().getFieldValue(key);
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        return getActiveTag().getValue(genericKey, index);
     }
 
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        return getActiveTag().getFieldValue(key, index);
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getActiveTag().getValue(genericKey, index).or("");
     }
 
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {

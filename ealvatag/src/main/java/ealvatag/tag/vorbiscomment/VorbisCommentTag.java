@@ -29,7 +29,6 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.Key;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
@@ -39,9 +38,9 @@ import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.vorbiscomment.util.Base64Coder;
 
+import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
-import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.VENDOR;
 import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
@@ -261,88 +260,37 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
         return tagFieldToOggField.keySet();
     }
 
-    // Overriding this just in case super class implementation changes
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return getFieldValue(key, 0);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        checkArgNotNull(key, CANNOT_BE_NULL, "key");
-        try {
-            FieldKey genericKey = FieldKey.valueOf(key.name());
-            if (genericKey == FieldKey.ALBUM_ARTIST) {
-                switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
-                    case READ_ALBUMARTIST:
-                        return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
-                    case READ_JRIVER_ALBUMARTIST:
-                        return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
-                    case READ_ALBUMARTIST_THEN_JRIVER: {
-                        final Optional<String> value = getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
-                        if (!value.isPresent()) {
-                            return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
-                        } else {
-                            return value;
-                        }
-                    }
-                    case READ_JRIVER_THEN_ALBUMARTIST: {
-                        final Optional<String> value = getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
-                        if (!value.isPresent()) {
-                            return getFieldAtIndex(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
-                        } else {
-                            return value;
-                        }
-                    }
-                }
-            }
-            return getFieldAtIndex(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
-        } catch (IllegalArgumentException e) {
-           return Optional.absent();
-        }
-    }
-
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
         checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
         if (genericKey == FieldKey.ALBUM_ARTIST) {
             switch (TagOptionSingleton.getInstance().getVorbisAlbumArtisReadOptions()) {
-                case READ_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                }
-
-                case READ_JRIVER_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                    return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                }
-
+                case READ_ALBUMARTIST:
+                    return getValue(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
+                case READ_JRIVER_ALBUMARTIST:
+                    return getValue(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
                 case READ_ALBUMARTIST_THEN_JRIVER: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    if (value.isEmpty()) {
-                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    Optional<String> value = getValue(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
+                    if (!value.isPresent()) {
+                        return getValue(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
                     } else {
                         return value;
                     }
                 }
-
                 case READ_JRIVER_THEN_ALBUMARTIST: {
-                    VorbisCommentFieldKey vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST_JRIVER;
-                    String value = super.getItem(vorbisCommentFieldKey.getFieldName(), index);
-                    if (value.isEmpty()) {
-                        vorbisCommentFieldKey = VorbisCommentFieldKey.ALBUMARTIST;
-                        return super.getItem(vorbisCommentFieldKey.getFieldName(), index);
+                    Optional<String> value = getValue(VorbisCommentFieldKey.ALBUMARTIST_JRIVER.getFieldName(), index);
+                    if (!value.isPresent()) {
+                        return getValue(VorbisCommentFieldKey.ALBUMARTIST.getFieldName(), index);
                     } else {
                         return value;
                     }
                 }
-
-                default:
-                    return super.getItem(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
             }
-        } else {
-            return super.getItem(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
         }
+        return getValue(getVorbisCommentFieldKey(genericKey).getFieldName(), index);
+    }
+
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, index).or("");
     }
 
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {

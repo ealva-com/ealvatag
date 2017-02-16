@@ -19,6 +19,7 @@
  */
 package ealvatag.tag.reference;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSortedSet;
 import ealvatag.tag.id3.valuepair.SimpleIntStringMap;
@@ -296,6 +297,13 @@ public class GenreTypes implements SimpleIntStringMap {
             return "";
         }
         return Strings.nullToEmpty(values[id]);
+    }
+
+    public Optional<String> getOptionalValue(int id) {
+        if (!containsKey(id)) {
+            return Optional.absent();
+        }
+        return Optional.fromNullable(values[id]);
     }
 
     private TreeMap<String, Integer> getValueToIdMap() {

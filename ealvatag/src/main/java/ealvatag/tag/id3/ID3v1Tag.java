@@ -77,6 +77,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     protected static final int GENRE_UNDEFINED = 0xff;
     private static final Logger LOG = LoggerFactory.getLogger(ID3v1Tag.class);
     private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
+    protected static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
     private static final byte RELEASE = 1;
     private static final byte MAJOR_VERSION = 0;
     private static final byte REVISION = 0;
@@ -86,11 +87,16 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         builder.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST)
                .put(FieldKey.ALBUM, ID3v1FieldKey.ALBUM)
                .put(FieldKey.TITLE, ID3v1FieldKey.TITLE)
-               .put(FieldKey.TRACK, ID3v1FieldKey.TRACK)
                .put(FieldKey.YEAR, ID3v1FieldKey.YEAR)
                .put(FieldKey.GENRE, ID3v1FieldKey.GENRE)
                .put(FieldKey.COMMENT, ID3v1FieldKey.COMMENT);
         tagFieldToID3v1Field = builder.build();
+
+        tagFieldToID3v11Field = ImmutableMap.<FieldKey, ID3v1FieldKey>builder()
+                .putAll(tagFieldToID3v1Field)
+                .put(FieldKey.TRACK, ID3v1FieldKey.TRACK)
+                .build();
+
     }
 
     /**
@@ -627,38 +633,6 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         return this;
     }
 
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        try {
-            FieldKey fieldKey = FieldKey.valueOf(key.name());
-            switch (fieldKey) {
-                case ARTIST:
-                    return Optional.of(getFirstArtist());
-                case ALBUM:
-                    return Optional.of(getFirstAlbum());
-                case TITLE:
-                    return Optional.of(getFirstTitle());
-                case GENRE:
-                    return Optional.of(getFirstGenre());
-                case YEAR:
-                    return Optional.of(getFirstYear());
-                case COMMENT:
-                    return Optional.of(getFirstComment());
-                default:
-                    return Optional.absent();
-            }
-        } catch (IllegalArgumentException e) {
-            return Optional.absent();
-        }
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        checkArgNotNull(key);
-        if (index == 0) {
-            return getFieldValue(key);
-        }
-        return Optional.absent();
-    }
-
     /**
      * Retrieve the first value that exists for this generic key
      *
@@ -667,28 +641,32 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
      * @return
      */
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        switch (genericKey) {
-            case ARTIST:
-                return getFirstArtist();
-
-            case ALBUM:
-                return getFirstAlbum();
-
-            case TITLE:
-                return getFirstTitle();
-
-            case GENRE:
-                return getFirstGenre();
-
-            case YEAR:
-                return getFirstYear();
-
-            case COMMENT:
-                return getFirstComment();
-
-            default:
-                throw new UnsupportedFieldException(genericKey.name());
+        if (!getSupportedFields().contains(genericKey)) {
+            throw new UnsupportedFieldException(genericKey.toString());
         }
+        return getValue(genericKey).or("");
+//        switch (genericKey) {
+//            case ARTIST:
+//                return getFirstArtist();
+//
+//            case ALBUM:
+//                return getFirstAlbum();
+//
+//            case TITLE:
+//                return getFirstTitle();
+//
+//            case GENRE:
+//                return getFirstGenre();
+//
+//            case YEAR:
+//                return getFirstYear();
+//
+//            case COMMENT:
+//                return getFirstComment();
+//
+//            default:
+//                throw new UnsupportedFieldException(genericKey.name());
+//        }
     }
 
     /**
@@ -707,9 +685,36 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
         }
     }
 
-    public String getFieldAt(FieldKey genericKey, int index)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        return getFirst(genericKey);
+    public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        switch (genericKey) {
+            case ARTIST:
+                return Optional.of(getFirstArtist());
+            case ALBUM:
+                return Optional.of(getFirstAlbum());
+            case TITLE:
+                return Optional.of(getFirstTitle());
+            case GENRE:
+                return getOptionalFirstGenre();
+            case YEAR:
+                return Optional.of(getFirstYear());
+            case COMMENT:
+                return Optional.of(getFirstComment());
+            default:
+                return Optional.absent();
+        }
+    }
+
+    @Override
+    public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        checkArgNotNull(genericKey);
+        if (index > 0) {
+            return Optional.absent();
+        }
+        return getValue(genericKey);
+    }
+
+    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+        return getValue(genericKey, index).or("");
     }
 
     public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
@@ -789,11 +794,15 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     public TagField createField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
                                                                                           UnsupportedFieldException,
                                                                                           FieldDataInvalidException {
-        ID3v1FieldKey idv1FieldKey = tagFieldToID3v1Field.get(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
+        ID3v1FieldKey idv1FieldKey = getFieldMap().get(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
         if (idv1FieldKey == null) {
             throw new UnsupportedFieldException(genericKey.name());
         }
         return new ID3v1TagField(idv1FieldKey.name(), checkVarArg0NotNull(values));
+    }
+
+    protected ImmutableMap<FieldKey, ID3v1FieldKey> getFieldMap() {
+        return tagFieldToID3v1Field;
     }
 
     public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
@@ -922,6 +931,11 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
             return genreValue;
         }
     }
+
+    public Optional<String> getOptionalFirstGenre() {
+        return GenreTypes.getInstanceOf().getOptionalValue(genre & BYTE_TO_UNSIGNED);
+    }
+
 
     /**
      * Get title

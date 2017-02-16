@@ -133,25 +133,18 @@ public class Mp4TrackField extends Mp4TagTextNumberField {
         content = sb.toString();
     }
 
-    /**
-     * @return
-     */
     public Short getTrackNo() {
         return numbers.get(TRACK_NO_INDEX);
     }
 
-    /**
-     * Set Track No
-     *
-     * @param trackNo
-     */
+    public String getTrackNoString() {
+        return getTrackNo().toString();
+    }
+
     public void setTrackNo(int trackNo) {
         numbers.set(TRACK_NO_INDEX, (short)trackNo);
     }
 
-    /**
-     * @return
-     */
     public Short getTrackTotal() {
         if (numbers.size() <= TRACK_TOTAL_INDEX) {
             return 0;
@@ -159,11 +152,10 @@ public class Mp4TrackField extends Mp4TagTextNumberField {
         return numbers.get(TRACK_TOTAL_INDEX);
     }
 
-    /**
-     * Set total number of tracks
-     *
-     * @param trackTotal
-     */
+    public String getTrackTotalString() {
+        return getTrackTotal().toString();
+    }
+
     public void setTrackTotal(int trackTotal) {
         numbers.set(TRACK_TOTAL_INDEX, (short)trackTotal);
     }

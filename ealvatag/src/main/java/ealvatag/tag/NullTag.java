@@ -82,16 +82,16 @@ public final class NullTag implements Tag {
         return "";
     }
 
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        return Optional.absent();
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        return Optional.absent();
-    }
-
     @Override public String getFirst(final String id) throws IllegalArgumentException, UnsupportedFieldException {
         return null;
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return Optional.absent();
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        return Optional.absent();
     }
 
     @Override public String getFieldAt(final FieldKey genericKey, final int index)

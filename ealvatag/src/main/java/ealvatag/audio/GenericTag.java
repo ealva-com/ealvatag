@@ -17,7 +17,6 @@
 package ealvatag.audio;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -171,17 +170,17 @@ public abstract class GenericTag extends AbstractTag {
 
     @Override
     public String getFirst(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
+    }
+
+    @Override public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+        return getValue(genericKey.name(), index);
     }
 
     @Override
     public String getFieldAt(final FieldKey genericKey, final int index) throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
-        if (getSupportedFields().contains(genericKey)) {
-            return getItem(genericKey.name(), index);
-        } else {
-            throw new UnsupportedFieldException(genericKey.name());
-        }
+        return getValue(genericKey, index).or("");
     }
 
     @Override

@@ -100,6 +100,13 @@ public abstract class AbstractTag implements TagFieldContainer {
         return fields;
     }
 
+    protected Optional<String> getValue(String id, int index) {
+        List<TagField> tagFieldList = getFieldList(id);
+        if (tagFieldList.size() > index) {
+            return Optional.of(tagFieldList.get(index).toString());
+        }
+        return Optional.absent();
+    }
 
     protected String getItem(String id, int index) {
         List<TagField> tagFieldList = getFieldList(id);
@@ -209,25 +216,11 @@ public abstract class AbstractTag implements TagFieldContainer {
 
     @Override
     public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFieldAt(genericKey, 0);
+        return getValue(genericKey, 0).or("");
     }
 
-    @Override public Optional<String> getFieldValue(final Key key) throws IllegalArgumentException {
-        checkArgNotNull(key);
-        return getFieldAtIndex(key.name(), 0);
-    }
-
-    @Override public Optional<String> getFieldValue(final Key key, final int index) throws IllegalArgumentException {
-        checkArgNotNull(key);
-        return getFieldAtIndex(key.name(), index);
-    }
-
-    protected Optional<String> getFieldAtIndex(final String key, final int index) {
-        final List<TagField> fieldList = getFieldList(key);
-        if (fieldList.size() > index) {
-            return Optional.of(fieldList.get(index).toString());
-        }
-        return Optional.absent();
+    public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+        return getValue(genericKey, 0);
     }
 
     @Override
