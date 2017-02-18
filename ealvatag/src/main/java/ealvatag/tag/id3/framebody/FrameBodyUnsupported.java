@@ -146,7 +146,7 @@ public class FrameBodyUnsupported extends AbstractID3v2FrameBody implements ID3v
      * bytes.
      */
     protected void setupObjectList() {
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 
 }

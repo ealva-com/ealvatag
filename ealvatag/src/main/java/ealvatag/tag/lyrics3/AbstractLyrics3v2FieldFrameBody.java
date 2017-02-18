@@ -20,7 +20,6 @@
  */
 package ealvatag.tag.lyrics3;
 
-import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.datatype.AbstractDataType;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.List;
 
 public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBody {
     public AbstractLyrics3v2FieldFrameBody() {
@@ -103,25 +103,24 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
      * @throws InvalidTagException if there is any error in the data format.
      */
     public void read(ByteBuffer byteBuffer) throws InvalidTagException {
-        int size = getSize();
+        int frameBodySize = getSize();
         //Allocate a buffer to the size of the Frame Body and read from file
-        byte[] buffer = new byte[size];
+        byte[] buffer = new byte[frameBodySize];
         byteBuffer.get(buffer);
         //Offset into buffer, incremented by length of previous MP3Object
         int offset = 0;
 
         //Go through the ObjectList of the Frame reading the data into the
         //correct datatype.
-        AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext()) {
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
             //The read has extended further than the defined frame size
-            if (offset > (size - 1)) {
+            if (offset > (frameBodySize - 1)) {
                 throw new InvalidTagException("Invalid size for Frame Body");
             }
 
             //Get next Object and load it with data from the Buffer
-            object = iterator.next();
+            AbstractDataType object = dataTypeList.get(i);
             object.readByteArray(buffer, offset);
             //Increment Offset to start of next datatype.
             offset += object.getSize();
@@ -138,11 +137,9 @@ public abstract class AbstractLyrics3v2FieldFrameBody extends AbstractTagFrameBo
     public void write(RandomAccessFile file) throws IOException {
         //Write the various fields to file in order
         byte[] buffer;
-        AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext()) {
-            object = iterator.next();
-            buffer = object.writeByteArray();
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            buffer = dataTypeList.get(i).writeByteArray();
             file.write(buffer);
         }
     }

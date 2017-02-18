@@ -266,9 +266,9 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
 
     @Override
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT,
-                                         this,
-                                         EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
-        objectList.add(new SynchronisedTempoCodeList(this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT,
+                                                   this,
+                                                   EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        addDataType(new SynchronisedTempoCodeList(this));
     }
 }

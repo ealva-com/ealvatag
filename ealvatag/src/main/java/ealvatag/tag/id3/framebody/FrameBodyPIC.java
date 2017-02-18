@@ -244,11 +244,11 @@ public class FrameBodyPIC extends AbstractArtworkFrameBody implements ID3v22Fram
      *
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new StringFixedLength(DataTypes.OBJ_IMAGE_FORMAT, this, 3));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, PictureTypes.PICTURE_TYPE_FIELD_SIZE));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_PICTURE_DATA, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new StringFixedLength(DataTypes.OBJ_IMAGE_FORMAT, this, 3));
+        addDataType(new NumberHashMap(DataTypes.OBJ_PICTURE_TYPE, this, PictureTypes.PICTURE_TYPE_FIELD_SIZE));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_PICTURE_DATA, this));
     }
 
 }

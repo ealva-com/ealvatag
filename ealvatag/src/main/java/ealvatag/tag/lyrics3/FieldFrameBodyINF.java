@@ -92,6 +92,6 @@ public class FieldFrameBodyINF extends AbstractLyrics3v2FieldFrameBody
      */
     protected void setupObjectList()
     {
-        objectList.add(new StringSizeTerminated("Additional Information", this));
+        addDataType(new StringSizeTerminated("Additional Information", this));
     }
 }

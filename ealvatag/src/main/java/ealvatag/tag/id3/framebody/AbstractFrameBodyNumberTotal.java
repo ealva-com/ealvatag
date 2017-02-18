@@ -148,7 +148,7 @@ public abstract class AbstractFrameBodyNumberTotal extends AbstractID3v2FrameBod
 
 
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new PartOfSet(DataTypes.OBJ_TEXT, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new PartOfSet(DataTypes.OBJ_TEXT, this));
     }
 }

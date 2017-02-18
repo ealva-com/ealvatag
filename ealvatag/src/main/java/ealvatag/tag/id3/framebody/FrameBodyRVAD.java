@@ -86,6 +86,6 @@ public class FrameBodyRVAD extends AbstractID3v2FrameBody implements ID3v23Frame
      * bytes.
      */
     protected void setupObjectList() {
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

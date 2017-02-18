@@ -79,6 +79,6 @@ public class FrameBodyEncrypted extends AbstractID3v2FrameBody implements ID3v24
      * TODO:proper mapping
      */
     protected void setupObjectList() {
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

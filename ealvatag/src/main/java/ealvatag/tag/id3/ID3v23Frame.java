@@ -177,7 +177,7 @@ import java.util.regex.Pattern;
                 else {
                     this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated)frame.getBody());
                     this.frameBody.setHeader(this);
-                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, this.frameBody.getTextEncoding()));
+                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, frameBody.getTextEncoding()));
 
                     identifier = frame.getIdentifier();
                     LOG.debug("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
@@ -191,7 +191,7 @@ import java.util.regex.Pattern;
                     LOG.debug("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
                     this.frameBody = (AbstractTagFrameBody)ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
-                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, this.frameBody.getTextEncoding()));
+                    this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, frameBody.getTextEncoding()));
                     return;
                 } else {
                     //Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT

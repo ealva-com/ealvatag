@@ -141,10 +141,10 @@ public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2Chapte
      *
      */
     protected void setupObjectList() {
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_ELEMENT_ID, this));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_START_TIME, this, 4));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_END_TIME, this, 4));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_START_OFFSET, this, 4));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_END_OFFSET, this, 4));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_ELEMENT_ID, this));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_START_TIME, this, 4));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_END_TIME, this, 4));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_START_OFFSET, this, 4));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_END_OFFSET, this, 4));
     }
 }

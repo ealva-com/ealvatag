@@ -128,8 +128,8 @@ public class FrameBodyCRM extends AbstractID3v2FrameBody implements ID3v22FrameB
      *
      */
     protected void setupObjectList() {
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_ENCRYPTED_DATABLOCK, this));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_ENCRYPTED_DATABLOCK, this));
     }
 }

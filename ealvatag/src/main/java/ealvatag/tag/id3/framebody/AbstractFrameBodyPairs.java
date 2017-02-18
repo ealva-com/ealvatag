@@ -152,8 +152,8 @@ public abstract class AbstractFrameBodyPairs extends AbstractID3v2FrameBody impl
      * of Strings as they are paired as involvement/involvee
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new PairedTextEncodedStringNullTerminated(DataTypes.OBJ_TEXT, this));
     }
 
     public PairedTextEncodedStringNullTerminated.ValuePairs getPairing() {

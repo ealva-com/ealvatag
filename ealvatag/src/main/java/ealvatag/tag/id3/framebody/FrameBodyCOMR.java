@@ -204,14 +204,14 @@ public class FrameBodyCOMR extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     protected void setupObjectList()
     {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_PRICE_STRING, this));
-        objectList.add(new StringDate(DataTypes.OBJ_VALID_UNTIL, this));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_CONTACT_URL, this));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_RECIEVED_AS, this, ReceivedAsTypes.RECEIVED_AS_FIELD_SIZE));
-        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_SELLER_NAME, this));
-        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_SELLER_LOGO, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_PRICE_STRING, this));
+        addDataType(new StringDate(DataTypes.OBJ_VALID_UNTIL, this));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_CONTACT_URL, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_RECIEVED_AS, this, ReceivedAsTypes.RECEIVED_AS_FIELD_SIZE));
+        addDataType(new TextEncodedStringNullTerminated(DataTypes.OBJ_SELLER_NAME, this));
+        addDataType(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_SELLER_LOGO, this));
     }
 }

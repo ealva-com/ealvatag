@@ -78,6 +78,6 @@ public class FrameBodySEEK extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_OFFSET, this, 4));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_OFFSET, this, 4));
     }
 }

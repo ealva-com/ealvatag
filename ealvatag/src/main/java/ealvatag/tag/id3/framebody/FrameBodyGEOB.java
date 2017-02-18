@@ -148,10 +148,10 @@ public class FrameBodyGEOB extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
-        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_FILENAME, this));
-        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_MIME_TYPE, this));
+        addDataType(new TextEncodedStringNullTerminated(DataTypes.OBJ_FILENAME, this));
+        addDataType(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

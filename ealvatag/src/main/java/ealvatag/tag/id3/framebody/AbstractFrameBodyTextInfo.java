@@ -21,7 +21,6 @@
 package ealvatag.tag.id3.framebody;
 
 import ealvatag.logging.ErrorMessage;
-import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.NumberHashMap;
@@ -222,7 +221,7 @@ public abstract class AbstractFrameBodyTextInfo extends AbstractID3v2FrameBody {
      * TODO:would like to make final but cannot because overridden by FrameBodyTXXX
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 }

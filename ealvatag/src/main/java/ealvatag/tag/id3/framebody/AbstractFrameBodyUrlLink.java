@@ -133,7 +133,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
      *
      */
     protected void setupObjectList() {
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_URLLINK, this));
+        addDataType(new StringSizeTerminated(DataTypes.OBJ_URLLINK, this));
     }
 
     /**

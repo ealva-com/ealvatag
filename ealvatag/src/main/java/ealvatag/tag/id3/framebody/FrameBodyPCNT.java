@@ -115,6 +115,6 @@ public class FrameBodyPCNT extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new NumberVariableLength(DataTypes.OBJ_NUMBER, this, COUNTER_MINIMUM_FIELD_SIZE));
+        addDataType(new NumberVariableLength(DataTypes.OBJ_NUMBER, this, COUNTER_MINIMUM_FIELD_SIZE));
     }
 }

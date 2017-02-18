@@ -93,6 +93,6 @@ public class FieldFrameBodyETT extends AbstractLyrics3v2FieldFrameBody
      */
     protected void setupObjectList()
     {
-        objectList.add(new StringSizeTerminated("Title", this));
+        addDataType(new StringSizeTerminated("Title", this));
     }
 }

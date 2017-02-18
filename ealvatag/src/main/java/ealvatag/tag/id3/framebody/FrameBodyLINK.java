@@ -156,8 +156,8 @@ public class FrameBodyLINK extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new StringFixedLength(DataTypes.OBJ_DESCRIPTION, this, 4));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_URL, this));
-        objectList.add(new StringSizeTerminated(DataTypes.OBJ_ID, this));
+        addDataType(new StringFixedLength(DataTypes.OBJ_DESCRIPTION, this, 4));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_URL, this));
+        addDataType(new StringSizeTerminated(DataTypes.OBJ_ID, this));
     }
 }

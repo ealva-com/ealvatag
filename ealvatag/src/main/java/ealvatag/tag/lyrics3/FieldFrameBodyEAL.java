@@ -94,6 +94,6 @@ public class FieldFrameBodyEAL extends AbstractLyrics3v2FieldFrameBody
      */
     protected void setupObjectList()
     {
-        objectList.add(new StringSizeTerminated("Album", this));
+        addDataType(new StringSizeTerminated("Album", this));
     }
 }

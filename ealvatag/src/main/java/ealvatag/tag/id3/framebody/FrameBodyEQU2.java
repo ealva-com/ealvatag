@@ -109,6 +109,6 @@ public class FrameBodyEQU2 extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

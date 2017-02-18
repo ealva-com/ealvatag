@@ -91,6 +91,6 @@ public class FrameBodyEQUA extends AbstractID3v2FrameBody implements ID3v23Frame
      * TODO:proper mapping
      */
     protected void setupObjectList() {
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

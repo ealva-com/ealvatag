@@ -95,6 +95,6 @@ public class FieldFrameBodyEAR extends AbstractLyrics3v2FieldFrameBody
      */
     protected void setupObjectList()
     {
-        objectList.add(new StringSizeTerminated("Artist", this));
+        addDataType(new StringSizeTerminated("Artist", this));
     }
 }

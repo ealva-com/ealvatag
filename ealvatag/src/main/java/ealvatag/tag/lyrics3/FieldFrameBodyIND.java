@@ -97,7 +97,7 @@ public class FieldFrameBodyIND extends AbstractLyrics3v2FieldFrameBody
      */
     protected void setupObjectList()
     {
-        objectList.add(new BooleanString("Lyrics Present", this));
-        objectList.add(new BooleanString("Timestamp Present", this));
+        addDataType(new BooleanString("Lyrics Present", this));
+        addDataType(new BooleanString("Timestamp Present", this));
     }
 }

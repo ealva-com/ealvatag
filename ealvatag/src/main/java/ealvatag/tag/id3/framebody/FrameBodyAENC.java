@@ -145,9 +145,9 @@ public class FrameBodyAENC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     protected void setupObjectList()
     {
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_PREVIEW_START, this, 2));
-        objectList.add(new NumberFixedLength(DataTypes.OBJ_PREVIEW_LENGTH, this, 2));
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_ENCRYPTION_INFO, this));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_OWNER, this));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_PREVIEW_START, this, 2));
+        addDataType(new NumberFixedLength(DataTypes.OBJ_PREVIEW_LENGTH, this, 2));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_ENCRYPTION_INFO, this));
     }
 }

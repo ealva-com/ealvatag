@@ -287,8 +287,8 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
     }
 
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new TCONString(DataTypes.OBJ_TEXT, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new TCONString(DataTypes.OBJ_TEXT, this));
     }
 
 

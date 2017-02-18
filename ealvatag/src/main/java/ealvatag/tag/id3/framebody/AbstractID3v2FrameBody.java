@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
@@ -124,8 +125,9 @@ import java.nio.ByteBuffer;
      */
     public void setSize() {
         size = 0;
-        for (AbstractDataType object : objectList) {
-            size += object.getSize();
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, listLength = dataTypeList.size(); i < listLength; i++) {
+            size += dataTypeList.get(i).getSize();
         }
     }
 
@@ -153,11 +155,11 @@ import java.nio.ByteBuffer;
     //then we wouldn't have to temporary allocate space for the buffer, using lots of needless memory
     //and providing extra work for the garbage collector.
     public void read(ByteBuffer byteBuffer) throws InvalidTagException {
-        int size = getSize();
-        LOG.debug("Reading body for" + this.getIdentifier() + ":" + size);
+        int frameBodySize = getSize();
+        LOG.debug("Reading body for" + this.getIdentifier() + ":" + frameBodySize);
 
         //Allocate a buffer to the size of the Frame Body and read from file
-        byte[] buffer = new byte[size];
+        byte[] buffer = new byte[frameBodySize];
         byteBuffer.get(buffer);
 
         //Offset into buffer, incremented by length of previous dataType
@@ -166,13 +168,15 @@ import java.nio.ByteBuffer;
         int offset = 0;
 
         //Go through the ObjectList of the Frame reading the data into the
-        for (AbstractDataType object : objectList) {
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            final AbstractDataType object = getDataTypeList().get(i);
             //correct dataType.
             LOG.trace("offset:" + offset);
 
             //The read has extended further than the defined frame size (ok to extend upto
             //size because the next datatype may be of length 0.)
-            if (offset > (size)) {
+            if (offset > (frameBodySize)) {
                 LOG.warn("Invalid Size for FrameBody");
                 throw new InvalidFrameException("Invalid size for Frame Body");
             }
@@ -191,13 +195,15 @@ import java.nio.ByteBuffer;
     }
 
     public void read(Buffer buffer) throws InvalidTagException {
-        int size = getSize();
+        int frameBodySize = getSize();
         final String identifier = getIdentifier();
 
-        for (AbstractDataType object : objectList) {
-            checkSize(size, object.getClass().getName(), identifier);
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            AbstractDataType object = dataTypeList.get(i);
+            checkSize(frameBodySize, object.getClass().getName(), identifier);
             try {
-                object.read(buffer, size);
+                object.read(buffer, frameBodySize);
             } catch (EOFException | ArrayIndexOutOfBoundsException e) {
                 throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
                                                            object.getClass(),
@@ -205,10 +211,10 @@ import java.nio.ByteBuffer;
                                                            e.getMessage()),
                                               e);
             }
-            size -= object.getSize();
+            frameBodySize -= object.getSize();
         }
 
-        checkFinalSize(size, identifier);
+        checkFinalSize(frameBodySize, identifier);
     }
     /**
      * Write the contents of this datatype to the byte array
@@ -218,8 +224,9 @@ import java.nio.ByteBuffer;
     public void write(ByteArrayOutputStream tagBuffer) {
         LOG.debug("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
         //Write the various fields to file in order
-        for (AbstractDataType object : objectList) {
-            byte[] objectData = object.writeByteArray();
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            byte[] objectData = dataTypeList.get(i).writeByteArray();
             if (objectData != null) {
                 try {
                     tagBuffer.write(objectData);
@@ -239,8 +246,9 @@ import java.nio.ByteBuffer;
      */
     public void createStructure() {
         MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
-        for (AbstractDataType nextObject : objectList) {
-            nextObject.createStructure();
+        final List<AbstractDataType> dataTypeList = getDataTypeList();
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            dataTypeList.get(i).createStructure();
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
     }

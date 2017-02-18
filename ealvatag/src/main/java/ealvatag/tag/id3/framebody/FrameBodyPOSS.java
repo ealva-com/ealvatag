@@ -111,7 +111,7 @@ public class FrameBodyPOSS extends AbstractID3v2FrameBody implements ID3v24Frame
      *
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
-        objectList.add(new NumberVariableLength(DataTypes.OBJ_POSITION, this, 1));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        addDataType(new NumberVariableLength(DataTypes.OBJ_POSITION, this, 1));
     }
 }

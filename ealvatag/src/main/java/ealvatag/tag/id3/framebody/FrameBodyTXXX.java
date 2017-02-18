@@ -234,9 +234,9 @@ public class FrameBodyTXXX extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * This is different to other text Frames
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
-        objectList.add(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new TextEncodedStringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new TextEncodedStringSizeTerminated(DataTypes.OBJ_TEXT, this));
     }
 
 }

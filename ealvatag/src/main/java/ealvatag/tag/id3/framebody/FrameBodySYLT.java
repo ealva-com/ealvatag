@@ -231,13 +231,13 @@ public class FrameBodySYLT extends AbstractID3v2FrameBody implements ID3v24Frame
      * Setup Object List
      */
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
-        objectList.add(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
-        objectList.add(new NumberHashMap(DataTypes.OBJ_CONTENT_TYPE, this, SynchronisedLyricsContentType.CONTENT_KEY_FIELD_SIZE));
-        objectList.add(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TEXT_ENCODING, this, TextEncoding.TEXT_ENCODING_FIELD_SIZE));
+        addDataType(new StringHashMap(DataTypes.OBJ_LANGUAGE, this, Languages.LANGUAGE_FIELD_SIZE));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        addDataType(new NumberHashMap(DataTypes.OBJ_CONTENT_TYPE, this, SynchronisedLyricsContentType.CONTENT_KEY_FIELD_SIZE));
+        addDataType(new StringNullTerminated(DataTypes.OBJ_DESCRIPTION, this));
 
         //TODO:This hold the actual lyrics
-        objectList.add(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
+        addDataType(new ByteArraySizeTerminated(DataTypes.OBJ_DATA, this));
     }
 }

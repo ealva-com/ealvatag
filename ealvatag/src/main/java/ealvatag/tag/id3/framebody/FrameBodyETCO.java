@@ -321,8 +321,8 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     @Override
     protected void setupObjectList() {
-        objectList.add(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
-        objectList.add(new EventTimingCodeList(this));
+        addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+        addDataType(new EventTimingCodeList(this));
     }
 
     private static Set<Integer> toSet(final int... types) {

@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>
@@ -29,7 +29,10 @@ import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * A frame body contains the data content for a frame
@@ -46,10 +49,29 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      */
     private AbstractTagFrame header;
 
+    // set to default ArrayList.DEFAULT_CAPACITY, which happens to match our max.
+    private ArrayList<AbstractDataType> dataTypeList = new ArrayList<>(10);
+
+    // 10 is currently our max size and one 1 has that many. 5 would be the max if not for that outlier. So knowing that current HashMaps
+    // will take 5 to the next power of 2 (8), I'll choose 5. That one case of 10 will cause a map resize, but I'll save a lot of space as
+    // average waste will be approximately 3 and not 11.
+    private HashMap<String, AbstractDataType> dataTypeMap = new LinkedHashMap<>(5);
+
     /**
      * List of data types that make up this particular frame body.
      */
-    protected ArrayList<AbstractDataType> objectList = new ArrayList<>();
+    protected List<AbstractDataType> getDataTypeList() {
+        return dataTypeList;
+    }
+
+    protected void addDataType(final AbstractDataType dataType) {
+        dataTypeList.add(dataType);
+        dataTypeMap.put(dataType.getIdentifier(), dataType);
+    }
+
+    private boolean containsDataType(final AbstractDataType dataType) {
+        return dataTypeMap.containsKey(dataType.getIdentifier());
+    }
 
     /**
      * Return the Text Encoding
@@ -89,22 +111,19 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
     /**
      * Copy Constructor for fragment body. Copies all objects in the
      * Object Iterator with data.
-     * @param copyObject
      */
     protected AbstractTagFrameBody(AbstractTagFrameBody copyObject) {
-        AbstractDataType newObject;
-        for (int i = 0; i < copyObject.objectList.size(); i++) {
-            newObject = (AbstractDataType)ID3Tags.copyObject(copyObject.objectList.get(i));
+        final ArrayList<AbstractDataType> copyObjectList = copyObject.dataTypeList;
+        for (int i = 0, size = copyObjectList.size(); i < size; i++) {
+            final AbstractDataType newObject = (AbstractDataType)ID3Tags.copyObject(copyObjectList.get(i));
             newObject.setBody(this);
-            this.objectList.add(newObject);
+            addDataType(newObject);
         }
     }
 
 
     /**
-     *
-     * @return the text value that the user would expect to see for this framebody type, this should be overridden
-     * for all frame-bodies
+     * @return the text value that the user would expect to see for this framebody type, this should be overridden for all frame-bodies
      */
     public String getUserFriendlyValue() {
         return toString();
@@ -117,13 +136,18 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * @return brief description string
      */
     public String getBriefDescription() {
-        String str = "";
-        for (AbstractDataType object : objectList) {
+        final int size = dataTypeList.size();
+        StringBuilder builder = new StringBuilder(size * 10);  // wtf is 10?? I don't know. Need to research if this is even important
+        for (int i = 0; i < size; i++) {
+            AbstractDataType object = dataTypeList.get(i);
             if ((object.toString() != null) && (object.toString().length() > 0)) {
-                str += (object.getIdentifier() + "=\"" + object.toString() + "\"; ");
+                builder.append(object.getIdentifier())
+                       .append("=\"")
+                       .append(object.toString())
+                       .append("\"; ");
             }
         }
-        return str;
+        return builder.toString();
     }
 
 
@@ -134,9 +158,10 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      *
      * @return formatted description string
      */
+    @SuppressWarnings("unused")                     // TODO: 2/18/17 Is this method needed?
     public final String getLongDescription() {
         String str = "";
-        for (AbstractDataType object : objectList) {
+        for (AbstractDataType object : dataTypeList) {
             if ((object.toString() != null) && (object.toString().length() > 0)) {
                 str += (object.getIdentifier() + " = " + object.toString() + "\n");
             }
@@ -151,13 +176,9 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * @param value      new datatype value
      */
     public final void setObjectValue(String identifier, Object value) {
-        AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext()) {
-            object = iterator.next();
-            if (object.getIdentifier().equals(identifier)) {
-                object.setValue(value);
-            }
+        final AbstractDataType abstractDataType = dataTypeMap.get(identifier);
+        if (abstractDataType != null) {
+            abstractDataType.setValue(value);
         }
     }
 
@@ -165,9 +186,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * Returns the value of the datatype with the specified
      * <code>identifier</code>
      *
-     * @param identifier
-     * @return the value of the dattype with the specified
-     *         <code>identifier</code>
+     * @return the value of the dattype with the specified <code>identifier</code>
      */
     public final Object getObjectValue(String identifier) {
         return getObject(identifier).getValue();
@@ -177,20 +196,10 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * Returns the datatype with the specified
      * <code>identifier</code>
      *
-     * @param identifier
-     * @return the datatype with the specified
-     *         <code>identifier</code>
+     * @return the datatype with the specified <code>identifier</code>
      */
     public final AbstractDataType getObject(String identifier) {
-        AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext()) {
-            object = iterator.next();
-            if (object.getIdentifier().equals(identifier)) {
-                return object;
-            }
-        }
-        return null;
+        return dataTypeMap.get(identifier);
     }
 
     /**
@@ -199,14 +208,11 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * @return estimated size in bytes of this datatype
      */
     public int getSize() {
-        int size = 0;
-        AbstractDataType object;
-        Iterator<AbstractDataType> iterator = objectList.listIterator();
-        while (iterator.hasNext()) {
-            object = iterator.next();
-            size += object.getSize();
+        int frameBodySize = 0;
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            frameBodySize += dataTypeList.get(i).getSize();
         }
-        return size;
+        return frameBodySize;
     }
 
     /**
@@ -215,19 +221,17 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * the same class as the argument.
      *
      * @param obj datatype to determine subset of
-     * @return true if this instance and its entire datatype array list is a
-     *         subset of the argument.
+     *
+     * @return true if this instance and its entire datatype array list is a subset of the argument.
      */
     public boolean isSubsetOf(Object obj) {
         if (!(obj instanceof AbstractTagFrameBody)) {
             return false;
         }
-        ArrayList<AbstractDataType> superset = ((AbstractTagFrameBody)obj).objectList;
-        for (AbstractDataType anObjectList : objectList) {
-            if (anObjectList.getValue() != null) {
-                if (!superset.contains(anObjectList)) {
-                    return false;
-                }
+        final AbstractTagFrameBody possibleSuperset = (AbstractTagFrameBody)obj;
+        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+            if (!possibleSuperset.containsDataType(dataTypeList.get(i))) {
+                return false;
             }
         }
         return true;
@@ -239,15 +243,15 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * are the same class.
      *
      * @param obj datatype to determine equality of
-     * @return true if this datatype and its entire <code>MP3Object</code> array
-     *         list equals the argument.
+     *
+     * @return true if this datatype and its entire <code>MP3Object</code> array list equals the argument.
      */
     public boolean equals(Object obj) {
         if (!(obj instanceof AbstractTagFrameBody)) {
             return false;
         }
         AbstractTagFrameBody object = (AbstractTagFrameBody)obj;
-        return this.objectList.equals(object.objectList);
+        return this.dataTypeList.equals(object.dataTypeList);
     }
 
     /**
@@ -256,7 +260,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
      * @return iterator of the DataType list.
      */
     public Iterator iterator() {
-        return objectList.iterator();
+        return dataTypeList.iterator();
     }
 
 
@@ -278,8 +282,6 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
 
     /**
      * Get Reference to header
-     *
-     * @return
      */
     public AbstractTagFrame getHeader() {
         return header;
@@ -287,10 +289,9 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
 
     /**
      * Set header
-     *
-     * @param header
      */
     public void setHeader(AbstractTagFrame header) {
         this.header = header;
     }
+
 }

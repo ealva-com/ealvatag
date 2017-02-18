@@ -143,11 +143,12 @@ public abstract class AbstractString extends AbstractDataType {
      * @throws IllegalCharsetException if {@link #getTextEncodingCharSet()} throws this
      */
     Charset peekCorrectDecoder(Buffer buffer) {
+        final Charset encodingCharSet = getTextEncodingCharSet();
         if (buffer.size() <= 2) {
-            return getTextEncodingCharSet();
+            return encodingCharSet;
         }
 
-        if (getTextEncodingCharSet() == StandardCharsets.UTF_16) {
+        if (encodingCharSet == StandardCharsets.UTF_16) {
             final int firstCodePoint = getShort(buffer);  // doesn't move position
             if (firstCodePoint == 0xfffe || firstCodePoint == 0xfeff) {
                 return StandardCharsets.UTF_16;
@@ -159,7 +160,7 @@ public abstract class AbstractString extends AbstractDataType {
                 }
             }
         } else {
-            return getTextEncodingCharSet();
+            return encodingCharSet;
         }
     }
 
@@ -178,10 +179,7 @@ public abstract class AbstractString extends AbstractDataType {
      */
     protected Charset getTextEncodingCharSet() throws IllegalCharsetException {
         try {
-            final byte textEncoding = this.getBody().getTextEncoding();
-            final Charset charSetName = TextEncoding.getInstanceOf().getCharsetForId(textEncoding);
-            LOG.trace("text encoding:" + textEncoding + " charset:" + charSetName.name());
-            return charSetName;
+            return TextEncoding.getInstanceOf().getCharsetForId(getBody().getTextEncoding());
         } catch (NoSuchElementException e) {
             throw new IllegalCharsetException("Bad Charset Id ", e);
         }
