@@ -364,11 +364,6 @@ public class MP3File extends AudioFileImpl {
      */
     public void setID3v2Tag(AbstractID3v2Tag id3v2tag) {
         this.id3v2tag = id3v2tag;
-        if (id3v2tag instanceof ID3v24Tag) {
-            this.id3v2Asv24tag = (ID3v24Tag)this.id3v2tag;
-        } else {
-            this.id3v2Asv24tag = new ID3v24Tag(id3v2tag);
-        }
     }
 
     /**
@@ -659,9 +654,19 @@ public class MP3File extends AudioFileImpl {
     }
 
     /**
+     * Delay creating the id3V24 tag until needed. This was being created during initial read and was taking 24% of the CPU time creating
+     * an V22 or V23 tag!!!! Plus, I only find this getter invoked in TEST code!
+     *
      * @return a representation of tag as v24
      */
     public ID3v24Tag getID3v2TagAsv24() {
+        if (id3v2Asv24tag == null) {
+            if (id3v2tag instanceof ID3v24Tag) {
+                id3v2Asv24tag = (ID3v24Tag)this.id3v2tag;
+            } else {
+                id3v2Asv24tag = new ID3v24Tag(id3v2tag);
+            }
+        }
         return id3v2Asv24tag;
     }
 
