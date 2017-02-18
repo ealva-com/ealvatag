@@ -27,7 +27,7 @@ import ealvatag.tag.id3.framebody.AbstractID3v2FrameBody;
 import ealvatag.tag.id3.framebody.FrameBodyDeprecated;
 import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
 import ealvatag.tag.id3.valuepair.TextEncoding;
-import ealvatag.utils.EqualsUtil;
+import ealvatag.utils.Characters;
 import okio.Buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represents an ID3v2.2 frame.
@@ -53,11 +51,9 @@ import java.util.regex.Pattern;
 @SuppressWarnings("Duplicates") public class ID3v22Frame extends AbstractID3v2Frame {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v22Frame.class);
 
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{2}");
-
-    protected static final int FRAME_ID_SIZE = 3;
-    protected static final int FRAME_SIZE_SIZE = 3;
-    protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE;
+    private static final int FRAME_ID_SIZE = 3;
+    private static final int FRAME_SIZE_SIZE = 3;
+    static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE;
 
     public ID3v22Frame() {
 
@@ -91,8 +87,6 @@ import java.util.regex.Pattern;
      * containing the same body,datatype list ectera.
      * equals() method is made up from all the various components
      *
-     * @param obj
-     *
      * @return if true if this object is equivalent to obj
      */
     public boolean equals(Object obj) {
@@ -107,8 +101,8 @@ import java.util.regex.Pattern;
 
 
         return Objects.equal(this.statusFlags, that.statusFlags) &&
-                        Objects.equal(this.encodingFlags, that.encodingFlags) &&
-                        super.equals(that);
+                Objects.equal(this.encodingFlags, that.encodingFlags) &&
+                super.equals(that);
 
     }
 
@@ -118,7 +112,6 @@ import java.util.regex.Pattern;
      * An empty body of the correct type will be automatically created. This constructor should be used when wish to
      * create a new frame from scratch using user values
      *
-     * @param identifier
      */
     @SuppressWarnings("unchecked")
     public ID3v22Frame(String identifier) {
@@ -161,15 +154,11 @@ import java.util.regex.Pattern;
             frameBody = new FrameBodyUnsupported(identifier);
         }
         //Instantiate Interface/Abstract should not happen
-        catch (InstantiationException ie) {
+        catch (InstantiationException | IllegalAccessException ie) {
             LOG.error(ie.getMessage(), ie);
             throw new RuntimeException(ie);
         }
-        //Private Constructor shouild not happen
-        catch (IllegalAccessException iae) {
-            LOG.error(iae.getMessage(), iae);
-            throw new RuntimeException(iae);
-        }
+
         frameBody.setHeader(this);
         LOG.debug("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
 
@@ -180,7 +169,6 @@ import java.util.regex.Pattern;
      * <p>
      * Creates a new v22 frame based on another v22 frame
      *
-     * @param frame
      */
     public ID3v22Frame(ID3v22Frame frame) {
         super(frame);
@@ -234,7 +222,6 @@ import java.util.regex.Pattern;
      *
      * @param frame to construct the new frame from
      *
-     * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v22Frame(AbstractID3v2Frame frame) throws InvalidFrameException {
         LOG.debug("Creating frame from a frame of a different version");
@@ -259,9 +246,6 @@ import java.util.regex.Pattern;
      * Creates a new ID3v22Frame datatype by reading from byteBuffer.
      *
      * @param byteBuffer      to read from
-     * @param loggingFilename
-     *
-     * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v22Frame(ByteBuffer byteBuffer, String loggingFilename)
             throws InvalidFrameException, InvalidDataTypeException {
@@ -279,7 +263,6 @@ import java.util.regex.Pattern;
      *
      * @param byteBuffer to read from
      *
-     * @throws ealvatag.tag.InvalidFrameException
      * @deprecated use {@link #ID3v22Frame(ByteBuffer, String)} instead
      */
     public ID3v22Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
@@ -297,14 +280,9 @@ import java.util.regex.Pattern;
 
     @Override
     protected boolean isPadding(byte[] buffer) {
-        if (
-                (buffer[0] == '\0') &&
-                        (buffer[1] == '\0') &&
-                        (buffer[2] == '\0')
-                ) {
-            return true;
-        }
-        return false;
+        return (buffer[0] == '\0') &&
+                (buffer[1] == '\0') &&
+                (buffer[2] == '\0');
     }
 
     public void read(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
@@ -417,7 +395,7 @@ import java.util.regex.Pattern;
 
                 frameBody = readBody(id, frameBodyBuffer, frameSize);
             }
-        }  catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
             throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +
                                                     " not valid ID3v2.30 frame " + fileName,
@@ -428,9 +406,6 @@ import java.util.regex.Pattern;
     /**
      * Read Frame Size, which has to be decoded
      *
-     * @param buffer
-     *
-     * @return
      */
     private int decodeSize(byte[] buffer) {
         BigInteger bi = new BigInteger(buffer);
@@ -494,8 +469,6 @@ import java.util.regex.Pattern;
      * Write Frame Size (can now be accurately calculated, have to convert 4 byte int
      * to 3 byte format.
      *
-     * @param headerBuffer
-     * @param size
      */
     private void encodeSize(ByteBuffer headerBuffer, int size) {
         headerBuffer.put((byte)((size & 0x00FF0000) >> 16));
@@ -508,15 +481,20 @@ import java.util.regex.Pattern;
     /**
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
+     * <p>
+     * Must be 4 characters which match [A-Z][0-9A-Z]{2}
      *
-     * @param identifier
+     * @param identifier to be checked
      *
-     * @return
+     * @return whether the identifier is valid
      */
-    public boolean isValidID3v2FrameIdentifier(String identifier) {
-        Matcher m = ID3v22Frame.validFrameIdentifier.matcher(identifier);
-        return m.matches();
+    private boolean isValidID3v2FrameIdentifier(String identifier) {
+        return identifier.length() >= 3 &&
+                Characters.isUpperCaseEnglish(identifier.charAt(0)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(1)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(2));
     }
+
 
     /**
      * Return String Representation of body

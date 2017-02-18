@@ -28,6 +28,7 @@ import ealvatag.tag.id3.framebody.FrameBodyDeprecated;
 import ealvatag.tag.id3.framebody.FrameBodyUnsupported;
 import ealvatag.tag.id3.framebody.ID3v23FrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
+import ealvatag.utils.Characters;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
 import org.slf4j.Logger;
@@ -39,8 +40,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represents an ID3v2.3 frame.
@@ -52,16 +51,14 @@ import java.util.regex.Pattern;
 @SuppressWarnings("Duplicates") public class ID3v23Frame extends AbstractID3v2Frame {
     private static final Logger LOG = LoggerFactory.getLogger(ID3v23Frame.class);
 
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
+    private static final int FRAME_ID_SIZE = 4;
+    private static final int FRAME_FLAGS_SIZE = 2;
+    private static final int FRAME_SIZE_SIZE = 4;
+    private static final int FRAME_COMPRESSION_UNCOMPRESSED_SIZE = 4;
+    private static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
+    private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
 
-    protected static final int FRAME_ID_SIZE = 4;
-    protected static final int FRAME_FLAGS_SIZE = 2;
-    protected static final int FRAME_SIZE_SIZE = 4;
-    protected static final int FRAME_COMPRESSION_UNCOMPRESSED_SIZE = 4;
-    protected static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
-    protected static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
-
-    protected static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
+    static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
 
     /**
      * If the frame is encrypted then the encryption method is stored in this byte
@@ -97,8 +94,6 @@ import java.util.regex.Pattern;
      * <p>An empty body of the correct type will be automatically created.
      * This constructor should be used when wish to create a new
      * frame from scratch using user data.
-     *
-     * @param identifier
      */
     public ID3v23Frame(String identifier) {
         super(identifier);
@@ -111,7 +106,6 @@ import java.util.regex.Pattern;
      * <p>
      * Creates a new v23 frame  based on another v23 frame
      *
-     * @param frame
      */
     public ID3v23Frame(ID3v23Frame frame) {
         super(frame);
@@ -124,10 +118,6 @@ import java.util.regex.Pattern;
      * <p>
      * Used for Special Cases
      *
-     * @param frame
-     * @param identifier
-     *
-     * @throws InvalidFrameException
      */
     protected ID3v23Frame(ID3v24Frame frame, String identifier) throws InvalidFrameException {
         this.identifier = identifier;
@@ -138,9 +128,7 @@ import java.util.regex.Pattern;
     /**
      * Creates a new ID3v23Frame  based on another frame of a different version.
      *
-     * @param frame
      *
-     * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v23Frame(AbstractID3v2Frame frame) throws InvalidFrameException {
         LOG.debug("Creating frame from a frame of a different version");
@@ -269,16 +257,14 @@ import java.util.regex.Pattern;
      * Creates a new ID3v23Frame dataType by reading from byteBuffer.
      *
      * @param byteBuffer      to read from
-     * @param loggingFilename
-     *
-     * @throws ealvatag.tag.InvalidFrameException
      */
     public ID3v23Frame(ByteBuffer byteBuffer, String loggingFilename) throws InvalidFrameException, InvalidDataTypeException {
         setLoggingFilename(loggingFilename);
         read(byteBuffer);
     }
 
-    public ID3v23Frame(final Buffer buffer, final String loggingFilename, final boolean ignoreArtwork) throws InvalidTagException, IOException {
+    public ID3v23Frame(final Buffer buffer, final String loggingFilename, final boolean ignoreArtwork)
+            throws InvalidTagException, IOException {
         setLoggingFilename(loggingFilename);
         read(buffer, ignoreArtwork);
     }
@@ -288,7 +274,6 @@ import java.util.regex.Pattern;
      *
      * @param byteBuffer to read from
      *
-     * @throws ealvatag.tag.InvalidFrameException
      * @deprecated use {@link #ID3v23Frame(ByteBuffer, String)} instead
      */
     public ID3v23Frame(ByteBuffer byteBuffer) throws InvalidFrameException, InvalidDataTypeException {
@@ -310,8 +295,6 @@ import java.util.regex.Pattern;
      * and the same flags.
      * containing the same body,dataType list ectera.
      * equals() method is made up from all the various components
-     *
-     * @param obj
      *
      * @return if true if this object is equivalent to obj
      */
@@ -424,7 +407,7 @@ import java.util.regex.Pattern;
 
         if (((EncodingFlags)encodingFlags).isNonStandardFlags()) {
             //Probably corrupt so treat as a standard frame
-            LOG.error(getLoggingFilename() + ":InvalidEncodingFlags:" + Hex.asHex(((EncodingFlags)encodingFlags).getFlags()));
+            LOG.error(getLoggingFilename() + ":InvalidEncodingFlags:" + Hex.asHex(encodingFlags.getFlags()));
         }
 
         if (((EncodingFlags)encodingFlags).isCompression()) {
@@ -693,26 +676,26 @@ import java.util.regex.Pattern;
      * Make adjustments if necessary based on frame type and specification.
      */
     class StatusFlags extends AbstractID3v2Frame.StatusFlags {
-        public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
-        public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
-        public static final String TYPE_READONLY = "typeReadOnly";
+        static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
+        static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
+        static final String TYPE_READONLY = "typeReadOnly";
 
         /**
          * Discard frame if tag altered
          */
-        public static final int MASK_TAG_ALTER_PRESERVATION = FileConstants.BIT7;
+        static final int MASK_TAG_ALTER_PRESERVATION = FileConstants.BIT7;
 
         /**
          * Discard frame if audio file part altered
          */
-        public static final int MASK_FILE_ALTER_PRESERVATION = FileConstants.BIT6;
+        static final int MASK_FILE_ALTER_PRESERVATION = FileConstants.BIT6;
 
         /**
          * Frame tagged as read only
          */
-        public static final int MASK_READ_ONLY = FileConstants.BIT5;
+        static final int MASK_READ_ONLY = FileConstants.BIT5;
 
-        public StatusFlags() {
+        StatusFlags() {
             originalFlags = (byte)0;
             writeFlags = (byte)0;
         }
@@ -727,7 +710,6 @@ import java.util.regex.Pattern;
         /**
          * Use this constructor when convert a v24 frame
          *
-         * @param statusFlags
          */
         StatusFlags(ID3v24Frame.StatusFlags statusFlags) {
             originalFlags = convertV4ToV3Flags(statusFlags.getOriginalFlags());
@@ -746,7 +728,7 @@ import java.util.regex.Pattern;
             return v3Flag;
         }
 
-        protected void modifyFlags() {
+        void modifyFlags() {
             String str = getIdentifier();
             if (ID3v23Frames.getInstanceOf().isDiscardIfFileAltered(str)) {
                 writeFlags |= (byte)MASK_FILE_ALTER_PRESERVATION;
@@ -770,30 +752,30 @@ import java.util.regex.Pattern;
      * This represents a frame headers Encoding Flags
      */
     class EncodingFlags extends AbstractID3v2Frame.EncodingFlags {
-        public static final String TYPE_COMPRESSION = "compression";
-        public static final String TYPE_ENCRYPTION = "encryption";
-        public static final String TYPE_GROUPIDENTITY = "groupidentity";
+        static final String TYPE_COMPRESSION = "compression";
+        static final String TYPE_ENCRYPTION = "encryption";
+        static final String TYPE_GROUPIDENTITY = "groupidentity";
 
         /**
          * Frame is compressed
          */
-        public static final int MASK_COMPRESSION = FileConstants.BIT7;
+        static final int MASK_COMPRESSION = FileConstants.BIT7;
 
         /**
          * Frame is encrypted
          */
-        public static final int MASK_ENCRYPTION = FileConstants.BIT6;
+        static final int MASK_ENCRYPTION = FileConstants.BIT6;
 
         /**
          * Frame is part of a group
          */
-        public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT5;
+        static final int MASK_GROUPING_IDENTITY = FileConstants.BIT5;
 
-        public EncodingFlags() {
+        EncodingFlags() {
             super();
         }
 
-        public EncodingFlags(byte flags) {
+        EncodingFlags(byte flags) {
             super(flags);
             logEnabledFlags();
         }
@@ -810,7 +792,7 @@ import java.util.regex.Pattern;
             flags |= MASK_GROUPING_IDENTITY;
         }
 
-        public void unsetCompression() {
+        void unsetCompression() {
             flags &= (byte)~MASK_COMPRESSION;
         }
 
@@ -822,7 +804,7 @@ import java.util.regex.Pattern;
             flags &= (byte)~MASK_GROUPING_IDENTITY;
         }
 
-        public boolean isNonStandardFlags() {
+        boolean isNonStandardFlags() {
             return ((flags & FileConstants.BIT4) > 0) ||
                     ((flags & FileConstants.BIT3) > 0) ||
                     ((flags & FileConstants.BIT2) > 0) ||
@@ -831,7 +813,7 @@ import java.util.regex.Pattern;
 
         }
 
-        public void unsetNonStandardFlags() {
+        void unsetNonStandardFlags() {
             if (isNonStandardFlags()) {
                 LOG.warn(getLoggingFilename() + ":" + getIdentifier() + ":Unsetting Unknown Encoding Flags:" + Hex.asHex(flags));
                 flags &= (byte)~FileConstants.BIT4;
@@ -843,7 +825,7 @@ import java.util.regex.Pattern;
         }
 
 
-        public void logEnabledFlags() {
+        void logEnabledFlags() {
             if (isNonStandardFlags()) {
                 LOG.warn(getLoggingFilename() + ":" + identifier + ":Unknown Encoding Flags:" + Hex.asHex(flags));
             }
@@ -885,14 +867,19 @@ import java.util.regex.Pattern;
     /**
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
+     * <p>
+     * Must be 4 characters which match [A-Z][0-9A-Z]{3}
      *
      * @param identifier to be checked
      *
      * @return whether the identifier is valid
      */
-    public boolean isValidID3v2FrameIdentifier(String identifier) {
-        Matcher m = ID3v23Frame.validFrameIdentifier.matcher(identifier);
-        return m.matches();
+    private boolean isValidID3v2FrameIdentifier(String identifier) {
+        return identifier.length() >= 4 &&
+                Characters.isUpperCaseEnglish(identifier.charAt(0)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(1)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(2)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(3));
     }
 
     /**

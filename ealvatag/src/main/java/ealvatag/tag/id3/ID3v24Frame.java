@@ -47,6 +47,7 @@ import ealvatag.tag.lyrics3.FieldFrameBodyETT;
 import ealvatag.tag.lyrics3.FieldFrameBodyINF;
 import ealvatag.tag.lyrics3.FieldFrameBodyLYR;
 import ealvatag.tag.lyrics3.Lyrics3v2Field;
+import ealvatag.utils.Characters;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
 import org.slf4j.Logger;
@@ -62,8 +63,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represents an ID3v2.4 frame.
@@ -81,7 +80,6 @@ import java.util.regex.Pattern;
     private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
     private static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
     private static final Logger LOG = LoggerFactory.getLogger(ID3v24Frame.class);
-    private static Pattern validFrameIdentifier = Pattern.compile("[A-Z][0-9A-Z]{3}");
     /**
      * If the frame is encrypted then the encryption method is stored in this byte
      */
@@ -501,9 +499,6 @@ import java.util.regex.Pattern;
                                                      identifier);
                                 }
                                 //invalid so assume syncsafe as that is is the standard
-                                else {
-
-                                }
                             } else {
                                 //If the unsync framesize matches exactly the remaining bytes then assume it has the
                                 //correct size for the last frame
@@ -511,8 +506,6 @@ import java.util.regex.Pattern;
                                     frameSize = nonSyncSafeFrameSize;
                                 }
                                 //Inconclusive stick with syncsafe
-                                else {
-                                }
                             }
                         }
                     }
@@ -666,14 +659,19 @@ import java.util.regex.Pattern;
     /**
      * Does the frame identifier meet the syntax for a idv3v2 frame identifier.
      * must start with a capital letter and only contain capital letters and numbers
+     * <p>
+     * Must be 4 characters which match [A-Z][0-9A-Z]{3}
      *
      * @param identifier to be checked
      *
      * @return whether the identifier is valid
      */
     private boolean isValidID3v2FrameIdentifier(String identifier) {
-        Matcher m = ID3v24Frame.validFrameIdentifier.matcher(identifier);
-        return m.matches();
+        return identifier.length() >= 4 &&
+                Characters.isUpperCaseEnglish(identifier.charAt(0)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(1)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(2)) &&
+                Characters.isUpperCaseEnglishOrDigit(identifier.charAt(3));
     }
 
     public ID3v24Frame(ByteBuffer byteBuffer, String loggingFilename)
@@ -818,9 +816,6 @@ import java.util.regex.Pattern;
      * Frames with certain byte sequences should be unsynchronized but sometimes editors do not
      * unsynchronize them so this method checks both cases and goes with the option that fits best with the data
      *
-     * @param byteBuffer
-     *
-     * @throws InvalidFrameException
      */
     private void checkIfFrameSizeThatIsNotSyncSafe(ByteBuffer byteBuffer)
             throws InvalidFrameException {
@@ -915,9 +910,6 @@ import java.util.regex.Pattern;
                                                      identifier);
                                 }
                                 //invalid so assume syncsafe as that is is the standard
-                                else {
-
-                                }
                             } else {
                                 //reset position to just after framesize
                                 byteBuffer.position(currentPosition);
@@ -928,8 +920,6 @@ import java.util.regex.Pattern;
                                     frameSize = nonSyncSafeFrameSize;
                                 }
                                 //Inconclusive stick with syncsafe
-                                else {
-                                }
                             }
                         }
                     }
@@ -938,13 +928,13 @@ import java.util.regex.Pattern;
         }
     }
 
-    public int getEncryptionMethod() {
-        return encryptionMethod;
-    }
-
-    public int getGroupIdentifier() {
-        return groupIdentifier;
-    }
+//    public int getEncryptionMethod() {
+//        return encryptionMethod;
+//    }
+//
+//    public int getGroupIdentifier() {
+//        return groupIdentifier;
+//    }
 
     /**
      * @return true if considered a common frame
@@ -980,25 +970,25 @@ import java.util.regex.Pattern;
      * Make adjustments if necessary based on frame type and specification.
      */
     public class StatusFlags extends AbstractID3v2Frame.StatusFlags {
-        public static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
-        public static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
-        public static final String TYPE_READONLY = "typeReadOnly";
+        static final String TYPE_TAGALTERPRESERVATION = "typeTagAlterPreservation";
+        static final String TYPE_FILEALTERPRESERVATION = "typeFileAlterPreservation";
+        static final String TYPE_READONLY = "typeReadOnly";
 
 
         /**
          * Discard frame if tag altered
          */
-        public static final int MASK_TAG_ALTER_PRESERVATION = FileConstants.BIT6;
+        static final int MASK_TAG_ALTER_PRESERVATION = FileConstants.BIT6;
 
         /**
          * Discard frame if audio part of file altered
          */
-        public static final int MASK_FILE_ALTER_PRESERVATION = FileConstants.BIT5;
+        static final int MASK_FILE_ALTER_PRESERVATION = FileConstants.BIT5;
 
         /**
          * Frame tagged as read only
          */
-        public static final int MASK_READ_ONLY = FileConstants.BIT4;
+        static final int MASK_READ_ONLY = FileConstants.BIT4;
 
         /**
          * Use this when creating a frame from scratch
@@ -1009,8 +999,6 @@ import java.util.regex.Pattern;
 
         /**
          * Use this constructor when reading from file or from another v4 frame
-         *
-         * @param flags
          */
         StatusFlags(byte flags) {
             originalFlags = flags;
@@ -1021,7 +1009,7 @@ import java.util.regex.Pattern;
         /**
          * Makes modifications to flags based on specification and frameid
          */
-        protected void modifyFlags() {
+        void modifyFlags() {
             String str = getIdentifier();
             if (ID3v24Frames.getInstanceOf().isDiscardIfFileAltered(str)) {
                 writeFlags |= (byte)MASK_FILE_ALTER_PRESERVATION;
@@ -1034,8 +1022,6 @@ import java.util.regex.Pattern;
 
         /**
          * Use this constructor when convert a v23 frame
-         *
-         * @param statusFlags
          */
         StatusFlags(ID3v23Frame.StatusFlags statusFlags) {
             originalFlags = convertV3ToV4Flags(statusFlags.getOriginalFlags());
@@ -1046,9 +1032,6 @@ import java.util.regex.Pattern;
         /**
          * Convert V3 Flags to equivalent V4 Flags
          *
-         * @param v3Flag
-         *
-         * @return
          */
         private byte convertV3ToV4Flags(byte v3Flag) {
             byte v4Flag = (byte)0;
@@ -1078,36 +1061,36 @@ import java.util.regex.Pattern;
      * This represents a frame headers Encoding Flags
      */
     class EncodingFlags extends AbstractID3v2Frame.EncodingFlags {
-        public static final String TYPE_COMPRESSION = "compression";
-        public static final String TYPE_ENCRYPTION = "encryption";
-        public static final String TYPE_GROUPIDENTITY = "groupidentity";
-        public static final String TYPE_FRAMEUNSYNCHRONIZATION = "frameUnsynchronisation";
-        public static final String TYPE_DATALENGTHINDICATOR = "dataLengthIndicator";
+        static final String TYPE_COMPRESSION = "compression";
+        static final String TYPE_ENCRYPTION = "encryption";
+        static final String TYPE_GROUPIDENTITY = "groupidentity";
+        static final String TYPE_FRAMEUNSYNCHRONIZATION = "frameUnsynchronisation";
+        static final String TYPE_DATALENGTHINDICATOR = "dataLengthIndicator";
 
         /**
          * Frame is part of a group
          */
-        public static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
+        static final int MASK_GROUPING_IDENTITY = FileConstants.BIT6;
 
         /**
          * Frame is compressed
          */
-        public static final int MASK_COMPRESSION = FileConstants.BIT3;
+        static final int MASK_COMPRESSION = FileConstants.BIT3;
 
         /**
          * Frame is encrypted
          */
-        public static final int MASK_ENCRYPTION = FileConstants.BIT2;
+        static final int MASK_ENCRYPTION = FileConstants.BIT2;
 
         /**
          * Unsynchronisation
          */
-        public static final int MASK_FRAME_UNSYNCHRONIZATION = FileConstants.BIT1;
+        static final int MASK_FRAME_UNSYNCHRONIZATION = FileConstants.BIT1;
 
         /**
          * Length
          */
-        public static final int MASK_DATA_LENGTH_INDICATOR = FileConstants.BIT0;
+        static final int MASK_DATA_LENGTH_INDICATOR = FileConstants.BIT0;
 
         /**
          * Use this when creating a frame from scratch
@@ -1118,15 +1101,13 @@ import java.util.regex.Pattern;
 
         /**
          * Use this when creating a frame from existing flags in another v4 frame
-         *
-         * @param flags
          */
         EncodingFlags(byte flags) {
             super(flags);
             logEnabledFlags();
         }
 
-        public void logEnabledFlags() {
+        void logEnabledFlags() {
             if (isNonStandardFlags()) {
                 LOG.warn(getLoggingFilename() + ":" + identifier + ":Unknown Encoding Flags:" + Hex.asHex(flags));
             }
@@ -1163,15 +1144,15 @@ import java.util.regex.Pattern;
             return (flags & MASK_GROUPING_IDENTITY) > 0;
         }
 
-        public boolean isUnsynchronised() {
+        boolean isUnsynchronised() {
             return (flags & MASK_FRAME_UNSYNCHRONIZATION) > 0;
         }
 
-        public boolean isDataLengthIndicator() {
+        boolean isDataLengthIndicator() {
             return (flags & MASK_DATA_LENGTH_INDICATOR) > 0;
         }
 
-        public boolean isNonStandardFlags() {
+        boolean isNonStandardFlags() {
             return ((flags & FileConstants.BIT7) > 0) ||
                     ((flags & FileConstants.BIT5) > 0) ||
                     ((flags & FileConstants.BIT4) > 0);
@@ -1192,47 +1173,47 @@ import java.util.regex.Pattern;
             MP3File.getStructureFormatter().closeHeadingElement(TYPE_FLAGS);
         }
 
-        public void setCompression() {
-            flags |= MASK_COMPRESSION;
-        }
+//        public void setCompression() {
+//            flags |= MASK_COMPRESSION;
+//        }
+//
+//        public void setEncryption() {
+//            flags |= MASK_ENCRYPTION;
+//        }
+//
+//        public void setGrouping() {
+//            flags |= MASK_GROUPING_IDENTITY;
+//        }
 
-        public void setEncryption() {
-            flags |= MASK_ENCRYPTION;
-        }
-
-        public void setGrouping() {
-            flags |= MASK_GROUPING_IDENTITY;
-        }
-
-        public void setUnsynchronised() {
+        void setUnsynchronised() {
             flags |= MASK_FRAME_UNSYNCHRONIZATION;
         }
 
-        public void setDataLengthIndicator() {
-            flags |= MASK_DATA_LENGTH_INDICATOR;
-        }
+//        public void setDataLengthIndicator() {
+//            flags |= MASK_DATA_LENGTH_INDICATOR;
+//        }
 
-        public void unsetCompression() {
+        void unsetCompression() {
             flags &= (byte)~MASK_COMPRESSION;
         }
 
-        public void unsetEncryption() {
-            flags &= (byte)~MASK_ENCRYPTION;
-        }
+//        public void unsetEncryption() {
+//            flags &= (byte)~MASK_ENCRYPTION;
+//        }
+//
+//        public void unsetGrouping() {
+//            flags &= (byte)~MASK_GROUPING_IDENTITY;
+//        }
 
-        public void unsetGrouping() {
-            flags &= (byte)~MASK_GROUPING_IDENTITY;
-        }
-
-        public void unsetUnsynchronised() {
+        void unsetUnsynchronised() {
             flags &= (byte)~MASK_FRAME_UNSYNCHRONIZATION;
         }
 
-        public void unsetDataLengthIndicator() {
+        void unsetDataLengthIndicator() {
             flags &= (byte)~MASK_DATA_LENGTH_INDICATOR;
         }
 
-        public void unsetNonStandardFlags() {
+        void unsetNonStandardFlags() {
             if (isNonStandardFlags()) {
                 LOG.warn(getLoggingFilename() + ":" + getIdentifier() + ":Unsetting Unknown Encoding Flags:" +
                                  Hex.asHex(flags));
