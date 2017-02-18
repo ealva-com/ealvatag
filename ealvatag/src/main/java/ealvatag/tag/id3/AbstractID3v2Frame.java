@@ -247,15 +247,10 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     }
 
     protected boolean isPadding(byte[] buffer) {
-        if (
-                (buffer[0] == '\0') &&
-                        (buffer[1] == '\0') &&
-                        (buffer[2] == '\0') &&
-                        (buffer[3] == '\0')
-                ) {
-            return true;
-        }
-        return false;
+        return (buffer[0] == '\0') &&
+                (buffer[1] == '\0') &&
+                (buffer[2] == '\0') &&
+                (buffer[3] == '\0');
     }
 
     /**
@@ -338,7 +333,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         return frameBody;
     }
 
-    protected AbstractID3v2FrameBody readBody(String identifier, Buffer buffer, int frameSize) throws InvalidTagException {
+    AbstractID3v2FrameBody readBody(String identifier, Buffer buffer, int frameSize) throws InvalidTagException {
         // Stop using reflection. Frame types added/changed rarely. Performance penalty for no good reason.
         AbstractID3v2FrameBody frameBody;
         try {
@@ -346,7 +341,6 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
         } catch (FrameIdentifierException e) {
             frameBody = new FrameBodyUnsupported(buffer, frameSize);
         }
-        LOG.trace(getLoggingFilename() + ":" + "Created framebody:end" + frameBody.getIdentifier());
         frameBody.setHeader(this);
         return frameBody;
     }
@@ -354,14 +348,8 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     /**
      * Get the next frame id, throwing an exception if unable to do this and check against just having padded data
      *
-     * @param byteBuffer
-     *
-     * @return
-     *
-     * @throws PaddingException
-     * @throws InvalidFrameException
      */
-    protected String readIdentifier(ByteBuffer byteBuffer) throws PaddingException, InvalidFrameException {
+    String readIdentifier(ByteBuffer byteBuffer) throws InvalidFrameException {
         byte[] buffer = new byte[getFrameIdSize()];
 
         //Read the Frame Identifier
@@ -378,9 +366,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
             throw new InvalidFrameException(getLoggingFilename() + ":" + "No space to find another frame");
         }
 
-
         identifier = new String(buffer);
-        LOG.info(getLoggingFilename() + ":" + "Identifier is" + identifier);
         return identifier;
     }
 

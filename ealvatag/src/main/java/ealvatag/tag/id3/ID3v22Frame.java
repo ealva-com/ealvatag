@@ -115,8 +115,7 @@ import java.util.NoSuchElementException;
      */
     @SuppressWarnings("unchecked")
     public ID3v22Frame(String identifier) {
-
-        LOG.debug("Creating empty frame of type" + identifier);
+        LOG.debug("Creating empty frame of type {}", identifier);
         String bodyIdentifier = identifier;
         this.identifier = identifier;
 
@@ -160,8 +159,6 @@ import java.util.NoSuchElementException;
         }
 
         frameBody.setHeader(this);
-        LOG.debug("Created empty frame of type" + this.identifier + "with frame body of" + bodyIdentifier);
-
     }
 
     /**
@@ -179,14 +176,14 @@ import java.util.NoSuchElementException;
         identifier = ID3Tags.convertFrameID23To22(frame.getIdentifier());
         if (identifier != null) {
             LOG.debug("V2:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-            this.frameBody = (AbstractID3v2FrameBody)ID3Tags.copyObject(frame.getBody());
+            frameBody = (AbstractID3v2FrameBody)ID3Tags.copyObject(frame.getBody());
         }
         // Is it a known v3 frame which needs forcing to v2 frame e.g. APIC - PIC
         else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier())) {
             identifier = ID3Tags.forceFrameID23To22(frame.getIdentifier());
             if (identifier != null) {
                 LOG.debug("V2:Force:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
-                this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody)frame.getBody());
+                frameBody = readBody(identifier, (AbstractID3v2FrameBody)frame.getBody());
             }
             // No mechanism exists to convert it to a v22 frame
             else {
@@ -198,13 +195,13 @@ import java.util.NoSuchElementException;
         else if (frame.getBody() instanceof FrameBodyDeprecated) {
             //Was it valid for this tag version, if so try and reconstruct
             if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier())) {
-                this.frameBody = frame.getBody();
+                frameBody = frame.getBody();
                 identifier = frame.getIdentifier();
                 LOG.debug("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             }
             //or was it still deprecated, if so leave as is
             else {
-                this.frameBody = new FrameBodyDeprecated((FrameBodyDeprecated)frame.getBody());
+                frameBody = new FrameBodyDeprecated((FrameBodyDeprecated)frame.getBody());
                 identifier = frame.getIdentifier();
                 LOG.debug("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
             }

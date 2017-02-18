@@ -516,8 +516,6 @@ import java.util.NoSuchElementException;
                 }
             }
 
-            LOG.info(fileName + ":Identifier was:" + identifier + " reading using:" + frameId + "with frame size:" + frameSize);
-
             //Read extra bits appended to frame header for various encodings
             //These are not included in header size but are included in frame size but won't be read when we actually
             //try to read the frame body data
@@ -528,7 +526,6 @@ import java.util.NoSuchElementException;
                 //Read the Decompressed Size
                 decompressedFrameSize = buffer.readInt();
                 extraHeaderBytesCount = FRAME_COMPRESSION_UNCOMPRESSED_SIZE;
-                LOG.info(fileName + ":Decompressed frame size is:" + decompressedFrameSize);
             }
 
             if (((EncodingFlags)encodingFlags).isEncryption()) {
@@ -573,7 +570,6 @@ import java.util.NoSuchElementException;
                 //Read the body data
                 if (((EncodingFlags)encodingFlags).isCompression()) {
                     final Buffer decompressBuffer = AbstractID3v2Frame.decompressPartOfBuffer(buffer, realFrameSize, decompressedFrameSize);
-                    LOG.info("Bufer.size={} expected:{}", decompressBuffer.size(), decompressedFrameSize);
                     if (((EncodingFlags)encodingFlags).isEncryption()) {
                         frameBody = readEncryptedBody(frameId, decompressBuffer, decompressedFrameSize);
                     } else {
