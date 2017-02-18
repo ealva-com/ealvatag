@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>
@@ -45,7 +45,7 @@ import java.util.List;
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2FrameBody.class);
 
-    protected static final String TYPE_BODY = "body";
+    private static final String TYPE_BODY = "body";
 
 
     /**
@@ -63,8 +63,6 @@ import java.util.List;
 
     /**
      * Create Body based on another body
-     *
-     * @param copyObject
      */
     protected AbstractID3v2FrameBody(AbstractID3v2FrameBody copyObject) {
         super(copyObject);
@@ -75,9 +73,6 @@ import java.util.List;
      * Constructor sets up the Object list for the frame.
      *
      * @param byteBuffer from where to read the frame body from
-     * @param frameSize
-     *
-     * @throws ealvatag.tag.InvalidTagException
      */
     protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
         super();
@@ -113,8 +108,6 @@ import java.util.List;
     /**
      * Set size based on size passed as parameter from frame header,
      * done before read
-     *
-     * @param size
      */
     public void setSize(int size) {
         this.size = size;
@@ -123,7 +116,7 @@ import java.util.List;
     /**
      * Set size based on size of the DataTypes making up the body,done after write
      */
-    public void setSize() {
+    private void setSize() {
         size = 0;
         final List<AbstractDataType> dataTypeList = getDataTypeList();
         for (int i = 0, listLength = dataTypeList.size(); i < listLength; i++) {
@@ -133,8 +126,6 @@ import java.util.List;
 
     /**
      * Are two bodies equal
-     *
-     * @param obj
      */
     public boolean equals(Object obj) {
         return (obj instanceof AbstractID3v2FrameBody) && super.equals(obj);
@@ -186,7 +177,7 @@ import java.util.List;
             try {
                 object.readByteArray(buffer, offset);
             } catch (InvalidDataTypeException e) {
-                LOG.warn("Problem reading datatype within Frame Body:" + e.getMessage());
+                LOG.warn("Problem reading datatype within Frame Body:", e);
                 throw e;
             }
             //Increment Offset to start of next datatype.
@@ -195,31 +186,39 @@ import java.util.List;
     }
 
     public void read(Buffer buffer) throws InvalidTagException {
-        int frameBodySize = getSize();
         final String identifier = getIdentifier();
+        AbstractDataType dataType = null;
+        try {
+            int frameBodySize = getSize();
 
-        final List<AbstractDataType> dataTypeList = getDataTypeList();
-        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
-            AbstractDataType object = dataTypeList.get(i);
-            checkSize(frameBodySize, object.getClass().getName(), identifier);
-            try {
-                object.read(buffer, frameBodySize);
-            } catch (EOFException | ArrayIndexOutOfBoundsException e) {
-                throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                           object.getClass(),
-                                                           identifier,
-                                                           e.getMessage()),
-                                              e);
+            final List<AbstractDataType> dataTypeList = getDataTypeList();
+            for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+                dataType = dataTypeList.get(i);
+                dataType.read(buffer, frameBodySize);
+                frameBodySize -= dataType.getSize();
             }
-            frameBodySize -= object.getSize();
+
+            if (frameBodySize > 0) {
+                LOG.warn("Tag {} did not read it's entire expected size.", identifier);
+            } else if (frameBodySize < 0) {
+                throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
+                                                           "Past last",
+                                                           identifier,
+                                                           "Not enough data. Maybe previous data type read past it's size"));
+            }
+        } catch (EOFException | ArrayIndexOutOfBoundsException e) {
+            // dataType.read() barfed
+            throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
+                                                       dataType != null ? dataType.getClass() : "Unknown",
+                                                       identifier,
+                                                       e.getMessage()),
+                                          e);
         }
 
-        checkFinalSize(frameBodySize, identifier);
     }
+
     /**
      * Write the contents of this datatype to the byte array
-     *
-     * @param tagBuffer
      */
     public void write(ByteArrayOutputStream tagBuffer) {
         LOG.debug("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
@@ -252,26 +251,4 @@ import java.util.List;
         }
         MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
     }
-
-    // static so more easily optimized. In a time critical loop
-    private static void checkFinalSize(final int size, final String identifier) throws InvalidTagException {
-        if (size > 0) {
-            LOG.warn("Tag {} did not read it's entire expected size.", identifier);
-            // TODO: 1/26/17 I'm unsure why this could happen other than an error. However, skipping bytes causes problems for ensuing
-            // frames. Why isn't size not exactly matching total frames size?
-        } else {
-            checkSize(size, "Past last", identifier);
-        }
-    }
-
-    // static so more easily optimized. In a time critical loop
-    private static void checkSize(final int size, final String objectType, final String identifier) throws InvalidTagException {
-        if (size < 0) {
-            throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                       objectType,
-                                                       identifier,
-                                                       "Not enough data. Maybe previous data type read past it's size"));
-        }
-    }
-
 }
