@@ -55,7 +55,7 @@ public abstract class AbstractTagFrameBody extends AbstractTagItem {
     // 10 is currently our max size and one 1 has that many. 5 would be the max if not for that outlier. So knowing that current HashMaps
     // will take 5 to the next power of 2 (8), I'll choose 5. That one case of 10 will cause a map resize, but I'll save a lot of space as
     // average waste will be approximately 3 and not 11.
-    private HashMap<String, AbstractDataType> dataTypeMap = new LinkedHashMap<>(5);
+    private HashMap<String, AbstractDataType> dataTypeMap = new HashMap<>(5);
 
     /**
      * List of data types that make up this particular frame body.

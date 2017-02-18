@@ -148,7 +148,7 @@ import java.util.NoSuchElementException;
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported)frame.getBody());
                 this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
-                LOG.debug("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                LOG.debug("UNKNOWN:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                 return;
             }
             // Deprecated frame for v24
@@ -159,7 +159,7 @@ import java.util.NoSuchElementException;
                     this.frameBody.setHeader(this);
                     this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, this.frameBody.getTextEncoding()));
                     identifier = frame.getIdentifier();
-                    LOG.debug("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    LOG.debug("DEPRECATED:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                 }
                 //or was it still deprecated, if so leave as is
                 else {
@@ -168,7 +168,7 @@ import java.util.NoSuchElementException;
                     this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, frameBody.getTextEncoding()));
 
                     identifier = frame.getIdentifier();
-                    LOG.debug("DEPRECATED:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    LOG.debug("DEPRECATED:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                     return;
                 }
             } else if (ID3Tags.isID3v24FrameIdentifier(frame.getIdentifier())) {
@@ -176,7 +176,7 @@ import java.util.NoSuchElementException;
                 //Version between v4 and v3
                 identifier = ID3Tags.convertFrameID24To23(frame.getIdentifier());
                 if (identifier != null) {
-                    LOG.debug("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    LOG.debug("V4:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                     this.frameBody = (AbstractTagFrameBody)ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
                     this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, frameBody.getTextEncoding()));
@@ -185,7 +185,7 @@ import java.util.NoSuchElementException;
                     //Is it a known v4 frame which needs forcing to v3 frame e.g. TDRC - TYER,TDAT
                     identifier = ID3Tags.forceFrameID24To23(frame.getIdentifier());
                     if (identifier != null) {
-                        LOG.debug("V4:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                        LOG.debug("V4:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody)frame.getBody());
                         this.frameBody.setHeader(this);
                         this.frameBody.setTextEncoding(ID3TextEncodingConversion.getTextEncoding(this, this.frameBody.getTextEncoding()));
@@ -201,21 +201,21 @@ import java.util.NoSuchElementException;
                         identifier = frame.getIdentifier();
                         this.frameBody = new FrameBodyUnsupported(identifier, baos.toByteArray());
                         this.frameBody.setHeader(this);
-                        LOG.debug("V4:Orig id is:" + frame.getIdentifier() + ":New Id Unsupported is:" + identifier);
+                        LOG.debug("V4:Orig id is:{}:New Id Unsupported is:{}", frame.getIdentifier(), identifier);
                         return;
                     }
                 }
             }
             // Unable to find a suitable frameBody, this should not happen
             else {
-                LOG.error("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
+                LOG.error("Orig id is:{}Unable to create Frame Body", frame.getIdentifier());
                 throw new InvalidFrameException("Orig id is:" + frame.getIdentifier() + "Unable to create Frame Body");
             }
         } else if (frame instanceof ID3v22Frame) {
             if (ID3Tags.isID3v22FrameIdentifier(frame.getIdentifier())) {
                 identifier = ID3Tags.convertFrameID22To23(frame.getIdentifier());
                 if (identifier != null) {
-                    LOG.debug("V3:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                    LOG.debug("V3:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                     this.frameBody = (AbstractTagFrameBody)ID3Tags.copyObject(frame.getBody());
                     this.frameBody.setHeader(this);
                     return;
@@ -225,7 +225,7 @@ import java.util.NoSuchElementException;
                     //Force v2 to v3
                     identifier = ID3Tags.forceFrameID22To23(frame.getIdentifier());
                     if (identifier != null) {
-                        LOG.debug("V22Orig id is:" + frame.getIdentifier() + "New id is:" + identifier);
+                        LOG.debug("V22Orig id is:{} New id is:{}", frame.getIdentifier(), identifier);
                         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody)frame.getBody());
                         this.frameBody.setHeader(this);
                         return;
@@ -235,7 +235,7 @@ import java.util.NoSuchElementException;
                         this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
                         this.frameBody.setHeader(this);
                         identifier = frame.getIdentifier();
-                        LOG.debug("Deprecated:V22:orig id id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                        LOG.debug("Deprecated:V22:orig id id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                         return;
                     }
                 }
@@ -245,12 +245,12 @@ import java.util.NoSuchElementException;
                 this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported)frame.getBody());
                 this.frameBody.setHeader(this);
                 identifier = frame.getIdentifier();
-                LOG.debug("UNKNOWN:Orig id is:" + frame.getIdentifier() + ":New id is:" + identifier);
+                LOG.debug("UNKNOWN:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
                 return;
             }
         }
 
-        LOG.warn("Frame is unknown version:" + frame.getClass());
+        LOG.warn("Frame is unknown version:{}", frame.getClass());
     }
 
     /**
@@ -475,7 +475,7 @@ import java.util.NoSuchElementException;
                 LOG.warn("Invalid Frame Size:{} Id:{} - {}", frameSize, identifier, fileName);
                 throw new InvalidFrameException(identifier + " is invalid frame:" + frameSize);
             } else if (frameSize == 0) {
-                LOG.warn(fileName + ":Empty Frame Size:" + identifier);
+                LOG.warn("{}:Empty Frame Size:{}", fileName, identifier);
                 //We don't process this frame or add to frameMap because contains no useful information
                 //Skip the two flag bytes so in correct position for subsequent frames
                 buffer.readByte();
@@ -542,7 +542,7 @@ import java.util.NoSuchElementException;
 
             if (((EncodingFlags)encodingFlags).isNonStandardFlags()) {
                 //Probably corrupt so treat as a standard frame
-                LOG.error(fileName + ":InvalidEncodingFlags:" + Hex.asHex(encodingFlags.getFlags()));
+                LOG.error("{}:InvalidEncodingFlags:", fileName, Hex.asHex(encodingFlags.getFlags()));
             }
 
             if (((EncodingFlags)encodingFlags).isCompression()) {
@@ -584,7 +584,7 @@ import java.util.NoSuchElementException;
                 //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn't
                 //it then be created as FrameBodyUnsupported
                 if (!(frameBody instanceof ID3v23FrameBody)) {
-                    LOG.debug(fileName + ":Converted frameBody with:" + identifier + " to deprecated frameBody");
+                    LOG.debug("{}:Converted frameBody with:{} to deprecated frameBody", fileName, identifier);
                     frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
                 }
             }
@@ -811,7 +811,7 @@ import java.util.NoSuchElementException;
 
         void unsetNonStandardFlags() {
             if (isNonStandardFlags()) {
-                LOG.warn(getLoggingFilename() + ":" + getIdentifier() + ":Unsetting Unknown Encoding Flags:" + Hex.asHex(flags));
+                LOG.warn("{}:{}:Unsetting Unknown Encoding Flags:{}", getLoggingFilename(), getIdentifier(), Hex.asHex(flags));
                 flags &= (byte)~FileConstants.BIT4;
                 flags &= (byte)~FileConstants.BIT3;
                 flags &= (byte)~FileConstants.BIT2;
@@ -823,18 +823,18 @@ import java.util.NoSuchElementException;
 
         void logEnabledFlags() {
             if (isNonStandardFlags()) {
-                LOG.warn(getLoggingFilename() + ":" + identifier + ":Unknown Encoding Flags:" + Hex.asHex(flags));
+                LOG.warn("{}:{}:Unknown Encoding Flags:{}", getLoggingFilename(), identifier, Hex.asHex(flags));
             }
             if (isCompression()) {
-                LOG.warn(getLoggingFilename() + ":" + identifier + " is compressed");
+                LOG.warn("{}:{} is compressed", getLoggingFilename(), identifier);
             }
 
             if (isEncryption()) {
-                LOG.warn(getLoggingFilename() + ":" + identifier + " is encrypted");
+                LOG.warn("{}:{} is encrypted", getLoggingFilename(), identifier);
             }
 
             if (isGrouping()) {
-                LOG.warn(getLoggingFilename() + ":" + identifier + " is grouped");
+                LOG.warn("{}:{} is grouped", getLoggingFilename(), identifier);
             }
         }
 
