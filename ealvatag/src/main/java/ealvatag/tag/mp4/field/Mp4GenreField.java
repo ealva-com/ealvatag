@@ -102,10 +102,10 @@ public class Mp4GenreField extends Mp4TagTextNumberField {
             //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
             //as null so apps can handle if they wish, but we do display a warning to make them aware.
             if (content == null) {
-                LOG.warn(ErrorMessage.MP4_GENRE_OUT_OF_RANGE.getMsg(genreId));
+                LOG.warn(ErrorMessage.MP4_GENRE_OUT_OF_RANGE, genreId);
             }
         } else {
-            LOG.warn(ErrorMessage.MP4_NO_GENREID_FOR_GENRE.getMsg(header.getDataLength()));
+            LOG.warn(ErrorMessage.MP4_NO_GENREID_FOR_GENRE, header.getDataLength());
         }
     }
 }

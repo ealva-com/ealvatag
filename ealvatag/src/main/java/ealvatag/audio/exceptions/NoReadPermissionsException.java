@@ -55,6 +55,6 @@ public class NoReadPermissionsException extends CannotReadException
      */
     public NoReadPermissionsException(String message, Throwable cause)
     {
-        super(message, cause);
+        super(cause, message);
     }
 }

@@ -140,9 +140,9 @@ public class NumberHashMap extends NumberFixedLength {
         int intValue = ((Number)value).intValue();
         if (!simpleIntStringMap.containsKey(intValue)) {
             if (!hasEmptyValue) {
-                throw new InvalidDataTypeException(ErrorMessage.MP3_REFERENCE_KEY_INVALID.getMsg(identifier, intValue));
+                throw new InvalidDataTypeException(ErrorMessage.MP3_REFERENCE_KEY_INVALID, identifier, intValue);
             } else if (identifier.equals(DataTypes.OBJ_PICTURE_TYPE)) {
-                LOG.warn(ErrorMessage.MP3_PICTURE_TYPE_INVALID.getMsg(value));
+                LOG.warn(ErrorMessage.MP3_PICTURE_TYPE_INVALID, value);
             }
         }
     }

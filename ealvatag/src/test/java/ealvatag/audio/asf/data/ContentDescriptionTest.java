@@ -1,10 +1,7 @@
 package ealvatag.audio.asf.data;
 
-import ealvatag.logging.ErrorMessage;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static ealvatag.TestUtil.assertErrorMessage;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -78,8 +75,6 @@ public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDes
                                     .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
             Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
-            assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                               iae.getMessage());
         }
     }
 
@@ -102,8 +97,6 @@ public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDes
                                      .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
             Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
-            assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                               iae.getMessage());
         }
     }
 
@@ -126,8 +119,6 @@ public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDes
                                        .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
             Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
-            assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                               iae.getMessage());
         }
     }
 
@@ -150,8 +141,6 @@ public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDes
                                     .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
             Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
-            assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                               iae.getMessage());
         }
     }
 
@@ -174,8 +163,6 @@ public class ContentDescriptionTest extends AbstractMetadataContainer<ContentDes
                                    .createAString(MetadataDescriptor.WORD_MAXVALUE + 1));
             Assert.fail("Exception expected");
         } catch (IllegalArgumentException iae) {
-            assertErrorMessage(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                               iae.getMessage());
         }
     }
 

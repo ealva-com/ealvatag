@@ -55,7 +55,7 @@ class Mp4MinfBox {
                     break;
                 case VMHD:
                     // video, get out
-                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO.getMsg());
+                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO);
                 case STBL:
                     stblBox = new Mp4StblBox(childHeader, bufferedSource, audioHeader, foundPreviousTrak);
                     break;

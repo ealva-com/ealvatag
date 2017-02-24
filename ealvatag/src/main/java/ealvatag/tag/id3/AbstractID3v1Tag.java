@@ -44,7 +44,7 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag {
     private static Logger LOG = LoggerFactory.getLogger(AbstractID3v1Tag.class);
 
     //If field is less than maximum field length this is how it is terminated
-    protected static final byte END_OF_FIELD = (byte)0;
+    static final byte END_OF_FIELD = (byte)0;
 
     //Used to detect end of field in String constructed from Data
     protected static Pattern endofStringPattern = Pattern.compile("\\x00");
@@ -126,12 +126,10 @@ abstract public class AbstractID3v1Tag extends AbstractID3Tag {
                 LOG.debug("Deleted ID3v1 tag");
                 file.setLength(file.length() - TAG_LENGTH);
             } catch (IOException ex) {
-                LOG.error("Unable to delete existing ID3v1 Tag:" + ex.getMessage());
+                LOG.error("Unable to delete existing ID3v1 Tag", ex);
             }
         } else {
             LOG.debug("Unable to find ID3v1 tag to deleteField");
         }
     }
-
-
 }

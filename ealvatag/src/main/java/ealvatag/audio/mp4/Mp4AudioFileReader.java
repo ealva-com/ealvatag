@@ -130,7 +130,7 @@ public class Mp4AudioFileReader extends AudioFileReader {
         } catch (FileNotFoundException e) {
             throw e;
         } catch (IOException e) {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_CONTAINER.getMsg(), e);
+            throw new CannotReadException(e, ErrorMessage.MP4_FILE_NOT_CONTAINER);
         }
     }
 }

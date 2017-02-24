@@ -131,7 +131,7 @@ public abstract class AbstractDataTypeList<T extends AbstractDataType> extends A
      * @return a byte array that that contains the data that should be persisted to file
      */
     public byte[] writeByteArray() {
-        LOG.debug("Writing DataTypeList " + this.getIdentifier());
+        LOG.debug("Writing DataTypeList {}", getIdentifier());
         final byte[] buffer = new byte[getSize()];
         int offset = 0;
         for (final AbstractDataType data : getValue()) {

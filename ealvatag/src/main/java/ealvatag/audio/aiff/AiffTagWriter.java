@@ -48,376 +48,361 @@ import java.nio.channels.FileChannel;
  * Write Aiff Tag.
  */
 public class AiffTagWriter {
-    // Logger Object
-    private static Logger LOG = LoggerFactory.getLogger(AiffTagWriter.class);
+  private static Logger LOG = LoggerFactory.getLogger(AiffTagWriter.class);
 
-    /**
-     * Delete given {@link Tag} from file.
-     *
-     * @param tag      tag, must be instance of {@link AiffTag}
-     * @param fc
-     * @param fileName
-     *
-     * @throws ealvatag.audio.exceptions.CannotWriteException
-     */
-    public void delete(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
-        try {
-            LOG.error(fileName + " Deleting tag from file");
-            final AiffTag existingTag = getExistingMetadata(fc, fileName);
-            fc.position(0);
-            if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null) {
-                ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
-                if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
-                    LOG.error(fileName + " Setting new length to:" + (existingTag.getStartLocationInFileOfId3Chunk()));
-                    fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
-                } else {
-                    LOG.error(fileName + " Deleting tag chunk");
-                    deleteTagChunk(fc, existingTag, chunkHeader, fileName);
-                }
-                rewriteRiffHeaderSize(fc);
-            }
-            LOG.error(fileName + " Deleted tag from fc");
-        } catch (IOException ioe) {
-            throw new CannotWriteException(fileName + ":" + ioe.getMessage());
-        }
-    }
-
-    /**
-     * Read existing metadata
-     *
-     * @param channel
-     * @param fileName
-     *
-     * @return tags within Tag wrapper
-     *
-     * @throws IOException
-     * @throws CannotWriteException
-     */
-    private AiffTag getExistingMetadata(FileChannel channel, final String fileName)
-            throws IOException, CannotWriteException {
-        try {
-            //Find AiffTag (if any)
-            AiffTagReader im = new AiffTagReader();
-            return im.read(channel, fileName);
-        } catch (CannotReadException ex) {
-            throw new CannotWriteException(fileName + " Failed to read file");
-        }
-    }
-
-    /**
-     * Seek in file to start of LIST Metadata chunk
-     *
-     * @param fc
-     * @param existingTag
-     *
-     * @throws IOException
-     * @throws CannotWriteException
-     */
-    private ChunkHeader seekToStartOfMetadata(FileChannel fc, AiffTag existingTag, String fileName)
-            throws IOException, CannotWriteException {
-        fc.position(existingTag.getStartLocationInFileOfId3Chunk());
-        final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-        chunkHeader.readHeader(fc);
-        fc.position(fc.position() - ChunkHeader.CHUNK_HEADER_SIZE);
-
-        if (!AiffChunkType.TAG.getCode().equals(chunkHeader.getID())) {
-            throw new CannotWriteException(fileName + " Unable to find ID3 chunk at expected location:" +
-                                                   existingTag.getStartLocationInFileOfId3Chunk());
-        }
-        return chunkHeader;
-    }
-
-    /**
-     * @param existingTag
-     * @param fc
-     *
-     * @return true if at end of file (also take into account padding byte)
-     *
-     * @throws IOException
-     */
-    private boolean isAtEndOfFileAllowingForPaddingByte(AiffTag existingTag, FileChannel fc) throws IOException {
-        return ((existingTag.getID3Tag().getEndLocationInFile() == fc.size()) ||
-                (Utils.isOddLength(existingTag.getID3Tag().getEndLocationInFile()) &&
-                        existingTag.getID3Tag().getEndLocationInFile() + 1 == fc.size()));
-    }
-
-    /**
-     * <p>Deletes the given ID3-{@link Tag}/{@link Chunk} from the file by moving all following chunks up.</p>
-     * <pre>
-     * [chunk][-id3-][chunk][chunk]
-     * [chunk] &lt;&lt;--- [chunk][chunk]
-     * [chunk][chunk][chunk]
-     * </pre>
-     *
-     * @param fc,            filechannel
-     * @param existingTag    existing tag
-     * @param tagChunkHeader existing chunk header for the tag
-     *
-     * @throws IOException if something goes wrong
-     */
-    private void deleteTagChunk(FileChannel fc,
-                                final AiffTag existingTag,
-                                final ChunkHeader tagChunkHeader,
-                                String fileName) throws IOException {
-        int lengthTagChunk = (int)tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
-        if (Utils.isOddLength(lengthTagChunk)) {
-            if (existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk < fc.size()) {
-                lengthTagChunk++;
-            }
-        }
-        final long newLength = fc.size() - lengthTagChunk;
-        LOG.error(fileName + " Size of id3 chunk to delete is:" + lengthTagChunk + ":Location:" +
-                          existingTag.getStartLocationInFileOfId3Chunk());
-
-        // position for reading after the id3 tag
-        fc.position(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk);
-
-        deleteTagChunkUsingSmallByteBufferSegments(existingTag, fc, newLength, lengthTagChunk);
-        // truncate the file after the last chunk
-        LOG.error(fileName + " Setting new length to:" + newLength);
-        fc.truncate(newLength);
-    }
-
-    /**
-     * Use ByteBuffers to copy a 4mb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
-     * is rewritten
-     *
-     * @param existingTag    existing tag
-     * @param channel        channel
-     * @param newLength      new length
-     * @param lengthTagChunk length tag chunk
-     *
-     * @throws IOException if something goes wrong
-     */
-    // TODO: arguments are not used, position is implicit
-    private void deleteTagChunkUsingSmallByteBufferSegments(final AiffTag existingTag,
-                                                            final FileChannel channel,
-                                                            final long newLength,
-                                                            final long lengthTagChunk)
-            throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
-        while (channel.read(buffer) >= 0 || buffer.position() != 0) {
-            buffer.flip();
-            final long readPosition = channel.position();
-            channel.position(readPosition - lengthTagChunk - buffer.limit());
-            channel.write(buffer);
-            channel.position(readPosition);
-            buffer.compact();
-        }
-    }
-
-    /**
-     * Rewrite RAF header to reflect new file length
-     *
-     * @param fc
-     *
-     * @throws IOException
-     */
-    private void rewriteRiffHeaderSize(FileChannel fc) throws IOException {
-
-        fc.position(IffHeaderChunk.SIGNATURE_LENGTH);
-        ByteBuffer bb = ByteBuffer.allocateDirect(IffHeaderChunk.SIZE_LENGTH);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        int size = ((int)fc.size()) - SIGNATURE_LENGTH - SIZE_LENGTH;
-        bb.putInt(size);
-        bb.flip();
-        fc.write(bb);
-    }
-
-    /**
-     * The following seems to work on Windows but hangs on OSX!
-     * Bug is filed <a href="https://bugs.openjdk.java.net/browse/JDK-8140241">here</a>.
-     *
-     * @param existingTag existing tag
-     * @param channel     channel
-     * @param newLength   new length
-     *
-     * @throws IOException if something goes wrong
-     */
-    private void deleteTagChunkUsingChannelTransfer(final AiffTag existingTag,
-                                                    final FileChannel channel,
-                                                    final long newLength)
-            throws IOException {
-        long read;
-        //Read from just after the ID3Chunk into the channel at where the ID3 chunk started, should usually only
-        // require one transfer
-        //but put into loop in case multiple calls are required
-        for (long position = existingTag.getStartLocationInFileOfId3Chunk();
-             (read = channel.transferFrom(channel, position, newLength - position)) < newLength - position;
-             position += read) {
-            ;//is this problem if loop called more than once do we need to update position of channel to modify
-        }
-        //where write to ?
-    }
-
-    /**
-     * @param tag
-     * @param fc
-     * @param fileName
-     *
-     * @throws CannotWriteException
-     */
-    public void write(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
-        LOG.error(fileName + " Writing Aiff tag to fc");
-        AiffTag existingTag = null;
-        try {
-            existingTag = getExistingMetadata(fc, fileName);
-            fc.position(0);
-        } catch (IOException ioe) {
-            throw new CannotWriteException(fileName + ":" + ioe.getMessage());
-        }
-
-        try {
-            long existingFileLength = fc.size();
-
-            final AiffTag aiffTag = (AiffTag)tag;
-            final ByteBuffer bb = convert(aiffTag, existingTag);
-
-            //Replacing ID3 tag
-            if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null) {
-                //Usual case
-                if (!existingTag.isIncorrectlyAlignedTag()) {
-                    final ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
-                    LOG.info(fileName + "Current Space allocated:" + existingTag.getSizeOfID3TagOnly() +
-                                     ":NewTagRequires:" + bb.limit());
-
-                    //Usual case ID3 is last chunk
-                    if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
-                        writeDataToFile(fc, bb);
-                    }
-                    //Unusual Case where ID3 is not last chunk
-                    else {
-                        deleteTagChunk(fc, existingTag, chunkHeader, fileName);
-                        fc.position(fc.size());
-                        writeExtraByteIfChunkOddSize(fc, fc.size());
-                        writeDataToFile(fc, bb);
-                    }
-                }
-                //Existing ID3 tag is incorrectly aligned so if we can lets delete it and any subsequentially added
-                //ID3 tags as we only want one ID3 tag.
-                else if (AiffChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag)) {
-                    deleteRemainderOfFile(fc, existingTag, fileName);
-                    fc.position(fc.size());
-                    writeExtraByteIfChunkOddSize(fc, fc.size());
-                    writeDataToFile(fc, bb);
-                } else {
-                    throw new CannotWriteException(
-                            fileName + " Metadata tags are corrupted and not at end of fc so cannot be fixed");
-                }
-            }
-            //New Tag
-            else {
-                fc.position(fc.size());
-                if (Utils.isOddLength(fc.size())) {
-                    fc.write(ByteBuffer.allocateDirect(1));
-                }
-                writeDataToFile(fc, bb);
-            }
-
-            if (existingFileLength != fc.size()) {
-                rewriteRiffHeaderSize(fc);
-            }
-        } catch (IOException ioe) {
-            throw new CannotWriteException(fileName + ":" + ioe.getMessage());
-        }
-    }
-
-    /**
-     * If Metadata tags are corrupted and no other tags later in the file then just truncate ID3 tags and start again
-     *
-     * @param fc
-     * @param existingTag
-     *
-     * @throws IOException
-     */
-    private void deleteRemainderOfFile(FileChannel fc, final AiffTag existingTag, String fileName) throws IOException {
-        ChunkSummary precedingChunk = AiffChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
-        if (!Utils.isOddLength(precedingChunk.getEndLocation())) {
-            LOG.error(fileName + " Truncating corrupted ID3 tags from:" +
-                              (existingTag.getStartLocationInFileOfId3Chunk() - 1));
-            fc.truncate(existingTag.getStartLocationInFileOfId3Chunk() - 1);
+  /**
+   * Delete given {@link Tag} from file.
+   */
+  public void delete(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
+    try {
+      LOG.warn("{} Deleting tag from file", fileName);
+      final AiffTag existingTag = getExistingMetadata(fc, fileName);
+      fc.position(0);
+      if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null) {
+        ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
+        if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
+          LOG.warn("{} Setting new length to:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk());
+          fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
         } else {
-            LOG.error(fileName + " Truncating corrupted ID3 tags from:" +
-                              (existingTag.getStartLocationInFileOfId3Chunk()));
-            fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
+          LOG.warn("{} Deleting tag chunk", fileName);
+          deleteTagChunk(fc, existingTag, chunkHeader, fileName);
         }
+        rewriteRiffHeaderSize(fc);
+      }
+      LOG.warn("{} Deleted tag from file", fileName);
+    } catch (IOException ioe) {
+      throw new CannotWriteException(fileName + ":" + ioe.getMessage());
+    }
+  }
+
+  /**
+   * Read existing metadata
+   *
+   * @param channel
+   * @param fileName
+   *
+   * @return tags within Tag wrapper
+   *
+   * @throws IOException
+   * @throws CannotWriteException
+   */
+  private AiffTag getExistingMetadata(FileChannel channel, final String fileName)
+      throws IOException, CannotWriteException {
+    try {
+      //Find AiffTag (if any)
+      AiffTagReader im = new AiffTagReader();
+      return im.read(channel, fileName);
+    } catch (CannotReadException ex) {
+      throw new CannotWriteException(fileName + " Failed to read file");
+    }
+  }
+
+  /**
+   * Seek in file to start of LIST Metadata chunk
+   *
+   * @param fc
+   * @param existingTag
+   *
+   * @throws IOException
+   * @throws CannotWriteException
+   */
+  private ChunkHeader seekToStartOfMetadata(FileChannel fc, AiffTag existingTag, String fileName)
+      throws IOException, CannotWriteException {
+    fc.position(existingTag.getStartLocationInFileOfId3Chunk());
+    final ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+    chunkHeader.readHeader(fc);
+    fc.position(fc.position() - ChunkHeader.CHUNK_HEADER_SIZE);
+
+    if (!AiffChunkType.TAG.getCode().equals(chunkHeader.getID())) {
+      throw new CannotWriteException(fileName + " Unable to find ID3 chunk at expected location:" +
+                                         existingTag.getStartLocationInFileOfId3Chunk());
+    }
+    return chunkHeader;
+  }
+
+  /**
+   * @param existingTag
+   * @param fc
+   *
+   * @return true if at end of file (also take into account padding byte)
+   *
+   * @throws IOException
+   */
+  private boolean isAtEndOfFileAllowingForPaddingByte(AiffTag existingTag, FileChannel fc) throws IOException {
+    return ((existingTag.getID3Tag().getEndLocationInFile() == fc.size()) ||
+        (Utils.isOddLength(existingTag.getID3Tag().getEndLocationInFile()) &&
+            existingTag.getID3Tag().getEndLocationInFile() + 1 == fc.size()));
+  }
+
+  /**
+   * <p>Deletes the given ID3-{@link Tag}/{@link Chunk} from the file by moving all following chunks up.</p>
+   * <pre>
+   * [chunk][-id3-][chunk][chunk]
+   * [chunk] &lt;&lt;--- [chunk][chunk]
+   * [chunk][chunk][chunk]
+   * </pre>
+   *
+   * @param fc,            filechannel
+   * @param existingTag    existing tag
+   * @param tagChunkHeader existing chunk header for the tag
+   *
+   * @throws IOException if something goes wrong
+   */
+  private void deleteTagChunk(FileChannel fc,
+                              final AiffTag existingTag,
+                              final ChunkHeader tagChunkHeader,
+                              String fileName) throws IOException {
+    int lengthTagChunk = (int)tagChunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE;
+    if (Utils.isOddLength(lengthTagChunk)) {
+      if (existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk < fc.size()) {
+        lengthTagChunk++;
+      }
+    }
+    final long newLength = fc.size() - lengthTagChunk;
+    LOG.error("{} Size of id3 chunk to delete is:{}:location:{}",
+              fileName,
+              lengthTagChunk,
+              existingTag.getStartLocationInFileOfId3Chunk());
+
+    // position for reading after the id3 tag
+    fc.position(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk);
+
+    deleteTagChunkUsingSmallByteBufferSegments(existingTag, fc, newLength, lengthTagChunk);
+    // truncate the file after the last chunk
+    LOG.error("{} Setting new length to:{}", fileName, newLength);
+    fc.truncate(newLength);
+  }
+
+  /**
+   * Use ByteBuffers to copy a 4mb chunk, write the chunk and repeat until the rest of the file after the ID3 tag
+   * is rewritten
+   *
+   * @param existingTag    existing tag
+   * @param channel        channel
+   * @param newLength      new length
+   * @param lengthTagChunk length tag chunk
+   *
+   * @throws IOException if something goes wrong
+   */
+  // TODO: arguments are not used, position is implicit
+  private void deleteTagChunkUsingSmallByteBufferSegments(final AiffTag existingTag,
+                                                          final FileChannel channel,
+                                                          final long newLength,
+                                                          final long lengthTagChunk)
+      throws IOException {
+    final ByteBuffer buffer = ByteBuffer.allocateDirect((int)TagOptionSingleton.getInstance().getWriteChunkSize());
+    while (channel.read(buffer) >= 0 || buffer.position() != 0) {
+      buffer.flip();
+      final long readPosition = channel.position();
+      channel.position(readPosition - lengthTagChunk - buffer.limit());
+      channel.write(buffer);
+      channel.position(readPosition);
+      buffer.compact();
+    }
+  }
+
+  /**
+   * Rewrite RAF header to reflect new file length
+   *
+   * @param fc
+   *
+   * @throws IOException
+   */
+  private void rewriteRiffHeaderSize(FileChannel fc) throws IOException {
+
+    fc.position(IffHeaderChunk.SIGNATURE_LENGTH);
+    ByteBuffer bb = ByteBuffer.allocateDirect(IffHeaderChunk.SIZE_LENGTH);
+    bb.order(ByteOrder.BIG_ENDIAN);
+    int size = ((int)fc.size()) - SIGNATURE_LENGTH - SIZE_LENGTH;
+    bb.putInt(size);
+    bb.flip();
+    fc.write(bb);
+  }
+
+  /**
+   * The following seems to work on Windows but hangs on OSX!
+   * Bug is filed <a href="https://bugs.openjdk.java.net/browse/JDK-8140241">here</a>.
+   *
+   * @param existingTag existing tag
+   * @param channel     channel
+   * @param newLength   new length
+   *
+   * @throws IOException if something goes wrong
+   */
+  private void deleteTagChunkUsingChannelTransfer(final AiffTag existingTag,
+                                                  final FileChannel channel,
+                                                  final long newLength)
+      throws IOException {
+    long read;
+    //Read from just after the ID3Chunk into the channel at where the ID3 chunk started, should usually only
+    // require one transfer
+    //but put into loop in case multiple calls are required
+    for (long position = existingTag.getStartLocationInFileOfId3Chunk();
+         (read = channel.transferFrom(channel, position, newLength - position)) < newLength - position;
+         position += read) {
+      ;//is this problem if loop called more than once do we need to update position of channel to modify
+    }
+    //where write to ?
+  }
+
+  public void write(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
+    LOG.error("{} Writing Aiff tag to file", fileName);
+    AiffTag existingTag;
+    try {
+      existingTag = getExistingMetadata(fc, fileName);
+      fc.position(0);
+    } catch (IOException ioe) {
+      throw new CannotWriteException(fileName + ":" + ioe.getMessage());
     }
 
-    /**
-     * Writes data as a {@link ealvatag.audio.aiff.chunk.AiffChunkType#TAG} chunk to the file.
-     *
-     * @param fc filechannel
-     * @param bb data to write
-     *
-     * @throws IOException
-     */
-    private void writeDataToFile(FileChannel fc, final ByteBuffer bb)
-            throws IOException {
-        final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
-        ch.setID(AiffChunkType.TAG.getCode());
-        ch.setSize(bb.limit());
-        fc.write(ch.writeHeader());
-        fc.write(bb);
-        writeExtraByteIfChunkOddSize(fc, bb.limit());
-    }
+    try {
+      long existingFileLength = fc.size();
 
-    /**
-     * Chunk must also start on an even byte so if our chunksize is odd we need
-     * to write another byte. This should never happen as ID3Tag is now amended
-     * to ensure always write padding byte if needed to stop it being odd sized
-     * but we keep check in just incase.
-     *
-     * @param fc
-     * @param size
-     *
-     * @throws IOException
-     */
-    private void writeExtraByteIfChunkOddSize(FileChannel fc, long size)
-            throws IOException {
-        if (Utils.isOddLength(size)) {
-            fc.write(ByteBuffer.allocateDirect(1));
+      final AiffTag aiffTag = (AiffTag)tag;
+      final ByteBuffer bb = convert(aiffTag, existingTag);
+
+      //Replacing ID3 tag
+      if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null) {
+        //Usual case
+        if (!existingTag.isIncorrectlyAlignedTag()) {
+          final ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
+          LOG.info(fileName + "Current Space allocated:" + existingTag.getSizeOfID3TagOnly() +
+                       ":NewTagRequires:" + bb.limit());
+
+          //Usual case ID3 is last chunk
+          if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
+            writeDataToFile(fc, bb);
+          }
+          //Unusual Case where ID3 is not last chunk
+          else {
+            deleteTagChunk(fc, existingTag, chunkHeader, fileName);
+            fc.position(fc.size());
+            writeExtraByteIfChunkOddSize(fc, fc.size());
+            writeDataToFile(fc, bb);
+          }
         }
-    }
-
-    /**
-     * Converts tag to {@link ByteBuffer}.
-     *
-     * @param tag         tag
-     * @param existingTag
-     *
-     * @return byte buffer containing the tag data
-     *
-     * @throws UnsupportedEncodingException
-     */
-    public ByteBuffer convert(final AiffTag tag, AiffTag existingTag) throws UnsupportedEncodingException {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            long existingTagSize = existingTag.getSizeOfID3TagOnly();
-
-            //If existingTag is uneven size lets make it even
-            if (existingTagSize > 0) {
-                if ((existingTagSize & 1) != 0) {
-                    existingTagSize++;
-                }
-            }
-
-            //Write Tag to buffer
-            tag.getID3Tag().write(baos, (int)existingTagSize);
-
-            //If the tag is now odd because we needed to increase size and the data made it odd sized
-            //we redo adding a padding byte to make it even
-            if ((baos.toByteArray().length & 1) != 0) {
-                int newSize = baos.toByteArray().length + 1;
-                baos = new ByteArrayOutputStream();
-                tag.getID3Tag().write(baos, newSize);
-            }
-            final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
-            buf.rewind();
-            return buf;
-        } catch (IOException ioe) {
-            //Should never happen as not writing to file at this point
-            throw new RuntimeException(ioe);
+        //Existing ID3 tag is incorrectly aligned so if we can lets delete it and any subsequentially added
+        //ID3 tags as we only want one ID3 tag.
+        else if (AiffChunkSummary.isOnlyMetadataTagsAfterStartingMetadataTag(existingTag)) {
+          deleteRemainderOfFile(fc, existingTag, fileName);
+          fc.position(fc.size());
+          writeExtraByteIfChunkOddSize(fc, fc.size());
+          writeDataToFile(fc, bb);
+        } else {
+          throw new CannotWriteException(
+              fileName + " Metadata tags are corrupted and not at end of fc so cannot be fixed");
         }
+      }
+      //New Tag
+      else {
+        fc.position(fc.size());
+        if (Utils.isOddLength(fc.size())) {
+          fc.write(ByteBuffer.allocateDirect(1));
+        }
+        writeDataToFile(fc, bb);
+      }
+
+      if (existingFileLength != fc.size()) {
+        rewriteRiffHeaderSize(fc);
+      }
+    } catch (IOException ioe) {
+      throw new CannotWriteException(fileName + ":" + ioe.getMessage());
     }
+  }
+
+  /**
+   * If Metadata tags are corrupted and no other tags later in the file then just truncate ID3 tags and start again
+   */
+  private void deleteRemainderOfFile(FileChannel fc, final AiffTag existingTag, String fileName) throws IOException {
+    ChunkSummary precedingChunk = AiffChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
+    if (precedingChunk != null) {
+      if (!Utils.isOddLength(precedingChunk.getEndLocation())) {
+        LOG.error("{} Truncating corrupted ID3 tags from:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk() - 1);
+        fc.truncate(existingTag.getStartLocationInFileOfId3Chunk() - 1);
+      } else {
+        LOG.error("{} Truncating corrupted ID3 tags from:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk());
+        fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
+      }
+    } else {
+      LOG.error("{} No preceding chunk trying to delete remainder of file", fileName);
+    }
+  }
+
+  /**
+   * Writes data as a {@link ealvatag.audio.aiff.chunk.AiffChunkType#TAG} chunk to the file.
+   *
+   * @param fc filechannel
+   * @param bb data to write
+   *
+   * @throws IOException
+   */
+  private void writeDataToFile(FileChannel fc, final ByteBuffer bb)
+      throws IOException {
+    final ChunkHeader ch = new ChunkHeader(ByteOrder.BIG_ENDIAN);
+    ch.setID(AiffChunkType.TAG.getCode());
+    ch.setSize(bb.limit());
+    fc.write(ch.writeHeader());
+    fc.write(bb);
+    writeExtraByteIfChunkOddSize(fc, bb.limit());
+  }
+
+  /**
+   * Chunk must also start on an even byte so if our chunksize is odd we need
+   * to write another byte. This should never happen as ID3Tag is now amended
+   * to ensure always write padding byte if needed to stop it being odd sized
+   * but we keep check in just incase.
+   *
+   * @param fc
+   * @param size
+   *
+   * @throws IOException
+   */
+  private void writeExtraByteIfChunkOddSize(FileChannel fc, long size)
+      throws IOException {
+    if (Utils.isOddLength(size)) {
+      fc.write(ByteBuffer.allocateDirect(1));
+    }
+  }
+
+  /**
+   * Converts tag to {@link ByteBuffer}.
+   *
+   * @param tag         tag
+   * @param existingTag
+   *
+   * @return byte buffer containing the tag data
+   *
+   * @throws UnsupportedEncodingException
+   */
+  public ByteBuffer convert(final AiffTag tag, AiffTag existingTag) throws UnsupportedEncodingException {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      long existingTagSize = existingTag.getSizeOfID3TagOnly();
+
+      //If existingTag is uneven size lets make it even
+      if (existingTagSize > 0) {
+        if ((existingTagSize & 1) != 0) {
+          existingTagSize++;
+        }
+      }
+
+      //Write Tag to buffer
+      tag.getID3Tag().write(baos, (int)existingTagSize);
+
+      //If the tag is now odd because we needed to increase size and the data made it odd sized
+      //we redo adding a padding byte to make it even
+      if ((baos.toByteArray().length & 1) != 0) {
+        int newSize = baos.toByteArray().length + 1;
+        baos = new ByteArrayOutputStream();
+        tag.getID3Tag().write(baos, newSize);
+      }
+      final ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
+      buf.rewind();
+      return buf;
+    } catch (IOException ioe) {
+      //Should never happen as not writing to file at this point
+      throw new RuntimeException(ioe);
+    }
+  }
 }
 

@@ -75,7 +75,7 @@ public abstract class AudioFileReader {
                                                               IOException,
                                                               TagException,
                                                               InvalidAudioFrameException {
-        LOG.trace(ErrorMessage.GENERAL_READ.getMsg(file.getAbsolutePath()));
+        LOG.trace(ErrorMessage.GENERAL_READ, file.getAbsolutePath());
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             raf.seek(0);
             return makeAudioFile(raf, file, extension, ignoreArtwork);

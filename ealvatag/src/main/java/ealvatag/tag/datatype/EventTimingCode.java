@@ -86,7 +86,7 @@ public class EventTimingCode extends AbstractDataType implements Cloneable {
         int localOffset = originalOffset;
         int size = getSize();
 
-        LOG.trace("offset:" + localOffset);
+        LOG.trace("offset:{}", localOffset);
 
         //The read has extended further than the defined frame size (ok to extend upto
         //size because the next datatype may be of length 0.)

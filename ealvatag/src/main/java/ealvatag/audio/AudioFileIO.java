@@ -213,7 +213,7 @@ import java.util.Locale;
     private AudioFileWriter getWriterForExtension(final String ext) throws CannotWriteException {
         final AudioFileWriterFactory factory = writerFactories.get(ext);
         if (factory == null) {
-            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT.getMsg(ext));
+            throw new CannotWriteException(ErrorMessage.NO_DELETER_FOR_THIS_FORMAT, ext);
         }
         return factory.make().setAudioFileModificationListener(modificationHandler);
     }
@@ -229,7 +229,7 @@ import java.util.Locale;
     private AudioFileReader getReaderForExtension(final String ext) throws CannotReadException {
         AudioFileReaderFactory factory = readerFactories.get(ext);
         if (factory == null) {
-            throw new CannotReadException(ErrorMessage.NO_READER_FOR_THIS_FORMAT.getMsg(ext));
+            throw new CannotReadException(ext, ErrorMessage.NO_READER_FOR_THIS_FORMAT);
         }
         return factory.make();
     }
@@ -245,7 +245,7 @@ import java.util.Locale;
         String ext = audioFile.getExt();
         AudioFileWriter afw = getWriterForExtension(ext);
         if (afw == null) {
-            throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT.getMsg(ext));
+            throw new CannotWriteException(ErrorMessage.NO_WRITER_FOR_THIS_FORMAT, ext);
         }
         afw.write(audioFile);
     }
@@ -267,7 +267,7 @@ import java.util.Locale;
             audioFile.setFile(destination);
             writeFile(audioFile);
         } catch (IOException e) {
-            throw new CannotWriteException("Error While Copying", e);
+            throw new CannotWriteException(e, "Error While Copying");
         }
     }
 

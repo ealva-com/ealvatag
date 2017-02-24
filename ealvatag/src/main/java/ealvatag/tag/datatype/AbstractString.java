@@ -91,7 +91,7 @@ public abstract class AbstractString extends AbstractDataType {
         if (encoder.canEncode((String)value)) {
             return true;
         } else {
-            LOG.trace("Failed Trying to decode" + value + "with" + encoder.toString());
+            LOG.trace("Failed Trying to decode {} with {}", value, encoder);
             return false;
         }
     }

@@ -66,11 +66,7 @@ public class AiffInfoReader extends AiffChunkReader {
             return false;
         }
 
-        LOG.trace("{} Reading Next Chunk:{} starting at:{} sizeIncHeader:{}",
-                  fileName,
-                  chunkHeader.getID(),
-                  chunkHeader.getStartLocationInFile(),
-                  chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE);
+        LOG.trace("{} Reading Next Chunk:{}", fileName, chunkHeader);
 
         chunk = createChunk(fc, chunkHeader, aiffAudioHeader);
 

@@ -158,7 +158,7 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
 
     public String getFirst(String id) throws IllegalArgumentException, UnsupportedFieldException {
         if (id.equals(FieldKey.COVER_ART.name())) {
-            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD);
         } else {
             return tag.getFirst(id);
         }
@@ -386,7 +386,7 @@ public class FlacTag implements Tag, ContainsVorbisCommentField {
 
     public TagField createField(String vorbisCommentFieldKey, String value) {
         if (vorbisCommentFieldKey.equals(VorbisCommentFieldKey.COVERART.getFieldName())) {
-            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD);
         }
         return tag.createField(vorbisCommentFieldKey, value);
     }

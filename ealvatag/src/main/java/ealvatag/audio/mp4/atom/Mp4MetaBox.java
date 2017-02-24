@@ -61,7 +61,7 @@ public class Mp4MetaBox extends AbstractMp4Box {
         byte[] b = new byte[FLAGS_LENGTH];
         dataBuffer.get(b);
         if (b[0] != 0) {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_META_ATOM_CHILD_DATA_NOT_NULL.getMsg());
+            throw new CannotReadException(ErrorMessage.MP4_FILE_META_ATOM_CHILD_DATA_NOT_NULL);
         }
     }
 

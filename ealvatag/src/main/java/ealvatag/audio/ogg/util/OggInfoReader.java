@@ -56,7 +56,7 @@ public class OggInfoReader {
                     start = raf.getFilePointer();
                 }
             } else {
-                throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND.getMsg(new String(b)));
+                throw new CannotReadException(ErrorMessage.OGG_HEADER_CANNOT_BE_FOUND, new String(b));
             }
         }
 
@@ -94,7 +94,7 @@ public class OggInfoReader {
 
         if (pcmSamplesNumber == -1) {
             //According to spec a value of -1 indicates no packet finished on this page, this should not occur
-            throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_SETUP_BLOCK.getMsg());
+            throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_SETUP_BLOCK);
         }
 
         //1st page = Identification Header

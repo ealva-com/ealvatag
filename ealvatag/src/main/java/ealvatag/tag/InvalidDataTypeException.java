@@ -13,6 +13,10 @@
  */
 package ealvatag.tag;
 
+import ealvatag.logging.ErrorMessage;
+
+import static ealvatag.logging.ErrorMessage.exceptionMsg;
+
 /**
  * Indicates there was a problem parsing this datatype due to a problem with the data
  * such as the array being empty when trying to read from a file.
@@ -21,7 +25,7 @@ package ealvatag.tag;
 public class InvalidDataTypeException extends InvalidTagException {
     private static final long serialVersionUID = -7361525721486799573L;
 
-    public InvalidDataTypeException(final String message, final Throwable cause) {
+    public InvalidDataTypeException(final Throwable cause, final String message) {
         super(message, cause);
     }
 
@@ -31,6 +35,10 @@ public class InvalidDataTypeException extends InvalidTagException {
 
     public InvalidDataTypeException(String msg) {
         super(msg);
+    }
+
+    public InvalidDataTypeException(String msg, Object... formatArgs) {
+        super(exceptionMsg(msg, formatArgs));
     }
 
 }

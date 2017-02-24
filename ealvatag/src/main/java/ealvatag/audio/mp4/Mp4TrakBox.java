@@ -54,7 +54,7 @@ class Mp4TrakBox {
             dataSize -= childHeader.getLength();
         }
         if (mdiaBox == null) {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO);
         }
         bufferedSource.skip(dataSize);
     }

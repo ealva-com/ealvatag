@@ -97,10 +97,6 @@ public class MetadataBlockDataPicture
 
     /**
      * Initialize MetaBlockDataPicture from byteBuffer
-     *
-     * @param rawdata
-     * @throws IOException
-     * @throws InvalidFrameException
      */
     public MetadataBlockDataPicture(ByteBuffer rawdata) throws IOException, InvalidFrameException {
         initFromByteBuffer(rawdata);

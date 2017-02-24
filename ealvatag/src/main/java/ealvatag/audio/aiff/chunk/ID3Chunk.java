@@ -35,7 +35,7 @@ public class ID3Chunk extends Chunk {
 
     @Override
     public boolean readChunk() throws IOException {
-        LOG.error("Reading chunk");
+        LOG.debug("Reading chunk");
         if (!isId3v2Tag(chunkData)) {
             LOG.error("Invalid ID3 header for ID3 chunk");
             return false;
@@ -46,15 +46,15 @@ public class ID3Chunk extends Chunk {
         switch (version) {
             case ID3v22Tag.MAJOR_VERSION:
                 id3Tag = new ID3v22Tag();
-                LOG.error("Reading ID3V2.2 tag");
+                LOG.debug("Reading ID3V2.2 tag");
                 break;
             case ID3v23Tag.MAJOR_VERSION:
                 id3Tag = new ID3v23Tag();
-                LOG.error("Reading ID3V2.3 tag");
+                LOG.debug("Reading ID3V2.3 tag");
                 break;
             case ID3v24Tag.MAJOR_VERSION:
                 id3Tag = new ID3v24Tag();
-                LOG.error("Reading ID3V2.4 tag");
+                LOG.debug("Reading ID3V2.4 tag");
                 break;
             default:
                 return false;     // bad or unknown version

@@ -80,7 +80,7 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
      * @throws InvalidDataTypeException if unable to find any null terminated Strings
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        LOG.debug("Reading PairTextEncodedStringNullTerminated from array from offset:" + offset);
+        LOG.debug("Reading PairTextEncodedStringNullTerminated from array from offset:{}", offset);
         //Continue until unable to read a null terminated String
         while (true) {
             try {
@@ -130,7 +130,7 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
                 throw new InvalidDataTypeException("No null terminated Strings found");
             }
         }
-        LOG.debug("Read  PairTextEncodedStringNullTerminated:" + value + " size:" + size);
+        LOG.debug("Read  PairTextEncodedStringNullTerminated:{} size:{}", value, size);
     }
 
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
@@ -176,7 +176,7 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
                 throw new InvalidDataTypeException("No null terminated Strings found");
             }
         }
-        LOG.debug("Read  PairTextEncodedStringNullTerminated:{} size:{}", value, this.size);
+        LOG.debug("Read  PairTextEncodedStringNullTerminated:{} size:{}", value, size);
     }
 
     /**

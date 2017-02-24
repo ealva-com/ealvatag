@@ -17,20 +17,27 @@
 
 package ealvatag.tag;
 
+import static ealvatag.logging.ErrorMessage.exceptionMsg;
+
 /**
  * Thrown when a {@link Tag} instance does not support a particular Field
- *
+ * <p>
  * Created by Eric A. Snell on 1/14/17.
  */
 public class UnsupportedFieldException extends RuntimeException {
 
-    private static final long serialVersionUID = -985995829314388820L;
+  private static final long serialVersionUID = -985995829314388820L;
 
-    /**
-     *
-     * @param message the name of the field that caused the exception
-     */
-    public UnsupportedFieldException(final String message) {
-        super(message);
-    }
+  /**
+   * @param message the name of the field that caused the exception
+   */
+  public UnsupportedFieldException(final String message) {
+    super(message);
+  }
+
+  public UnsupportedFieldException(final String message, Object... formatArgs) {
+    super(exceptionMsg(message, formatArgs));
+  }
+
+
 }

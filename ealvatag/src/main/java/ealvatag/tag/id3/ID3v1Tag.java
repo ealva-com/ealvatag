@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Key;
@@ -55,7 +54,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -69,890 +67,803 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  */
 public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
-    //For writing output
-    protected static final String TYPE_COMMENT = "comment";
-    protected static final int FIELD_COMMENT_LENGTH = 30;
-    protected static final int FIELD_COMMENT_POS = 97;
-    protected static final int BYTE_TO_UNSIGNED = 0xff;
-    protected static final int GENRE_UNDEFINED = 0xff;
-    private static final Logger LOG = LoggerFactory.getLogger(ID3v1Tag.class);
-    private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
-    protected static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
-    private static final byte RELEASE = 1;
-    private static final byte MAJOR_VERSION = 0;
-    private static final byte REVISION = 0;
+  //For writing output
+  static final String TYPE_COMMENT = "comment";
+  private static final int FIELD_COMMENT_LENGTH = 30;
+  private static final int FIELD_COMMENT_POS = 97;
+  static final int BYTE_TO_UNSIGNED = 0xff;
+  static final int GENRE_UNDEFINED = 0xff;
+  private static final Logger LOG = LoggerFactory.getLogger(ID3v1Tag.class);
+  private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
+  static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
+  private static final byte RELEASE = 1;
+  private static final byte MAJOR_VERSION = 0;
+  private static final byte REVISION = 0;
 
-    static {
-        final ImmutableMap.Builder<FieldKey, ID3v1FieldKey> builder = ImmutableMap.builder();
-        builder.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST)
-               .put(FieldKey.ALBUM, ID3v1FieldKey.ALBUM)
-               .put(FieldKey.TITLE, ID3v1FieldKey.TITLE)
-               .put(FieldKey.YEAR, ID3v1FieldKey.YEAR)
-               .put(FieldKey.GENRE, ID3v1FieldKey.GENRE)
-               .put(FieldKey.COMMENT, ID3v1FieldKey.COMMENT);
-        tagFieldToID3v1Field = builder.build();
+  static {
+    final ImmutableMap.Builder<FieldKey, ID3v1FieldKey> builder = ImmutableMap.builder();
+    builder.put(FieldKey.ARTIST, ID3v1FieldKey.ARTIST)
+           .put(FieldKey.ALBUM, ID3v1FieldKey.ALBUM)
+           .put(FieldKey.TITLE, ID3v1FieldKey.TITLE)
+           .put(FieldKey.YEAR, ID3v1FieldKey.YEAR)
+           .put(FieldKey.GENRE, ID3v1FieldKey.GENRE)
+           .put(FieldKey.COMMENT, ID3v1FieldKey.COMMENT);
+    tagFieldToID3v1Field = builder.build();
 
-        tagFieldToID3v11Field = ImmutableMap.<FieldKey, ID3v1FieldKey>builder()
-                .putAll(tagFieldToID3v1Field)
-                .put(FieldKey.TRACK, ID3v1FieldKey.TRACK)
-                .build();
+    tagFieldToID3v11Field = ImmutableMap.<FieldKey, ID3v1FieldKey>builder()
+        .putAll(tagFieldToID3v1Field)
+        .put(FieldKey.TRACK, ID3v1FieldKey.TRACK)
+        .build();
 
+  }
+
+  /**
+   *
+   */
+  protected String album = "";
+  /**
+   *
+   */
+  protected String artist = "";
+  /**
+   *
+   */
+  protected String comment = "";
+  /**
+   *
+   */
+  protected String title = "";
+  /**
+   *
+   */
+  protected String year = "";
+  /**
+   *
+   */
+  protected byte genre = (byte)-1;
+
+  /**
+   * Creates a new ID3v1 datatype.
+   */
+  public ID3v1Tag() {
+  }
+
+  public ID3v1Tag(ID3v1Tag copyObject) {
+    this.album = copyObject.album;
+    this.artist = copyObject.artist;
+    this.comment = copyObject.comment;
+    this.title = copyObject.title;
+    this.year = copyObject.year;
+    this.genre = copyObject.genre;
+  }
+
+  public ID3v1Tag(BaseID3Tag mp3tag) {
+    if (mp3tag != null) {
+      ID3v11Tag convertedTag;
+      if (mp3tag instanceof ID3v1Tag) {
+        throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
+      }
+      convertedTag = new ID3v11Tag(mp3tag);
+      this.album = convertedTag.album;
+      this.artist = convertedTag.artist;
+      this.comment = convertedTag.comment;
+      this.title = convertedTag.title;
+      this.year = convertedTag.year;
+      this.genre = convertedTag.genre;
     }
+  }
 
-    /**
-     *
-     */
-    protected String album = "";
-    /**
-     *
-     */
-    protected String artist = "";
-    /**
-     *
-     */
-    protected String comment = "";
-    /**
-     *
-     */
-    protected String title = "";
-    /**
-     *
-     */
-    protected String year = "";
-    /**
-     *
-     */
-    protected byte genre = (byte)-1;
+  public ID3v1Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {
+    FileChannel fileChannel = fileOperator.getFileChannel();
+    setLoggingFilename(loggingFilename);
+    ByteBuffer byteBuffer;
 
-    /**
-     * Creates a new ID3v1 datatype.
-     */
-    public ID3v1Tag() {
+    fileChannel.position(fileChannel.size() - TAG_LENGTH);
+    byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
+    fileChannel.read(byteBuffer);
+    byteBuffer.flip();
+    read(byteBuffer);
+  }
+
+  public void read(ByteBuffer byteBuffer) throws TagNotFoundException {
+    if (!seek(byteBuffer)) {
+      throw new TagNotFoundException(loggingFilename + ":" + "ID3v1 tag not found");
     }
-
-    public ID3v1Tag(ID3v1Tag copyObject) {
-        this.album = copyObject.album;
-        this.artist = copyObject.artist;
-        this.comment = copyObject.comment;
-        this.title = copyObject.title;
-        this.year = copyObject.year;
-        this.genre = copyObject.genre;
+    LOG.debug("{}:Reading v1 tag", loggingFilename);
+    //Do single file read of data to cut down on file reads
+    byte[] dataBuffer = new byte[TAG_LENGTH];
+    byteBuffer.position(0);
+    byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
+    title = new String(dataBuffer, FIELD_TITLE_POS, FIELD_TITLE_LENGTH, StandardCharsets.ISO_8859_1).trim();
+    Matcher m = AbstractID3v1Tag.endofStringPattern.matcher(title);
+    if (m.find()) {
+      title = title.substring(0, m.start());
     }
-
-    public ID3v1Tag(BaseID3Tag mp3tag) {
-        if (mp3tag != null) {
-            ID3v11Tag convertedTag;
-            if (mp3tag instanceof ID3v1Tag) {
-                throw new UnsupportedOperationException("Copy Constructor not called. Please type cast the argument");
-            }
-            convertedTag = new ID3v11Tag(mp3tag);
-            this.album = convertedTag.album;
-            this.artist = convertedTag.artist;
-            this.comment = convertedTag.comment;
-            this.title = convertedTag.title;
-            this.year = convertedTag.year;
-            this.genre = convertedTag.genre;
-        }
+    artist = new String(dataBuffer, FIELD_ARTIST_POS, FIELD_ARTIST_LENGTH, StandardCharsets.ISO_8859_1).trim();
+    m = AbstractID3v1Tag.endofStringPattern.matcher(artist);
+    if (m.find()) {
+      artist = artist.substring(0, m.start());
     }
-
-    public ID3v1Tag(FileOperator fileOperator, String loggingFilename) throws TagNotFoundException, IOException {
-        FileChannel fileChannel = fileOperator.getFileChannel();
-        setLoggingFilename(loggingFilename);
-        ByteBuffer byteBuffer;
-
-        fileChannel.position(fileChannel.size() - TAG_LENGTH);
-        byteBuffer = ByteBuffer.allocate(TAG_LENGTH);
-        fileChannel.read(byteBuffer);
-        byteBuffer.flip();
-        read(byteBuffer);
+    album = new String(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, StandardCharsets.ISO_8859_1).trim();
+    m = AbstractID3v1Tag.endofStringPattern.matcher(album);
+    LOG.trace("{}:Orig Album is:{}", loggingFilename, comment);
+    if (m.find()) {
+      album = album.substring(0, m.start());
+      LOG.trace("{}:Album is:{}", loggingFilename, album);
     }
-
-    /**
-     * @param byteBuffer
-     *
-     * @throws TagNotFoundException
-     */
-    public void read(ByteBuffer byteBuffer) throws TagNotFoundException {
-        if (!seek(byteBuffer)) {
-            throw new TagNotFoundException(getLoggingFilename() + ":" + "ID3v1 tag not found");
-        }
-        LOG.debug(getLoggingFilename() + ":" + "Reading v1 tag");
-        //Do single file read of data to cut down on file reads
-        byte[] dataBuffer = new byte[TAG_LENGTH];
-        byteBuffer.position(0);
-        byteBuffer.get(dataBuffer, 0, TAG_LENGTH);
-        title = new String(dataBuffer, FIELD_TITLE_POS, FIELD_TITLE_LENGTH, StandardCharsets.ISO_8859_1).trim();
-        Matcher m = AbstractID3v1Tag.endofStringPattern.matcher(title);
-        if (m.find()) {
-            title = title.substring(0, m.start());
-        }
-        artist = new String(dataBuffer, FIELD_ARTIST_POS, FIELD_ARTIST_LENGTH, StandardCharsets.ISO_8859_1).trim();
-        m = AbstractID3v1Tag.endofStringPattern.matcher(artist);
-        if (m.find()) {
-            artist = artist.substring(0, m.start());
-        }
-        album = new String(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, StandardCharsets.ISO_8859_1).trim();
-        m = AbstractID3v1Tag.endofStringPattern.matcher(album);
-        LOG.trace(getLoggingFilename() + ":" + "Orig Album is:" + comment + ":");
-        if (m.find()) {
-            album = album.substring(0, m.start());
-            LOG.trace(getLoggingFilename() + ":" + "Album is:" + album + ":");
-        }
-        year = new String(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, StandardCharsets.ISO_8859_1).trim();
-        m = AbstractID3v1Tag.endofStringPattern.matcher(year);
-        if (m.find()) {
-            year = year.substring(0, m.start());
-        }
-        comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, StandardCharsets.ISO_8859_1).trim();
-        m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
-        LOG.trace(getLoggingFilename() + ":" + "Orig Comment is:" + comment + ":");
-        if (m.find()) {
-            comment = comment.substring(0, m.start());
-            LOG.trace(getLoggingFilename() + ":" + "Comment is:" + comment + ":");
-        }
-        genre = dataBuffer[FIELD_GENRE_POS];
-
+    year = new String(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, StandardCharsets.ISO_8859_1).trim();
+    m = AbstractID3v1Tag.endofStringPattern.matcher(year);
+    if (m.find()) {
+      year = year.substring(0, m.start());
     }
-
-    /**
-     * Does a tag of this version exist within the byteBuffer
-     *
-     * @return whether tag exists within the byteBuffer
-     */
-    public boolean seek(ByteBuffer byteBuffer) {
-        byte[] buffer = new byte[FIELD_TAGID_LENGTH];
-        // read the TAG value
-        byteBuffer.get(buffer, 0, FIELD_TAGID_LENGTH);
-        return (Arrays.equals(buffer, TAG_ID));
+    comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, StandardCharsets.ISO_8859_1).trim();
+    m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
+    LOG.trace("{}:Orig Comment is:{}", loggingFilename, comment);
+    if (m.find()) {
+      comment = comment.substring(0, m.start());
+      LOG.trace("{}:Comment is:{}", loggingFilename, comment);
     }
+    genre = dataBuffer[FIELD_GENRE_POS];
 
-    /**
-     * Write this tag to the file, replacing any tag previously existing
-     *
-     * @param file
-     *
-     * @throws IOException
-     */
-    public void write(RandomAccessFile file) throws IOException {
-        LOG.debug("Saving ID3v1 tag to file");
-        byte[] buffer = new byte[TAG_LENGTH];
-        int i;
-        String str;
-        delete(file);
-        file.seek(file.length());
-        //Copy the TAGID into new buffer
-        System.arraycopy(TAG_ID, FIELD_TAGID_POS, buffer, FIELD_TAGID_POS, TAG_ID.length);
-        int offset = FIELD_TITLE_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveTitle()) {
-            str = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
-            for (i = 0; i < str.length(); i++) {
-                buffer[i + offset] = (byte)str.charAt(i);
-            }
-        }
-        offset = FIELD_ARTIST_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveArtist()) {
-            str = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
-            for (i = 0; i < str.length(); i++) {
-                buffer[i + offset] = (byte)str.charAt(i);
-            }
-        }
-        offset = FIELD_ALBUM_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveAlbum()) {
-            str = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
-            for (i = 0; i < str.length(); i++) {
-                buffer[i + offset] = (byte)str.charAt(i);
-            }
-        }
-        offset = FIELD_YEAR_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveYear()) {
-            str = ID3Tags.truncate(year, AbstractID3v1Tag.FIELD_YEAR_LENGTH);
-            for (i = 0; i < str.length(); i++) {
-                buffer[i + offset] = (byte)str.charAt(i);
-            }
-        }
-        offset = FIELD_COMMENT_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveComment()) {
-            str = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
-            for (i = 0; i < str.length(); i++) {
-                buffer[i + offset] = (byte)str.charAt(i);
-            }
-        }
-        offset = FIELD_GENRE_POS;
-        if (TagOptionSingleton.getInstance().isId3v1SaveGenre()) {
-            buffer[offset] = genre;
-        }
-        file.write(buffer);
-        LOG.debug("Saved ID3v1 tag to file");
+  }
+
+  /**
+   * Does a tag of this version exist within the byteBuffer
+   *
+   * @return whether tag exists within the byteBuffer
+   */
+  public boolean seek(ByteBuffer byteBuffer) {
+    byte[] buffer = new byte[FIELD_TAGID_LENGTH];
+    // read the TAG value
+    byteBuffer.get(buffer, 0, FIELD_TAGID_LENGTH);
+    return (Arrays.equals(buffer, TAG_ID));
+  }
+
+  /**
+   * Write this tag to the file, replacing any tag previously existing
+   */
+  public void write(RandomAccessFile file) throws IOException {
+    LOG.debug("Saving ID3v1 tag to file");
+    byte[] buffer = new byte[TAG_LENGTH];
+    int i;
+    String str;
+    delete(file);
+    file.seek(file.length());
+    System.arraycopy(TAG_ID, FIELD_TAGID_POS, buffer, FIELD_TAGID_POS, TAG_ID.length);
+    int offset = FIELD_TITLE_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveTitle()) {
+      str = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
+      for (i = 0; i < str.length(); i++) {
+        buffer[i + offset] = (byte)str.charAt(i);
+      }
     }
-
-    /**
-     * @param obj
-     *
-     * @return true if this and obj are equivalent
-     */
-    public boolean equals(Object obj) {
-        if (!(obj instanceof ID3v1Tag)) {
-            return false;
-        }
-        ID3v1Tag object = (ID3v1Tag)obj;
-        if (!this.album.equals(object.album)) {
-            return false;
-        }
-        if (!this.artist.equals(object.artist)) {
-            return false;
-        }
-        if (!this.comment.equals(object.comment)) {
-            return false;
-        }
-        if (this.genre != object.genre) {
-            return false;
-        }
-        if (!this.title.equals(object.title)) {
-            return false;
-        }
-        return this.year.equals(object.year) && super.equals(obj);
+    offset = FIELD_ARTIST_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveArtist()) {
+      str = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
+      for (i = 0; i < str.length(); i++) {
+        buffer[i + offset] = (byte)str.charAt(i);
+      }
     }
-
-    /**
-     * @return an iterator to iterate through the fields of the tag
-     */
-    public Iterator iterator() {
-        return new ID3v1Iterator(this);
+    offset = FIELD_ALBUM_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveAlbum()) {
+      str = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
+      for (i = 0; i < str.length(); i++) {
+        buffer[i + offset] = (byte)str.charAt(i);
+      }
     }
-
-    /**
-     * Retrieve the Release
-     */
-    public byte getRelease() {
-        return RELEASE;
+    offset = FIELD_YEAR_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveYear()) {
+      str = ID3Tags.truncate(year, AbstractID3v1Tag.FIELD_YEAR_LENGTH);
+      for (i = 0; i < str.length(); i++) {
+        buffer[i + offset] = (byte)str.charAt(i);
+      }
     }
-
-    /**
-     * Retrieve the Major Version
-     */
-    public byte getMajorVersion() {
-        return MAJOR_VERSION;
+    offset = FIELD_COMMENT_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveComment()) {
+      str = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
+      for (i = 0; i < str.length(); i++) {
+        buffer[i + offset] = (byte)str.charAt(i);
+      }
     }
-
-    /**
-     * Retrieve the Revision
-     */
-    public byte getRevision() {
-        return REVISION;
+    offset = FIELD_GENRE_POS;
+    if (TagOptionSingleton.getInstance().isId3v1SaveGenre()) {
+      buffer[offset] = genre;
     }
+    file.write(buffer);
+    LOG.debug("Saved ID3v1 tag to file");
+  }
 
-    protected List<TagField> returnFieldToList(ID3v1TagField field) {
-        List<TagField> fields = new ArrayList<TagField>();
-        fields.add(field);
-        return fields;
+  /**
+   * @return true if this and obj are equivalent
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof ID3v1Tag)) {
+      return false;
     }
+    ID3v1Tag object = (ID3v1Tag)obj;
 
-    /**
-     * @return album within list or empty if does not exist
-     */
-    public ImmutableList<TagField> getAlbum() {
-        final String firstAlbum = getFirstAlbum();
-        if (firstAlbum.length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), firstAlbum));
-        } else {
-            return ImmutableList.of();
-        }
+    return this.album.equals(object.album) &&
+        this.artist.equals(object.artist) &&
+        this.comment.equals(object.comment) &&
+        this.genre == object.genre &&
+        this.title.equals(object.title) &&
+        this.year.equals(object.year) &&
+        super.equals(obj);
+  }
+
+  /**
+   * @return an iterator to iterate through the fields of the tag
+   */
+  public Iterator iterator() {
+    return new ID3v1Iterator(this);
+  }
+
+  /**
+   * Retrieve the Release
+   */
+  public byte getRelease() {
+    return RELEASE;
+  }
+
+  /**
+   * Retrieve the Major Version
+   */
+  public byte getMajorVersion() {
+    return MAJOR_VERSION;
+  }
+
+  /**
+   * Retrieve the Revision
+   */
+  public byte getRevision() {
+    return REVISION;
+  }
+
+//  protected List<TagField> returnFieldToList(ID3v1TagField field) {
+//    List<TagField> fields = new ArrayList<TagField>();
+//    fields.add(field);
+//    return fields;
+//  }
+
+  /**
+   * @return album within list or empty if does not exist
+   */
+  public ImmutableList<TagField> getAlbum() {
+    final String firstAlbum = getFirstAlbum();
+    if (firstAlbum.length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ALBUM.name(), firstAlbum));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * Set Album
-     *
-     * @param album
-     */
-    public void setAlbum(String album) {
-        if (album == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        this.album = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
+  /**
+   * Set Album
+   */
+  public void setAlbum(String album) {
+    checkArgNotNull(album);
+    this.album = ID3Tags.truncate(album, FIELD_ALBUM_LENGTH);
+  }
+
+  /**
+   * @return Artist within list or empty if does not exist
+   */
+  public ImmutableList<TagField> getArtist() {
+    final String firstArtist = getFirstArtist();
+    if (firstArtist.length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), firstArtist));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * @return Artist within list or empty if does not exist
-     */
-    public ImmutableList<TagField> getArtist() {
-        final String firstArtist = getFirstArtist();
-        if (firstArtist.length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.ARTIST.name(), firstArtist));
-        } else {
-            return ImmutableList.of();
-        }
+  /**
+   * Set Artist
+   */
+  public void setArtist(String artist) {
+    checkArgNotNull(artist);
+    this.artist = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
+  }
+
+  /**
+   * @return comment within list or empty if does not exist
+   */
+  public ImmutableList<TagField> getComment() {
+    if (getFirstComment().length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment()));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * Set Artist
-     *
-     * @param artist
-     */
-    public void setArtist(String artist) {
-        if (artist == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        this.artist = ID3Tags.truncate(artist, FIELD_ARTIST_LENGTH);
+  /**
+   * Set Comment
+   *
+   * @throws IllegalArgumentException if comment null
+   */
+  public void setComment(String comment) {
+    checkArgNotNull(comment);
+    this.comment = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
+  }
+
+  /**
+   * Get Genre field
+   * <p>
+   * <p>Only a single genre is available in ID3v1
+   */
+  public ImmutableList<TagField> getGenre() {
+    final String firstGenre = getFirst(FieldKey.GENRE);
+    if (firstGenre.length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.GENRE.name(), firstGenre));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * @return comment within list or empty if does not exist
-     */
-    public ImmutableList<TagField> getComment() {
-        if (getFirstComment().length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.COMMENT.name(), getFirstComment()));
-        } else {
-            return ImmutableList.of();
-        }
+  /**
+   * Sets the genreID,
+   * <p>
+   * <p>ID3v1 only supports genres defined in a predefined list
+   * so if unable to find value in list set 255, which seems to be the value
+   * winamp uses for undefined.
+   */
+  public void setGenre(String genreVal) {
+    checkArgNotNull(genreVal);
+    Integer genreID = GenreTypes.getInstanceOf().getIdForValue(genreVal);
+    if (genreID != null) {
+      this.genre = genreID.byteValue();
+    } else {
+      this.genre = (byte)GENRE_UNDEFINED;
     }
+  }
 
-    /**
-     * Set Comment
-     *
-     * @param comment
-     *
-     * @throws IllegalArgumentException if comment null
-     */
-    public void setComment(String comment) {
-        if (comment == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        this.comment = ID3Tags.truncate(comment, FIELD_COMMENT_LENGTH);
+  /**
+   * Get title field
+   * <p>
+   * <p>Only a single title is available in ID3v1
+   */
+  public ImmutableList<TagField> getTitle() {
+    final String firstTitle = getFirst(FieldKey.TITLE);
+    if (firstTitle.length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.TITLE.name(), firstTitle));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * Get Genre field
-     * <p>
-     * <p>Only a single genre is available in ID3v1
-     *
-     * @return
-     */
-    public ImmutableList<TagField> getGenre() {
-        final String firstGenre = getFirst(FieldKey.GENRE);
-        if (firstGenre.length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.GENRE.name(), firstGenre));
-        } else {
-            return ImmutableList.of();
-        }
+  /**
+   * Set Title
+   */
+  public void setTitle(String title) {
+    checkArgNotNull(title);
+    this.title = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
+  }
+
+  /**
+   * Get year field
+   * <p>
+   * <p>Only a single year is available in ID3v1
+   */
+  public ImmutableList<TagField> getYear() {
+    if (getFirst(FieldKey.YEAR).length() > 0) {
+      return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR)));
+    } else {
+      return ImmutableList.of();
     }
+  }
 
-    /**
-     * Sets the genreID,
-     * <p>
-     * <p>ID3v1 only supports genres defined in a predefined list
-     * so if unable to find value in list set 255, which seems to be the value
-     * winamp uses for undefined.
-     *
-     * @param genreVal
-     */
-    public void setGenre(String genreVal) {
-        if (genreVal == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        Integer genreID = GenreTypes.getInstanceOf().getIdForValue(genreVal);
-        if (genreID != null) {
-            this.genre = genreID.byteValue();
-        } else {
-            this.genre = (byte)GENRE_UNDEFINED;
-        }
+  /**
+   * Set year
+   */
+  public void setYear(String year) {
+    this.year = ID3Tags.truncate(year, FIELD_YEAR_LENGTH);
+  }
+
+  public String getFirstTrack() {
+    throw new UnsupportedFieldException(FieldKey.TRACK.name());
+  }
+
+  public ImmutableList<TagField> getTrack() {
+    throw new UnsupportedFieldException(FieldKey.TRACK.name());
+  }
+
+  public Charset getEncoding() {
+    return StandardCharsets.ISO_8859_1;
+  }
+
+//  /**
+//   * The m parameter is effectively ignored
+//   *
+//   */
+//  public String getSubValue(FieldKey id, int n, int m) {
+//    return getFieldAt(id, n);
+//  }
+
+  /**
+   * Create structured representation of this item.
+   */
+  public void createStructure() {
+    MP3File.getStructureFormatter().openHeadingElement(TYPE_TAG, getIdentifier());
+    //Header
+    MP3File.getStructureFormatter().addElement(TYPE_TITLE, this.title);
+    MP3File.getStructureFormatter().addElement(TYPE_ARTIST, this.artist);
+    MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
+    MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
+    MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
+    MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
+    MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
+  }
+
+  @Override public ImmutableSet<FieldKey> getSupportedFields() {
+    return tagFieldToID3v1Field.keySet();
+  }
+
+  public boolean isEmpty() {
+    return !(getFirst(FieldKey.TITLE).length() > 0 ||
+        getFirstArtist().length() > 0 ||
+        getFirstAlbum().length() > 0 ||
+        getFirst(FieldKey.GENRE).length() > 0 ||
+        getFirst(FieldKey.YEAR).length() > 0 ||
+        getFirstComment().length() > 0);
+  }
+
+  public boolean hasField(FieldKey genericKey) {
+    return getFirst(genericKey).length() > 0;
+  }
+
+  public boolean hasField(String id) {
+    try {
+      FieldKey key = FieldKey.valueOf(id.toUpperCase());
+      return hasField(key);
+    } catch (java.lang.IllegalArgumentException iae) {
+      return false;
     }
+  }
 
-    /**
-     * Get title field
-     * <p>
-     * <p>Only a single title is available in ID3v1
-     *
-     * @return
-     */
-    public ImmutableList<TagField> getTitle() {
-        final String firstTitle = getFirst(FieldKey.TITLE);
-        if (firstTitle.length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.TITLE.name(), firstTitle));
-        } else {
-            return ImmutableList.of();
-        }
+  @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    return getFields(FieldKey.valueOf(genericKey.name())).size();
+  }
+
+  public int getFieldCount() {
+    return 6;
+  }
+
+  public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                    UnsupportedFieldException,
+                                                                    FieldDataInvalidException {
+    // create field checks parameters
+    TagField tagfield = createField(genericKey, values);
+    setField(tagfield);
+    return this;
+  }
+
+  public void setField(TagField field) {
+    FieldKey genericKey = FieldKey.valueOf(field.getId());
+    switch (genericKey) {
+      case ARTIST:
+        setArtist(field.toString());
+        break;
+
+      case ALBUM:
+        setAlbum(field.toString());
+        break;
+
+      case TITLE:
+        setTitle(field.toString());
+        break;
+
+      case GENRE:
+        setGenre(field.toString());
+        break;
+
+      case YEAR:
+        setYear(field.toString());
+        break;
+
+      case COMMENT:
+        setComment(field.toString());
+        break;
     }
+  }
 
-    /**
-     * Set Title
-     *
-     * @param title
-     */
-    public void setTitle(String title) {
-        if (title == null) {
-            throw new IllegalArgumentException(ErrorMessage.GENERAL_INVALID_NULL_ARGUMENT.getMsg());
-        }
-        this.title = ID3Tags.truncate(title, FIELD_TITLE_LENGTH);
+  public void addField(TagField field) {
+    //TODO
+  }
+
+  public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
+                                                                    UnsupportedFieldException,
+                                                                    FieldDataInvalidException {
+    // parameters checked later in chain // TODO: 1/20/17 refactor into public and private methods
+    setField(genericKey, values);
+    return this;
+  }
+
+  /**
+   * Retrieve the first value that exists for this generic key
+   */
+  public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    if (!getSupportedFields().contains(genericKey)) {
+      throw new UnsupportedFieldException(genericKey.toString());
     }
+    return getValue(genericKey).or("");
+  }
 
-    /**
-     * Get year field
-     * <p>
-     * <p>Only a single year is available in ID3v1
-     *
-     * @return
-     */
-    public ImmutableList<TagField> getYear() {
-        if (getFirst(FieldKey.YEAR).length() > 0) {
-            return ImmutableList.<TagField>of(new ID3v1TagField(ID3v1FieldKey.YEAR.name(), getFirst(FieldKey.YEAR)));
-        } else {
-            return ImmutableList.of();
-        }
-    }
+  /**
+   * Retrieve the first value that exists for this key id
+   */
+  public String getFirst(String genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    FieldKey matchingKey = FieldKey.valueOf(genericKey);
+    return getValue(matchingKey).or("");
+  }
 
-    /**
-     * Set year
-     *
-     * @param year
-     */
-    public void setYear(String year) {
-        this.year = ID3Tags.truncate(year, FIELD_YEAR_LENGTH);
-    }
-
-    public String getFirstTrack() {
-        throw new UnsupportedFieldException(FieldKey.TRACK.name());
-    }
-
-    public ImmutableList<TagField> getTrack() {
-        throw new UnsupportedFieldException(FieldKey.TRACK.name());
-    }
-
-    public Charset getEncoding() {
-        return StandardCharsets.ISO_8859_1;
-    }
-
-    /**
-     * The m parameter is effectively ignored
-     *
-     * @param id
-     * @param n
-     * @param m
-     *
-     * @return
-     */
-    public String getSubValue(FieldKey id, int n, int m) {
-        return getFieldAt(id, n);
-    }
-
-    /**
-     * Create structured representation of this item.
-     */
-    public void createStructure() {
-        MP3File.getStructureFormatter().openHeadingElement(TYPE_TAG, getIdentifier());
-        //Header
-        MP3File.getStructureFormatter().addElement(TYPE_TITLE, this.title);
-        MP3File.getStructureFormatter().addElement(TYPE_ARTIST, this.artist);
-        MP3File.getStructureFormatter().addElement(TYPE_ALBUM, this.album);
-        MP3File.getStructureFormatter().addElement(TYPE_YEAR, this.year);
-        MP3File.getStructureFormatter().addElement(TYPE_COMMENT, this.comment);
-        MP3File.getStructureFormatter().addElement(TYPE_GENRE, this.genre);
-        MP3File.getStructureFormatter().closeHeadingElement(TYPE_TAG);
-    }
-
-    @Override public ImmutableSet<FieldKey> getSupportedFields() {
-        return tagFieldToID3v1Field.keySet();
-    }
-
-    public boolean isEmpty() {
-        return !(getFirst(FieldKey.TITLE).length() > 0 ||
-                getFirstArtist().length() > 0 ||
-                getFirstAlbum().length() > 0 ||
-                getFirst(FieldKey.GENRE).length() > 0 ||
-                getFirst(FieldKey.YEAR).length() > 0 ||
-                getFirstComment().length() > 0);
-    }
-
-    public boolean hasField(FieldKey genericKey) {
-        return getFirst(genericKey).length() > 0;
-    }
-
-    public boolean hasField(String id) {
-        try {
-            FieldKey key = FieldKey.valueOf(id.toUpperCase());
-            return hasField(key);
-        } catch (java.lang.IllegalArgumentException iae) {
-            return false;
-        }
-    }
-
-    @Override public int getFieldCount(final Key genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return getFields(FieldKey.valueOf(genericKey.name())).size();
-    }
-
-    public int getFieldCount() {
-        return 6;
-    }
-
-    public Tag setField(FieldKey genericKey, String... values) throws IllegalArgumentException,
-                                                                      UnsupportedFieldException,
-                                                                      FieldDataInvalidException {
-        // create field checks parameters
-        TagField tagfield = createField(genericKey, values);
-        setField(tagfield);
-        return this;
-    }
-
-    public void setField(TagField field) {
-        FieldKey genericKey = FieldKey.valueOf(field.getId());
-        switch (genericKey) {
-            case ARTIST:
-                setArtist(field.toString());
-                break;
-
-            case ALBUM:
-                setAlbum(field.toString());
-                break;
-
-            case TITLE:
-                setTitle(field.toString());
-                break;
-
-            case GENRE:
-                setGenre(field.toString());
-                break;
-
-            case YEAR:
-                setYear(field.toString());
-                break;
-
-            case COMMENT:
-                setComment(field.toString());
-                break;
-        }
-    }
-
-    public void addField(TagField field) {
-        //TODO
-    }
-
-    public Tag addField(FieldKey genericKey, String... values) throws IllegalArgumentException,
-                                                                      UnsupportedFieldException,
-                                                                      FieldDataInvalidException {
-        // parameters checked later in chain // TODO: 1/20/17 refactor into public and private methods
-        setField(genericKey, values);
-        return this;
-    }
-
-    /**
-     * Retrieve the first value that exists for this generic key
-     *
-     * @param genericKey
-     *
-     * @return
-     */
-    public String getFirst(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        if (!getSupportedFields().contains(genericKey)) {
-            throw new UnsupportedFieldException(genericKey.toString());
-        }
-        return getValue(genericKey).or("");
-//        switch (genericKey) {
-//            case ARTIST:
-//                return getFirstArtist();
-//
-//            case ALBUM:
-//                return getFirstAlbum();
-//
-//            case TITLE:
-//                return getFirstTitle();
-//
-//            case GENRE:
-//                return getFirstGenre();
-//
-//            case YEAR:
-//                return getFirstYear();
-//
-//            case COMMENT:
-//                return getFirstComment();
-//
-//            default:
-//                throw new UnsupportedFieldException(genericKey.name());
-//        }
-    }
-
-    /**
-     * Retrieve the first value that exists for this key id
-     *
-     * @param genericKey
-     *
-     * @return
-     */
-    public String getFirst(String genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        FieldKey matchingKey = FieldKey.valueOf(genericKey);
-        if (matchingKey != null) {
-            return getFirst(matchingKey);
-        } else {
-            return "";
-        }
-    }
-
-    public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
-        switch (genericKey) {
-            case ARTIST:
-                return Optional.of(getFirstArtist());
-            case ALBUM:
-                return Optional.of(getFirstAlbum());
-            case TITLE:
-                return Optional.of(getFirstTitle());
-            case GENRE:
-                return getOptionalFirstGenre();
-            case YEAR:
-                return Optional.of(getFirstYear());
-            case COMMENT:
-                return Optional.of(getFirstComment());
-            default:
-                return Optional.absent();
-        }
-    }
-
-    @Override
-    public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
-        checkArgNotNull(genericKey);
-        if (index > 0) {
-            return Optional.absent();
-        }
-        return getValue(genericKey);
-    }
-
-    public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
-        return getValue(genericKey, index).or("");
-    }
-
-    public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        return Collections.singletonList(getFirst(genericKey.name()));
-    }
-
-    public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
-        checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
-        switch (genericKey) {
-            case ARTIST:
-                setArtist("");
-                break;
-            case ALBUM:
-                setAlbum("");
-                break;
-            case TITLE:
-                setTitle("");
-                break;
-            case GENRE:
-                setGenre("");
-                break;
-            case YEAR:
-                setYear("");
-                break;
-            case COMMENT:
-                setComment("");
-                break;
-            default:
-                throw new UnsupportedFieldException(genericKey.name());
-        }
-        return this;
-    }
-
-    public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
-        FieldKey key = FieldKey.valueOf(checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY, "id")); // could throw IllegalArgumentException
-        deleteField(key);
-        return this;
-    }
-
-    public Tag setArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
-        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
-    }
-
-    public Tag addArtwork(final Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
-        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
-    }
-
-    public Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException {
-        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
-    }
-
-    public List<Artwork> getArtworkList() throws UnsupportedFieldException {
-        return Collections.emptyList();
-    }
-
-    public Tag deleteArtwork() throws UnsupportedFieldException {
-        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
-    }
-
-    public boolean hasCommonFields() {
-        //TODO
-        return true;
-    }
-
-    public int getFieldCountIncludingSubValues() {
-        return getFieldCount();
-    }
-
-    @Override
-    public boolean setEncoding(final Charset encoding) {
-        return true;
-    }
-
-    /**
-     * Create Tag Field using generic key
-     */
-    public TagField createField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
-                                                                                          UnsupportedFieldException,
-                                                                                          FieldDataInvalidException {
-        ID3v1FieldKey idv1FieldKey = getFieldMap().get(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
-        if (idv1FieldKey == null) {
-            throw new UnsupportedFieldException(genericKey.name());
-        }
-        return new ID3v1TagField(idv1FieldKey.name(), checkVarArg0NotNull(values));
-    }
-
-    protected ImmutableMap<FieldKey, ID3v1FieldKey> getFieldMap() {
-        return tagFieldToID3v1Field;
-    }
-
-    public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
-        throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
-    }
-
-    /**
-     * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
-     * is the specified one.<br>
-     *
-     * @param genericKey The generic field key
-     *
-     * @return A list of {@link TagField} objects with the given &quot;id&quot;.
-     */
-    public ImmutableList<TagField> getFields(FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        switch (genericKey) {
-            case ARTIST:
-                return getArtist();
-
-            case ALBUM:
-                return getAlbum();
-
-            case TITLE:
-                return getTitle();
-
-            case GENRE:
-                return getGenre();
-
-            case YEAR:
-                return getYear();
-
-            case COMMENT:
-                return getComment();
-
-            default:
-                return ImmutableList.of();
-        }
-    }
-
-    public Iterator<TagField> getFields() {
-        throw new UnsupportedOperationException("TODO:Not done yet");
-    }
-
-    public ImmutableList<TagField> getFields(String id) {
-        try {
-            return getFields(FieldKey.valueOf(id));
-        } catch (NullPointerException | IllegalArgumentException ignored) {
-        }
-        return ImmutableList.of();
-    }
-
-    public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
-        List<TagField> results = null;
-
-        if (FieldKey.ARTIST.name().equals(id)) {
-            results = getArtist();
-        } else if (FieldKey.ALBUM.name().equals(id)) {
-            results = getAlbum();
-        } else if (FieldKey.TITLE.name().equals(id)) {
-            results = getTitle();
-        } else if (FieldKey.GENRE.name().equals(id)) {
-            results = getGenre();
-        } else if (FieldKey.YEAR.name().equals(id)) {
-            results = getYear();
-        } else if (FieldKey.COMMENT.name().equals(id)) {
-            results = getComment();
-        }
-
-        if (results != null) {
-            if (results.size() > 0) {
-                return Optional.fromNullable(results.get(0));
-            }
-        }
+  public Optional<String> getValue(final FieldKey genericKey) throws IllegalArgumentException {
+    switch (genericKey) {
+      case ARTIST:
+        return Optional.of(getFirstArtist());
+      case ALBUM:
+        return Optional.of(getFirstAlbum());
+      case TITLE:
+        return Optional.of(getFirstTitle());
+      case GENRE:
+        return getOptionalFirstGenre();
+      case YEAR:
+        return Optional.of(getFirstYear());
+      case COMMENT:
+        return Optional.of(getFirstComment());
+      default:
         return Optional.absent();
     }
+  }
 
-    public Optional<TagField> getFirstField(final FieldKey genericKey)
-            throws IllegalArgumentException, UnsupportedFieldException {
-        List<TagField> l = getFields(genericKey);
-        return (l.size() != 0) ? Optional.fromNullable(l.get(0)) : Optional.<TagField>absent();
+  @Override
+  public Optional<String> getValue(final FieldKey genericKey, final int index) throws IllegalArgumentException {
+    checkArgNotNull(genericKey);
+    if (index > 0) {
+      return Optional.absent();
+    }
+    return getValue(genericKey);
+  }
+
+  public String getFieldAt(FieldKey genericKey, int index) throws IllegalArgumentException, UnsupportedFieldException {
+    return getValue(genericKey, index).or("");
+  }
+
+  public List<String> getAll(FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    return Collections.singletonList(getFirst(genericKey.name()));
+  }
+
+  public Tag deleteField(final FieldKey genericKey) throws IllegalArgumentException, UnsupportedFieldException {
+    checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey");
+    switch (genericKey) {
+      case ARTIST:
+        setArtist("");
+        break;
+      case ALBUM:
+        setAlbum("");
+        break;
+      case TITLE:
+        setTitle("");
+        break;
+      case GENRE:
+        setGenre("");
+        break;
+      case YEAR:
+        setYear("");
+        break;
+      case COMMENT:
+        setComment("");
+        break;
+      default:
+        throw new UnsupportedFieldException(genericKey.name());
+    }
+    return this;
+  }
+
+  public Tag deleteField(final String id) throws IllegalArgumentException, UnsupportedFieldException {
+    FieldKey key = FieldKey.valueOf(checkArgNotNullOrEmpty(id, CANNOT_BE_NULL_OR_EMPTY, "id")); // could throw IllegalArgumentException
+    deleteField(key);
+    return this;
+  }
+
+  public Tag setArtwork(Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+    throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
+  }
+
+  public Tag addArtwork(final Artwork artwork) throws IllegalArgumentException, UnsupportedFieldException, FieldDataInvalidException {
+    throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
+  }
+
+  public Optional<Artwork> getFirstArtwork() throws UnsupportedFieldException {
+    throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
+  }
+
+  public List<Artwork> getArtworkList() throws UnsupportedFieldException {
+    return Collections.emptyList();
+  }
+
+  public Tag deleteArtwork() throws UnsupportedFieldException {
+    throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
+  }
+
+  public boolean hasCommonFields() {
+    //TODO
+    return true;
+  }
+
+  public int getFieldCountIncludingSubValues() {
+    return getFieldCount();
+  }
+
+  @Override
+  public boolean setEncoding(final Charset encoding) {
+    return true;
+  }
+
+  /**
+   * Create Tag Field using generic key
+   */
+  public TagField createField(final FieldKey genericKey, final String... values) throws IllegalArgumentException,
+                                                                                        UnsupportedFieldException,
+                                                                                        FieldDataInvalidException {
+    ID3v1FieldKey idv1FieldKey = getFieldMap().get(checkArgNotNull(genericKey, CANNOT_BE_NULL, "genericKey"));
+    if (idv1FieldKey == null) {
+      throw new UnsupportedFieldException(genericKey.name());
+    }
+    return new ID3v1TagField(idv1FieldKey.name(), checkVarArg0NotNull(values));
+  }
+
+  protected ImmutableMap<FieldKey, ID3v1FieldKey> getFieldMap() {
+    return tagFieldToID3v1Field;
+  }
+
+  public TagField createArtwork(Artwork artwork) throws UnsupportedFieldException, FieldDataInvalidException {
+    throw new UnsupportedFieldException(FieldKey.COVER_ART.name());
+  }
+
+  /**
+   * Returns a {@linkplain List list} of {@link TagField} objects whose &quot;{@linkplain TagField#getId() id}&quot;
+   * is the specified one.<br>
+   *
+   * @param genericKey The generic field key
+   *
+   * @return A list of {@link TagField} objects with the given &quot;id&quot;.
+   */
+  public ImmutableList<TagField> getFields(FieldKey genericKey)
+      throws IllegalArgumentException, UnsupportedFieldException {
+    switch (genericKey) {
+      case ARTIST:
+        return getArtist();
+
+      case ALBUM:
+        return getAlbum();
+
+      case TITLE:
+        return getTitle();
+
+      case GENRE:
+        return getGenre();
+
+      case YEAR:
+        return getYear();
+
+      case COMMENT:
+        return getComment();
+
+      default:
+        return ImmutableList.of();
+    }
+  }
+
+  public Iterator<TagField> getFields() {
+    throw new UnsupportedOperationException("TODO:Not done yet");
+  }
+
+  public ImmutableList<TagField> getFields(String id) {
+    try {
+      return getFields(FieldKey.valueOf(id));
+    } catch (NullPointerException | IllegalArgumentException ignored) {
+    }
+    return ImmutableList.of();
+  }
+
+  public Optional<TagField> getFirstField(String id) throws IllegalArgumentException, UnsupportedFieldException {
+    List<TagField> results = null;
+
+    if (FieldKey.ARTIST.name().equals(id)) {
+      results = getArtist();
+    } else if (FieldKey.ALBUM.name().equals(id)) {
+      results = getAlbum();
+    } else if (FieldKey.TITLE.name().equals(id)) {
+      results = getTitle();
+    } else if (FieldKey.GENRE.name().equals(id)) {
+      results = getGenre();
+    } else if (FieldKey.YEAR.name().equals(id)) {
+      results = getYear();
+    } else if (FieldKey.COMMENT.name().equals(id)) {
+      results = getComment();
     }
 
-    public TagField createCompilationField(boolean value) throws UnsupportedFieldException {
-        throw new UnsupportedFieldException(FieldKey.IS_COMPILATION.name());
+    if (results != null) {
+      if (results.size() > 0) {
+        return Optional.fromNullable(results.get(0));
+      }
     }
+    return Optional.absent();
+  }
 
-    /**
-     * Get Album
-     *
-     * @return album
-     */
-    public String getFirstAlbum() {
-        return album;
+  public Optional<TagField> getFirstField(final FieldKey genericKey)
+      throws IllegalArgumentException, UnsupportedFieldException {
+    List<TagField> l = getFields(genericKey);
+    return (l.size() != 0) ? Optional.fromNullable(l.get(0)) : Optional.<TagField>absent();
+  }
+
+  public TagField createCompilationField(boolean value) throws UnsupportedFieldException {
+    throw new UnsupportedFieldException(FieldKey.IS_COMPILATION.name());
+  }
+
+  /**
+   * Get Album
+   *
+   * @return album
+   */
+  String getFirstAlbum() {
+    return album;
+  }
+
+  /**
+   * Get Artist
+   *
+   * @return artist
+   */
+  String getFirstArtist() {
+    return artist;
+  }
+
+  /**
+   * Get Comment
+   *
+   * @return comment
+   */
+  public String getFirstComment() {
+    return comment;
+  }
+
+  /**
+   * Get Genre
+   *
+   * @return genre or empty string if not valid
+   */
+  String getFirstGenre() {
+    Integer genreId = genre & BYTE_TO_UNSIGNED;
+    String genreValue = GenreTypes.getInstanceOf().getValue(genreId);
+    if (genreValue == null) {
+      return "";
+    } else {
+      return genreValue;
     }
+  }
 
-    /**
-     * Get Artist
-     *
-     * @return artist
-     */
-    public String getFirstArtist() {
-        return artist;
-    }
-
-    /**
-     * Get Comment
-     *
-     * @return comment
-     */
-    public String getFirstComment() {
-        return comment;
-    }
-
-    /**
-     * Get Genre
-     *
-     * @return genre or empty string if not valid
-     */
-    public String getFirstGenre() {
-        Integer genreId = genre & BYTE_TO_UNSIGNED;
-        String genreValue = GenreTypes.getInstanceOf().getValue(genreId);
-        if (genreValue == null) {
-            return "";
-        } else {
-            return genreValue;
-        }
-    }
-
-    public Optional<String> getOptionalFirstGenre() {
-        return GenreTypes.getInstanceOf().getOptionalValue(genre & BYTE_TO_UNSIGNED);
-    }
+  private Optional<String> getOptionalFirstGenre() {
+    return GenreTypes.getInstanceOf().getOptionalValue(genre & BYTE_TO_UNSIGNED);
+  }
 
 
-    /**
-     * Get title
-     *
-     * @return Title
-     */
-    public String getFirstTitle() {
-        return title;
-    }
+  /**
+   * Get title
+   *
+   * @return Title
+   */
+  String getFirstTitle() {
+    return title;
+  }
 
-    /**
-     * Get year
-     *
-     * @return year
-     */
-    public String getFirstYear() {
-        return year;
-    }
+  /**
+   * Get year
+   *
+   * @return year
+   */
+  String getFirstYear() {
+    return year;
+  }
 
 }

@@ -112,7 +112,7 @@ public class Mp4IlstBox {
             TagField field = new Mp4TagReverseDnsField(header, byteBuffer);
             tag.addField(field);
         } catch (Exception e) {
-            LOG.warn(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD.getMsg(e.getMessage()));
+            LOG.warn(ErrorMessage.MP4_UNABLE_READ_REVERSE_DNS_FIELD, e);
             TagField field = new Mp4TagRawBinaryField(header, byteBuffer);
             tag.addField(field);
         }
@@ -147,14 +147,14 @@ public class Mp4IlstBox {
                         //be 21 (ox15) so looks like somebody got their decimal and hex numbering confused
                         //So in this case best to ignore this field and just write a warning
                         existingId = true;
-                        LOG.warn("Known Field:" + id + " with invalid field type of:" + fieldType + " is ignored");
+                        LOG.warn("Known Field:{} with invalid field type of:{} is ignored", id, fieldType);
                         break;
                     }
                 }
 
                 //Unknown field id with unknown type so just create as binary
                 if (!existingId) {
-                    LOG.warn("UnKnown Field:" + id + " with invalid field type of:" + fieldType + " created as binary");
+                    LOG.warn("UnKnown Field:{} with invalid field type of:{}", id, fieldType);
                     tag.addField(new Mp4TagBinaryField(id, raw));
                 }
             }

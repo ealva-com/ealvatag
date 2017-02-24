@@ -162,7 +162,7 @@ public class Issue173Test {
             tag.setField(Mp4FieldKey.GENRE, "Rocky");
         } catch (Exception ex) {
             Assert.assertTrue(ex instanceof IllegalArgumentException);
-            Assert.assertTrue(ex.getMessage().equals(ErrorMessage.NOT_STANDARD_MP$_GENRE.getMsg()));
+            Assert.assertTrue(ex.getMessage().equals(ErrorMessage.NOT_STANDARD_MP$_GENRE));
         }
     }
 

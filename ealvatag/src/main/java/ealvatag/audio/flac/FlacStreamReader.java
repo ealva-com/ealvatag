@@ -62,13 +62,13 @@ public class FlacStreamReader {
             startOfFlacInFile = (int)(fc.position() - FLAC_STREAM_IDENTIFIER_LENGTH);
             return;
         }
-        throw new CannotReadException(loggingName + ErrorMessage.FLAC_NO_FLAC_HEADER_FOUND.getMsg());
+        throw new CannotReadException(loggingName + ErrorMessage.FLAC_NO_FLAC_HEADER_FOUND);
     }
 
     private boolean isId3v2Tag() throws IOException {
         fc.position(0);
         if (AbstractID3v2Tag.isId3Tag(fc)) {
-            LOG.warn("{}", loggingName, ErrorMessage.FLAC_CONTAINS_ID3TAG.getMsg(fc.position()));
+            LOG.warn("{}", loggingName, ErrorMessage.FLAC_CONTAINS_ID3TAG, fc.position());
             //FLAC Stream immediately after end of id3 tag
             if (isFlacHeader()) {
                 return true;

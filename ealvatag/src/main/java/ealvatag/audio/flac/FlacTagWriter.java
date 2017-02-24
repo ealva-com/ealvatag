@@ -50,318 +50,321 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Write Flac Tag
  */
 public class FlacTagWriter {
-    // Logger Object
-    public static Logger LOG = LoggerFactory.getLogger(FlacTagWriter.class);
-    private FlacTagCreator tc = new FlacTagCreator();
+  // Logger Object
+  public static Logger LOG = LoggerFactory.getLogger(FlacTagWriter.class);
+  private FlacTagCreator tc = new FlacTagCreator();
 
-    /**
-     * @param tag
-     * @param channel
-     * @param fileName
-     *
-     * @throws CannotWriteException
-     */
-    public void delete(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException {
-        //This will save the file without any Comment or PictureData blocks
-        FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>(), false);
-        write(emptyTag, channel, fileName);
-    }
+  /**
+   * @param tag
+   * @param channel
+   * @param fileName
+   *
+   * @throws CannotWriteException
+   */
+  public void delete(Tag tag, FileChannel channel, final String fileName) throws CannotWriteException {
+    //This will save the file without any Comment or PictureData blocks
+    FlacTag emptyTag = new FlacTag(null, new ArrayList<MetadataBlockDataPicture>(), false);
+    write(emptyTag, channel, fileName);
+  }
 
-    private static class MetadataBlockInfo {
-        private MetadataBlock streamInfoBlock;
-        private List<MetadataBlock> metadataBlockPadding = new ArrayList<>(1);
-        private List<MetadataBlock> metadataBlockApplication = new ArrayList<>(1);
-        private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<>(1);
-        private List<MetadataBlock> metadataBlockCueSheet = new ArrayList<>(1);
-    }
+  private static class MetadataBlockInfo {
+    private MetadataBlock streamInfoBlock;
+    private List<MetadataBlock> metadataBlockPadding = new ArrayList<>(1);
+    private List<MetadataBlock> metadataBlockApplication = new ArrayList<>(1);
+    private List<MetadataBlock> metadataBlockSeekTable = new ArrayList<>(1);
+    private List<MetadataBlock> metadataBlockCueSheet = new ArrayList<>(1);
+  }
 
-    /**
-     * @param tag
-     * @param fc
-     * @param fileName
-     *
-     * @throws CannotWriteException
-     */
-    public void write(TagFieldContainer tag, FileChannel fc, final String fileName) throws CannotWriteException {
-        LOG.trace("{} Writing tag", fileName);
+  /**
+   * @param tag
+   * @param fc
+   * @param fileName
+   *
+   * @throws CannotWriteException
+   */
+  public void write(TagFieldContainer tag, FileChannel fc, final String fileName) throws CannotWriteException {
+    LOG.trace("{} Writing tag", fileName);
+    try {
+      MetadataBlockInfo blockInfo = new MetadataBlockInfo();
+
+      //Read existing data
+      FlacStreamReader flacStream = new FlacStreamReader(fc, fileName + " ");
+      try {
+        flacStream.findStream();
+      } catch (CannotReadException cre) {
+        throw new CannotWriteException(cre.getMessage());
+      }
+
+      boolean isLastBlock = false;
+      while (!isLastBlock) {
         try {
-            MetadataBlockInfo blockInfo = new MetadataBlockInfo();
+          MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
+          if (mbh.getBlockType() != null) {
+            switch (mbh.getBlockType()) {
+              case STREAMINFO: {
+                blockInfo.streamInfoBlock =
+                    new MetadataBlock(mbh, new MetadataBlockDataStreamInfo(mbh, fc));
+                break;
+              }
 
-            //Read existing data
-            FlacStreamReader flacStream = new FlacStreamReader(fc, fileName + " ");
-            try {
-                flacStream.findStream();
-            } catch (CannotReadException cre) {
-                throw new CannotWriteException(cre.getMessage());
+              case VORBIS_COMMENT:
+              case PADDING:
+              case PICTURE: {
+                //All these will be replaced by the new metadata so we just treat as padding in order
+                //to determine how much space is already allocated in the file
+                fc.position(fc.position() + mbh.getDataLength());
+                MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
+                blockInfo.metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
+                break;
+              }
+              case APPLICATION: {
+                MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, fc);
+                blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
+                break;
+              }
+              case SEEKTABLE: {
+                MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, fc);
+                blockInfo.metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
+                break;
+              }
+              case CUESHEET: {
+                MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, fc);
+                blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
+                break;
+              }
+              default: {
+                //What are the consequences of doing this
+                fc.position(fc.position() + mbh.getDataLength());
+                break;
+              }
             }
-
-            boolean isLastBlock = false;
-            while (!isLastBlock) {
-                try {
-                    MetadataBlockHeader mbh = MetadataBlockHeader.readHeader(fc);
-                    if (mbh.getBlockType() != null) {
-                        switch (mbh.getBlockType()) {
-                            case STREAMINFO: {
-                                blockInfo.streamInfoBlock =
-                                        new MetadataBlock(mbh, new MetadataBlockDataStreamInfo(mbh, fc));
-                                break;
-                            }
-
-                            case VORBIS_COMMENT:
-                            case PADDING:
-                            case PICTURE: {
-                                //All these will be replaced by the new metadata so we just treat as padding in order
-                                //to determine how much space is already allocated in the file
-                                fc.position(fc.position() + mbh.getDataLength());
-                                MetadataBlockData mbd = new MetadataBlockDataPadding(mbh.getDataLength());
-                                blockInfo.metadataBlockPadding.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-                            case APPLICATION: {
-                                MetadataBlockData mbd = new MetadataBlockDataApplication(mbh, fc);
-                                blockInfo.metadataBlockApplication.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-                            case SEEKTABLE: {
-                                MetadataBlockData mbd = new MetadataBlockDataSeekTable(mbh, fc);
-                                blockInfo.metadataBlockSeekTable.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-                            case CUESHEET: {
-                                MetadataBlockData mbd = new MetadataBlockDataCueSheet(mbh, fc);
-                                blockInfo.metadataBlockCueSheet.add(new MetadataBlock(mbh, mbd));
-                                break;
-                            }
-                            default: {
-                                //What are the consequences of doing this
-                                fc.position(fc.position() + mbh.getDataLength());
-                                break;
-                            }
-                        }
-                    }
-                    isLastBlock = mbh.isLastBlock();
-                } catch (CannotReadException cre) {
-                    throw new CannotWriteException(cre.getMessage());
-                }
-            }
-
-            //Number of bytes in the existing file available before audio data
-            int availableRoom = computeAvailableRoom(blockInfo);
-
-            //Minimum Size of the New tag data without padding
-            int newTagSize = tc.convert(tag).limit();
-
-            //Other blocks required size
-            int otherBlocksRequiredSize = computeNeededRoom(blockInfo);
-
-            //Number of bytes required for new tagdata and other metadata blocks
-            int neededRoom = newTagSize + otherBlocksRequiredSize;
-
-            //Go to start of Flac within file
-            fc.position(flacStream.getStartOfFlacInFile());
-
-            LOG.trace("{}:Writing tag available bytes:{} needed bytes:", fileName, availableRoom, neededRoom);
-
-            //There is enough room to fit the tag without moving the audio just need to
-            //adjust padding accordingly need to allow space for padding header if padding required
-            if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH)) {
-                LOG.trace("{} Room to Rewrite", fileName);
-                //Jump over Id3 (if exists) and flac header
-                fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
-
-                //Write stream info and other non metadata blocks
-                writeOtherMetadataBlocks(fc, blockInfo);
-
-                //Write tag (and padding)
-                fc.write(tc.convert(tag, availableRoom - neededRoom));
-            }
-            //Need to move audio
-            else {
-                LOG.trace(fileName + ":Audio must be shifted " + "NewTagSize:" + newTagSize + ":AvailableRoom:" +
-                                  availableRoom + ":MinimumAdditionalRoomRequired:" + (neededRoom - availableRoom));
-                //As we are having to both anyway may as well put in the default padding
-                insertUsingChunks(fileName,
-                                  tag,
-                                  fc,
-                                  blockInfo,
-                                  flacStream,
-                                  neededRoom + FlacTagCreator.DEFAULT_PADDING,
-                                  availableRoom);
-            }
-        } catch (IOException ioe) {
-            LOG.error("Cannot write {} {}", fileName, ioe.getMessage());
-            throw new CannotWriteException(fileName + ":" + ioe.getMessage());
+          }
+          isLastBlock = mbh.isLastBlock();
+        } catch (CannotReadException cre) {
+          throw new CannotWriteException(cre.getMessage());
         }
-    }
+      }
 
+      //Number of bytes in the existing file available before audio data
+      int availableRoom = computeAvailableRoom(blockInfo);
 
-    /**
-     * Insert metadata into space that is not large enough
-     * <p>
-     * We do this by reading/writing chunks of data allowing it to work on low memory systems
-     * <p>
-     * Chunk size defined by TagOptionSingleton.getInstance().getWriteChunkSize()
-     *
-     * @param tag
-     * @param fc
-     * @param blockInfo
-     * @param flacStream
-     * @param neededRoom
-     * @param availableRoom
-     *
-     * @throws IOException
-     * @throws UnsupportedEncodingException
-     */
-    private void insertUsingChunks(String file,
-                                   TagFieldContainer tag,
-                                   FileChannel fc,
-                                   MetadataBlockInfo blockInfo,
-                                   FlacStreamReader flacStream,
-                                   int neededRoom,
-                                   int availableRoom) throws IOException {
-        long originalFileSize = fc.size();
+      //Minimum Size of the New tag data without padding
+      int newTagSize = tc.convert(tag).limit();
 
-        //Find end of metadata blocks (start of Audio), i.e start of Flac + 4 bytes for 'fLaC', 4 bytes for
-        // streaminfo header and
-        //34 bytes for streaminfo and then size of all the other existing blocks
-        long audioStart = flacStream.getStartOfFlacInFile()
-                + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
-                + MetadataBlockHeader.HEADER_LENGTH
-                + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
-                + availableRoom;
+      //Other blocks required size
+      int otherBlocksRequiredSize = computeNeededRoom(blockInfo);
 
-        //Extra Space Required for larger metadata block
-        int extraSpaceRequired = neededRoom - availableRoom;
-        LOG.trace("{} Audio needs shifting:{}", file, extraSpaceRequired);
+      //Number of bytes required for new tagdata and other metadata blocks
+      int neededRoom = newTagSize + otherBlocksRequiredSize;
 
-        //ChunkSize must be at least as large as the extra space required to write the metadata
-        int chunkSize = (int)TagOptionSingleton.getInstance().getWriteChunkSize();
-        if (chunkSize < extraSpaceRequired) {
-            chunkSize = extraSpaceRequired;
-        }
+      //Go to start of Flac within file
+      fc.position(flacStream.getStartOfFlacInFile());
 
-        Queue<ByteBuffer> queue = new LinkedBlockingQueue<>();
+      LOG.trace("{}:Writing tag available bytes:{} needed bytes:{}", fileName, availableRoom, neededRoom);
 
-        //Read first chunk of audio
-        fc.position(audioStart);
-        {
-            ByteBuffer audioBuffer = ByteBuffer.allocateDirect(chunkSize);
-            fc.read(audioBuffer);
-            audioBuffer.flip();
-            queue.add(audioBuffer);
-        }
-        long readPosition = fc.position();
-
-        //Jump over Id3 (if exists) and Flac Header
+      //There is enough room to fit the tag without moving the audio just need to
+      //adjust padding accordingly need to allow space for padding header if padding required
+      if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH)) {
+        LOG.trace("{} Room to Rewrite", fileName);
+        //Jump over Id3 (if exists) and flac header
         fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
+
+        //Write stream info and other non metadata blocks
         writeOtherMetadataBlocks(fc, blockInfo);
-        fc.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING));
-        long writePosition = fc.position();
+
+        //Write tag (and padding)
+        fc.write(tc.convert(tag, availableRoom - neededRoom));
+      }
+      //Need to move audio
+      else {
+        LOG.trace("{}:Audio must be shifted NewTagSize:{}:AvailableRoom:{}:MinimumAdditionalRoomRequired:{}",
+                  fileName,
+                  newTagSize,
+                  availableRoom,
+                  neededRoom - availableRoom);
+        //As we are having to both anyway may as well put in the default padding
+        insertUsingChunks(fileName,
+                          tag,
+                          fc,
+                          blockInfo,
+                          flacStream,
+                          neededRoom + FlacTagCreator.DEFAULT_PADDING,
+                          availableRoom);
+      }
+    } catch (IOException ioe) {
+      LOG.error("Cannot write {} {}", fileName, ioe.getMessage());
+      throw new CannotWriteException(fileName + ":" + ioe.getMessage());
+    }
+  }
 
 
-        fc.position(readPosition);
-        while (fc.position() < originalFileSize) {
-            //Read next chunk
-            ByteBuffer audioBuffer = ByteBuffer.allocateDirect(chunkSize);
-            fc.read(audioBuffer);
-            readPosition = fc.position();
-            audioBuffer.flip();
-            queue.add(audioBuffer);
+  /**
+   * Insert metadata into space that is not large enough
+   * <p>
+   * We do this by reading/writing chunks of data allowing it to work on low memory systems
+   * <p>
+   * Chunk size defined by TagOptionSingleton.getInstance().getWriteChunkSize()
+   *
+   * @param tag
+   * @param fc
+   * @param blockInfo
+   * @param flacStream
+   * @param neededRoom
+   * @param availableRoom
+   *
+   * @throws IOException
+   * @throws UnsupportedEncodingException
+   */
+  private void insertUsingChunks(String file,
+                                 TagFieldContainer tag,
+                                 FileChannel fc,
+                                 MetadataBlockInfo blockInfo,
+                                 FlacStreamReader flacStream,
+                                 int neededRoom,
+                                 int availableRoom) throws IOException {
+    long originalFileSize = fc.size();
 
-            //Write previous chunk
-            fc.position(writePosition);
-            fc.write(queue.remove());
-            writePosition = fc.position();
+    //Find end of metadata blocks (start of Audio), i.e start of Flac + 4 bytes for 'fLaC', 4 bytes for
+    // streaminfo header and
+    //34 bytes for streaminfo and then size of all the other existing blocks
+    long audioStart = flacStream.getStartOfFlacInFile()
+        + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH
+        + MetadataBlockHeader.HEADER_LENGTH
+        + MetadataBlockDataStreamInfo.STREAM_INFO_DATA_LENGTH
+        + availableRoom;
 
-            fc.position(readPosition);
-        }
-        fc.position(writePosition);
-        fc.write(queue.remove());
+    //Extra Space Required for larger metadata block
+    int extraSpaceRequired = neededRoom - availableRoom;
+    LOG.trace("{} Audio needs shifting:{}", file, extraSpaceRequired);
+
+    //ChunkSize must be at least as large as the extra space required to write the metadata
+    int chunkSize = (int)TagOptionSingleton.getInstance().getWriteChunkSize();
+    if (chunkSize < extraSpaceRequired) {
+      chunkSize = extraSpaceRequired;
     }
 
-    /**
-     * Write all metadata blocks except for the the actual tag metadata
-     * <p/>
-     * We always write blocks in this order
-     *
-     * @param fc
-     * @param blockInfo
-     *
-     * @throws IOException
-     */
-    private void writeOtherMetadataBlocks(FileChannel fc, MetadataBlockInfo blockInfo) throws IOException {
-        //Write StreamInfo, we always write this first even if wasn't first in original spec
-        fc.write(ByteBuffer.wrap(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag()));
-        fc.write(blockInfo.streamInfoBlock.getData().getBytes());
+    Queue<ByteBuffer> queue = new LinkedBlockingQueue<>();
 
-        //Write Application Blocks
-        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
-            fc.write(ByteBuffer.wrap(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag()));
-            fc.write(aMetadataBlockApplication.getData().getBytes());
-        }
+    //Read first chunk of audio
+    fc.position(audioStart);
+    {
+      ByteBuffer audioBuffer = ByteBuffer.allocateDirect(chunkSize);
+      fc.read(audioBuffer);
+      audioBuffer.flip();
+      queue.add(audioBuffer);
+    }
+    long readPosition = fc.position();
 
-        //Write Seek Table Blocks
-        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
-            fc.write(ByteBuffer.wrap(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag()));
-            fc.write(aMetadataBlockSeekTable.getData().getBytes());
-        }
+    //Jump over Id3 (if exists) and Flac Header
+    fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
+    writeOtherMetadataBlocks(fc, blockInfo);
+    fc.write(tc.convert(tag, FlacTagCreator.DEFAULT_PADDING));
+    long writePosition = fc.position();
 
-        //Write Cue sheet Blocks
-        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
-            fc.write(ByteBuffer.wrap(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag()));
-            fc.write(aMetadataBlockCueSheet.getData().getBytes());
-        }
+
+    fc.position(readPosition);
+    while (fc.position() < originalFileSize) {
+      //Read next chunk
+      ByteBuffer audioBuffer = ByteBuffer.allocateDirect(chunkSize);
+      fc.read(audioBuffer);
+      readPosition = fc.position();
+      audioBuffer.flip();
+      queue.add(audioBuffer);
+
+      //Write previous chunk
+      fc.position(writePosition);
+      fc.write(queue.remove());
+      writePosition = fc.position();
+
+      fc.position(readPosition);
+    }
+    fc.position(writePosition);
+    fc.write(queue.remove());
+  }
+
+  /**
+   * Write all metadata blocks except for the the actual tag metadata
+   * <p/>
+   * We always write blocks in this order
+   *
+   * @param fc
+   * @param blockInfo
+   *
+   * @throws IOException
+   */
+  private void writeOtherMetadataBlocks(FileChannel fc, MetadataBlockInfo blockInfo) throws IOException {
+    //Write StreamInfo, we always write this first even if wasn't first in original spec
+    fc.write(ByteBuffer.wrap(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag()));
+    fc.write(blockInfo.streamInfoBlock.getData().getBytes());
+
+    //Write Application Blocks
+    for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
+      fc.write(ByteBuffer.wrap(aMetadataBlockApplication.getHeader().getBytesWithoutIsLastBlockFlag()));
+      fc.write(aMetadataBlockApplication.getData().getBytes());
     }
 
-    /**
-     * @param blockInfo
-     *
-     * @return space currently available for writing all Flac metadatablocks except for StreamInfo which is fixed size
-     */
-    private int computeAvailableRoom(MetadataBlockInfo blockInfo) {
-        int length = 0;
-
-        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
-            length += aMetadataBlockApplication.getLength();
-        }
-
-        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
-            length += aMetadataBlockSeekTable.getLength();
-        }
-
-        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
-            length += aMetadataBlockCueSheet.getLength();
-        }
-
-        //Note when reading metadata has been put into padding as well for purposes of write
-        for (MetadataBlock aMetadataBlockPadding : blockInfo.metadataBlockPadding) {
-            length += aMetadataBlockPadding.getLength();
-        }
-
-        return length;
+    //Write Seek Table Blocks
+    for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
+      fc.write(ByteBuffer.wrap(aMetadataBlockSeekTable.getHeader().getBytesWithoutIsLastBlockFlag()));
+      fc.write(aMetadataBlockSeekTable.getData().getBytes());
     }
 
-    /**
-     * @param blockInfo
-     *
-     * @return space required to write the metadata blocks that are part of Flac but are not part of tagdata in the normal sense.
-     */
-    private int computeNeededRoom(MetadataBlockInfo blockInfo) {
-        int length = 0;
-
-        for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
-            length += aMetadataBlockApplication.getLength();
-        }
-
-        for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
-            length += aMetadataBlockSeekTable.getLength();
-        }
-
-        for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
-            length += aMetadataBlockCueSheet.getLength();
-        }
-
-        return length;
+    //Write Cue sheet Blocks
+    for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
+      fc.write(ByteBuffer.wrap(aMetadataBlockCueSheet.getHeader().getBytesWithoutIsLastBlockFlag()));
+      fc.write(aMetadataBlockCueSheet.getData().getBytes());
     }
+  }
+
+  /**
+   * @param blockInfo
+   *
+   * @return space currently available for writing all Flac metadatablocks except for StreamInfo which is fixed size
+   */
+  private int computeAvailableRoom(MetadataBlockInfo blockInfo) {
+    int length = 0;
+
+    for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
+      length += aMetadataBlockApplication.getLength();
+    }
+
+    for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
+      length += aMetadataBlockSeekTable.getLength();
+    }
+
+    for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
+      length += aMetadataBlockCueSheet.getLength();
+    }
+
+    //Note when reading metadata has been put into padding as well for purposes of write
+    for (MetadataBlock aMetadataBlockPadding : blockInfo.metadataBlockPadding) {
+      length += aMetadataBlockPadding.getLength();
+    }
+
+    return length;
+  }
+
+  /**
+   * @param blockInfo
+   *
+   * @return space required to write the metadata blocks that are part of Flac but are not part of tagdata in the normal sense.
+   */
+  private int computeNeededRoom(MetadataBlockInfo blockInfo) {
+    int length = 0;
+
+    for (MetadataBlock aMetadataBlockApplication : blockInfo.metadataBlockApplication) {
+      length += aMetadataBlockApplication.getLength();
+    }
+
+    for (MetadataBlock aMetadataBlockSeekTable : blockInfo.metadataBlockSeekTable) {
+      length += aMetadataBlockSeekTable.getLength();
+    }
+
+    for (MetadataBlock aMetadataBlockCueSheet : blockInfo.metadataBlockCueSheet) {
+      length += aMetadataBlockCueSheet.getLength();
+    }
+
+    return length;
+  }
 }
 

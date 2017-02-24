@@ -103,7 +103,7 @@ public class Mp4MoovBox {
         }
 
         if (trak == null || mvhd == null) {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO);
         }
         audioHeader.ensureFieldsSet();
     }

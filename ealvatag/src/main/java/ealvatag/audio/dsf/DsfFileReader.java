@@ -89,7 +89,7 @@ public class DsfFileReader extends AudioFileReader2 {
                         case ID3v24Tag.MAJOR_VERSION:
                             return new ID3v24Tag(id3Chunk.getDataBuffer(), "");
                         default:
-                            LOG.warn(fileName + " Unknown ID3v2 version " + version + ". Returning an empty ID3v2 Tag.");
+                            LOG.warn("{} Unknown ID3v2 version {}. Returning an empty ID3v2 Tag.", fileName, version);
                             return null;
                     }
                 } catch (TagException e) {

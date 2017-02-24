@@ -110,228 +110,228 @@ import java.util.Set;
  * @version $Id$
  */
 public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
-    private static final Logger LOG = LoggerFactory.getLogger(FrameBodyETCO.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FrameBodyETCO.class);
 
-    public static final int MPEG_FRAMES = 1;
-    public static final int MILLISECONDS = 2;
+  public static final int MPEG_FRAMES = 1;
+  public static final int MILLISECONDS = 2;
 
-    /**
-     * Creates a new FrameBodyETCO datatype.
-     */
-    public FrameBodyETCO() {
-        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, MILLISECONDS);
+  /**
+   * Creates a new FrameBodyETCO datatype.
+   */
+  public FrameBodyETCO() {
+    setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, MILLISECONDS);
+  }
+
+  public FrameBodyETCO(final FrameBodyETCO body) {
+    super(body);
+  }
+
+  /**
+   * Creates a new FrameBodyETCO datatype.
+   *
+   * @param byteBuffer buffer to read from
+   * @param frameSize  size of the frame
+   *
+   * @throws InvalidTagException if unable to create framebody from buffer
+   */
+  public FrameBodyETCO(final ByteBuffer byteBuffer, final int frameSize) throws InvalidTagException {
+    super(byteBuffer, frameSize);
+  }
+
+  public FrameBodyETCO(final Buffer byteBuffer, final int frameSize) throws InvalidTagException {
+    super(byteBuffer, frameSize);
+  }
+
+  /**
+   * Timestamp format for all events in this frame.
+   * A value of {@code 1} means absolute time (32 bit) using <a href="#MPEG">MPEG</a> frames as unit.
+   * A value of {@code 2} means absolute time (32 bit) using milliseconds as unit.
+   *
+   * @return timestamp format
+   *
+   * @see #MILLISECONDS
+   * @see #MPEG_FRAMES
+   */
+  public int getTimestampFormat() {
+    return ((Number)getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
+  }
+
+  /**
+   * Sets the timestamp format.
+   *
+   * @param timestampFormat 1 for MPEG frames or 2 for milliseconds
+   *
+   * @see #getTimestampFormat()
+   */
+  public void setTimestampFormat(final int timestampFormat) {
+    if (EventTimingTimestampTypes.getInstanceOf().getValue(timestampFormat) == null) {
+      throw new IllegalArgumentException("Timestamp format must be 1 or 2 (ID3v2.4, 4.5): " + timestampFormat);
     }
+    setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timestampFormat);
+  }
 
-    public FrameBodyETCO(final FrameBodyETCO body) {
-        super(body);
+  /**
+   * Chronological map of timing codes.
+   *
+   * @return map of timing codes
+   */
+  public Map<Long, int[]> getTimingCodes() {
+    final Map<Long, int[]> map = new LinkedHashMap<Long, int[]>();
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    long lastTimestamp = 0;
+    for (final EventTimingCode code : codes) {
+      final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
+      final int[] types = map.get(translatedTimestamp);
+      if (types == null) {
+        map.put(translatedTimestamp, new int[]{code.getType()});
+      } else {
+        final int[] newTypes = new int[types.length + 1];
+        System.arraycopy(types, 0, newTypes, 0, types.length);
+        newTypes[newTypes.length - 1] = code.getType();
+        map.put(translatedTimestamp, newTypes);
+      }
+      lastTimestamp = translatedTimestamp;
     }
+    return Collections.unmodifiableMap(map);
+  }
 
-    /**
-     * Creates a new FrameBodyETCO datatype.
-     *
-     * @param byteBuffer buffer to read from
-     * @param frameSize  size of the frame
-     *
-     * @throws InvalidTagException if unable to create framebody from buffer
-     */
-    public FrameBodyETCO(final ByteBuffer byteBuffer, final int frameSize) throws InvalidTagException {
-        super(byteBuffer, frameSize);
+  /**
+   * Chronological list of timestamps of a set of given types.
+   *
+   * @param type types
+   *
+   * @return list of timestamps
+   */
+  public List<Long> getTimestamps(final int... type) {
+    final Set<Integer> typeSet = toSet(type);
+    final List<Long> list = new ArrayList<Long>();
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    long lastTimestamp = 0;
+    for (final EventTimingCode code : codes) {
+      final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
+      if (typeSet.contains(code.getType())) {
+        list.add(translatedTimestamp);
+      }
+      lastTimestamp = translatedTimestamp;
     }
+    return Collections.unmodifiableList(list);
+  }
 
-    public FrameBodyETCO(final Buffer byteBuffer, final int frameSize) throws InvalidTagException {
-        super(byteBuffer, frameSize);
-    }
-
-    /**
-     * Timestamp format for all events in this frame.
-     * A value of {@code 1} means absolute time (32 bit) using <a href="#MPEG">MPEG</a> frames as unit.
-     * A value of {@code 2} means absolute time (32 bit) using milliseconds as unit.
-     *
-     * @return timestamp format
-     *
-     * @see #MILLISECONDS
-     * @see #MPEG_FRAMES
-     */
-    public int getTimestampFormat() {
-        return ((Number)getObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT)).intValue();
-    }
-
-    /**
-     * Sets the timestamp format.
-     *
-     * @param timestampFormat 1 for MPEG frames or 2 for milliseconds
-     *
-     * @see #getTimestampFormat()
-     */
-    public void setTimestampFormat(final int timestampFormat) {
-        if (EventTimingTimestampTypes.getInstanceOf().getValue(timestampFormat) == null) {
-            throw new IllegalArgumentException("Timestamp format must be 1 or 2 (ID3v2.4, 4.5): " + timestampFormat);
+  /**
+   * Adds a timing code for each given type.
+   *
+   * @param timestamp timestamp
+   * @param types     types
+   */
+  public void addTimingCode(final long timestamp, final int... types) {
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    long lastTimestamp = 0;
+    int insertIndex = 0;
+    if (!codes.isEmpty() && codes.get(0).getTimestamp() <= timestamp) {
+      for (final EventTimingCode code : codes) {
+        final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
+        if (timestamp < translatedTimestamp) {
+          break;
         }
-        setObjectValue(DataTypes.OBJ_TIME_STAMP_FORMAT, timestampFormat);
+        insertIndex++;
+        lastTimestamp = translatedTimestamp;
+      }
     }
-
-    /**
-     * Chronological map of timing codes.
-     *
-     * @return map of timing codes
-     */
-    public Map<Long, int[]> getTimingCodes() {
-        final Map<Long, int[]> map = new LinkedHashMap<Long, int[]>();
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        long lastTimestamp = 0;
-        for (final EventTimingCode code : codes) {
-            final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
-            final int[] types = map.get(translatedTimestamp);
-            if (types == null) {
-                map.put(translatedTimestamp, new int[]{code.getType()});
-            } else {
-                final int[] newTypes = new int[types.length + 1];
-                System.arraycopy(types, 0, newTypes, 0, types.length);
-                newTypes[newTypes.length - 1] = code.getType();
-                map.put(translatedTimestamp, newTypes);
-            }
-            lastTimestamp = translatedTimestamp;
-        }
-        return Collections.unmodifiableMap(map);
+    for (final int type : types) {
+      codes.add(insertIndex, new EventTimingCode(DataTypes.OBJ_TIMED_EVENT, this, type, timestamp));
+      insertIndex++; // preserve order of types
     }
+  }
 
-    /**
-     * Chronological list of timestamps of a set of given types.
-     *
-     * @param type types
-     *
-     * @return list of timestamps
-     */
-    public List<Long> getTimestamps(final int... type) {
-        final Set<Integer> typeSet = toSet(type);
-        final List<Long> list = new ArrayList<Long>();
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        long lastTimestamp = 0;
-        for (final EventTimingCode code : codes) {
-            final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
-            if (typeSet.contains(code.getType())) {
-                list.add(translatedTimestamp);
-            }
-            lastTimestamp = translatedTimestamp;
-        }
-        return Collections.unmodifiableList(list);
+  /**
+   * Removes timestamps at a given time with the given types.
+   *
+   * @param timestamp timestamp
+   * @param types     types
+   *
+   * @return {@code true}, if any timestamps were removed
+   */
+  public boolean removeTimingCode(final long timestamp, final int... types) {
+    // before we can remove anything, we have to resolve relative 0-timestamps
+    // otherwise we might remove the anchor a relative timestamp relies on
+    resolveRelativeTimestamps();
+    final Set<Integer> typeSet = toSet(types);
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    boolean removed = false;
+    for (final ListIterator<EventTimingCode> iterator = codes.listIterator(); iterator.hasNext(); ) {
+      final EventTimingCode code = iterator.next();
+      if (timestamp == code.getTimestamp() && typeSet.contains(code.getType())) {
+        iterator.remove();
+        removed = true;
+      }
+      if (timestamp > code.getTimestamp()) {
+        break;
+      }
     }
+    return removed;
+  }
 
-    /**
-     * Adds a timing code for each given type.
-     *
-     * @param timestamp timestamp
-     * @param types     types
-     */
-    public void addTimingCode(final long timestamp, final int... types) {
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        long lastTimestamp = 0;
-        int insertIndex = 0;
-        if (!codes.isEmpty() && codes.get(0).getTimestamp() <= timestamp) {
-            for (final EventTimingCode code : codes) {
-                final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
-                if (timestamp < translatedTimestamp) {
-                    break;
-                }
-                insertIndex++;
-                lastTimestamp = translatedTimestamp;
-            }
-        }
-        for (final int type : types) {
-            codes.add(insertIndex, new EventTimingCode(DataTypes.OBJ_TIMED_EVENT, this, type, timestamp));
-            insertIndex++; // preserve order of types
-        }
+  /**
+   * Remove all timing codes.
+   */
+  public void clearTimingCodes() {
+    ((List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST)).clear();
+  }
+
+  /**
+   * Resolve any relative timestamp (zero timestamp after a non-zero timestamp) to absolute timestamp.
+   */
+  private void resolveRelativeTimestamps() {
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    long lastTimestamp = 0;
+    for (final EventTimingCode code : codes) {
+      final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
+      code.setTimestamp(translatedTimestamp);
+      lastTimestamp = translatedTimestamp;
     }
+  }
 
-    /**
-     * Removes timestamps at a given time with the given types.
-     *
-     * @param timestamp timestamp
-     * @param types     types
-     *
-     * @return {@code true}, if any timestamps were removed
-     */
-    public boolean removeTimingCode(final long timestamp, final int... types) {
-        // before we can remove anything, we have to resolve relative 0-timestamps
-        // otherwise we might remove the anchor a relative timestamp relies on
-        resolveRelativeTimestamps();
-        final Set<Integer> typeSet = toSet(types);
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        boolean removed = false;
-        for (final ListIterator<EventTimingCode> iterator = codes.listIterator(); iterator.hasNext(); ) {
-            final EventTimingCode code = iterator.next();
-            if (timestamp == code.getTimestamp() && typeSet.contains(code.getType())) {
-                iterator.remove();
-                removed = true;
-            }
-            if (timestamp > code.getTimestamp()) {
-                break;
-            }
-        }
-        return removed;
+  @Override
+  public void read(final ByteBuffer byteBuffer) throws InvalidTagException {
+    super.read(byteBuffer);
+
+    // validate input
+    final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
+    long lastTimestamp = 0;
+    for (final EventTimingCode code : codes) {
+      final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
+      if (code.getTimestamp() < lastTimestamp) {
+        LOG.warn("Event codes are not in chronological order. {} is followed by {}", lastTimestamp, code.getTimestamp());
+        // throw exception???
+      }
+      lastTimestamp = translatedTimestamp;
     }
+  }
 
-    /**
-     * Remove all timing codes.
-     */
-    public void clearTimingCodes() {
-        ((List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST)).clear();
+  /**
+   * @return identifier
+   */
+  @Override
+  public String getIdentifier() {
+    return ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES;
+  }
+
+  /**
+   * Setup object list.
+   */
+  @Override
+  protected void setupObjectList() {
+    addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
+    addDataType(new EventTimingCodeList(this));
+  }
+
+  private static Set<Integer> toSet(final int... types) {
+    final Set<Integer> typeSet = new HashSet<>();
+    for (final int type : types) {
+      typeSet.add(type);
     }
-
-    /**
-     * Resolve any relative timestamp (zero timestamp after a non-zero timestamp) to absolute timestamp.
-     */
-    private void resolveRelativeTimestamps() {
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        long lastTimestamp = 0;
-        for (final EventTimingCode code : codes) {
-            final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
-            code.setTimestamp(translatedTimestamp);
-            lastTimestamp = translatedTimestamp;
-        }
-    }
-
-    @Override
-    public void read(final ByteBuffer byteBuffer) throws InvalidTagException {
-        super.read(byteBuffer);
-
-        // validate input
-        final List<EventTimingCode> codes = (List<EventTimingCode>)getObjectValue(DataTypes.OBJ_TIMED_EVENT_LIST);
-        long lastTimestamp = 0;
-        for (final EventTimingCode code : codes) {
-            final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
-            if (code.getTimestamp() < lastTimestamp) {
-                LOG.warn("Event codes are not in chronological order. " + lastTimestamp + " is followed by " + code.getTimestamp() + ".");
-                // throw exception???
-            }
-            lastTimestamp = translatedTimestamp;
-        }
-    }
-
-    /**
-     * @return identifier
-     */
-    @Override
-    public String getIdentifier() {
-        return ID3v24Frames.FRAME_ID_EVENT_TIMING_CODES;
-    }
-
-    /**
-     * Setup object list.
-     */
-    @Override
-    protected void setupObjectList() {
-        addDataType(new NumberHashMap(DataTypes.OBJ_TIME_STAMP_FORMAT, this, EventTimingTimestampTypes.TIMESTAMP_KEY_FIELD_SIZE));
-        addDataType(new EventTimingCodeList(this));
-    }
-
-    private static Set<Integer> toSet(final int... types) {
-        final Set<Integer> typeSet = new HashSet<>();
-        for (final int type : types) {
-            typeSet.add(type);
-        }
-        return typeSet;
-    }
+    return typeSet;
+  }
 
 
 }

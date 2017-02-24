@@ -43,212 +43,210 @@ import java.util.List;
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2FrameBody.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2FrameBody.class);
 
-    private static final String TYPE_BODY = "body";
-
-
-    /**
-     * Frame Body Size, originally this is size as indicated in frame header
-     * when we come to writing data we recalculate it.
-     */
-    private int size;
+  private static final String TYPE_BODY = "body";
 
 
-    /**
-     * Create Empty Body. Super Constructor sets up Object list
-     */
-    protected AbstractID3v2FrameBody() {
+  /**
+   * Frame Body Size, originally this is size as indicated in frame header
+   * when we come to writing data we recalculate it.
+   */
+  private int size;
+
+
+  /**
+   * Create Empty Body. Super Constructor sets up Object list
+   */
+  protected AbstractID3v2FrameBody() {
+  }
+
+  /**
+   * Create Body based on another body
+   */
+  protected AbstractID3v2FrameBody(AbstractID3v2FrameBody copyObject) {
+    super(copyObject);
+  }
+
+  /**
+   * Creates a new FrameBody dataType from file. The super
+   * Constructor sets up the Object list for the frame.
+   *
+   * @param byteBuffer from where to read the frame body from
+   */
+  protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
+    super();
+    setSize(frameSize);
+    this.read(byteBuffer);
+
+  }
+
+  protected AbstractID3v2FrameBody(Buffer buffer, int frameSize) throws InvalidTagException {
+    super();
+    setSize(frameSize);
+    read(buffer);
+  }
+
+  /**
+   * Return the ID3v2 Frame Identifier, must be implemented by concrete subclasses
+   *
+   * @return the frame identifier
+   */
+  public abstract String getIdentifier();
+
+
+  /**
+   * Return size of frame body,if frameBody already exist will take this value from the frame header
+   * but it is always recalculated before writing any changes back to disk.
+   *
+   * @return size in bytes of this frame body
+   */
+  public int getSize() {
+    return size;
+  }
+
+  /**
+   * Set size based on size passed as parameter from frame header,
+   * done before read
+   */
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+  /**
+   * Set size based on size of the DataTypes making up the body,done after write
+   */
+  private void setSize() {
+    size = 0;
+    final List<AbstractDataType> dataTypeList = getDataTypeList();
+    for (int i = 0, listLength = dataTypeList.size(); i < listLength; i++) {
+      size += dataTypeList.get(i).getSize();
+    }
+  }
+
+  /**
+   * Are two bodies equal
+   */
+  public boolean equals(Object obj) {
+    return (obj instanceof AbstractID3v2FrameBody) && super.equals(obj);
+  }
+
+  /**
+   * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
+   * buffer to be just after the end of this frameBody
+   * <p>
+   * The ByteBuffer represents the tag and its position should be at the start of this frameBody. The size as
+   * indicated in the header is passed to the frame constructor when reading from file.
+   *
+   * @param byteBuffer file to read
+   *
+   * @throws InvalidFrameException if unable to construct a frameBody from the ByteBuffer
+   */
+  //TODO why don't we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
+  //then we wouldn't have to temporary allocate space for the buffer, using lots of needless memory
+  //and providing extra work for the garbage collector.
+  public void read(ByteBuffer byteBuffer) throws InvalidTagException {
+    int frameBodySize = getSize();
+    LOG.debug("Reading body for {}:{}", getIdentifier(), frameBodySize);
+
+    //Allocate a buffer to the size of the Frame Body and read from file
+    byte[] buffer = new byte[frameBodySize];
+    byteBuffer.get(buffer);
+
+    //Offset into buffer, incremented by length of previous dataType
+    //this offset is only used internally to decide where to look for the next
+    //dataType within a frameBody, it does not decide where to look for the next frame body
+    int offset = 0;
+
+    //Go through the ObjectList of the Frame reading the data into the
+    final List<AbstractDataType> dataTypeList = getDataTypeList();
+    for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+      final AbstractDataType object = getDataTypeList().get(i);
+      //correct dataType.
+      LOG.trace("offset{}", offset);
+
+      //The read has extended further than the defined frame size (ok to extend upto
+      //size because the next datatype may be of length 0.)
+      if (offset > (frameBodySize)) {
+        LOG.warn("Invalid Size for FrameBody");
+        throw new InvalidFrameException("Invalid size for Frame Body");
+      }
+
+      //Try and load it with data from the Buffer
+      //if it fails frame is invalid
+      try {
+        object.readByteArray(buffer, offset);
+      } catch (InvalidDataTypeException e) {
+        LOG.warn("Problem reading datatype within Frame Body", e);
+        throw e;
+      }
+      //Increment Offset to start of next datatype.
+      offset += object.getSize();
+    }
+  }
+
+  public void read(Buffer buffer) throws InvalidTagException {
+    final String identifier = getIdentifier();
+    AbstractDataType dataType = null;
+    try {
+      int frameBodySize = getSize();
+
+      final List<AbstractDataType> dataTypeList = getDataTypeList();
+      for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+        dataType = dataTypeList.get(i);
+        dataType.read(buffer, frameBodySize);
+        frameBodySize -= dataType.getSize();
+      }
+
+      if (frameBodySize < 0) {
+        throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
+                                                   "Past last",
+                                                   identifier,
+                                                   "Not enough data. Maybe previous data type read past it's size"));
+      }
+    } catch (EOFException | ArrayIndexOutOfBoundsException e) {
+      // dataType.read() barfed
+      throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
+                                                 dataType != null ? dataType.getClass() : "Unknown",
+                                                 identifier,
+                                                 e.getMessage()),
+                                    e);
     }
 
-    /**
-     * Create Body based on another body
-     */
-    protected AbstractID3v2FrameBody(AbstractID3v2FrameBody copyObject) {
-        super(copyObject);
-    }
+  }
 
-    /**
-     * Creates a new FrameBody dataType from file. The super
-     * Constructor sets up the Object list for the frame.
-     *
-     * @param byteBuffer from where to read the frame body from
-     */
-    protected AbstractID3v2FrameBody(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
-        super();
-        setSize(frameSize);
-        this.read(byteBuffer);
-
-    }
-
-    protected AbstractID3v2FrameBody(Buffer buffer, int frameSize) throws InvalidTagException {
-        super();
-        setSize(frameSize);
-        read(buffer);
-    }
-
-    /**
-     * Return the ID3v2 Frame Identifier, must be implemented by concrete subclasses
-     *
-     * @return the frame identifier
-     */
-    public abstract String getIdentifier();
-
-
-    /**
-     * Return size of frame body,if frameBody already exist will take this value from the frame header
-     * but it is always recalculated before writing any changes back to disk.
-     *
-     * @return size in bytes of this frame body
-     */
-    public int getSize() {
-        return size;
-    }
-
-    /**
-     * Set size based on size passed as parameter from frame header,
-     * done before read
-     */
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    /**
-     * Set size based on size of the DataTypes making up the body,done after write
-     */
-    private void setSize() {
-        size = 0;
-        final List<AbstractDataType> dataTypeList = getDataTypeList();
-        for (int i = 0, listLength = dataTypeList.size(); i < listLength; i++) {
-            size += dataTypeList.get(i).getSize();
-        }
-    }
-
-    /**
-     * Are two bodies equal
-     */
-    public boolean equals(Object obj) {
-        return (obj instanceof AbstractID3v2FrameBody) && super.equals(obj);
-    }
-
-    /**
-     * This reads a frame body from a ByteBuffer into the appropriate FrameBody class and update the position of the
-     * buffer to be just after the end of this frameBody
-     * <p>
-     * The ByteBuffer represents the tag and its position should be at the start of this frameBody. The size as
-     * indicated in the header is passed to the frame constructor when reading from file.
-     *
-     * @param byteBuffer file to read
-     *
-     * @throws InvalidFrameException if unable to construct a frameBody from the ByteBuffer
-     */
-    //TODO why don't we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
-    //then we wouldn't have to temporary allocate space for the buffer, using lots of needless memory
-    //and providing extra work for the garbage collector.
-    public void read(ByteBuffer byteBuffer) throws InvalidTagException {
-        int frameBodySize = getSize();
-        LOG.debug("Reading body for" + this.getIdentifier() + ":" + frameBodySize);
-
-        //Allocate a buffer to the size of the Frame Body and read from file
-        byte[] buffer = new byte[frameBodySize];
-        byteBuffer.get(buffer);
-
-        //Offset into buffer, incremented by length of previous dataType
-        //this offset is only used internally to decide where to look for the next
-        //dataType within a frameBody, it does not decide where to look for the next frame body
-        int offset = 0;
-
-        //Go through the ObjectList of the Frame reading the data into the
-        final List<AbstractDataType> dataTypeList = getDataTypeList();
-        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
-            final AbstractDataType object = getDataTypeList().get(i);
-            //correct dataType.
-            LOG.trace("offset:" + offset);
-
-            //The read has extended further than the defined frame size (ok to extend upto
-            //size because the next datatype may be of length 0.)
-            if (offset > (frameBodySize)) {
-                LOG.warn("Invalid Size for FrameBody");
-                throw new InvalidFrameException("Invalid size for Frame Body");
-            }
-
-            //Try and load it with data from the Buffer
-            //if it fails frame is invalid
-            try {
-                object.readByteArray(buffer, offset);
-            } catch (InvalidDataTypeException e) {
-                LOG.warn("Problem reading datatype within Frame Body:", e);
-                throw e;
-            }
-            //Increment Offset to start of next datatype.
-            offset += object.getSize();
-        }
-    }
-
-    public void read(Buffer buffer) throws InvalidTagException {
-        final String identifier = getIdentifier();
-        AbstractDataType dataType = null;
+  /**
+   * Write the contents of this datatype to the byte array
+   */
+  public void write(ByteArrayOutputStream tagBuffer) {
+    LOG.debug("Writing frame body for {}:Est Size:{}", this.getIdentifier(), size);
+    //Write the various fields to file in order
+    final List<AbstractDataType> dataTypeList = getDataTypeList();
+    for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+      byte[] objectData = dataTypeList.get(i).writeByteArray();
+      if (objectData != null) {
         try {
-            int frameBodySize = getSize();
-
-            final List<AbstractDataType> dataTypeList = getDataTypeList();
-            for (int i = 0, size = dataTypeList.size(); i < size; i++) {
-                dataType = dataTypeList.get(i);
-                dataType.read(buffer, frameBodySize);
-                frameBodySize -= dataType.getSize();
-            }
-
-            if (frameBodySize > 0) {
-                LOG.warn("Tag {} did not read it's entire expected size.", identifier);
-            } else if (frameBodySize < 0) {
-                throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                           "Past last",
-                                                           identifier,
-                                                           "Not enough data. Maybe previous data type read past it's size"));
-            }
-        } catch (EOFException | ArrayIndexOutOfBoundsException e) {
-            // dataType.read() barfed
-            throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                       dataType != null ? dataType.getClass() : "Unknown",
-                                                       identifier,
-                                                       e.getMessage()),
-                                          e);
+          tagBuffer.write(objectData);
+        } catch (IOException ioe) {
+          //This could never happen coz not writing to file, so convert to RuntimeException
+          throw new RuntimeException(ioe);
         }
-
+      }
     }
+    setSize();
+    LOG.debug("Written frame body for {}:Real Size:{}", getIdentifier(), size);
 
-    /**
-     * Write the contents of this datatype to the byte array
-     */
-    public void write(ByteArrayOutputStream tagBuffer) {
-        LOG.debug("Writing frame body for" + this.getIdentifier() + ":Est Size:" + size);
-        //Write the various fields to file in order
-        final List<AbstractDataType> dataTypeList = getDataTypeList();
-        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
-            byte[] objectData = dataTypeList.get(i).writeByteArray();
-            if (objectData != null) {
-                try {
-                    tagBuffer.write(objectData);
-                } catch (IOException ioe) {
-                    //This could never happen coz not writing to file, so convert to RuntimeException
-                    throw new RuntimeException(ioe);
-                }
-            }
-        }
-        setSize();
-        LOG.debug("Written frame body for" + this.getIdentifier() + ":Real Size:" + size);
+  }
 
+  /**
+   * Return String Representation of Datatype     *
+   */
+  public void createStructure() {
+    MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
+    final List<AbstractDataType> dataTypeList = getDataTypeList();
+    for (int i = 0, size = dataTypeList.size(); i < size; i++) {
+      dataTypeList.get(i).createStructure();
     }
-
-    /**
-     * Return String Representation of Datatype     *
-     */
-    public void createStructure() {
-        MP3File.getStructureFormatter().openHeadingElement(TYPE_BODY, "");
-        final List<AbstractDataType> dataTypeList = getDataTypeList();
-        for (int i = 0, size = dataTypeList.size(); i < size; i++) {
-            dataTypeList.get(i).createStructure();
-        }
-        MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
-    }
+    MP3File.getStructureFormatter().closeHeadingElement(TYPE_BODY);
+  }
 }

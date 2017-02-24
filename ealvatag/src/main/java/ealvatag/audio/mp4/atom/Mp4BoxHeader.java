@@ -22,10 +22,12 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
-import ealvatag.logging.ErrorMessage;
 import okio.BufferedSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static ealvatag.logging.ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID;
+import static ealvatag.logging.ErrorMessage.exceptionMsg;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -54,316 +56,300 @@ import java.nio.charset.StandardCharsets;
  * to pass the header data which is used to read the identifier and the the size of the box
  */
 public class Mp4BoxHeader {
-    // Logger Object
-    private static Logger LOG = LoggerFactory.getLogger(Mp4BoxHeader.class);
+  // Logger Object
+  private static Logger LOG = LoggerFactory.getLogger(Mp4BoxHeader.class);
 
-    public static final int OFFSET_POS = 0;
-    public static final int IDENTIFIER_POS = 4;
-    public static final int OFFSET_LENGTH = 4;
-    public static final int IDENTIFIER_LENGTH = 4;
-    public static final int HEADER_LENGTH = OFFSET_LENGTH + IDENTIFIER_LENGTH;
+  public static final int OFFSET_POS = 0;
+  public static final int IDENTIFIER_POS = 4;
+  public static final int OFFSET_LENGTH = 4;
+  public static final int IDENTIFIER_LENGTH = 4;
+  public static final int HEADER_LENGTH = OFFSET_LENGTH + IDENTIFIER_LENGTH;
 
-    //Box identifier
-    private String id;
+  //Box identifier
+  private String id;
 
-    //Box length
-    protected int length;
+  //Box length
+  protected int length;
 
-    //If reading from file , this can be used to hold the headers position in the file
-    private long filePos;
+  //If reading from file , this can be used to hold the headers position in the file
+  private long filePos;
 
-    //Raw Header data
-    protected ByteBuffer dataBuffer;
+  //Raw Header data
+  protected ByteBuffer dataBuffer;
 
-    //Mp4 uses UTF-8 for all text
-    public static final String CHARSET_UTF_8 = "UTF-8";
+  //Mp4 uses UTF-8 for all text
+  public static final String CHARSET_UTF_8 = "UTF-8";
 
-    /**
-     * Construct empty header
-     * <p>
-     * Can be populated later with update method
-     */
-    public Mp4BoxHeader() {
+  /**
+   * Construct empty header
+   * <p>
+   * Can be populated later with update method
+   */
+  public Mp4BoxHeader() {
 
+  }
+
+  /**
+   * Construct header to allow manual creation of header for writing to file
+   *
+   * @param id
+   */
+  public Mp4BoxHeader(String id) {
+    if (id.length() != IDENTIFIER_LENGTH) {
+      throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
+    }
+    dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
+    try {
+      this.id = id;
+      dataBuffer.put(4, id.getBytes("ISO-8859-1")[0]);
+      dataBuffer.put(5, id.getBytes("ISO-8859-1")[1]);
+      dataBuffer.put(6, id.getBytes("ISO-8859-1")[2]);
+      dataBuffer.put(7, id.getBytes("ISO-8859-1")[3]);
+    } catch (UnsupportedEncodingException uee) {
+      //Should never happen
+      throw new RuntimeException(uee);
+    }
+  }
+
+  /**
+   * Construct header
+   * <p>
+   * Create header using headerdata, expected to find header at headerdata current position
+   * <p>
+   * Note after processing adjusts position to immediately after header
+   *
+   * @param headerData
+   */
+  public Mp4BoxHeader(ByteBuffer headerData) {
+    update(headerData);
+  }
+
+  /**
+   * Create header using headerdata, expected to find header at headerdata current position
+   * <p>
+   * Note after processing adjusts position to immediately after header
+   *
+   */
+  public void update(ByteBuffer headerData) {
+    //Read header data into byte array
+    byte[] b = new byte[HEADER_LENGTH];
+    headerData.get(b);
+    //Keep reference to copy of RawData
+    dataBuffer = ByteBuffer.wrap(b);
+    dataBuffer.order(ByteOrder.BIG_ENDIAN);
+
+    //Calculate box size and id
+    this.length = dataBuffer.getInt();
+    this.id = Utils.readFourBytesAsChars(dataBuffer);
+
+    LOG.trace("Mp4BoxHeader id:{}:length:{}", id, length);
+    if (id.equals("\0\0\0\0")) {
+      throw new NullBoxIdException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id));
     }
 
-    /**
-     * Construct header to allow manual creation of header for writing to file
-     *
-     * @param id
-     */
-    public Mp4BoxHeader(String id) {
-        if (id.length() != IDENTIFIER_LENGTH) {
-            throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
-        }
-        dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-        try {
-            this.id = id;
-            dataBuffer.put(4, id.getBytes("ISO-8859-1")[0]);
-            dataBuffer.put(5, id.getBytes("ISO-8859-1")[1]);
-            dataBuffer.put(6, id.getBytes("ISO-8859-1")[2]);
-            dataBuffer.put(7, id.getBytes("ISO-8859-1")[3]);
-        } catch (UnsupportedEncodingException uee) {
-            //Should never happen
-            throw new RuntimeException(uee);
-        }
+    if (length < HEADER_LENGTH) {
+      throw new InvalidBoxHeaderException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id, length));
     }
+  }
 
-    /**
-     * Construct header
-     * <p>
-     * Create header using headerdata, expected to find header at headerdata current position
-     * <p>
-     * Note after processing adjusts position to immediately after header
-     *
-     * @param headerData
-     */
-    public Mp4BoxHeader(ByteBuffer headerData) {
-        update(headerData);
+  public Mp4BoxHeader(BufferedSource source) throws IOException {
+    length = source.readInt();
+    id = source.readString(IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
+    if ("\0\0\0\0".equals(id)) {
+      throw new NullBoxIdException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id));
     }
+  }
 
-    /**
-     * Create header using headerdata, expected to find header at headerdata current position
-     * <p>
-     * Note after processing adjusts position to immediately after header
-     *
-     * @param headerData
-     */
-    public void update(ByteBuffer headerData) {
-        //Read header data into byte array
-        byte[] b = new byte[HEADER_LENGTH];
-        headerData.get(b);
-        //Keep reference to copy of RawData
-        dataBuffer = ByteBuffer.wrap(b);
-        dataBuffer.order(ByteOrder.BIG_ENDIAN);
+  /**
+   * @return the box identifier
+   */
+  public String getId() {
+    return id;
+  }
 
-        //Calculate box size and id
-        this.length = dataBuffer.getInt();
-        this.id = Utils.readFourBytesAsChars(dataBuffer);
+  public Mp4AtomIdentifier getIdentifier() {
+    return Mp4AtomIdentifier.fromHeaderId(id);
+  }
 
-        LOG.trace("Mp4BoxHeader id:" + id + ":length:" + length);
-        if (id.equals("\0\0\0\0")) {
-            throw new NullBoxIdException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(
-                    id));
-        }
+  /**
+   * @return the length of the boxes data (includes the header size)
+   */
+  public int getLength() {
+    return length;
+  }
 
-        if (length < HEADER_LENGTH) {
-            throw new InvalidBoxHeaderException(ErrorMessage
-                                                        .MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID
-                                                        .getMsg(
-                                                                id,
-                                                                length));
-        }
+  /**
+   * Set the length.
+   * <p>
+   * This will modify the databuffer accordingly
+   */
+  public void setLength(int length) {
+    byte[] headerSize = Utils.getSizeBEInt32(length);
+    dataBuffer.put(0, headerSize[0]);
+    dataBuffer.put(1, headerSize[1]);
+    dataBuffer.put(2, headerSize[2]);
+    dataBuffer.put(3, headerSize[3]);
+
+    this.length = length;
+
+  }
+
+  /**
+   * Set the Id.
+   * <p>
+   * Allows you to manully create a header
+   * This will modify the databuffer accordingly
+   *
+   * @param length
+   */
+  public void setId(int length) {
+    byte[] headerSize = Utils.getSizeBEInt32(length);
+    dataBuffer.put(5, headerSize[0]);
+    dataBuffer.put(6, headerSize[1]);
+    dataBuffer.put(7, headerSize[2]);
+    dataBuffer.put(8, headerSize[3]);
+
+    this.length = length;
+
+  }
+
+  /**
+   * @return the 8 byte header buffer
+   */
+  public ByteBuffer getHeaderData() {
+    dataBuffer.rewind();
+    return dataBuffer;
+  }
+
+  /**
+   * @return the length of the data only (does not include the header size)
+   */
+  public int getDataLength() {
+    return length - HEADER_LENGTH;
+  }
+
+
+  /**
+   * @return UTF_8 (always used by Mp4)
+   */
+  public Charset getEncoding() {
+    return StandardCharsets.UTF_8;
+  }
+
+
+  /**
+   * Seek for box with the specified id starting from the current location of filepointer,
+   * <p>
+   * Note it wont find the box if it is contained with a level below the current level, nor if we are
+   * at a parent atom that also contains data and we havent yet processed the data. It will work
+   * if we are at the start of a child box even if it not the required box as long as the box we are
+   * looking for is the same level (or the level above in some cases).
+   *
+   */
+  static Mp4BoxHeader seekWithinLevel(FileChannel fc, String id) throws IOException {
+    LOG.debug("Started searching for:{} in file at:", id, fc.position());
+
+    Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+    ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
+    int bytesRead = fc.read(headerBuffer);
+    if (bytesRead != HEADER_LENGTH) {
+      return null;
     }
+    headerBuffer.rewind();
+    boxHeader.update(headerBuffer);
+    while (!boxHeader.getId().equals(id)) {
+      LOG.debug("Found:{}  Still searching for:{} in file at:{}", boxHeader.getId(), id, fc.position());
 
-    public Mp4BoxHeader(BufferedSource source) throws IOException {
-        length = source.readInt();
-        id = source.readString(IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
-        if ("\0\0\0\0".equals(id)) {
-            throw new NullBoxIdException(ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID.getMsg(id));
-        }
-    }
-
-    /**
-     * @return the box identifier
-     */
-    public String getId() {
-        return id;
-    }
-
-    public Mp4AtomIdentifier getIdentifier() {
-        return Mp4AtomIdentifier.fromHeaderId(id);
-    }
-
-    /**
-     * @return the length of the boxes data (includes the header size)
-     */
-    public int getLength() {
-        return length;
-    }
-
-    /**
-     * Set the length.
-     * <p>
-     * This will modify the databuffer accordingly
-     *
-     * @param length
-     */
-    public void setLength(int length) {
-        byte[] headerSize = Utils.getSizeBEInt32(length);
-        dataBuffer.put(0, headerSize[0]);
-        dataBuffer.put(1, headerSize[1]);
-        dataBuffer.put(2, headerSize[2]);
-        dataBuffer.put(3, headerSize[3]);
-
-        this.length = length;
-
-    }
-
-    /**
-     * Set the Id.
-     * <p>
-     * Allows you to manully create a header
-     * This will modify the databuffer accordingly
-     *
-     * @param length
-     */
-    public void setId(int length) {
-        byte[] headerSize = Utils.getSizeBEInt32(length);
-        dataBuffer.put(5, headerSize[0]);
-        dataBuffer.put(6, headerSize[1]);
-        dataBuffer.put(7, headerSize[2]);
-        dataBuffer.put(8, headerSize[3]);
-
-        this.length = length;
-
-    }
-
-    /**
-     * @return the 8 byte header buffer
-     */
-    public ByteBuffer getHeaderData() {
-        dataBuffer.rewind();
-        return dataBuffer;
-    }
-
-    /**
-     * @return the length of the data only (does not include the header size)
-     */
-    public int getDataLength() {
-        return length - HEADER_LENGTH;
-    }
-
-    public String toString() {
-        return "Box " + id + ":length" + length + ":filepos:" + filePos;
-    }
-
-    /**
-     * @return UTF_8 (always used by Mp4)
-     */
-    public Charset getEncoding() {
-        return StandardCharsets.UTF_8;
-    }
-
-
-    /**
-     * Seek for box with the specified id starting from the current location of filepointer,
-     * <p>
-     * Note it wont find the box if it is contained with a level below the current level, nor if we are
-     * at a parent atom that also contains data and we havent yet processed the data. It will work
-     * if we are at the start of a child box even if it not the required box as long as the box we are
-     * looking for is the same level (or the level above in some cases).
-     *
-     * @param fc
-     * @param id
-     *
-     * @return
-     *
-     * @throws java.io.IOException
-     */
-    public static Mp4BoxHeader seekWithinLevel(FileChannel fc, String id) throws IOException {
-        LOG.debug("Started searching for:" + id + " in file at:" + fc.position());
-
-        Mp4BoxHeader boxHeader = new Mp4BoxHeader();
-        ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
-        int bytesRead = fc.read(headerBuffer);
-        if (bytesRead != HEADER_LENGTH) {
-            return null;
-        }
-        headerBuffer.rewind();
+      //Something gone wrong probably not at the start of an atom so return null;
+      if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
+        return null;
+      }
+      fc.position(fc.position() + boxHeader.getDataLength());
+      if (fc.position() > fc.size()) {
+        return null;
+      }
+      headerBuffer.rewind();
+      bytesRead = fc.read(headerBuffer);
+      LOG.debug("Header Bytes Read:{}", bytesRead);
+      headerBuffer.rewind();
+      if (bytesRead == Mp4BoxHeader.HEADER_LENGTH) {
         boxHeader.update(headerBuffer);
-        while (!boxHeader.getId().equals(id)) {
-            LOG.debug("Found:" + boxHeader.getId() + " Still searching for:" + id + " in file at:" + fc.position());
-
-            //Something gone wrong probably not at the start of an atom so return null;
-            if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
-                return null;
-            }
-            fc.position(fc.position() + boxHeader.getDataLength());
-            if (fc.position() > fc.size()) {
-                return null;
-            }
-            headerBuffer.rewind();
-            bytesRead = fc.read(headerBuffer);
-            LOG.debug("Header Bytes Read:" + bytesRead);
-            headerBuffer.rewind();
-            if (bytesRead == Mp4BoxHeader.HEADER_LENGTH) {
-                boxHeader.update(headerBuffer);
-            } else {
-                return null;
-            }
-        }
-        return boxHeader;
+      } else {
+        return null;
+      }
     }
+    return boxHeader;
+  }
 
 
-    /**
-     * Seek for box with the specified id starting from the current location of filepointer,
-     * <p>
-     * Note it won't find the box if it is contained with a level below the current level, nor if we are
-     * at a parent atom that also contains data and we havent yet processed the data. It will work
-     * if we are at the start of a child box even if it not the required box as long as the box we are
-     * looking for is the same level (or the level above in some cases).
-     *
-     * @param data
-     * @param id
-     *
-     * @return
-     *
-     * @throws java.io.IOException
-     */
-    public static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException {
-        LOG.debug("Started searching for:" + id + " in bytebuffer at" + data.position());
+  /**
+   * Seek for box with the specified id starting from the current location of filepointer,
+   * <p>
+   * Note it won't find the box if it is contained with a level below the current level, nor if we are
+   * at a parent atom that also contains data and we havent yet processed the data. It will work
+   * if we are at the start of a child box even if it not the required box as long as the box we are
+   * looking for is the same level (or the level above in some cases).
+   */
+  static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException {
+    LOG.debug("Started searching for:{} in bytebuffer at {}", id,  data.position());
 
-        Mp4BoxHeader boxHeader = new Mp4BoxHeader();
-        if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH) {
-            boxHeader.update(data);
-        } else {
-            return null;
-        }
-        while (!boxHeader.getId().equals(id)) {
-            LOG.debug("Found:" + boxHeader.getId() + " Still searching for:" + id + " in bytebuffer at" +
-                              data.position());
-            //Something gone wrong probably not at the start of an atom so return null;
-            if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
-                return null;
-            }
-            if (data.remaining() < (boxHeader.getLength() - HEADER_LENGTH)) {
-                //i.e Could happen if Moov header had size incorrectly recorded
-                return null;
-            }
-            data.position(data.position() + (boxHeader.getLength() - HEADER_LENGTH));
-            if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH) {
-                boxHeader.update(data);
-            } else {
-                return null;
-            }
-        }
-        LOG.debug("Found:" + id + " in bytebuffer at" + data.position());
-
-        return boxHeader;
+    Mp4BoxHeader boxHeader = new Mp4BoxHeader();
+    if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH) {
+      boxHeader.update(data);
+    } else {
+      return null;
     }
-
-    /**
-     * @return location in file of the start of atom  header (i.e where the 4 byte length field starts)
-     */
-    public long getFilePos() {
-        return filePos;
+    while (!boxHeader.getId().equals(id)) {
+      LOG.debug("Found:{} Still searching for:{} in bytebuffer at {}", boxHeader.getId(), id, data.position());
+      //Something gone wrong probably not at the start of an atom so return null;
+      if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
+        return null;
+      }
+      if (data.remaining() < (boxHeader.getLength() - HEADER_LENGTH)) {
+        //i.e Could happen if Moov header had size incorrectly recorded
+        return null;
+      }
+      data.position(data.position() + (boxHeader.getLength() - HEADER_LENGTH));
+      if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH) {
+        boxHeader.update(data);
+      } else {
+        return null;
+      }
     }
+    LOG.debug("Found:{} in bytebyter at{}", id, data.position());
 
-    /**
-     * @return location in file of the end of atom
-     */
-    public long getFileEndPos() {
-        return filePos + length;
-    }
+    return boxHeader;
+  }
 
-    /**
-     * Set location in file of the start of file header (i.e where the 4 byte length field starts)
-     *
-     * @param filePos
-     */
-    public void setFilePos(long filePos) {
-        this.filePos = filePos;
-    }
+  /**
+   * @return location in file of the start of atom  header (i.e where the 4 byte length field starts)
+   */
+  public long getFilePos() {
+    return filePos;
+  }
+
+  /**
+   * @return location in file of the end of atom
+   */
+  public long getFileEndPos() {
+    return filePos + length;
+  }
+
+  /**
+   * Set location in file of the start of file header (i.e where the 4 byte length field starts)
+   */
+  public void setFilePos(long filePos) {
+    this.filePos = filePos;
+  }
+
+  @Override public String toString() {
+    return new StringBuilder(256)
+        .append("Mp4BoxHeader{")
+        .append("id='").append(id).append('\'')
+        .append(", length=").append(length)
+        .append(", filePos=").append(filePos)
+        .append(", endsAt=").append(filePos + length)
+        .append('}')
+        .toString();
+  }
 }

@@ -112,7 +112,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
         if (parentHeader.getDataLength() == meanBoxHeader.getLength() + nameBoxHeader.getLength()) {
             id = IDENTIFIER + ":" + issuer + ":" + descriptor;
             setContent("");
-            LOG.warn(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));
+            LOG.warn(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA, id);
         } else {
             //Usual Case
             //Read data box, identify the data
@@ -154,7 +154,7 @@ public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
         if (parentHeader.getDataLength() == meanBoxHeader.getLength() + nameBoxHeader.getLength()) {
             id = IDENTIFIER + ":" + issuer + ":" + descriptor;
             setContent("");
-            LOG.warn(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA.getMsg(id));
+            LOG.warn(ErrorMessage.MP4_REVERSE_DNS_FIELD_HAS_NO_DATA, id);
         }
         //Usual Case
         else {

@@ -412,7 +412,7 @@ public class OggVorbisTagReader {
         }
         raf.seek(raf.getFilePointer() -
                          (VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
-        LOG.debug("Found start of comment header at:" + raf.getFilePointer());
+        LOG.debug("Found start of comment header at:{}", raf.getFilePointer());
 
         //Calculate Comment Size (not inc header)
         while (true) {
@@ -442,11 +442,11 @@ public class OggVorbisTagReader {
             b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
             raf.read(b);
             if (!isVorbisSetupHeader(b)) {
-                throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_VORBIS_HEADER_FOUND.getMsg());
+                throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_VORBIS_HEADER_FOUND);
             }
             raf.seek(raf.getFilePointer() -
                              (VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
-            LOG.debug("Found start of vorbis setup header at file position:" + raf.getFilePointer());
+            LOG.debug("Found start of vorbis setup header at file position:{}", raf.getFilePointer());
 
             //Set this to the  start of the OggPage that setupheader was found on
             setupHeaderStartPosition = raf.getFilePointer() -
@@ -498,12 +498,12 @@ public class OggVorbisTagReader {
             b = new byte[VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH];
             raf.read(b);
             if (!isVorbisSetupHeader(b)) {
-                LOG.warn("Expecting but got:" + new String(b) + "at " + (raf.getFilePointer() - b.length));
-                throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_VORBIS_HEADER_FOUND.getMsg());
+                LOG.warn("Expecting Vorbis header but got:{} at {}", new String(b), raf.getFilePointer() - b.length);
+                throw new CannotReadException(ErrorMessage.OGG_VORBIS_NO_VORBIS_HEADER_FOUND);
             }
             raf.seek(raf.getFilePointer() -
                              (VorbisHeader.FIELD_PACKET_TYPE_LENGTH + VorbisHeader.FIELD_CAPTURE_PATTERN_LENGTH));
-            LOG.debug("Found start of vorbis setup header at file position:" + raf.getFilePointer());
+            LOG.debug("Found start of vorbis setup header at file position:{}", raf.getFilePointer());
 
             //Set this to the  start of the OggPage that setupheader was found on
             setupHeaderStartPosition = raf.getFilePointer() -

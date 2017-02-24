@@ -22,9 +22,8 @@ public final class MetadataContainerUtils {
         Collections.sort(l2, new MetadataDescriptorComparator());
         for (int i = 0; result && i < l1.size(); i++) {
             result &= MetadataDescriptorUtils.equals(l1.get(i), l2.get(i));
-            if (!result) {
-                LOG.warn("Unequal descriptors: " + l1.get(i) + " -> "
-                                 + l2.get(i));
+            if (!result && LOG.isWarnEnabled()) {
+                LOG.warn("Unequal descriptors: {}  ->  {}", l1.get(i), l2.get(i));
             }
         }
         return result;

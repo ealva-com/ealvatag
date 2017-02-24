@@ -75,7 +75,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
      * @throws InvalidDataTypeException if unable to find any null terminated Strings
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        LOG.debug("Reading MultipleTextEncodedStringNullTerminated from array from offset:" + offset);
+        LOG.debug("Reading MultipleTextEncodedStringNullTerminated from array from offset:{}", offset);
         //Continue until unable to read a null terminated String
         while (true) {
             try {
@@ -104,7 +104,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
                 throw new InvalidDataTypeException("No null terminated Strings found");
             }
         }
-        LOG.debug("Read  MultipleTextEncodedStringNullTerminated:" + value + " size:" + size);
+        LOG.debug("Read  MultipleTextEncodedStringNullTerminated:{} size:{}", value, size);
     }
 
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {

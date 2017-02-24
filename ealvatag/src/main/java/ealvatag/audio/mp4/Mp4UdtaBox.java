@@ -53,7 +53,7 @@ class Mp4UdtaBox {
             dataSize -= childHeader.getLength();
         }
         if (metaBox == null) {
-            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO.getMsg());
+            throw new CannotReadException(ErrorMessage.MP4_FILE_NOT_AUDIO);
         }
         bufferedSource.skip(dataSize);
     }

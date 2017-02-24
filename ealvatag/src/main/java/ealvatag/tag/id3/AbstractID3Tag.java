@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>
@@ -37,7 +37,7 @@ public abstract class AbstractID3Tag extends BaseID3Tag {
     //The purpose of this is to provide the filename that should be used when writing debug messages
     //when problems occur reading or writing to file, otherwise it is difficult to track down the error
     //when processing many files
-    private String loggingFilename = "";
+    protected String loggingFilename = "";
 
     /**
      * Get full version
@@ -69,18 +69,7 @@ public abstract class AbstractID3Tag extends BaseID3Tag {
     public abstract byte getRevision();
 
     /**
-     * Retrieve the logging filename to be used in debugging
-     *
-     * @return logging filename to be used in debugging
-     */
-    protected String getLoggingFilename() {
-        return loggingFilename;
-    }
-
-    /**
      * Set logging filename when construct tag for read from file
-     *
-     * @param loggingFilename
      */
     protected void setLoggingFilename(String loggingFilename) {
         this.loggingFilename = loggingFilename;

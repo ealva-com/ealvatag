@@ -18,56 +18,37 @@
  */
 package ealvatag.audio.exceptions;
 
+import static ealvatag.logging.ErrorMessage.exceptionMsg;
+
 /**
  * This exception is thrown if the writing process of an audio file failed.
  *
  * @author Rapha�l Slinckx
  */
-public class CannotWriteException extends Exception
-{
-    /**
-     * (overridden)
-     *
-     * @see Exception#Exception()
-     */
-    public CannotWriteException()
-    {
-        super();
-    }
+public class CannotWriteException extends Exception {
+  public CannotWriteException() {
+    super();
+  }
 
-    /**
-     * (overridden)
-     *
-     * @param message
-     * @see Exception#Exception(java.lang.String)
-     */
-    public CannotWriteException(String message)
-    {
-        super(message);
-    }
+  public CannotWriteException(String message) {
+    super(message);
+  }
 
-    /**
-     * (overridden)
-     *
-     * @param message
-     * @param cause
-     * @see Exception#Exception(java.lang.String,java.lang.Throwable)
-     */
-    public CannotWriteException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
+  public CannotWriteException(String message, Object... formatArgs) {
+    super(exceptionMsg(message, formatArgs));
+  }
 
-    /**
-     * (overridden)
-     *
-     * @param cause
-     * @see Exception#Exception(java.lang.Throwable)
-     */
-    public CannotWriteException(Throwable cause)
-    {
-        super(cause);
+  public CannotWriteException(Throwable cause, String message) {
+    super(message, cause);
+  }
 
-    }
+  public CannotWriteException(Throwable cause, String message, Object... formatArgs) {
+    super(exceptionMsg(message, formatArgs), cause);
+  }
+
+  public CannotWriteException(Throwable cause) {
+    super(cause);
+
+  }
 
 }

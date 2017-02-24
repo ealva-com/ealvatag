@@ -84,7 +84,7 @@ public class PartOfSet extends AbstractString {
      * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        LOG.trace("Reading from array from offset:" + offset);
+        LOG.trace("Reading from array from offset:{}", offset);
 
         //Get the Specified Decoder
         CharsetDecoder decoder = getTextEncodingCharSet().newDecoder();
@@ -95,7 +95,7 @@ public class PartOfSet extends AbstractString {
         decoder.reset();
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError()) {
-            LOG.warn("Decoding error:" + coderResult.toString());
+            LOG.warn("Decoding error:{}", coderResult);
         }
         decoder.flush(outBuffer);
         outBuffer.flip();
@@ -106,7 +106,7 @@ public class PartOfSet extends AbstractString {
 
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
-        LOG.debug("Read SizeTerminatedString:" + value + " size:" + size);
+        LOG.debug("Read SizeTerminatedString:{] size:{}", value, size);
     }
 
     @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
@@ -114,7 +114,7 @@ public class PartOfSet extends AbstractString {
             value = new PartOfSetValue(buffer.readString(size, getTextEncodingCharSet()));
             setSize(value.toString().length());
         } catch (IllegalCharsetException e) {
-            throw new InvalidDataTypeException("Bad charset Id", e);
+            throw new InvalidDataTypeException(e, "Bad charset Id");
         }
     }
 
@@ -160,7 +160,7 @@ public class PartOfSet extends AbstractString {
         }
         //Should never happen so if does throw a RuntimeException
         catch (CharacterCodingException ce) {
-            LOG.error(ce.getMessage());
+            LOG.error("Character coding", ce);
             throw new RuntimeException(ce);
         }
         setSize(data.length);

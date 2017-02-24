@@ -101,7 +101,7 @@ public class ByteArraySizeTerminated extends AbstractDataType {
      * @return a byte array that that contians the data that should be perisisted to file
      */
     public byte[] writeByteArray() {
-        LOG.debug("Writing byte array" + this.getIdentifier());
+        LOG.debug("Writing byte array {}", getIdentifier());
         return (byte[])value;
     }
 }

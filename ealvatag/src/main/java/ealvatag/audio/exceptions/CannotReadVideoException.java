@@ -37,6 +37,6 @@ public class CannotReadVideoException extends CannotReadException
      */
     public CannotReadVideoException(String message, Throwable cause)
     {
-        super(message, cause);
+        super(cause, message);
     }
 }

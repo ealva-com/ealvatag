@@ -76,7 +76,7 @@ public class MetadataBlockHeader {
                 bytes[i] = rawdata.get(i);
             }
         } else {
-            throw new CannotReadException(ErrorMessage.FLAC_NO_BLOCKTYPE.getMsg(type));
+            throw new CannotReadException(ErrorMessage.FLAC_NO_BLOCKTYPE, type);
         }
     }
 

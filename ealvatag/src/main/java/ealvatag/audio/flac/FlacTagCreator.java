@@ -18,11 +18,11 @@
  */
 package ealvatag.audio.flac;
 
+import ealvatag.audio.AbstractTagCreator;
 import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPadding;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.audio.AbstractTagCreator;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
@@ -37,75 +37,69 @@ import java.util.ListIterator;
  * Create the tag data ready for writing to flac file
  */
 public class FlacTagCreator
-        extends AbstractTagCreator {
-    // Logger Object
-    public static Logger LOG = LoggerFactory.getLogger(FlacTagCreator.class);
+    extends AbstractTagCreator {
+  // Logger Object
+  public static Logger LOG = LoggerFactory.getLogger(FlacTagCreator.class);
 
-    //TODO make an option
-    public static final int DEFAULT_PADDING = 4000;
+  //TODO make an option
+  static final int DEFAULT_PADDING = 4000;
 
-    private static final VorbisCommentCreator creator = new VorbisCommentCreator();
+  private static final VorbisCommentCreator creator = new VorbisCommentCreator();
 
-    /**
-     * @param tag
-     * @param paddingSize extra padding to be added
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    public ByteBuffer convert(TagFieldContainer tag, int paddingSize) throws UnsupportedEncodingException {
-        LOG.trace("Convert flac tag:padding:{}", paddingSize);
-        FlacTag flacTag = (FlacTag)tag;
+  public ByteBuffer convert(TagFieldContainer tag, int paddingSize) throws UnsupportedEncodingException {
+    LOG.trace("Convert flac tag:padding:{}", paddingSize);
+    FlacTag flacTag = (FlacTag)tag;
 
-        int tagLength = 0;
-        ByteBuffer vorbiscomment = null;
-        if (flacTag.getVorbisCommentTag() != null) {
-            vorbiscomment = creator.convert(flacTag.getVorbisCommentTag());
-            tagLength = vorbiscomment.capacity() + MetadataBlockHeader.HEADER_LENGTH;
-        }
-        for (MetadataBlockDataPicture image : flacTag.getImages()) {
-            tagLength += image.getBytes().limit() + MetadataBlockHeader.HEADER_LENGTH;
-        }
-
-        LOG.trace("Convert flac tag:taglength:{}", tagLength);
-        ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
-
-        MetadataBlockHeader vorbisHeader;
-        //If there are other metadata blocks
-        if (flacTag.getVorbisCommentTag() != null) {
-            if ((paddingSize > 0) || (flacTag.getImages().size() > 0)) {
-                vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
-            } else {
-                vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
-            }
-            buf.put(vorbisHeader.getBytes());
-            buf.put(vorbiscomment);
-        }
-
-        //Images
-        ListIterator<MetadataBlockDataPicture> li = flacTag.getImages().listIterator();
-        while (li.hasNext()) {
-            MetadataBlockDataPicture imageField = li.next();
-            MetadataBlockHeader imageHeader;
-
-            if (paddingSize > 0 || li.hasNext()) {
-                imageHeader = new MetadataBlockHeader(false, BlockType.PICTURE, imageField.getLength());
-            } else {
-                imageHeader = new MetadataBlockHeader(true, BlockType.PICTURE, imageField.getLength());
-            }
-            buf.put(imageHeader.getBytes());
-            buf.put(imageField.getBytes());
-        }
-
-        //Padding
-        LOG.trace("Convert flac tag at:{}", buf.position());
-        if (paddingSize > 0) {
-            int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;
-            MetadataBlockHeader paddingHeader = new MetadataBlockHeader(true, BlockType.PADDING, paddingDataSize);
-            MetadataBlockDataPadding padding = new MetadataBlockDataPadding(paddingDataSize);
-            buf.put(paddingHeader.getBytes());
-            buf.put(padding.getBytes());
-        }
-        buf.rewind();
-        return buf;
+    int tagLength = 0;
+    ByteBuffer vorbiscomment = null;
+    if (flacTag.getVorbisCommentTag() != null) {
+      vorbiscomment = creator.convert(flacTag.getVorbisCommentTag());
+      tagLength = vorbiscomment.capacity() + MetadataBlockHeader.HEADER_LENGTH;
     }
+    for (MetadataBlockDataPicture image : flacTag.getImages()) {
+      tagLength += image.getBytes().limit() + MetadataBlockHeader.HEADER_LENGTH;
+    }
+
+    LOG.trace("Convert flac tag:taglength:{}", tagLength);
+    ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
+
+    MetadataBlockHeader vorbisHeader;
+    //If there are other metadata blocks
+    if (flacTag.getVorbisCommentTag() != null) {
+      if ((paddingSize > 0) || (flacTag.getImages().size() > 0)) {
+        vorbisHeader = new MetadataBlockHeader(false, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
+      } else {
+        vorbisHeader = new MetadataBlockHeader(true, BlockType.VORBIS_COMMENT, vorbiscomment.capacity());
+      }
+      buf.put(vorbisHeader.getBytes());
+      buf.put(vorbiscomment);
+    }
+
+    //Images
+    ListIterator<MetadataBlockDataPicture> li = flacTag.getImages().listIterator();
+    while (li.hasNext()) {
+      MetadataBlockDataPicture imageField = li.next();
+      MetadataBlockHeader imageHeader;
+
+      if (paddingSize > 0 || li.hasNext()) {
+        imageHeader = new MetadataBlockHeader(false, BlockType.PICTURE, imageField.getLength());
+      } else {
+        imageHeader = new MetadataBlockHeader(true, BlockType.PICTURE, imageField.getLength());
+      }
+      buf.put(imageHeader.getBytes());
+      buf.put(imageField.getBytes());
+    }
+
+    //Padding
+    LOG.trace("Convert flac tag at:{}", buf.position());
+    if (paddingSize > 0) {
+      int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;
+      MetadataBlockHeader paddingHeader = new MetadataBlockHeader(true, BlockType.PADDING, paddingDataSize);
+      MetadataBlockDataPadding padding = new MetadataBlockDataPadding(paddingDataSize);
+      buf.put(paddingHeader.getBytes());
+      buf.put(padding.getBytes());
+    }
+    buf.rewind();
+    return buf;
+  }
 }

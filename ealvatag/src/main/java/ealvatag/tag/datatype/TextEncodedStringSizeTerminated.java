@@ -78,7 +78,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
      * @throws IndexOutOfBoundsException
      */
     public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        LOG.trace("Reading from array from offset:" + offset);
+        LOG.trace("Reading from array from offset:{}", offset);
 
 
         //Decode sliced inBuffer
@@ -99,7 +99,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
         CharsetDecoder decoder = getCorrectDecoder(inBuffer);
         CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
         if (coderResult.isError()) {
-            LOG.warn("Decoding error:" + coderResult.toString());
+            LOG.warn("Decoding error:{}", coderResult);
         }
         decoder.flush(outBuffer);
         outBuffer.flip();
@@ -113,7 +113,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
         }
         //SetSize, important this is correct for finding the next datatype
         setSize(arr.length - offset);
-        LOG.trace("Read SizeTerminatedString:" + value + " size:" + size);
+        LOG.trace("Read SizeTerminatedString:{} size:{}", value, size);
 
     }
 
@@ -132,7 +132,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
             }
             setSize((int)(bufferStartSize - buffer.size()));
         } catch (IllegalCharsetException e) {
-            throw new InvalidDataTypeException("Bad charset id", e);
+            throw new InvalidDataTypeException(e, "Bad charset id");
         }
     }
 
@@ -311,7 +311,7 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
         }
         //https://bitbucket.org/ijabz/jaudiotagger/issue/1/encoding-metadata-to-utf-16-can-fail-if
         catch (CharacterCodingException ce) {
-            LOG.error(ce.getMessage() + ":" + charset + ":" + value);
+            LOG.error("Character coding charset:{} value:{}", charset, value, ce);
             throw new RuntimeException(ce);
         }
         return data;

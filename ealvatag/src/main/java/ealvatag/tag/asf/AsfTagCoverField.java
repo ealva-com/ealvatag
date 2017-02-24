@@ -110,7 +110,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
             // code because not 100% sure how to identify
             // formats
             if (mimeType == null) {
-                LOG.warn(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT.getMsg());
+                LOG.warn(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT);
                 mimeType = ImageFormats.MIME_TYPE_PNG;
             }
         }

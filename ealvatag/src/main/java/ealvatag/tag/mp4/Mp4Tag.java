@@ -637,7 +637,7 @@ public class Mp4Tag extends AbstractTag {
             if (Mp4GenreField.isValidGenre(value)) {
                 return new Mp4GenreField(value);
             } else {
-                throw new IllegalArgumentException(ErrorMessage.NOT_STANDARD_MP$_GENRE.getMsg());
+                throw new IllegalArgumentException(ErrorMessage.NOT_STANDARD_MP$_GENRE);
             }
         } else if (mp4FieldKey == Mp4FieldKey.GENRE_CUSTOM) {
             return new Mp4TagTextField(GENRE_CUSTOM.getFieldName(), value);
@@ -652,13 +652,13 @@ public class Mp4Tag extends AbstractTag {
         } else if (mp4FieldKey.getSubClassFieldType() == Mp4TagFieldSubType.REVERSE_DNS) {
             return new Mp4TagReverseDnsField(mp4FieldKey, value);
         } else if (mp4FieldKey.getSubClassFieldType() == Mp4TagFieldSubType.ARTWORK) {
-            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD.getMsg());
+            throw new UnsupportedFieldException(ErrorMessage.ARTWORK_CANNOT_BE_CREATED_WITH_THIS_METHOD);
         } else if (mp4FieldKey.getSubClassFieldType() == Mp4TagFieldSubType.TEXT) {
             return new Mp4TagTextField(mp4FieldKey.getFieldName(), value);
         } else if (mp4FieldKey.getSubClassFieldType() == Mp4TagFieldSubType.UNKNOWN) {
-            throw new UnsupportedFieldException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE.getMsg(mp4FieldKey.getFieldName()));
+            throw new UnsupportedFieldException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE, mp4FieldKey.getFieldName());
         } else {
-            throw new UnsupportedFieldException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE.getMsg(mp4FieldKey.getFieldName()));
+            throw new UnsupportedFieldException(ErrorMessage.DO_NOT_KNOW_HOW_TO_CREATE_THIS_ATOM_TYPE, mp4FieldKey.getFieldName());
         }
     }
 
