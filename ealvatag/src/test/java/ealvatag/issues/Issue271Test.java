@@ -105,7 +105,7 @@ public class Issue271Test {
 
     /**
      * Test doesnt fail when read mp3 that has an encrypted field
-     * <p/>
+     * <p>
      * TODO currently we cant decrypt it, that will come later
      */
     @Test public void testReadMp3WithEncryptedField() {

@@ -174,7 +174,7 @@ public class ID3v23TagTest {
 
     /**
      * Test converting a v24 tag to a v23 tag, the v24 tag contains:
-     * <p/>
+     * <p>
      * A frame which is known in v24 and v23
      *
      */
@@ -225,7 +225,7 @@ public class ID3v23TagTest {
 
     /**
      * Test converting a v24 tag to a v23 tag, the v24 tag contains:
-     * <p/>
+     * <p>
      * A frame which is known in v24 but not v23
      *
      */

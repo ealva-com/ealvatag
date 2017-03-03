@@ -1,0 +1,4 @@
+rootProject.name = 'ealvatag-parent'
+include ':ealvatag'
+
+project(':ealvatag').projectDir = "$rootDir/ealvatag" as File

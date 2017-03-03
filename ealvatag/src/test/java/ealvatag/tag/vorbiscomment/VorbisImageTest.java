@@ -25,7 +25,7 @@ public class VorbisImageTest {
 
     /**
      * Test can read file with base64 encoded image from ogg
-     * <p/>
+     * <p>
      * Works
      */
     @Test public void testReadFileWithSmallImageTag() {
@@ -47,7 +47,7 @@ public class VorbisImageTest {
 
     /**
      * Test can read file with base64 encoded image thats spans multiple ogg pages
-     * <p/>
+     * <p>
      * Fails:Doesnt give error but doesnt read image
      */
     @Test public void testReadFileWithLargeImageTag() {

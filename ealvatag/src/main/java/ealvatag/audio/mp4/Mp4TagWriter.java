@@ -47,7 +47,7 @@ import java.util.List;
  * Writes metadata from mp4, the metadata tags are held under the {@code ilst} atom as shown below, (note all free
  * atoms are
  * optional).
- * <p/>
+ * <p>
  * When writing changes the size of all the atoms up to {@code ilst} has to be recalculated, then if the size of
  * the metadata is increased the size of the free atom (below {@code meta}) should be reduced accordingly or vice versa.
  * If the size of the metadata has increased by more than the size of the {@code free} atom then the size of {@code
@@ -56,12 +56,12 @@ import java.util.List;
  * If there is not enough space even if using both of the {@code free} atoms, then the {@code mdat} atom has to be
  * shifted down accordingly to make space, and the {@code stco} atoms have to have their offsets to {@code mdat}
  * chunks table adjusted accordingly.
- * <p/>
+ * <p>
  * Exceptions are that the meta/udta/ilst do not currently exist, in which udta/meta/ilst are created. Note it is valid
  * to have meta/ilst without udta but this is less common so we always try to write files according to the Apple/iTunes
  * specification. *
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * <pre>
  * |--- ftyp
  * |--- free
@@ -116,7 +116,7 @@ public class Mp4TagWriter {
 
   /**
    * Replace the {@code ilst} metadata.
-   * <p/>
+   * <p>
    * Because it is the same size as the original data nothing else has to be modified.
    *
    */
@@ -642,7 +642,7 @@ public class Mp4TagWriter {
 
   /**
    * Write data after {@code ilst} up to the end of the file.
-   * <p/>
+   * <p>
    * <p>Can be used if don't need to adjust size of {@code moov} header of modify top level {@code free} atoms
    *
    */
@@ -784,7 +784,7 @@ public class Mp4TagWriter {
 
   /**
    * Delete the tag.
-   * <p/>
+   * <p>
    * <p>This is achieved by writing an empty {@code ilst} atom.
    */
   public void delete(RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException {

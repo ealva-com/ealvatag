@@ -257,9 +257,9 @@ public class WavTagWriter {
 
     /**
      * Delete Tag Chunk
-     * <p/>
+     * <p>
      * Can be used when chunk is not the last chunk
-     * <p/>
+     * <p>
      * Continually copy a 4mb chunk, write the chunk and repeat until the rest of the file after the tag
      * is rewritten
      *

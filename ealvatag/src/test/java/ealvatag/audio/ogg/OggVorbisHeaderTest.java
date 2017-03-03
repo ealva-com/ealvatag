@@ -50,7 +50,7 @@ public class OggVorbisHeaderTest {
 
     /**
      * Testing reading of vorbis audio header info
-     * <p/>
+     * <p>
      * TODO, need to replace with file that is not copyrighted
      */
     @Test public void testReadPaddedFile() {

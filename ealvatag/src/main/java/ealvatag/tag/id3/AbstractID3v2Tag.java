@@ -188,7 +188,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
   /**
    * Determines if file contain an id3 tag and if so positions the file pointer just after the end
    * of the tag.
-   * <p/>
+   * <p>
    * This method is used by non mp3s (such as .ogg and .flac) to determine if they contain an id3 tag
    */
   public static boolean isId3Tag(RandomAccessFile raf) throws IOException {
@@ -435,7 +435,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 //   * Return whether tag has frame with this identifier and a related body. This is required to protect
 //   * against circumstances whereby a tag contains a frame with an unsupported body
 //   * but happens to have an identifier that is valid for another version of the tag which it has been converted to
-//   * <p/>
+//   * <p>
 //   * e.g TDRC is an invalid frame in a v23 tag but if somehow a v23tag has been created by another application
 //   * with a TDRC frame we construct an UnsupportedFrameBody to hold it, then this library constructs a
 //   * v24 tag, it will contain a frame with id TDRC but it will not have the expected frame body it is not really a
@@ -458,7 +458,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Return whether tag has frame with this identifier
-   * <p/>
+   * <p>
    * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
    * but happens to have an identifier that is valid for another version of the tag it will return true
    *
@@ -473,7 +473,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
   /**
    * For single frames return the frame in this tag with given identifier if it exists, if multiple frames
    * exist with the same identifier it will return a list containing all the frames with this identifier
-   * <p/>
+   * <p>
    * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
    * but happens to have an identifier that is valid for another version of the tag it will be returned.
    *
@@ -489,7 +489,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
 //  /**
 //   * Return whether tag has frame starting with this identifier
-//   * <p/>
+//   * <p>
 //   * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
 //   * but happens to have an identifier that is valid for another version of the tag it will return true
 //   *
@@ -508,7 +508,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Return any encrypted frames with this identifier
-   * <p/>
+   * <p>
    * <p>For single frames return the frame in this tag with given identifier if it exists, if multiple frames
    * exist with the same identifier it will return a list containing all the frames with this identifier
    */
@@ -520,8 +520,8 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    * Add a frame to this tag
    *
    * @param frame the frame to add
-   *              <p/>
-   *              <p/>
+   *              <p>
+   *              <p>
    *              Warning if frame(s) already exists for this identifier that they are overwritten
    */
   //TODO needs to ensure do not addField an invalid frame for this tag
@@ -609,7 +609,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Retrieve the first value that exists for this identifier
-   * <p/>
+   * <p>
    * If the value is a String it returns that, otherwise returns a summary of the fields information
    */
   public String getFirst(String identifier) throws IllegalArgumentException, UnsupportedFieldException {
@@ -1031,7 +1031,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Create Frame for Id3 Key
-   * <p/>
+   * <p>
    * Only textual data supported at the moment, should only be used with frames that
    * support a simple string argument.
    */
@@ -1139,7 +1139,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Add new field
-   * <p/>
+   * <p>
    * There is a special handling if adding another text field of the same type, in this case the value will
    * be appended to the existing field, separated by the null character.
    */
@@ -1360,7 +1360,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Used for setting multiple frames for a single frame Identifier
-   * <p/>
+   * <p>
    * Warning if frame(s) already exists for this identifier they are overwritten
    * TODO needs to ensure do not add an invalid frame for this tag
    */
@@ -1374,7 +1374,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    * can be more than one which is useful if trying to retrieve
    * similar frames e.g TIT1,TIT2,TIT3 ... and don't know exactly
    * which ones there are.
-   * <p/>
+   * <p>
    * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
    * but happens to have an identifier that is valid for another version of the tag it will be returned.
    *
@@ -1640,7 +1640,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Get file lock for writing too file
-   * <p/>
+   * <p>
    * TODO:this appears to have little effect on Windows Vista
    *
    * @return lock or null if locking is not supported
@@ -1679,7 +1679,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
   /**
    * Adjust the length of the  padding at the beginning of the MP3 file, this is only called when there is currently
    * not enough space before the start of the audio to write the tag.
-   * <p/>
+   * <p>
    * A new file will be created with enough size to fit the <code>ID3v2</code> tag.
    * The old file will be deleted, and the new file renamed.
    *
@@ -1819,7 +1819,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Replace originalFile with the contents of newFile
-   * <p/>
+   * <p>
    * Both files must exist in the same folder so that there are no problems with filesystem mount points
    */
   private void replaceFile(File originalFile, File newFile) throws IOException {
@@ -1999,7 +1999,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Write all the frames to the byteArrayOutputStream
-   * <p/>
+   * <p>
    * <p>Currently Write all frames, defaults to the order in which they were loaded, newly
    * created frames will be at end of tag.
    *
@@ -2087,7 +2087,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
 
   /**
    * Create a list of values for this (sub)frame
-   * <p/>
+   * <p>
    * This method  does all the complex stuff of splitting multiple values in one frame into separate values.
    *
    * @param formatKey frame and sub-id

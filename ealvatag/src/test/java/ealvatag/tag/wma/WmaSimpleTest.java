@@ -55,7 +55,7 @@ public class WmaSimpleTest {
 
     /**
      * File metadata was set with Media Monkey 3
-     * <p/>
+     * <p>
      * Checking our fields match the fields used by media Monkey 3 (Defacto Standard) by ensuring we can read fields written
      * in Media Monkey
      */
@@ -135,7 +135,7 @@ public class WmaSimpleTest {
 
     /**
      * File metadata was set with PicardQt
-     * <p/>
+     * <p>
      * Checking our fields match the fields used by picard Qt3 (Defacto Standard for Musicbrainz fields) by ensuring we can read fields
      * written in Picard Qt
      */

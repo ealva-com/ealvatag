@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class M4aWriteDataBeforeMoovTagTest {
     /**
      * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
-     * <p/>
+     * <p>
      */
     @Test public void testWriteFileOption1SameSize() {
         Exception exceptionCaught = null;
@@ -59,7 +59,7 @@ public class M4aWriteDataBeforeMoovTagTest {
 
     /**
      * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
-     * <p/>
+     * <p>
      */
     @Test public void testWriteFileOption3SmallerSizeCreateFree() {
         Exception exceptionCaught = null;
@@ -102,7 +102,7 @@ public class M4aWriteDataBeforeMoovTagTest {
 
     /**
      * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
-     * <p/>
+     * <p>
      */
     @Test public void testWriteFileOption4SmallerSizeNoFree() {
         Exception exceptionCaught = null;
@@ -142,7 +142,7 @@ public class M4aWriteDataBeforeMoovTagTest {
 
     /**
      * Test to write all fields to check all can be written, just use simple file as starting point
-     * <p/>
+     * <p>
      * TODO:Test incomplete
      */
     @Test public void testWriteFileOption8CannoutUseTopLevelFree() {
@@ -236,7 +236,7 @@ public class M4aWriteDataBeforeMoovTagTest {
 
     /**
      * Test to write file that has MDAT at start BEFORE MOOV atom, this is what Facc 1.25 does
-     * <p/>
+     * <p>
      */
     @Test public void testWriteFileOption9CannotUseTopLevelFree() {
         Exception exceptionCaught = null;

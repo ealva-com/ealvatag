@@ -6,7 +6,7 @@ import org.junit.Test;
 
 /**
  * Tests basic behavior of {@link AsfTagCoverField}.
- * <p/>
+ * <p>
  * Date: 10/19/12
  *
  * @author <a href="mailto:hs@tagtraum.com">Hendrik Schreiber</a>

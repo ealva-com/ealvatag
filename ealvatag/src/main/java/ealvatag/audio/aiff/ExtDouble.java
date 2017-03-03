@@ -4,15 +4,15 @@ package ealvatag.audio.aiff;
  * Code to deal with the 80-bit floating point (extended double)
  * numbers which occur in AIFF files.  Should also be applicable
  * in general.
- * <p/>
+ * <p>
  * Java has no built-in support for IEEE 754 extended double numbers.
  * Thus, we have to unpack the number and convert it to a double by
  * hand.  There is, of course, loss of precision.
- * <p/>
+ * <p>
  * This isn't designed for high-precision work; as the standard
  * disclaimer says, don't use it for life support systems or nuclear
  * power plants.
- * <p/>
+ * <p>
  * Lifted bodily from JHOVE.
  *
  * @author Gary McGath

@@ -73,7 +73,7 @@ public class AiffTag implements TagFieldContainer, Id3SupportingTag {
 
     /**
      * Determines whether the tag has no fields specified.<br>
-     * <p/>
+     * <p>
      * <p>If there are no images we return empty if either there is no VorbisTag or if there is a
      * VorbisTag but it is empty
      *

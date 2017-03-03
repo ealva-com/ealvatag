@@ -284,7 +284,7 @@ public class FlacTagWriter {
 
   /**
    * Write all metadata blocks except for the the actual tag metadata
-   * <p/>
+   * <p>
    * We always write blocks in this order
    *
    * @param fc

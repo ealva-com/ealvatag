@@ -22,7 +22,7 @@ import com.google.common.base.Preconditions;
 
 /**
  * An ranges of numbers between lower and upper, inclusive.
- * <p/>
+ * <p>
  * Created by Eric on 8/22/2015.
  */
 @SuppressWarnings({"WeakerAccess", "unused"})

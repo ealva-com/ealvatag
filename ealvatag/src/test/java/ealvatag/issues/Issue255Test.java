@@ -62,7 +62,7 @@ public class Issue255Test {
 
     /**
      * Test to write all data to a m4p which has a padding but no MDAT Dat aso fails on read
-     * <p/>
+     * <p>
      */
     @Test public void testReadFileWithInvalidPadding() {
         File orig = new File("testdata", "test28.m4p");

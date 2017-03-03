@@ -426,7 +426,7 @@ public class M4aReadTagTest {
     /**
      * Test to read all metadata from an Apple iTunes encoded m4a file , this tests a few items that could not
      * be tested with first test. Namely genre picked from list, and png item instead of jpg
-     * <p/>
+     * <p>
      * TODO:Although selected genre from a list still seems to be using a custom genre
      */
     @Test public void testReadFile2() {
