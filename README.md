@@ -66,6 +66,8 @@ Maven:
 </dependency>
 ```
 
+Ensure you have the most recent version by checking [here](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ealva%22%20AND%20a%3A%22ealvatag%22)
+
 Android
 -------
 
