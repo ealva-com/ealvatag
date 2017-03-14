@@ -24,7 +24,7 @@ public class Issue365Test {
         try {
             File orig = new File("testdata", "test90.ogg");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

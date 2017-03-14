@@ -32,7 +32,7 @@ public class Issue173Test {
 
         File orig = new File("testdata", "test.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -114,7 +114,7 @@ public class Issue173Test {
 
         File orig = new File("testdata", "test.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -147,7 +147,7 @@ public class Issue173Test {
 
         File orig = new File("testdata", "test.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -169,7 +169,7 @@ public class Issue173Test {
     @Test public void testMp3ID3v24sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -268,7 +268,7 @@ public class Issue173Test {
     @Test public void testMp3ID3v22sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -361,7 +361,7 @@ public class Issue173Test {
     @Test public void testMp3ID3v23sGenresUsingGenericInterface() {
         File orig = new File("testdata", "01.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

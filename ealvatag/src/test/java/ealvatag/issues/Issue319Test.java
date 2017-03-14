@@ -20,7 +20,7 @@ public class Issue319Test {
     @Test public void testTagEquality() throws Exception {
         File orig = new File("testdata", "test26.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

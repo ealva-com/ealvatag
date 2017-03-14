@@ -34,12 +34,10 @@ public class LoggingTest {
 
         File testFile = TestUtil.copyAudioToTmp("Issue92.id3", "testV1.mp3");
         MP3File mp3File = new MP3File(testFile);
-        System.out.println(mp3File.displayStructureAsXML());
         Assert.assertEquals("TALB", xpath1.evaluate(new InputSource(new StringReader(mp3File.displayStructureAsXML()))));
 
         File testFile2 = TestUtil.copyAudioToTmp("Issue96-1.id3", "testV1.mp3");
         MP3File mp3File2 = new MP3File(testFile2);
-        System.out.println(mp3File2.displayStructureAsXML());
         Document d2 = DocumentBuilderFactory.newInstance()
                                             .newDocumentBuilder().parse(new InputSource(new StringReader(mp3File2.displayStructureAsXML())));
         Assert.assertEquals("TIT2", xpath1.evaluate(new InputSource(new StringReader(mp3File2.displayStructureAsXML()))));

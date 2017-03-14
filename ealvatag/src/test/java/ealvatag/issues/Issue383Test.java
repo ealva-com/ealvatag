@@ -31,7 +31,7 @@ public class Issue383Test {
         try {
             File orig = new File("testdata", "test106.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -55,7 +55,7 @@ public class Issue383Test {
         try {
             File orig = new File("testdata", "test107.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

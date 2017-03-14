@@ -30,8 +30,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals("176", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             Assert.assertEquals(22050, f.getAudioHeader().getByteRate());
@@ -51,7 +49,7 @@ public class WavSimpleTest {
     @Test public void testRead24BitMonoFile() {
         File orig = new File("testdata", "test105.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -59,8 +57,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test105.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
 
             Assert.assertEquals("529", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -87,8 +83,6 @@ public class WavSimpleTest {
         int format = headerBuffer.get() & 0xff + (headerBuffer.get() & 0xff) * 256;
         headerBuffer.position(0);
         int formatNew = headerBuffer.getShort() & 0xffff;
-        System.out.println("Format:" + format + "(" + Hex.asHex(format) + ")" + ":FormatNew:"
-                                   + formatNew + "(" + Hex.asHex(formatNew) + ")");
     }
 
     @Test public void testRead8bitStereoFile() {
@@ -96,8 +90,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test127.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("128", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -120,8 +112,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test129.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals(4875, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("13", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -144,8 +134,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test128.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals(46986, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals("128", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -168,8 +156,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test130.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals(232128, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals(1411, f.getAudioHeader().getBitRate());
@@ -194,8 +180,6 @@ public class WavSimpleTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test131.wav");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
 
             Assert.assertEquals(844056, f.getAudioHeader().getAudioDataLength());
             Assert.assertEquals(1411, f.getAudioHeader().getBitRate());

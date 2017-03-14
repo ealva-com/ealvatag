@@ -25,7 +25,7 @@ public class Issue258Test {
     @Test public void testWriteToShortMp3File() {
         File orig = new File("testdata", "01.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -53,7 +53,7 @@ public class Issue258Test {
     @Test public void testWriteToShortMp4File() {
         File orig = new File("testdata", "01.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

@@ -24,7 +24,7 @@ public class Issue257Test {
     @Test public void testReadMp4FileWithPaddingAfterLastAtom() {
         File orig = new File("testdata", "test37.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

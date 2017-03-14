@@ -21,9 +21,9 @@ public class Issue292Test {
     }
 
     @Test public void testSavingMp3File() {
-        File testFile = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
-        if (!testFile.isFile()) {
-            System.err.println("Unable to test file - not available");
+        File orig = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
+        if (!orig.isFile()) {
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -32,24 +32,24 @@ public class Issue292Test {
         Exception exceptionCaught = null;
         try {
 
-            testFile = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
+            orig = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
             //Put file in backup location
             originalFileBackup =
-                    new File(testFile.getAbsoluteFile().getParentFile().getPath(),
-                             Files.getNameWithoutExtension(testFile.getPath()) + ".old");
-            testFile.renameTo(originalFileBackup);
+                    new File(orig.getAbsoluteFile().getParentFile().getPath(),
+                             Files.getNameWithoutExtension(orig.getPath()) + ".old");
+            orig.renameTo(originalFileBackup);
 
             //Copy over again
-            testFile = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
+            orig = TestUtil.copyAudioToTmp("testV1Cbr128ID3v2.mp3");
 
             //Read and save chnages
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFile af = AudioFileIO.read(orig);
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.AMAZON_ID, "fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
             af.save();
 
-            af = AudioFileIO.read(testFile);
+            af = AudioFileIO.read(orig);
             Assert.assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,9 +61,9 @@ public class Issue292Test {
     }
 
     @Test public void testSavingMp4File() {
-        File testFile = TestUtil.copyAudioToTmp("test8.m4a");
-        if (!testFile.isFile()) {
-            System.err.println("Unable to test file - not available");
+        File orig = TestUtil.copyAudioToTmp("test8.m4a");
+        if (!orig.isFile()) {
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -72,24 +72,24 @@ public class Issue292Test {
         Exception exceptionCaught = null;
         try {
 
-            testFile = TestUtil.copyAudioToTmp("test8.m4a");
+            orig = TestUtil.copyAudioToTmp("test8.m4a");
             //Put file in backup location
             originalFileBackup =
-                    new File(testFile.getAbsoluteFile().getParentFile().getPath(),
-                             Files.getNameWithoutExtension(testFile.getPath()) + ".old");
-            testFile.renameTo(originalFileBackup);
+                    new File(orig.getAbsoluteFile().getParentFile().getPath(),
+                             Files.getNameWithoutExtension(orig.getPath()) + ".old");
+            orig.renameTo(originalFileBackup);
 
             //Copy over again
-            testFile = TestUtil.copyAudioToTmp("test8.m4a");
+            orig = TestUtil.copyAudioToTmp("test8.m4a");
 
             //Read and save chnages
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFile af = AudioFileIO.read(orig);
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.AMAZON_ID, "fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
 
             af.save();
 
-            af = AudioFileIO.read(testFile);
+            af = AudioFileIO.read(orig);
             Assert.assertEquals("fredqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
         } catch (Exception e) {
             e.printStackTrace();

@@ -36,7 +36,7 @@ public class Issue428Test {
     @Test public void testGetMD5ForFlac2() {
         File orig = new File("testdata", "test102.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

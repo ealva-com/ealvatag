@@ -35,7 +35,6 @@ public class FlacHeaderTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test.flac");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
 
             assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
@@ -130,8 +129,6 @@ public class FlacHeaderTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test2.flac");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-
 
             assertEquals("192", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
             assertEquals("FLAC 16 bits", f.getAudioHeader().getEncodingType());
@@ -155,7 +152,7 @@ public class FlacHeaderTest {
     @Test public void testReadFile2() {
         File orig = new File("testdata", "test102.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -163,7 +160,6 @@ public class FlacHeaderTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test102.flac");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
 
 
             assertEquals("948", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -188,7 +184,7 @@ public class FlacHeaderTest {
     @Test public void testReadWithID3Header() {
         File orig = new File("testdata", "test158.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -196,7 +192,6 @@ public class FlacHeaderTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test158.flac");
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
 
 
             assertEquals("1004", Utils.formatBitRate(f.getAudioHeader(), f.getAudioHeader().getBitRate()));
@@ -221,7 +216,7 @@ public class FlacHeaderTest {
     @Test public void testReadWriteWithID3Header() {
         File orig = new File("testdata", "test158.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -229,14 +224,11 @@ public class FlacHeaderTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test158.flac", new File("test158write.flac"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f);
 
             FlacTag tag = (FlacTag)f.getTag().or(NullTag.INSTANCE);
             tag.setField(FieldKey.ARTIST, "artist");
             f.save();
-            System.out.println("Writing audio data");
             f = AudioFileIO.read(testFile);
-            System.out.println(f);
 
         } catch (Exception e) {
             e.printStackTrace();

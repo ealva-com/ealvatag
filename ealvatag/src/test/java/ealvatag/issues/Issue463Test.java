@@ -26,7 +26,7 @@ public class Issue463Test {
         try {
             File orig = new File("testdata", "test116.m4a");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -34,8 +34,7 @@ public class Issue463Test {
             File testFile = TestUtil.copyAudioToTmp("test116.m4a");
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             Mp4AtomTree tree = new Mp4AtomTree(raf, false);
-            tree.printAtomTree();
-            raf.close();
+          raf.close();
 
             AudioFile af = AudioFileIO.read(testFile);
             Assert.assertNotNull(af.getTag().orNull());
@@ -47,8 +46,7 @@ public class Issue463Test {
 
             raf = new RandomAccessFile(testFile, "r");
             tree = new Mp4AtomTree(raf, false);
-            tree.printAtomTree();
-            raf.close();
+          raf.close();
 
             af = AudioFileIO.read(testFile);
             Assert.assertNotNull(af.getTag().orNull());

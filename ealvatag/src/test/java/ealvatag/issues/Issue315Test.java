@@ -27,7 +27,7 @@ public class Issue315Test {
     @Test public void testReadWriteTagWithPictureBlockAtStart() throws Exception {
         File orig = new File("testdata", "test54.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

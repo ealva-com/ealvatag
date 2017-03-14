@@ -39,8 +39,7 @@ public class VorbisReadTagTest {
             File testFile = TestUtil.copyAudioToTmp("test6.ogg");
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
             OggFileReader oggFileReader = new OggFileReader();
-            oggFileReader.summarizeOggPageHeaders(testFile);
-            raf.close();
+          raf.close();
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

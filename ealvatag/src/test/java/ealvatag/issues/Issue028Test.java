@@ -23,7 +23,7 @@ public class Issue028Test {
     @Test public void testReadV2L3Stereo() {
         File orig = new File("testdata", "test97.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 

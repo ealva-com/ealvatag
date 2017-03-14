@@ -28,7 +28,7 @@ public class Issue265Test {
     @Test public void testWriteTooLargeStringToFile() {
         File orig = new File("testdata", "test7.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -64,7 +64,7 @@ public class Issue265Test {
     @Test public void testWriteTruncateStringToFile() {
         File orig = new File("testdata", "test7.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -99,7 +99,7 @@ public class Issue265Test {
     @Test public void testWriteTooLargeStringToFileContentDesc() {
         File orig = new File("testdata", "test7.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -131,7 +131,7 @@ public class Issue265Test {
     @Test public void testWriteTruncateStringToFileContentDesc() {
         File orig = new File("testdata", "test7.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

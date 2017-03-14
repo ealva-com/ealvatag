@@ -24,7 +24,6 @@ public class AsfKeyMappingTest {
         final HashSet<FieldKey> fieldKeys = Sets.newHashSet(FieldKey.values());
         fieldKeys.remove(FieldKey.ITUNES_GROUPING);
         fieldKeys.removeAll(tag.getSupportedFields());
-        System.out.println(fieldKeys.toString());
         assertTrue(fieldKeys.isEmpty());
     }
 }

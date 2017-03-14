@@ -26,7 +26,7 @@ public class Issue446Test {
         Exception ex = null;
         File orig = new File("testdata", "test110.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -54,7 +54,7 @@ public class Issue446Test {
     @Test public void testWriteReplayGain() throws Exception {
         File orig = new File("testdata", "test110.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

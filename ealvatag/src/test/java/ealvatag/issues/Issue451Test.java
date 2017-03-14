@@ -25,7 +25,7 @@ public class Issue451Test {
         Exception ex = null;
         File orig = new File("testdata", "test109.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -33,7 +33,6 @@ public class Issue451Test {
         try {
             //Now just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -39,7 +39,6 @@ public class DsfAudioFileTest {
         Assert.assertEquals(5, ah.getDuration(TimeUnit.SECONDS, true));
         Assert.assertFalse(ah.isLossless());
         Tag tag = f.getTag().or(NullTag.INSTANCE);
-        System.out.println(tag);
         Assert.assertEquals("Artist", tag.getFirst(FieldKey.ARTIST));
         Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
         Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
@@ -54,7 +53,7 @@ public class DsfAudioFileTest {
 
         File orig = new File("testdata", "test122.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -63,13 +62,11 @@ public class DsfAudioFileTest {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
             f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
             Assert.assertEquals("test3", tag.getFirst(FieldKey.TITLE));
             Assert.assertEquals("Album", tag.getFirst(FieldKey.ALBUM));
@@ -93,7 +90,7 @@ public class DsfAudioFileTest {
 
         File orig = new File("testdata", "test122.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -102,12 +99,10 @@ public class DsfAudioFileTest {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +118,7 @@ public class DsfAudioFileTest {
 
         File orig = new File("testdata", "test156.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -132,7 +127,6 @@ public class DsfAudioFileTest {
         try {
             AudioFile f = AudioFileIO.read(testFile);
             AudioHeader ah = f.getAudioHeader();
-            System.out.println(ah);
             Assert.assertEquals("5644800", Utils.formatBitRate(ah, ah.getBitRate()));
             Assert.assertEquals(5644800, ah.getBitRate());
             Assert.assertEquals("2", String.valueOf(ah.getChannelCount()));
@@ -155,7 +149,7 @@ public class DsfAudioFileTest {
 
         File orig = new File("testdata", "test156.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -165,13 +159,11 @@ public class DsfAudioFileTest {
             Assert.assertNull(f.getTag().orNull());
             f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             tag.setField(FieldKey.ARTIST, "fred");
             f.save();
 
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
 
@@ -188,7 +180,7 @@ public class DsfAudioFileTest {
     public void testDeleteDsfNoTag() throws Exception {
         File orig = new File("testdata", "test156.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -197,18 +189,16 @@ public class DsfAudioFileTest {
         Assert.assertNull(f.getTag().orNull());
         f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
         Tag tag = f.getTag().or(NullTag.INSTANCE);
-        System.out.println(tag);
         f.deleteFileTag();
 
         f = AudioFileIO.read(testFile);
         tag = f.getTag().or(NullTag.INSTANCE);
-        System.out.println(tag);
     }
 
     @Test public void testCreateDefaultTag() throws Exception {
         File orig = new File("testdata", "test122.dsf");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 

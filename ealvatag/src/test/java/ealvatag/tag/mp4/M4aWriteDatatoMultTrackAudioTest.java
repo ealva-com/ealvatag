@@ -35,9 +35,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //First let's just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Now we try to make some changes
+          //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
@@ -52,9 +51,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //See tree again
             atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Ease of use methods for common fields
+          //Ease of use methods for common fields
             Assert.assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
 
 
@@ -75,9 +73,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //First lets just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Now we try to make some changes
+          //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
@@ -92,9 +89,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //See tree again
             atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Ease of use methods for common fields
+          //Ease of use methods for common fields
             Assert.assertEquals("A", tag.getFirst(FieldKey.ARTIST));
             Assert.assertEquals("T", tag.getFirst(FieldKey.TITLE));
 
@@ -115,9 +111,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //First lets just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Now we try to make some changes
+          //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
@@ -131,9 +126,8 @@ public class M4aWriteDatatoMultTrackAudioTest {
 
             //See tree again
             atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Ease of use methods for common fields
+          //Ease of use methods for common fields
             Assert.assertEquals("AR", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -397,7 +391,6 @@ public class M4aWriteDatatoMultTrackAudioTest {
             //Visual check of atom tree
             testFile = TestUtil.getTestDataTmpFile("testWriteMultiTrack7.m4a");
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
         } catch (Exception e) {
             e.printStackTrace();

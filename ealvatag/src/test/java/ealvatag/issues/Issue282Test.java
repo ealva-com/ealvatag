@@ -24,7 +24,7 @@ public class Issue282Test {
     @Test public void testWriteToRelativeWmaFile() {
         File orig = new File("testdata", "test1.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -62,7 +62,7 @@ public class Issue282Test {
     @Test public void testWriteToRelativeMp3File() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

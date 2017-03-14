@@ -23,7 +23,7 @@ public class Issue421Test {
     @Test public void testTrackField() throws Exception {
         File orig = new File("testdata", "Arizona.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

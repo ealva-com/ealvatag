@@ -23,7 +23,7 @@ public class Issue283Test {
     @Test public void testRead() {
         File orig = new File("testdata", "test56.m4b");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -48,7 +48,7 @@ public class Issue283Test {
     @Test public void testWrite() {
         File orig = new File("testdata", "test56.m4b");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

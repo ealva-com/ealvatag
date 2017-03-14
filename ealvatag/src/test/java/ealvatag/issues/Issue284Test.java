@@ -28,7 +28,7 @@ public class Issue284Test {
     @Test public void testConvertv23v24() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -55,7 +55,7 @@ public class Issue284Test {
     @Test public void testConvertv22v24() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -82,7 +82,7 @@ public class Issue284Test {
     @Test public void testConvertv24v23() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -109,7 +109,7 @@ public class Issue284Test {
     @Test public void testConvertv24v22() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -136,7 +136,7 @@ public class Issue284Test {
     @Test public void testConvertv22v23() {
         File orig = new File("testdata", "testV1.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

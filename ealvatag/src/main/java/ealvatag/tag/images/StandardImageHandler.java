@@ -128,27 +128,27 @@ public class StandardImageHandler implements ImageHandler {
         return baos.toByteArray();
     }
 
-    /**
-     * Show read formats
-     * <p>
-     * On Windows supports png/jpeg/bmp/gif
-     */
-    public void showReadFormats() {
-        String[] formats = ImageIO.getReaderMIMETypes();
-        for (String f : formats) {
-            System.out.println("r" + f);
-        }
-    }
+//    /**
+//     * Show read formats
+//     * <p>
+//     * On Windows supports png/jpeg/bmp/gif
+//     */
+//    public void showReadFormats() {
+//        String[] formats = ImageIO.getReaderMIMETypes();
+//        for (String f : formats) {
+//            System.out.println("r" + f);
+//        }
+//    }
 
-    /**
-     * Show write formats
-     * <p>
-     * On Windows supports png/jpeg/bmp
-     */
-    public void showWriteFormats() {
-        String[] formats = ImageIO.getWriterMIMETypes();
-        for (String f : formats) {
-            System.out.println(f);
-        }
-    }
+//    /**
+//     * Show write formats
+//     * <p>
+//     * On Windows supports png/jpeg/bmp
+//     */
+//    public void showWriteFormats() {
+//        String[] formats = ImageIO.getWriterMIMETypes();
+//        for (String f : formats) {
+//            System.out.println(f);
+//        }
+//    }
 }

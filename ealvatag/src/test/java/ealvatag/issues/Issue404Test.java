@@ -21,22 +21,18 @@ public class Issue404Test {
     }
 
     @Test public void testWritingTooLongTempFile() throws Exception {
-        File
-                origFile =
-                new File("testdata",
+        File orig = new File("testdata",
                          "test3811111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111...........................................................m4a");
-        if (!origFile.isFile()) {
-            System.err.println("Unable to test file - not available");
+        if (!orig.isFile()) {
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
         Exception caught = null;
         try {
-            File
-                    orig =
-                    TestUtil.copyAudioToTmp(
+            File orig2 = TestUtil.copyAudioToTmp(
                             "test3811111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111...........................................................m4a");
-            AudioFile af = AudioFileIO.read(orig);
+            AudioFile af = AudioFileIO.read(orig2);
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "Albumstuff");
             af.save();
         } catch (Exception e) {

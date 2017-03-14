@@ -27,7 +27,7 @@ public class Issue307Test {
     @Test public void testMultiThreadedMP3HeaderAccess() throws Exception {
         File orig = new File("testdata", "test71.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -36,7 +36,7 @@ public class Issue307Test {
         try {
             final File testFile = TestUtil.copyAudioToTmp("test71.mp3");
             if (!testFile.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
             mp3File = new MP3File(testFile);

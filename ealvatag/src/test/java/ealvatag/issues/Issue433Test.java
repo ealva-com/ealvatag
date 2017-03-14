@@ -20,23 +20,21 @@ public class Issue433Test {
         Exception ex = null;
         File orig = new File("testdata", "test112.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
         File testFile = TestUtil.copyAudioToTmp("test112.m4a", new File("test112.m4a"));
 
         Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
 
-        AudioFile af = AudioFileIO.read(testFile);
+      AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "fredwwwwwwwwwwwwwwwwwwwwwwww");
         af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
-        af = AudioFileIO.read(testFile);
+      af = AudioFileIO.read(testFile);
         Assert.assertEquals("fredwwwwwwwwwwwwwwwwwwwwwwww", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
@@ -44,23 +42,21 @@ public class Issue433Test {
         Exception ex = null;
         File orig = new File("testdata", "test112.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
         File testFile = TestUtil.copyAudioToTmp("test112.m4a", new File("test112WriteSmall.m4a"));
 
         Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
 
-        AudioFile af = AudioFileIO.read(testFile);
+      AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "fred");
         af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
-        af = AudioFileIO.read(testFile);
+      af = AudioFileIO.read(testFile);
         Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
@@ -68,23 +64,21 @@ public class Issue433Test {
         Exception ex = null;
         File orig = new File("testdata", "test141.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
         File testFile = TestUtil.copyAudioToTmp("test141.m4a", new File("test141Large.m4a"));
 
         Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
 
-        AudioFile af = AudioFileIO.read(testFile);
+      AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "fredwwwwwwwwwwwwwwwwwwwwwwww");
         af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
-        af = AudioFileIO.read(testFile);
+      af = AudioFileIO.read(testFile);
         Assert.assertEquals("fredwwwwwwwwwwwwwwwwwwwwwwww", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 
@@ -92,23 +86,21 @@ public class Issue433Test {
         Exception ex = null;
         File orig = new File("testdata", "test141.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
         File testFile = TestUtil.copyAudioToTmp("test141.m4a", new File("test141Small.m4a"));
 
         Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
 
-        AudioFile af = AudioFileIO.read(testFile);
+      AudioFile af = AudioFileIO.read(testFile);
 
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "fred");
         af.save();
 
         atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-        atomTree.printAtomTree();
-        af = AudioFileIO.read(testFile);
+      af = AudioFileIO.read(testFile);
         Assert.assertEquals("fred", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
     }
 }

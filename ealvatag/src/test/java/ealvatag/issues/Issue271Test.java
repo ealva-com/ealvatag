@@ -32,7 +32,7 @@ public class Issue271Test {
     @Test public void testReadMp3WithExtendedHeaderFlagSetButNoExtendedHeader() {
         File orig = new File("testdata", "test46.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -69,7 +69,7 @@ public class Issue271Test {
     @Test public void testReadMp3WithExtendedHeaderAndCrc() {
         File orig = new File("testdata", "test47.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -111,7 +111,7 @@ public class Issue271Test {
     @Test public void testReadMp3WithEncryptedField() {
         File orig = new File("testdata", "test48.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -153,7 +153,7 @@ public class Issue271Test {
     @Test public void testReadFlagsCompressed() {
         File orig = new File("testdata", "test51.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -206,7 +206,7 @@ public class Issue271Test {
     @Test public void testReadFlagsUnsyced() {
         File orig = new File("testdata", "test52.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -260,7 +260,7 @@ public class Issue271Test {
     @Test public void testReadFlagsUnsycedCompressed() {
         File orig = new File("testdata", "test53.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

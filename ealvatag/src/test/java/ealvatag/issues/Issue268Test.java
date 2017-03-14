@@ -26,7 +26,7 @@ public class Issue268Test {
     @Test public void testReadWma() {
         File orig = new File("testdata", "test8.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

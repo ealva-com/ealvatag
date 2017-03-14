@@ -30,7 +30,7 @@ public class Issue093Test {
 
         File orig = new File("testdata", "test145.aiff");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -41,12 +41,10 @@ public class Issue093Test {
             AudioHeader ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "Jonathon");
             f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("Jonathon", tag.getFirst(FieldKey.ARTIST));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -61,7 +59,7 @@ public class Issue093Test {
 
         File orig = new File("testdata", "test152.aiff");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -72,12 +70,10 @@ public class Issue093Test {
             AudioHeader ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception ex) {
@@ -90,7 +86,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleTagsFixId3() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -101,13 +97,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_id3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -120,7 +113,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleFixTagsInfo() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -131,13 +124,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_info.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -150,7 +140,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleFixTagsExistingId3() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -161,13 +151,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_id3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -180,7 +167,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleFixTagsExistingInfo() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -191,13 +178,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_info.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -210,7 +194,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleTagsFixId3Both() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -221,13 +205,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_id3_both.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -240,7 +221,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleFixTagsInfoBoth() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -251,13 +232,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_info_both.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -270,7 +248,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleTagsFixId3BothSync() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -281,13 +259,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_id3_both_sync.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {
@@ -300,7 +275,7 @@ public class Issue093Test {
     @Test public void testNaimRipMultipleFixTagsInfoBothSync() {
         File orig = new File("testdata", "test152.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
 
@@ -311,13 +286,10 @@ public class Issue093Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test152.wav", new File("test152_existing_info_both_sync.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag());
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception e) {

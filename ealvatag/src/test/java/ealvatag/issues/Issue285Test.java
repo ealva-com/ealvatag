@@ -23,7 +23,7 @@ public class Issue285Test {
     @Test public void testSavingOggFile() {
         File orig = new File("testdata", "test57.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

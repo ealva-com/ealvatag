@@ -21,7 +21,7 @@ public class Issue450Test {
     @Test public void testSaveUrl() throws Exception {
         File orig = new File("testdata", "test108.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
         File testFile = TestUtil.copyAudioToTmp("test108.mp3");

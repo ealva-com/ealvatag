@@ -308,7 +308,7 @@ public class ID3v24TagTest {
     @Test public void testDeleteTag() throws Exception {
         File orig = new File("testdata", "test70.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -333,7 +333,7 @@ public class ID3v24TagTest {
     @Test public void testWriteTagUsingAudioIOMethod() {
         File orig = new File("testdata", "test70.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

@@ -61,9 +61,6 @@ public abstract class AbstractMetadataContainer<T extends MetadataContainer> ext
             final Map<String, List<MetadataDescriptor>> descriptorMap = new HashMap<String, List<MetadataDescriptor>>();
             final List<MetadataDescriptor> allDescriptors = new ArrayList<MetadataDescriptor>();
             for (MetadataDescriptor desc : createSupportedDescriptors(curr)) {
-                if (!curr.isAddSupported(desc)) {
-                    System.out.println("laal");
-                }
                 Assert.assertTrue(desc.toString(), curr.isAddSupported(desc));
                 curr.addDescriptor(desc);
                 allDescriptors.add(desc);

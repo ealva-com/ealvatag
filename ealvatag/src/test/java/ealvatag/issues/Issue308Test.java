@@ -26,7 +26,7 @@ public class Issue308Test {
     @Test public void testAddingLargeImageToOgg() throws Exception {
         File orig = new File("testdata", "test72.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -34,7 +34,7 @@ public class Issue308Test {
         try {
             final File testFile = TestUtil.copyAudioToTmp("test72.ogg");
             if (!testFile.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
             AudioFile af = AudioFileIO.read(testFile);

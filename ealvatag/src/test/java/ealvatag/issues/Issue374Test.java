@@ -37,7 +37,7 @@ public class Issue374Test {
             count++;
             File orig = new File("testdata", next.getName());
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

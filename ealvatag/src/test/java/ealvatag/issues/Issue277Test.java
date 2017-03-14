@@ -28,7 +28,7 @@ public class Issue277Test {
     @Test public void testSetIsCompilation() {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -61,7 +61,7 @@ public class Issue277Test {
     @Test public void testSetIsCompilation2() {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -94,7 +94,7 @@ public class Issue277Test {
     @Test public void testSetRating() {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -128,7 +128,7 @@ public class Issue277Test {
     @Test public void testSetRating2() {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

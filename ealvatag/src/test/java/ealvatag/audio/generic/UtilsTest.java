@@ -141,7 +141,6 @@ public class UtilsTest {
         bb.put(bytes);
         bb.rewind();
         short val = Utils.getShortBE(bb, 1, 2);
-        System.out.println(val);
     }
 
 }

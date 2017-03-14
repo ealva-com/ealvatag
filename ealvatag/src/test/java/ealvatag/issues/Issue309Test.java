@@ -22,7 +22,7 @@ public class Issue309Test {
     @Test public void testAddingLargeImageToOgg() throws Exception {
         File orig = new File("testdata", "test73.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

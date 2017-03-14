@@ -20,7 +20,7 @@ public class Issue409Test {
         Exception ex = null;
         File orig = new File("testdata", "test111.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

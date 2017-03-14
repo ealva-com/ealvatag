@@ -19,7 +19,7 @@ public class ReadMp4MovementTagsTest {
     @Test public void testReadMovementFieldsFromITunes() throws Exception {
         File orig = new File("testdata", "test161.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

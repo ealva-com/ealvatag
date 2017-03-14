@@ -26,7 +26,7 @@ public class Issue279Test {
     @Test public void testWriteToOgg() {
         File orig = new File("testdata", "test55.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

@@ -21,7 +21,7 @@ public class Issue161Test {
     @Test public void testReadID3() throws Exception {
         File orig = new File("testdata", "test159.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

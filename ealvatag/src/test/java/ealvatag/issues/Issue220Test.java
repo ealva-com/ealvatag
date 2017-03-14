@@ -27,7 +27,7 @@ public class Issue220Test {
     @Test public void testReadMp4WithoutUdta() {
         File orig = new File("testdata", "test41.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -53,7 +53,7 @@ public class Issue220Test {
     @Test public void testWriteMp4WithoutUdta() {
         File orig = new File("testdata", "test41.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -63,9 +63,8 @@ public class Issue220Test {
             testFile = TestUtil.copyAudioToTmp("test41.m4a");
 
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            //Read File okay
+          //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
             Assert.assertTrue(af.getTag().or(NullTag.INSTANCE).isEmpty());
 
@@ -80,9 +79,8 @@ public class Issue220Test {
             //Read file again okay
 
             atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            af = AudioFileIO.read(testFile);
+          af = AudioFileIO.read(testFile);
             Assert.assertEquals("FREDDYCOUGAR", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));
             Assert.assertEquals("album", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM));
             Assert.assertEquals("title", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.TITLE));
@@ -104,7 +102,7 @@ public class Issue220Test {
     @Test public void testReadMp4WithUdtaAndMetaHierachy() {
         File orig = new File("testdata", "test42.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -133,7 +131,7 @@ public class Issue220Test {
     @Test public void testWriteMp4WithUdtaAndMetaHierachy() {
         File orig = new File("testdata", "test42.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -171,7 +169,7 @@ public class Issue220Test {
     @Test public void testWriteMp4WithUdtaAfterTrackSmaller() {
         File orig = new File("testdata", "test44.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -206,7 +204,7 @@ public class Issue220Test {
     @Test public void testWriteMp4WithUdtaAfterTrack() {
         File orig = new File("testdata", "test44.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

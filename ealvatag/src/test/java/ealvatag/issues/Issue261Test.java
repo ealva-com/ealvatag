@@ -26,7 +26,7 @@ public class Issue261Test {
     @Test public void testWriteMp4() {
         File orig = new File("testdata", "test45.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

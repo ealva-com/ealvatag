@@ -36,7 +36,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -73,7 +73,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -116,7 +116,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -157,7 +157,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -196,7 +196,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -236,7 +236,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -275,7 +275,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -308,7 +308,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -341,7 +341,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -374,7 +374,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -413,7 +413,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "01.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 
@@ -458,7 +458,7 @@ public class Issue412Test {
         try {
             File orig = new File("testdata", "test.flac");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

@@ -22,7 +22,7 @@ public class Issue484Test {
     @Test public void testReadUTF16WithMissingBOM() throws Exception {
         File orig = new File("testdata", "test140.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

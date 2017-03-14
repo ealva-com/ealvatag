@@ -28,7 +28,7 @@ public class Issue255Test {
     @Test public void testReadMp4FileWithPaddingAfterLastAtom() {
         File orig = new File("testdata", "test35.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -52,7 +52,6 @@ public class Issue255Test {
         try {
             //Now just createField tree
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -67,7 +66,7 @@ public class Issue255Test {
     @Test public void testReadFileWithInvalidPadding() {
         File orig = new File("testdata", "test28.m4p");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -89,7 +88,7 @@ public class Issue255Test {
     @Test public void testWriteMp4FileWithPaddingAfterLastAtom() {
         File orig = new File("testdata", "test35.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

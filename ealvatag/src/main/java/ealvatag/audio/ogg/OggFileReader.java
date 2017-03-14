@@ -27,6 +27,7 @@ import ealvatag.tag.TagFieldContainer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 
 /**
@@ -76,55 +77,39 @@ public class OggFileReader extends AudioFileReader {
     return pageHeader;
   }
 
-  /**
-   * Summarize all the ogg headers in a file
-   * <p>
-   * A useful utility function
-   *
-   * @param oggFile
-   *
-   * @throws CannotReadException
-   * @throws IOException
-   */
-  public void summarizeOggPageHeaders(File oggFile) throws CannotReadException, IOException {
-    RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
-
-    while (raf.getFilePointer() < raf.length()) {
-      System.out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
-      OggPageHeader pageHeader = OggPageHeader.read(raf);
-      System.out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
-      System.out.println(pageHeader + "\n");
-      raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
-    }
-    System.out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
-    raf.close();
-  }
-
-  /**
-   * Summarizes the first five pages, normally all we are interested in
-   *
-   * @param oggFile
-   *
-   * @throws CannotReadException
-   * @throws IOException
-   */
-  public void shortSummarizeOggPageHeaders(File oggFile) throws CannotReadException, IOException {
-    RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
-
-    int i = 0;
-    while (raf.getFilePointer() < raf.length()) {
-      System.out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
-      OggPageHeader pageHeader = OggPageHeader.read(raf);
-      System.out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
-      System.out.println(pageHeader + "\n");
-      raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
-      i++;
-      if (i >= 5) {
-        break;
-      }
-    }
-    System.out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
-    raf.close();
-  }
+//  @SuppressWarnings("unused")
+//  public void summarizeOggPageHeaders(File oggFile, PrintStream out) throws CannotReadException, IOException {
+//    RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
+//
+//    while (raf.getFilePointer() < raf.length()) {
+//      out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
+//      OggPageHeader pageHeader = OggPageHeader.read(raf);
+//      out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
+//      out.println(pageHeader + "\n");
+//      raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
+//    }
+//    out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
+//    raf.close();
+//  }
+//
+//  @SuppressWarnings("unused")
+//  public void shortSummarizeOggPageHeaders(File oggFile, PrintStream out) throws CannotReadException, IOException {
+//    RandomAccessFile raf = new RandomAccessFile(oggFile, "r");
+//
+//    int i = 0;
+//    while (raf.getFilePointer() < raf.length()) {
+//      out.println("pageHeader starts at absolute file position:" + raf.getFilePointer());
+//      OggPageHeader pageHeader = OggPageHeader.read(raf);
+//      out.println("pageHeader finishes at absolute file position:" + raf.getFilePointer());
+//      out.println(pageHeader + "\n");
+//      raf.seek(raf.getFilePointer() + pageHeader.getPageLength());
+//      i++;
+//      if (i >= 5) {
+//        break;
+//      }
+//    }
+//    out.println("Raf File Pointer at:" + raf.getFilePointer() + "File Size is:" + raf.length());
+//    raf.close();
+//  }
 }
 

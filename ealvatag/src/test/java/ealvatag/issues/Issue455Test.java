@@ -22,7 +22,7 @@ public class Issue455Test {
     @Test public void testMp4IsCompilationTrue() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -53,7 +53,7 @@ public class Issue455Test {
 
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -83,7 +83,7 @@ public class Issue455Test {
     @Test public void testMp4IsCompilationFalse() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -110,7 +110,7 @@ public class Issue455Test {
     @Test public void testMp4IsCompilationFalse2() throws Exception {
         File orig = new File("testdata", "test1.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

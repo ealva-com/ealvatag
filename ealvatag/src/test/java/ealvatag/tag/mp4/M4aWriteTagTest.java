@@ -1601,9 +1601,8 @@ public class M4aWriteTagTest {
 
             File testFile = TestUtil.copyAudioToTmp("test4.m4a", new File("testWriteNewMetadata.m4a"));
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
 
-            AudioFile f = AudioFileIO.read(testFile);
+          AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             //Change album to different value (but same no of characters, this is the easiest mod to make

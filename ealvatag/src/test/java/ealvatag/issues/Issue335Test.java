@@ -32,7 +32,7 @@ public class Issue335Test {
     @Test public void testConvertv24Tov23ConvertsUTF8ToISO8859IfItCan() throws Exception {
         File orig = new File("testdata", "test79.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -60,7 +60,7 @@ public class Issue335Test {
     @Test public void testConvertv24Tov23OnlyConvertsUTF8ToISO8859IfItCan() throws Exception {
         File orig = new File("testdata", "test79.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -95,7 +95,7 @@ public class Issue335Test {
     @Test public void testConvertv23Twice() throws Exception {
         File orig = new File("testdata", "test79.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -142,7 +142,7 @@ public class Issue335Test {
     @Test public void testConvertCharsAtStartOfFile() throws Exception {
         File orig = new File("testdata", "test79.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

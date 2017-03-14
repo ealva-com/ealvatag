@@ -22,7 +22,7 @@ public class Issue290Test {
     @Test public void testSavingFile() {
         File orig = new File("testdata", "test59.mp4");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

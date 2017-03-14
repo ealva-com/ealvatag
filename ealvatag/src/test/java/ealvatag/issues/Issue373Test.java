@@ -26,7 +26,7 @@ public class Issue373Test {
         try {
             File orig = new File("testdata", "test94.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

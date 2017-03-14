@@ -55,9 +55,8 @@ public class M4aReadTagTest {
             Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
-            tree.printAtomTree();
 
-            System.out.println(f.getAudioHeader());
+          System.out.println(f.getAudioHeader());
             System.out.println(tag);
 
             //AudioInfo
@@ -206,7 +205,7 @@ public class M4aReadTagTest {
     @Test public void testReadFileFromMediaMonkey306() {
         File orig = new File("testdata", "test38.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -361,7 +360,7 @@ public class M4aReadTagTest {
     @Test public void testReadFileFromWinamp5531() {
         File orig = new File("testdata", "test39.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -759,9 +758,8 @@ public class M4aReadTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test7.mp4");
             Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
-            tree.printAtomTree();
 
-            AudioFileIO.read(testFile);
+          AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -784,9 +782,8 @@ public class M4aReadTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test86.mp4");
             Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
-            tree.printAtomTree();
 
-            AudioFile f = AudioFileIO.read(testFile);
+          AudioFile f = AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -810,9 +807,8 @@ public class M4aReadTagTest {
             File testFile = TestUtil.copyAudioToTmp("test87.mp4");
 
             Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
-            tree.printAtomTree();
 
-            AudioFile f = AudioFileIO.read(testFile);
+          AudioFile f = AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -1218,7 +1214,7 @@ public class M4aReadTagTest {
     @Test public void testNumericGenres() throws Exception {
         File orig = new File("testdata", "test75.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1240,7 +1236,7 @@ public class M4aReadTagTest {
     @Test public void testReadFile3() throws Exception {
         File orig = new File("testdata", "test84.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1275,7 +1271,7 @@ public class M4aReadTagTest {
     @Test public void testReadFile4() throws Exception {
         File orig = new File("testdata", "test86.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1299,12 +1295,11 @@ public class M4aReadTagTest {
     @Test public void testReadAudioBook() throws Exception {
         File orig = new File("testdata", "test147.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
-        new Mp4AtomTree(new RandomAccessFile(orig, "r")).printAtomTree();
-        Exception exceptionCaught = null;
+      Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test147.m4a");
             AudioFile f = AudioFileIO.read(testFile);
@@ -1322,7 +1317,7 @@ public class M4aReadTagTest {
     @Test public void testWriteHighTrackNo() throws Exception {
         File orig = new File("testdata", "test84.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

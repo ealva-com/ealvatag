@@ -190,7 +190,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test119.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -427,7 +427,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test144.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -460,7 +460,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test144.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -494,7 +494,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test124.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -545,7 +545,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test136.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -611,7 +611,7 @@ public class AiffAudioTagTest {
 
         File orig = new File("testdata", "test157.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

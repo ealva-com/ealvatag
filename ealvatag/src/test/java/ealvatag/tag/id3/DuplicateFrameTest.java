@@ -23,7 +23,7 @@ public class DuplicateFrameTest {
     @Test public void testReadingFileWithCorruptFirstFrame() throws Exception {
         File orig = new File("testdata", "test78.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
         File testFile = TestUtil.copyAudioToTmp("test78.mp3");

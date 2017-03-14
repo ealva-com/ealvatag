@@ -22,7 +22,7 @@ public class Issue481Test {
     @Test public void testReadYear() throws Exception {
         File orig = new File("testdata", "test139.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

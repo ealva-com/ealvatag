@@ -24,7 +24,7 @@ public class Issue466Test {
         try {
             File orig = new File("testdata", "test115.flac");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

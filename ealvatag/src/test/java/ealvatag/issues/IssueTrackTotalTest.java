@@ -27,7 +27,7 @@ public class IssueTrackTotalTest {
 
             File orig = new File("testdata", "issue400.mp3");
             if (!orig.isFile()) {
-                System.err.println("Unable to test file - not available");
+                System.err.println("Unable to test file - not available" + orig);
                 return;
             }
 

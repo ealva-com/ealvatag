@@ -31,7 +31,7 @@ public class Issue269Test {
     @Test public void testReadMp3WithExtendedHeaderFlagSetButNoExtendedHeader() {
         File orig = new File("testdata", "test46.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -67,7 +67,7 @@ public class Issue269Test {
     @Test public void testReadID3v23Mp3WithExtendedHeaderAndCrc() {
         File orig = new File("testdata", "test47.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -107,7 +107,7 @@ public class Issue269Test {
     @Test public void testReadMp3WithEncryptedField() {
         File orig = new File("testdata", "test48.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -173,7 +173,7 @@ public class Issue269Test {
     @Test public void testReadID3v24Mp3WithExtendedHeaderAndCrc() {
         File orig = new File("testdata", "test47.mp3");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

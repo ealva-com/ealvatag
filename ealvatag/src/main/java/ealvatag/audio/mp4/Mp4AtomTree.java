@@ -21,7 +21,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
@@ -195,37 +194,38 @@ public class Mp4AtomTree {
     }
   }
 
-  /**
-   * Display atom tree
-   */
-  @SuppressWarnings("unchecked")
-  public void printAtomTree() {
-    Enumeration<DefaultMutableTreeNode> e = rootNode.preorderEnumeration();
-    DefaultMutableTreeNode nextNode;
-    while (e.hasMoreElements()) {
-      nextNode = e.nextElement();
-      Mp4BoxHeader header = (Mp4BoxHeader)nextNode.getUserObject();
-      if (header != null) {
-        String tabbing = "";
-        for (int i = 1; i < nextNode.getLevel(); i++) {
-          tabbing += "\t";
-        }
+//  /**
+//   * For debug/development/test
+//   *
+//   * @param out stream to write to
+//   */
+//  @SuppressWarnings({"unchecked", "unused"})
+//  public void printAtomTree(final PrintStream out) {
+//    Enumeration<DefaultMutableTreeNode> e = rootNode.preorderEnumeration();
+//    DefaultMutableTreeNode nextNode;
+//    while (e.hasMoreElements()) {
+//      nextNode = e.nextElement();
+//      Mp4BoxHeader header = (Mp4BoxHeader)nextNode.getUserObject();
+//      if (header != null) {
+//        String tabbing = "";
+//        for (int i = 1; i < nextNode.getLevel(); i++) {
+//          tabbing += "\t";
+//        }
+//
+//        if (header instanceof NullPadding) {
+//          out.println(
+//              tabbing + "Null pad " + " @ " + header.getFilePos() + " of size:" + header.getLength() +
+//                  " ,ends @ " + (header.getFilePos() + header.getLength()));
+//        } else {
+//          out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" +
+//                          header.getLength() + " ,ends @ " +
+//                          (header.getFilePos() + header.getLength()));
+//        }
+//      }
+//    }
+//  }
 
-        if (header instanceof NullPadding) {
-          System.out.println(
-              tabbing + "Null pad " + " @ " + header.getFilePos() + " of size:" + header.getLength() +
-                  " ,ends @ " + (header.getFilePos() + header.getLength()));
-        } else {
-          System.out.println(tabbing + "Atom " + header.getId() + " @ " + header.getFilePos() + " of size:" +
-                                 header.getLength() + " ,ends @ " +
-                                 (header.getFilePos() + header.getLength()));
-        }
-      }
-    }
-  }
-
-  private void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode parentNode)
-      throws IOException, CannotReadException {
+  private void buildChildrenOfNode(ByteBuffer moovBuffer, DefaultMutableTreeNode parentNode) throws IOException, CannotReadException {
     Mp4BoxHeader boxHeader;
 
     //Preprocessing for nodes that contain data before their children atoms

@@ -179,7 +179,7 @@ public class VorbisImageTest {
     @Test public void testReadFileWithNewlinesInBase64() {
         File orig = new File("testdata", "testnewlineimage.small.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

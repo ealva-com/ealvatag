@@ -24,7 +24,7 @@ public class Issue291Test {
     @Test public void testSavingFile() {
         File orig = new File("testdata", "test83.mp4");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -51,7 +51,7 @@ public class Issue291Test {
     @Test public void testPrintAtomTree() {
         File orig = new File("testdata", "test83.mp4");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -61,7 +61,6 @@ public class Issue291Test {
         try {
             testFile = TestUtil.copyAudioToTmp("test83.mp4");
             Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
-            atomTree.printAtomTree();
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

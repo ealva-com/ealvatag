@@ -25,7 +25,7 @@ public class Issue260Test {
     @Test public void testReadMp4WithoutUdta() {
         File orig = new File("testdata", "test40.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -51,7 +51,7 @@ public class Issue260Test {
     @Test public void testWriteMp4WithoutUdta() {
         File orig = new File("testdata", "test40.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -94,7 +94,7 @@ public class Issue260Test {
     @Test public void testReadMp4WithUdtaAtStart() {
         File orig = new File("testdata", "test43.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -120,7 +120,7 @@ public class Issue260Test {
     @Test public void testWriteMp4WithUdtaAtStart() {
         File orig = new File("testdata", "test43.m4a");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

@@ -25,22 +25,20 @@ public class Issue081Test {
 
         File orig = new File("testdata", "test142.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
         File file = TestUtil.copyAudioToTmp("test142.wav", new File("test142SaveInfo.wav"));
 
         AudioFile audioFile = AudioFileIO.read(file);
-        System.out.println(audioFile.getAudioHeader());
         WavTag tag = (WavTag)audioFile.getTag().or(NullTag.INSTANCE);
-        System.out.println(tag.getInfoTag());
     }
 
     @Test public void testId3TagFile() throws Exception {
 
         File orig = new File("testdata", "test142.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
         File file = TestUtil.copyAudioToTmp("test142.wav", new File("test142SaveId3.wav"));
@@ -68,7 +66,7 @@ public class Issue081Test {
 
         File orig = new File("testdata", "test142.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available " + orig);
             return;
         }
         File file = TestUtil.copyAudioToTmp("test142.wav", new File("test142SaveInfo.wav"));

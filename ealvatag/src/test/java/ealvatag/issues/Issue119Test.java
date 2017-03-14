@@ -31,7 +31,7 @@ public class Issue119Test {
 
         File orig = new File("testdata", "test151.aif");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -42,12 +42,10 @@ public class Issue119Test {
             AudioHeader ah = f.getAudioHeader();
             Assert.assertTrue(ah instanceof AiffAudioHeader);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "fred");
             f.save();
             f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("fred", tag.getFirst(FieldKey.ARTIST));
 
         } catch (Exception ex) {
@@ -63,7 +61,7 @@ public class Issue119Test {
 
         File orig = new File("testdata", "test153.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -71,14 +69,11 @@ public class Issue119Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test153.wav", new File("test153_odd_data_length_info.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag().or(NullTag.INSTANCE));
 
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "freddy");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("freddy", tag.getFirst(FieldKey.ARTIST));
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,7 +88,7 @@ public class Issue119Test {
 
         File orig = new File("testdata", "test153.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -101,14 +96,11 @@ public class Issue119Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test153.wav", new File("test153_odd_data_length_id3.wav"));
             AudioFile f = AudioFileIO.read(testFile);
-            System.out.println(f.getAudioHeader());
-            System.out.println(f.getTag().or(NullTag.INSTANCE));
 
             f.getTag().or(NullTag.INSTANCE).setField(FieldKey.ARTIST, "freddy");
             f.save();
             f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
-            System.out.println(tag);
             Assert.assertEquals("freddy", tag.getFirst(FieldKey.ARTIST));
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +115,7 @@ public class Issue119Test {
 
         File orig = new File("testdata", "test153.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

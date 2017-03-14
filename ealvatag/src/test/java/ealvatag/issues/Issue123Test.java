@@ -29,7 +29,7 @@ public class Issue123Test {
     @Test public void testWriteJRiverAlbumArtistOgg() throws Exception {
         File orig = new File("testdata", "test.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -138,7 +138,7 @@ public class Issue123Test {
     @Test public void testWriteJRiverAlbumArtistFlac() throws Exception {
         File orig = new File("testdata", "test.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -258,7 +258,7 @@ public class Issue123Test {
     @Test public void testReadJRiverAlbumArtistOgg() throws Exception {
         File orig = new File("testdata", "test.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -345,7 +345,7 @@ public class Issue123Test {
     @Test public void testReadJRiverAlbumArtistFlac() throws Exception {
         File orig = new File("testdata", "test.flac");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

@@ -35,13 +35,9 @@ public class WavCleaner {
     this.loggingName = path.getAbsolutePath();
   }
 
-  /**
-   * Delete all data after data chunk and print new length
-   *
-   * @throws Exception
-   */
   public void clean() throws Exception {
-    System.out.println("EndOfDataChunk:" + Hex.asHex(findEndOfDataChunk()));
+    // TODO: 3/14/17 wtf?
+//    System.out.println("EndOfDataChunk:" + Hex.asHex(findEndOfDataChunk()));
 
   }
 

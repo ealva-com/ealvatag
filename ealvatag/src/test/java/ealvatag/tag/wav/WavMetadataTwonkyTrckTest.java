@@ -1207,7 +1207,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testReadFileWithPaddingAtEndOfListInfoMetadata() {
         File orig = new File("testdata", "test146.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1244,7 +1244,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testNaimRip() {
         File orig = new File("testdata", "test149.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1268,7 +1268,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testCreationOfDefaultTag() {
         File orig = new File("testdata", "test126.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1293,7 +1293,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testRip2() {
         File orig = new File("testdata", "test500.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1324,7 +1324,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testRip3() {
         File orig = new File("testdata", "test501.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1351,7 +1351,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testRip4() {
         File orig = new File("testdata", "test502.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1380,7 +1380,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testWavWithCorruptDataAfterDataChunkHeaderSize() {
         File orig = new File("testdata", "test503.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1407,7 +1407,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testCleanAndThenWriteWavWithCorruptDataChunkHeaderSize() {
         File orig = new File("testdata", "test504.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1448,7 +1448,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testWavRead() {
         File orig = new File("testdata", "test505.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1474,7 +1474,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testWavReadNew() {
         File orig = new File("testdata", "test506.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1519,7 +1519,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testReadJacobPavluk() {
         File orig = new File("testdata", "GreenLight.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -1561,7 +1561,7 @@ public class WavMetadataTwonkyTrckTest {
     @Test public void testWavRead2() {
         File orig = new File("testdata", "test160.wav");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 

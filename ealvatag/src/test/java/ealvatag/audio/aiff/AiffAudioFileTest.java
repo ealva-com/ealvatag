@@ -27,7 +27,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("128", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(128, ah.getBitRate());
@@ -52,8 +51,6 @@ public class AiffAudioFileTest {
         assertTrue(ah instanceof AiffAudioHeader);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
 
-        System.out.println(ah);
-
         assertEquals(1411, ah.getBitRate());
         assertFalse(ah.isVariableBitRate());
         assertEquals(2, ah.getChannelCount());
@@ -75,8 +72,6 @@ public class AiffAudioFileTest {
         assertTrue(ah instanceof AiffAudioHeader);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
 
-        System.out.println(ah);
-
         assertEquals("1411", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(1411, ah.getBitRate());
         assertFalse(ah.isVariableBitRate());
@@ -97,7 +92,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals(128, ah.getBitRate());
         assertEquals(2, ah.getChannelCount());
@@ -119,7 +113,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("128", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(128, ah.getBitRate());
@@ -142,7 +135,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("1024", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(1024, ah.getBitRate());
@@ -166,7 +158,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("199", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(199, ah.getBitRate());
@@ -188,7 +179,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals(199, ah.getBitRate());
         assertEquals(1, ah.getChannelCount());
@@ -209,7 +199,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("199", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(199, ah.getBitRate());
@@ -231,7 +220,6 @@ public class AiffAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         AudioHeader ah = f.getAudioHeader();
         assertTrue(ah instanceof AiffAudioHeader);
-        System.out.println(ah);
         AiffAudioHeader aah = (AiffAudioHeader)ah;
         assertEquals("19", Utils.formatBitRate(ah, ah.getBitRate()));
         assertEquals(19, ah.getBitRate());

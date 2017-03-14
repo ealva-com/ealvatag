@@ -23,7 +23,7 @@ public class Issue289Test {
     @Test public void testSavingOggFile() {
         File orig = new File("testdata", "test58.ogg");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -44,7 +44,6 @@ public class Issue289Test {
             af = AudioFileIO.read(testFile);
             Assert.assertEquals("91421a81-50b9-f577-70cf-20356eea212e", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
 
-            ofr.shortSummarizeOggPageHeaders(testFile);
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

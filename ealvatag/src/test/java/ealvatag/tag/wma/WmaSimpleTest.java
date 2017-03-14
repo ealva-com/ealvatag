@@ -37,7 +37,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileFromPicardQtInvalidHeaderSizeException() {
         File orig = new File("testdata", "test2.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -142,7 +142,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileFromPicardQt() {
         File orig = new File("testdata", "test2.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -442,7 +442,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileWithHeaderSizeDoesntMatchFileSize() {
         File orig = new File("testdata", "test3.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -462,7 +462,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileWithGifArtwork() {
         File orig = new File("testdata", "test1.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -541,7 +541,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileWithGifArtworkNoDescription() {
         File orig = new File("testdata", "test4.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -614,7 +614,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileWithPngArtwork() {
         File orig = new File("testdata", "test5.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -690,7 +690,7 @@ public class WmaSimpleTest {
     @Test public void testReadFileWithJpgArtwork() {
         File orig = new File("testdata", "test6.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
@@ -774,7 +774,7 @@ public class WmaSimpleTest {
     @Test public void testWritePngArtworkToFile() {
         File orig = new File("testdata", "test7.wma");
         if (!orig.isFile()) {
-            System.err.println("Unable to test file - not available");
+            System.err.println("Unable to test file - not available" + orig);
             return;
         }
 
