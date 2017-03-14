@@ -24,6 +24,8 @@ import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
+import static ealvalog.LogLevel.DEBUG;
+
 import java.io.EOFException;
 
 /**
@@ -31,77 +33,77 @@ import java.io.EOFException;
  * we havent yet mapped the data to a better fitting type.
  */
 public class ByteArraySizeTerminated extends AbstractDataType {
-    public ByteArraySizeTerminated(String identifier, AbstractTagFrameBody frameBody) {
-        super(identifier, frameBody);
+  public ByteArraySizeTerminated(String identifier, AbstractTagFrameBody frameBody) {
+    super(identifier, frameBody);
+  }
+
+  public ByteArraySizeTerminated(ByteArraySizeTerminated object) {
+    super(object);
+  }
+
+  /**
+   * Return the size in byte of this datatype
+   *
+   * @return the size in bytes
+   */
+  public int getSize() {
+    int len = 0;
+
+    if (value != null) {
+      len = ((byte[])value).length;
     }
 
-    public ByteArraySizeTerminated(ByteArraySizeTerminated object) {
-        super(object);
+    return len;
+  }
+
+  public boolean equals(Object obj) {
+    return obj instanceof ByteArraySizeTerminated && super.equals(obj);
+
+  }
+
+  public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
+    if (arr == null) {
+      throw new NullPointerException("Byte array is null");
     }
 
-    /**
-     * Return the size in byte of this datatype
-     *
-     * @return the size in bytes
-     */
-    public int getSize() {
-        int len = 0;
-
-        if (value != null) {
-            len = ((byte[])value).length;
-        }
-
-        return len;
+    if (offset < 0) {
+      throw new IndexOutOfBoundsException(
+          "Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
     }
 
-    public boolean equals(Object obj) {
-        return obj instanceof ByteArraySizeTerminated && super.equals(obj);
-
+    //Empty Byte Array
+    if (offset >= arr.length) {
+      value = null;
+      return;
     }
 
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        if (arr == null) {
-            throw new NullPointerException("Byte array is null");
-        }
+    int len = arr.length - offset;
+    value = new byte[len];
+    //noinspection SuspiciousSystemArraycopy
+    System.arraycopy(arr, offset, value, 0, len);
+  }
 
-        if (offset < 0) {
-            throw new IndexOutOfBoundsException(
-                    "Offset to byte array is out of bounds: offset = " + offset + ", array.length = " + arr.length);
-        }
+  @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+    value = buffer.readByteArray(size);
+  }
 
-        //Empty Byte Array
-        if (offset >= arr.length) {
-            value = null;
-            return;
-        }
+  /**
+   * Because this is usually binary data and could be very long we just return
+   * the number of bytes held
+   *
+   * @return the number of bytes
+   */
+  public String toString() {
+    return getSize() + " bytes";
+  }
 
-        int len = arr.length - offset;
-        value = new byte[len];
-        //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(arr, offset, value, 0, len);
-    }
-
-    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
-        value = buffer.readByteArray(size);
-    }
-
-    /**
-     * Because this is usually binary data and could be very long we just return
-     * the number of bytes held
-     *
-     * @return the number of bytes
-     */
-    public String toString() {
-        return getSize() + " bytes";
-    }
-
-    /**
-     * Write contents to a byte array
-     *
-     * @return a byte array that that contians the data that should be perisisted to file
-     */
-    public byte[] writeByteArray() {
-        LOG.debug("Writing byte array {}", getIdentifier());
-        return (byte[])value;
-    }
+  /**
+   * Write contents to a byte array
+   *
+   * @return a byte array that that contians the data that should be perisisted to file
+   */
+  public byte[] writeByteArray() {
+    LOG.log(DEBUG, "Writing byte array %s", getIdentifier());
+    return (byte[])value;
+  }
 }

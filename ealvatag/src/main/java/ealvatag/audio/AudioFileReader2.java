@@ -17,13 +17,18 @@
 
 package ealvatag.audio;
 
+import ealvalog.LogLevel;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvalog.Logger;
+import ealvalog.Loggers;
+
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,7 +40,7 @@ import java.nio.channels.FileChannel;
  * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader {
-  private static final Logger LOG = LoggerFactory.getLogger(AudioFileReader2.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /*
  * Reads the given file, and return an AudioFile object containing the Tag
@@ -48,7 +53,7 @@ public abstract class AudioFileReader2 extends AudioFileReader {
  */
   public AudioFileImpl read(File f, final String extension, final boolean ignoreArtwork)
       throws CannotReadException, IOException, TagException, InvalidAudioFrameException {
-    LOG.debug(ErrorMessage.GENERAL_READ, f);
+    LOG.log(DEBUG, ErrorMessage.GENERAL_READ, f);
 
     try (FileChannel channel = new RandomAccessFile(f, "r").getChannel()) {
       final String absolutePath = f.getAbsolutePath();
@@ -56,7 +61,7 @@ public abstract class AudioFileReader2 extends AudioFileReader {
       channel.position(0);
       return new AudioFileImpl(f, extension, info, getTag(channel, absolutePath, ignoreArtwork));
     } catch (FileNotFoundException e) {
-      LOG.warn("Unable to read file: {}", f, e);
+      LOG.log(WARN, e, "Unable to read file: %s", f);
       throw e;
     }
   }

@@ -15,29 +15,17 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.tag;
+package ealvatag.logging;
 
-import java.util.Locale;
+import ealvalog.Marker;
+import ealvalog.Markers;
 
 /**
- * Thrown when a {@link Tag} instance does not support a particular Field
- * <p>
- * Created by Eric A. Snell on 1/14/17.
+ * Logging constants
+ *
+ * Created by Eric A. Snell on 3/14/17.
  */
-public class UnsupportedFieldException extends RuntimeException {
-
-  private static final long serialVersionUID = -985995829314388820L;
-
-  /**
-   * @param message the name of the field that caused the exception
-   */
-  public UnsupportedFieldException(final String message) {
-    super(message);
-  }
-
-  public UnsupportedFieldException(final String message, Object... formatArgs) {
-    super(String.format(Locale.getDefault(), message, formatArgs));
-  }
-
-
+public class Log {
+  private static final String MARKER_NAME = "eAlvaTag";
+  public static final Marker MARKER = Markers.get(MARKER_NAME);
 }

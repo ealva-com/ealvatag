@@ -15,6 +15,9 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.EventTimingCode;
@@ -23,8 +26,8 @@ import ealvatag.tag.datatype.NumberHashMap;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.WARN;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -110,7 +113,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
-  private static final Logger LOG = LoggerFactory.getLogger(FrameBodyETCO.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   public static final int MPEG_FRAMES = 1;
   public static final int MILLISECONDS = 2;
@@ -301,7 +304,7 @@ public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24Frame
     for (final EventTimingCode code : codes) {
       final long translatedTimestamp = code.getTimestamp() == 0 ? lastTimestamp : code.getTimestamp();
       if (code.getTimestamp() < lastTimestamp) {
-        LOG.warn("Event codes are not in chronological order. {} is followed by {}", lastTimestamp, code.getTimestamp());
+        LOG.log(WARN, "Event codes are not in chronological order. %s is followed by %s", lastTimestamp, code.getTimestamp());
         // throw exception???
       }
       lastTimestamp = translatedTimestamp;

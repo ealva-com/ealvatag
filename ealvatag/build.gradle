@@ -7,12 +7,11 @@ tasks.withType(Javadoc) {
 description = 'ealvatag'
 dependencies {
     compile group: 'com.squareup.okio', name: 'okio', version:'1.11.0'
-    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.22'
+    compile 'com.ealva:ealvalog:0.0.2-SNAPSHOT'
     compile group: 'com.google.guava', name: 'guava', version:'20.0'
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'2.6.4'
     testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version:'2.0.0.0'
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.22'
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

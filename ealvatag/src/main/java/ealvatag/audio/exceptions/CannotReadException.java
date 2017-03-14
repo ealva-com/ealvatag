@@ -18,9 +18,7 @@
  */
 package ealvatag.audio.exceptions;
 
-import ealvatag.logging.ErrorMessage;
-
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import java.util.Locale;
 
 /**
  * This exception is thrown if an audio file cannot be read.<br>
@@ -42,7 +40,7 @@ public class CannotReadException extends Exception {
   }
 
   public CannotReadException(String message, Object... formatArgs) {
-    super(exceptionMsg(message, formatArgs));
+    super(String.format(Locale.getDefault(), message, formatArgs));
   }
 
   public CannotReadException(Throwable cause, String message) {

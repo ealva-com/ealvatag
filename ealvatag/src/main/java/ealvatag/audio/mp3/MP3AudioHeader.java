@@ -18,15 +18,20 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.base.MoreObjects;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.AudioHeader;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.utils.TimeUnits;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import java.io.EOFException;
@@ -78,7 +83,7 @@ import java.util.concurrent.TimeUnit;
   private static final int CONVERTS_BYTE_TO_BITS = 8;
 
   //Logger
-  public static Logger LOG = LoggerFactory.getLogger(MP3AudioHeader.class);
+  public static Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * After testing the average location of the first MP3Header bit was at 5000 bytes so this is
@@ -137,7 +142,7 @@ import java.util.concurrent.TimeUnit;
 
         if (MPEGFrameHeader.isMPEGFrame(buffer)) {  // doesn't move buffer position
           try {
-            LOG.trace("Found Possible header at:{}", filePointerCount);
+            LOG.log(TRACE, "Found Possible header at:%s", filePointerCount);
 
             mp3FrameHeader = MPEGFrameHeader.parseMPEGHeader(buffer);  // doesn't move buffer position
             syncFound = true;
@@ -146,7 +151,7 @@ import java.util.concurrent.TimeUnit;
 
             final Buffer xingFrameBuffer = XingFrame.isXingFrame(buffer.clone(), mp3FrameHeader);
             if (xingFrameBuffer != null) {
-              LOG.trace("Found Possible XingHeader");
+              LOG.log(TRACE, "Found Possible XingHeader");
               try {
                 mp3XingFrame = XingFrame.parseXingFrame(xingFrameBuffer);
                 xingFrameBuffer.skip(xingFrameBuffer.size());
@@ -159,7 +164,7 @@ import java.util.concurrent.TimeUnit;
 
             final Buffer vbriFrameBuffer = VbriFrame.isVbriFrame(buffer.clone());
             if (vbriFrameBuffer != null) {
-              LOG.trace("Found Possible VbriHeader");
+              LOG.log(TRACE, "Found Possible VbriHeader");
               mp3VbriFrame = VbriFrame.parseVBRIFrame(vbriFrameBuffer);
               vbriFrameBuffer.skip(vbriFrameBuffer.size());
               break;
@@ -190,15 +195,15 @@ import java.util.concurrent.TimeUnit;
 
       }
     } catch (EOFException ex) {
-      LOG.warn("Reached end of file without finding sync match", ex);
+      LOG.log(WARN, "Reached end of file without finding sync match", ex);
       syncFound = false;
     } catch (IOException iox) {
-      LOG.error("IOException occurred while trying to find sync", iox);
+      LOG.log(ERROR, "IOException occurred while trying to find sync", iox);
       throw iox;
     }
 
     //Return to start of audio header
-    LOG.trace("Return found matching mp3 header starting at {}", filePointerCount);
+    LOG.log(TRACE, "Return found matching mp3 header starting at %s", filePointerCount);
     setFileSize(fileOperator.getFileChannel().size());
     setMp3StartByte(filePointerCount);
     setTimePerFrame();
@@ -211,10 +216,10 @@ import java.util.concurrent.TimeUnit;
 
   private boolean isNextFrameValid(long filePointerCount, Buffer bb, FileOperator fileOperator, final String seekFileName)
       throws IOException {
-    LOG.trace("Checking next frame {}:fpc:{}skipping to:{}",
-              seekFileName,
-              filePointerCount,
-              (filePointerCount + mp3FrameHeader.getFrameLength()));
+    LOG.log(TRACE, "Checking next frame %s:fpc:%sskipping to:%s",
+            seekFileName,
+            filePointerCount,
+            (filePointerCount + mp3FrameHeader.getFrameLength()));
     boolean result = false;
 
     final long fileSize = fileOperator.getFileChannel().size();
@@ -223,20 +228,20 @@ import java.util.concurrent.TimeUnit;
     //have gone wrong because frames are not this large, so just return false
     //bad frame header
     if (mp3FrameHeader.getFrameLength() > (FILE_BUFFER_SIZE - MIN_BUFFER_REMAINING_REQUIRED)) {
-      LOG.debug("Frame size is too large to be a frame:{}", mp3FrameHeader.getFrameLength());
+      LOG.log(DEBUG, "Frame size is too large to be a frame:%s", mp3FrameHeader.getFrameLength());
       return false;
     }
 
     //Check for end of buffer if not enough room get some more
     if (bb.size() <= MIN_BUFFER_REMAINING_REQUIRED + mp3FrameHeader.getFrameLength()) {
-      LOG.debug("Buffer too small, need to reload, buffer size:{}", bb.size());
+      LOG.log(DEBUG, "Buffer too small, need to reload, buffer size:%s", bb.size());
       bb.clear();
       final long byteCount = Math.max(Math.min(FILE_BUFFER_SIZE, fileSize - filePointerCount), 0);
       fileOperator.read(filePointerCount, bb, byteCount);
       //Not enough left
       if (bb.size() <= MIN_BUFFER_REMAINING_REQUIRED) {
         //No mp3 exists
-        LOG.debug("Nearly at end of file, no header found:");
+        LOG.log(DEBUG, "Nearly at end of file, no header found:");
         return false;
       }
     }
@@ -246,14 +251,14 @@ import java.util.concurrent.TimeUnit;
     if (MPEGFrameHeader.isMPEGFrame(bb)) {
       try {
         MPEGFrameHeader.parseMPEGHeader(bb);
-        LOG.debug("Check next frame confirms is an audio header ");
+        LOG.log(DEBUG, "Check next frame confirms is an audio header ");
         result = true;
       } catch (InvalidAudioFrameException ex) {
-        LOG.debug("Check next frame has identified this is not an audio header");
+        LOG.log(DEBUG, "Check next frame has identified this is not an audio header");
         result = false;
       }
     } else {
-      LOG.debug("isMPEGFrame has identified this is not an audio header");
+      LOG.log(DEBUG, "isMPEGFrame has identified this is not an audio header");
     }
     return result;
   }

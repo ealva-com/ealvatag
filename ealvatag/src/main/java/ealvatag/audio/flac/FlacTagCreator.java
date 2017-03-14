@@ -18,16 +18,19 @@
  */
 package ealvatag.audio.flac;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.AbstractTagCreator;
 import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPadding;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -39,7 +42,7 @@ import java.util.ListIterator;
 public class FlacTagCreator
     extends AbstractTagCreator {
   // Logger Object
-  public static Logger LOG = LoggerFactory.getLogger(FlacTagCreator.class);
+  public static Logger LOG = Loggers.get(Log.MARKER);
 
   //TODO make an option
   static final int DEFAULT_PADDING = 4000;
@@ -47,7 +50,7 @@ public class FlacTagCreator
   private static final VorbisCommentCreator creator = new VorbisCommentCreator();
 
   public ByteBuffer convert(TagFieldContainer tag, int paddingSize) throws UnsupportedEncodingException {
-    LOG.trace("Convert flac tag:padding:{}", paddingSize);
+    LOG.log(TRACE, "Convert flac tag:padding:%d", paddingSize);
     FlacTag flacTag = (FlacTag)tag;
 
     int tagLength = 0;
@@ -60,7 +63,7 @@ public class FlacTagCreator
       tagLength += image.getBytes().limit() + MetadataBlockHeader.HEADER_LENGTH;
     }
 
-    LOG.trace("Convert flac tag:taglength:{}", tagLength);
+    LOG.log(TRACE, "Convert flac tag:taglength:%d", tagLength);
     ByteBuffer buf = ByteBuffer.allocate(tagLength + paddingSize);
 
     MetadataBlockHeader vorbisHeader;
@@ -91,7 +94,7 @@ public class FlacTagCreator
     }
 
     //Padding
-    LOG.trace("Convert flac tag at:{}", buf.position());
+    LOG.log(TRACE, "Convert flac tag at:%d", buf.position());
     if (paddingSize > 0) {
       int paddingDataSize = paddingSize - MetadataBlockHeader.HEADER_LENGTH;
       MetadataBlockHeader paddingHeader = new MetadataBlockHeader(true, BlockType.PADDING, paddingDataSize);

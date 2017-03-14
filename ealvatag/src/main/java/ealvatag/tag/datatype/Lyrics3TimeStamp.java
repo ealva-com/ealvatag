@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * @author : Eric Farng
  * <p>
@@ -26,188 +26,144 @@ import okio.Buffer;
 
 import java.io.EOFException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Lyrics3TimeStamp extends AbstractDataType {
-    /**
-     *
-     */
-    private long minute = 0;
+  /**
+   *
+   */
+  private long minute = 0;
 
-    /**
-     *
-     */
-    private long second = 0;
+  /**
+   *
+   */
+  private long second = 0;
 
-    /**
-     * Todo this is wrong
-     * @param s
-     */
-    public void readString(String s) {
+  // TODO: 3/14/17  implement?
+  public void readString() {
+  }
+
+  public Lyrics3TimeStamp(String identifier, AbstractTagFrameBody frameBody) {
+    super(identifier, frameBody);
+  }
+
+  Lyrics3TimeStamp(String identifier) {
+    super(identifier, null);
+  }
+
+  Lyrics3TimeStamp(Lyrics3TimeStamp copy) {
+    super(copy);
+    this.minute = copy.minute;
+    this.second = copy.second;
+  }
+
+  @SuppressWarnings("unused") public void setMinute(long minute) {
+    this.minute = minute;
+  }
+
+  @SuppressWarnings("unused") public long getMinute() {
+    return minute;
+  }
+
+  public void setSecond(long second) {
+    this.second = second;
+  }
+
+  public long getSecond() {
+    return second;
+  }
+
+  public int getSize() {
+    return 7;
+  }
+
+  @SuppressWarnings("unused")
+  public void setTimeStamp(long timeStamp, byte timeStampFormat) {
+    // TODO: 3/14/17  convert both types of formats
+    timeStamp = timeStamp / 1000;
+    minute = timeStamp / 60;
+    second = timeStamp % 60;
+  }
+
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Lyrics3TimeStamp)) {
+      return false;
     }
 
-    /**
-     * Creates a new ObjectLyrics3TimeStamp datatype.
-     *
-     * @param identifier
-     * @param frameBody
-     */
-    public Lyrics3TimeStamp(String identifier, AbstractTagFrameBody frameBody) {
-        super(identifier, frameBody);
+    Lyrics3TimeStamp object = (Lyrics3TimeStamp)obj;
+
+    return this.minute == object.minute && this.second == object.second && super.equals(obj);
+
+  }
+
+  public void readString(String timeStamp, int offset) {
+    if (timeStamp == null) {
+      throw new NullPointerException("Image is null");
     }
 
-    public Lyrics3TimeStamp(String identifier) {
-        super(identifier, null);
+    if ((offset < 0) || (offset >= timeStamp.length())) {
+      throw new IndexOutOfBoundsException("Offset to timeStamp is out of bounds: offset = " +
+                                              offset +
+                                              ", timeStamp.length()" +
+                                              timeStamp.length());
     }
 
-    public Lyrics3TimeStamp(Lyrics3TimeStamp copy) {
-        super(copy);
-        this.minute = copy.minute;
-        this.second = copy.second;
+    timeStamp = timeStamp.substring(offset);
+
+    if (timeStamp.length() == 7) {
+      minute = Integer.parseInt(timeStamp.substring(1, 3));
+      second = Integer.parseInt(timeStamp.substring(4, 6));
+    } else {
+      minute = 0;
+      second = 0;
+    }
+  }
+
+  public String toString() {
+    return writeString();
+  }
+
+  String writeString() {
+    String str;
+    str = "[";
+
+    if (minute < 0) {
+      str += "00";
+    } else {
+      if (minute < 10) {
+        str += '0';
+      }
+
+      str += Long.toString(minute);
     }
 
-    public void setMinute(long minute) {
-        this.minute = minute;
+    str += ':';
+
+    if (second < 0) {
+      str += "00";
+    } else {
+      if (second < 10) {
+        str += '0';
+      }
+
+      str += Long.toString(second);
     }
 
-    /**
-     * @return
-     */
-    public long getMinute() {
-        return minute;
-    }
+    str += ']';
 
-    public void setSecond(long second) {
-        this.second = second;
-    }
+    return str;
+  }
 
-    /**
-     * @return
-     */
-    public long getSecond() {
-        return second;
-    }
+  public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
+    readString(Arrays.toString(arr), offset);
+  }
 
-    /**
-     * @return
-     */
-    public int getSize() {
-        return 7;
-    }
+  @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
+    readString(Arrays.toString(buffer.readByteArray()), 0);
+  }
 
-    /**
-     * Creates a new ObjectLyrics3TimeStamp datatype.
-     *
-     * @param timeStamp
-     * @param timeStampFormat
-     */
-    public void setTimeStamp(long timeStamp, byte timeStampFormat) {
-        /**
-         * @todo convert both types of formats
-         */
-        timeStamp = timeStamp / 1000;
-        minute = timeStamp / 60;
-        second = timeStamp % 60;
-    }
-
-    /**
-     * @param obj
-     * @return
-     */
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Lyrics3TimeStamp)) {
-            return false;
-        }
-
-        Lyrics3TimeStamp object = (Lyrics3TimeStamp)obj;
-
-        if (this.minute != object.minute) {
-            return false;
-        }
-
-        return this.second == object.second && super.equals(obj);
-
-    }
-
-    /**
-     * @param timeStamp
-     * @param offset
-     * @throws NullPointerException
-     * @throws IndexOutOfBoundsException
-     */
-    public void readString(String timeStamp, int offset) {
-        if (timeStamp == null) {
-            throw new NullPointerException("Image is null");
-        }
-
-        if ((offset < 0) || (offset >= timeStamp.length())) {
-            throw new IndexOutOfBoundsException("Offset to timeStamp is out of bounds: offset = " +
-                                                        offset +
-                                                        ", timeStamp.length()" +
-                                                        timeStamp.length());
-        }
-
-        timeStamp = timeStamp.substring(offset);
-
-        if (timeStamp.length() == 7) {
-            minute = Integer.parseInt(timeStamp.substring(1, 3));
-            second = Integer.parseInt(timeStamp.substring(4, 6));
-        } else {
-            minute = 0;
-            second = 0;
-        }
-    }
-
-    /**
-     * @return
-     */
-    public String toString() {
-        return writeString();
-    }
-
-    /**
-     * @return
-     */
-    public String writeString() {
-        String str;
-        str = "[";
-
-        if (minute < 0) {
-            str += "00";
-        } else {
-            if (minute < 10) {
-                str += '0';
-            }
-
-            str += Long.toString(minute);
-        }
-
-        str += ':';
-
-        if (second < 0) {
-            str += "00";
-        } else {
-            if (second < 10) {
-                str += '0';
-            }
-
-            str += Long.toString(second);
-        }
-
-        str += ']';
-
-        return str;
-    }
-
-    public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
-        readString(arr.toString(), offset);
-    }
-
-    @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
-        readString(buffer.readByteArray().toString(), 0);
-    }
-
-    public byte[] writeByteArray() {
-        return writeString().getBytes(StandardCharsets.ISO_8859_1);
-    }
+  public byte[] writeByteArray() {
+    return writeString().getBytes(StandardCharsets.ISO_8859_1);
+  }
 
 }

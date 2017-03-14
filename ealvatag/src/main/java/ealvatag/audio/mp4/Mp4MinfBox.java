@@ -18,60 +18,63 @@
 package ealvatag.audio.mp4;
 
 import com.google.common.base.Preconditions;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import okio.BufferedSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.DEBUG;
 
 import java.io.IOException;
 
 /**
  * Represents an mp4 trak box
- *
+ * <p>
  * Created by Eric A. Snell on 2/3/17.
  */
 class Mp4MinfBox {
-    private static final Logger LOG = LoggerFactory.getLogger(Mp4MinfBox.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    Mp4MinfBox(final Mp4BoxHeader minfBoxHeader,
-               final BufferedSource bufferedSource,
-               final Mp4AudioHeader audioHeader,
-               final boolean foundPreviousTrak) throws IOException, CannotReadException {
-        Preconditions.checkArgument(Mp4AtomIdentifier.MINF.matches(minfBoxHeader.getId()));
-        Mp4StblBox stblBox = null;
-        boolean haveSeenAudio = foundPreviousTrak;
+  Mp4MinfBox(final Mp4BoxHeader minfBoxHeader,
+             final BufferedSource bufferedSource,
+             final Mp4AudioHeader audioHeader,
+             final boolean foundPreviousTrak) throws IOException, CannotReadException {
+    Preconditions.checkArgument(Mp4AtomIdentifier.MINF.matches(minfBoxHeader.getId()));
+    Mp4StblBox stblBox = null;
+    boolean haveSeenAudio = foundPreviousTrak;
 
-        int dataSize = minfBoxHeader.getDataLength();
-        boolean done = false;
-        while (dataSize >= Mp4BoxHeader.HEADER_LENGTH && !done) {
-            Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
-            switch (childHeader.getIdentifier()) {
-                case SMHD:
-                    bufferedSource.skip(childHeader.getDataLength());
-                    haveSeenAudio = true;
-                    break;
-                case VMHD:
-                    // video, get out
-                    throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO);
-                case STBL:
-                    stblBox = new Mp4StblBox(childHeader, bufferedSource, audioHeader, foundPreviousTrak);
-                    break;
-                default:
-                    bufferedSource.skip(childHeader.getDataLength());
-                    break;
-            }
-            dataSize -= childHeader.getLength();
-            if (stblBox != null && haveSeenAudio) {
-                done = true;
-            }
-        }
-
-        if (dataSize > 0) {
-            LOG.debug("{} data not fully read. Remaining={}", getClass(), dataSize);
-            bufferedSource.skip(dataSize);
-        }
+    int dataSize = minfBoxHeader.getDataLength();
+    boolean done = false;
+    while (dataSize >= Mp4BoxHeader.HEADER_LENGTH && !done) {
+      Mp4BoxHeader childHeader = new Mp4BoxHeader(bufferedSource);
+      switch (childHeader.getIdentifier()) {
+        case SMHD:
+          bufferedSource.skip(childHeader.getDataLength());
+          haveSeenAudio = true;
+          break;
+        case VMHD:
+          // video, get out
+          throw new CannotReadVideoException(ErrorMessage.MP4_FILE_IS_VIDEO);
+        case STBL:
+          stblBox = new Mp4StblBox(childHeader, bufferedSource, audioHeader, foundPreviousTrak);
+          break;
+        default:
+          bufferedSource.skip(childHeader.getDataLength());
+          break;
+      }
+      dataSize -= childHeader.getLength();
+      if (stblBox != null && haveSeenAudio) {
+        done = true;
+      }
     }
+
+    if (dataSize > 0) {
+      LOG.log(DEBUG, "%s data not fully read. Remaining=%d", getClass(), dataSize);
+      bufferedSource.skip(dataSize);
+    }
+  }
 }

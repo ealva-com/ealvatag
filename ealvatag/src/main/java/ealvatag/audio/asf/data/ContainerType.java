@@ -3,11 +3,10 @@ package ealvatag.audio.asf.data;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.logging.ErrorMessage;
 
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
-
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Enumerates capabilities, respectively uses, of metadata descriptors.<br>
@@ -185,34 +184,41 @@ public enum ContainerType {
       result = new IllegalArgumentException("Arguments must not be null.");
     } else {
       if (!Utils.isStringLengthValidNullSafe(name)) {
-        result = new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE, name.length()));
+        result = new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                            ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE,
+                                                            name.length()));
       }
     }
     if (result == null && !isWithinValueRange(data.length)) {
       result =
-          new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                                                    data.length,
-                                                    getMaximumDataLength(),
-                                                    getContainerGUID().getDescription()));
+          new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                     ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
+                                                     data.length,
+                                                     getMaximumDataLength(),
+                                                     getContainerGUID().getDescription()));
     }
     if (result == null && (stream < 0 || stream > MetadataDescriptor.MAX_STREAM_NUMBER || (!isStreamNumberEnabled() && stream != 0))) {
       final String streamAllowed = isStreamNumberEnabled() ? "0 to 127" : "0";
       result =
-          new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_INVALID_STREAM_REFERNCE,
-                                                    stream,
-                                                    streamAllowed,
-                                                    getContainerGUID().getDescription()));
+          new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                     ErrorMessage.WMA_INVALID_STREAM_REFERNCE,
+                                                     stream,
+                                                     streamAllowed,
+                                                     getContainerGUID().getDescription()));
     }
     if (result == null && type == MetadataDescriptor.TYPE_GUID && !isGuidEnabled()) {
-      result = new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_INVALID_GUID_USE, getContainerGUID().getDescription()));
+      result = new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                          ErrorMessage.WMA_INVALID_GUID_USE,
+                                                          getContainerGUID().getDescription()));
     }
     if (result == null && ((language != 0 && !isLanguageEnabled()) || (language < 0 || language >= MetadataDescriptor.MAX_LANG_INDEX))) {
       final String langAllowed = isStreamNumberEnabled() ? "0 to 126" : "0";
       result =
-          new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_INVALID_LANGUAGE_USE,
-                                                    language,
-                                                    getContainerGUID().getDescription(),
-                                                    langAllowed));
+          new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                     ErrorMessage.WMA_INVALID_LANGUAGE_USE,
+                                                     language,
+                                                     getContainerGUID().getDescription(),
+                                                     langAllowed));
     }
     if (result == null && this == CONTENT_DESCRIPTION && type != MetadataDescriptor.TYPE_STRING) {
       result = new IllegalArgumentException(ErrorMessage.WMA_ONLY_STRING_IN_CD);

@@ -16,9 +16,12 @@
 package ealvatag.tag.id3;
 
 import com.google.common.base.Strings;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
+import ealvatag.logging.Log;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
@@ -50,9 +53,10 @@ import ealvatag.tag.lyrics3.Lyrics3v2Field;
 import ealvatag.utils.Characters;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.INFO;
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.tag.id3.ID3SyncSafeInteger.INTEGRAL_SIZE;
 
 import java.io.ByteArrayOutputStream;
@@ -79,7 +83,7 @@ import java.util.NoSuchElementException;
   private static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
   private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
   private static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
-  private static final Logger LOG = LoggerFactory.getLogger(ID3v24Frame.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
   /**
    * If the frame is encrypted then the encryption method is stored in this byte
    */
@@ -165,7 +169,7 @@ import java.util.NoSuchElementException;
   private void createV24FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException {
     // Is it a straight conversion e.g TALB - TALB
     identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
-    LOG.debug("Creating V24frame from v23:{}:{}", frame.getIdentifier(), identifier);
+    LOG.log(DEBUG, "Creating V24frame from v23:%s:%s", frame.getIdentifier(), identifier);
 
 
     //We cant convert unsupported bodies properly
@@ -173,7 +177,7 @@ import java.util.NoSuchElementException;
       this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported)frame.getBody());
       this.frameBody.setHeader(this);
       identifier = frame.getIdentifier();
-      LOG.debug("V3:UnsupportedBody:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
+      LOG.log(DEBUG, "V3:UnsupportedBody:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
     }//Simple Copy
     else if (identifier != null) {
       //Special Case
@@ -183,7 +187,7 @@ import java.util.NoSuchElementException;
         this.frameBody.setHeader(this);
         identifier = frameBody.getIdentifier();
       } else {
-        LOG.debug("V3:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
+        LOG.log(DEBUG, "V3:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
         this.frameBody = (AbstractTagFrameBody)ID3Tags.copyObject(frame.getBody());
         this.frameBody.setHeader(this);
       }
@@ -192,7 +196,7 @@ import java.util.NoSuchElementException;
     else if (ID3Tags.isID3v23FrameIdentifier(frame.getIdentifier())) {
       identifier = ID3Tags.forceFrameID23To24(frame.getIdentifier());
       if (identifier != null) {
-        LOG.debug("V3:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
+        LOG.log(DEBUG, "V3:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
         this.frameBody = this.readBody(identifier, (AbstractID3v2FrameBody)frame.getBody());
         this.frameBody.setHeader(this);
       }
@@ -202,7 +206,7 @@ import java.util.NoSuchElementException;
         this.frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frame.getBody());
         this.frameBody.setHeader(this);
         identifier = frame.getIdentifier();
-        LOG.debug("V3:Deprecated:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
+        LOG.log(DEBUG, "V3:Deprecated:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
       }
     }
     // Unknown Frame e.g NCON or TDRL (because TDRL unknown to V23)
@@ -210,7 +214,7 @@ import java.util.NoSuchElementException;
       this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported)frame.getBody());
       this.frameBody.setHeader(this);
       identifier = frame.getIdentifier();
-      LOG.debug("V3:Unknown:Orig id is:{}:New id is:{}", frame.getIdentifier(), identifier);
+      LOG.log(DEBUG, "V3:Unknown:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
     }
   }
 
@@ -325,7 +329,7 @@ import java.util.NoSuchElementException;
         //Read the sync safe size field
         dataLengthSize = ID3SyncSafeInteger.bufferToValue(buffer);
         extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-        LOG.debug("{}:Frame Size Is:{} Data length Size{}", fileName, frameSize, dataLengthSize);
+        LOG.log(DEBUG, "%s:Frame Size Is:%s Data length Size%s", fileName, frameSize, dataLengthSize);
       }
 
       //Work out the real size of the frameBody data
@@ -348,7 +352,7 @@ import java.util.NoSuchElementException;
             buffer.read(frameBodyBuffer, realFrameSize);
             frameBodyBuffer = Id3SynchronizingSink.synchronizeBuffer(frameBodyBuffer);
             syncSize = (int)frameBodyBuffer.size();
-            LOG.debug("{}:Frame Size After Syncing is:{}", fileName, syncSize);
+            LOG.log(DEBUG, "%s:Frame Size After Syncing is:%s", fileName, syncSize);
           }
 
 
@@ -365,7 +369,7 @@ import java.util.NoSuchElementException;
             frameBody = readBody(identifier, frameBodyBuffer, syncSize);
           }
           if (!(frameBody instanceof ID3v24FrameBody)) {
-            LOG.debug("{}:Converted frame body with:{} to deprecated framebody", fileName, identifier);
+            LOG.log(DEBUG, "%s:Converted frame body with:%s to deprecated framebody", fileName, identifier);
             frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
           }
         }
@@ -377,7 +381,7 @@ import java.util.NoSuchElementException;
         }
       }
     } catch (RuntimeException e) {
-      LOG.debug("Unexpected :{} - {}", Strings.nullToEmpty(identifier), fileName, e);
+      LOG.log(DEBUG, "Unexpected :%s - %s", Strings.nullToEmpty(identifier), fileName, e);
       throw new InvalidFrameException("Buffer:" + buffer.size() + " " + Strings.nullToEmpty(identifier) +
                                           " not valid ID3v2.30 frame " + fileName,
                                       e);
@@ -389,10 +393,10 @@ import java.util.NoSuchElementException;
     frameSize = ID3SyncSafeInteger.peekBufferToValue(buffer);
 
     if (frameSize < 0) {
-      LOG.warn("{}:Invalid Frame size:{}", loggingFilename, identifier);
+      LOG.log(WARN, "%s:Invalid Frame size:%s", loggingFilename, identifier);
       throw new InvalidFrameException(identifier + " is invalid frame");
     } else if (frameSize == 0) {
-      LOG.warn("{}:Empty Frame:{}", loggingFilename, identifier);
+      LOG.log(WARN, "%s:Empty Frame:%s", loggingFilename, identifier);
       //We dont process this frame or add to frame map because contains no useful information
       //Skip the two flag bytes so in correct position for subsequent frames
       // We peeked the frameSize, so move past it and 2 extra
@@ -401,7 +405,7 @@ import java.util.NoSuchElementException;
       }
       throw new EmptyFrameException(identifier + " is empty frame");
     } else if (frameSize > (buffer.size() - FRAME_FLAGS_SIZE)) {
-      LOG.warn("{}:Invalid Frame size larger than size before mp3 audio:{}", loggingFilename, identifier);
+      LOG.log(WARN, "%s:Invalid Frame size larger than size before mp3 audio:%s", loggingFilename, identifier);
       throw new InvalidFrameException(identifier + " is invalid frame");
     }
 
@@ -427,13 +431,13 @@ import java.util.NoSuchElementException;
       boolean isNotSyncSafe = ID3SyncSafeInteger.peekIsBufferNotSyncSafe(buffer);
 
       if (isNotSyncSafe) {
-        LOG.warn("{}:Frame size is NOT stored as a sync safe integer:{}", loggingFilename, identifier);
+        LOG.log(WARN, "%s:Frame size is NOT stored as a sync safe integer:%s", loggingFilename, identifier);
 
         //This will return a larger frame size so need to check against buffer size if too large then we are
         //buggered , give up
         if (nonSyncSafeFrameSize > (buffer.size() + INTEGRAL_SIZE)) {   // remember, we're keeping the buffer just before
           // the frame size
-          LOG.warn("{}:Invalid Frame size larger than size before mp3 audio:{}", loggingFilename, identifier);
+          LOG.log(WARN, "%s:Invalid Frame size larger than size before mp3 audio:%s", loggingFilename, identifier);
           throw new InvalidFrameException(identifier + " is invalid frame");
         } else {
           frameSize = nonSyncSafeFrameSize;
@@ -481,7 +485,7 @@ import java.util.NoSuchElementException;
                 //and continue
                 if (isValidID3v2FrameIdentifier(readAheadIdentifier)) {
                   frameSize = nonSyncSafeFrameSize;
-                  LOG.warn("{}:Assuming frame size is NOT stored as a sync safe integer:{}", loggingFilename, identifier);
+                  LOG.log(WARN, "%s:Assuming frame size is NOT stored as a sync safe integer:%s", loggingFilename, identifier);
                 }
                 //no data found so assume entered padding in which case assume it is last
                 //frame and we are ok whereas we didn't hit padding when using syncsafe integer
@@ -489,7 +493,7 @@ import java.util.NoSuchElementException;
                 //the frame data whereas this has reached end of frames.
                 else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer)) {
                   frameSize = nonSyncSafeFrameSize;
-                  LOG.warn("{}:Assuming frame size is NOT stored as a sync safe integer:{}", loggingFilename, identifier);
+                  LOG.log(WARN, "%s:Assuming frame size is NOT stored as a sync safe integer:%s", loggingFilename, identifier);
                 }
                 //invalid so assume syncsafe as that is is the standard
               } else {
@@ -526,7 +530,7 @@ import java.util.NoSuchElementException;
   public void write(ByteArrayOutputStream tagBuffer) {
     boolean unsynchronization;
 
-    LOG.debug("Writing frame to file:" + getIdentifier());
+    LOG.log(DEBUG, "Writing frame to file:" + getIdentifier());
 
     //This is where we will write header, move position to where we can
     //write bodybuffer
@@ -542,7 +546,7 @@ import java.util.NoSuchElementException;
         ID3Unsynchronization.requiresUnsynchronization(bodyBuffer);
     if (unsynchronization) {
       bodyBuffer = ID3Unsynchronization.unsynchronize(bodyBuffer);
-      LOG.debug("bodybytebuffer:sizeafterunsynchronisation:" + bodyBuffer.length);
+      LOG.log(DEBUG, "bodybytebuffer:sizeafterunsynchronisation:" + bodyBuffer.length);
     }
 
     //Write Frame Header
@@ -556,7 +560,7 @@ import java.util.NoSuchElementException;
     //Write Frame Size based on size of body buffer (if it has been unsynced then it size
     //will have increased accordingly
     int size = bodyBuffer.length;
-    LOG.info("Frame Size Is:" + size);
+    LOG.log(INFO, "Frame Size Is:" + size);
     headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(size));
 
     //Write the Flags
@@ -689,7 +693,7 @@ import java.util.NoSuchElementException;
     if (!isValidID3v2FrameIdentifier(identifier)) {
       //If not valid move file pointer back to one byte after
       //the original check so can try again.
-      LOG.debug(loggingFilename + ":" + "Invalid identifier:" + identifier);
+      LOG.log(DEBUG, loggingFilename + ":" + "Invalid identifier:" + identifier);
       byteBuffer.position(byteBuffer.position() - (getFrameIdSize() - 1));
       throw new InvalidFrameIdentifierException(
           loggingFilename + ":" + identifier + ":is not a valid ID3v2.30 frame");
@@ -722,7 +726,7 @@ import java.util.NoSuchElementException;
       //Read the sync safe size field
       dataLengthSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
       extraHeaderBytesCount += FRAME_DATA_LENGTH_SIZE;
-      LOG.debug(loggingFilename + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + dataLengthSize);
+      LOG.log(DEBUG, loggingFilename + ":" + "Frame Size Is:" + frameSize + " Data Length Size:" + dataLengthSize);
     }
 
     //Work out the real size of the frameBody data
@@ -742,7 +746,7 @@ import java.util.NoSuchElementException;
       //bytes to be dropped so the existing buffer is large enough to hold the modifications
       frameBodyBuffer = ID3Unsynchronization.synchronize(frameBodyBuffer);
       syncSize = frameBodyBuffer.limit();
-      LOG.debug(loggingFilename + ":" + "Frame Size After Syncing is:" + syncSize);
+      LOG.log(DEBUG, loggingFilename + ":" + "Frame Size After Syncing is:" + syncSize);
     }
 
     //Read the body data
@@ -766,8 +770,8 @@ import java.util.NoSuchElementException;
         frameBody = readBody(identifier, frameBodyBuffer, syncSize);
       }
       if (!(frameBody instanceof ID3v24FrameBody)) {
-        LOG.debug(loggingFilename + ":" + "Converted frame body with:" + identifier +
-                      " to deprecated framebody");
+        LOG.log(DEBUG, loggingFilename + ":" + "Converted frame body with:" + identifier +
+            " to deprecated framebody");
         frameBody = new FrameBodyDeprecated((AbstractID3v2FrameBody)frameBody);
       }
     } finally {
@@ -786,17 +790,17 @@ import java.util.NoSuchElementException;
     frameSize = ID3SyncSafeInteger.bufferToValue(byteBuffer);
 
     if (frameSize < 0) {
-      LOG.warn(loggingFilename + ":" + "Invalid Frame size:" + identifier);
+      LOG.log(WARN, loggingFilename + ":" + "Invalid Frame size:" + identifier);
       throw new InvalidFrameException(identifier + " is invalid frame");
     } else if (frameSize == 0) {
-      LOG.warn(loggingFilename + ":" + "Empty Frame:" + identifier);
+      LOG.log(WARN, loggingFilename + ":" + "Empty Frame:" + identifier);
       //We dont process this frame or add to framemap becuase contains no useful information
       //Skip the two flag bytes so in correct position for subsequent frames
       byteBuffer.get();
       byteBuffer.get();
       throw new EmptyFrameException(identifier + " is empty frame");
     } else if (frameSize > (byteBuffer.remaining() - FRAME_FLAGS_SIZE)) {
-      LOG.warn(loggingFilename + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
+      LOG.log(WARN, loggingFilename + ":" + "Invalid Frame size larger than size before mp3 audio:" + identifier);
       throw new InvalidFrameException(identifier + " is invalid frame");
     }
 
@@ -827,13 +831,13 @@ import java.util.NoSuchElementException;
       byteBuffer.position(currentPosition);
 
       if (isNotSyncSafe) {
-        LOG.warn(loggingFilename + ":" + "Frame size is NOT stored as a sync safe integer:" + identifier);
+        LOG.log(WARN, loggingFilename + ":" + "Frame size is NOT stored as a sync safe integer:" + identifier);
 
         //This will return a larger frame size so need to check against buffer size if too large then we are
         //buggered , give up
         if (nonSyncSafeFrameSize > (byteBuffer.remaining() - -getFrameFlagsSize())) {
-          LOG.warn(loggingFilename + ":" + "Invalid Frame size larger than size before mp3 audio:" +
-                       identifier);
+          LOG.log(WARN, loggingFilename + ":" + "Invalid Frame size larger than size before mp3 audio:" +
+              identifier);
           throw new InvalidFrameException(identifier + " is invalid frame");
         } else {
           frameSize = nonSyncSafeFrameSize;
@@ -886,9 +890,9 @@ import java.util.NoSuchElementException;
                 //and continue
                 if (isValidID3v2FrameIdentifier(readAheadIdentifier)) {
                   frameSize = nonSyncSafeFrameSize;
-                  LOG.warn(loggingFilename + ":" +
-                               "Assuming frame size is NOT stored as a sync safe integer:" +
-                               identifier);
+                  LOG.log(WARN, loggingFilename + ":" +
+                      "Assuming frame size is NOT stored as a sync safe integer:" +
+                      identifier);
                 }
                 //no data found so assume entered padding in which case assume it is last
                 //frame and we are ok whereas we didn't hit padding when using syncsafe integer
@@ -896,9 +900,9 @@ import java.util.NoSuchElementException;
                 //the frame data whereas this has reached end of frames.
                 else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer)) {
                   frameSize = nonSyncSafeFrameSize;
-                  LOG.warn(loggingFilename + ":" +
-                               "Assuming frame size is NOT stored as a sync safe integer:" +
-                               identifier);
+                  LOG.log(WARN, loggingFilename + ":" +
+                      "Assuming frame size is NOT stored as a sync safe integer:" +
+                      identifier);
                 }
                 //invalid so assume syncsafe as that is is the standard
               } else {
@@ -1098,27 +1102,27 @@ import java.util.NoSuchElementException;
     }
 
     void logEnabledFlags() {
-      if (isNonStandardFlags() && LOG.isWarnEnabled()) {
-        LOG.warn("{}:{} Unknown Encoding Flags:{}", loggingFilename, identifier, Hex.asHex(flags));
+      if (isNonStandardFlags()) {
+        LOG.log(WARN, "%s:%s Unknown Encoding Flags:%s", loggingFilename, identifier, Hex.asHex(flags));
       }
       if (isCompression()) {
-        LOG.warn(ErrorMessage.MP3_FRAME_IS_COMPRESSED, loggingFilename, identifier);
+        LOG.log(WARN, ErrorMessage.MP3_FRAME_IS_COMPRESSED, loggingFilename, identifier);
       }
 
       if (isEncryption()) {
-        LOG.warn(ErrorMessage.MP3_FRAME_IS_ENCRYPTED, loggingFilename, identifier);
+        LOG.log(WARN, ErrorMessage.MP3_FRAME_IS_ENCRYPTED, loggingFilename, identifier);
       }
 
       if (isGrouping()) {
-        LOG.debug(ErrorMessage.MP3_FRAME_IS_GROUPED, loggingFilename, identifier);
+        LOG.log(DEBUG, ErrorMessage.MP3_FRAME_IS_GROUPED, loggingFilename, identifier);
       }
 
       if (isUnsynchronised()) {
-        LOG.debug(ErrorMessage.MP3_FRAME_IS_UNSYNCHRONISED, loggingFilename, identifier);
+        LOG.log(DEBUG, ErrorMessage.MP3_FRAME_IS_UNSYNCHRONISED, loggingFilename, identifier);
       }
 
       if (isDataLengthIndicator()) {
-        LOG.debug(ErrorMessage.MP3_FRAME_IS_DATA_LENGTH_INDICATOR, loggingFilename, identifier);
+        LOG.log(DEBUG, ErrorMessage.MP3_FRAME_IS_DATA_LENGTH_INDICATOR, loggingFilename, identifier);
       }
     }
 
@@ -1205,9 +1209,7 @@ import java.util.NoSuchElementException;
 
     void unsetNonStandardFlags() {
       if (isNonStandardFlags()) {
-        if (LOG.isWarnEnabled()) {
-          LOG.warn("{}:{}:Unsetting Unknown Encoding Flags:{}", loggingFilename, getIdentifier(), Hex.asHex(flags));
-        }
+        LOG.log(WARN, "%s:%s:Unsetting Unknown Encoding Flags:%s", loggingFilename, getIdentifier(), Hex.asHex(flags));
         flags &= (byte)~FileConstants.BIT7;
         flags &= (byte)~FileConstants.BIT5;
         flags &= (byte)~FileConstants.BIT4;

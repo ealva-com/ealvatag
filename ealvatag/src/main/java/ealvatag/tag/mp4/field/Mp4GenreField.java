@@ -1,12 +1,16 @@
 package ealvatag.tag.mp4.field;
 
+import ealvalog.LogLevel;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.reference.GenreTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvalog.Logger;
+import ealvalog.Loggers;
+
+import static ealvalog.LogLevel.*;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -18,7 +22,7 @@ import java.util.ArrayList;
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */
 public class Mp4GenreField extends Mp4TagTextNumberField {
-    private static final Logger LOG = LoggerFactory.getLogger(Mp4GenreField.class);
+    private static final Logger LOG = Loggers.get(Log.MARKER);
 
     public Mp4GenreField(String id, ByteBuffer data) throws UnsupportedEncodingException {
         super(id, data);
@@ -102,10 +106,10 @@ public class Mp4GenreField extends Mp4TagTextNumberField {
             //Some apps set genre to invalid value, we dont disguise this by setting content to empty string we leave
             //as null so apps can handle if they wish, but we do display a warning to make them aware.
             if (content == null) {
-                LOG.warn(ErrorMessage.MP4_GENRE_OUT_OF_RANGE, genreId);
+                LOG.log(WARN, ErrorMessage.MP4_GENRE_OUT_OF_RANGE, genreId);
             }
         } else {
-            LOG.warn(ErrorMessage.MP4_NO_GENREID_FOR_GENRE, header.getDataLength());
+            LOG.log(WARN, ErrorMessage.MP4_NO_GENREID_FOR_GENRE, header.getDataLength());
         }
     }
 }

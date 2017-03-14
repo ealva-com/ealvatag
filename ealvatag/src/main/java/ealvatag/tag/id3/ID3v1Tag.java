@@ -26,8 +26,11 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.logging.Log;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Key;
@@ -39,9 +42,9 @@ import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.UnsupportedFieldException;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.reference.GenreTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.TRACE;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
@@ -73,7 +76,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
   private static final int FIELD_COMMENT_POS = 97;
   static final int BYTE_TO_UNSIGNED = 0xff;
   static final int GENRE_UNDEFINED = 0xff;
-  private static final Logger LOG = LoggerFactory.getLogger(ID3v1Tag.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
   private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
   static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
   private static final byte RELEASE = 1;
@@ -169,7 +172,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     if (!seek(byteBuffer)) {
       throw new TagNotFoundException(loggingFilename + ":" + "ID3v1 tag not found");
     }
-    LOG.debug("{}:Reading v1 tag", loggingFilename);
+    LOG.log(DEBUG, "%s:Reading v1 tag", loggingFilename);
     //Do single file read of data to cut down on file reads
     byte[] dataBuffer = new byte[TAG_LENGTH];
     byteBuffer.position(0);
@@ -186,10 +189,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     }
     album = new String(dataBuffer, FIELD_ALBUM_POS, FIELD_ALBUM_LENGTH, StandardCharsets.ISO_8859_1).trim();
     m = AbstractID3v1Tag.endofStringPattern.matcher(album);
-    LOG.trace("{}:Orig Album is:{}", loggingFilename, comment);
+    LOG.log(TRACE, "%s:Orig Album is:%s", loggingFilename, comment);
     if (m.find()) {
       album = album.substring(0, m.start());
-      LOG.trace("{}:Album is:{}", loggingFilename, album);
+      LOG.log(TRACE, "%s:Album is:%s", loggingFilename, album);
     }
     year = new String(dataBuffer, FIELD_YEAR_POS, FIELD_YEAR_LENGTH, StandardCharsets.ISO_8859_1).trim();
     m = AbstractID3v1Tag.endofStringPattern.matcher(year);
@@ -198,10 +201,10 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
     }
     comment = new String(dataBuffer, FIELD_COMMENT_POS, FIELD_COMMENT_LENGTH, StandardCharsets.ISO_8859_1).trim();
     m = AbstractID3v1Tag.endofStringPattern.matcher(comment);
-    LOG.trace("{}:Orig Comment is:{}", loggingFilename, comment);
+    LOG.log(TRACE, "%s:Orig Comment is:%s", loggingFilename, comment);
     if (m.find()) {
       comment = comment.substring(0, m.start());
-      LOG.trace("{}:Comment is:{}", loggingFilename, comment);
+      LOG.log(TRACE, "%s:Comment is:%s", loggingFilename, comment);
     }
     genre = dataBuffer[FIELD_GENRE_POS];
 
@@ -223,7 +226,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
    * Write this tag to the file, replacing any tag previously existing
    */
   public void write(RandomAccessFile file) throws IOException {
-    LOG.debug("Saving ID3v1 tag to file");
+    LOG.log(DEBUG, "Saving ID3v1 tag to file");
     byte[] buffer = new byte[TAG_LENGTH];
     int i;
     String str;
@@ -270,7 +273,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
       buffer[offset] = genre;
     }
     file.write(buffer);
-    LOG.debug("Saved ID3v1 tag to file");
+    LOG.log(DEBUG, "Saved ID3v1 tag to file");
   }
 
   /**

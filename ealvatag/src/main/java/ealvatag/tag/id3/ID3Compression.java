@@ -1,13 +1,15 @@
 package ealvatag.tag.id3;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidFrameException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
 import static ealvatag.logging.ErrorMessage.ID3_UNABLE_TO_DECOMPRESS_FRAME;
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
 
 import java.nio.ByteBuffer;
+import java.util.Locale;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -17,9 +19,8 @@ import java.util.zip.Inflater;
  * Is currently required for V23Frames and V24Frames
  */
 //TODO also need to support compress framedata
-@SuppressWarnings("Duplicates")
-class ID3Compression {
-  private static Logger LOG = LoggerFactory.getLogger(ID3Compression.class);
+@SuppressWarnings("Duplicates") class ID3Compression {
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Decompress realFrameSize bytes to decompressedFrameSize bytes and return as ByteBuffer
@@ -29,7 +30,7 @@ class ID3Compression {
                                ByteBuffer byteBuffer,
                                int decompressedFrameSize,
                                int realFrameSize) throws InvalidFrameException {
-    LOG.debug("{}:About to decompress {} bytes, expect result to be:{} bytes", filename, realFrameSize, decompressedFrameSize);
+    LOG.log(DEBUG, "%s:About to decompress %s bytes, expect result to be:%s bytes", filename, realFrameSize, decompressedFrameSize);
     // Decompress the bytes into this buffer, size initialized from header field
     byte[] result = new byte[decompressedFrameSize];
     byte[] input = new byte[realFrameSize];
@@ -44,15 +45,13 @@ class ID3Compression {
     decompresser.setInput(input);
     try {
       int inflatedTo = decompresser.inflate(result);
-      LOG.debug("{}:Decompressed to {} bytes", inflatedTo);
+      LOG.log(DEBUG, "%s:Decompressed to %s bytes", inflatedTo);
     } catch (DataFormatException dfe) {
-      LOG.debug("Unable to decompress this frame:{}", identifier, dfe);
+      LOG.log(DEBUG, "Unable to decompress this frame:%s", identifier, dfe);
 
       //Update position of main buffer, so no attempt is made to reread these bytes
       byteBuffer.position(byteBuffer.position() + realFrameSize);
-      throw new InvalidFrameException(exceptionMsg(ID3_UNABLE_TO_DECOMPRESS_FRAME,
-                                                   identifier,
-                                                   filename),
+      throw new InvalidFrameException(String.format(Locale.getDefault(), ID3_UNABLE_TO_DECOMPRESS_FRAME, identifier, filename),
                                       dfe);
     }
     decompresser.end();
@@ -64,7 +63,8 @@ class ID3Compression {
 //                                     Buffer byteBuffer,
 //                                     int decompressedFrameSize,
 //                                     int realFrameSize) throws InvalidFrameException {
-//    LOG.debug("{}:About to decompress {} bytes, expect result to be:{} bytes", filename, realFrameSize, decompressedFrameSize);
+//    LOG.log(LogLevel.DEBUG, "%s:About to decompress %s bytes, expect result to be:%s bytes", filename, realFrameSize,
+// decompressedFrameSize);
 //    // Decompress the bytes into this buffer, size initialized from header field
 //    byte[] result = new byte[decompressedFrameSize];
 //    byte[] input = new byte[realFrameSize];
@@ -75,9 +75,9 @@ class ID3Compression {
 //    decompresser.setInput(input);
 //    try {
 //      int inflatedTo = decompresser.inflate(result);
-//      LOG.debug(filename + ":Decompressed to " + inflatedTo + " bytes");
+//      LOG.log(LogLevel.DEBUG, filename + ":Decompressed to " + inflatedTo + " bytes");
 //    } catch (DataFormatException dfe) {
-//      LOG.debug("Unable to decompress this frame:" + identifier, dfe);
+//      LOG.log(LogLevel.DEBUG, "Unable to decompress this frame:" + identifier, dfe);
 //
 //      //Update position of main buffer, so no attempt is made to reread these bytes
 ////            byteBuffer.position(byteBuffer.position() + realFrameSize);

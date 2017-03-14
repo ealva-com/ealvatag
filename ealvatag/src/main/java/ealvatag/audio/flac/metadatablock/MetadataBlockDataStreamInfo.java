@@ -19,8 +19,9 @@
 package ealvatag.audio.flac.metadatablock;
 
 import ealvatag.audio.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -59,9 +60,6 @@ import java.nio.channels.FileChannel;
 public class MetadataBlockDataStreamInfo
         implements MetadataBlockData {
     public static final int STREAM_INFO_DATA_LENGTH = 34;
-
-    // Logger Object
-    public static Logger LOG = LoggerFactory.getLogger(MetadataBlockDataStreamInfo.class);
 
     private int minBlockSize, maxBlockSize, minFrameSize, maxFrameSize, samplingRate, samplingRatePerChannel,
             bitsPerSample, noOfChannels, noOfSamples;

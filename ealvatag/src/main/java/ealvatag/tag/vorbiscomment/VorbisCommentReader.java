@@ -19,12 +19,16 @@
  */
 package ealvatag.tag.vorbiscomment;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.logging.ErrorMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvatag.logging.Log;
+
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 
@@ -51,7 +55,7 @@ import java.io.IOException;
  */
 public class VorbisCommentReader {
   // Logger Object
-  private static Logger LOG = LoggerFactory.getLogger(VorbisCommentReader.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   private static final int FIELD_VENDOR_LENGTH_POS = 0;
 //    public static final int FIELD_VENDOR_STRING_POS = 4;
@@ -84,14 +88,14 @@ public class VorbisCommentReader {
     System.arraycopy(rawdata, pos, b, 0, vendorStringLength);
     pos += vendorStringLength;
     tag.setVendor(new String(b, VorbisHeader.CHARSET_UTF_8));
-    LOG.debug("Vendor is:{}", tag.getVendor());
+    LOG.log(DEBUG, "Vendor is:%s", tag.getVendor());
 
     b = new byte[FIELD_USER_COMMENT_LIST_LENGTH];
     System.arraycopy(rawdata, pos, b, 0, FIELD_USER_COMMENT_LIST_LENGTH);
     pos += FIELD_USER_COMMENT_LIST_LENGTH;
 
     int userComments = Utils.getIntLE(b);
-    LOG.debug("Number of user comments:{}", userComments);
+    LOG.log(DEBUG, "Number of user comments:%s", userComments);
 
     for (int i = 0; i < userComments; i++) {
       b = new byte[FIELD_COMMENT_LENGTH_LENGTH];
@@ -99,13 +103,13 @@ public class VorbisCommentReader {
       pos += FIELD_COMMENT_LENGTH_LENGTH;
 
       int commentLength = Utils.getIntLE(b);
-      LOG.debug("Next Comment Length:{}", commentLength);
+      LOG.log(DEBUG, "Next Comment Length:%s", commentLength);
 
       if (commentLength > JAUDIOTAGGER_MAX_COMMENT_LENGTH) {
-        LOG.warn(ErrorMessage.VORBIS_COMMENT_LENGTH_TOO_LARGE, commentLength);
+        LOG.log(WARN, ErrorMessage.VORBIS_COMMENT_LENGTH_TOO_LARGE, commentLength);
         break;
       } else if (commentLength > rawdata.length) {
-        LOG.warn(ErrorMessage.VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER, commentLength, rawdata.length);
+        LOG.log(WARN, ErrorMessage.VORBIS_COMMENT_LENGTH_LARGE_THAN_HEADER, commentLength, rawdata.length);
         break;
       } else {
         b = new byte[commentLength];
@@ -113,7 +117,7 @@ public class VorbisCommentReader {
         pos += commentLength;
 
         VorbisCommentTagField fieldComment = new VorbisCommentTagField(b);
-        LOG.debug("Adding:{}", fieldComment.getId());
+        LOG.log(DEBUG, "Adding:%s", fieldComment.getId());
         tag.addField(fieldComment);
       }
     }

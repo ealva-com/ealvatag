@@ -24,6 +24,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.UnsupportedFileType;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -35,6 +37,7 @@ import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.AbstractTagDisplayFormatter;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
+import ealvatag.logging.Log;
 import ealvatag.logging.PlainTextTagDisplayFormatter;
 import ealvatag.logging.XMLTagDisplayFormatter;
 import ealvatag.tag.Tag;
@@ -52,11 +55,12 @@ import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.id3.Id3v2Header;
 import ealvatag.tag.lyrics3.AbstractLyrics3;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkState;
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,6 +70,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Locale;
 
 /**
  * This class represents a physical MP3 File
@@ -81,7 +86,7 @@ public class MP3File extends AudioFileImpl {
   private static final int LOAD_LYRICS3 = 8;
 
   private static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
-  private static final Logger LOG = LoggerFactory.getLogger(MP3File.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
   private static final int MINIMUM_FILESIZE = 150;
 
   private static AbstractTagDisplayFormatter tagFormatter;
@@ -147,7 +152,7 @@ public class MP3File extends AudioFileImpl {
 
         //If the audio header is not straight after the end of the tag then search from start of file
         if (audioStart != mp3AudioHeader.getMp3StartByte()) {
-          LOG.trace("First header found after tag:{}", mp3AudioHeader);
+          LOG.log(TRACE, "First header found after tag:%s", mp3AudioHeader);
           mp3AudioHeader = checkAudioStart(fileOperator, audioStart, mp3AudioHeader, file.getPath());
           audioStart = mp3AudioHeader.getMp3StartByte();
         }
@@ -201,13 +206,13 @@ public class MP3File extends AudioFileImpl {
 
   private void readV1Tag(String fileName, FileOperator newFile, int loadOptions) throws IOException {
     if ((loadOptions & LOAD_IDV1TAG) != 0) {
-      LOG.debug("Attempting to read id3v1tags");
+      LOG.log(DEBUG, "Attempting to read id3v1tags");
 
 
       try {
         id3v1tag = new ID3v11Tag(newFile, fileName);
       } catch (TagNotFoundException ex) {
-        LOG.trace("No ids3v11 tag found");
+        LOG.log(TRACE, "No ids3v11 tag found");
       }
 
       try {
@@ -215,7 +220,7 @@ public class MP3File extends AudioFileImpl {
           id3v1tag = new ID3v1Tag(newFile, fileName);
         }
       } catch (TagNotFoundException ex) {
-        LOG.trace("No id3v1 tag found");
+        LOG.log(TRACE, "No id3v1 tag found");
       }
     }
   }
@@ -232,35 +237,33 @@ public class MP3File extends AudioFileImpl {
     MP3AudioHeader headerOne;
     MP3AudioHeader headerTwo;
 
-    LOG.warn(ErrorMessage.MP3_ID3TAG_LENGTH_INCORRECT,
-             filePath,
-             Hex.asHex(startByte),
-             Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
+    LOG.log(WARN, ErrorMessage.MP3_ID3TAG_LENGTH_INCORRECT,
+            filePath,
+            Hex.asHex(startByte),
+            Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
 
     //because we cant agree on start location we reread the audioheader from the start of the file, at least
     //this way we cant overwrite the audio although we might overwrite part of the tag if we write this file
     //back later
     headerOne = new MP3AudioHeader(fileOperator, 0, filePath);
-    LOG.trace("Checking from start:{}", headerOne);
+    LOG.log(TRACE, "Checking from start:%s", headerOne);
 
     //Although the id3 tag size appears to be incorrect at least we have found the same location for the start
     //of audio whether we start searching from start of file or at the end of the alleged of file so no real
     //problem
     if (firstHeaderAfterTag.getMp3StartByte() == headerOne.getMp3StartByte()) {
-      LOG.trace(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED, filePath, Hex.asHex(headerOne.getMp3StartByte()));
+      LOG.log(TRACE, ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED, filePath, Hex.asHex(headerOne.getMp3StartByte()));
       return firstHeaderAfterTag;
     } else {
 
       // TODO: 2/6/17 There is currently no test that executes this code path
 
       //We get a different value if read from start, can't guarantee 100% correct lets do some more checks
-      LOG.trace(ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
+      LOG.log(TRACE, ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
 
       //Same frame count so probably both audio headers with newAudioHeader being the first one
       if (firstHeaderAfterTag.getNumberOfFrames() == headerOne.getNumberOfFrames()) {
-        if (LOG.isWarnEnabled()) {
-          LOG.warn(ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
-        }
+        LOG.log(WARN, ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
         return headerOne;
       }
 
@@ -281,9 +284,7 @@ public class MP3File extends AudioFileImpl {
       //It matches the header we found when doing the original search from after the ID3Tag therefore it
       //seems that newAudioHeader was a false match and the original header was correct
       if (headerTwo.getMp3StartByte() == firstHeaderAfterTag.getMp3StartByte()) {
-        if (LOG.isWarnEnabled()) {
-          LOG.warn(ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED, filePath, Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
-        }
+        LOG.log(WARN, ErrorMessage.MP3_START_OF_AUDIO_CONFIRMED, filePath, Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
         return firstHeaderAfterTag;
       }
 
@@ -292,16 +293,12 @@ public class MP3File extends AudioFileImpl {
       //however it maybe that neither are really headers and just contain the same data being misrepresented as
       // headers.
       if (headerTwo.getNumberOfFrames() == headerOne.getNumberOfFrames()) {
-        if (LOG.isWarnEnabled()) {
-          LOG.warn(ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
-        }
+        LOG.log(WARN, ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(headerOne.getMp3StartByte()));
         return headerOne;
       }
       ///Doesn't match the frameCount lets go back to the original header
       else {
-        if (LOG.isWarnEnabled()) {
-          LOG.warn(ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
-        }
+        LOG.log(WARN, ErrorMessage.MP3_RECALCULATED_START_OF_MP3_AUDIO, filePath, Hex.asHex(firstHeaderAfterTag.getMp3StartByte()));
         return firstHeaderAfterTag;
       }
     }
@@ -313,7 +310,7 @@ public class MP3File extends AudioFileImpl {
    * @throws IOException if read error
    */
   private boolean isFilePortionNull(int startByte, int endByte) throws IOException {
-    LOG.trace("Checking file portion:{}:{}", Hex.asHex(startByte), Hex.asHex(endByte));
+    LOG.log(TRACE, "Checking file portion:%s:%s", Hex.asHex(startByte), Hex.asHex(endByte));
     FileInputStream fis = null;
     FileChannel fc = null;
     try {
@@ -339,11 +336,6 @@ public class MP3File extends AudioFileImpl {
     return true;
   }
 
-  /**
-   * Returns the <code>ID3v2</code> tag for this datatype.
-   *
-   * @return the <code>ID3v2</code> tag for this datatype
-   */
   public AbstractID3v2Tag getID3v2Tag() {
     return id3v2tag;
   }
@@ -352,7 +344,6 @@ public class MP3File extends AudioFileImpl {
    * Sets the v2 tag to the v2 tag provided as an argument.
    * Also store a v24 version of tag as v24 is the interface to be used
    * when talking with client applications.
-   *
    */
   public void setID3v2Tag(AbstractID3v2Tag id3v2tag) {
     this.id3v2tag = id3v2tag;
@@ -396,7 +387,6 @@ public class MP3File extends AudioFileImpl {
    * (fully) loaded using the standard methods.
    *
    * @param outputFile to write the data to
-   *
    */
   public File extractID3v2TagDataIntoFile(File outputFile) throws TagNotFoundException, IOException {
     int startByte = (int)((MP3AudioHeader)audioHeader).getMp3StartByte();
@@ -433,7 +423,6 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Return audio header
-   *
    */
   public MP3AudioHeader getMP3AudioHeader() {
     return (MP3AudioHeader)getAudioHeader();
@@ -449,7 +438,7 @@ public class MP3File extends AudioFileImpl {
   }
 
   public void setID3v1Tag(Tag id3v1tag) {
-    LOG.trace("setting id3v1tag tag");
+    LOG.log(TRACE, "setting id3v1tag tag");
     this.id3v1tag = (ID3v1Tag)id3v1tag;
   }
 
@@ -524,7 +513,7 @@ public class MP3File extends AudioFileImpl {
 //
 //      MP3AudioHeader audioHeader = new MP3AudioHeader(fileOperator, startByte, file.getPath());
 //      if (startByte != audioHeader.getMp3StartByte()) {
-//        LOG.trace("First header found after tag:" + audioHeader);
+//        LOG.log(LogLevel.TRACE, "First header found after tag:" + audioHeader);
 //        audioHeader = checkAudioStart(fileOperator, startByte, audioHeader, file.getPath());
 //      }
 //      return audioHeader.getMp3StartByte();
@@ -557,7 +546,7 @@ public class MP3File extends AudioFileImpl {
    * @param mp3tag Any MP3Tag dataType can be used and will be converted into a new ID3v1_1 dataType.
    */
   public void setID3v1Tag(BaseID3Tag mp3tag) {
-    LOG.trace("setting tagv1:abstract");
+    LOG.log(TRACE, "setting tagv1:abstract");
     id3v1tag = new ID3v11Tag(mp3tag);
   }
 
@@ -597,7 +586,6 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Set v2 tag ,don't need to set v24 tag because saving
-   *
    */
   //TODO temp its rather messy
   public void setID3v2TagOnly(AbstractID3v2Tag id3v2tag) {
@@ -655,7 +643,6 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Remove tag from file
-   *
    */
   public void delete(BaseID3Tag mp3tag) throws IOException {
     RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
@@ -703,7 +690,7 @@ public class MP3File extends AudioFileImpl {
     //Ensure we are dealing with absolute filepaths not relative ones
     File file = fileToSave.getAbsoluteFile();
 
-    LOG.trace("Saving  : {}", file);
+    LOG.log(TRACE, "Saving  : %s", file);
 
     //Checks before starting write
     precheck(file);
@@ -717,15 +704,15 @@ public class MP3File extends AudioFileImpl {
           (new ID3v24Tag()).delete(rfile);
           (new ID3v23Tag()).delete(rfile);
           (new ID3v22Tag()).delete(rfile);
-          LOG.trace("Deleting ID3v2 tag:{}", file);
+          LOG.log(TRACE, "Deleting ID3v2 tag:%s", file);
           rfile.close();
         } else {
-          LOG.trace("Writing ID3v2 tag:{}", file);
+          LOG.log(TRACE, "Writing ID3v2 tag:%s", file);
           final MP3AudioHeader mp3AudioHeader = (MP3AudioHeader)this.getAudioHeader();
           final long mp3StartByte = mp3AudioHeader.getMp3StartByte();
           final long newMp3StartByte = id3v2tag.write(file, mp3StartByte);
           if (mp3StartByte != newMp3StartByte) {
-            LOG.trace("New mp3 start byte: {}", newMp3StartByte);
+            LOG.log(TRACE, "New mp3 start byte: %s", newMp3StartByte);
             mp3AudioHeader.setMp3StartByte(newMp3StartByte);
           }
 
@@ -741,20 +728,20 @@ public class MP3File extends AudioFileImpl {
       }
       //ID3v1 tag
       if (TagOptionSingleton.getInstance().isId3v1Save()) {
-        LOG.trace("Processing ID3v1");
+        LOG.log(TRACE, "Processing ID3v1");
         if (id3v1tag == null) {
-          LOG.trace("Deleting ID3v1");
+          LOG.log(TRACE, "Deleting ID3v1");
           (new ID3v1Tag()).delete(rfile);
         } else {
-          LOG.trace("Saving ID3v1");
+          LOG.log(TRACE, "Saving ID3v1");
           id3v1tag.write(rfile);
         }
       }
     } catch (FileNotFoundException ex) {
-      LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file, ex);
+      LOG.log(ERROR, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file, ex);
       throw ex;
     } catch (IOException | RuntimeException iex) {
-      LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE, file, iex);
+      LOG.log(ERROR, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE, file, iex);
       throw iex;
     } finally {
       if (rfile != null) {
@@ -765,22 +752,21 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Check can write to file
-   *
    */
   private void precheck(File file) throws IOException {
     if (!file.exists()) {
-      LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file);
-      throw new IOException(exceptionMsg(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file.getName()));
+      LOG.log(ERROR, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file);
+      throw new IOException(String.format(Locale.getDefault(), ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file.getName()));
     }
 
     if (TagOptionSingleton.getInstance().isCheckIsWritable() && !file.canWrite()) {
-      LOG.error(ErrorMessage.GENERAL_WRITE_FAILED, file.getName());
-      throw new IOException(exceptionMsg(ErrorMessage.GENERAL_WRITE_FAILED, file.getName()));
+      LOG.log(ERROR, ErrorMessage.GENERAL_WRITE_FAILED, file.getName());
+      throw new IOException(String.format(Locale.getDefault(), ErrorMessage.GENERAL_WRITE_FAILED, file.getName()));
     }
 
     if (file.length() <= MINIMUM_FILESIZE) {
-      LOG.error(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL, file.getName());
-      throw new IOException(exceptionMsg(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL, file.getName()));
+      LOG.log(ERROR, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL, file.getName());
+      throw new IOException(String.format(Locale.getDefault(), ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_IS_TOO_SMALL, file.getName()));
     }
   }
 
@@ -788,7 +774,6 @@ public class MP3File extends AudioFileImpl {
    * Set the Tag
    * <p>
    * If the parameter tag is a v1tag then the v1 tag is set if v2tag then the v2tag.
-   *
    */
   public Tag setTag(Tag tag) {
     this.tag = (TagFieldContainer)tag;
@@ -802,16 +787,14 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Sets the ID3v1(_1)tag to the tag provided as an argument.
-   *
    */
   public void setID3v1Tag(ID3v1Tag id3v1tag) {
-    LOG.trace("setting id3v1tag tag");
+    LOG.log(TRACE, "setting id3v1tag tag");
     this.id3v1tag = id3v1tag;
   }
 
   /**
    * Create Default Tag
-   *
    */
   @Override
   public Tag makeDefaultTag() throws UnsupportedFileType {
@@ -820,7 +803,6 @@ public class MP3File extends AudioFileImpl {
 
   /**
    * Overridden to only consider ID3v2 Tag
-   *
    */
   @Override
   public Tag getTagOrSetNewDefault() throws UnsupportedFileType {
@@ -835,7 +817,6 @@ public class MP3File extends AudioFileImpl {
    * Get the ID3v2 tag and convert to preferred version or if the file doesn't have one at all
    * create a default tag of preferred version and set it. The file may already contain a ID3v1 tag but because
    * this is not terribly useful the v1tag is not considered for this problem.
-   *
    */
   @Override
   public Tag getConvertedTagOrSetNewDefault() {

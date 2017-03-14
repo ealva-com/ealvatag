@@ -18,16 +18,17 @@
  */
 package ealvatag.audio.mp4.atom;
 
+import ealvalog.LogLevel;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
+import ealvatag.logging.Log;
 import okio.BufferedSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static ealvatag.logging.ErrorMessage.MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID;
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -38,7 +39,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Everything in MP4s are held in boxes (formally known as atoms), they are held as a hierachial tree within the MP4.
+ * Everything in MP4s are held in boxes (aka atoms). They are held as a hierarchical tree within the MP4.
  * <p>
  * We are most interested in boxes that are used to hold metadata, but we have to know about some other boxes
  * as well in order to find them.
@@ -57,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Mp4BoxHeader {
   // Logger Object
-  private static Logger LOG = LoggerFactory.getLogger(Mp4BoxHeader.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   public static final int OFFSET_POS = 0;
   public static final int IDENTIFIER_POS = 4;
@@ -128,7 +129,6 @@ public class Mp4BoxHeader {
    * Create header using headerdata, expected to find header at headerdata current position
    * <p>
    * Note after processing adjusts position to immediately after header
-   *
    */
   public void update(ByteBuffer headerData) {
     //Read header data into byte array
@@ -142,13 +142,13 @@ public class Mp4BoxHeader {
     this.length = dataBuffer.getInt();
     this.id = Utils.readFourBytesAsChars(dataBuffer);
 
-    LOG.trace("Mp4BoxHeader id:{}:length:{}", id, length);
+    LOG.log(TRACE, "Mp4BoxHeader id:%s :length:%d", id, length);
     if (id.equals("\0\0\0\0")) {
-      throw new NullBoxIdException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id));
+      throw new NullBoxIdException(id);
     }
 
     if (length < HEADER_LENGTH) {
-      throw new InvalidBoxHeaderException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id, length));
+      throw new InvalidBoxHeaderException(id);
     }
   }
 
@@ -156,7 +156,7 @@ public class Mp4BoxHeader {
     length = source.readInt();
     id = source.readString(IDENTIFIER_LENGTH, StandardCharsets.ISO_8859_1);
     if ("\0\0\0\0".equals(id)) {
-      throw new NullBoxIdException(exceptionMsg(MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID, id));
+      throw new NullBoxIdException(id);
     }
   }
 
@@ -244,10 +244,9 @@ public class Mp4BoxHeader {
    * at a parent atom that also contains data and we havent yet processed the data. It will work
    * if we are at the start of a child box even if it not the required box as long as the box we are
    * looking for is the same level (or the level above in some cases).
-   *
    */
   static Mp4BoxHeader seekWithinLevel(FileChannel fc, String id) throws IOException {
-    LOG.debug("Started searching for:{} in file at:", id, fc.position());
+    LOG.log(LogLevel.DEBUG, "Started searching for:%s in file at:%s", id, fc.position());
 
     Mp4BoxHeader boxHeader = new Mp4BoxHeader();
     ByteBuffer headerBuffer = ByteBuffer.allocate(HEADER_LENGTH);
@@ -258,7 +257,7 @@ public class Mp4BoxHeader {
     headerBuffer.rewind();
     boxHeader.update(headerBuffer);
     while (!boxHeader.getId().equals(id)) {
-      LOG.debug("Found:{}  Still searching for:{} in file at:{}", boxHeader.getId(), id, fc.position());
+      LOG.log(LogLevel.DEBUG, "Found:%s  Still searching for:%s in file at:%s", boxHeader.getId(), id, fc.position());
 
       //Something gone wrong probably not at the start of an atom so return null;
       if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
@@ -270,7 +269,7 @@ public class Mp4BoxHeader {
       }
       headerBuffer.rewind();
       bytesRead = fc.read(headerBuffer);
-      LOG.debug("Header Bytes Read:{}", bytesRead);
+      LOG.log(LogLevel.DEBUG, "Header Bytes Read:%s", bytesRead);
       headerBuffer.rewind();
       if (bytesRead == Mp4BoxHeader.HEADER_LENGTH) {
         boxHeader.update(headerBuffer);
@@ -291,7 +290,7 @@ public class Mp4BoxHeader {
    * looking for is the same level (or the level above in some cases).
    */
   static Mp4BoxHeader seekWithinLevel(ByteBuffer data, String id) throws IOException {
-    LOG.debug("Started searching for:{} in bytebuffer at {}", id,  data.position());
+    LOG.log(LogLevel.DEBUG, "Started searching for:%s in bytebuffer at %s", id, data.position());
 
     Mp4BoxHeader boxHeader = new Mp4BoxHeader();
     if (data.remaining() >= Mp4BoxHeader.HEADER_LENGTH) {
@@ -300,7 +299,7 @@ public class Mp4BoxHeader {
       return null;
     }
     while (!boxHeader.getId().equals(id)) {
-      LOG.debug("Found:{} Still searching for:{} in bytebuffer at {}", boxHeader.getId(), id, data.position());
+      LOG.log(LogLevel.DEBUG, "Found:%s Still searching for:%s in bytebuffer at %s", boxHeader.getId(), id, data.position());
       //Something gone wrong probably not at the start of an atom so return null;
       if (boxHeader.getLength() < Mp4BoxHeader.HEADER_LENGTH) {
         return null;
@@ -316,7 +315,7 @@ public class Mp4BoxHeader {
         return null;
       }
     }
-    LOG.debug("Found:{} in bytebyter at{}", id, data.position());
+    LOG.log(LogLevel.DEBUG, "Found:%s in bytebyter at%s", id, data.position());
 
     return boxHeader;
   }

@@ -18,6 +18,9 @@
  */
 package ealvatag.audio.aiff;
 
+import ealvalog.LogLevel;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.aiff.chunk.AiffChunkSummary;
 import ealvatag.audio.aiff.chunk.AiffChunkType;
@@ -27,11 +30,10 @@ import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.iff.IffHeaderChunk;
+import ealvatag.logging.Log;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.aiff.AiffTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static ealvatag.audio.iff.IffHeaderChunk.SIGNATURE_LENGTH;
 import static ealvatag.audio.iff.IffHeaderChunk.SIZE_LENGTH;
@@ -48,28 +50,28 @@ import java.nio.channels.FileChannel;
  * Write Aiff Tag.
  */
 public class AiffTagWriter {
-  private static Logger LOG = LoggerFactory.getLogger(AiffTagWriter.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Delete given {@link Tag} from file.
    */
   public void delete(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
     try {
-      LOG.warn("{} Deleting tag from file", fileName);
+      LOG.log(LogLevel.WARN, "%s Deleting tag from file", fileName);
       final AiffTag existingTag = getExistingMetadata(fc, fileName);
       fc.position(0);
       if (existingTag.isExistingId3Tag() && existingTag.getID3Tag().getStartLocationInFile() != null) {
         ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
         if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
-          LOG.warn("{} Setting new length to:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk());
+          LOG.log(LogLevel.WARN, "%s Setting new length to:%d", fileName, existingTag.getStartLocationInFileOfId3Chunk());
           fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
         } else {
-          LOG.warn("{} Deleting tag chunk", fileName);
+          LOG.log(LogLevel.WARN, "%s Deleting tag chunk", fileName);
           deleteTagChunk(fc, existingTag, chunkHeader, fileName);
         }
         rewriteRiffHeaderSize(fc);
       }
-      LOG.warn("{} Deleted tag from file", fileName);
+      LOG.log(LogLevel.WARN, "%s Deleted tag from file", fileName);
     } catch (IOException ioe) {
       throw new CannotWriteException(fileName + ":" + ioe.getMessage());
     }
@@ -159,17 +161,17 @@ public class AiffTagWriter {
       }
     }
     final long newLength = fc.size() - lengthTagChunk;
-    LOG.error("{} Size of id3 chunk to delete is:{}:location:{}",
-              fileName,
-              lengthTagChunk,
-              existingTag.getStartLocationInFileOfId3Chunk());
+    LOG.log(LogLevel.ERROR, "%s Size of id3 chunk to delete is:%d:location:%d",
+            fileName,
+            lengthTagChunk,
+            existingTag.getStartLocationInFileOfId3Chunk());
 
     // position for reading after the id3 tag
     fc.position(existingTag.getStartLocationInFileOfId3Chunk() + lengthTagChunk);
 
     deleteTagChunkUsingSmallByteBufferSegments(existingTag, fc, newLength, lengthTagChunk);
     // truncate the file after the last chunk
-    LOG.error("{} Setting new length to:{}", fileName, newLength);
+    LOG.log(LogLevel.ERROR, "%s Setting new length to %d", fileName, newLength);
     fc.truncate(newLength);
   }
 
@@ -246,7 +248,7 @@ public class AiffTagWriter {
   }
 
   public void write(final Tag tag, FileChannel fc, final String fileName) throws CannotWriteException {
-    LOG.error("{} Writing Aiff tag to file", fileName);
+    LOG.log(LogLevel.ERROR, "%s Writing Aiff tag to file", fileName);
     AiffTag existingTag;
     try {
       existingTag = getExistingMetadata(fc, fileName);
@@ -266,8 +268,10 @@ public class AiffTagWriter {
         //Usual case
         if (!existingTag.isIncorrectlyAlignedTag()) {
           final ChunkHeader chunkHeader = seekToStartOfMetadata(fc, existingTag, fileName);
-          LOG.info(fileName + "Current Space allocated:" + existingTag.getSizeOfID3TagOnly() +
-                       ":NewTagRequires:" + bb.limit());
+          LOG.log(LogLevel.INFO, " %s Current Space allocated:%d new tag requires:%d",
+                  fileName,
+                  existingTag.getSizeOfID3TagOnly(),
+                  bb.limit());
 
           //Usual case ID3 is last chunk
           if (isAtEndOfFileAllowingForPaddingByte(existingTag, fc)) {
@@ -317,14 +321,14 @@ public class AiffTagWriter {
     ChunkSummary precedingChunk = AiffChunkSummary.getChunkBeforeStartingMetadataTag(existingTag);
     if (precedingChunk != null) {
       if (!Utils.isOddLength(precedingChunk.getEndLocation())) {
-        LOG.error("{} Truncating corrupted ID3 tags from:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk() - 1);
+        LOG.log(LogLevel.ERROR, "%s Truncating corrupted ID3 tags from:%d", fileName, existingTag.getStartLocationInFileOfId3Chunk() - 1);
         fc.truncate(existingTag.getStartLocationInFileOfId3Chunk() - 1);
       } else {
-        LOG.error("{} Truncating corrupted ID3 tags from:{}", fileName, existingTag.getStartLocationInFileOfId3Chunk());
+        LOG.log(LogLevel.ERROR, "%s Truncating corrupted ID3 tags from:%d", fileName, existingTag.getStartLocationInFileOfId3Chunk());
         fc.truncate(existingTag.getStartLocationInFileOfId3Chunk());
       }
     } else {
-      LOG.error("{} No preceding chunk trying to delete remainder of file", fileName);
+      LOG.log(LogLevel.ERROR, "%s No preceding chunk trying to delete remainder of file", fileName);
     }
   }
 

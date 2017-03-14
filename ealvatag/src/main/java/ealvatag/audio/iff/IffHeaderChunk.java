@@ -1,8 +1,11 @@
 package ealvatag.audio.iff;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvatag.logging.Log;
+
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -11,7 +14,7 @@ import java.nio.channels.FileChannel;
  * Common to all IFF formats such as Wav and Aiff
  */
 public class IffHeaderChunk {
-  public static Logger LOG = LoggerFactory.getLogger(IffHeaderChunk.class);
+  public static Logger LOG = Loggers.get(Log.MARKER);
 
   public static int SIGNATURE_LENGTH = 4;
   public static int SIZE_LENGTH = 4;
@@ -30,7 +33,7 @@ public class IffHeaderChunk {
 //    if (Utils.isOddLength(chunkHeader.getSize())) {
 //      // Must come out to an even byte boundary unless at end of file
 //      if (raf.getFilePointer() < raf.length()) {
-//        LOG.trace("Skipping Byte because on odd boundary");
+//        LOG.log(LogLevel.TRACE, "Skipping Byte because on odd boundary");
 //        raf.skipBytes(1);
 //      }
 //    }
@@ -40,7 +43,7 @@ public class IffHeaderChunk {
     if (Utils.isOddLength(chunkHeader.getSize())) {
       // Must come out to an even byte boundary unless at end of file
       if (fc.position() < fc.size()) {
-        LOG.trace("Skipping Byte because on odd boundary");
+        LOG.log(TRACE, "Skipping Byte because on odd boundary");
         fc.position(fc.position() + 1);
       }
     }

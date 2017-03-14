@@ -18,6 +18,8 @@
  */
 package ealvatag.audio.mp4;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -26,14 +28,15 @@ import ealvatag.audio.mp4.atom.Mp4HdlrBox;
 import ealvatag.audio.mp4.atom.Mp4MetaBox;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.mp4.Mp4Tag;
 import ealvatag.tag.mp4.Mp4TagCreator;
 import ealvatag.utils.tree.DefaultMutableTreeNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
 import static ealvatag.logging.ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_NUMBER_OF_TRACKS;
 
 import java.io.IOException;
@@ -41,6 +44,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -109,7 +113,7 @@ import java.util.List;
  */
 public class Mp4TagWriter {
   // Logger Object
-  private static Logger LOG = LoggerFactory.getLogger(Mp4TagWriter.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   private Mp4TagCreator tc = new Mp4TagCreator();
 
@@ -118,14 +122,13 @@ public class Mp4TagWriter {
    * Replace the {@code ilst} metadata.
    * <p>
    * Because it is the same size as the original data nothing else has to be modified.
-   *
    */
   private void writeMetadataSameSize(FileChannel fileReadChannel,
                                      FileChannel fileWriteChannel,
                                      Mp4BoxHeader ilstHeader,
                                      ByteBuffer newIlstData,
                                      Mp4BoxHeader tagsHeader) throws CannotWriteException, IOException {
-    LOG.debug("Writing:Option 1:Same Size");
+    LOG.log(DEBUG, "Writing:Option 1:Same Size");
 
     fileReadChannel.position(0);
     fileWriteChannel.transferFrom(fileReadChannel, 0, ilstHeader.getFilePos());
@@ -142,7 +145,6 @@ public class Mp4TagWriter {
    * {@code ilst} causing problems. So the solution is to convert the tags atom and its children into a free atom
    * whilst
    * leaving the chp1 atom alone.
-   *
    */
   private void writeNeroData(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader)
       throws IOException, CannotWriteException {
@@ -217,7 +219,7 @@ public class Mp4TagWriter {
                                                      List<Mp4StcoBox> stcos,
                                                      int sizeOfExistingMetaLevelFreeAtom)
       throws IOException, CannotWriteException {
-    LOG.debug("Writing:Option 1:Smaller Size");
+    LOG.log(DEBUG, "Writing:Option 1:Smaller Size");
 
     int ilstPositionRelativeToAfterMoovHeader =
         (int)(ilstHeader.getFilePos() - (moovHeader.getFilePos() + Mp4BoxHeader.HEADER_LENGTH));
@@ -227,7 +229,7 @@ public class Mp4TagWriter {
     int sizeRequiredByNewIlstAtom = newIlstData.limit();
 
     if (sizeOfExistingMetaLevelFreeAtom > 0) {
-      LOG.debug("Writing:Option 2:Smaller Size have free atom:{}:{}", ilstHeader.getLength(), sizeRequiredByNewIlstAtom);
+      LOG.log(DEBUG, "Writing:Option 2:Smaller Size have free atom:%s:%s", ilstHeader.getLength(), sizeRequiredByNewIlstAtom);
       writeDataUptoIncludingIlst(fileReadChannel, fileWriteChannel, ilstHeader, newIlstData);
 
       //Write the modified free atom that comes after ilst
@@ -247,7 +249,7 @@ public class Mp4TagWriter {
       //of tags has decreased by more 8 characters so there is enough room for the free boxes header we take
       //into account size of new header in calculating size of box
       if (newFreeSize > 0) {
-        LOG.debug("Writing:Option 3:Smaller Size can create free atom");
+        LOG.log(DEBUG, "Writing:Option 3:Smaller Size can create free atom");
         writeDataUptoIncludingIlst(fileReadChannel, fileWriteChannel, ilstHeader, newIlstData);
 
         //Create new free box
@@ -258,7 +260,7 @@ public class Mp4TagWriter {
       }
       //Ok everything in this bit of tree has to be recalculated because eight or less bytes smaller
       else {
-        LOG.debug("Writing:Option 4:Smaller Size <=8 cannot create free atoms");
+        LOG.log(DEBUG, "Writing:Option 4:Smaller Size <=8 cannot create free atoms");
 
         //Size will be this amount smaller
         int sizeReducedBy = ilstHeader.getLength() - sizeRequiredByNewIlstAtom;
@@ -303,7 +305,6 @@ public class Mp4TagWriter {
    * We can fit the metadata in under the meta item just by using some of the padding available in the {@code free}
    * atom under the {@code meta} atom need to take of the side of free header otherwise might end up with
    * solution where can fit in data, but can't fit in free atom header.
-   *
    */
   private void writeNewMetadataLargerButCanUseFreeAtom(FileChannel fileReadChannel,
                                                        FileChannel fileWriteChannel,
@@ -314,7 +315,7 @@ public class Mp4TagWriter {
                                                        int additionalSpaceRequiredForMetadata)
       throws IOException, CannotWriteException {
     int newFreeSize = sizeOfExistingMetaLevelFreeAtom - (additionalSpaceRequiredForMetadata);
-    LOG.debug("Writing:Option 5;Larger Size can use meta free atom need extra:{} bytes", newFreeSize);
+    LOG.log(DEBUG, "Writing:Option 5;Larger Size can use meta free atom need extra:%s bytes", newFreeSize);
 
     writeDataUptoIncludingIlst(fileReadChannel, fileWriteChannel, ilstHeader, newIlstData);
 
@@ -334,11 +335,10 @@ public class Mp4TagWriter {
    * @param tag     tag data
    * @param raf     current file
    * @param rafTemp temporary file for writing
-   *
    */
   public void write(TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
       throws CannotWriteException, IOException {
-    LOG.debug("Started writing tag data");
+    LOG.log(DEBUG, "Started writing tag data");
     FileChannel fileReadChannel = raf.getChannel();
     FileChannel fileWriteChannel = rafTemp.getChannel();
 
@@ -469,7 +469,7 @@ public class Mp4TagWriter {
       positionOfTopLevelFreeAtom = (int)mdatHeader.getFilePos();
     }
 
-    LOG.debug("Read header successfully ready for writing");
+    LOG.log(DEBUG, "Read header successfully ready for writing");
     //The easiest option since no difference in the size of the metadata so all we have to do is
     //create a new file identical to first file but with replaced ilst
     if (sizeOfExistingIlstAtom == sizeRequiredByNewIlstAtom) {
@@ -589,7 +589,6 @@ public class Mp4TagWriter {
    * Write the remainder of data in read channel to write channel data in
    * {@link TagOptionSingleton#getWriteChunkSize()}
    * chunks, needed if writing large amounts of data.
-   *
    */
   private void writeDataInChunks(FileChannel fileReadChannel, FileChannel fileWriteChannel)
       throws IOException, CannotWriteException {
@@ -615,7 +614,6 @@ public class Mp4TagWriter {
 
   /**
    * Replace tags atom (and children) by a {@code free} atom.
-   *
    */
   private void convertandWriteTagsAtomToFreeAtom(FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader)
       throws IOException {
@@ -627,7 +625,6 @@ public class Mp4TagWriter {
   /**
    * Write the data including new {@code ilst}.
    * <p>Can be used as long as we don't have to adjust the size of {@code moov} header.
-   *
    */
   private void writeDataUptoIncludingIlst(FileChannel fileReadChannel,
                                           FileChannel fileWriteChannel,
@@ -644,7 +641,6 @@ public class Mp4TagWriter {
    * Write data after {@code ilst} up to the end of the file.
    * <p>
    * <p>Can be used if don't need to adjust size of {@code moov} header of modify top level {@code free} atoms
-   *
    */
   private void writeDataAfterIlst(FileChannel fileReadChannel, FileChannel fileWriteChannel, Mp4BoxHeader tagsHeader)
       throws IOException, CannotWriteException {
@@ -660,7 +656,6 @@ public class Mp4TagWriter {
   /**
    * Determine the size of the {@code free} atom immediately after {@code ilst} atom at the same level (if any),
    * we can use this if {@code ilst} needs to grow or shrink because of more less metadata.
-   *
    */
   private int getMetaLevelFreeAtomSize(Mp4AtomTree atomTree) {
     int oldMetaLevelFreeAtomSize;//Level 4 - Free
@@ -690,14 +685,13 @@ public class Mp4TagWriter {
 
   /**
    * Check file written correctly.
-   *
    */
   private void checkFileWrittenCorrectly(RandomAccessFile rafTemp,
                                          Mp4BoxHeader mdatHeader,
                                          FileChannel fileWriteChannel,
                                          List<Mp4StcoBox> stcos) throws CannotWriteException, IOException {
 
-    LOG.debug("Checking file has been written correctly");
+    LOG.log(DEBUG, "Checking file has been written correctly");
 
     try {
       //Create a tree from the new file
@@ -729,9 +723,10 @@ public class Mp4TagWriter {
       final List<Mp4StcoBox> newStcos = newAtomTree.getStcos();
       if (newStcos.size() != stcos.size()) {
         // at the very least, we have to have the same number of 'stco' atoms
-        throw new CannotWriteException(ErrorMessage.exceptionMsg(MP4_CHANGES_TO_FILE_FAILED_INCORRECT_NUMBER_OF_TRACKS,
-                                                                 stcos.size(),
-                                                                 newStcos.size()));
+        throw new CannotWriteException(String.format(Locale.getDefault(),
+                                                     MP4_CHANGES_TO_FILE_FAILED_INCORRECT_NUMBER_OF_TRACKS,
+                                                     stcos.size(),
+                                                     newStcos.size()));
       }
       //Check offsets are correct, may not match exactly in original file so just want to make
       //sure that the discrepancy if any is preserved
@@ -743,27 +738,29 @@ public class Mp4TagWriter {
       for (int i = 0; i < newStcos.size(); i++) {
         final Mp4StcoBox newStco = newStcos.get(i);
         final Mp4StcoBox stco = stcos.get(i);
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("stco:Original First Offset {}", stco.getFirstOffSet());
-          LOG.debug("stco:Original Diff {}", stco.getFirstOffSet() - mdatHeader.getFilePos());
-          LOG.debug("stco:Original Mdat Pos {}", mdatHeader.getFilePos());
-          LOG.debug("stco:New First Offset {}", newStco.getFirstOffSet());
-          LOG.debug("stco:New Diff {}", (newStco.getFirstOffSet() - newMdatHeader.getFilePos()));
-          LOG.debug("stco:New Mdat Pos {}", newMdatHeader.getFilePos());
+        if (LOG.isLoggable(DEBUG, Log.MARKER, null)) {
+          LOG.log(DEBUG, "stco:Original First Offset %s", stco.getFirstOffSet());
+          LOG.log(DEBUG, "stco:Original Diff %s", stco.getFirstOffSet() - mdatHeader.getFilePos());
+          LOG.log(DEBUG, "stco:Original Mdat Pos %s", mdatHeader.getFilePos());
+          LOG.log(DEBUG, "stco:New First Offset %s", newStco.getFirstOffSet());
+          LOG.log(DEBUG, "stco:New Diff %s", (newStco.getFirstOffSet() - newMdatHeader.getFilePos()));
+          LOG.log(DEBUG, "stco:New Mdat Pos %s", newMdatHeader.getFilePos());
         }
 
         if (i == 0) {
           final int diff = (int)(stco.getFirstOffSet() - mdatHeader.getFilePos());
           if ((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) != diff) {
             int discrepancy = (int)((newStco.getFirstOffSet() - newMdatHeader.getFilePos()) - diff);
-            throw new CannotWriteException(ErrorMessage.exceptionMsg(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS,
-                                                                     discrepancy));
+            throw new CannotWriteException(String.format(Locale.getDefault(),
+                                                         ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS,
+                                                         discrepancy));
           }
           shift = stco.getFirstOffSet() - newStco.getFirstOffSet();
         } else {
           if (shift != stco.getFirstOffSet() - newStco.getFirstOffSet()) {
-            throw new CannotWriteException(ErrorMessage.exceptionMsg(ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS,
-                                                                     shift));
+            throw new CannotWriteException(String.format(Locale.getDefault(),
+                                                         ErrorMessage.MP4_CHANGES_TO_FILE_FAILED_INCORRECT_OFFSETS,
+                                                         shift));
           }
         }
       }
@@ -779,7 +776,7 @@ public class Mp4TagWriter {
       rafTemp.close();
       fileWriteChannel.close();
     }
-    LOG.debug("File has been written correctly");
+    LOG.log(DEBUG, "File has been written correctly");
   }
 
   /**
@@ -800,7 +797,6 @@ public class Mp4TagWriter {
   /**
    * Use when we need to write metadata and there is no existing {@code udta} atom so we have to create the complete
    * udta/metadata structure.
-   *
    */
   private void writeNoExistingUdtaAtom(FileChannel fileReadChannel,
                                        FileChannel fileWriteChannel,
@@ -820,7 +816,7 @@ public class Mp4TagWriter {
       throws IOException, CannotWriteException
 
   {
-    LOG.error("Writing:Option 5.1;No udta atom");
+    LOG.log(ERROR, "Writing:Option 5.1;No udta atom");
     long endOfMoov = moovHeader.getFileEndPos();
     Mp4HdlrBox hdlrBox = Mp4HdlrBox.createiTunesStyleHdlrBox();
     Mp4MetaBox metaBox = Mp4MetaBox.createiTunesStyleMetaBox(hdlrBox.getHeader().getLength() + newIlstData.limit());
@@ -870,7 +866,7 @@ public class Mp4TagWriter {
                      topLevelFreeSize,
                      additionalMetaSizeThatWontFitWithinMetaAtom);
     } else {
-      LOG.debug("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
+      LOG.log(DEBUG, "Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
     }
     writeDataInChunks(fileReadChannel, fileWriteChannel);
   }
@@ -899,7 +895,7 @@ public class Mp4TagWriter {
 
   {
     //Create a new udta atom
-    LOG.error("Writing:Option 5.2;No meta atom");
+    LOG.log(ERROR, "Writing:Option 5.2;No meta atom");
 
     long endOfMoov = moovHeader.getFileEndPos();
 
@@ -970,7 +966,7 @@ public class Mp4TagWriter {
                      topLevelFreeSize,
                      additionalMetaSizeThatWontFitWithinMetaAtom);
     } else {
-      LOG.debug("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
+      LOG.log(DEBUG, "Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
     }
     writeDataInChunks(fileReadChannel, fileWriteChannel);
   }
@@ -996,7 +992,7 @@ public class Mp4TagWriter {
                                          int positionInExistingFileOfWhereNewIlstAtomShouldBeWritten,
                                          int existingSizeOfIlstData)
       throws IOException, CannotWriteException {
-    LOG.debug("Writing:Option 5.3;udta and meta atom exists");
+    LOG.log(DEBUG, "Writing:Option 5.3;udta and meta atom exists");
 
     boolean isMdatDataMoved = adjustStcosIfNoSuitableTopLevelAtom(topLevelFreeSize,
                                                                   topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata,
@@ -1047,7 +1043,7 @@ public class Mp4TagWriter {
                      topLevelFreeSize,
                      additionalMetaSizeThatWontFitWithinMetaAtom);
     } else {
-      LOG.debug("Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
+      LOG.log(DEBUG, "Writing:Option 9;Top Level Free comes after Mdat or before Metadata or not large enough");
     }
     writeDataInChunks(fileReadChannel, fileWriteChannel);
   }
@@ -1055,7 +1051,6 @@ public class Mp4TagWriter {
   /**
    * If any data between existing {@code ilst} atom and {@code tags} atom write it to new file, then convert
    * {@code tags} atom to a {@code free} atom.
-   *
    */
   private void writeFromEndOfIlstToNeroTagsAndMakeNeroFree(long endOfMoov,
                                                            FileChannel fileReadChannel,
@@ -1076,7 +1071,6 @@ public class Mp4TagWriter {
 
   /**
    * We adjust {@code free} atom, allowing us to not need to move {@code mdat} atom.
-   *
    */
   private void adjustFreeAtom(FileChannel fileReadChannel,
                               FileChannel fileWriteChannel,
@@ -1086,7 +1080,7 @@ public class Mp4TagWriter {
     //If the shift is less than the space available in this second free atom data size we just
     //shrink the free atom accordingly
     if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom) {
-      LOG.debug("Writing:Option 6;Larger Size can use top free atom");
+      LOG.log(DEBUG, "Writing:Option 6;Larger Size can use top free atom");
       Mp4FreeBox freeBox = new Mp4FreeBox(
           (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH) - additionalMetaSizeThatWontFitWithinMetaAtom);
       fileWriteChannel.write(freeBox.getHeader().getHeaderData());
@@ -1098,7 +1092,7 @@ public class Mp4TagWriter {
     //If the space required is identical to total size of the free space (inc header)
     //we could just remove the header
     else if (topLevelFreeSize == additionalMetaSizeThatWontFitWithinMetaAtom) {
-      LOG.debug("Writing:Option 7;Larger Size uses top free atom including header");
+      LOG.log(DEBUG, "Writing:Option 7;Larger Size uses top free atom including header");
       //Skip over the read channel old free atom
       fileReadChannel.position(fileReadChannel.position() + topLevelFreeSize);
     } // else MDAT comes before MOOV, nothing to do because data has already been written

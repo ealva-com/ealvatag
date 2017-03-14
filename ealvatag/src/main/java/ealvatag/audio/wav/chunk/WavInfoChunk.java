@@ -1,12 +1,16 @@
 package ealvatag.audio.wav.chunk;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
+import ealvatag.logging.Log;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -17,68 +21,68 @@ import java.nio.charset.StandardCharsets;
  * instead contains a number of name,size, value tuples. So for this reason we do not subclass the Chunk class
  */
 public class WavInfoChunk {
-    private static Logger LOG = LoggerFactory.getLogger(WavInfoChunk.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
-    private WavInfoTag wavInfoTag;
-    private String loggingName;
+  private WavInfoTag wavInfoTag;
+  private String loggingName;
 
-    public WavInfoChunk(WavTag tag, String loggingName) {
-        this.loggingName = loggingName;
-        wavInfoTag = new WavInfoTag();
-        tag.setInfoTag(wavInfoTag);
-    }
+  public WavInfoChunk(WavTag tag, String loggingName) {
+    this.loggingName = loggingName;
+    wavInfoTag = new WavInfoTag();
+    tag.setInfoTag(wavInfoTag);
+  }
 
-    /**
-     * Read Info chunk
-     *
-     * @param chunkData
-     */
-    public boolean readChunks(ByteBuffer chunkData) {
-        while (chunkData.remaining() >= IffHeaderChunk.TYPE_LENGTH) {
-            String id = Utils.readFourBytesAsChars(chunkData);
-            //Padding
-            if (id.trim().isEmpty()) {
-                return true;
-            }
-            int size = chunkData.getInt();
-
-            if (
-                    (!Character.isAlphabetic(id.charAt(0))) ||
-                            (!Character.isAlphabetic(id.charAt(1))) ||
-                            (!Character.isAlphabetic(id.charAt(2))) ||
-                            (!Character.isAlphabetic(id.charAt(3)))
-                    ) {
-                LOG.error(loggingName + "LISTINFO appears corrupt, ignoring:" + id + ":" + size);
-                return false;
-            }
-
-            String value = null;
-            try {
-                value = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
-            } catch (BufferUnderflowException bue) {
-                LOG.error(loggingName + "LISTINFO appears corrupt, ignoring:" + bue.getMessage(), bue);
-                return false;
-            }
-
-            LOG.debug(loggingName + "Result:" + id + ":" + size + ":" + value + ":");
-            WavInfoIdentifier wii = WavInfoIdentifier.getByCode(id);
-            if (wii != null && wii.getFieldKey() != null) {
-                try {
-                    wavInfoTag.setField(wii.getFieldKey(), value);
-                } catch (FieldDataInvalidException fdie) {
-                    LOG.error(loggingName + fdie.getMessage(), fdie);
-                }
-            }
-            //Add unless just padding
-            else if (id != null && !id.trim().isEmpty()) {
-                wavInfoTag.addUnRecognizedField(id, value);
-            }
-
-            //Each tuple aligned on even byte boundary
-            if (Utils.isOddLength(size) && chunkData.hasRemaining()) {
-                chunkData.get();
-            }
-        }
+  /**
+   * Read Info chunk
+   *
+   * @param chunkData
+   */
+  public boolean readChunks(ByteBuffer chunkData) {
+    while (chunkData.remaining() >= IffHeaderChunk.TYPE_LENGTH) {
+      String id = Utils.readFourBytesAsChars(chunkData);
+      //Padding
+      if (id.trim().isEmpty()) {
         return true;
+      }
+      int size = chunkData.getInt();
+
+      if (
+          (!Character.isAlphabetic(id.charAt(0))) ||
+              (!Character.isAlphabetic(id.charAt(1))) ||
+              (!Character.isAlphabetic(id.charAt(2))) ||
+              (!Character.isAlphabetic(id.charAt(3)))
+          ) {
+        LOG.log(ERROR, loggingName + "LISTINFO appears corrupt, ignoring:" + id + ":" + size);
+        return false;
+      }
+
+      String value = null;
+      try {
+        value = Utils.getString(chunkData, 0, size, StandardCharsets.UTF_8);
+      } catch (BufferUnderflowException bue) {
+        LOG.log(ERROR, loggingName + "LISTINFO appears corrupt, ignoring:" + bue.getMessage(), bue);
+        return false;
+      }
+
+      LOG.log(DEBUG, loggingName + "Result:" + id + ":" + size + ":" + value + ":");
+      WavInfoIdentifier wii = WavInfoIdentifier.getByCode(id);
+      if (wii != null && wii.getFieldKey() != null) {
+        try {
+          wavInfoTag.setField(wii.getFieldKey(), value);
+        } catch (FieldDataInvalidException fdie) {
+          LOG.log(ERROR, loggingName + fdie.getMessage(), fdie);
+        }
+      }
+      //Add unless just padding
+      else if (id != null && !id.trim().isEmpty()) {
+        wavInfoTag.addUnRecognizedField(id, value);
+      }
+
+      //Each tuple aligned on even byte boundary
+      if (Utils.isOddLength(size) && chunkData.hasRemaining()) {
+        chunkData.get();
+      }
     }
+    return true;
+  }
 }

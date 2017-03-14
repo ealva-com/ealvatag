@@ -1,8 +1,7 @@
 package ealvatag.audio.exceptions;
 
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
-
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Should be thrown when unable to modify a file when it is expected it should be modifiable. For example because
@@ -14,7 +13,7 @@ public class UnableToModifyFileException extends IOException {
   }
 
   public UnableToModifyFileException(String message, Object... formatArgs) {
-    super(exceptionMsg(message, formatArgs));
+    super(String.format(Locale.getDefault(), message, formatArgs));
   }
 
 }

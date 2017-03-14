@@ -20,30 +20,34 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.AbstractDataType;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.INVALID_DATATYPE;
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractID3v2FrameBody.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   private static final String TYPE_BODY = "body";
 
@@ -147,7 +151,7 @@ import java.util.List;
   //and providing extra work for the garbage collector.
   public void read(ByteBuffer byteBuffer) throws InvalidTagException {
     int frameBodySize = getSize();
-    LOG.debug("Reading body for {}:{}", getIdentifier(), frameBodySize);
+    LOG.log(DEBUG, "Reading body for %s:%s", getIdentifier(), frameBodySize);
 
     //Allocate a buffer to the size of the Frame Body and read from file
     byte[] buffer = new byte[frameBodySize];
@@ -163,12 +167,12 @@ import java.util.List;
     for (int i = 0, size = dataTypeList.size(); i < size; i++) {
       final AbstractDataType object = getDataTypeList().get(i);
       //correct dataType.
-      LOG.trace("offset{}", offset);
+      LOG.log(TRACE, "offset%s", offset);
 
       //The read has extended further than the defined frame size (ok to extend upto
       //size because the next datatype may be of length 0.)
       if (offset > (frameBodySize)) {
-        LOG.warn("Invalid Size for FrameBody");
+        LOG.log(WARN, "Invalid Size for FrameBody");
         throw new InvalidFrameException("Invalid size for Frame Body");
       }
 
@@ -177,7 +181,7 @@ import java.util.List;
       try {
         object.readByteArray(buffer, offset);
       } catch (InvalidDataTypeException e) {
-        LOG.warn("Problem reading datatype within Frame Body", e);
+        LOG.log(WARN, "Problem reading datatype within Frame Body", e);
         throw e;
       }
       //Increment Offset to start of next datatype.
@@ -199,17 +203,16 @@ import java.util.List;
       }
 
       if (frameBodySize < 0) {
-        throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                   "Past last",
-                                                   identifier,
-                                                   "Not enough data. Maybe previous data type read past it's size"));
+        throw new InvalidTagException(String.format(Locale.getDefault(),
+                                                    INVALID_DATATYPE,
+                                                    "Past last",
+                                                    identifier,
+                                                    "Not enough data. Maybe previous data type read past it's size"));
       }
     } catch (EOFException | ArrayIndexOutOfBoundsException e) {
       // dataType.read() barfed
-      throw new InvalidTagException(exceptionMsg(INVALID_DATATYPE,
-                                                 dataType != null ? dataType.getClass() : "Unknown",
-                                                 identifier,
-                                                 e.getMessage()),
+      Object[] args = new Object[]{dataType != null ? dataType.getClass() : "Unknown", identifier, e.getMessage()};
+      throw new InvalidTagException(String.format(Locale.getDefault(), INVALID_DATATYPE, args),
                                     e);
     }
 
@@ -219,7 +222,7 @@ import java.util.List;
    * Write the contents of this datatype to the byte array
    */
   public void write(ByteArrayOutputStream tagBuffer) {
-    LOG.debug("Writing frame body for {}:Est Size:{}", this.getIdentifier(), size);
+    LOG.log(DEBUG, "Writing frame body for %s:Est Size:%s", this.getIdentifier(), size);
     //Write the various fields to file in order
     final List<AbstractDataType> dataTypeList = getDataTypeList();
     for (int i = 0, size = dataTypeList.size(); i < size; i++) {
@@ -234,7 +237,7 @@ import java.util.List;
       }
     }
     setSize();
-    LOG.debug("Written frame body for {}:Real Size:{}", getIdentifier(), size);
+    LOG.log(DEBUG, "Written frame body for %s:Real Size:%s", getIdentifier(), size);
 
   }
 

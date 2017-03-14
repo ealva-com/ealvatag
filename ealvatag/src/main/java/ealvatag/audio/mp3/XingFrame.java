@@ -1,10 +1,14 @@
 package ealvatag.audio.mp3;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
+import ealvatag.logging.Log;
 import ealvatag.utils.ArrayUtil;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.INFO;
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.EOFException;
 import java.util.Arrays;
@@ -28,193 +32,193 @@ import java.util.Arrays;
  * It my then contain a Lame Frame ( a Lame frame is in essence an extended Xing Frame
  */
 public class XingFrame {
-    private static final Logger LOG = LoggerFactory.getLogger(XingFrame.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    //The offset into first frame varies based on the MPEG frame properties
-    private static final int MPEG_VERSION_1_MODE_MONO_OFFSET = 21;
-    private static final int MPEG_VERSION_1_MODE_STEREO_OFFSET = 36;
-    private static final int MPEG_VERSION_2_MODE_MONO_OFFSET = 13;
-    private static final int MPEG_VERSION_2_MODE_STEREO_OFFSET = 21;
+  //The offset into first frame varies based on the MPEG frame properties
+  private static final int MPEG_VERSION_1_MODE_MONO_OFFSET = 21;
+  private static final int MPEG_VERSION_1_MODE_STEREO_OFFSET = 36;
+  private static final int MPEG_VERSION_2_MODE_MONO_OFFSET = 13;
+  private static final int MPEG_VERSION_2_MODE_STEREO_OFFSET = 21;
 
-    private static final int XING_HEADER_BUFFER_SIZE = 120;
-    private static final int XING_IDENTIFIER_BUFFER_SIZE = 4;
-    private static final int XING_FLAG_BUFFER_SIZE = 4;
-    private static final int XING_FRAMECOUNT_BUFFER_SIZE = 4;
-    private static final int XING_AUDIOSIZE_BUFFER_SIZE = 4;
-    private static final int TEMP_BUF_SIZE = Math.max(Math.max(Math.max(Math.max(XING_IDENTIFIER_BUFFER_SIZE,
-                                                                                 XING_FLAG_BUFFER_SIZE),
-                                                                        XING_FRAMECOUNT_BUFFER_SIZE),
-                                                               XING_AUDIOSIZE_BUFFER_SIZE),
-                                                      LameFrame.ENCODER_SIZE);
+  private static final int XING_HEADER_BUFFER_SIZE = 120;
+  private static final int XING_IDENTIFIER_BUFFER_SIZE = 4;
+  private static final int XING_FLAG_BUFFER_SIZE = 4;
+  private static final int XING_FRAMECOUNT_BUFFER_SIZE = 4;
+  private static final int XING_AUDIOSIZE_BUFFER_SIZE = 4;
+  private static final int TEMP_BUF_SIZE = Math.max(Math.max(Math.max(Math.max(XING_IDENTIFIER_BUFFER_SIZE,
+                                                                               XING_FLAG_BUFFER_SIZE),
+                                                                      XING_FRAMECOUNT_BUFFER_SIZE),
+                                                             XING_AUDIOSIZE_BUFFER_SIZE),
+                                                    LameFrame.ENCODER_SIZE);
 
-    static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_XING =
-            MPEG_VERSION_1_MODE_STEREO_OFFSET + XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE;
-
-
-    private static final int BYTE_1 = 0;
-    private static final int BYTE_2 = 1;
-    private static final int BYTE_3 = 2;
-    private static final int BYTE_4 = 3;
-
-    /**
-     * Use when it is a VBR (Variable Bitrate) file
-     */
-    private static final byte[] XING_VBR_ID = {'X', 'i', 'n', 'g'};
-
-    /**
-     * Use when it is a CBR (Constant Bitrate) file
-     */
-    private static final byte[] XING_CBR_ID = {'I', 'n', 'f', 'o'};
+  static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_XING =
+      MPEG_VERSION_1_MODE_STEREO_OFFSET + XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE;
 
 
-    private boolean vbr = false;
-    private boolean isFrameCountEnabled = false;
-    private int frameCount = -1;
-    private boolean isAudioSizeEnabled = false;
-    private int audioSize = -1;
-    private LameFrame lameFrame;
+  private static final int BYTE_1 = 0;
+  private static final int BYTE_2 = 1;
+  private static final int BYTE_3 = 2;
+  private static final int BYTE_4 = 3;
 
-    private XingFrame(final Buffer buffer) {
-        final byte[] tempBuf = new byte[TEMP_BUF_SIZE];
+  /**
+   * Use when it is a VBR (Variable Bitrate) file
+   */
+  private static final byte[] XING_VBR_ID = {'X', 'i', 'n', 'g'};
 
-        int skipLess = setVbr(buffer, tempBuf);
+  /**
+   * Use when it is a CBR (Constant Bitrate) file
+   */
+  private static final byte[] XING_CBR_ID = {'I', 'n', 'f', 'o'};
 
-        Arrays.fill(tempBuf, ArrayUtil.ZERO);
-        buffer.read(tempBuf, 0, XING_FLAG_BUFFER_SIZE);
-        skipLess += XING_FLAG_BUFFER_SIZE;
 
-        final boolean hasFrameCount = (tempBuf[BYTE_4] & (byte)(1)) != 0;
-        final boolean readSize = (tempBuf[BYTE_4] & (byte)(1 << 1)) != 0;
+  private boolean vbr = false;
+  private boolean isFrameCountEnabled = false;
+  private int frameCount = -1;
+  private boolean isAudioSizeEnabled = false;
+  private int audioSize = -1;
+  private LameFrame lameFrame;
 
-        if (hasFrameCount) {
-            skipLess += setFrameCount(buffer, tempBuf);
-        }
+  private XingFrame(final Buffer buffer) {
+    final byte[] tempBuf = new byte[TEMP_BUF_SIZE];
 
-        if (readSize) {
-            skipLess += setAudioSize(buffer, tempBuf);
-        }
+    int skipLess = setVbr(buffer, tempBuf);
 
-        //TODO TOC
-        //TODO VBR Quality
+    Arrays.fill(tempBuf, ArrayUtil.ZERO);
+    buffer.read(tempBuf, 0, XING_FLAG_BUFFER_SIZE);
+    skipLess += XING_FLAG_BUFFER_SIZE;
 
-        //Look for LAME Header as long as we have enough bytes to do it properly
-        if (buffer.size() >= XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE) {
-            try {
-                buffer.skip(XING_HEADER_BUFFER_SIZE - skipLess);
-                lameFrame = LameFrame.parseLameFrame(buffer, tempBuf);
-            } catch (EOFException e) {
-                LOG.info("Not enough room for Lame header", e);
-            }
-        }
+    final boolean hasFrameCount = (tempBuf[BYTE_4] & (byte)(1)) != 0;
+    final boolean readSize = (tempBuf[BYTE_4] & (byte)(1 << 1)) != 0;
+
+    if (hasFrameCount) {
+      skipLess += setFrameCount(buffer, tempBuf);
     }
 
-    LameFrame getLameFrame() {
-        return lameFrame;
+    if (readSize) {
+      skipLess += setAudioSize(buffer, tempBuf);
     }
 
-    private int setVbr(Buffer buffer, final byte[] tempBuf) {
-        //Is it VBR or CBR
-        buffer.read(tempBuf, 0, XING_IDENTIFIER_BUFFER_SIZE);
-        if (ArrayUtil.equals(tempBuf, XING_VBR_ID, XING_VBR_ID.length)) {
-            LOG.trace("Is Vbr");
-            vbr = true;
-        }
-        return XING_IDENTIFIER_BUFFER_SIZE;
-    }
+    //TODO TOC
+    //TODO VBR Quality
 
-    private int setFrameCount(final Buffer header, final byte[] frameCountBuffer) {
-        frameCount = header.readInt();
-        isFrameCountEnabled = true;
+    //Look for LAME Header as long as we have enough bytes to do it properly
+    if (buffer.size() >= XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE) {
+      try {
+        buffer.skip(XING_HEADER_BUFFER_SIZE - skipLess);
+        lameFrame = LameFrame.parseLameFrame(buffer, tempBuf);
+      } catch (EOFException e) {
+        LOG.log(INFO, "Not enough room for Lame header", e);
+      }
+    }
+  }
+
+  LameFrame getLameFrame() {
+    return lameFrame;
+  }
+
+  private int setVbr(Buffer buffer, final byte[] tempBuf) {
+    //Is it VBR or CBR
+    buffer.read(tempBuf, 0, XING_IDENTIFIER_BUFFER_SIZE);
+    if (ArrayUtil.equals(tempBuf, XING_VBR_ID, XING_VBR_ID.length)) {
+      LOG.log(TRACE, "Is Vbr");
+      vbr = true;
+    }
+    return XING_IDENTIFIER_BUFFER_SIZE;
+  }
+
+  private int setFrameCount(final Buffer header, final byte[] frameCountBuffer) {
+    frameCount = header.readInt();
+    isFrameCountEnabled = true;
 //        ArrayUtil.fill(frameCountBuffer, ArrayUtil.ZERO, XING_FRAMECOUNT_BUFFER_SIZE);
 //        header.read(frameCountBuffer, 0, XING_FRAMECOUNT_BUFFER_SIZE);
 //        isFrameCountEnabled = true;
 //        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
 //                (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
-        return XING_FRAMECOUNT_BUFFER_SIZE;
-    }
+    return XING_FRAMECOUNT_BUFFER_SIZE;
+  }
 
-    /**
-     * @return true if frameCount has been specified in header
-     */
-    final boolean isFrameCountEnabled() {
-        return isFrameCountEnabled;
-    }
+  /**
+   * @return true if frameCount has been specified in header
+   */
+  final boolean isFrameCountEnabled() {
+    return isFrameCountEnabled;
+  }
 
-    /**
-     * @return count of frames
-     */
-    final int getFrameCount() {
-        return frameCount;
-    }
+  /**
+   * @return count of frames
+   */
+  final int getFrameCount() {
+    return frameCount;
+  }
 
-    private int setAudioSize(final Buffer header, final byte[] frameSizeBuffer) {
-        audioSize = header.readInt();
-        isAudioSizeEnabled = true;
+  private int setAudioSize(final Buffer header, final byte[] frameSizeBuffer) {
+    audioSize = header.readInt();
+    isAudioSizeEnabled = true;
 //        ArrayUtil.fill(frameSizeBuffer, ArrayUtil.ZERO, XING_AUDIOSIZE_BUFFER_SIZE);
 //        header.read(frameSizeBuffer, 0, XING_AUDIOSIZE_BUFFER_SIZE);
 //        isAudioSizeEnabled = true;
 //        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
 //                (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
-        return XING_AUDIOSIZE_BUFFER_SIZE;
+    return XING_AUDIOSIZE_BUFFER_SIZE;
+  }
+
+  /**
+   * @return true if audioSize has been specified in header
+   */
+  final boolean isAudioSizeEnabled() {
+    return isAudioSizeEnabled;
+  }
+
+  /**
+   * @return size of audio data in bytes
+   */
+  final int getAudioSize() {
+    return audioSize;
+  }
+
+  static XingFrame parseXingFrame(final Buffer buffer) throws InvalidAudioFrameException {
+    return new XingFrame(buffer);
+  }
+
+  static Buffer isXingFrame(Buffer buffer, MPEGFrameHeader mpegFrameHeader) throws EOFException {
+
+    //Get to Start of where Xing Frame Should be ( we dont know if it is one at this point)
+    if (mpegFrameHeader.getVersion() == MPEGFrameHeader.VERSION_1) {
+      if (mpegFrameHeader.getChannelMode() == MPEGFrameHeader.MODE_MONO) {
+        buffer.skip(MPEG_VERSION_1_MODE_MONO_OFFSET);
+      } else {
+        buffer.skip(MPEG_VERSION_1_MODE_STEREO_OFFSET);
+      }
+    }
+    //MPEGVersion 2 and 2.5
+    else {
+      if (mpegFrameHeader.getChannelMode() == MPEGFrameHeader.MODE_MONO) {
+        buffer.skip(MPEG_VERSION_2_MODE_MONO_OFFSET);
+      } else {
+        buffer.skip(MPEG_VERSION_2_MODE_STEREO_OFFSET);
+      }
     }
 
-    /**
-     * @return true if audioSize has been specified in header
-     */
-    final boolean isAudioSizeEnabled() {
-        return isAudioSizeEnabled;
+    //Create header from here
+
+    //Check Identifier
+    byte[] identifier = new byte[XING_IDENTIFIER_BUFFER_SIZE];
+    for (int i = 0; i < identifier.length; i++) {
+      identifier[i] = buffer.getByte(i);
     }
-
-    /**
-     * @return size of audio data in bytes
-     */
-    final int getAudioSize() {
-        return audioSize;
+    if ((!Arrays.equals(identifier, XING_VBR_ID)) && (!Arrays.equals(identifier, XING_CBR_ID))) {
+      return null;
     }
+    LOG.log(TRACE, "Found Xing Frame");
+    return buffer;
+  }
 
-    static XingFrame parseXingFrame(final Buffer buffer) throws InvalidAudioFrameException {
-        return new XingFrame(buffer);
-    }
+  final boolean isVbr() {
+    return vbr;
+  }
 
-    static Buffer isXingFrame(Buffer buffer, MPEGFrameHeader mpegFrameHeader) throws EOFException {
-
-        //Get to Start of where Xing Frame Should be ( we dont know if it is one at this point)
-        if (mpegFrameHeader.getVersion() == MPEGFrameHeader.VERSION_1) {
-            if (mpegFrameHeader.getChannelMode() == MPEGFrameHeader.MODE_MONO) {
-                buffer.skip(MPEG_VERSION_1_MODE_MONO_OFFSET);
-            } else {
-                buffer.skip(MPEG_VERSION_1_MODE_STEREO_OFFSET);
-            }
-        }
-        //MPEGVersion 2 and 2.5
-        else {
-            if (mpegFrameHeader.getChannelMode() == MPEGFrameHeader.MODE_MONO) {
-                buffer.skip(MPEG_VERSION_2_MODE_MONO_OFFSET);
-            } else {
-                buffer.skip(MPEG_VERSION_2_MODE_STEREO_OFFSET);
-            }
-        }
-
-        //Create header from here
-
-        //Check Identifier
-        byte[] identifier = new byte[XING_IDENTIFIER_BUFFER_SIZE];
-        for (int i = 0; i < identifier.length; i++) {
-            identifier[i] = buffer.getByte(i);
-        }
-        if ((!Arrays.equals(identifier, XING_VBR_ID)) && (!Arrays.equals(identifier, XING_CBR_ID))) {
-            return null;
-        }
-        LOG.trace("Found Xing Frame");
-        return buffer;
-    }
-
-    final boolean isVbr() {
-        return vbr;
-    }
-
-    public String toString() {
-        return "xingheader" + " vbr:" + vbr + " frameCountEnabled:" + isFrameCountEnabled + " frameCount:" +
-                frameCount + " audioSizeEnabled:" + isAudioSizeEnabled + " audioFileSize:" + audioSize;
-    }
+  public String toString() {
+    return "xingheader" + " vbr:" + vbr + " frameCountEnabled:" + isFrameCountEnabled + " frameCount:" +
+        frameCount + " audioSizeEnabled:" + isAudioSizeEnabled + " audioFileSize:" + audioSize;
+  }
 }

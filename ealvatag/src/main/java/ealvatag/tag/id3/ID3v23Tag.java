@@ -18,8 +18,11 @@ package ealvatag.tag.id3;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -49,9 +52,11 @@ import ealvatag.tag.id3.framebody.FrameBodyTIPL;
 import ealvatag.tag.id3.framebody.FrameBodyTMCL;
 import ealvatag.tag.id3.framebody.FrameBodyTYER;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;
 import static ealvatag.utils.Check.checkArgNotNull;
@@ -67,6 +72,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents an ID3v2.3 tag.
@@ -104,7 +110,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   private static final String TYPE_EXTENDED = "extended";
   private static final String TYPE_PADDINGSIZE = "paddingsize";
   private static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  private static final Logger LOG = LoggerFactory.getLogger(ID3v23Tag.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
   private static int TAG_EXT_HEADER_LENGTH = 10;
   private static int TAG_EXT_HEADER_CRC_LENGTH = 4;
   private static int FIELD_TAG_EXT_SIZE_LENGTH = 4;
@@ -150,7 +156,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    * Copy Constructor, creates a new ID3v2_3 Tag based on another ID3v2_3 Tag
    */
   public ID3v23Tag(ID3v23Tag copyObject) {
-    LOG.debug("Creating tag from another tag of same type");
+    LOG.log(DEBUG, "Creating tag from another tag of same type");
     copyPrimitives(copyObject);
     copyFrames(copyObject);
 
@@ -160,7 +166,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    * Constructs a new tag based upon another tag of different version/type
    */
   public ID3v23Tag(BaseID3Tag mp3tag) {
-    LOG.debug("Creating tag from a tag of a different version");
+    LOG.log(DEBUG, "Creating tag from a tag of a different version");
     ensureFrameMapsAndClear();
 
     if (mp3tag != null) {
@@ -181,7 +187,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       copyPrimitives(convertedTag);
       //Copy Frames
       copyFrames(convertedTag);
-      LOG.debug("Created tag from a tag of a different version");
+      LOG.log(DEBUG, "Created tag from a tag of a different version");
     }
   }
 
@@ -203,7 +209,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    * Copy primitives applicable to v2.3
    */
   protected void copyPrimitives(AbstractID3v2Tag copyObj) {
-    LOG.debug("Copying primitives");
+    LOG.log(DEBUG, "Copying primitives");
     super.copyPrimitives(copyObj);
 
     if (copyObj instanceof ID3v23Tag) {
@@ -228,7 +234,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         }
       }
     } catch (InvalidFrameException ife) {
-      LOG.error("Unable to convert frame:{}", frame.getIdentifier());
+      LOG.log(ERROR, "Unable to convert frame:%s", frame.getIdentifier());
     }
   }
 
@@ -455,27 +461,25 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    */
   public long write(File file, long audioStartLocation) throws IOException {
     setLoggingFilename(file.getName());
-    LOG.debug("Writing tag to file:{}", loggingFilename);
+    LOG.log(DEBUG, "Writing tag to file:%s", loggingFilename);
 
     //Write Body Buffer
     byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-    LOG.debug("{}:bodybytebuffer:sizebeforeunsynchronisation:{}", loggingFilename, bodyByteBuffer.length);
+    LOG.log(DEBUG, "%s:bodybytebuffer:sizebeforeunsynchronisation:%s", loggingFilename, bodyByteBuffer.length);
 
     // Unsynchronize if option enabled and unsync required
     unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
         ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
     if (isUnsynchronized()) {
       bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-      LOG.debug("{}:bodybytebuffer:sizeafterunsynchronisation:{}", loggingFilename, bodyByteBuffer.length);
+      LOG.log(DEBUG, "%s:bodybytebuffer:sizeafterunsynchronisation:%s", loggingFilename, bodyByteBuffer.length);
     }
 
     int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, (int)audioStartLocation);
     int padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("{}:Current audiostart:{}", loggingFilename, audioStartLocation);
-      LOG.debug("{}:Size including padding:{}", loggingFilename, sizeIncPadding);
-      LOG.debug("{}:Padding:{}", loggingFilename, padding);
-    }
+    LOG.log(DEBUG, "%s:Current audiostart:%s", loggingFilename, audioStartLocation);
+    LOG.log(DEBUG, "%s:Size including padding:%s", loggingFilename, sizeIncPadding);
+    LOG.log(DEBUG, "%s:Padding:%s", loggingFilename, padding);
 
     ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
     writeBufferToFile(file, headerBuffer, bodyByteBuffer, padding, sizeIncPadding, audioStartLocation);
@@ -487,24 +491,24 @@ public class ID3v23Tag extends AbstractID3v2Tag {
    */
   @Override
   public void write(WritableByteChannel channel, int currentTagSize) throws IOException {
-    LOG.debug(loggingFilename + ":Writing tag to channel");
+    LOG.log(DEBUG, loggingFilename + ":Writing tag to channel");
 
     byte[] bodyByteBuffer = writeFramesToBuffer().toByteArray();
-    LOG.debug("{}:bodybytebuffer:sizebeforeunsynchronisation:{}", loggingFilename, bodyByteBuffer.length);
+    LOG.log(DEBUG, "%s:bodybytebuffer:sizebeforeunsynchronisation:%s", loggingFilename, bodyByteBuffer.length);
 
     // Unsynchronize if option enabled and unsync required
     unsynchronization = TagOptionSingleton.getInstance().isUnsyncTags() &&
         ID3Unsynchronization.requiresUnsynchronization(bodyByteBuffer);
     if (isUnsynchronized()) {
       bodyByteBuffer = ID3Unsynchronization.unsynchronize(bodyByteBuffer);
-      LOG.debug("{}:bodybytebuffer:sizeafterunsynchronisation:{}", loggingFilename, bodyByteBuffer.length);
+      LOG.log(DEBUG, "%s:bodybytebuffer:sizeafterunsynchronisation:%s", loggingFilename, bodyByteBuffer.length);
     }
 
     int padding = 0;
     if (currentTagSize > 0) {
       int sizeIncPadding = calculateTagSize(bodyByteBuffer.length + TAG_HEADER_LENGTH, currentTagSize);
       padding = sizeIncPadding - (bodyByteBuffer.length + TAG_HEADER_LENGTH);
-      LOG.debug("{}:Padding:{}", loggingFilename, padding);
+      LOG.log(DEBUG, "%s:Padding:%s", loggingFilename, padding);
     }
     ByteBuffer headerBuffer = writeHeaderToBuffer(padding, bodyByteBuffer.length);
 
@@ -563,7 +567,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     if (frameId.equals(ID3v23Frames.FRAME_ID_V3_TDAT)) {
       if (frame.getContent().length() == 0) {
         //Discard not useful to complicate by trying to map it
-        LOG.warn("TDAT is empty so just ignoring");
+        LOG.log(WARN, "TDAT is empty so just ignoring");
         return;
       }
     }
@@ -695,35 +699,35 @@ public class ID3v23Tag extends AbstractID3v2Tag {
 
     //Not allowable/Unknown Flags
     if ((flags & FileConstants.BIT4) != 0) {
-      LOG.warn(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT4);
+      LOG.log(WARN, ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT4);
     }
 
     if ((flags & FileConstants.BIT3) != 0) {
-      LOG.warn(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT3);
+      LOG.log(WARN, ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT3);
     }
 
     if ((flags & FileConstants.BIT2) != 0) {
-      LOG.warn(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT2);
+      LOG.log(WARN, ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT2);
     }
 
     if ((flags & FileConstants.BIT1) != 0) {
-      LOG.warn(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT1);
+      LOG.log(WARN, ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT1);
     }
 
     if ((flags & FileConstants.BIT0) != 0) {
-      LOG.warn(ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT0);
+      LOG.log(WARN, ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET, loggingFilename, FileConstants.BIT0);
     }
 
     if (isUnsynchronized()) {
-      LOG.debug(ErrorMessage.ID3_TAG_UNSYNCHRONIZED, loggingFilename);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_UNSYNCHRONIZED, loggingFilename);
     }
 
     if (extended) {
-      LOG.debug(ErrorMessage.ID3_TAG_EXTENDED, loggingFilename);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_EXTENDED, loggingFilename);
     }
 
     if (experimental) {
-      LOG.debug(ErrorMessage.ID3_TAG_EXPERIMENTAL, loggingFilename);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_EXPERIMENTAL, loggingFilename);
     }
   }
 
@@ -739,7 +743,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       byte extFlag = buffer.get();
       crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
       if (crcDataFlag) {
-        LOG.warn(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
       }
       //2nd Flag Byte (not used)
       buffer.get();
@@ -747,32 +751,32 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       //Take padding and ext header size off the size to be read
       paddingSize = buffer.getInt();
       if (paddingSize > 0) {
-        LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
       }
     } else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH) {
-      LOG.debug(ErrorMessage.ID3_TAG_CRC, loggingFilename);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC, loggingFilename);
 
       //Flag should be setField, if nor just act as if it is
       byte extFlag = buffer.get();
       crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
       if (!crcDataFlag) {
-        LOG.warn(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
       }
       //2nd Flag Byte (not used)
       buffer.get();
       //Take padding size of size to be read
       paddingSize = buffer.getInt();
       if (paddingSize > 0) {
-        LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
       }
       //CRC Data
       crc32 = buffer.getInt();
-      LOG.debug(ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
     }
     //Extended header size is only allowed to be six or ten bytes so this is invalid but instead
     //of giving up lets guess its six bytes and carry on and see if we can read file ok
     else {
-      LOG.warn(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
+      LOG.log(WARN, ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
       buffer.position(buffer.position() - FIELD_TAG_EXT_SIZE_LENGTH);
     }
   }
@@ -786,7 +790,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       byte extFlag = buffer.readByte();
       crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
       if (crcDataFlag) {
-        LOG.warn(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
       }
       //2nd Flag Byte (not used)
       buffer.readByte();
@@ -794,34 +798,35 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       //Take padding and ext header size off the size to be read
       paddingSize = buffer.readInt();
       if (paddingSize > 0) {
-        LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
       }
     } else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH) {
-      LOG.debug(ErrorMessage.ID3_TAG_CRC, loggingFilename);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC, loggingFilename);
 
       //Flag should be setField, if nor just act as if it is
       byte extFlag = buffer.readByte();
       crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
       if (!crcDataFlag) {
-        LOG.warn(ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
       }
       //2nd Flag Byte (not used)
       buffer.readByte();
       //Take padding size of size to be read
       paddingSize = buffer.readInt();
       if (paddingSize > 0) {
-        LOG.debug(ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
       }
       //CRC Data
       crc32 = buffer.readInt();
-      LOG.debug(ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
+      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
     } else {
       //Extended header size is only allowed to be six or ten bytes so this is invalid but instead
       //of giving up lets guess its six bytes and carry on and see if we can read file ok
-      LOG.warn(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
-      throw new InvalidTagHeaderException(ErrorMessage.exceptionMsg(ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID,
-                                                                    loggingFilename,
-                                                                    extendedHeaderSize));
+      LOG.log(WARN, ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
+      throw new InvalidTagHeaderException(String.format(Locale.getDefault(),
+                                                        ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID,
+                                                        loggingFilename,
+                                                        extendedHeaderSize));
     }
     return extendedHeaderSize;
   }
@@ -831,13 +836,13 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     if (!seek(buffer)) {
       throw new TagNotFoundException(getIdentifier() + " tag not found");
     }
-    LOG.debug("{}:Reading ID3v23 tag", loggingFilename);
+    LOG.log(DEBUG, "%s:Reading ID3v23 tag", loggingFilename);
 
     readHeaderFlags(buffer.get());
 
     // Read the size, this is size of tag not including the tag header
     size = ID3SyncSafeInteger.bufferToValue(buffer);
-    LOG.debug(ErrorMessage.ID_TAG_SIZE, loggingFilename, size);
+    LOG.log(DEBUG, ErrorMessage.ID_TAG_SIZE, loggingFilename, size);
 
     //Extended Header
     if (extended) {
@@ -852,9 +857,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
     }
 
     readFrames(bufferWithoutHeader, size);
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("{}:Loaded Frames,there are:{}", loggingFilename, frameMap.keySet().size());
-    }
+    LOG.log(DEBUG, "%s:Loaded Frames,there are:%s", loggingFilename, frameMap.keySet().size());
   }
 
   private void read(Buffer buffer, Id3v2Header header, final boolean ignoreArtwork) throws TagException {
@@ -862,7 +865,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       readHeaderFlags(header.getFlags());
 
       int size = header.getTagSize();
-      LOG.debug(ErrorMessage.ID_TAG_SIZE, loggingFilename, size);
+      LOG.log(DEBUG, ErrorMessage.ID_TAG_SIZE, loggingFilename, size);
 
       if (extended) {
         readExtendedHeader(buffer);
@@ -875,9 +878,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       }
 
       readFrames(bufferWithoutHeader, size, ignoreArtwork);
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("{}:Loaded Frames,there are:{}", loggingFilename, frameMap.keySet().size());
-      }
+      LOG.log(DEBUG, "%s:Loaded Frames,there are:%s", loggingFilename, frameMap.keySet().size());
     } catch (IOException e) {
       throw new TagNotFoundException(getIdentifier() + " error reading tag", e);
     }
@@ -896,7 +897,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
 
     //Read the size from the Tag Header
     this.fileReadSize = size;
-    LOG.trace("{}:Start of frame body at:{},frames data size is:", loggingFilename, byteBuffer.position(), size);
+    LOG.log(TRACE, "%s:Start of frame body at:%s,frames data size is:", loggingFilename, byteBuffer.position(), size);
 
     // Read the frames until got to up to the size as specified in header or until
     // we hit an invalid frame identifier or padding
@@ -905,23 +906,23 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       try {
         //Read Frame
         int posBeforeRead = byteBuffer.position();
-        LOG.debug(loggingFilename + ":Looking for next frame at:" + posBeforeRead);
+        LOG.log(DEBUG, loggingFilename + ":Looking for next frame at:" + posBeforeRead);
         next = new ID3v23Frame(byteBuffer, loggingFilename);
         id = next.getIdentifier();
-        LOG.debug(loggingFilename + ":Found " + id + " at frame at:" + posBeforeRead);
+        LOG.log(DEBUG, loggingFilename + ":Found " + id + " at frame at:" + posBeforeRead);
         loadFrameIntoMap(id, next);
       }
       //Found Padding, no more frames
       catch (PaddingException ex) {
-        LOG.debug(loggingFilename + ":Found padding starting at:" + byteBuffer.position());
+        LOG.log(DEBUG, loggingFilename + ":Found padding starting at:" + byteBuffer.position());
         break;
       }
       //Found Empty Frame, log it - empty frames should not exist
       catch (EmptyFrameException ex) {
-        LOG.warn(loggingFilename + ":Empty Frame:" + ex.getMessage());
+        LOG.log(WARN, loggingFilename + ":Empty Frame:" + ex.getMessage());
         this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
       } catch (InvalidFrameIdentifierException ifie) {
-        LOG.warn(loggingFilename + ":Invalid Frame Identifier:" + ifie.getMessage());
+        LOG.log(WARN, loggingFilename + ":Invalid Frame Identifier:" + ifie.getMessage());
         this.invalidFrames++;
         //Don't try and find any more frames
         break;
@@ -929,7 +930,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       //Problem trying to find frame, often just occurs because frameHeader includes padding
       //and we have reached padding
       catch (InvalidFrameException ife) {
-        LOG.warn(loggingFilename + ":Invalid Frame:" + ife.getMessage());
+        LOG.log(WARN, loggingFilename + ":Invalid Frame:" + ife.getMessage());
         this.invalidFrames++;
         //Don't try and find any more frames
         break;
@@ -937,7 +938,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
       //Failed reading frame but may just have invalid data but correct length so lets carry on
       //in case we can read the next frame
       catch (InvalidDataTypeException idete) {
-        LOG.warn(loggingFilename + ":Corrupt Frame:" + idete.getMessage());
+        LOG.log(WARN, loggingFilename + ":Corrupt Frame:" + idete.getMessage());
         this.invalidFrames++;
       }
     }
@@ -946,7 +947,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   private void readFrames(Buffer buffer, int size, final boolean ignoreArtwork) {
     ensureFrameMapsAndClear();
     fileReadSize = size;
-    LOG.trace("Frame data is size:{}", size);
+    LOG.log(TRACE, "Frame data is size:%s", size);
 
     // Read the frames until got to up to the size as specified in header or until
     // we hit an invalid frame identifier or padding
@@ -960,34 +961,34 @@ public class ID3v23Tag extends AbstractID3v2Tag {
         }
       } catch (PaddingException ex) {
         //Found Padding, no more frames
-        LOG.debug("Found padding with {} remaining. {}", buffer.size(), loggingFilename);
+        LOG.log(DEBUG, "Found padding with %s remaining. %s", buffer.size(), loggingFilename);
         break;
       } catch (EmptyFrameException ex) {
         //Found Empty Frame, log it - empty frames should not exist
-        LOG.warn("{}:Empty Frame", loggingFilename, ex);
+        LOG.log(WARN, "%s:Empty Frame", loggingFilename, ex);
         this.emptyFrameBytes += ID3v23Frame.FRAME_HEADER_SIZE;
       } catch (InvalidFrameIdentifierException ifie) {
-        LOG.warn("{}:Invalid Frame Identifier", loggingFilename, ifie);
+        LOG.log(WARN, "%s:Invalid Frame Identifier", loggingFilename, ifie);
         this.invalidFrames++;
         //Don't try and find any more frames
         break;
       } catch (InvalidFrameException ife) {
         //Problem trying to find frame, often just occurs because frameHeader includes padding
         //and we have reached padding
-        LOG.warn("{}:Invalid Frame", loggingFilename, ife);
+        LOG.log(WARN, "%s:Invalid Frame", loggingFilename, ife);
         this.invalidFrames++;
         //Don't try and find any more frames
         break;
       } catch (InvalidDataTypeException idete) {
         //Failed reading frame but may just have invalid data but correct length so lets carry on
         //in case we can read the next frame
-        LOG.warn("{}:Corrupt Frame", loggingFilename, idete);
+        LOG.log(WARN, "%s:Corrupt Frame", loggingFilename, idete);
         this.invalidFrames++;
       } catch (IOException e) {
-        LOG.warn("Unexpectedly reached end of frame" + e);
+        LOG.log(WARN, "Unexpectedly reached end of frame" + e);
         this.invalidFrames++;
       } catch (@SuppressWarnings("TryWithIdenticalCatches") InvalidTagException e) {  // TODO: 1/25/17 get exceptions straightened out
-        LOG.warn("{}:Corrupt Frame", loggingFilename, e);
+        LOG.log(WARN, "%s:Corrupt Frame", loggingFilename, e);
         this.invalidFrames++;
       }
     }

@@ -7,6 +7,11 @@ import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
+
 import java.io.EOFException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -38,7 +43,6 @@ public class TextEncodedStringNullTerminated extends AbstractString {
 
   /**
    * Creates a new TextEncodedStringNullTerminated datatype, with value
-   *
    */
   public TextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody, String value) {
     super(identifier, frameBody, value);
@@ -68,7 +72,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
     }
     int bufferSize;
 
-    LOG.debug("Reading from array starting from offset:{}", offset);
+    LOG.log(DEBUG, "Reading from array starting from offset:%s", offset);
     int size;
 
     //Get the Specified Decoder
@@ -93,7 +97,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
           buffer.mark();
           buffer.reset();
           endPosition = buffer.position() - 1;
-          LOG.trace("Null terminator found starting at:{}", endPosition);
+          LOG.log(TRACE, "Null terminator found starting at:%s", endPosition);
 
           isNullTerminatorFound = true;
           break;
@@ -105,16 +109,16 @@ public class TextEncodedStringNullTerminated extends AbstractString {
               buffer.mark();
               buffer.reset();
               endPosition = buffer.position() - 2;
-              LOG.trace("UTF16:Null terminator found starting at:{}", endPosition);
+              LOG.log(TRACE, "UTF16:Null terminator found starting at:%s", endPosition);
               isNullTerminatorFound = true;
               break;
             } //Nothing to do, we have checked 2nd value of pair it was not a null terminator
-              //so will just start looking again in next invocation of loop
+            //so will just start looking again in next invocation of loop
           } else {
             buffer.mark();
             buffer.reset();
             endPosition = buffer.position() - 1;
-            LOG.warn("UTF16:Should be two null terminator marks but only found one starting at:{}", endPosition);
+            LOG.log(WARN, "UTF16:Should be two null terminator marks but only found one starting at:%s", endPosition);
 
             isNullTerminatorFound = true;
             break;
@@ -135,7 +139,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
     }
 
 
-    LOG.trace("End Position is:{} Offset:{}", endPosition, offset);
+    LOG.log(TRACE, "End Position is:%s Offset:%s", endPosition, offset);
 
     //Set Size so offset is ready for next field (includes the null terminator)
     size = endPosition - offset;
@@ -149,7 +153,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
     //catch and then set value to empty string. (We don't read the null terminator
     //because we dont want to display this)
     bufferSize = endPosition - offset;
-    LOG.trace("Text size is:{}", bufferSize);
+    LOG.log(TRACE, "Text size is:%s", bufferSize);
     if (bufferSize == 0) {
       value = "";
     } else {
@@ -160,14 +164,14 @@ public class TextEncodedStringNullTerminated extends AbstractString {
       final CharsetDecoder decoder = getCorrectDecoder(inBuffer);
       CoderResult coderResult = decoder.decode(inBuffer, outBuffer, true);
       if (coderResult.isError()) {
-        LOG.warn("Problem decoding text encoded null terminated string:{}", coderResult.toString());
+        LOG.log(WARN, "Problem decoding text encoded null terminated string:%s", coderResult.toString());
       }
       decoder.flush(outBuffer);
       outBuffer.flip();
       value = outBuffer.toString();
     }
     //Set Size so offset is ready for next field (includes the null terminator)
-    LOG.debug("Read NullTerminatedString:{} size inc terminator:{}", value, size);
+    LOG.log(DEBUG, "Read NullTerminatedString:%s size inc terminator:%s", value, size);
   }
 
   @Override public void read(final Buffer buffer, final int size) throws EOFException, InvalidDataTypeException {
@@ -240,7 +244,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
    * @return the data as a byte array in format to write to file
    */
   public byte[] writeByteArray() {
-    LOG.debug("Writing NullTerminatedString. {}", value);
+    LOG.log(DEBUG, "Writing NullTerminatedString. %s", value);
     byte[] data;
     //Write to buffer using the CharSet defined by getTextEncodingCharSet()
     //Add a null terminator which will be encoded based on encoding.
@@ -278,7 +282,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
     }
     //https://bitbucket.org/ijabz/jaudiotagger/issue/1/encoding-metadata-to-utf-16-can-fail-if
     catch (CharacterCodingException ce) {
-      LOG.error("Character encoding, charset:{} value:{}", charset, value, ce);
+      LOG.log(ERROR, "Character encoding, charset:%s value:%s", charset, value, ce);
       throw new RuntimeException(ce);
     }
     setSize(data.length);

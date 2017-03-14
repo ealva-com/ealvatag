@@ -18,6 +18,8 @@
  */
 package ealvatag.audio.flac;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.flac.metadatablock.MetadataBlock;
@@ -29,15 +31,16 @@ import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataSeekTable;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
+import ealvatag.logging.Log;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.flac.FlacTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -51,7 +54,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class FlacTagWriter {
   // Logger Object
-  public static Logger LOG = LoggerFactory.getLogger(FlacTagWriter.class);
+  public static Logger LOG = Loggers.get(Log.MARKER);
   private FlacTagCreator tc = new FlacTagCreator();
 
   /**
@@ -83,7 +86,7 @@ public class FlacTagWriter {
    * @throws CannotWriteException
    */
   public void write(TagFieldContainer tag, FileChannel fc, final String fileName) throws CannotWriteException {
-    LOG.trace("{} Writing tag", fileName);
+    LOG.log(TRACE, "%s Writing tag", fileName);
     try {
       MetadataBlockInfo blockInfo = new MetadataBlockInfo();
 
@@ -160,12 +163,12 @@ public class FlacTagWriter {
       //Go to start of Flac within file
       fc.position(flacStream.getStartOfFlacInFile());
 
-      LOG.trace("{}:Writing tag available bytes:{} needed bytes:{}", fileName, availableRoom, neededRoom);
+      LOG.log(TRACE, "%s:Writing tag available bytes:%s needed bytes:%s", fileName, availableRoom, neededRoom);
 
       //There is enough room to fit the tag without moving the audio just need to
       //adjust padding accordingly need to allow space for padding header if padding required
       if ((availableRoom == neededRoom) || (availableRoom > neededRoom + MetadataBlockHeader.HEADER_LENGTH)) {
-        LOG.trace("{} Room to Rewrite", fileName);
+        LOG.log(TRACE, "%s Room to Rewrite", fileName);
         //Jump over Id3 (if exists) and flac header
         fc.position(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
@@ -177,11 +180,11 @@ public class FlacTagWriter {
       }
       //Need to move audio
       else {
-        LOG.trace("{}:Audio must be shifted NewTagSize:{}:AvailableRoom:{}:MinimumAdditionalRoomRequired:{}",
-                  fileName,
-                  newTagSize,
-                  availableRoom,
-                  neededRoom - availableRoom);
+        LOG.log(TRACE, "%s:Audio must be shifted NewTagSize:%s:AvailableRoom:%s:MinimumAdditionalRoomRequired:%s",
+                fileName,
+                newTagSize,
+                availableRoom,
+                neededRoom - availableRoom);
         //As we are having to both anyway may as well put in the default padding
         insertUsingChunks(fileName,
                           tag,
@@ -192,7 +195,7 @@ public class FlacTagWriter {
                           availableRoom);
       }
     } catch (IOException ioe) {
-      LOG.error("Cannot write {} {}", fileName, ioe.getMessage());
+      LOG.log(ERROR, "Cannot write %s %s", fileName, ioe.getMessage());
       throw new CannotWriteException(fileName + ":" + ioe.getMessage());
     }
   }
@@ -204,16 +207,6 @@ public class FlacTagWriter {
    * We do this by reading/writing chunks of data allowing it to work on low memory systems
    * <p>
    * Chunk size defined by TagOptionSingleton.getInstance().getWriteChunkSize()
-   *
-   * @param tag
-   * @param fc
-   * @param blockInfo
-   * @param flacStream
-   * @param neededRoom
-   * @param availableRoom
-   *
-   * @throws IOException
-   * @throws UnsupportedEncodingException
    */
   private void insertUsingChunks(String file,
                                  TagFieldContainer tag,
@@ -235,7 +228,7 @@ public class FlacTagWriter {
 
     //Extra Space Required for larger metadata block
     int extraSpaceRequired = neededRoom - availableRoom;
-    LOG.trace("{} Audio needs shifting:{}", file, extraSpaceRequired);
+    LOG.log(TRACE, "%s Audio needs shifting:%s", file, extraSpaceRequired);
 
     //ChunkSize must be at least as large as the extra space required to write the metadata
     int chunkSize = (int)TagOptionSingleton.getInstance().getWriteChunkSize();

@@ -1,9 +1,12 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.base.MoreObjects;
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.TRACE;
 
 import java.io.EOFException;
 import java.util.Arrays;
@@ -38,108 +41,108 @@ import java.util.Arrays;
  * entries, you can calculate the length of this field.
  */
 public class VbriFrame {
-    private static final Logger LOG = LoggerFactory.getLogger(VbriFrame.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    //The offset into frame
-    private static final int VBRI_OFFSET = MPEGFrameHeader.HEADER_SIZE + 32;
+  //The offset into frame
+  private static final int VBRI_OFFSET = MPEGFrameHeader.HEADER_SIZE + 32;
 
-    //    private static final int VBRI_HEADER_BUFFER_SIZE = 120; //TODO this is just a guess, not right
-    private static final int VBRI_IDENTIFIER_BUFFER_SIZE = 4;
-    //    private static final int VBRI_DELAY_BUFFER_SIZE = 2;
+  //    private static final int VBRI_HEADER_BUFFER_SIZE = 120; //TODO this is just a guess, not right
+  private static final int VBRI_IDENTIFIER_BUFFER_SIZE = 4;
+  //    private static final int VBRI_DELAY_BUFFER_SIZE = 2;
 //    private static final int VBRI_QUALITY_BUFFER_SIZE = 2;
-    private static final int VBRI_AUDIOSIZE_BUFFER_SIZE = 4;
-    private static final int VBRI_FRAMECOUNT_BUFFER_SIZE = 4;
+  private static final int VBRI_AUDIOSIZE_BUFFER_SIZE = 4;
+  private static final int VBRI_FRAMECOUNT_BUFFER_SIZE = 4;
 //    private static final int VBRI_TOC_ENTRY_BUFFER_SIZE = 2;
 
 //    public static final int MAX_BUFFER_SIZE_NEEDED_TO_READ_VBRI = VBRI_OFFSET + VBRI_HEADER_BUFFER_SIZE;
 
-    private static final int BYTE_1 = 0;
-    private static final int BYTE_2 = 1;
-    private static final int BYTE_3 = 2;
-    private static final int BYTE_4 = 3;
+  private static final int BYTE_1 = 0;
+  private static final int BYTE_2 = 1;
+  private static final int BYTE_3 = 2;
+  private static final int BYTE_4 = 3;
 
-    /**
-     * Identifier
-     */
-    private static final byte[] VBRI_VBR_ID = {'V', 'B', 'R', 'I'};
+  /**
+   * Identifier
+   */
+  private static final byte[] VBRI_VBR_ID = {'V', 'B', 'R', 'I'};
 
-    private boolean vbr = false;
-    private int frameCount = -1;
-    private int audioSize = -1;
+  private boolean vbr = false;
+  private int frameCount = -1;
+  private int audioSize = -1;
 
-    private VbriFrame(final Buffer header) throws EOFException {
-        vbr = true;
-        header.skip(10);
-        setAudioSize(header);
-        setFrameCount(header);
+  private VbriFrame(final Buffer header) throws EOFException {
+    vbr = true;
+    header.skip(10);
+    setAudioSize(header);
+    setFrameCount(header);
+  }
+
+  private void setAudioSize(Buffer header) {
+    byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
+    for (int i = 0; i < frameSizeBuffer.length; i++) {
+      frameSizeBuffer[i] = header.readByte();
     }
+    audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
+        (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
+  }
 
-    private void setAudioSize(Buffer header) {
-        byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
-        for (int i = 0; i < frameSizeBuffer.length; i++) {
-            frameSizeBuffer[i] = header.readByte();
-        }
-        audioSize = (frameSizeBuffer[BYTE_1] << 24) & 0xFF000000 | (frameSizeBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
+  private void setFrameCount(Buffer header) {
+    byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
+    for (int i = 0; i < frameCountBuffer.length; i++) {
+      frameCountBuffer[i] = header.readByte();
     }
+    frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
+        (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
+  }
 
-    private void setFrameCount(Buffer header) {
-        byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
-        for (int i = 0; i < frameCountBuffer.length; i++) {
-            frameCountBuffer[i] = header.readByte();
-        }
-        frameCount = (frameCountBuffer[BYTE_1] << 24) & 0xFF000000 | (frameCountBuffer[BYTE_2] << 16) & 0x00FF0000 |
-                (frameCountBuffer[BYTE_3] << 8) & 0x0000FF00 | frameCountBuffer[BYTE_4] & 0x000000FF;
+
+  /**
+   * @return count of frames
+   */
+  final int getFrameCount() {
+    return frameCount;
+  }
+
+  /**
+   * @return size of audio data in bytes
+   */
+  final int getAudioSize() {
+    return audioSize;
+  }
+
+  static VbriFrame parseVBRIFrame(final Buffer header) throws EOFException {
+    return new VbriFrame(header);
+  }
+
+  static Buffer isVbriFrame(Buffer buffer) throws EOFException {
+    buffer.skip(VBRI_OFFSET);
+
+    //Check Identifier
+    byte[] identifier = new byte[VBRI_IDENTIFIER_BUFFER_SIZE];
+    for (int i = 0; i < identifier.length; i++) {
+      identifier[i] = buffer.getByte(i);
     }
-
-
-    /**
-     * @return count of frames
-     */
-    final int getFrameCount() {
-        return frameCount;
+    if ((!Arrays.equals(identifier, VBRI_VBR_ID))) {
+      return null;
     }
+    LOG.log(TRACE, "Found VBRI Frame");
+    return buffer;
+  }
 
-    /**
-     * @return size of audio data in bytes
-     */
-    final int getAudioSize() {
-        return audioSize;
-    }
+  final boolean isVbr() {
+    return true;
+  }
 
-    static VbriFrame parseVBRIFrame(final Buffer header) throws EOFException {
-        return new VbriFrame(header);
-    }
-
-    static Buffer isVbriFrame(Buffer buffer) throws EOFException {
-        buffer.skip(VBRI_OFFSET);
-
-        //Check Identifier
-        byte[] identifier = new byte[VBRI_IDENTIFIER_BUFFER_SIZE];
-        for (int i = 0; i < identifier.length; i++) {
-            identifier[i] = buffer.getByte(i);
-        }
-        if ((!Arrays.equals(identifier, VBRI_VBR_ID))) {
-            return null;
-        }
-        LOG.trace("Found VBRI Frame");
-        return buffer;
-    }
-
-    final boolean isVbr() {
-        return true;
-    }
-
-    public String getEncoder() {
-        return "Fraunhofer";
-    }
+  public String getEncoder() {
+    return "Fraunhofer";
+  }
 
 
-    @Override public String toString() {
-        return MoreObjects.toStringHelper(this)
-                          .add("vbr", vbr)
-                          .add("frameCount", frameCount)
-                          .add("audioSize", audioSize)
-                          .toString();
-    }
+  @Override public String toString() {
+    return MoreObjects.toStringHelper(this)
+                      .add("vbr", vbr)
+                      .add("frameCount", frameCount)
+                      .add("audioSize", audioSize)
+                      .toString();
+  }
 }

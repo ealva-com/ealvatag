@@ -18,6 +18,8 @@
  */
 package ealvatag.audio.asf;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileReader;
@@ -41,10 +43,12 @@ import ealvatag.audio.asf.util.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagException;
 import ealvatag.tag.asf.AsfTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -65,7 +69,7 @@ public class AsfFileReader extends AudioFileReader {
   /**
    * Logger instance
    */
-  private final static Logger LOG = LoggerFactory.getLogger(AsfFileReader.class);
+  private final static Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * This reader will be configured to read tag and audio header information.<br>
@@ -196,7 +200,7 @@ public class AsfFileReader extends AudioFileReader {
       tag = TagConverter.createTagOf(header);
 
     } catch (final RuntimeException e) {
-      LOG.error("Unexpected error", e);
+      LOG.log(ERROR, e, "Unexpected error");
       throw new CannotReadException("Failed to read", e);
     }
     return tag;
@@ -216,7 +220,7 @@ public class AsfFileReader extends AudioFileReader {
 
       // Just log a warning because file seems to play okay
       if (header.getFileHeader().getFileSize().longValue() != f.length()) {
-        LOG.warn(ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE, f, header.getFileHeader().getFileSize(), f.length());
+        LOG.log(WARN, ErrorMessage.ASF_FILE_HEADER_SIZE_DOES_NOT_MATCH_FILE_SIZE, f, header.getFileHeader().getFileSize(), f.length());
       }
 
       return new AudioFileImpl(f, extension, getAudioHeader(header), getTag(header));

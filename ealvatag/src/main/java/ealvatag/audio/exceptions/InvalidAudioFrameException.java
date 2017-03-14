@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$ Date :${DATE}
@@ -7,7 +7,7 @@
  */
 package ealvatag.audio.exceptions;
 
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import java.util.Locale;
 
 /**
  * Thrown if portion of file thought to be an AudioFrame is found to not be.
@@ -18,7 +18,7 @@ public class InvalidAudioFrameException extends Exception {
   }
 
   public InvalidAudioFrameException(String message, Object... formatArgs) {
-    super(exceptionMsg(message, formatArgs));
+    super(String.format(Locale.getDefault(), message, formatArgs));
   }
 
 }

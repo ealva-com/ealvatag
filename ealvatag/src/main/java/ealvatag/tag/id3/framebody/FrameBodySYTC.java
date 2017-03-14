@@ -15,6 +15,9 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.EventTimingCode;
@@ -24,8 +27,8 @@ import ealvatag.tag.datatype.SynchronisedTempoCodeList;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.WARN;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -81,7 +84,7 @@ import java.util.Map;
  * @version $Id$
  */
 public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
-  private static final Logger LOG = LoggerFactory.getLogger(FrameBodySYTC.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
 
   public static final int MPEG_FRAMES = 1;
@@ -256,7 +259,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
     long lastTimestamp = 0;
     for (final SynchronisedTempoCode code : codes) {
       if (code.getTimestamp() < lastTimestamp) {
-        LOG.warn("Synchronized tempo codes are not in chronological order. {} is followed by {}", lastTimestamp, code.getTimestamp());
+        LOG.log(WARN, "Synchronized tempo codes are not in chronological order. %s is followed by %s", lastTimestamp, code.getTimestamp());
         // throw exception???
       }
       lastTimestamp = code.getTimestamp();

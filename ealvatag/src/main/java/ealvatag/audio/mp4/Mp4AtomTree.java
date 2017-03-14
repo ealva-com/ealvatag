@@ -1,5 +1,7 @@
 package ealvatag.audio.mp4;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -7,10 +9,12 @@ import ealvatag.audio.mp4.atom.Mp4MetaBox;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.audio.mp4.atom.NullPadding;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.utils.tree.DefaultMutableTreeNode;
 import ealvatag.utils.tree.DefaultTreeModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -19,6 +23,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Tree representing atoms in the mp4 file
@@ -55,7 +60,7 @@ public class Mp4AtomTree {
   private Mp4BoxHeader moovHeader;
 
   //Logger Object
-  private static Logger LOG = LoggerFactory.getLogger(Mp4AtomTree.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Create Atom Tree
@@ -122,7 +127,7 @@ public class Mp4AtomTree {
             NullPadding np = new NullPadding(fc.position() - Mp4BoxHeader.HEADER_LENGTH, fc.size());
             DefaultMutableTreeNode trailingPaddingNode = new DefaultMutableTreeNode(np);
             rootNode.add(trailingPaddingNode);
-            LOG.warn(ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4, np.getFilePos());
+            LOG.log(WARN, ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4, np.getFilePos());
             break;
           } else {
             //File appears invalid
@@ -138,7 +143,7 @@ public class Mp4AtomTree {
           //A second Moov atom, this is illegal but may just be mess at the end of the file so ignore
           //and finish
           if (moovNode != null & mdatNode != null) {
-            LOG.warn(ErrorMessage.ADDITIONAL_MOOV_ATOM_AT_END_OF_MP4, fc.position() - Mp4BoxHeader.HEADER_LENGTH);
+            LOG.log(WARN, ErrorMessage.ADDITIONAL_MOOV_ATOM_AT_END_OF_MP4, fc.position() - Mp4BoxHeader.HEADER_LENGTH);
             break;
           }
           moovNode = newAtom;
@@ -150,10 +155,11 @@ public class Mp4AtomTree {
 
           //If Moov atom is incomplete we are not going to be able to read this file properly
           if (bytesRead < boxHeader.getDataLength()) {
-            throw new CannotReadException(ErrorMessage.exceptionMsg(ErrorMessage.ATOM_LENGTH_LARGER_THAN_DATA,
-                                                                    boxHeader.getId(),
-                                                                    boxHeader.getDataLength(),
-                                                                    bytesRead));
+            throw new CannotReadException(String.format(Locale.getDefault(),
+                                                        ErrorMessage.ATOM_LENGTH_LARGER_THAN_DATA,
+                                                        boxHeader.getId(),
+                                                        boxHeader.getDataLength(),
+                                                        bytesRead));
           }
           moovBuffer.rewind();
           buildChildrenOfNode(moovBuffer, newAtom);
@@ -251,7 +257,7 @@ public class Mp4AtomTree {
     while (moovBuffer.position() < ((startPos + parentBoxHeader.getDataLength()) - Mp4BoxHeader.HEADER_LENGTH)) {
       boxHeader = new Mp4BoxHeader(moovBuffer);
       boxHeader.setFilePos(moovHeader.getFilePos() + moovBuffer.position());
-      LOG.trace("Atom {} ", boxHeader);
+      LOG.log(TRACE, "Atom %s ", boxHeader);
 
       DefaultMutableTreeNode newAtom = new DefaultMutableTreeNode(boxHeader);
       parentNode.add(newAtom);
@@ -308,7 +314,6 @@ public class Mp4AtomTree {
     }
     moovBuffer.position(justAfterHeaderPos);
   }
-
 
 
   DefaultMutableTreeNode getMoovNode() {

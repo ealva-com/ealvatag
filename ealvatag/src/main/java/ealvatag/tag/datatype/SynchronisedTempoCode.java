@@ -18,6 +18,9 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
 import okio.Buffer;
 
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
+
 import java.io.EOFException;
 
 /**
@@ -89,12 +92,12 @@ public class SynchronisedTempoCode extends AbstractDataType implements Cloneable
     int localOffset = originalOffset;
     int size = getSize();
 
-    LOG.trace("offset:{}", localOffset);
+    LOG.log(TRACE, "offset:%s", localOffset);
 
     //The read has extended further than the defined frame size (ok to extend upto
     //size because the next datatype may be of length 0.)
     if (originalOffset > buffer.length - size) {
-      LOG.warn("Invalid size for FrameBody");
+      LOG.log(WARN, "Invalid size for FrameBody");
       throw new InvalidDataTypeException("Invalid size for FrameBody");
     }
 

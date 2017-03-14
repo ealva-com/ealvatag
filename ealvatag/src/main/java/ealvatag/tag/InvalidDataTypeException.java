@@ -13,9 +13,7 @@
  */
 package ealvatag.tag;
 
-import ealvatag.logging.ErrorMessage;
-
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import java.util.Locale;
 
 /**
  * Indicates there was a problem parsing this datatype due to a problem with the data
@@ -38,7 +36,7 @@ public class InvalidDataTypeException extends InvalidTagException {
     }
 
     public InvalidDataTypeException(String msg, Object... formatArgs) {
-        super(exceptionMsg(msg, formatArgs));
+      super(String.format(Locale.getDefault(), msg, formatArgs));
     }
 
 }

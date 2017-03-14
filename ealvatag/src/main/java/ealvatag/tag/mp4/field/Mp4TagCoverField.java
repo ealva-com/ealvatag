@@ -18,14 +18,17 @@
  */
 package ealvatag.tag.mp4.field;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.mp4.atom.Mp4NameBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.WARN;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -38,134 +41,137 @@ import java.nio.ByteBuffer;
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField {
-    private static final Logger LOG = LoggerFactory.getLogger(Mp4TagCoverField.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    //Type
-    private Mp4FieldType imageType;
+  //Type
+  private Mp4FieldType imageType;
 
-    //Contains the size of each atom including header, required because may only have data atom or
-    //may have data and name atom
-    private int dataAndHeaderSize;
+  //Contains the size of each atom including header, required because may only have data atom or
+  //may have data and name atom
+  private int dataAndHeaderSize;
 
-    /**
-     * Empty CoverArt Field
-     */
-    public Mp4TagCoverField() {
-        super(Mp4FieldKey.ARTWORK.getFieldName());
+  /**
+   * Empty CoverArt Field
+   */
+  public Mp4TagCoverField() {
+    super(Mp4FieldKey.ARTWORK.getFieldName());
+  }
+
+  /**
+   * @return data and header size
+   */
+  public int getDataAndHeaderSize() {
+    return dataAndHeaderSize;
+  }
+
+  /**
+   * Construct CoverField by reading data from audio file
+   *
+   * @param raw
+   * @param imageType
+   *
+   * @throws UnsupportedEncodingException
+   */
+  public Mp4TagCoverField(ByteBuffer raw, Mp4FieldType imageType) throws UnsupportedEncodingException {
+    super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
+    this.imageType = imageType;
+    if (!Mp4FieldType.isCoverArtType(imageType)) {
+      LOG.log(WARN, ErrorMessage.MP4_IMAGE_FORMAT_IS_NOT_TO_EXPECTED_TYPE, imageType);
+    }
+  }
+
+  /**
+   * Construct new cover art with binarydata provided
+   * <p>
+   * <p>
+   * Identifies the imageType by looking at the data
+   *
+   * @param data
+   *
+   * @throws UnsupportedEncodingException
+   */
+  public Mp4TagCoverField(byte[] data) {
+    super(Mp4FieldKey.ARTWORK.getFieldName(), data);
+
+    //Read signature
+    if (ImageFormats.binaryDataIsPngFormat(data)) {
+      imageType = Mp4FieldType.COVERART_PNG;
+    } else if (ImageFormats.binaryDataIsJpgFormat(data)) {
+      imageType = Mp4FieldType.COVERART_JPEG;
+    } else if (ImageFormats.binaryDataIsGifFormat(data)) {
+      imageType = Mp4FieldType.COVERART_GIF;
+    } else if (ImageFormats.binaryDataIsBmpFormat(data)) {
+      imageType = Mp4FieldType.COVERART_BMP;
+    } else {
+      LOG.log(WARN, ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT);
+      imageType = Mp4FieldType.COVERART_PNG;
+    }
+  }
+
+
+  /**
+   * Return field type, for artwork this also identifies the imagetype
+   *
+   * @return field type
+   */
+  public Mp4FieldType getFieldType() {
+    return imageType;
+  }
+
+  public boolean isBinary() {
+    return true;
+  }
+
+
+  public String toString() {
+    return imageType + ":" + dataBytes.length + "bytes";
+  }
+
+  protected void build(ByteBuffer raw) {
+    Mp4BoxHeader header = new Mp4BoxHeader(raw);
+    dataSize = header.getDataLength();
+    dataAndHeaderSize = header.getLength();
+
+    //Skip the version and length fields
+    raw.position(raw.position() + Mp4DataBox.PRE_DATA_LENGTH);
+
+    //Read the raw data into byte array
+    this.dataBytes = new byte[dataSize - Mp4DataBox.PRE_DATA_LENGTH];
+    raw.get(dataBytes, 0, dataBytes.length);
+
+    //Is there room for another atom (remember actually passed all the data so unless Covr is last atom
+    //there will be room even though more likely to be for the text top level atom)
+    int positionAfterDataAtom = raw.position();
+    if (raw.position() + Mp4BoxHeader.HEADER_LENGTH <= raw.limit()) {
+      //Is there a following name field (not the norm)
+      Mp4BoxHeader nameHeader = new Mp4BoxHeader(raw);
+      if (nameHeader.getId().equals(Mp4NameBox.IDENTIFIER)) {
+        dataSize += nameHeader.getDataLength();
+        dataAndHeaderSize += nameHeader.getLength();
+      } else {
+        raw.position(positionAfterDataAtom);
+      }
     }
 
-    /**
-     * @return data and header size
-     */
-    public int getDataAndHeaderSize() {
-        return dataAndHeaderSize;
+    //After returning buffers position will be after the end of this atom
+  }
+
+  /**
+   * @param imageType
+   *
+   * @return the corresponding mimetype
+   */
+  public static String getMimeTypeForImageType(Mp4FieldType imageType) {
+    if (imageType == Mp4FieldType.COVERART_PNG) {
+      return ImageFormats.MIME_TYPE_PNG;
+    } else if (imageType == Mp4FieldType.COVERART_JPEG) {
+      return ImageFormats.MIME_TYPE_JPEG;
+    } else if (imageType == Mp4FieldType.COVERART_GIF) {
+      return ImageFormats.MIME_TYPE_GIF;
+    } else if (imageType == Mp4FieldType.COVERART_BMP) {
+      return ImageFormats.MIME_TYPE_BMP;
+    } else {
+      return null;
     }
-
-    /**
-     * Construct CoverField by reading data from audio file
-     *
-     * @param raw
-     * @param imageType
-     * @throws UnsupportedEncodingException
-     */
-    public Mp4TagCoverField(ByteBuffer raw, Mp4FieldType imageType) throws UnsupportedEncodingException {
-        super(Mp4FieldKey.ARTWORK.getFieldName(), raw);
-        this.imageType = imageType;
-        if (!Mp4FieldType.isCoverArtType(imageType)) {
-            LOG.warn(ErrorMessage.MP4_IMAGE_FORMAT_IS_NOT_TO_EXPECTED_TYPE, imageType);
-        }
-    }
-
-    /**
-     * Construct new cover art with binarydata provided
-     * <p>
-     * <p>
-     * Identifies the imageType by looking at the data
-     *
-     * @param data
-     * @throws UnsupportedEncodingException
-     */
-    public Mp4TagCoverField(byte[] data) {
-        super(Mp4FieldKey.ARTWORK.getFieldName(), data);
-
-        //Read signature
-        if (ImageFormats.binaryDataIsPngFormat(data)) {
-            imageType = Mp4FieldType.COVERART_PNG;
-        } else if (ImageFormats.binaryDataIsJpgFormat(data)) {
-            imageType = Mp4FieldType.COVERART_JPEG;
-        } else if (ImageFormats.binaryDataIsGifFormat(data)) {
-            imageType = Mp4FieldType.COVERART_GIF;
-        } else if (ImageFormats.binaryDataIsBmpFormat(data)) {
-            imageType = Mp4FieldType.COVERART_BMP;
-        } else {
-            LOG.warn(ErrorMessage.GENERAL_UNIDENITIFED_IMAGE_FORMAT);
-            imageType = Mp4FieldType.COVERART_PNG;
-        }
-    }
-
-
-    /**
-     * Return field type, for artwork this also identifies the imagetype
-     *
-     * @return field type
-     */
-    public Mp4FieldType getFieldType() {
-        return imageType;
-    }
-
-    public boolean isBinary() {
-        return true;
-    }
-
-
-    public String toString() {
-        return imageType + ":" + dataBytes.length + "bytes";
-    }
-
-    protected void build(ByteBuffer raw) {
-        Mp4BoxHeader header = new Mp4BoxHeader(raw);
-        dataSize = header.getDataLength();
-        dataAndHeaderSize = header.getLength();
-
-        //Skip the version and length fields
-        raw.position(raw.position() + Mp4DataBox.PRE_DATA_LENGTH);
-
-        //Read the raw data into byte array
-        this.dataBytes = new byte[dataSize - Mp4DataBox.PRE_DATA_LENGTH];
-        raw.get(dataBytes, 0, dataBytes.length);
-
-        //Is there room for another atom (remember actually passed all the data so unless Covr is last atom
-        //there will be room even though more likely to be for the text top level atom)
-        int positionAfterDataAtom = raw.position();
-        if (raw.position() + Mp4BoxHeader.HEADER_LENGTH <= raw.limit()) {
-            //Is there a following name field (not the norm)
-            Mp4BoxHeader nameHeader = new Mp4BoxHeader(raw);
-            if (nameHeader.getId().equals(Mp4NameBox.IDENTIFIER)) {
-                dataSize += nameHeader.getDataLength();
-                dataAndHeaderSize += nameHeader.getLength();
-            } else {
-                raw.position(positionAfterDataAtom);
-            }
-        }
-
-        //After returning buffers position will be after the end of this atom
-    }
-
-    /**
-     * @param imageType
-     * @return the corresponding mimetype
-     */
-    public static String getMimeTypeForImageType(Mp4FieldType imageType) {
-        if (imageType == Mp4FieldType.COVERART_PNG) {
-            return ImageFormats.MIME_TYPE_PNG;
-        } else if (imageType == Mp4FieldType.COVERART_JPEG) {
-            return ImageFormats.MIME_TYPE_JPEG;
-        } else if (imageType == Mp4FieldType.COVERART_GIF) {
-            return ImageFormats.MIME_TYPE_GIF;
-        } else if (imageType == Mp4FieldType.COVERART_BMP) {
-            return ImageFormats.MIME_TYPE_BMP;
-        } else {
-            return null;
-        }
-    }
+  }
 }

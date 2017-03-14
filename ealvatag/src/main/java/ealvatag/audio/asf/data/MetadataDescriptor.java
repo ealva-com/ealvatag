@@ -18,13 +18,14 @@
  */
 package ealvatag.audio.asf.data;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.asf.util.Utils;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagOptionSingleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE;
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * This structure represents metadata objects in ASF {@link MetadataContainer}.<br>
@@ -57,7 +59,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
   /**
    * Logger instance.
    */
-  private static final Logger LOG = LoggerFactory.getLogger(MetadataDescriptor.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * The maximum language index allowed. (exclusive)
@@ -339,7 +341,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
     try {
       writeInto(result, this.containerType);
     } catch (final IOException e) {
-      LOG.warn(e.getMessage(), e);
+      LOG.log(WARN, e, "Error writing to byte array");
     }
     return result.toByteArray();
   }
@@ -521,7 +523,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
         try {
           result = new String(this.content, "UTF-16LE");
         } catch (final UnsupportedEncodingException e) {
-          LOG.warn(e.getMessage(), e);
+          LOG.log(WARN, e, "Bad encoding");
         }
         break;
       default:
@@ -774,10 +776,11 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
           System.arraycopy(tmp, 0, this.content, 0, this.content.length);
         } else {
           // We may not truncate, so its an error
-          throw new IllegalArgumentException(exceptionMsg(WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
-                                                          tmp.length,
-                                                          getContainerType().getMaximumDataLength(),
-                                                          getContainerType().getContainerGUID().getDescription()));
+          throw new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                           WMA_LENGTH_OF_DATA_IS_TOO_LARGE,
+                                                           tmp.length,
+                                                           getContainerType().getMaximumDataLength(),
+                                                           getContainerType().getContainerGUID().getDescription()));
         }
       }
     }

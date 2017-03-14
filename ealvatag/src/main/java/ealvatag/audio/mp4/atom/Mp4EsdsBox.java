@@ -1,15 +1,17 @@
 package ealvatag.audio.mp4.atom;
 
 import com.google.common.base.Preconditions;
+import ealvalog.LogLevel;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
 import ealvatag.audio.mp4.Mp4AudioProfile;
 import ealvatag.audio.mp4.Mp4Kind;
+import ealvatag.logging.Log;
 import okio.BufferedSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -72,17 +74,17 @@ import java.io.IOException;
  * - 1 byte SL value = 8-bit hex value set to 0x02
  */
 public class Mp4EsdsBox extends AbstractMp4Box {
-    private static final Logger LOG = LoggerFactory.getLogger(Mp4EsdsBox.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    private static final int VERSION_FLAG_LENGTH = 1;
-    private static final int OTHER_FLAG_LENGTH = 3;
-    //    public static final int DESCRIPTOR_TYPE_LENGTH = 1;
-    private static final int ES_ID_LENGTH = 2;
-    private static final int STREAM_PRIORITY_LENGTH = 1;
-    //    public static final int CONFIG_TYPE_LENGTH = 1;
+  private static final int VERSION_FLAG_LENGTH = 1;
+  private static final int OTHER_FLAG_LENGTH = 3;
+  //    public static final int DESCRIPTOR_TYPE_LENGTH = 1;
+  private static final int ES_ID_LENGTH = 2;
+  private static final int STREAM_PRIORITY_LENGTH = 1;
+  //    public static final int CONFIG_TYPE_LENGTH = 1;
 //    public static final int OBJECT_TYPE_LENGTH = 1;
-    private static final int STREAM_TYPE_LENGTH = 1;
-    private static final int BUFFER_SIZE_LENGTH = 3;
+  private static final int STREAM_TYPE_LENGTH = 1;
+  private static final int BUFFER_SIZE_LENGTH = 3;
 //    public static final int MAX_BITRATE_LENGTH = 4;
 //    public static final int AVERAGE_BITRATE_LENGTH = 4;
 //    public static final int DESCRIPTOR_OBJECT_TYPE_LENGTH = 1;
@@ -90,107 +92,107 @@ public class Mp4EsdsBox extends AbstractMp4Box {
 //    private static final int UNUSED_REMAINING_LENGTH = 6;
 
 
-    //Section indentifiers
-    private static final int SECTION_THREE = 0x03;
-    private static final int SECTION_FOUR = 0x04;
-    private static final int SECTION_FIVE = 0x05;
+  //Section indentifiers
+  private static final int SECTION_THREE = 0x03;
+  private static final int SECTION_FOUR = 0x04;
+  private static final int SECTION_FIVE = 0x05;
 //    private static final int SECTION_SIX = 0x06;
 
-    //Possible Section Filler values
-    private static final int FILLER_START = 0x80;
-    private static final int FILLER_OTHER = 0x81;
-    private static final int FILLER_END = 0xFE;
+  //Possible Section Filler values
+  private static final int FILLER_START = 0x80;
+  private static final int FILLER_OTHER = 0x81;
+  private static final int FILLER_END = 0xFE;
 
-    Mp4EsdsBox(final Mp4BoxHeader esdsBoxHeader,
-               final BufferedSource bufferedSource,
-               final Mp4AudioHeader audioHeader,
-               final EncoderType encoderType) throws IOException {
-        Preconditions.checkArgument(Mp4AtomIdentifier.ESDS.matches(esdsBoxHeader.getId()));
-        header = esdsBoxHeader;
-        int dataSize = esdsBoxHeader.getDataLength();
+  Mp4EsdsBox(final Mp4BoxHeader esdsBoxHeader,
+             final BufferedSource bufferedSource,
+             final Mp4AudioHeader audioHeader,
+             final EncoderType encoderType) throws IOException {
+    Preconditions.checkArgument(Mp4AtomIdentifier.ESDS.matches(esdsBoxHeader.getId()));
+    header = esdsBoxHeader;
+    int dataSize = esdsBoxHeader.getDataLength();
 
-        final int skipUnusedAmount = VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH;
-        bufferedSource.skip(skipUnusedAmount);
-        dataSize -= skipUnusedAmount;
+    final int skipUnusedAmount = VERSION_FLAG_LENGTH + OTHER_FLAG_LENGTH;
+    bufferedSource.skip(skipUnusedAmount);
+    dataSize -= skipUnusedAmount;
 
-        //Process Section 3 if exists
-        if (bufferedSource.readByte() == SECTION_THREE) {
-            dataSize--;
-            dataSize -= processSectionHeader(bufferedSource);
-            //Skip Other Section 3 data
-            bufferedSource.skip(ES_ID_LENGTH + STREAM_PRIORITY_LENGTH);
-            dataSize -= ES_ID_LENGTH + STREAM_PRIORITY_LENGTH;
-        }
-
-        Mp4Kind kind = Mp4Kind.UNKNOWN;
-        int avgBitrate = 0;
-
-        //Process Section 4 (to getFields type and bitrate)
-        if (bufferedSource.readByte() == SECTION_FOUR) {
-            dataSize--;
-            dataSize -= processSectionHeader(bufferedSource);
-            //kind (in iTunes)
-            kind = Mp4Kind.fromId((int)bufferedSource.readByte());
-            dataSize -= 1;
-            //Skip Other Section 4 data
-            bufferedSource.skip(STREAM_TYPE_LENGTH + BUFFER_SIZE_LENGTH);
-            dataSize -= STREAM_TYPE_LENGTH + BUFFER_SIZE_LENGTH;
-            //Bit rates
-            @SuppressWarnings("unused") final int maxBitrate = bufferedSource.readInt();
-            avgBitrate = bufferedSource.readInt();
-            dataSize -= 8;
-        }
-
-        Mp4AudioProfile audioProfile = Mp4AudioProfile.UNKNOWN;
-
-        int numberOfChannels = 0;
-
-        //Process Section 5,(to getFields no of channels and audioprofile(profile in itunes))
-        if (bufferedSource.readByte() == SECTION_FIVE) {
-            dataSize--;
-            dataSize -= processSectionHeader(bufferedSource);
-
-            //Audio Profile
-            audioProfile = Mp4AudioProfile.fromId(bufferedSource.readByte() >> 3);
-            dataSize--;
-            //Channels
-            byte channelByte = bufferedSource.readByte();
-            dataSize--;
-            numberOfChannels = (channelByte << 1) >> 4;
-        }
-
-        //Process Section 6, not needed ...
-
-        //Set Bitrate in kbps
-        audioHeader.setBitRate(avgBitrate / 1000);
-
-        //Set Number of Channels
-        audioHeader.setChannelNumber(numberOfChannels);
-
-        audioHeader.setKind(kind);
-        audioHeader.setProfile(audioProfile);
-
-        audioHeader.setEncodingType(encoderType.getDescription());
-
-        if (dataSize != 0) {
-            LOG.debug("{} did not fully read. Remaining={}", getClass(), dataSize);
-            bufferedSource.skip(dataSize);
-        }
+    //Process Section 3 if exists
+    if (bufferedSource.readByte() == SECTION_THREE) {
+      dataSize--;
+      dataSize -= processSectionHeader(bufferedSource);
+      //Skip Other Section 3 data
+      bufferedSource.skip(ES_ID_LENGTH + STREAM_PRIORITY_LENGTH);
+      dataSize -= ES_ID_LENGTH + STREAM_PRIORITY_LENGTH;
     }
 
-    @SuppressWarnings({"unused", "UnusedAssignment"})
-    private int processSectionHeader(BufferedSource dataBuffer) throws IOException {
-        int dataLength;
-        byte nextByte = dataBuffer.readByte();
-        if (((nextByte & 0xFF) == FILLER_START) || ((nextByte & 0xFF) == FILLER_OTHER) || ((nextByte & 0xFF) == FILLER_END)) {
-            dataBuffer.readByte();
-            dataBuffer.readByte();
-            dataLength = Utils.convertUnsignedByteToInt(dataBuffer.readByte());
-            return 4;
-        } else {
-            dataLength = Utils.convertUnsignedByteToInt(nextByte);
-            return 1;
-        }
+    Mp4Kind kind = Mp4Kind.UNKNOWN;
+    int avgBitrate = 0;
+
+    //Process Section 4 (to getFields type and bitrate)
+    if (bufferedSource.readByte() == SECTION_FOUR) {
+      dataSize--;
+      dataSize -= processSectionHeader(bufferedSource);
+      //kind (in iTunes)
+      kind = Mp4Kind.fromId((int)bufferedSource.readByte());
+      dataSize -= 1;
+      //Skip Other Section 4 data
+      bufferedSource.skip(STREAM_TYPE_LENGTH + BUFFER_SIZE_LENGTH);
+      dataSize -= STREAM_TYPE_LENGTH + BUFFER_SIZE_LENGTH;
+      //Bit rates
+      @SuppressWarnings("unused") final int maxBitrate = bufferedSource.readInt();
+      avgBitrate = bufferedSource.readInt();
+      dataSize -= 8;
     }
+
+    Mp4AudioProfile audioProfile = Mp4AudioProfile.UNKNOWN;
+
+    int numberOfChannels = 0;
+
+    //Process Section 5,(to getFields no of channels and audioprofile(profile in itunes))
+    if (bufferedSource.readByte() == SECTION_FIVE) {
+      dataSize--;
+      dataSize -= processSectionHeader(bufferedSource);
+
+      //Audio Profile
+      audioProfile = Mp4AudioProfile.fromId(bufferedSource.readByte() >> 3);
+      dataSize--;
+      //Channels
+      byte channelByte = bufferedSource.readByte();
+      dataSize--;
+      numberOfChannels = (channelByte << 1) >> 4;
+    }
+
+    //Process Section 6, not needed ...
+
+    //Set Bitrate in kbps
+    audioHeader.setBitRate(avgBitrate / 1000);
+
+    //Set Number of Channels
+    audioHeader.setChannelNumber(numberOfChannels);
+
+    audioHeader.setKind(kind);
+    audioHeader.setProfile(audioProfile);
+
+    audioHeader.setEncodingType(encoderType.getDescription());
+
+    if (dataSize != 0) {
+      LOG.log(LogLevel.DEBUG, "%s did not fully read. Remaining=%s", getClass(), dataSize);
+      bufferedSource.skip(dataSize);
+    }
+  }
+
+  @SuppressWarnings({"unused", "UnusedAssignment"})
+  private int processSectionHeader(BufferedSource dataBuffer) throws IOException {
+    int dataLength;
+    byte nextByte = dataBuffer.readByte();
+    if (((nextByte & 0xFF) == FILLER_START) || ((nextByte & 0xFF) == FILLER_OTHER) || ((nextByte & 0xFF) == FILLER_END)) {
+      dataBuffer.readByte();
+      dataBuffer.readByte();
+      dataLength = Utils.convertUnsignedByteToInt(dataBuffer.readByte());
+      return 4;
+    } else {
+      dataLength = Utils.convertUnsignedByteToInt(nextByte);
+      return 1;
+    }
+  }
 
 }

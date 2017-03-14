@@ -90,9 +90,12 @@ public class TestAudioTagger {
         file = deque.pollLast();
         final AudioFile audioFile = AudioFileIO.readIgnoreArtwork(file);
         final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
-        System.out.println("Title:  " + tag.getFirst(FieldKey.TITLE));
-        System.out.println("Artist: " + tag.getFirst(FieldKey.ARTIST));
-        System.out.println("Album:  " + tag.getFirst(FieldKey.ALBUM));
+        @SuppressWarnings("unused") final String title = tag.getFirst(FieldKey.TITLE);
+        @SuppressWarnings("unused") final String artist = tag.getFirst(FieldKey.ARTIST);
+        @SuppressWarnings("unused") final String album = tag.getFirst(FieldKey.ALBUM);
+//        System.out.println("Title:  " + title);
+//        System.out.println("Artist: " + artist);
+//        System.out.println("Album:  " + album);
       } catch (Throwable t) {
         System.err.println("Unable to read file:" + count + " path:" + (file != null ? file.getPath() : ""));
         failed++;

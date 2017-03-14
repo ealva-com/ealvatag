@@ -1,11 +1,14 @@
 package ealvatag.tag.mp4.field;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.Mp4TagField;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.INFO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,92 +24,94 @@ import java.nio.charset.StandardCharsets;
  * written back to file
  */
 public class Mp4TagRawBinaryField extends Mp4TagField {
-    private static final Logger LOG = LoggerFactory.getLogger(Mp4TagRawBinaryField.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
-    protected int dataSize;
-    protected byte[] dataBytes;
+  protected int dataSize;
+  protected byte[] dataBytes;
 
 
-    /**
-     * Construct binary field from rawdata of audio file
-     *
-     * @param header
-     * @param raw
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public Mp4TagRawBinaryField(Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException {
-        super(header.getId());
-        dataSize = header.getDataLength();
-        build(raw);
+  /**
+   * Construct binary field from rawdata of audio file
+   *
+   * @param header
+   * @param raw
+   *
+   * @throws java.io.UnsupportedEncodingException
+   */
+  public Mp4TagRawBinaryField(Mp4BoxHeader header, ByteBuffer raw) throws UnsupportedEncodingException {
+    super(header.getId());
+    dataSize = header.getDataLength();
+    build(raw);
+  }
+
+  public Mp4FieldType getFieldType() {
+    return Mp4FieldType.IMPLICIT;
+  }
+
+  /**
+   * Used when creating raw content
+   *
+   * @return
+   *
+   * @throws java.io.UnsupportedEncodingException
+   */
+  protected byte[] getDataBytes() throws UnsupportedEncodingException {
+    return dataBytes;
+  }
+
+
+  /**
+   * Build from data
+   * <p>
+   * <p>After returning buffers position will be after the end of this atom
+   *
+   * @param raw
+   */
+  protected void build(ByteBuffer raw) {
+    //Read the raw data into byte array
+    this.dataBytes = new byte[dataSize];
+    for (int i = 0; i < dataBytes.length; i++) {
+      this.dataBytes[i] = raw.get();
     }
+  }
 
-    public Mp4FieldType getFieldType() {
-        return Mp4FieldType.IMPLICIT;
+  public boolean isBinary() {
+    return true;
+  }
+
+  public boolean isEmpty() {
+    return this.dataBytes.length == 0;
+  }
+
+  public int getDataSize() {
+    return dataSize;
+
+  }
+
+  public byte[] getData() {
+    return this.dataBytes;
+  }
+
+  public void setData(byte[] d) {
+    this.dataBytes = d;
+  }
+
+  public void copyContent(TagField field) {
+    throw new UnsupportedOperationException("not done");
+  }
+
+  public byte[] getRawContent() throws UnsupportedEncodingException {
+    LOG.log(INFO, "Getting Raw data for:" + getId());
+    try {
+      ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
+      outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + dataSize));
+      outerbaos.write(getId().getBytes(StandardCharsets.ISO_8859_1));
+      outerbaos.write(dataBytes);
+      return outerbaos.toByteArray();
+    } catch (IOException ioe) {
+      //This should never happen as were not actually writing to/from a file
+      throw new RuntimeException(ioe);
     }
-
-    /**
-     * Used when creating raw content
-     *
-     * @return
-     * @throws java.io.UnsupportedEncodingException
-     */
-    protected byte[] getDataBytes() throws UnsupportedEncodingException {
-        return dataBytes;
-    }
-
-
-    /**
-     * Build from data
-     * <p>
-     * <p>After returning buffers position will be after the end of this atom
-     *
-     * @param raw
-     */
-    protected void build(ByteBuffer raw) {
-        //Read the raw data into byte array
-        this.dataBytes = new byte[dataSize];
-        for (int i = 0; i < dataBytes.length; i++) {
-            this.dataBytes[i] = raw.get();
-        }
-    }
-
-    public boolean isBinary() {
-        return true;
-    }
-
-    public boolean isEmpty() {
-        return this.dataBytes.length == 0;
-    }
-
-    public int getDataSize() {
-        return dataSize;
-
-    }
-
-    public byte[] getData() {
-        return this.dataBytes;
-    }
-
-    public void setData(byte[] d) {
-        this.dataBytes = d;
-    }
-
-    public void copyContent(TagField field) {
-        throw new UnsupportedOperationException("not done");
-    }
-
-    public byte[] getRawContent() throws UnsupportedEncodingException {
-        LOG.info("Getting Raw data for:" + getId());
-        try {
-            ByteArrayOutputStream outerbaos = new ByteArrayOutputStream();
-            outerbaos.write(Utils.getSizeBEInt32(Mp4BoxHeader.HEADER_LENGTH + dataSize));
-            outerbaos.write(getId().getBytes(StandardCharsets.ISO_8859_1));
-            outerbaos.write(dataBytes);
-            return outerbaos.toByteArray();
-        } catch (IOException ioe) {
-            //This should never happen as were not actually writing to/from a file
-            throw new RuntimeException(ioe);
-        }
-    }
+  }
 
 }

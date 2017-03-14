@@ -1,12 +1,16 @@
 package ealvatag.audio.wav;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.logging.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvatag.logging.Log;
+
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.ERROR;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -21,7 +25,7 @@ import java.nio.channels.FileChannel;
  * use with care, not very robust.
  */
 public class WavCleaner {
-  private static Logger LOG = LoggerFactory.getLogger(WavCleaner.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
   private File path;
   private String loggingName;
@@ -79,9 +83,9 @@ public class WavCleaner {
     }
 
     String id = chunkHeader.getID();
-    LOG.debug(loggingName + " Reading Chunk:" + id
-                  + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile())
-                  + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
+    LOG.log(DEBUG, loggingName + " Reading Chunk:" + id
+        + ":starting at:" + Hex.asDecAndHex(chunkHeader.getStartLocationInFile())
+        + ":sizeIncHeader:" + (chunkHeader.getSize() + ChunkHeader.CHUNK_HEADER_SIZE));
     final WavChunkType chunkType = WavChunkType.get(id);
 
     //If known chunkType
@@ -95,7 +99,7 @@ public class WavCleaner {
 
         //Dont need to do anything with these just skip
         default:
-          LOG.debug(loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
+          LOG.log(DEBUG, loggingName + " Skipping chunk bytes:" + chunkHeader.getSize());
           fc.position(fc.position() + chunkHeader.getSize());
       }
     }
@@ -104,10 +108,10 @@ public class WavCleaner {
       if (chunkHeader.getSize() < 0) {
         String msg = loggingName + " Not a valid header, unable to read a sensible size:Header"
             + chunkHeader.getID() + "Size:" + chunkHeader.getSize();
-        LOG.error(msg);
+        LOG.log(ERROR, msg);
         throw new CannotReadException(msg);
       }
-      LOG.error("{} Skipping chunk bytes:{} for {}", loggingName, chunkHeader.getSize(), chunkHeader.getID());
+      LOG.log(ERROR, "%s Skipping chunk bytes:%s for %s", loggingName, chunkHeader.getSize(), chunkHeader.getID());
       fc.position(fc.position() + chunkHeader.getSize());
     }
     IffHeaderChunk.ensureOnEqualBoundary(fc, chunkHeader);
@@ -121,12 +125,12 @@ public class WavCleaner {
   private static void recursiveDelete(File... paths) throws Exception {
     for (File dir : paths) {
       if (dir != null) {
-        for (File next : dir.listFiles( new FileFilter() {
-              @Override
-              public boolean accept(final File file) {
-                return file.isDirectory() || (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"));
-              }
-            })) {
+        for (File next : dir.listFiles(new FileFilter() {
+          @Override
+          public boolean accept(final File file) {
+            return file.isDirectory() || (file.getName().endsWith(".wav") || file.getName().endsWith(".WAV"));
+          }
+        })) {
           if (next.isDirectory()) {
             recursiveDelete(next);
           } else {

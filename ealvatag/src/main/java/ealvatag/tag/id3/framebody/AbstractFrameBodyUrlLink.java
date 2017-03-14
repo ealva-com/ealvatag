@@ -18,14 +18,16 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.StringSizeTerminated;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +41,7 @@ import java.nio.charset.StandardCharsets;
  * Abstract super class of all URL Frames
  */
 public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractFrameBodyUrlLink.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Creates a new FrameBodyUrlLink datatype.
@@ -57,7 +59,6 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
 
   /**
    * Creates a new FrameBodyUrlLink datatype., set up with data.
-   *
    */
   public AbstractFrameBodyUrlLink(String urlLink) {
     setObjectValue(DataTypes.OBJ_URLLINK, urlLink);
@@ -82,7 +83,6 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
 
   /**
    * Set URL Link
-   *
    */
   public void setUrlLink(String urlLink) {
     checkArgNotNull(urlLink);
@@ -111,12 +111,12 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
 
       //We still cant convert so just set log error and set to blank to allow save to continue
       if (!encoder.canEncode(getUrlLink())) {
-        LOG.warn(ErrorMessage.MP3_UNABLE_TO_ENCODE_URL, origUrl);
+        LOG.log(WARN, ErrorMessage.MP3_UNABLE_TO_ENCODE_URL, origUrl);
         setUrlLink("");
       }
       //it was ok, just note the modification made
       else {
-        LOG.warn(ErrorMessage.MP3_URL_SAVED_ENCODED, origUrl, getUrlLink());
+        LOG.log(WARN, ErrorMessage.MP3_URL_SAVED_ENCODED, origUrl, getUrlLink());
       }
     }
     super.write(tagBuffer);
@@ -131,7 +131,6 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
 
   /**
    * Encode url because may receive url already encoded or not, but we can only store as ISO8859-1
-   *
    */
   private String encodeURL(String url) {
     try {
@@ -144,7 +143,7 @@ public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
     } catch (UnsupportedEncodingException uee) {
       //Should never happen as utf-8 is always availablebut in case it does we just return the utl
       //unmodified
-      LOG.warn("Uable to url encode because utf-8 charset not available", uee);
+      LOG.log(WARN, "Uable to url encode because utf-8 charset not available", uee);
       return url;
     }
   }

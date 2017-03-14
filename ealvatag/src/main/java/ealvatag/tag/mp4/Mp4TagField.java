@@ -18,13 +18,16 @@
  */
 package ealvatag.tag.mp4;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
+import ealvatag.logging.Log;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.mp4.field.Mp4FieldType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.DEBUG;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,7 +46,7 @@ import java.nio.charset.StandardCharsets;
  * There are various subclasses that represent different types of fields
  */
 public abstract class Mp4TagField implements TagField {
-  private static Logger LOG = LoggerFactory.getLogger(Mp4TagField.class);
+  private static Logger LOG = Loggers.get(Log.MARKER);
 
 
   protected String id;
@@ -140,7 +143,7 @@ public abstract class Mp4TagField implements TagField {
    * Convert back to raw content, includes parent and data atom as views as one thing externally
    */
   public byte[] getRawContent() throws UnsupportedEncodingException {
-    LOG.debug("Getting Raw data for:{}", getId());
+    LOG.log(DEBUG, "Getting Raw data for:%s", getId());
     try {
       //Create Data Box
       byte[] databox = getRawContentDataOnly();
@@ -161,7 +164,7 @@ public abstract class Mp4TagField implements TagField {
    * Get raw content for the data component only
    */
   public byte[] getRawContentDataOnly() throws UnsupportedEncodingException {
-    LOG.debug("Getting Raw data for:{}", getId());
+    LOG.log(DEBUG, "Getting Raw data for:%s", getId());
     try {
       //Create Data Box
       ByteArrayOutputStream baos = new ByteArrayOutputStream();

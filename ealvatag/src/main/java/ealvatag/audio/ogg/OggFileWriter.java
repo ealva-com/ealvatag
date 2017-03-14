@@ -19,13 +19,11 @@
 package ealvatag.audio.ogg;
 
 import ealvatag.audio.AudioFile;
+import ealvatag.audio.AudioFileWriter;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
-import ealvatag.audio.AudioFileWriter;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -36,18 +34,15 @@ import java.io.RandomAccessFile;
  * Only works for Ogg files containing a vorbis stream
  */
 public class OggFileWriter extends AudioFileWriter {
-    // Logger Object
-    private static Logger logger = LoggerFactory.getLogger(OggFileWriter.class);
+  private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
 
-    private OggVorbisTagWriter vtw = new OggVorbisTagWriter();
+  protected void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
+      throws CannotReadException, CannotWriteException, IOException {
+    vtw.write(tag, raf, rafTemp);
+  }
 
-    protected void writeTag(AudioFile audioFile, TagFieldContainer tag, RandomAccessFile raf, RandomAccessFile rafTemp)
-            throws CannotReadException, CannotWriteException, IOException {
-        vtw.write(tag, raf, rafTemp);
-    }
-
-    protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf)
-            throws CannotReadException, CannotWriteException, IOException {
-        vtw.delete(raf, tempRaf);
-    }
+  protected void deleteTag(Tag tag, RandomAccessFile raf, RandomAccessFile tempRaf)
+      throws CannotReadException, CannotWriteException, IOException {
+    vtw.delete(raf, tempRaf);
+  }
 }

@@ -20,14 +20,19 @@
  */
 package ealvatag.tag.id3.framebody;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
+import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import okio.Buffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.INFO;
+import static ealvalog.LogLevel.TRACE;
+import static ealvalog.LogLevel.WARN;
 
 import java.nio.ByteBuffer;
 import java.text.ParseException;
@@ -39,7 +44,7 @@ import java.util.Locale;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody {
-  private static final Logger LOG = LoggerFactory.getLogger(FrameBodyTDRC.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Used when converting from v3 tags , these fields should ALWAYS hold the v23 value
@@ -102,7 +107,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * Retrieve the original identifier
-   *
    */
   public String getOriginalID() {
     return originalID;
@@ -126,7 +130,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
       Date date = parseDate.parse(text);
       return formatDate.format(date);
     } catch (ParseException e) {
-      LOG.warn("Unable to parse:{}", text);
+      LOG.log(WARN, "Unable to parse:%s", text);
     }
     return "";
   }
@@ -159,18 +163,18 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
   }
 
   public void setYear(String year) {
-    LOG.trace("Setting year to {}", year);
+    LOG.log(TRACE, "Setting year to %s", year);
     this.year = year;
   }
 
   public void setTime(String time) {
-    LOG.trace("Setting time to {}", time);
+    LOG.log(TRACE, "Setting time to %s", time);
     this.time = time;
   }
 
 
   public void setDate(String date) {
-    LOG.trace("Setting date to {}", date);
+    LOG.log(TRACE, "Setting date to %s", date);
     this.date = date;
   }
 
@@ -188,7 +192,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * When converting v3 TYER to v4 TDRC frame
-   *
    */
   public FrameBodyTDRC(FrameBodyTYER body) {
     originalID = ID3v23Frames.FRAME_ID_V3_TYER;
@@ -199,7 +202,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * When converting v3 TIME to v4 TDRC frame
-   *
    */
   public FrameBodyTDRC(FrameBodyTIME body) {
     originalID = ID3v23Frames.FRAME_ID_V3_TIME;
@@ -211,7 +213,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * When converting v3 TDAT to v4 TDRC frame
-   *
    */
   public FrameBodyTDRC(FrameBodyTDAT body) {
     originalID = ID3v23Frames.FRAME_ID_V3_TDAT;
@@ -223,7 +224,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * When converting v3 TDRA to v4 TDRC frame
-   *
    */
   public FrameBodyTDRC(FrameBodyTRDA body) {
     originalID = ID3v23Frames.FRAME_ID_V3_TRDA;
@@ -236,7 +236,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
    * Creates a new FrameBodyTDRC dataType.
    * <p>
    * Tries to decode the text to find the v24 date mask being used, and store the v3 components of the mask
-   *
    */
   public FrameBodyTDRC(byte textEncoding, String text) {
     super(textEncoding, text);
@@ -245,7 +244,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * Creates a new FrameBodyTDRC datatype from File
-   *
    */
   public FrameBodyTDRC(ByteBuffer byteBuffer, int frameSize) throws InvalidTagException {
     super(byteBuffer, frameSize);
@@ -276,9 +274,7 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
         //Do nothing;
       } catch (NumberFormatException nfe) {
         //Do nothing except log warning because not really expecting this to happen
-        if (LOG.isWarnEnabled()) {
-          LOG.warn("Date Formatter:{} failed to parse:{}", formatters.get(i).toPattern(), getText(), nfe);
-        }
+        LOG.log(WARN, "Date Formatter:%s failed to parse:%s", formatters.get(i).toPattern(), getText(), nfe);
       }
     }
   }
@@ -287,7 +283,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
    * Format Date
    * <p>
    * Synchronized because SimpleDateFormat is invalid
-   *
    */
   private static synchronized String formatDateAsYear(Date d) {
     return formatYearIn.format(d);
@@ -297,7 +292,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
    * Format Date
    * <p>
    * Synchronized because SimpleDateFormat is invalid
-   *
    */
   private static synchronized String formatDateAsDate(Date d) {
     return formatDateIn.format(d);
@@ -307,7 +301,6 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
    * Format Date
    * <p>
    * Synchronized because SimpleDateFormat is invalid
-   *
    */
   private static synchronized String formatDateAsTime(Date d) {
     return formatTimeIn.format(d);
@@ -315,12 +308,11 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
   /**
    * Extract the components ans store the v23 version of the various values
-   *
    */
   //TODO currently if user has entered Year and Month, we only store in v23, should we store month with
   //first day
   private void extractID3v23Formats(final Date dateRecord, final int precision) {
-    LOG.info("Precision is:" + precision + "for date:" + dateRecord.toString());
+    LOG.log(INFO, "Precision is:" + precision + "for date:" + dateRecord.toString());
 
     //Precision Year
     if (precision == PRECISION_YEAR) {

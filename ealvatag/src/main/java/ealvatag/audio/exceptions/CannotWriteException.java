@@ -18,7 +18,7 @@
  */
 package ealvatag.audio.exceptions;
 
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
+import java.util.Locale;
 
 /**
  * This exception is thrown if the writing process of an audio file failed.
@@ -35,7 +35,7 @@ public class CannotWriteException extends Exception {
   }
 
   public CannotWriteException(String message, Object... formatArgs) {
-    super(exceptionMsg(message, formatArgs));
+    super(String.format(Locale.getDefault(), message, formatArgs));
   }
 
   public CannotWriteException(Throwable cause, String message) {
@@ -43,7 +43,7 @@ public class CannotWriteException extends Exception {
   }
 
   public CannotWriteException(Throwable cause, String message, Object... formatArgs) {
-    super(exceptionMsg(message, formatArgs), cause);
+    super(String.format(Locale.getDefault(), message, formatArgs), cause);
   }
 
   public CannotWriteException(Throwable cause) {

@@ -1,11 +1,14 @@
 package ealvatag.audio.asf.io;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.asf.data.Chunk;
 import ealvatag.audio.asf.data.ChunkContainer;
 import ealvatag.audio.asf.data.GUID;
 import ealvatag.audio.asf.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ealvatag.logging.Log;
+
+import static ealvalog.LogLevel.ERROR;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +32,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
   /**
    * Logger
    */
-  private static final Logger LOG = LoggerFactory.getLogger(ChunkContainerReader.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Within this range, a {@link ChunkReader} should be aware if it fails.
@@ -58,8 +61,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
    * readers.<br>
    *
    * @param toRegister    List of {@link ChunkReader} class instances, which are to be utilized by the instance.
-   * @param readChunkOnce if <code>true</code>, each chunk type (identified by chunk GUID) will handled only once, if a reader is
-   *                      available,
+   * @param readChunkOnce if <code>true</code>, each chunk type (identified by chunk GUID) will handled only once, if a reader is available,
    *                      other chunks will be discarded.
    */
   protected ChunkContainerReader(final List<Class<? extends ChunkReader>> toRegister, final boolean readChunkOnce) {
@@ -207,7 +209,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
         this.readerMap.put(curr, reader);
       }
     } catch (InstantiationException | IllegalAccessException e) {
-      LOG.error("Could not register chunk reader", e);
+      LOG.log(ERROR, e, "Could not register chunk reader");
     }
   }
 

@@ -24,8 +24,11 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
+import ealvatag.logging.Log;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
@@ -41,9 +44,9 @@ import ealvatag.tag.id3.framebody.FrameBodyTIT2;
 import ealvatag.tag.id3.framebody.FrameBodyTPE1;
 import ealvatag.tag.id3.framebody.FrameBodyTRCK;
 import ealvatag.tag.reference.GenreTypes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static ealvalog.LogLevel.DEBUG;
+import static ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 
@@ -64,7 +67,7 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  */
 public class ID3v11Tag extends ID3v1Tag {
-  private static final Logger LOG = LoggerFactory.getLogger(ID3v11Tag.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   //For writing output
   private static final String TYPE_TRACK = "track";
@@ -199,7 +202,7 @@ public class ID3v11Tag extends ID3v1Tag {
             if (null != genreId) {
               this.genre = genreId.byteValue();
             } else {
-              LOG.warn("{}:Unable to convert TCON frame to format suitable for v11 tag", loggingFilename, ex);
+              LOG.log(WARN, "%s:Unable to convert TCON frame to format suitable for v11 tag", loggingFilename, ex);
               this.genre = (byte)ID3v1Tag.GENRE_UNDEFINED;
             }
           }
@@ -422,7 +425,7 @@ public class ID3v11Tag extends ID3v1Tag {
     if (!seek(byteBuffer)) {
       throw new TagNotFoundException("ID3v1 tag not found");
     }
-    LOG.debug("Reading v1.1 tag");
+    LOG.log(DEBUG, "Reading v1.1 tag");
 
     //Do single file read of data to cut down on file reads
     byte[] dataBuffer = new byte[TAG_LENGTH];
@@ -466,7 +469,7 @@ public class ID3v11Tag extends ID3v1Tag {
    * @throws IOException thrown if there were problems writing to the file
    */
   public void write(RandomAccessFile file) throws IOException {
-    LOG.debug("Saving ID3v11 tag to file");
+    LOG.log(DEBUG, "Saving ID3v11 tag to file");
     byte[] buffer = new byte[TAG_LENGTH];
     int i;
     String str;
@@ -516,7 +519,7 @@ public class ID3v11Tag extends ID3v1Tag {
     }
     file.write(buffer);
 
-    LOG.debug("Saved ID3v11 tag to file");
+    LOG.log(DEBUG, "Saved ID3v11 tag to file");
   }
 
 

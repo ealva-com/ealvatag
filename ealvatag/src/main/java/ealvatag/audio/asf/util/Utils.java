@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Some static Methods which are used in several Classes. <br>
@@ -61,8 +62,9 @@ public class Utils {
   public static void checkStringLengthNullSafe(String value) throws IllegalArgumentException {
     if (value != null) {
       if (value.length() > MAXIMUM_STRING_LENGTH_ALLOWED) {
-        throw new IllegalArgumentException(ErrorMessage.exceptionMsg(ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE,
-                                                                     value.length() * 2));
+        throw new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                         ErrorMessage.WMA_LENGTH_OF_STRING_IS_TOO_LARGE,
+                                                         value.length() * 2));
       }
     }
   }

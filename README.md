@@ -68,6 +68,26 @@ Maven:
 
 Ensure you have the most recent version by checking [here](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ealva%22%20AND%20a%3A%22ealvatag%22)
 
+Dependencies
+------------
+ [Square's Okio](https://github.com/square/okio)
+    Used for reading mp3 and mp4 files and will be further integrated. The segment pooling, along with our customizations (if you choose 
+    to use them), dramatically increased read performance over Jdk stream/file IO.
+    
+    compile group: 'com.squareup.okio', name: 'okio', version:'1.11.0'
+
+ [Google's Guava](https://github.com/google/guava)
+    Used for Optional<>, Immutable collections, and general utilities
+     
+    compile group: 'com.google.guava', name: 'guava', version:'20.0'
+
+ [eAlvaLog](https://github.com/ealva-com/ealvalog)
+    Thin logging facade. Only the API is used in this library. For users of this library it currently supports the java.util.logging 
+    Logger and Android logging. It should be very easy to write a facade implementation for another logging framework if it's not already
+    provided.
+    
+    compile 'com.ealva:ealvalog:0.0.2-SNAPSHOT'
+
 Android
 -------
 
@@ -91,8 +111,6 @@ ProGuard
 
 License
 -------
-    Copyright (c) 2003-2005 Raphaël Slinckx <raphael@slinckx.net>
-    Copyright (C) 2015 Paul Taylor
     Copyright 2017 Eric A. Snell
 
     eAlvaTag is free software: you can redistribute it and/or modify
@@ -107,6 +125,8 @@ License
 
     You should have received a copy of the GNU Lesser General Public License
     along with eAlvaTag.  If not, see <http://www.gnu.org/licenses/>.
+    
+ Some files copyright by the original authors (see file headers)    
  
 History
 -------

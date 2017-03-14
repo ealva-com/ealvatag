@@ -17,15 +17,19 @@
 
 package ealvatag.audio;
 
+import ealvalog.Logger;
+import ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.logging.ErrorMessage;
+import ealvatag.logging.Log;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static ealvalog.LogLevel.ERROR;
+import static ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +43,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 28/01/2016.
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter {
-  private static final Logger LOG = LoggerFactory.getLogger(AudioFileWriter2.class);
+  private static final Logger LOG = Loggers.get(Log.MARKER);
 
   /**
    * Delete the tag (if any) present in the given file
@@ -54,18 +58,15 @@ public abstract class AudioFileWriter2 extends AudioFileWriter {
     checkCanWriteAndSize(af, file);
     try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel()) {
       deleteTag(af.getTag().orNull(), channel, file.getAbsolutePath());
-    } catch (FileNotFoundException e) {
-      LOG.warn(ErrorMessage.GENERAL_DELETE_FAILED, file);
-      throw new CannotWriteException(e, ErrorMessage.GENERAL_DELETE_FAILED, file);
     } catch (IOException e) {
-      LOG.warn(ErrorMessage.GENERAL_DELETE_FAILED, file, e);
+      LOG.log(WARN, e, ErrorMessage.GENERAL_DELETE_FAILED, file);
       throw new CannotWriteException(e, ErrorMessage.GENERAL_DELETE_FAILED, file);
     }
   }
 
   private void checkCanWriteAndSize(final AudioFile af, final File file) throws CannotWriteException {
     if (TagOptionSingleton.getInstance().isCheckIsWritable() && !file.canWrite()) {
-      LOG.error(ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE, file);
+      LOG.log(ERROR, ErrorMessage.NO_PERMISSIONS_TO_WRITE_TO_FILE, file);
       throw new CannotWriteException(ErrorMessage.GENERAL_DELETE_FAILED, file);
     }
 
@@ -88,14 +89,14 @@ public abstract class AudioFileWriter2 extends AudioFileWriter {
     } catch (FileNotFoundException e) {
       if (file.exists()) {
         // file exists, permission error
-        LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING, file);
+        LOG.log(WARN, ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING, file);
         throw new NoWritePermissionsException(e, ErrorMessage.GENERAL_WRITE_FAILED_TO_OPEN_FILE_FOR_EDITING, file);
       } else {
-        LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file);
+        LOG.log(WARN, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file);
         throw new CannotWriteException(e, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE_FILE_NOT_FOUND, file);
       }
     } catch (IOException e) {
-      LOG.warn(ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE, file, e);
+      LOG.log(WARN, e, ErrorMessage.GENERAL_WRITE_FAILED_BECAUSE, file);
       throw new CannotWriteException(e);
     }
   }

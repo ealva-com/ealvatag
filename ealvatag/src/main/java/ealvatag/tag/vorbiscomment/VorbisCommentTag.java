@@ -62,7 +62,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
 
   /**
    * Use to construct a new tag properly initialized
-   *
    */
   public static VorbisCommentTag createNewTag() {
     VorbisCommentTag tag = new VorbisCommentTag();
@@ -244,7 +243,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
    * <p>
    * We dont want this to be blank, when written to file this field is written to a different location
    * to all other fields but user of library can just reat it as another field
-   *
    */
   void setVendor(String vendor) {
     if (vendor == null) {
@@ -343,7 +341,6 @@ public class VorbisCommentTag extends AbstractTag implements ContainsVorbisComme
 
   /**
    * Retrieve artwork raw data when using the deprecated COVERART format
-   *
    */
   byte[] getArtworkBinaryData() {
     String base64data = this.getFirst(VorbisCommentFieldKey.COVERART);

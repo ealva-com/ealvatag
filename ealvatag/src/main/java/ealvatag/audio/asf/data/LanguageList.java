@@ -3,11 +3,10 @@ package ealvatag.audio.asf.data;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.logging.ErrorMessage;
 
-import static ealvatag.logging.ErrorMessage.exceptionMsg;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This structure represents the data of the ASF language object.<br>
@@ -46,7 +45,9 @@ public class LanguageList extends Chunk {
         this.languages.add(language);
       }
     } else {
-      throw new IllegalArgumentException(exceptionMsg(ErrorMessage.WMA_LENGTH_OF_LANGUAGE_IS_TOO_LARGE, language.length() * 2 + 2));
+      throw new IllegalArgumentException(String.format(Locale.getDefault(),
+                                                       ErrorMessage.WMA_LENGTH_OF_LANGUAGE_IS_TOO_LARGE,
+                                                       language.length() * 2 + 2));
     }
   }
 
