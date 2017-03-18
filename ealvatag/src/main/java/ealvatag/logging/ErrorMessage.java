@@ -97,8 +97,6 @@ public final class ErrorMessage {
   public static final String MP3_URL_SAVED_ENCODED = "Url:%s saved in encoded form as %s";
   public static final String MP3_UNABLE_TO_ENCODE_URL =
       "Unable to save url:%s because cannot encode all characters setting to blank instead";
-  public static final String MP4_UNABLE_TO_FIND_NEXT_ATOM_BECAUSE_IDENTIFIER_IS_INVALID =
-      "Unable to find next atom because identifier is invalid %s";
   public static final String MP4_NO_GENREID_FOR_GENRE = "No genre id could be found for this genre atom with data length %s";
   public static final String MP4_GENRE_OUT_OF_RANGE = "Genre Id %s does not map to a valid genre";
   public static final String MP3_PICTURE_TYPE_INVALID = "Picture Type is set to invalid value:%s";

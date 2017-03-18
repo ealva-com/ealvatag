@@ -15,19 +15,22 @@
  * see <http://www.gnu.org/licenses/>.
  */
 
-package ealvatag.logging;
+package ealvatag;
 
-import ealvalog.Marker;
-import ealvalog.Markers;
+import java.util.Locale;
 
 /**
- * Logging constants
+ * Base exception which includes string formatting
  *
- * Created by Eric A. Snell on 3/14/17.
+ * Created by Eric A. Snell on 3/18/17.
  */
-public class Log {
-  private static final String MARKER_NAME = "eAlvaTag";
+@SuppressWarnings("unused")
+public class BaseException extends RuntimeException {
+  public BaseException(final String msg, final Object... formatArgs) {
+      super(String.format(Locale.getDefault(), msg, formatArgs));
+  }
 
-  /** Every logger in eAlvaTag uses this Marker */
-  public static final Marker MARKER = Markers.get(MARKER_NAME);
+  public BaseException(final Throwable cause, final String msg, final Object... formatArgs) {
+    super(String.format(Locale.getDefault(), msg, formatArgs), cause);
+  }
 }

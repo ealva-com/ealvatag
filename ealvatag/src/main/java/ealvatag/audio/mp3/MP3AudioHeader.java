@@ -97,6 +97,7 @@ import java.util.concurrent.TimeUnit;
   MP3AudioHeader(final FileOperator fileOperator, final long startByte, final String fileName) throws IOException,
                                                                                                       InvalidAudioFrameException {
     if (!seek(fileOperator, startByte, fileName)) {
+      LOG.log(ERROR, ErrorMessage.NO_AUDIO_HEADER_FOUND, fileName);
       throw new InvalidAudioFrameException(ErrorMessage.NO_AUDIO_HEADER_FOUND, fileName);
     }
   }

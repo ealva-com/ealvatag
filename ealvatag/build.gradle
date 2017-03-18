@@ -7,7 +7,7 @@ tasks.withType(Javadoc) {
 description = 'ealvatag'
 dependencies {
     compile group: 'com.squareup.okio', name: 'okio', version:'1.11.0'
-    compile 'com.ealva:ealvalog:0.0.5-SNAPSHOT'
+    compile 'com.ealva:ealvalog:0.0.8-SNAPSHOT'
     compile group: 'com.google.guava', name: 'guava', version:'20.0'
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'2.6.4'

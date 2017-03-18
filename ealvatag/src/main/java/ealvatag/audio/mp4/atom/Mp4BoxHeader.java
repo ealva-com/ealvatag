@@ -48,7 +48,7 @@ import java.nio.charset.StandardCharsets;
  * which is model in this class.
  * <p>
  * The length includes the length of the box including the identifier and the length itself.
- * Then they may contain data and/or sub boxes, if they contain subboxes they are known as a parent box. Parent boxes
+ * Then they may contain data and/or sub boxes, if they contain sub-boxes they are known as a parent box. Parent boxes
  * shouldn't really contain data, but sometimes they do.
  * <p>
  * Parent boxes length includes the length of their immediate sub boxes
@@ -60,9 +60,9 @@ public class Mp4BoxHeader {
   // Logger Object
   private static Logger LOG = Loggers.get(Log.MARKER);
 
-  public static final int OFFSET_POS = 0;
+  //  public static final int OFFSET_POS = 0;
   public static final int IDENTIFIER_POS = 4;
-  public static final int OFFSET_LENGTH = 4;
+  private static final int OFFSET_LENGTH = 4;
   public static final int IDENTIFIER_LENGTH = 4;
   public static final int HEADER_LENGTH = OFFSET_LENGTH + IDENTIFIER_LENGTH;
 
@@ -78,9 +78,6 @@ public class Mp4BoxHeader {
   //Raw Header data
   protected ByteBuffer dataBuffer;
 
-  //Mp4 uses UTF-8 for all text
-  public static final String CHARSET_UTF_8 = "UTF-8";
-
   /**
    * Construct empty header
    * <p>
@@ -91,13 +88,13 @@ public class Mp4BoxHeader {
   }
 
   /**
-   * Construct header to allow manual creation of header for writing to file
+   * Construct header for writing to file
    *
-   * @param id
+   * @param id identifier of 4 char length
    */
   public Mp4BoxHeader(String id) {
     if (id.length() != IDENTIFIER_LENGTH) {
-      throw new RuntimeException("Invalid length:atom idenifier should always be 4 characters long");
+      throw new InvalidBoxHeaderException(id, id.length());
     }
     dataBuffer = ByteBuffer.allocate(HEADER_LENGTH);
     try {
@@ -115,11 +112,11 @@ public class Mp4BoxHeader {
   /**
    * Construct header
    * <p>
-   * Create header using headerdata, expected to find header at headerdata current position
+   * Create header using {@code headerdata}. Expecting to find header at current position
    * <p>
    * Note after processing adjusts position to immediately after header
    *
-   * @param headerData
+   * @param headerData buffer currently pointing to header data
    */
   public Mp4BoxHeader(ByteBuffer headerData) {
     update(headerData);
@@ -129,6 +126,8 @@ public class Mp4BoxHeader {
    * Create header using headerdata, expected to find header at headerdata current position
    * <p>
    * Note after processing adjusts position to immediately after header
+   *
+   * @param headerData buffer currently pointing to header data
    */
   public void update(ByteBuffer headerData) {
     //Read header data into byte array
@@ -148,7 +147,7 @@ public class Mp4BoxHeader {
     }
 
     if (length < HEADER_LENGTH) {
-      throw new InvalidBoxHeaderException(id);
+      throw new InvalidBoxHeaderException(id, length);
     }
   }
 
@@ -189,25 +188,6 @@ public class Mp4BoxHeader {
     dataBuffer.put(1, headerSize[1]);
     dataBuffer.put(2, headerSize[2]);
     dataBuffer.put(3, headerSize[3]);
-
-    this.length = length;
-
-  }
-
-  /**
-   * Set the Id.
-   * <p>
-   * Allows you to manully create a header
-   * This will modify the databuffer accordingly
-   *
-   * @param length
-   */
-  public void setId(int length) {
-    byte[] headerSize = Utils.getSizeBEInt32(length);
-    dataBuffer.put(5, headerSize[0]);
-    dataBuffer.put(6, headerSize[1]);
-    dataBuffer.put(7, headerSize[2]);
-    dataBuffer.put(8, headerSize[3]);
 
     this.length = length;
 
