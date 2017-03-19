@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+Version 0.1.0 *(2017-03-18)*
+----------------------------
+
+ * Results switching to parameterized logging, using Okio for reading/pooling, and other optimizations, batch read of of Mp3 and Mp4 files 
+ is now over twice as fast as original.
+ * Memory footprint while reading is approximately 50% of original and switching to a pooling reader implementation has greatly reduced 
+ GC thrash.
+ * Switching to eAlvaLog reduced dependency on large logging library. Now (13-03-2017) 40KB library included (20KB jar file).
+
 Version 0.0.2 *(2017-01-19)*
 ----------------------------
 

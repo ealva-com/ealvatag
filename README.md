@@ -50,11 +50,17 @@ Quick Start
   }
 ```
 
+eAlvaLog is a very thin facade used by eAlvaTag for logging purposes. Each Logger instance created by eAlvaTag logs all output with a 
+Marker found at ealvatag.logging.Log.MARKER. This allows for easy filtering so log output can be directed and/or filtered as needed. 
+eAlvaLog provides a very light Android specific LoggerFactory if you only need log to the Android log. If using the java.util.logging 
+logger framework, you may also add a handler at Loggers.get("ealvatag") to add a Handler specifically for eAlvaTag library log output. 
+See [eAlvaLog](https://github.com/ealva-com/ealvalog) for more details on configuring logging. 
+
 Add eAlvaTag to your project
 ----------------------------
 Gradle:
 ```gradle
-compile 'com.ealva:ealvatag:0.0.2'
+compile 'com.ealva:ealvatag:0.1.0'
 ```
 
 Maven:
@@ -62,7 +68,7 @@ Maven:
 <dependency>
     <groupId>com.ealva</groupId>
     <artifactId>ealvatag</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -74,19 +80,19 @@ Dependencies
     Used for reading mp3 and mp4 files and will be further integrated. The segment pooling, along with our customizations (if you choose 
     to use them), dramatically increased read performance over Jdk stream/file IO.
     
-    compile group: 'com.squareup.okio', name: 'okio', version:'1.11.0'
+    compile 'com.squareup.okio:okio:1.11.0'
 
  [Google's Guava](https://github.com/google/guava)
     Used for Optional<>, Immutable collections, and general utilities
      
-    compile group: 'com.google.guava', name: 'guava', version:'20.0'
+    compile 'com.google.guava:guava:20.0'
 
  [eAlvaLog](https://github.com/ealva-com/ealvalog)
     Thin logging facade. Only the API is used in this library. For users of this library it currently supports the java.util.logging 
     Logger and Android logging. It should be very easy to write a facade implementation for another logging framework if it's not already
     provided.
     
-    compile 'com.ealva:ealvalog:0.0.2-SNAPSHOT'
+    compile 'com.ealva:ealvalog:0.0.9'
 
 Android
 -------
