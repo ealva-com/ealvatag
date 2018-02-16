@@ -30,22 +30,20 @@ public interface Artwork {
     Artwork setWidth(int width);
 
     /**
-     * Should be called when you wish to prime the artwork for saving
+     * Should be called when you wish to prime the artwork for saving.
      *
-     * @return true if successful
+     * @return true if successful or if AndroidArtwork (always returns true)
      *
-     * @throws UnsupportedOperationException if AndroidArtwork
      */
-    boolean setImageFromData() throws UnsupportedOperationException;
+    boolean setImageFromData();
 
     /**
      *
-     * @return a BufferedImage if not on the Android platform
+     * @return a BufferedImage if not on the Android platform. Null on Android
      *
      * @throws IOException if error reading the image data
-     * @throws UnsupportedOperationException if AndroidArtwork
      */
-    Object getImage() throws IOException, UnsupportedOperationException;
+    Object getImage() throws IOException;
 
     boolean isLinked();
 

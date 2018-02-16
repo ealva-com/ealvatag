@@ -13,7 +13,7 @@ public class AndroidArtwork extends AbstractArtwork {
         return artwork;
     }
 
-    static AndroidArtwork createLinkedArtworkFromURL(String url) throws IOException {
+    static AndroidArtwork createLinkedArtworkFromURL(String url) {
         AndroidArtwork artwork = new AndroidArtwork();
         artwork.setImageUrl(url);
         return artwork;
@@ -28,12 +28,8 @@ public class AndroidArtwork extends AbstractArtwork {
     AndroidArtwork() {
     }
 
-    public boolean setImageFromData() {
-        throw new UnsupportedOperationException();
-    }
+    public boolean setImageFromData() { return true; }
 
-    public Object getImage() throws IOException {
-        throw new UnsupportedOperationException();
-    }
+    public Object getImage() { return null; }
 
 }
