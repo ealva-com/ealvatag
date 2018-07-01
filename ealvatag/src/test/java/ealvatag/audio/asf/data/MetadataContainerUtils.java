@@ -1,8 +1,8 @@
 package ealvatag.audio.asf.data;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.Log;
 
 import java.util.Collections;

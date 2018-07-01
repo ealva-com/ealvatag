@@ -16,8 +16,15 @@
 package ealvatag.tag.id3;
 
 import com.google.common.base.Strings;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidDataTypeException;
@@ -39,11 +46,6 @@ import okio.BufferedSource;
 import okio.InflaterSource;
 import okio.Okio;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.INFO;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
 import static ealvatag.tag.id3.ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE;
 import static ealvatag.tag.id3.ID3v24Frames.FRAME_ID_ATTACHED_PICTURE;
 

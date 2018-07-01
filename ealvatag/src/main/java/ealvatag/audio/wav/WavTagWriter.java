@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.wav;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -37,9 +37,9 @@ import ealvatag.tag.TagTextField;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.INFO;
 import static ealvatag.audio.iff.IffHeaderChunk.SIGNATURE_LENGTH;
 import static ealvatag.audio.iff.IffHeaderChunk.SIZE_LENGTH;
 

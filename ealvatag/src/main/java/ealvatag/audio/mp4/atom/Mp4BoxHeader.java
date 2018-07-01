@@ -18,9 +18,9 @@
  */
 package ealvatag.audio.mp4.atom;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
@@ -28,7 +28,7 @@ import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.logging.Log;
 import okio.BufferedSource;
 
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

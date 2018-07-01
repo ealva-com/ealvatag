@@ -1,13 +1,13 @@
 package ealvatag.tag.datatype;
 
-import ealvalog.LogLevel;
+import com.ealva.ealvalog.LogLevel;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.*;
+import static com.ealva.ealvalog.LogLevel.*;
 
 import java.io.EOFException;
 import java.nio.ByteBuffer;

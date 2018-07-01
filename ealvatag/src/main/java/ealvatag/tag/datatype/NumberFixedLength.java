@@ -26,7 +26,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.ID3Tags;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.EOFException;
 

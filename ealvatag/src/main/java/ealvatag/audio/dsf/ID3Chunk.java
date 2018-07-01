@@ -1,11 +1,12 @@
 package ealvatag.audio.dsf;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.Utils;
 import ealvatag.logging.Log;
-
-import static ealvalog.LogLevel.WARN;
 
 import java.nio.ByteBuffer;
 

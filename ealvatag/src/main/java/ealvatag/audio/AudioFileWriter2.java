@@ -17,8 +17,12 @@
 
 package ealvatag.audio;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.NoWritePermissionsException;
@@ -27,9 +31,6 @@ import ealvatag.logging.Log;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
-
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileNotFoundException;

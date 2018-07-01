@@ -1,15 +1,15 @@
 package ealvatag.audio.mp4.atom;
 
 import com.google.common.base.Preconditions;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
 import ealvatag.logging.Log;
 import okio.BufferedSource;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -18,8 +18,8 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.EventTimingTypes;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.EOFException;
 

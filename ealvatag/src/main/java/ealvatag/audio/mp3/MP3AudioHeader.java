@@ -18,8 +18,8 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.base.MoreObjects;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.AudioHeader;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.io.FileOperator;
@@ -28,10 +28,10 @@ import ealvatag.logging.Log;
 import ealvatag.utils.TimeUnits;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import java.io.EOFException;

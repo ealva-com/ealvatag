@@ -24,8 +24,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.UnsupportedFileType;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -57,10 +57,10 @@ import ealvatag.tag.lyrics3.AbstractLyrics3;
 import okio.Buffer;
 
 import static com.google.common.base.Preconditions.checkState;
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileInputStream;

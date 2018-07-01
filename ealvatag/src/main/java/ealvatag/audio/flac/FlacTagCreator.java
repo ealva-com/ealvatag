@@ -18,8 +18,11 @@
  */
 package ealvatag.audio.flac;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.TRACE;
+
 import ealvatag.audio.AbstractTagCreator;
 import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPadding;
@@ -29,8 +32,6 @@ import ealvatag.logging.Log;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
-
-import static ealvalog.LogLevel.TRACE;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

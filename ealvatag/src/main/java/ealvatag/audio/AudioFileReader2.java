@@ -17,18 +17,18 @@
 
 package ealvatag.audio;
 
-import ealvalog.LogLevel;
+import com.ealva.ealvalog.LogLevel;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.File;
 import java.io.FileNotFoundException;

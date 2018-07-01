@@ -1,11 +1,11 @@
 package ealvatag.tag.id3;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidFrameException;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 import static ealvatag.logging.ErrorMessage.ID3_UNABLE_TO_DECOMPRESS_FRAME;
 
 import java.nio.ByteBuffer;

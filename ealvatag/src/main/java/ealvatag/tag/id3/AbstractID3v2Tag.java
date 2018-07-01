@@ -19,8 +19,14 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.UnableToCreateFileException;
 import ealvatag.audio.exceptions.UnableToModifyFileException;
@@ -65,10 +71,6 @@ import ealvatag.tag.reference.Languages;
 import ealvatag.utils.Check;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.MP3_UNABLE_TO_ADJUST_PADDING;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;

@@ -1,11 +1,11 @@
 package ealvatag.audio.iff;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;

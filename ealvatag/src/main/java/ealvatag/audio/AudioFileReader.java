@@ -16,9 +16,9 @@
  */
 package ealvatag.audio;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;

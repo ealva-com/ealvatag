@@ -1,13 +1,13 @@
 package ealvatag.audio.aiff;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.Hex;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.ERROR;
 import static ealvatag.audio.aiff.AiffType.AIFC;
 import static ealvatag.audio.aiff.AiffType.AIFF;
 import static ealvatag.audio.iff.IffHeaderChunk.HEADER_LENGTH;

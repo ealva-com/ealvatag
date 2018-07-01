@@ -1,9 +1,9 @@
 package ealvatag.audio.mp4.atom;
 
 import com.google.common.base.Preconditions;
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;

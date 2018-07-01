@@ -18,8 +18,8 @@
 package ealvatag.audio.mp4;
 
 import com.google.common.base.Preconditions;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -44,8 +44,8 @@ import ealvatag.tag.mp4.field.Mp4TrackField;
 import ealvatag.utils.Buffers;
 import okio.BufferedSource;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

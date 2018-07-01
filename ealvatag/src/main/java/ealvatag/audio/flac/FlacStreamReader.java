@@ -1,14 +1,15 @@
 package ealvatag.audio.flac;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.id3.AbstractID3v2Tag;
-
-import static ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

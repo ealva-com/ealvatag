@@ -17,15 +17,15 @@
 package ealvatag.audio;
 
 import com.google.common.io.Files;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.Log;
 import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.FileTypeUtil;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 

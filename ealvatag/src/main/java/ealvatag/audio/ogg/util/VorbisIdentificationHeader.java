@@ -18,12 +18,12 @@
  */
 package ealvatag.audio.ogg.util;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.ogg.VorbisVersion;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.nio.charset.StandardCharsets;
 

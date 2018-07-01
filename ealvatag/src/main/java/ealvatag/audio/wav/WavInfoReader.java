@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.wav;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -31,8 +31,8 @@ import ealvatag.audio.wav.chunk.WavFormatChunk;
 import ealvatag.logging.Hex;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -18,8 +18,8 @@
 package ealvatag.audio.mp4;
 
 import com.google.common.base.Preconditions;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -27,7 +27,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import okio.BufferedSource;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.IOException;
 

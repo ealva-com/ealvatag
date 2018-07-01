@@ -16,8 +16,8 @@
 package ealvatag.tag.id3;
 
 import com.google.common.base.Strings;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
@@ -54,9 +54,9 @@ import ealvatag.utils.Characters;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.INFO;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.tag.id3.ID3SyncSafeInteger.INTEGRAL_SIZE;
 
 import java.io.ByteArrayOutputStream;

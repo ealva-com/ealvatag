@@ -1,14 +1,14 @@
 package ealvatag.audio.mp3;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.Log;
 import ealvatag.utils.ArrayUtil;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.INFO;
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.EOFException;
 import java.util.Arrays;

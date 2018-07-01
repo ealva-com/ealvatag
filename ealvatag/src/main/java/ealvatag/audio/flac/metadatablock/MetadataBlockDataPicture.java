@@ -1,8 +1,11 @@
 package ealvatag.audio.flac.metadatablock;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.TRACE;
+
 import ealvatag.audio.AbstractTag;
 import ealvatag.audio.Utils;
 import ealvatag.logging.Log;
@@ -10,8 +13,6 @@ import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.TagField;
 import ealvatag.tag.reference.PictureTypes;
-
-import static ealvalog.LogLevel.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

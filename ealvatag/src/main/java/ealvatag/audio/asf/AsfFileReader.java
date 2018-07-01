@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.asf;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileReader;
@@ -47,8 +47,8 @@ import ealvatag.logging.Log;
 import ealvatag.tag.TagException;
 import ealvatag.tag.asf.AsfTag;
 
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.BufferedInputStream;
 import java.io.File;

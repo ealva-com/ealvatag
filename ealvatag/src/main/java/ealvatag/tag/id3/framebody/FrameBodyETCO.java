@@ -15,8 +15,8 @@
  */
 package ealvatag.tag.id3.framebody;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
@@ -27,7 +27,7 @@ import ealvatag.tag.id3.ID3v24Frames;
 import ealvatag.tag.id3.valuepair.EventTimingTimestampTypes;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

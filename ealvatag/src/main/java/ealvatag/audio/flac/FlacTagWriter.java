@@ -18,8 +18,12 @@
  */
 package ealvatag.audio.flac;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.flac.metadatablock.MetadataBlock;
@@ -36,9 +40,6 @@ import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.flac.FlacTag;
-
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

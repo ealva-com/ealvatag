@@ -17,8 +17,8 @@ package ealvatag.tag.id3;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
@@ -44,10 +44,10 @@ import ealvatag.tag.id3.framebody.FrameBodyTDRC;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.AT_LEAST_ONE_REQUIRED;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.CANNOT_BE_NULL_OR_EMPTY;

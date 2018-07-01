@@ -18,13 +18,13 @@
  */
 package ealvatag.audio.asf.data;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.logging.Log;
 import ealvatag.tag.TagOptionSingleton;
 
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.WMA_LENGTH_OF_DATA_IS_TOO_LARGE;
 
 import java.io.ByteArrayOutputStream;

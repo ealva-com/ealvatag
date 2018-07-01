@@ -1,8 +1,8 @@
 package ealvatag.audio.aiff.chunk;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.logging.Log;

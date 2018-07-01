@@ -17,8 +17,8 @@ package ealvatag.tag.id3;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
@@ -60,10 +60,10 @@ import ealvatag.tag.reference.GenreTypes;
 import ealvatag.utils.Check;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.ID3_EXTENDED_HEADER_SIZE_TOO_SMALL;
 import static ealvatag.logging.ErrorMessage.ID3_INVALID_OR_UNKNOWN_FLAG_SET;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;

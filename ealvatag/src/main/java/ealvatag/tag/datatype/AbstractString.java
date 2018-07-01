@@ -25,7 +25,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.id3.valuepair.TextEncoding;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;

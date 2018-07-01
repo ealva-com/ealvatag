@@ -19,16 +19,17 @@
  */
 package ealvatag.tag.vorbiscomment;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
-
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 

@@ -1,7 +1,7 @@
 package ealvatag.audio.mp4;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -13,8 +13,8 @@ import ealvatag.logging.Log;
 import ealvatag.utils.tree.DefaultMutableTreeNode;
 import ealvatag.utils.tree.DefaultTreeModel;
 
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

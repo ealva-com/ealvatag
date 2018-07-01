@@ -19,8 +19,8 @@
  */
 package ealvatag.audio.ogg;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.util.OggPageHeader;
 import ealvatag.audio.ogg.util.VorbisHeader;
@@ -31,8 +31,8 @@ import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.vorbiscomment.VorbisCommentReader;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

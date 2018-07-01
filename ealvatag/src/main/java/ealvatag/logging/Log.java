@@ -17,8 +17,8 @@
 
 package ealvatag.logging;
 
-import ealvalog.Marker;
-import ealvalog.Markers;
+import com.ealva.ealvalog.Marker;
+import com.ealva.ealvalog.Markers;
 
 /**
  * Logging constants

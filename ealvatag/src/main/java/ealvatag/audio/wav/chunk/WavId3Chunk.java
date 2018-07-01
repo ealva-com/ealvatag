@@ -1,7 +1,7 @@
 package ealvatag.audio.wav.chunk;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.logging.Log;
@@ -12,9 +12,9 @@ import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 import ealvatag.tag.wav.WavTag;
 
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.INFO;
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

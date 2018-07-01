@@ -18,8 +18,8 @@
  */
 package ealvatag.tag.id3.framebody;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
@@ -27,7 +27,7 @@ import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.StringSizeTerminated;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.checkArgNotNull;
 
 import java.io.ByteArrayOutputStream;

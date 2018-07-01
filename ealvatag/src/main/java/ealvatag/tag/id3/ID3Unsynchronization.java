@@ -1,11 +1,11 @@
 package ealvatag.tag.id3;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.mp3.MPEGFrameHeader;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

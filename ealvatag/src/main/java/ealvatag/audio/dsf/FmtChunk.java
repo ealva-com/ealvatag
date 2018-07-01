@@ -1,14 +1,16 @@
 package ealvatag.audio.dsf;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
 import static ealvatag.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
 
 import java.io.IOException;

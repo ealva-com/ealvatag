@@ -20,8 +20,8 @@
  */
 package ealvatag.tag.datatype;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidDataTypeException;

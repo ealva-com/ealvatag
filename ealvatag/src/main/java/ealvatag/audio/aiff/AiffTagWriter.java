@@ -18,9 +18,9 @@
  */
 package ealvatag.audio.aiff;
 
-import ealvalog.LogLevel;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.LogLevel;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.aiff.chunk.AiffChunkSummary;
 import ealvatag.audio.aiff.chunk.AiffChunkType;

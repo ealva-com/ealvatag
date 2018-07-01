@@ -34,7 +34,7 @@ import ealvatag.tag.id3.valuepair.TextEncoding;
 import ealvatag.tag.reference.PictureTypes;
 import ealvatag.utils.EqualsUtil;
 
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 /**
  * Represents a number that acts as a key into an enumeration of values

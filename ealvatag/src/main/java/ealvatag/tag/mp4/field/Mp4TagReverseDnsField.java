@@ -1,7 +1,7 @@
 package ealvatag.tag.mp4.field;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
@@ -15,8 +15,8 @@ import ealvatag.tag.mp4.atom.Mp4MeanBox;
 import ealvatag.tag.mp4.atom.Mp4NameBox;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.INFO;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

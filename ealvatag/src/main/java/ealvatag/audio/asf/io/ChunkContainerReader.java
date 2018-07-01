@@ -1,14 +1,14 @@
 package ealvatag.audio.asf.io;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.asf.data.Chunk;
 import ealvatag.audio.asf.data.ChunkContainer;
 import ealvatag.audio.asf.data.GUID;
 import ealvatag.audio.asf.util.Utils;
 import ealvatag.logging.Log;
 
-import static ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.ERROR;
 
 import java.io.IOException;
 import java.io.InputStream;

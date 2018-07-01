@@ -1,7 +1,7 @@
 package ealvatag.tag.asf;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.MetadataDescriptor;
@@ -9,7 +9,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;

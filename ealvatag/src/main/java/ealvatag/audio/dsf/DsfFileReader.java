@@ -4,8 +4,11 @@
  */
 package ealvatag.audio.dsf;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.audio.AudioFileReader2;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
@@ -19,7 +22,6 @@ import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Tag;
 import ealvatag.tag.id3.ID3v24Tag;
 
-import static ealvalog.LogLevel.WARN;
 import static ealvatag.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
 
 import java.io.IOException;

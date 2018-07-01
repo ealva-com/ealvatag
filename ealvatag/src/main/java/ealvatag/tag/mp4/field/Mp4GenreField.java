@@ -1,16 +1,16 @@
 package ealvatag.tag.mp4.field;
 
-import ealvalog.LogLevel;
+import com.ealva.ealvalog.LogLevel;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.reference.GenreTypes;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 
-import static ealvalog.LogLevel.*;
+import static com.ealva.ealvalog.LogLevel.*;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

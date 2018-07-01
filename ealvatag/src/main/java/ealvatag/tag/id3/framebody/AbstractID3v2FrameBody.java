@@ -20,8 +20,13 @@
  */
 package ealvatag.tag.id3.framebody;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
+
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidDataTypeException;
@@ -31,9 +36,6 @@ import ealvatag.tag.datatype.AbstractDataType;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
 import static ealvatag.logging.ErrorMessage.INVALID_DATATYPE;
 
 import java.io.ByteArrayOutputStream;

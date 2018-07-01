@@ -1,14 +1,14 @@
 package ealvatag.tag.mp4.field;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.Log;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.Mp4TagField;
 
-import static ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.INFO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

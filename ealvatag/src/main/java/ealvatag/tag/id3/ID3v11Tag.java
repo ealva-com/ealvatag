@@ -24,8 +24,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Log;
@@ -45,8 +45,8 @@ import ealvatag.tag.id3.framebody.FrameBodyTPE1;
 import ealvatag.tag.id3.framebody.FrameBodyTRCK;
 import ealvatag.tag.reference.GenreTypes;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.WARN;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 

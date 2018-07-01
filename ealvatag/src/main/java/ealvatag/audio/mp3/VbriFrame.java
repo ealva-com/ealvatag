@@ -1,12 +1,12 @@
 package ealvatag.audio.mp3;
 
 import com.google.common.base.MoreObjects;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.logging.Log;
 import okio.Buffer;
 
-import static ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.TRACE;
 
 import java.io.EOFException;
 import java.util.Arrays;

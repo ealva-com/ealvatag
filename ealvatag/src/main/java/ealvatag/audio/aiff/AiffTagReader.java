@@ -1,8 +1,8 @@
 
 package ealvatag.audio.aiff;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.aiff.chunk.AiffChunkReader;
 import ealvatag.audio.aiff.chunk.AiffChunkType;
 import ealvatag.audio.aiff.chunk.ID3Chunk;
@@ -15,9 +15,9 @@ import ealvatag.logging.Log;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.aiff.AiffTag;
 
-import static ealvalog.LogLevel.ERROR;
-import static ealvalog.LogLevel.TRACE;
-import static ealvalog.LogLevel.WARN;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

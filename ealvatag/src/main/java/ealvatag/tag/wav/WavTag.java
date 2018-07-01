@@ -21,8 +21,8 @@ package ealvatag.tag.wav;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
@@ -40,7 +40,7 @@ import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.Id3SupportingTag;
 import ealvatag.tag.images.Artwork;
 
-import static ealvalog.LogLevel.INFO;
+import static com.ealva.ealvalog.LogLevel.INFO;
 import static ealvatag.utils.Check.CANNOT_BE_NULL;
 import static ealvatag.utils.Check.checkArgNotNull;
 

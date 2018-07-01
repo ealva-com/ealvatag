@@ -18,8 +18,8 @@
  */
 package ealvatag.tag.mp4;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.Log;
@@ -27,7 +27,7 @@ import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.mp4.field.Mp4FieldType;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

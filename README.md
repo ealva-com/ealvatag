@@ -60,7 +60,7 @@ Add eAlvaTag to your project
 ----------------------------
 Gradle:
 ```gradle
-compile 'com.ealva:ealvatag:0.1.0'
+compile 'com.ealva:ealvatag:0.4.2'
 ```
 
 Maven:
@@ -68,7 +68,7 @@ Maven:
 <dependency>
     <groupId>com.ealva</groupId>
     <artifactId>ealvatag</artifactId>
-    <version>0.1.0</version>
+    <version>0.4.2</version>
 </dependency>
 ```
 
@@ -80,19 +80,19 @@ Dependencies
     Used for reading mp3 and mp4 files and will be further integrated. The segment pooling, along with our customizations (if you choose 
     to use them), dramatically increased read performance over Jdk stream/file IO.
     
-    compile 'com.squareup.okio:okio:1.11.0'
+    implementation 'com.squareup.okio:okio:1.11.0'
 
  [Google's Guava](https://github.com/google/guava)
     Used for Optional<>, Immutable collections, and general utilities
      
-    compile 'com.google.guava:guava:20.0'
+    implementation 'com.google.guava:guava:20.0'
 
  [eAlvaLog](https://github.com/ealva-com/ealvalog)
     Thin logging facade. Only the API is used in this library. For users of this library it currently supports the java.util.logging 
     Logger and Android logging. It should be very easy to write a facade implementation for another logging framework if it's not already
     provided.
     
-    compile 'com.ealva:ealvalog:0.0.9'
+    implementation 'com.ealva:ealvalog:0.0.19'
 
 Android
 -------
@@ -117,7 +117,7 @@ ProGuard
 
 License
 -------
-    Copyright 2017 Eric A. Snell
+    Copyright 2018 Eric A. Snell
 
     eAlvaTag is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by

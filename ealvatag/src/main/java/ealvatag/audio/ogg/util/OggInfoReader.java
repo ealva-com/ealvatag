@@ -19,8 +19,8 @@
  */
 package ealvatag.audio.ogg.util;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -28,7 +28,7 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 
-import static ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

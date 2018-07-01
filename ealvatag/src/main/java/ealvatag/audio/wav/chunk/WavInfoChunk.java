@@ -1,7 +1,7 @@
 package ealvatag.audio.wav.chunk;
 
-import ealvalog.Logger;
-import ealvalog.Loggers;
+import com.ealva.ealvalog.Logger;
+import com.ealva.ealvalog.Loggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.logging.Log;
@@ -9,8 +9,8 @@ import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
 
-import static ealvalog.LogLevel.DEBUG;
-import static ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
