@@ -59,7 +59,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
   /**
    * Logger instance.
    */
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * The maximum language index allowed. (exclusive)

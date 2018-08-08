@@ -86,7 +86,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
   private static final byte REVISION = 0;
   private static final String TYPE_COMPRESSION = "compression";
   private static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   /**
    * The tag is compressed, although no compression scheme is defined in ID3v22
    */

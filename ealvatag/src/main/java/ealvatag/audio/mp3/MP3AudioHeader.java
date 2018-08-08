@@ -83,7 +83,7 @@ import java.util.concurrent.TimeUnit;
   private static final int CONVERTS_BYTE_TO_BITS = 8;
 
   //Logger
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * After testing the average location of the first MP3Header bit was at 5000 bytes so this is

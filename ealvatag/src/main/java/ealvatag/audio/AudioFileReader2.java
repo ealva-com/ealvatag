@@ -40,7 +40,7 @@ import java.nio.channels.FileChannel;
  * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /*
  * Reads the given file, and return an AudioFile object containing the Tag

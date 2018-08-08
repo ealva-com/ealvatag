@@ -32,7 +32,7 @@ import java.nio.channels.FileChannel;
  * Read Aiff chunks, except the ID3 chunk.
  */
 public class AiffInfoReader extends AiffChunkReader {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   protected GenericAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException {

@@ -43,7 +43,7 @@ import java.nio.channels.FileChannel;
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader {
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   private String loggingName;

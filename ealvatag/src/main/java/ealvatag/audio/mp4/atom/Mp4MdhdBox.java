@@ -19,7 +19,7 @@ import java.nio.ByteOrder;
  * MdhdBox ( media (stream) header), holds the Sampling Rate used.
  */
 public class Mp4MdhdBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static final int VERSION_FLAG_POS = 0;
   public static final int OTHER_FLAG_POS = 1;

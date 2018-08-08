@@ -18,7 +18,7 @@ import java.nio.ByteBuffer;
  */
 class ID3Unsynchronization {
   //Logger
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   /**

@@ -32,7 +32,7 @@ import java.util.Arrays;
  * It my then contain a Lame Frame ( a Lame frame is in essence an extended Xing Frame
  */
 public class XingFrame {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //The offset into first frame varies based on the MPEG frame properties
   private static final int MPEG_VERSION_1_MODE_MONO_OFFSET = 21;

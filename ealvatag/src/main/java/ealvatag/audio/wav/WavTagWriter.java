@@ -67,7 +67,7 @@ public class WavTagWriter {
   }
 
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Read existing metadata

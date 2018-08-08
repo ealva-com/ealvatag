@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
  * Created by Paul on 28/01/2016.
  */
 @SuppressWarnings("DefaultFileTemplate") public class ID3Chunk {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private ByteBuffer dataBuffer;
 

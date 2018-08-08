@@ -46,7 +46,7 @@ import java.util.List;
  * VorbisComment holds the tag information within an ogg file
  */
 public class OggVorbisTagWriter {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator();
   private OggVorbisTagReader reader = new OggVorbisTagReader();

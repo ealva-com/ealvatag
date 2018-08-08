@@ -41,7 +41,7 @@ import java.nio.ByteBuffer;
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //Type
   private Mp4FieldType imageType;

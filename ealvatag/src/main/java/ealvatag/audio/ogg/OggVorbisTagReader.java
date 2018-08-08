@@ -47,7 +47,7 @@ import java.util.List;
  * Vorbis is the audiostream within an ogg file, Vorbis uses VorbisComments as its tag
  */
 public class OggVorbisTagReader {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private VorbisCommentReader vorbisCommentReader;
 

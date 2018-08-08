@@ -67,7 +67,7 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  */
 public class ID3v11Tag extends ID3v1Tag {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //For writing output
   private static final String TYPE_TRACK = "track";

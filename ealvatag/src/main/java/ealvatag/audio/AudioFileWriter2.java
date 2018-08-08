@@ -44,7 +44,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 28/01/2016.
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Delete the tag (if any) present in the given file

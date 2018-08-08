@@ -69,7 +69,7 @@ public class AsfFileReader extends AudioFileReader {
   /**
    * Logger instance
    */
-  private final static Logger LOG = Loggers.get(Log.MARKER);
+  private final static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * This reader will be configured to read tag and audio header information.<br>

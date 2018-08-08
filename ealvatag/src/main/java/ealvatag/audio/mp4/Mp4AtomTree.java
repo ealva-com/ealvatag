@@ -59,7 +59,7 @@ public class Mp4AtomTree {
   private Mp4BoxHeader moovHeader;
 
   //Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Create Atom Tree

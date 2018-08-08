@@ -14,7 +14,7 @@ import java.nio.channels.FileChannel;
  * Common to all IFF formats such as Wav and Aiff
  */
 public class IffHeaderChunk {
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static int SIGNATURE_LENGTH = 4;
   public static int SIZE_LENGTH = 4;

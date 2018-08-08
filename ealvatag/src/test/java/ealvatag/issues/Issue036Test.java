@@ -54,13 +54,13 @@ public class Issue036Test {
         tag5.addField(FieldKey.ALBUM, "Porcupine");
         tag5.addField(FieldKey.ARTIST, "Echo & the Bunnymen");
 
-        Assert.assertTrue(tag1.equals(tag1));
-        Assert.assertTrue(tag1.equals(tag2));
-        Assert.assertFalse(tag1.equals(tag3));
+        Assert.assertEquals(tag1, tag1);
+        Assert.assertEquals(tag1, tag2);
+        Assert.assertNotEquals(tag1, tag3);
 
-        Assert.assertTrue(tag3.equals(tag3));
-        Assert.assertTrue(tag3.equals(tag4));
-        Assert.assertFalse(tag3.equals(tag5));
+        Assert.assertEquals(tag3, tag3);
+        Assert.assertEquals(tag3, tag4);
+        Assert.assertNotEquals(tag3, tag5);
     }
 
 
@@ -72,13 +72,13 @@ public class Issue036Test {
         ID3v23Frame frame5 = new ID3v23Frame("TPE1");
         frame5.getBody().setTextEncoding((byte)1);
 
-        Assert.assertTrue(frame1.equals(frame1));
-        Assert.assertTrue(frame1.equals(frame2));
-        Assert.assertFalse(frame1.equals(frame3));
+        Assert.assertEquals(frame1, frame1);
+        Assert.assertEquals(frame1, frame2);
+        Assert.assertNotEquals(frame1, frame3);
 
-        Assert.assertTrue(frame3.equals(frame3));
-        Assert.assertTrue(frame3.equals(frame4));
-        Assert.assertFalse(frame3.equals(frame5));
+        Assert.assertEquals(frame3, frame3);
+        Assert.assertEquals(frame3, frame4);
+        Assert.assertNotEquals(frame3, frame5);
     }
 
     @Test public void testAllID3v23Frames() throws Exception {

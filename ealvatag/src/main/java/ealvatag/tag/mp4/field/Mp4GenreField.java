@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */
 public class Mp4GenreField extends Mp4TagTextNumberField {
-    private static final Logger LOG = Loggers.get(Log.MARKER);
+    private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
     public Mp4GenreField(String id, ByteBuffer data) throws UnsupportedEncodingException {
         super(id, data);

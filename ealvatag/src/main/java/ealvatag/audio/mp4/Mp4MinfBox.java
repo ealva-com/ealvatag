@@ -37,7 +37,7 @@ import java.io.IOException;
  * Created by Eric A. Snell on 2/3/17.
  */
 class Mp4MinfBox {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   Mp4MinfBox(final Mp4BoxHeader minfBoxHeader,
              final BufferedSource bufferedSource,

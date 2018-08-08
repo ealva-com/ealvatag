@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class OggInfoReader {
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException {
     long start = raf.getFilePointer();

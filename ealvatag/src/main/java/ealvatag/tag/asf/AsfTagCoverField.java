@@ -28,7 +28,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
   /**
    * Logger Object
    */
-  private final static Logger LOG = Loggers.get(Log.MARKER);
+  private final static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Description

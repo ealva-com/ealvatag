@@ -58,7 +58,7 @@ import java.util.List;
  * The default is that ID3 takes precedence if it exists
  */
 public class WavTag implements TagFieldContainer, Id3SupportingTag {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final String NULL = "\0";
 

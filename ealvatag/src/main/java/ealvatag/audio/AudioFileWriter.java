@@ -62,7 +62,7 @@ public abstract class AudioFileWriter {
   static final int MINIMUM_FILESIZE = 100;
 
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //If filename too long try recreating it with length no longer than 50 that should be safe on all operating
   //systems

@@ -44,7 +44,7 @@ import java.util.Locale;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Used when converting from v3 tags , these fields should ALWAYS hold the v23 value

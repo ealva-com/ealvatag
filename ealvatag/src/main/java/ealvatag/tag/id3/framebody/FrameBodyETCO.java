@@ -113,7 +113,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static final int MPEG_FRAMES = 1;
   public static final int MILLISECONDS = 2;

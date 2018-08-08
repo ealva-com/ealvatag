@@ -52,7 +52,7 @@ import java.nio.charset.StandardCharsets;
  * @version 16 d�cembre 2003
  */
 public class VorbisIdentificationHeader implements VorbisHeader {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private int audioChannels;
   private boolean isValid = false;

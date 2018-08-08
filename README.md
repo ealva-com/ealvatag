@@ -53,7 +53,7 @@ Quick Start
 eAlvaLog is a very thin facade used by eAlvaTag for logging purposes. Each Logger instance created by eAlvaTag logs all output with a 
 Marker found at ealvatag.logging.Log.MARKER. This allows for easy filtering so log output can be directed and/or filtered as needed. 
 eAlvaLog provides a very light Android specific LoggerFactory if you only need log to the Android log. If using the java.util.logging 
-logger framework, you may also add a handler at Loggers.get("ealvatag") to add a Handler specifically for eAlvaTag library log output. 
+logger framework, you may also add a handler at Loggers.INSTANCE.get("ealvatag") to add a Handler specifically for eAlvaTag library log output. 
 See [eAlvaLog](https://github.com/ealva-com/ealvalog) for more details on configuring logging. 
 
 Add eAlvaTag to your project

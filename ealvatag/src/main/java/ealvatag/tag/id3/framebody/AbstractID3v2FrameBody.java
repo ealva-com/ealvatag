@@ -49,7 +49,7 @@ import java.util.Locale;
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final String TYPE_BODY = "body";
 

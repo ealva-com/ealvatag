@@ -154,7 +154,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    * Holds count of invalid frames, (frames that could not be read)
    */
   private static final String TYPE_INVALIDFRAMES = "invalidFrames";
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   //The max size we try to write in one go to avoid out of memory errors (10mb)
   private static final long MAXIMUM_WRITABLE_CHUNK_SIZE = 10000000;
   /**

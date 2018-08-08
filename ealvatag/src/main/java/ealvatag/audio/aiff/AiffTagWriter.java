@@ -50,7 +50,7 @@ import java.nio.channels.FileChannel;
  * Write Aiff Tag.
  */
 public class AiffTagWriter {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Delete given {@link Tag} from file.

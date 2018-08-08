@@ -54,7 +54,7 @@ import java.util.NoSuchElementException;
  * @version $Id$
  */
 @SuppressWarnings("Duplicates") public class ID3v22Frame extends AbstractID3v2Frame {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final int FRAME_ID_SIZE = 3;
   private static final int FRAME_SIZE_SIZE = 3;

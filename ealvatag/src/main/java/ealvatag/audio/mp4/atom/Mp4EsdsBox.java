@@ -74,7 +74,7 @@ import java.io.IOException;
  * - 1 byte SL value = 8-bit hex value set to 0x02
  */
 public class Mp4EsdsBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final int VERSION_FLAG_LENGTH = 1;
   private static final int OTHER_FLAG_LENGTH = 3;

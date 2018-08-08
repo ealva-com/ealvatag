@@ -31,7 +31,7 @@ import java.nio.channels.FileChannel;
  */
 public class AiffFileHeader {
   private static final String FORM = "FORM";
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Reads the file header and registers the data (file type) with the given header.

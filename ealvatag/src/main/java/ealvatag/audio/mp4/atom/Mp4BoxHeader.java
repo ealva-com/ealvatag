@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Mp4BoxHeader {
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //  public static final int OFFSET_POS = 0;
   public static final int IDENTIFIER_POS = 4;

@@ -43,7 +43,7 @@ import java.io.RandomAccessFile;
 public abstract class AudioFileReader {
 
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
 

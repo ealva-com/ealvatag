@@ -113,7 +113,7 @@ import java.util.Locale;
  */
 public class Mp4TagWriter {
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private Mp4TagCreator tc = new Mp4TagCreator();
 

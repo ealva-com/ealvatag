@@ -55,7 +55,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class FlacTagWriter {
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private FlacTagCreator tc = new FlacTagCreator();
 
   /**

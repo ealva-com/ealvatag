@@ -23,7 +23,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 25/01/2016.
  */
 public class FmtChunk {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
   private long chunkSizeLength;

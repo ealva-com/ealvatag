@@ -101,7 +101,7 @@ import java.io.RandomAccessFile;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4AudioFileReader extends AudioFileReader {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   // Almost a complete rewrite from the original which artificially separated header from tag parsing. This was causing the entire moov
   // box to be read into memory TWICE! I have seen this larger than 500KB in my own music library. That's opening a file, reading 500KB

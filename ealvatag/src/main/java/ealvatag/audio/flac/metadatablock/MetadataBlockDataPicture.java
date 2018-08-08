@@ -62,7 +62,7 @@ public class MetadataBlockDataPicture
   private byte[] imageData;
 
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private void initFromByteBuffer(ByteBuffer rawdata) throws IOException, InvalidFrameException {
     //Picture Type

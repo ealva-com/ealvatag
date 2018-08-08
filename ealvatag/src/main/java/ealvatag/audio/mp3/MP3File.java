@@ -86,7 +86,7 @@ public class MP3File extends AudioFileImpl {
   private static final int LOAD_LYRICS3 = 8;
 
   private static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private static final int MINIMUM_FILESIZE = 150;
 
   private static AbstractTagDisplayFormatter tagFormatter;

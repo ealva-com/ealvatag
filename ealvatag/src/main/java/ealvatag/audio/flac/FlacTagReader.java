@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class FlacTagReader {
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 

@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class VorbisSetupHeader implements VorbisHeader {
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private boolean isValid = false;
 

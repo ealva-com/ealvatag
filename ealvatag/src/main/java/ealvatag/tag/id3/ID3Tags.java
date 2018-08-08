@@ -16,6 +16,7 @@
 package ealvatag.tag.id3;
 
 import ealvatag.tag.TagException;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 
@@ -169,7 +170,7 @@ public class ID3Tags {
      * @param identifier
      * @return
      */
-    public static String convertFrameID23To24(String identifier) {
+    public static @Nullable String convertFrameID23To24(String identifier) {
         if (identifier.length() < 4) {
             return null;
         }

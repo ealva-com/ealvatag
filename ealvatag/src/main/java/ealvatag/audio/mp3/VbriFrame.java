@@ -41,7 +41,7 @@ import java.util.Arrays;
  * entries, you can calculate the length of this field.
  */
 public class VbriFrame {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //The offset into frame
   private static final int VBRI_OFFSET = MPEGFrameHeader.HEADER_SIZE + 32;

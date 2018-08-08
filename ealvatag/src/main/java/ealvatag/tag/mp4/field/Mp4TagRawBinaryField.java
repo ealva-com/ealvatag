@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  * written back to file
  */
 public class Mp4TagRawBinaryField extends Mp4TagField {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   protected int dataSize;
   protected byte[] dataBytes;

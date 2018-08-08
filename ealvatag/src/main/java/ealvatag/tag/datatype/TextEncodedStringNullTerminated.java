@@ -244,7 +244,7 @@ public class TextEncodedStringNullTerminated extends AbstractString {
    * @return the data as a byte array in format to write to file
    */
   public byte[] writeByteArray() {
-    LOG.log(DEBUG, "Writing NullTerminatedString. %s", value);
+    LOG.log(DEBUG, "Writing NullTerminatedString. %s", value != null ? value : "null");
     byte[] data;
     //Write to buffer using the CharSet defined by getTextEncodingCharSet()
     //Add a null terminator which will be encoded based on encoding.

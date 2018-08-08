@@ -49,7 +49,7 @@ public class Utils {
   public static int BITS_IN_BYTE_MULTIPLIER = 8;
   public static int KILOBYTE_MULTIPLIER = 1000;
 
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
 
   public static String formatBitRate(final AudioHeader header, final int bitRate) {

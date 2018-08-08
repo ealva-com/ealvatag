@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
  * Contains the ID3 tags.
  */
 public class ID3Chunk extends Chunk {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private AiffTag aiffTag;
 
   /**

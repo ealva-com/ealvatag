@@ -24,7 +24,7 @@ import java.util.List;
  * Ftyp (File Type) is the first atom, can be used to help identify the mp4 container type
  */
 public class Mp4FtypBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private String majorBrand;
   private int majorBrandVersion;
   private List<String> compatibleBrands = new ArrayList<String>();

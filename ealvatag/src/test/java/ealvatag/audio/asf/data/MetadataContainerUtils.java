@@ -15,7 +15,7 @@ import java.util.List;
  * @author Christian Laireiter
  */
 public final class MetadataContainerUtils {
-    private static Logger LOG = Loggers.get(Log.MARKER);
+    private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
     public static boolean equals(List<MetadataDescriptor> l1,
                                  List<MetadataDescriptor> l2) {

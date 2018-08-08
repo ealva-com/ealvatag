@@ -45,6 +45,7 @@ import okio.Buffer;
 import okio.BufferedSource;
 import okio.InflaterSource;
 import okio.Okio;
+import org.jetbrains.annotations.Nullable;
 
 import static ealvatag.tag.id3.ID3v22Frames.FRAME_ID_V2_ATTACHED_PICTURE;
 import static ealvatag.tag.id3.ID3v24Frames.FRAME_ID_ATTACHED_PICTURE;
@@ -67,14 +68,14 @@ import java.util.zip.Inflater;
  */
 @SuppressWarnings("Duplicates")
 public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   static final String TYPE_FRAME = "frame";
   static final String TYPE_FRAME_SIZE = "frameSize";
   static final String UNSUPPORTED_ID = "Unsupported";
 
   //Frame identifier
-  protected String identifier = "";
+  protected @Nullable String identifier = "";
 
   //Frame Size
   protected int frameSize;

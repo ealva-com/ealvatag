@@ -25,7 +25,7 @@ import java.nio.channels.FileChannel;
  * use with care, not very robust.
  */
 public class WavCleaner {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private File path;
   private String loggingName;

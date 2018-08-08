@@ -32,7 +32,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
   /**
    * Logger
    */
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Within this range, a {@link ChunkReader} should be aware if it fails.

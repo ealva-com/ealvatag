@@ -8,7 +8,7 @@ description = 'ealvatag'
 dependencies {
     compile 'com.squareup.okio:okio:1.11.0'
     compile 'com.google.guava:guava:20.0'
-    compile 'com.ealva:ealvalog:0.0.20'
+    compile 'com.ealva:ealvalog:0.01.00-SNAPSHOT'
 
     testCompile 'junit:junit:4.11'
     testCompile 'org.mockito:mockito-core:2.6.4'

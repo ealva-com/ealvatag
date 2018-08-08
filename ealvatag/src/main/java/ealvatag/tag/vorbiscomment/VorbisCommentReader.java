@@ -56,7 +56,7 @@ import java.io.IOException;
  */
 public class VorbisCommentReader {
   // Logger Object
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final int FIELD_VENDOR_LENGTH_POS = 0;
 //    public static final int FIELD_VENDOR_STRING_POS = 4;

@@ -83,7 +83,7 @@ import java.util.NoSuchElementException;
   private static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
   private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
   private static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   /**
    * If the frame is encrypted then the encryption method is stored in this byte
    */
@@ -169,7 +169,7 @@ import java.util.NoSuchElementException;
   private void createV24FrameFromV23Frame(ID3v23Frame frame) throws InvalidFrameException {
     // Is it a straight conversion e.g TALB - TALB
     identifier = ID3Tags.convertFrameID23To24(frame.getIdentifier());
-    LOG.log(DEBUG, "Creating V24frame from v23:%s:%s", frame.getIdentifier(), identifier);
+    LOG.log(DEBUG, "Creating V24frame from v23:%s:%s", frame.getIdentifier(), identifier == null ? "null" : identifier);
 
 
     //We cant convert unsupported bodies properly
@@ -177,7 +177,7 @@ import java.util.NoSuchElementException;
       this.frameBody = new FrameBodyUnsupported((FrameBodyUnsupported)frame.getBody());
       this.frameBody.setHeader(this);
       identifier = frame.getIdentifier();
-      LOG.log(DEBUG, "V3:UnsupportedBody:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier);
+      LOG.log(DEBUG, "V3:UnsupportedBody:Orig id is:%s:New id is:%s", frame.getIdentifier(), identifier == null ? "null" : identifier);
     }//Simple Copy
     else if (identifier != null) {
       //Special Case

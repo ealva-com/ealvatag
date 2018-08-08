@@ -41,7 +41,7 @@ import java.nio.charset.StandardCharsets;
  * Abstract super class of all URL Frames
  */
 public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Creates a new FrameBodyUrlLink datatype.

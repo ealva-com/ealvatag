@@ -90,7 +90,7 @@ import java.util.Locale;
  * @version $Id$
  */
 public class ID3v24Tag extends AbstractID3v2Tag {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final String TYPE_FOOTER = "footer";
   private static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";

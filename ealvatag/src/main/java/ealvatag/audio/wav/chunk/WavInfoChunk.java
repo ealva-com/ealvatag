@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * instead contains a number of name,size, value tuples. So for this reason we do not subclass the Chunk class
  */
 public class WavInfoChunk {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private WavInfoTag wavInfoTag;
   private String loggingName;

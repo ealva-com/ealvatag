@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4IlstBox {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public Mp4IlstBox(final Mp4BoxHeader ilstBoxHeader,
                     final BufferedSource bufferedSource,

@@ -41,7 +41,7 @@ import java.nio.channels.FileChannel;
  */
 public class FlacInfoReader {
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   public FlacAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException {

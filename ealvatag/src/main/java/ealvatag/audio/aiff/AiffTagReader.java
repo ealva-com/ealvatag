@@ -28,7 +28,7 @@ import java.nio.channels.FileChannel;
  * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
  */
 public class AiffTagReader extends AiffChunkReader {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   /**

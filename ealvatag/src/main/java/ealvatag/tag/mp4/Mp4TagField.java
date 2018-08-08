@@ -46,7 +46,7 @@ import java.nio.charset.StandardCharsets;
  * There are various subclasses that represent different types of fields
  */
 public abstract class Mp4TagField implements TagField {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   protected String id;

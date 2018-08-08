@@ -14,7 +14,7 @@ import static com.ealva.ealvalog.LogLevel.ERROR;
  */
 public class WavChunkSummary {
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   /**
    * Get start location in file of first metadata chunk (could be LIST or ID3)

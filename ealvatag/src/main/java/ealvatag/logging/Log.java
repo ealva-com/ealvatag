@@ -29,5 +29,5 @@ public class Log {
   private static final String MARKER_NAME = "eAlvaTag";
 
   /** Every logger in eAlvaTag uses this Marker */
-  public static final Marker MARKER = Markers.get(MARKER_NAME);
+  public static final Marker MARKER = Markers.INSTANCE.get(MARKER_NAME);
 }

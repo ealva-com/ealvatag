@@ -40,7 +40,7 @@ import java.nio.charset.StandardCharsets;
  * The raw data passed starts from the mean box
  */
 public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static final String IDENTIFIER = "----";
 

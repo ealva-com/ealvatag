@@ -27,6 +27,7 @@ import ealvatag.logging.Log;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.EOFException;
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ import java.util.LinkedList;
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
 public abstract class AbstractDataType {
-  protected static Logger LOG = Loggers.get(Log.MARKER);  // TODO: 3/14/17 make this private!!
+  protected static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);  // TODO: 3/14/17 make this private!!
 
   /**
    * Holds the data
    */
-  protected Object value = null;
+  protected @Nullable Object value = null;
 
   /**
    * Holds the key such as "Text" or "PictureType", the naming of keys are fairly arbitary but are intended

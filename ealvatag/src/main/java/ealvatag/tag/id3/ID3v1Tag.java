@@ -76,7 +76,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
   private static final int FIELD_COMMENT_POS = 97;
   static final int BYTE_TO_UNSIGNED = 0xff;
   static final int GENRE_UNDEFINED = 0xff;
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
   static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
   private static final byte RELEASE = 1;

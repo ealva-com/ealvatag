@@ -21,7 +21,7 @@ import java.nio.channels.FileChannel;
  * Reader files and identifies if this is in fact a flac stream
  */
 public class FlacStreamReader {
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   public static final int FLAC_STREAM_IDENTIFIER_LENGTH = 4;
   public static final String FLAC_STREAM_IDENTIFIER = "fLaC";

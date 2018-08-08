@@ -36,7 +36,7 @@ import java.nio.channels.FileChannel;
  * @author Veselin Markov (veselin_m84 a_t yahoo.com)
  */
 public class DsfFileReader extends AudioFileReader2 {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   @Override
   protected GenericAudioHeader getEncodingInfo(FileChannel fc, final String fileName) throws CannotReadException, IOException {

@@ -12,7 +12,7 @@ import static com.ealva.ealvalog.LogLevel.WARN;
  * Functions to encode text according to encodingoptions and ID3 version
  */
 public class ID3TextEncodingConversion {
-  private static Logger LOG = Loggers.get(Log.MARKER);
+  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
 
   /**

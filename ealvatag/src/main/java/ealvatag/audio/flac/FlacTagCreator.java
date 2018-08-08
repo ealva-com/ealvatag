@@ -43,7 +43,7 @@ import java.util.ListIterator;
 public class FlacTagCreator
     extends AbstractTagCreator {
   // Logger Object
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //TODO make an option
   static final int DEFAULT_PADDING = 4000;

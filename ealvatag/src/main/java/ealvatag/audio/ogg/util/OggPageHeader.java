@@ -46,7 +46,7 @@ import java.util.List;
  * @version 16 d�cembre 2003
  */
 public class OggPageHeader {
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   //Capture pattern at start of header
   public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g', 'S'};

@@ -41,7 +41,7 @@ import java.nio.ByteOrder;
  * depending on the version field this can be in either short or long format
  */
 public class Mp4MvhdBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.get(Log.MARKER);
+  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
 
   private static final int VERSION_FLAG_POS = 0;
   //    public static final int OTHER_FLAG_POS = 1;

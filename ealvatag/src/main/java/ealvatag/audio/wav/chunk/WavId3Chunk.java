@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
  * Contains the ID3 tags.
  */
 public class WavId3Chunk extends Chunk {
-  public static Logger LOG = Loggers.get(Log.MARKER);
+  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
   private WavTag wavTag;
 
   /**
