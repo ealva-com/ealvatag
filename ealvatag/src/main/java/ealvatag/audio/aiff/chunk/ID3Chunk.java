@@ -1,8 +1,8 @@
 package ealvatag.audio.aiff.chunk;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.logging.Log;
@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
  * Contains the ID3 tags.
  */
 public class ID3Chunk extends Chunk {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(ID3Chunk.class, Log.MARKER);
   private AiffTag aiffTag;
 
   /**

@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.asf;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileReader;
@@ -69,7 +69,7 @@ public class AsfFileReader extends AudioFileReader {
   /**
    * Logger instance
    */
-  private final static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private final static JLogger LOG = JLoggers.get(AsfFileReader.class, Log.MARKER);
 
   /**
    * This reader will be configured to read tag and audio header information.<br>

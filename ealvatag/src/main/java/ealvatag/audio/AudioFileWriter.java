@@ -17,8 +17,8 @@
 package ealvatag.audio;
 
 import com.google.common.io.Files;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.TRACE;
@@ -62,7 +62,7 @@ public abstract class AudioFileWriter {
   static final int MINIMUM_FILESIZE = 100;
 
   // Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AudioFileWriter.class, Log.MARKER);
 
   //If filename too long try recreating it with length no longer than 50 that should be safe on all operating
   //systems

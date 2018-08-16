@@ -25,8 +25,8 @@ import static com.ealva.ealvalog.LogLevel.DEBUG;
 import static com.ealva.ealvalog.LogLevel.TRACE;
 import static com.ealva.ealvalog.LogLevel.WARN;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.UnableToCreateFileException;
 import ealvatag.audio.exceptions.UnableToModifyFileException;
@@ -154,7 +154,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    * Holds count of invalid frames, (frames that could not be read)
    */
   private static final String TYPE_INVALIDFRAMES = "invalidFrames";
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2Tag.class, Log.MARKER);
   //The max size we try to write in one go to avoid out of memory errors (10mb)
   private static final long MAXIMUM_WRITABLE_CHUNK_SIZE = 10000000;
   /**

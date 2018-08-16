@@ -24,8 +24,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.UnsupportedFileType;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -86,7 +86,7 @@ public class MP3File extends AudioFileImpl {
   private static final int LOAD_LYRICS3 = 8;
 
   private static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(MP3File.class, Log.MARKER);
   private static final int MINIMUM_FILESIZE = 150;
 
   private static AbstractTagDisplayFormatter tagFormatter;

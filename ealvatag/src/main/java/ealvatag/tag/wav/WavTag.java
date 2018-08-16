@@ -21,8 +21,8 @@ package ealvatag.tag.wav;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
@@ -58,7 +58,7 @@ import java.util.List;
  * The default is that ID3 takes precedence if it exists
  */
 public class WavTag implements TagFieldContainer, Id3SupportingTag {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(WavTag.class, Log.MARKER);
 
   private static final String NULL = "\0";
 

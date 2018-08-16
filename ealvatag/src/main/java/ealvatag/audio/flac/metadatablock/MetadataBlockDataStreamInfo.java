@@ -19,8 +19,8 @@
 package ealvatag.audio.flac.metadatablock;
 
 import ealvatag.audio.Utils;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 
 import java.io.IOException;

@@ -17,8 +17,8 @@
 package ealvatag.audio;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
@@ -43,7 +43,7 @@ import java.io.RandomAccessFile;
 public abstract class AudioFileReader {
 
   // Logger Object
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AudioFileReader.class, Log.MARKER);
   protected static final int MINIMUM_SIZE_FOR_VALID_AUDIO_FILE = 100;
 
 

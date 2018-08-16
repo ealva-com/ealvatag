@@ -19,8 +19,8 @@
 package ealvatag.audio.mp4.atom;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Mp4BoxHeader {
   // Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4BoxHeader.class, Log.MARKER);
 
   //  public static final int OFFSET_POS = 0;
   public static final int IDENTIFIER_POS = 4;

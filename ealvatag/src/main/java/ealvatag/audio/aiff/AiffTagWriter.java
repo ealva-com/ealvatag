@@ -19,8 +19,8 @@
 package ealvatag.audio.aiff;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.aiff.chunk.AiffChunkSummary;
 import ealvatag.audio.aiff.chunk.AiffChunkType;
@@ -50,7 +50,7 @@ import java.nio.channels.FileChannel;
  * Write Aiff Tag.
  */
 public class AiffTagWriter {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AiffTagWriter.class, Log.MARKER);
 
   /**
    * Delete given {@link Tag} from file.

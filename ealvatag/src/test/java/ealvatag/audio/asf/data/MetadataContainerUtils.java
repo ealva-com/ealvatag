@@ -1,8 +1,8 @@
 package ealvatag.audio.asf.data;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 
 import java.util.Collections;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author Christian Laireiter
  */
 public final class MetadataContainerUtils {
-    private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+    private static JLogger LOG = JLoggers.get(MetadataContainerUtils.class, Log.MARKER);
 
     public static boolean equals(List<MetadataDescriptor> l1,
                                  List<MetadataDescriptor> l2) {

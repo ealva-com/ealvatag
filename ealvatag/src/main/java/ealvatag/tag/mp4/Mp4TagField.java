@@ -18,8 +18,8 @@
  */
 package ealvatag.tag.mp4;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.Log;
@@ -46,7 +46,7 @@ import java.nio.charset.StandardCharsets;
  * There are various subclasses that represent different types of fields
  */
 public abstract class Mp4TagField implements TagField {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4TagField.class, Log.MARKER);
 
 
   protected String id;

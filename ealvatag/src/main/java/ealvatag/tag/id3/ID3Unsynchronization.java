@@ -1,7 +1,7 @@
 package ealvatag.tag.id3;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MPEGFrameHeader;
 import ealvatag.logging.Log;
 
@@ -18,7 +18,7 @@ import java.nio.ByteBuffer;
  */
 class ID3Unsynchronization {
   //Logger
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(ID3Unsynchronization.class, Log.MARKER);
 
 
   /**

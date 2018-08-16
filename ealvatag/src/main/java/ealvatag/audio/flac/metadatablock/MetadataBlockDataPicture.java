@@ -1,8 +1,8 @@
 package ealvatag.audio.flac.metadatablock;
 
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 
@@ -62,7 +62,7 @@ public class MetadataBlockDataPicture
   private byte[] imageData;
 
   // Logger Object
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(MetadataBlockDataPicture.class, Log.MARKER);
 
   private void initFromByteBuffer(ByteBuffer rawdata) throws IOException, InvalidFrameException {
     //Picture Type

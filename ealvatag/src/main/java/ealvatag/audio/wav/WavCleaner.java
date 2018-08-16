@@ -1,7 +1,7 @@
 package ealvatag.audio.wav;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
@@ -25,7 +25,7 @@ import java.nio.channels.FileChannel;
  * use with care, not very robust.
  */
 public class WavCleaner {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(WavCleaner.class, Log.MARKER);
 
   private File path;
   private String loggingName;

@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.wav;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -67,7 +67,7 @@ public class WavTagWriter {
   }
 
   // Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(WavTagWriter.class, Log.MARKER);
 
   /**
    * Read existing metadata

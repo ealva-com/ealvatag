@@ -2,8 +2,8 @@ package ealvatag.audio.mp4.atom;
 
 import com.google.common.base.Preconditions;
 import com.ealva.ealvalog.LogLevel;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.EncoderType;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
@@ -74,7 +74,7 @@ import java.io.IOException;
  * - 1 byte SL value = 8-bit hex value set to 0x02
  */
 public class Mp4EsdsBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4EsdsBox.class, Log.MARKER);
 
   private static final int VERSION_FLAG_LENGTH = 1;
   private static final int OTHER_FLAG_LENGTH = 3;

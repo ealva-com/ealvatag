@@ -24,8 +24,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Log;
@@ -67,7 +67,7 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  */
 public class ID3v11Tag extends ID3v1Tag {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v11Tag.class, Log.MARKER);
 
   //For writing output
   private static final String TYPE_TRACK = "track";

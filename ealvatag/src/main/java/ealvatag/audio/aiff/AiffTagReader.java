@@ -1,8 +1,8 @@
 
 package ealvatag.audio.aiff;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.aiff.chunk.AiffChunkReader;
 import ealvatag.audio.aiff.chunk.AiffChunkType;
 import ealvatag.audio.aiff.chunk.ID3Chunk;
@@ -28,7 +28,7 @@ import java.nio.channels.FileChannel;
  * Read the AIff file chunks, until finds Aiff Common chunk and then generates AudioHeader from it
  */
 public class AiffTagReader extends AiffChunkReader {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AiffTagReader.class, Log.MARKER);
 
 
   /**

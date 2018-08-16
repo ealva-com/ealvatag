@@ -24,8 +24,8 @@ import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -40,7 +40,7 @@ import java.nio.channels.FileChannel;
  * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AudioFileReader2.class, Log.MARKER);
 
   /*
  * Reads the given file, and return an AudioFile object containing the Tag

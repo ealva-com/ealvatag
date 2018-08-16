@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.flac;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class FlacTagReader {
   // Logger Object
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagReader.class, Log.MARKER);
 
   private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 

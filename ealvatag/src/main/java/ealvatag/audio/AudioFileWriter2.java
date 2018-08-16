@@ -17,8 +17,8 @@
 
 package ealvatag.audio;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -44,7 +44,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 28/01/2016.
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AudioFileWriter2.class, Log.MARKER);
 
   /**
    * Delete the tag (if any) present in the given file

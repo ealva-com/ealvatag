@@ -17,8 +17,8 @@
 
 package ealvatag.audio.mp4;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileImpl;
 import ealvatag.audio.AudioFileReader;
@@ -101,7 +101,7 @@ import java.io.RandomAccessFile;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4AudioFileReader extends AudioFileReader {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4AudioFileReader.class, Log.MARKER);
 
   // Almost a complete rewrite from the original which artificially separated header from tag parsing. This was causing the entire moov
   // box to be read into memory TWICE! I have seen this larger than 500KB in my own music library. That's opening a file, reading 500KB

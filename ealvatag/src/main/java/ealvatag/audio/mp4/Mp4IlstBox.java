@@ -18,8 +18,8 @@
 package ealvatag.audio.mp4;
 
 import com.google.common.base.Preconditions;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4IlstBox {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4IlstBox.class, Log.MARKER);
 
   public Mp4IlstBox(final Mp4BoxHeader ilstBoxHeader,
                     final BufferedSource bufferedSource,

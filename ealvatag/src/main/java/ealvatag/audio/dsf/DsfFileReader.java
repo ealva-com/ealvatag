@@ -4,8 +4,10 @@
  */
 package ealvatag.audio.dsf;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.WARN;
 
@@ -36,7 +38,7 @@ import java.nio.channels.FileChannel;
  * @author Veselin Markov (veselin_m84 a_t yahoo.com)
  */
 public class DsfFileReader extends AudioFileReader2 {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(DsfFileReader.class, Log.MARKER);
 
   @Override
   protected GenericAudioHeader getEncodingInfo(FileChannel fc, final String fileName) throws CannotReadException, IOException {

@@ -16,8 +16,8 @@
 package ealvatag.tag.id3;
 
 import com.google.common.base.Strings;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -68,7 +68,7 @@ import java.util.zip.Inflater;
  */
 @SuppressWarnings("Duplicates")
 public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2Frame.class, Log.MARKER);
 
   static final String TYPE_FRAME = "frame";
   static final String TYPE_FRAME_SIZE = "frameSize";

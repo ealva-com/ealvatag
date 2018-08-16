@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.wav;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -43,7 +43,7 @@ import java.nio.channels.FileChannel;
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader {
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(WavInfoReader.class, Log.MARKER);
 
 
   private String loggingName;

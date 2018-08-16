@@ -20,8 +20,8 @@
  */
 package ealvatag.tag.id3.framebody;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -49,7 +49,7 @@ import java.util.Locale;
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2FrameBody.class, Log.MARKER);
 
   private static final String TYPE_BODY = "body";
 

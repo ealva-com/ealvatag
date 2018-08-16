@@ -7,8 +7,8 @@ import ealvatag.logging.Log;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.reference.GenreTypes;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.*;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * <p>This class allows you to retrieve either the internal genreid, or the display value
  */
 public class Mp4GenreField extends Mp4TagTextNumberField {
-    private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+    private static final JLogger LOG = JLoggers.get(Mp4GenreField.class, Log.MARKER);
 
     public Mp4GenreField(String id, ByteBuffer data) throws UnsupportedEncodingException {
         super(id, data);

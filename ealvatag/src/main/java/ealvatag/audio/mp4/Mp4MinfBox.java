@@ -18,8 +18,8 @@
 package ealvatag.audio.mp4;
 
 import com.google.common.base.Preconditions;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -37,7 +37,7 @@ import java.io.IOException;
  * Created by Eric A. Snell on 2/3/17.
  */
 class Mp4MinfBox {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4MinfBox.class, Log.MARKER);
 
   Mp4MinfBox(final Mp4BoxHeader minfBoxHeader,
              final BufferedSource bufferedSource,

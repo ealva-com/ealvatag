@@ -1,7 +1,7 @@
 package ealvatag.tag.id3;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidFrameException;
 
@@ -20,7 +20,7 @@ import java.util.zip.Inflater;
  */
 //TODO also need to support compress framedata
 @SuppressWarnings("Duplicates") class ID3Compression {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(ID3Compression.class, Log.MARKER);
 
   /**
    * Decompress realFrameSize bytes to decompressedFrameSize bytes and return as ByteBuffer

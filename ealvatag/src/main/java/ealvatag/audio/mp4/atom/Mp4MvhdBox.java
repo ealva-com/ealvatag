@@ -20,8 +20,8 @@ package ealvatag.audio.mp4.atom;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
@@ -41,7 +41,7 @@ import java.nio.ByteOrder;
  * depending on the version field this can be in either short or long format
  */
 public class Mp4MvhdBox extends AbstractMp4Box {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4MvhdBox.class, Log.MARKER);
 
   private static final int VERSION_FLAG_POS = 0;
   //    public static final int OTHER_FLAG_POS = 1;

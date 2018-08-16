@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.ogg.util;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.ErrorMessage;
@@ -46,7 +46,7 @@ import java.util.List;
  * @version 16 d�cembre 2003
  */
 public class OggPageHeader {
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(OggPageHeader.class, Log.MARKER);
 
   //Capture pattern at start of header
   public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g', 'S'};

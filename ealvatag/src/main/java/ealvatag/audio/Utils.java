@@ -17,8 +17,8 @@
 package ealvatag.audio;
 
 import com.google.common.io.Files;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.FileTypeUtil;
@@ -49,7 +49,7 @@ public class Utils {
   public static int BITS_IN_BYTE_MULTIPLIER = 8;
   public static int KILOBYTE_MULTIPLIER = 1000;
 
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Utils.class, Log.MARKER);
   private static final int MAX_BASE_TEMP_FILENAME_LENGTH = 20;
 
   public static String formatBitRate(final AudioHeader header, final int bitRate) {

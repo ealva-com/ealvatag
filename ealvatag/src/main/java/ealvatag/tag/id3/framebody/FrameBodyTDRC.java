@@ -20,8 +20,8 @@
  */
 package ealvatag.tag.id3.framebody;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
@@ -44,7 +44,7 @@ import java.util.Locale;
 
 
 public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24FrameBody {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(FrameBodyTDRC.class, Log.MARKER);
 
   /**
    * Used when converting from v3 tags , these fields should ALWAYS hold the v23 value

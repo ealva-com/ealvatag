@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.flac;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 
@@ -43,7 +43,7 @@ import java.util.ListIterator;
 public class FlacTagCreator
     extends AbstractTagCreator {
   // Logger Object
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagCreator.class, Log.MARKER);
 
   //TODO make an option
   static final int DEFAULT_PADDING = 4000;

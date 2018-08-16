@@ -19,8 +19,8 @@
  */
 package ealvatag.tag.vorbiscomment;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.WARN;
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -56,7 +56,7 @@ import java.io.IOException;
  */
 public class VorbisCommentReader {
   // Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(VorbisCommentReader.class, Log.MARKER);
 
   private static final int FIELD_VENDOR_LENGTH_POS = 0;
 //    public static final int FIELD_VENDOR_STRING_POS = 4;

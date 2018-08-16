@@ -1,7 +1,7 @@
 package ealvatag.tag.id3;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.id3.valuepair.TextEncoding;
@@ -12,7 +12,7 @@ import static com.ealva.ealvalog.LogLevel.WARN;
  * Functions to encode text according to encodingoptions and ID3 version
  */
 public class ID3TextEncodingConversion {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(ID3TextEncodingConversion.class, Log.MARKER);
 
 
   /**

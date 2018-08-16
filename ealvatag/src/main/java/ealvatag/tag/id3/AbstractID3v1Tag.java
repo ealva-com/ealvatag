@@ -24,8 +24,8 @@
  */
 package ealvatag.tag.id3;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.Log;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  * @author : Paul Taylor
  */
 abstract public class AbstractID3v1Tag extends AbstractID3Tag {
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AbstractID3v1Tag.class, Log.MARKER);
 
   //If field is less than maximum field length this is how it is terminated
   static final byte END_OF_FIELD = (byte)0;

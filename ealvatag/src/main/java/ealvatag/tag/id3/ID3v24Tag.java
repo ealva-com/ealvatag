@@ -17,8 +17,8 @@ package ealvatag.tag.id3;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Log;
@@ -90,7 +90,7 @@ import java.util.Locale;
  * @version $Id$
  */
 public class ID3v24Tag extends AbstractID3v2Tag {
-  private static final Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v24Tag.class, Log.MARKER);
 
   private static final String TYPE_FOOTER = "footer";
   private static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";

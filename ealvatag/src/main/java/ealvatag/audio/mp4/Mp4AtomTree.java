@@ -1,7 +1,7 @@
 package ealvatag.audio.mp4;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -59,7 +59,7 @@ public class Mp4AtomTree {
   private Mp4BoxHeader moovHeader;
 
   //Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4AtomTree.class, Log.MARKER);
 
   /**
    * Create Atom Tree

@@ -19,8 +19,8 @@
  */
 package ealvatag.audio.ogg.util;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class OggInfoReader {
   // Logger Object
-  private static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private static JLogger LOG = JLoggers.get(OggInfoReader.class, Log.MARKER);
 
   public GenericAudioHeader read(RandomAccessFile raf) throws CannotReadException, IOException {
     long start = raf.getFilePointer();

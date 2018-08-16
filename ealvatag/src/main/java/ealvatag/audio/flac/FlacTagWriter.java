@@ -18,8 +18,8 @@
  */
 package ealvatag.audio.flac;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.TRACE;
@@ -55,7 +55,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class FlacTagWriter {
   // Logger Object
-  public static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagWriter.class, Log.MARKER);
   private FlacTagCreator tc = new FlacTagCreator();
 
   /**

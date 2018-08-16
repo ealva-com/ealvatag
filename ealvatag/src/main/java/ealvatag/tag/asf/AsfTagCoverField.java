@@ -1,7 +1,7 @@
 package ealvatag.tag.asf;
 
-import com.ealva.ealvalog.Logger;
-import com.ealva.ealvalog.Loggers;
+import com.ealva.ealvalog.java.JLogger;
+import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.audio.asf.data.MetadataDescriptor;
@@ -28,7 +28,7 @@ public class AsfTagCoverField extends AbstractAsfTagImageField {
   /**
    * Logger Object
    */
-  private final static Logger LOG = Loggers.INSTANCE.get(Log.MARKER);
+  private final static JLogger LOG = JLoggers.get(AsfTagCoverField.class, Log.MARKER);
 
   /**
    * Description
