@@ -35,7 +35,7 @@ import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataSeekTable;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
@@ -55,7 +55,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class FlacTagWriter {
   // Logger Object
-  public static JLogger LOG = JLoggers.get(FlacTagWriter.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagWriter.class, EalvaTagLog.MARKER);
   private FlacTagCreator tc = new FlacTagCreator();
 
   /**

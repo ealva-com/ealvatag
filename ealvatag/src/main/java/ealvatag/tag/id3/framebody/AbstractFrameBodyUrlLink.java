@@ -21,7 +21,7 @@ package ealvatag.tag.id3.framebody;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.StringSizeTerminated;
@@ -41,7 +41,7 @@ import java.nio.charset.StandardCharsets;
  * Abstract super class of all URL Frames
  */
 public abstract class AbstractFrameBodyUrlLink extends AbstractID3v2FrameBody {
-  private static final JLogger LOG = JLoggers.get(AbstractFrameBodyUrlLink.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractFrameBodyUrlLink.class, EalvaTagLog.MARKER);
 
   /**
    * Creates a new FrameBodyUrlLink datatype.

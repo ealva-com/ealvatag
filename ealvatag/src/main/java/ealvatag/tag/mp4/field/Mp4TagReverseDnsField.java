@@ -5,7 +5,7 @@ import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 import ealvatag.tag.mp4.Mp4FieldKey;
@@ -40,7 +40,7 @@ import java.nio.charset.StandardCharsets;
  * The raw data passed starts from the mean box
  */
 public class Mp4TagReverseDnsField extends Mp4TagField implements TagTextField {
-  private static final JLogger LOG = JLoggers.get(Mp4TagReverseDnsField.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4TagReverseDnsField.class, EalvaTagLog.MARKER);
 
   public static final String IDENTIFIER = "----";
 

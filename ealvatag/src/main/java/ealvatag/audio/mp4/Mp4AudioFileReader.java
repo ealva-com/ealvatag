@@ -27,7 +27,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.audio.mp4.atom.Mp4FtypBox;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagFieldContainer;
 import okio.BufferedSource;
 import okio.Okio;
@@ -101,7 +101,7 @@ import java.io.RandomAccessFile;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4AudioFileReader extends AudioFileReader {
-  private static final JLogger LOG = JLoggers.get(Mp4AudioFileReader.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4AudioFileReader.class, EalvaTagLog.MARKER);
 
   // Almost a complete rewrite from the original which artificially separated header from tag parsing. This was causing the entire moov
   // box to be read into memory TWICE! I have seen this larger than 500KB in my own music library. That's opening a file, reading 500KB

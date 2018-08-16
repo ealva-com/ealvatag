@@ -26,7 +26,7 @@ import ealvatag.audio.ogg.util.OggPageHeader;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.audio.ogg.util.VorbisPacketType;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.vorbiscomment.VorbisCommentReader;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
@@ -47,7 +47,7 @@ import java.util.List;
  * Vorbis is the audiostream within an ogg file, Vorbis uses VorbisComments as its tag
  */
 public class OggVorbisTagReader {
-  private static JLogger LOG = JLoggers.get(OggVorbisTagReader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(OggVorbisTagReader.class, EalvaTagLog.MARKER);
 
   private VorbisCommentReader vorbisCommentReader;
 

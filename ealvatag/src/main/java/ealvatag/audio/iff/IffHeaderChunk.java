@@ -3,7 +3,7 @@ package ealvatag.audio.iff;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 
@@ -14,7 +14,7 @@ import java.nio.channels.FileChannel;
  * Common to all IFF formats such as Wav and Aiff
  */
 public class IffHeaderChunk {
-  public static JLogger LOG = JLoggers.get(IffHeaderChunk.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(IffHeaderChunk.class, EalvaTagLog.MARKER);
 
   public static int SIGNATURE_LENGTH = 4;
   public static int SIZE_LENGTH = 4;

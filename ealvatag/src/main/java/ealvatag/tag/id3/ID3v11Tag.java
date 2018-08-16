@@ -28,7 +28,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagException;
@@ -67,7 +67,7 @@ import java.util.regex.Matcher;
  * @author : Paul Taylor
  */
 public class ID3v11Tag extends ID3v1Tag {
-  private static final JLogger LOG = JLoggers.get(ID3v11Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v11Tag.class, EalvaTagLog.MARKER);
 
   //For writing output
   private static final String TYPE_TRACK = "track";

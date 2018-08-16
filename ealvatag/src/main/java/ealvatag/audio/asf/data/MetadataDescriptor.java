@@ -21,7 +21,7 @@ package ealvatag.audio.asf.data;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.asf.util.Utils;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagOptionSingleton;
 
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -59,7 +59,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>, Clone
   /**
    * Logger instance.
    */
-  private static final JLogger LOG = JLoggers.get(MetadataDescriptor.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(MetadataDescriptor.class, EalvaTagLog.MARKER);
 
   /**
    * The maximum language index allowed. (exclusive)

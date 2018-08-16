@@ -24,7 +24,7 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.Mp4NonStandardFieldKey;
@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  * Created by Eric A. Snell on 2/3/17.
  */
 public class Mp4IlstBox {
-  private static final JLogger LOG = JLoggers.get(Mp4IlstBox.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4IlstBox.class, EalvaTagLog.MARKER);
 
   public Mp4IlstBox(final Mp4BoxHeader ilstBoxHeader,
                     final BufferedSource bufferedSource,

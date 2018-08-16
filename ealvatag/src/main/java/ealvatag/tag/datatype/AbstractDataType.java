@@ -24,7 +24,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
@@ -40,7 +40,7 @@ import java.util.LinkedList;
  * Section 4. ID3v2 frame overview at http://www.id3.org/id3v2.4.0-structure.txt
  */
 public abstract class AbstractDataType {
-  protected static JLogger LOG = JLoggers.get(AbstractDataType.class, Log.MARKER);  // TODO: 3/14/17 make this private!!
+  protected static JLogger LOG = JLoggers.get(AbstractDataType.class, EalvaTagLog.MARKER);  // TODO: 3/14/17 make this private!!
 
   /**
    * Holds the data

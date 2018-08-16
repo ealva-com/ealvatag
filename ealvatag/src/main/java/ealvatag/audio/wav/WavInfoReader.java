@@ -29,7 +29,7 @@ import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.audio.wav.chunk.WavFactChunk;
 import ealvatag.audio.wav.chunk.WavFormatChunk;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
 import static com.ealva.ealvalog.LogLevel.ERROR;
@@ -43,7 +43,7 @@ import java.nio.channels.FileChannel;
  * Read the Wav file chunks, until finds WavFormatChunk and then generates AudioHeader from it
  */
 public class WavInfoReader {
-  public static JLogger LOG = JLoggers.get(WavInfoReader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(WavInfoReader.class, EalvaTagLog.MARKER);
 
 
   private String loggingName;

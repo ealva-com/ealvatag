@@ -43,7 +43,7 @@ import ealvatag.audio.asf.util.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagException;
 import ealvatag.tag.asf.AsfTag;
 
@@ -69,7 +69,7 @@ public class AsfFileReader extends AudioFileReader {
   /**
    * Logger instance
    */
-  private final static JLogger LOG = JLoggers.get(AsfFileReader.class, Log.MARKER);
+  private final static JLogger LOG = JLoggers.get(AsfFileReader.class, EalvaTagLog.MARKER);
 
   /**
    * This reader will be configured to read tag and audio header information.<br>

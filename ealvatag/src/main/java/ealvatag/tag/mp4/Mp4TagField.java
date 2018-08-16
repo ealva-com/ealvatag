@@ -22,7 +22,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
 import ealvatag.tag.mp4.field.Mp4FieldType;
@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom
  * <p>
- * Note there isnt a one to one correspondance between a tag field and a box because some fields are represented
+ * Note there isn't a one to one correspondence between a tag field and a box because some fields are represented
  * by multiple boxes, for example many of the MusicBrainz fields use the '----' box, which in turn uses one of mean,
  * name and data box. So an instance of a tag field maps to one item of data such as 'Title', but it may have to read
  * multiple boxes to do this.
@@ -46,7 +46,7 @@ import java.nio.charset.StandardCharsets;
  * There are various subclasses that represent different types of fields
  */
 public abstract class Mp4TagField implements TagField {
-  private static JLogger LOG = JLoggers.get(Mp4TagField.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4TagField.class, EalvaTagLog.MARKER);
 
 
   protected String id;
@@ -60,22 +60,14 @@ public abstract class Mp4TagField implements TagField {
 
   /**
    * Used by subclasses that canot identify their id until after they have been built such as ReverseDnsField
-   *
-   * @param data
-   *
-   * @throws UnsupportedEncodingException
    */
+  @SuppressWarnings("unused")
   protected Mp4TagField(ByteBuffer data) throws UnsupportedEncodingException {
     build(data);
   }
 
   /**
    * Used by reverese dns when reading from file, so can identify when there is a data atom
-   *
-   * @param parentHeader
-   * @param data
-   *
-   * @throws UnsupportedEncodingException
    */
   protected Mp4TagField(Mp4BoxHeader parentHeader, ByteBuffer data) throws UnsupportedEncodingException {
     this.parentHeader = parentHeader;
@@ -112,14 +104,13 @@ public abstract class Mp4TagField implements TagField {
   /**
    * @return field identifier as it will be held within the file
    */
+  @SuppressWarnings("unused")
   protected byte[] getIdBytes() {
     return getId().getBytes(StandardCharsets.ISO_8859_1);
   }
 
   /**
    * @return the data as it is held on file
-   *
-   * @throws UnsupportedEncodingException
    */
   protected abstract byte[] getDataBytes() throws UnsupportedEncodingException;
 
@@ -133,9 +124,6 @@ public abstract class Mp4TagField implements TagField {
    * Processes the data and sets the position of the data buffer to just after the end of this fields data
    * ready for processing next field.
    *
-   * @param data
-   *
-   * @throws UnsupportedEncodingException
    */
   protected abstract void build(ByteBuffer data) throws UnsupportedEncodingException;
 

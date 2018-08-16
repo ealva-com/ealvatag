@@ -22,7 +22,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -110,7 +110,7 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   private static final String TYPE_EXTENDED = "extended";
   private static final String TYPE_PADDINGSIZE = "paddingsize";
   private static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  private static final JLogger LOG = JLoggers.get(ID3v23Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v23Tag.class, EalvaTagLog.MARKER);
   private static int TAG_EXT_HEADER_LENGTH = 10;
   private static int TAG_EXT_HEADER_CRC_LENGTH = 4;
   private static int FIELD_TAG_EXT_SIZE_LENGTH = 4;

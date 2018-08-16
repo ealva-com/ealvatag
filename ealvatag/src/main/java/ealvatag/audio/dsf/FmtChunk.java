@@ -9,7 +9,7 @@ import static com.ealva.ealvalog.LogLevel.WARN;
 import ealvatag.audio.GenericAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static ealvatag.audio.dsf.DsdChunk.CHUNKSIZE_LENGTH;
 
@@ -23,7 +23,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 25/01/2016.
  */
 public class FmtChunk {
-  private static JLogger LOG = JLoggers.get(FmtChunk.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(FmtChunk.class, EalvaTagLog.MARKER);
 
   public static final int FMT_CHUNK_MIN_DATA_SIZE_ = 40;
   private long chunkSizeLength;

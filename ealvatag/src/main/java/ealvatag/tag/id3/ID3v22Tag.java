@@ -21,7 +21,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -86,7 +86,7 @@ public class ID3v22Tag extends AbstractID3v2Tag {
   private static final byte REVISION = 0;
   private static final String TYPE_COMPRESSION = "compression";
   private static final String TYPE_UNSYNCHRONISATION = "unsyncronisation";
-  private static final JLogger LOG = JLoggers.get(ID3v22Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v22Tag.class, EalvaTagLog.MARKER);
   /**
    * The tag is compressed, although no compression scheme is defined in ID3v22
    */

@@ -20,7 +20,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
@@ -55,7 +55,7 @@ import java.util.NoSuchElementException;
  * @version $Id$
  */
 @SuppressWarnings("Duplicates") public class ID3v23Frame extends AbstractID3v2Frame {
-  private static final JLogger LOG = JLoggers.get(ID3v23Frame.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v23Frame.class, EalvaTagLog.MARKER);
 
   private static final int FRAME_ID_SIZE = 4;
   private static final int FRAME_FLAGS_SIZE = 2;

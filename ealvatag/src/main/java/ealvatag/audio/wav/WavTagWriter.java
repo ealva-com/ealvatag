@@ -28,7 +28,7 @@ import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.audio.wav.chunk.WavChunkSummary;
 import ealvatag.audio.wav.chunk.WavInfoIdentifier;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagField;
@@ -67,7 +67,7 @@ public class WavTagWriter {
   }
 
   // Logger Object
-  private static JLogger LOG = JLoggers.get(WavTagWriter.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(WavTagWriter.class, EalvaTagLog.MARKER);
 
   /**
    * Read existing metadata

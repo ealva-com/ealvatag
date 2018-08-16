@@ -29,7 +29,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataStreamInfo;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.nio.channels.FileChannel;
  */
 public class FlacInfoReader {
   // Logger Object
-  public static JLogger LOG = JLoggers.get(FlacInfoReader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacInfoReader.class, EalvaTagLog.MARKER);
 
 
   public FlacAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException {

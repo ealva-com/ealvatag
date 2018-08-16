@@ -8,7 +8,7 @@ import static com.ealva.ealvalog.LogLevel.WARN;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.nio.channels.FileChannel;
  * Reader files and identifies if this is in fact a flac stream
  */
 public class FlacStreamReader {
-  public static JLogger LOG = JLoggers.get(FlacStreamReader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacStreamReader.class, EalvaTagLog.MARKER);
 
   public static final int FLAC_STREAM_IDENTIFIER_LENGTH = 4;
   public static final String FLAC_STREAM_IDENTIFIER = "fLaC";

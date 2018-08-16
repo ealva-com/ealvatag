@@ -28,7 +28,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentReader;
@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class FlacTagReader {
   // Logger Object
-  public static JLogger LOG = JLoggers.get(FlacTagReader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagReader.class, EalvaTagLog.MARKER);
 
   private VorbisCommentReader vorbisCommentReader = new VorbisCommentReader();
 

@@ -21,7 +21,7 @@ package ealvatag.audio.ogg.util;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.ogg.VorbisVersion;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
 
@@ -52,7 +52,7 @@ import java.nio.charset.StandardCharsets;
  * @version 16 d�cembre 2003
  */
 public class VorbisIdentificationHeader implements VorbisHeader {
-  private static JLogger LOG = JLoggers.get(VorbisIdentificationHeader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(VorbisIdentificationHeader.class, EalvaTagLog.MARKER);
 
   private int audioChannels;
   private boolean isValid = false;

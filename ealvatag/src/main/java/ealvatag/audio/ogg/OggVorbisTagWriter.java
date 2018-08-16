@@ -26,7 +26,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.ogg.util.OggCRCFactory;
 import ealvatag.audio.ogg.util.OggPageHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.id3.AbstractID3v1Tag;
 import ealvatag.tag.vorbiscomment.VorbisCommentTag;
@@ -46,7 +46,7 @@ import java.util.List;
  * VorbisComment holds the tag information within an ogg file
  */
 public class OggVorbisTagWriter {
-  private static JLogger LOG = JLoggers.get(OggVorbisTagWriter.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(OggVorbisTagWriter.class, EalvaTagLog.MARKER);
 
   private OggVorbisCommentTagCreator tc = new OggVorbisCommentTagCreator();
   private OggVorbisTagReader reader = new OggVorbisTagReader();

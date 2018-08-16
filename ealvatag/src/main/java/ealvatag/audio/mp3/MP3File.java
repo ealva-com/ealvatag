@@ -37,7 +37,7 @@ import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.AbstractTagDisplayFormatter;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.logging.PlainTextTagDisplayFormatter;
 import ealvatag.logging.XMLTagDisplayFormatter;
 import ealvatag.tag.Tag;
@@ -86,7 +86,7 @@ public class MP3File extends AudioFileImpl {
   private static final int LOAD_LYRICS3 = 8;
 
   private static final int LOAD_ALL = LOAD_IDV1TAG | LOAD_IDV2TAG | LOAD_LYRICS3;
-  private static final JLogger LOG = JLoggers.get(MP3File.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(MP3File.class, EalvaTagLog.MARKER);
   private static final int MINIMUM_FILESIZE = 150;
 
   private static AbstractTagDisplayFormatter tagFormatter;

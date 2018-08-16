@@ -26,7 +26,7 @@ import static com.ealva.ealvalog.LogLevel.TRACE;
 import static com.ealva.ealvalog.LogLevel.WARN;
 
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.InvalidTagException;
@@ -68,7 +68,7 @@ import java.util.zip.Inflater;
  */
 @SuppressWarnings("Duplicates")
 public abstract class AbstractID3v2Frame extends AbstractTagFrame implements TagTextField {
-  private static final JLogger LOG = JLoggers.get(AbstractID3v2Frame.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2Frame.class, EalvaTagLog.MARKER);
 
   static final String TYPE_FRAME = "frame";
   static final String TYPE_FRAME_SIZE = "frameSize";

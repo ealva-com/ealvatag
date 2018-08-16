@@ -4,7 +4,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.wav.WavInfoTag;
 import ealvatag.tag.wav.WavTag;
@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * instead contains a number of name,size, value tuples. So for this reason we do not subclass the Chunk class
  */
 public class WavInfoChunk {
-  private static JLogger LOG = JLoggers.get(WavInfoChunk.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(WavInfoChunk.class, EalvaTagLog.MARKER);
 
   private WavInfoTag wavInfoTag;
   private String loggingName;

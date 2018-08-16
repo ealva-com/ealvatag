@@ -27,7 +27,7 @@ import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavOptions;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Key;
@@ -58,7 +58,7 @@ import java.util.List;
  * The default is that ID3 takes precedence if it exists
  */
 public class WavTag implements TagFieldContainer, Id3SupportingTag {
-  private static final JLogger LOG = JLoggers.get(WavTag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(WavTag.class, EalvaTagLog.MARKER);
 
   private static final String NULL = "\0";
 

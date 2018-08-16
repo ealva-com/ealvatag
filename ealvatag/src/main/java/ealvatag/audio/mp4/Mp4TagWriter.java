@@ -28,7 +28,7 @@ import ealvatag.audio.mp4.atom.Mp4HdlrBox;
 import ealvatag.audio.mp4.atom.Mp4MetaBox;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.mp4.Mp4Tag;
@@ -113,7 +113,7 @@ import java.util.Locale;
  */
 public class Mp4TagWriter {
   // Logger Object
-  private static JLogger LOG = JLoggers.get(Mp4TagWriter.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4TagWriter.class, EalvaTagLog.MARKER);
 
   private Mp4TagCreator tc = new Mp4TagCreator();
 
@@ -738,7 +738,7 @@ public class Mp4TagWriter {
       for (int i = 0; i < newStcos.size(); i++) {
         final Mp4StcoBox newStco = newStcos.get(i);
         final Mp4StcoBox stco = stcos.get(i);
-        if (LOG.isLoggable(DEBUG, Log.MARKER, null)) {
+        if (LOG.isLoggable(DEBUG, EalvaTagLog.MARKER, null)) {
           LOG.log(DEBUG, "stco:Original First Offset %s", stco.getFirstOffSet());
           LOG.log(DEBUG, "stco:Original Diff %s", stco.getFirstOffSet() - mdatHeader.getFilePos());
           LOG.log(DEBUG, "stco:Original Mdat Pos %s", mdatHeader.getFilePos());

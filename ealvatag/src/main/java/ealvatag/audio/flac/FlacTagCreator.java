@@ -28,7 +28,7 @@ import ealvatag.audio.flac.metadatablock.BlockType;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPadding;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.flac.metadatablock.MetadataBlockHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.flac.FlacTag;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
@@ -43,7 +43,7 @@ import java.util.ListIterator;
 public class FlacTagCreator
     extends AbstractTagCreator {
   // Logger Object
-  public static JLogger LOG = JLoggers.get(FlacTagCreator.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(FlacTagCreator.class, EalvaTagLog.MARKER);
 
   //TODO make an option
   static final int DEFAULT_PADDING = 4000;

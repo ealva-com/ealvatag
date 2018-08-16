@@ -19,7 +19,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.IffHeaderChunk;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.TRACE;
@@ -32,7 +32,7 @@ import java.nio.channels.FileChannel;
  * Read Aiff chunks, except the ID3 chunk.
  */
 public class AiffInfoReader extends AiffChunkReader {
-  private static JLogger LOG = JLoggers.get(AiffInfoReader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AiffInfoReader.class, EalvaTagLog.MARKER);
 
 
   protected GenericAudioHeader read(FileChannel fc, final String fileName) throws CannotReadException, IOException {

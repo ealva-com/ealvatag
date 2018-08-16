@@ -3,7 +3,7 @@ package ealvatag.audio.asf.data;
 import com.ealva.ealvalog.LogLevel;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author Christian Laireiter
  */
 public final class MetadataContainerUtils {
-    private static JLogger LOG = JLoggers.get(MetadataContainerUtils.class, Log.MARKER);
+    private static JLogger LOG = JLoggers.get(MetadataContainerUtils.class, EalvaTagLog.MARKER);
 
     public static boolean equals(List<MetadataDescriptor> l1,
                                  List<MetadataDescriptor> l2) {
@@ -24,7 +24,7 @@ public final class MetadataContainerUtils {
         Collections.sort(l2, new MetadataDescriptorComparator());
         for (int i = 0; result && i < l1.size(); i++) {
             result = MetadataDescriptorUtils.equals(l1.get(i), l2.get(i));
-            if (!result && LOG.isLoggable(LogLevel.WARN, Log.MARKER, null)) {
+            if (!result && LOG.isLoggable(LogLevel.WARN, EalvaTagLog.MARKER, null)) {
                 LOG.log(LogLevel.WARN, "Unequal descriptors: %s  ->  %s", l1.get(i), l2.get(i));
             }
         }

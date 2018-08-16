@@ -17,7 +17,7 @@ package ealvatag.tag.id3.framebody;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import ealvatag.tag.datatype.EventTimingCode;
@@ -113,7 +113,7 @@ import java.util.Set;
  * @version $Id$
  */
 public class FrameBodyETCO extends AbstractID3v2FrameBody implements ID3v24FrameBody, ID3v23FrameBody {
-  private static final JLogger LOG = JLoggers.get(FrameBodyETCO.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(FrameBodyETCO.class, EalvaTagLog.MARKER);
 
   public static final int MPEG_FRAMES = 1;
   public static final int MILLISECONDS = 2;

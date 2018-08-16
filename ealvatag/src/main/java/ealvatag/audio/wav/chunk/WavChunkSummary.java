@@ -4,7 +4,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.wav.WavChunkType;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.wav.WavTag;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
@@ -14,7 +14,7 @@ import static com.ealva.ealvalog.LogLevel.ERROR;
  */
 public class WavChunkSummary {
   // Logger Object
-  public static JLogger LOG = JLoggers.get(WavChunkSummary.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(WavChunkSummary.class, EalvaTagLog.MARKER);
 
   /**
    * Get start location in file of first metadata chunk (could be LIST or ID3)

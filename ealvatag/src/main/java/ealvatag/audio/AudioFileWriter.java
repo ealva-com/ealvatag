@@ -29,7 +29,7 @@ import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.ModifyVetoException;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
@@ -62,7 +62,7 @@ public abstract class AudioFileWriter {
   static final int MINIMUM_FILESIZE = 100;
 
   // Logger Object
-  private static JLogger LOG = JLoggers.get(AudioFileWriter.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AudioFileWriter.class, EalvaTagLog.MARKER);
 
   //If filename too long try recreating it with length no longer than 50 that should be safe on all operating
   //systems

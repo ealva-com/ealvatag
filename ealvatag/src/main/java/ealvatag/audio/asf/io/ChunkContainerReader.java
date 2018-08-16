@@ -6,7 +6,7 @@ import ealvatag.audio.asf.data.Chunk;
 import ealvatag.audio.asf.data.ChunkContainer;
 import ealvatag.audio.asf.data.GUID;
 import ealvatag.audio.asf.util.Utils;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 
@@ -32,7 +32,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer> implements
   /**
    * Logger
    */
-  private static final JLogger LOG = JLoggers.get(ChunkContainerReader.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ChunkContainerReader.class, EalvaTagLog.MARKER);
 
   /**
    * Within this range, a {@link ChunkReader} should be aware if it fails.

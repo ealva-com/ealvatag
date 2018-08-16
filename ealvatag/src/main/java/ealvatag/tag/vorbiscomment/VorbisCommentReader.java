@@ -29,7 +29,7 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ import java.io.IOException;
  */
 public class VorbisCommentReader {
   // Logger Object
-  private static JLogger LOG = JLoggers.get(VorbisCommentReader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(VorbisCommentReader.class, EalvaTagLog.MARKER);
 
   private static final int FIELD_VENDOR_LENGTH_POS = 0;
 //    public static final int FIELD_VENDOR_STRING_POS = 4;

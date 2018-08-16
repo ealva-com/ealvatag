@@ -6,7 +6,7 @@ import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -19,7 +19,7 @@ import java.nio.ByteOrder;
  * MdhdBox ( media (stream) header), holds the Sampling Rate used.
  */
 public class Mp4MdhdBox extends AbstractMp4Box {
-  private static final JLogger LOG = JLoggers.get(Mp4MdhdBox.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4MdhdBox.class, EalvaTagLog.MARKER);
 
   public static final int VERSION_FLAG_POS = 0;
   public static final int OTHER_FLAG_POS = 1;

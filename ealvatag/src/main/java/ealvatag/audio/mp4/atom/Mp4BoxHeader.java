@@ -25,7 +25,7 @@ import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
@@ -58,7 +58,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class Mp4BoxHeader {
   // Logger Object
-  private static JLogger LOG = JLoggers.get(Mp4BoxHeader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4BoxHeader.class, EalvaTagLog.MARKER);
 
   //  public static final int OFFSET_POS = 0;
   public static final int IDENTIFIER_POS = 4;

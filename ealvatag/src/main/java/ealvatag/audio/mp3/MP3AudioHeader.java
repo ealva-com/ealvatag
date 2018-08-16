@@ -24,7 +24,7 @@ import ealvatag.audio.AudioHeader;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.utils.TimeUnits;
 import okio.Buffer;
 
@@ -83,7 +83,7 @@ import java.util.concurrent.TimeUnit;
   private static final int CONVERTS_BYTE_TO_BITS = 8;
 
   //Logger
-  public static JLogger LOG = JLoggers.get(MP3AudioHeader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(MP3AudioHeader.class, EalvaTagLog.MARKER);
 
   /**
    * After testing the average location of the first MP3Header bit was at 5000 bytes so this is

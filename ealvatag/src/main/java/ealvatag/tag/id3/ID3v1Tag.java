@@ -30,7 +30,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.io.FileOperator;
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.Key;
@@ -76,7 +76,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
   private static final int FIELD_COMMENT_POS = 97;
   static final int BYTE_TO_UNSIGNED = 0xff;
   static final int GENRE_UNDEFINED = 0xff;
-  private static final JLogger LOG = JLoggers.get(ID3v1Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v1Tag.class, EalvaTagLog.MARKER);
   private static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v1Field;
   static final ImmutableMap<FieldKey, ID3v1FieldKey> tagFieldToID3v11Field;
   private static final byte RELEASE = 1;

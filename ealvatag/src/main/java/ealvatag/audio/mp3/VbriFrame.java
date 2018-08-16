@@ -3,7 +3,7 @@ package ealvatag.audio.mp3;
 import com.google.common.base.MoreObjects;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.Buffer;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
@@ -41,7 +41,7 @@ import java.util.Arrays;
  * entries, you can calculate the length of this field.
  */
 public class VbriFrame {
-  private static final JLogger LOG = JLoggers.get(VbriFrame.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(VbriFrame.class, EalvaTagLog.MARKER);
 
   //The offset into frame
   private static final int VBRI_OFFSET = MPEGFrameHeader.HEADER_SIZE + 32;

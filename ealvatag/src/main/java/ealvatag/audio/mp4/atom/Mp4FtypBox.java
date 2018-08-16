@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
 
 import static com.ealva.ealvalog.LogLevel.WARN;
@@ -24,7 +24,7 @@ import java.util.List;
  * Ftyp (File Type) is the first atom, can be used to help identify the mp4 container type
  */
 public class Mp4FtypBox extends AbstractMp4Box {
-  private static final JLogger LOG = JLoggers.get(Mp4FtypBox.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4FtypBox.class, EalvaTagLog.MARKER);
   private String majorBrand;
   private int majorBrandVersion;
   private List<String> compatibleBrands = new ArrayList<String>();

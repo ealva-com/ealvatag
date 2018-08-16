@@ -23,7 +23,7 @@ import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -46,7 +46,7 @@ import java.util.List;
  * @version 16 d�cembre 2003
  */
 public class OggPageHeader {
-  public static JLogger LOG = JLoggers.get(OggPageHeader.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(OggPageHeader.class, EalvaTagLog.MARKER);
 
   //Capture pattern at start of header
   public static final byte[] CAPTURE_PATTERN = {'O', 'g', 'g', 'S'};

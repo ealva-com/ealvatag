@@ -30,7 +30,7 @@ import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.ChunkSummary;
 import ealvatag.audio.iff.IffHeaderChunk;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.aiff.AiffTag;
@@ -50,7 +50,7 @@ import java.nio.channels.FileChannel;
  * Write Aiff Tag.
  */
 public class AiffTagWriter {
-  private static JLogger LOG = JLoggers.get(AiffTagWriter.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AiffTagWriter.class, EalvaTagLog.MARKER);
 
   /**
    * Delete given {@link Tag} from file.

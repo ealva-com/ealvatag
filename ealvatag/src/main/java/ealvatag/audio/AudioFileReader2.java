@@ -17,11 +17,10 @@
 
 package ealvatag.audio;
 
-import com.ealva.ealvalog.LogLevel;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.InvalidAudioFrameException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagException;
 import ealvatag.tag.TagFieldContainer;
 import com.ealva.ealvalog.java.JLogger;
@@ -40,7 +39,7 @@ import java.nio.channels.FileChannel;
  * Replacement for AudioFileReader class
  */
 public abstract class AudioFileReader2 extends AudioFileReader {
-  private static final JLogger LOG = JLoggers.get(AudioFileReader2.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AudioFileReader2.class, EalvaTagLog.MARKER);
 
   /*
  * Reads the given file, and return an AudioFile object containing the Tag

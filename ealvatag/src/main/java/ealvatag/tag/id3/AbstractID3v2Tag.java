@@ -34,7 +34,7 @@ import ealvatag.audio.exceptions.UnableToRenameFileException;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.FileSystemMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.InvalidFrameException;
@@ -154,7 +154,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    * Holds count of invalid frames, (frames that could not be read)
    */
   private static final String TYPE_INVALIDFRAMES = "invalidFrames";
-  private static final JLogger LOG = JLoggers.get(AbstractID3v2Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2Tag.class, EalvaTagLog.MARKER);
   //The max size we try to write in one go to avoid out of memory errors (10mb)
   private static final long MAXIMUM_WRITABLE_CHUNK_SIZE = 10000000;
   /**

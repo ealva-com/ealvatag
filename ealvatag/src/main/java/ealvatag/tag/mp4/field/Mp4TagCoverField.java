@@ -22,7 +22,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.id3.valuepair.ImageFormats;
 import ealvatag.tag.mp4.Mp4FieldKey;
 import ealvatag.tag.mp4.atom.Mp4DataBox;
@@ -41,7 +41,7 @@ import java.nio.ByteBuffer;
  * a more complex conversion has to be done then for other fields when writing multiple images back to file.
  */
 public class Mp4TagCoverField extends Mp4TagBinaryField {
-  private static final JLogger LOG = JLoggers.get(Mp4TagCoverField.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4TagCoverField.class, EalvaTagLog.MARKER);
 
   //Type
   private Mp4FieldType imageType;

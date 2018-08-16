@@ -21,7 +21,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.FieldDataInvalidException;
 import ealvatag.tag.FieldKey;
@@ -90,7 +90,7 @@ import java.util.Locale;
  * @version $Id$
  */
 public class ID3v24Tag extends AbstractID3v2Tag {
-  private static final JLogger LOG = JLoggers.get(ID3v24Tag.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v24Tag.class, EalvaTagLog.MARKER);
 
   private static final String TYPE_FOOTER = "footer";
   private static final String TYPE_IMAGEENCODINGRESTRICTION = "imageEncodingRestriction";

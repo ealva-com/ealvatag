@@ -4,7 +4,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagField;
 import ealvatag.tag.mp4.Mp4TagField;
 
@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  * written back to file
  */
 public class Mp4TagRawBinaryField extends Mp4TagField {
-  private static final JLogger LOG = JLoggers.get(Mp4TagRawBinaryField.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4TagRawBinaryField.class, EalvaTagLog.MARKER);
 
   protected int dataSize;
   protected byte[] dataBytes;

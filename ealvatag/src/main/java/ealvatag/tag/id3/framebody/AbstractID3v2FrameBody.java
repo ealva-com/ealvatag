@@ -28,7 +28,7 @@ import static com.ealva.ealvalog.LogLevel.WARN;
 import static com.ealva.ealvalog.LogLevel.DEBUG;
 
 import ealvatag.audio.mp3.MP3File;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
 import ealvatag.tag.InvalidTagException;
@@ -49,7 +49,7 @@ import java.util.Locale;
  * Contains the content for an ID3v2 frame, (the header is held directly within the frame
  */
 @SuppressWarnings("Duplicates") public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody {
-  private static final JLogger LOG = JLoggers.get(AbstractID3v2FrameBody.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AbstractID3v2FrameBody.class, EalvaTagLog.MARKER);
 
   private static final String TYPE_BODY = "body";
 

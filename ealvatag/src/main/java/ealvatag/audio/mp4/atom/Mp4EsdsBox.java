@@ -10,7 +10,7 @@ import ealvatag.audio.mp4.Mp4AtomIdentifier;
 import ealvatag.audio.mp4.Mp4AudioHeader;
 import ealvatag.audio.mp4.Mp4AudioProfile;
 import ealvatag.audio.mp4.Mp4Kind;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
 
 import java.io.IOException;
@@ -74,7 +74,7 @@ import java.io.IOException;
  * - 1 byte SL value = 8-bit hex value set to 0x02
  */
 public class Mp4EsdsBox extends AbstractMp4Box {
-  private static final JLogger LOG = JLoggers.get(Mp4EsdsBox.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4EsdsBox.class, EalvaTagLog.MARKER);
 
   private static final int VERSION_FLAG_LENGTH = 1;
   private static final int OTHER_FLAG_LENGTH = 3;

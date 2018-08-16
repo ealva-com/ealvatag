@@ -27,7 +27,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
 import ealvatag.audio.exceptions.NoWritePermissionsException;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.TagOptionSingleton;
@@ -44,7 +44,7 @@ import java.nio.channels.FileChannel;
  * Created by Paul on 28/01/2016.
  */
 public abstract class AudioFileWriter2 extends AudioFileWriter {
-  private static final JLogger LOG = JLoggers.get(AudioFileWriter2.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(AudioFileWriter2.class, EalvaTagLog.MARKER);
 
   /**
    * Delete the tag (if any) present in the given file

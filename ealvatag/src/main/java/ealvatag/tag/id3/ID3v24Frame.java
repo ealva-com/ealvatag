@@ -21,7 +21,7 @@ import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.InvalidFrameException;
@@ -83,7 +83,7 @@ import java.util.NoSuchElementException;
   private static final int FRAME_ENCRYPTION_INDICATOR_SIZE = 1;
   private static final int FRAME_GROUPING_INDICATOR_SIZE = 1;
   private static final int FRAME_HEADER_SIZE = FRAME_ID_SIZE + FRAME_SIZE_SIZE + FRAME_FLAGS_SIZE;
-  private static final JLogger LOG = JLoggers.get(ID3v24Frame.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(ID3v24Frame.class, EalvaTagLog.MARKER);
   /**
    * If the frame is encrypted then the encryption method is stored in this byte
    */

@@ -4,7 +4,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.TagException;
 import ealvatag.tag.id3.AbstractID3v2Tag;
 import ealvatag.tag.id3.ID3v22Tag;
@@ -23,7 +23,7 @@ import java.nio.ByteBuffer;
  * Contains the ID3 tags.
  */
 public class WavId3Chunk extends Chunk {
-  public static JLogger LOG = JLoggers.get(WavId3Chunk.class, Log.MARKER);
+  public static JLogger LOG = JLoggers.get(WavId3Chunk.class, EalvaTagLog.MARKER);
   private WavTag wavTag;
 
   /**

@@ -4,8 +4,7 @@ import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.logging.Hex;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static ealvatag.audio.aiff.AiffType.AIFC;
@@ -31,7 +30,7 @@ import java.nio.channels.FileChannel;
  */
 public class AiffFileHeader {
   private static final String FORM = "FORM";
-  private static JLogger LOG = JLoggers.get(AiffFileHeader.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(AiffFileHeader.class, EalvaTagLog.MARKER);
 
   /**
    * Reads the file header and registers the data (file type) with the given header.

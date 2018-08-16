@@ -9,7 +9,7 @@ import ealvatag.audio.mp4.atom.Mp4MetaBox;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.audio.mp4.atom.NullPadding;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import ealvatag.utils.tree.DefaultMutableTreeNode;
 import ealvatag.utils.tree.DefaultTreeModel;
 
@@ -59,7 +59,7 @@ public class Mp4AtomTree {
   private Mp4BoxHeader moovHeader;
 
   //Logger Object
-  private static JLogger LOG = JLoggers.get(Mp4AtomTree.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(Mp4AtomTree.class, EalvaTagLog.MARKER);
 
   /**
    * Create Atom Tree

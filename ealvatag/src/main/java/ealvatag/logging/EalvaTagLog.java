@@ -18,16 +18,22 @@
 package ealvatag.logging;
 
 import com.ealva.ealvalog.Marker;
-import com.ealva.ealvalog.Markers;
+import com.ealva.ealvalog.core.Markers;
+import com.ealva.ealvalog.filter.MarkerFilter;
 
 /**
  * Logging constants
- *
+ * <p>
  * Created by Eric A. Snell on 3/14/17.
  */
-public class Log {
+public class EalvaTagLog {
+  private EalvaTagLog() {}
+
   private static final String MARKER_NAME = "eAlvaTag";
 
   /** Every logger in eAlvaTag uses this Marker */
   public static final Marker MARKER = Markers.INSTANCE.get(MARKER_NAME);
+
+  @SuppressWarnings("unused")
+  public static final MarkerFilter MARKER_FILTER = new MarkerFilter.Builder(MARKER).build();
 }

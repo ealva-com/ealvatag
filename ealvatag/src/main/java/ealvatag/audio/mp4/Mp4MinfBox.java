@@ -24,7 +24,7 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotReadVideoException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.ErrorMessage;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
@@ -37,7 +37,7 @@ import java.io.IOException;
  * Created by Eric A. Snell on 2/3/17.
  */
 class Mp4MinfBox {
-  private static final JLogger LOG = JLoggers.get(Mp4MinfBox.class, Log.MARKER);
+  private static final JLogger LOG = JLoggers.get(Mp4MinfBox.class, EalvaTagLog.MARKER);
 
   Mp4MinfBox(final Mp4BoxHeader minfBoxHeader,
              final BufferedSource bufferedSource,

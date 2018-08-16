@@ -6,7 +6,7 @@ import com.ealva.ealvalog.java.JLoggers;
 import static com.ealva.ealvalog.LogLevel.WARN;
 
 import ealvatag.audio.Utils;
-import ealvatag.logging.Log;
+import ealvatag.logging.EalvaTagLog;
 
 import java.nio.ByteBuffer;
 
@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
  * Created by Paul on 28/01/2016.
  */
 @SuppressWarnings("DefaultFileTemplate") public class ID3Chunk {
-  private static JLogger LOG = JLoggers.get(ID3Chunk.class, Log.MARKER);
+  private static JLogger LOG = JLoggers.get(ID3Chunk.class, EalvaTagLog.MARKER);
 
   private ByteBuffer dataBuffer;
 
