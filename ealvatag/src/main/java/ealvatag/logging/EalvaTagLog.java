@@ -18,7 +18,7 @@
 package ealvatag.logging;
 
 import com.ealva.ealvalog.Marker;
-import com.ealva.ealvalog.core.Markers;
+import com.ealva.ealvalog.Markers;
 import com.ealva.ealvalog.filter.MarkerFilter;
 
 /**
