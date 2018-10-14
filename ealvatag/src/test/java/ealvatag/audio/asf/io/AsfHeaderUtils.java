@@ -26,7 +26,7 @@ public final class AsfHeaderUtils {
   public final static int BINARY_PRINT_COLUMNS = 20;
 
   public static String binary2ByteArrayString(final byte[] data) {
-    StringBuffer result = new StringBuffer();
+    StringBuilder result = new StringBuilder();
     for (int i = 0; data != null && i < data.length; i++) {
       if (i > 0 && i % BINARY_PRINT_COLUMNS == 0) {
         result.append(Utils.LINE_SEPARATOR);

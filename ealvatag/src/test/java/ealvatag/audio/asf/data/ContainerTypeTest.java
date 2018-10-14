@@ -52,7 +52,7 @@ public class ContainerTypeTest {
      * {@link ealvatag.audio.asf.data.ContainerType#checkConstraints(java.lang.String, byte[], int, int, int)}
      * .
      */
-    @Test public void testCheckCtonstraints() {
+    @Test public void testCheckConstraints() {
         Assert.assertNotNull(ContainerType.CONTENT_DESCRIPTION.checkConstraints(null,
                                                                                 null, 0, 0, 0));
         Assert.assertNotNull(ContainerType.CONTENT_DESCRIPTION.checkConstraints(
@@ -90,7 +90,7 @@ public class ContainerTypeTest {
      * @return see description.
      */
     private String createAString(int charAmount) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         for (int i = 0; i < charAmount; i++) {
             result.append('a');
         }

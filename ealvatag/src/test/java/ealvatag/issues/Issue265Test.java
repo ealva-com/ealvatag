@@ -43,7 +43,7 @@ public class Issue265Test {
 
 
             //Now createField artwork field
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 34000; i++) {
                 sb.append("x");
             }
@@ -79,7 +79,7 @@ public class Issue265Test {
             TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(true);
 
             //Now createField artwork field
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 34000; i++) {
                 sb.append("x");
             }
@@ -110,7 +110,7 @@ public class Issue265Test {
             Tag tag = f.getTag().or(NullTag.INSTANCE);
 
             TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(false);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 34000; i++) {
                 sb.append("x");
             }
@@ -145,7 +145,7 @@ public class Issue265Test {
             TagOptionSingleton.getInstance().setTruncateTextWithoutErrors(true);
 
             //Now createField artwork field
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 34000; i++) {
                 sb.append("x");
             }

@@ -22,7 +22,7 @@ public abstract class AbstractChunk<T extends Chunk> {
      * @return see description.
      */
     public static String createAString(final long charAmount) {
-        final StringBuffer result = new StringBuffer("a");
+        final StringBuilder result = new StringBuilder("a");
         long amount = charAmount / 2;
         while (amount > 0) {
             result.append(result);
