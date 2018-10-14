@@ -98,7 +98,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField {
         super(id, data);
     }
 
-    protected void build(ByteBuffer data) throws UnsupportedEncodingException {
+    protected void build(ByteBuffer data) {
         //Data actually contains a 'Data' Box so process data using this
         Mp4BoxHeader header = new Mp4BoxHeader(data);
         Mp4DataBox databox = new Mp4DataBox(header, data);
@@ -107,7 +107,7 @@ public class Mp4DiscNoField extends Mp4TagTextNumberField {
 
         //Disc number always hold four values, we can discard the first one and last one, the second one is the disc no
         //and the third is the total no of discs so only use if not zero
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if ((numbers.size() > DISC_NO_INDEX) && (numbers.get(DISC_NO_INDEX) > 0)) {
             sb.append(numbers.get(DISC_NO_INDEX));
         }

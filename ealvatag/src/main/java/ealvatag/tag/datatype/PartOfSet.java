@@ -1,5 +1,10 @@
 package ealvatag.tag.datatype;
 
+import static com.ealva.ealvalog.LogLevel.DEBUG;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
@@ -7,11 +12,6 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.options.PadNumberOption;
 import ealvatag.utils.EqualsUtil;
 import okio.Buffer;
-
-import static com.ealva.ealvalog.LogLevel.DEBUG;
-import static com.ealva.ealvalog.LogLevel.ERROR;
-import static com.ealva.ealvalog.LogLevel.TRACE;
-import static com.ealva.ealvalog.LogLevel.WARN;
 
 import java.io.EOFException;
 import java.nio.ByteBuffer;
@@ -45,7 +45,6 @@ public class PartOfSet extends AbstractString {
    * Creates a new empty  PartOfSet datatype.
    *
    * @param identifier identifies the frame type
-   * @param frameBody
    */
   public PartOfSet(String identifier, AbstractTagFrameBody frameBody) {
     super(identifier, frameBody);
@@ -53,9 +52,8 @@ public class PartOfSet extends AbstractString {
 
   /**
    * Copy constructor
-   *
-   * @param object
    */
+  @SuppressWarnings("unused")
   public PartOfSet(PartOfSet object) {
     super(object);
   }
@@ -199,8 +197,6 @@ public class PartOfSet extends AbstractString {
 
     /**
      * When constructing from data
-     *
-     * @param value
      */
     public PartOfSetValue(String value) {
       this.rawText = value;
@@ -209,9 +205,6 @@ public class PartOfSet extends AbstractString {
 
     /**
      * Newly created
-     *
-     * @param count
-     * @param total
      */
     public PartOfSetValue(Integer count, Integer total) {
       this.count = count;
@@ -224,8 +217,6 @@ public class PartOfSet extends AbstractString {
     /**
      * Given a raw value that could contain both a count and total and extra stuff (but needdnt contain
      * anything tries to parse it)
-     *
-     * @param value
      */
     private void initFromValue(String value) {
       try {
@@ -252,14 +243,14 @@ public class PartOfSet extends AbstractString {
     }
 
     private void resetValueFromCounts() {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       if (rawCount != null) {
         sb.append(rawCount);
       } else {
         sb.append("0");
       }
       if (rawTotal != null) {
-        sb.append(SEPARATOR + rawTotal);
+        sb.append(SEPARATOR).append(rawTotal);
       }
       if (extra != null) {
         sb.append(extra);
@@ -308,10 +299,12 @@ public class PartOfSet extends AbstractString {
       }
     }
 
+    @SuppressWarnings("unused")
     public String getRawValue() {
       return rawText;
     }
 
+    @SuppressWarnings("unused")
     public void setRawValue(String value) {
       this.rawText = value;
       initFromValue(value);
@@ -319,12 +312,10 @@ public class PartOfSet extends AbstractString {
 
     /**
      * Get Count including padded if padding is enabled
-     *
-     * @return
      */
     public String getCountAsText() {
       //Don't Pad
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       if (!TagOptionSingleton.getInstance().isPadNumbers()) {
         return rawCount;
       } else {
@@ -335,12 +326,8 @@ public class PartOfSet extends AbstractString {
 
     /**
      * Pad number so number is defined as long as length
-     *
-     * @param sb
-     * @param count
-     * @param padNumberLength
      */
-    private void padNumber(StringBuffer sb, Integer count, PadNumberOption padNumberLength) {
+    private void padNumber(StringBuilder sb, Integer count, PadNumberOption padNumberLength) {
       if (count != null) {
         if (padNumberLength == PadNumberOption.PAD_ONE_ZERO) {
           if (count > 0 && count < 10) {
@@ -372,12 +359,10 @@ public class PartOfSet extends AbstractString {
 
     /**
      * Get Total padded
-     *
-     * @return
      */
     public String getTotalAsText() {
       //Don't Pad
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       if (!TagOptionSingleton.getInstance().isPadNumbers()) {
         return rawTotal;
       } else {
@@ -390,7 +375,7 @@ public class PartOfSet extends AbstractString {
     public String toString() {
 
       //Don't Pad
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       if (!TagOptionSingleton.getInstance().isPadNumbers()) {
         return rawText;
       } else {
@@ -432,6 +417,6 @@ public class PartOfSet extends AbstractString {
   }
 
   public String toString() {
-    return value.toString();
+    return value == null ? "" : value.toString();
   }
 }

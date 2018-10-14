@@ -1,13 +1,14 @@
 package ealvatag.tag.datatype;
 
-import com.ealva.ealvalog.LogLevel;
+import static com.ealva.ealvalog.LogLevel.ERROR;
+import static com.ealva.ealvalog.LogLevel.TRACE;
+import static com.ealva.ealvalog.LogLevel.WARN;
+
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
-
-import static com.ealva.ealvalog.LogLevel.*;
 
 import java.io.EOFException;
 import java.nio.ByteBuffer;
@@ -43,7 +44,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    * Creates a new empty TextEncodedStringSizeTerminated datatype.
    *
    * @param identifier identifies the frame type
-   * @param frameBody
    */
   public TextEncodedStringSizeTerminated(String identifier, AbstractTagFrameBody frameBody) {
     super(identifier, frameBody);
@@ -51,8 +51,6 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
 
   /**
    * Copy constructor
-   *
-   * @param object
    */
   public TextEncodedStringSizeTerminated(TextEncodedStringSizeTerminated object) {
     super(object);
@@ -78,8 +76,8 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    * @param arr    this is the buffer for the frame
    * @param offset this is where to start reading in the buffer for this field
    *
-   * @throws NullPointerException
-   * @throws IndexOutOfBoundsException
+   * @throws NullPointerException if arr is null
+   * @throws IndexOutOfBoundsException if offset is not within arr bounds
    */
   public void readByteArray(byte[] arr, int offset) throws InvalidDataTypeException {
     LOG.log(TRACE, "Reading from array from offset:%s", offset);
@@ -145,15 +143,8 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    * <p>
    * When this is called multiple times, all but the last value has a trailing null
    *
-   * @param encoder
-   * @param next
-   * @param i
-   * @param noOfValues
-   *
-   * @return
-   *
-   * @throws CharacterCodingException
    */
+  @SuppressWarnings("WeakerAccess")
   protected ByteBuffer writeString(CharsetEncoder encoder, String next, int i, int noOfValues)
       throws CharacterCodingException {
 
@@ -176,16 +167,10 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    * Remember we are using this charset because the charset that writes BOM does it the wrong way for us
    * so we use this none and then manually add the BOM ourselves.
    *
-   * @param next
-   * @param i
-   * @param noOfValues
-   *
-   * @return
-   *
-   * @throws CharacterCodingException
+   * @throws CharacterCodingException on encoding error
    */
-  protected ByteBuffer writeStringUTF16LEBOM(final String next, final int i, final int noOfValues)
-      throws CharacterCodingException {
+  @SuppressWarnings("WeakerAccess")
+  protected ByteBuffer writeStringUTF16LEBOM(final String next, final int i, final int noOfValues) throws CharacterCodingException {
     final CharsetEncoder encoder = StandardCharsets.UTF_16LE.newEncoder();
     encoder.onMalformedInput(CodingErrorAction.IGNORE);
     encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
@@ -206,14 +191,9 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
    * <p>
    * When this is called multiple times, all but the last value has a trailing null
    *
-   * @param next
-   * @param i
-   * @param noOfValues
-   *
-   * @return
-   *
-   * @throws CharacterCodingException
+   * @throws CharacterCodingException on encoding error
    */
+  @SuppressWarnings("WeakerAccess")
   protected ByteBuffer writeStringUTF16BEBOM(final String next, final int i, final int noOfValues)
       throws CharacterCodingException {
     final CharsetEncoder encoder = StandardCharsets.UTF_16BE.newEncoder();
@@ -389,18 +369,21 @@ public class TextEncodedStringSizeTerminated extends AbstractString {
 
   /**
    * Get value(s) whilst removing any trailing nulls
-   *
-   * @return
    */
   public String getValueWithoutTrailingNull() {
-    List<String> values = splitByNullSeperator((String)value);
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < values.size(); i++) {
-      if (i != 0) {
-        sb.append("\u0000");
+    if (value != null) {
+      List<String> values = splitByNullSeperator((String)value);
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < values.size(); i++) {
+        if (i != 0) {
+          sb.append("\u0000");
+        }
+        sb.append(values.get(i));
       }
-      sb.append(values.get(i));
+      return sb.toString();
+    } else {
+      LOG.log(ERROR, "value is null");
+      return "";
     }
-    return sb.toString();
   }
 }

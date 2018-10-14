@@ -247,7 +247,6 @@ public class AudioFileImpl implements AudioFile {
 
 
   @Override public String toString() {
-    //noinspection StringBufferReplaceableByString
     final StringBuilder sb = new StringBuilder("AudioFileImpl{");
     sb.append("file=").append(file);
     sb.append(", audioHeader=").append(audioHeader);

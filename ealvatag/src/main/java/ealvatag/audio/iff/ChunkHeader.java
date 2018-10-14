@@ -119,7 +119,6 @@ public class ChunkHeader {
 
 
   @Override public String toString() {
-    //noinspection StringBufferReplaceableByString
     return new StringBuilder(128)
         .append("ChunkHeader{")
         .append(", id='").append(getID()).append('\'')

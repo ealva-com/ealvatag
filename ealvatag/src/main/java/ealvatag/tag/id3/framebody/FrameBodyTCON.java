@@ -283,7 +283,7 @@ public class FrameBodyTCON extends AbstractFrameBodyTextInfo implements ID3v24Fr
 
     public void setV23Format() {
         TCONString text = (TCONString)getObject(DataTypes.OBJ_TEXT);
-        text.setNullSeperateMultipleValues(false);
+        text.setNullSeparateMultipleValues(false);
     }
 
     protected void setupObjectList() {

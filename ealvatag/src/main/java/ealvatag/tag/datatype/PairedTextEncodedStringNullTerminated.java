@@ -26,11 +26,13 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
     value = new PairedTextEncodedStringNullTerminated.ValuePairs();
   }
 
+  @SuppressWarnings("unused")
   public PairedTextEncodedStringNullTerminated(TextEncodedStringSizeTerminated object) {
     super(object);
     value = new PairedTextEncodedStringNullTerminated.ValuePairs();
   }
 
+  @SuppressWarnings("unused")
   public PairedTextEncodedStringNullTerminated(PairedTextEncodedStringNullTerminated object) {
     super(object);
   }
@@ -60,18 +62,21 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
 
   /**
    * Check the value can be encoded with the specified encoding
-   *
-   * @return
    */
   public boolean canBeEncoded() {
-    for (Pair entry : ((ValuePairs)value).mapping) {
-      TextEncodedStringNullTerminated next =
-          new TextEncodedStringNullTerminated(identifier, frameBody, entry.getValue());
-      if (!next.canBeEncoded()) {
-        return false;
+    if (null != value) {
+      for (Pair entry : ((ValuePairs)value).mapping) {
+        TextEncodedStringNullTerminated next =
+            new TextEncodedStringNullTerminated(identifier, frameBody, entry.getValue());
+        if (!next.canBeEncoded()) {
+          return false;
+        }
       }
+      return true;
+    } else {
+      LOG.log(ERROR, "value is null");
+      return false;
     }
-    return true;
   }
 
   /**
@@ -272,9 +277,12 @@ public class PairedTextEncodedStringNullTerminated extends AbstractDataType {
      * @return a string representation of the value
      */
     public String toString() {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       for (Pair next : mapping) {
-        sb.append(next.getKey() + ':' + next.getValue() + ',');
+        sb.append(next.getKey())
+          .append(':')
+          .append(next.getValue())
+          .append(',');
       }
       if (sb.length() > 0) {
         sb.setLength(sb.length() - 1);

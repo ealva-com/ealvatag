@@ -51,7 +51,7 @@ public class UtilsTest {
     @Test public void testCheckStringLengthNullSafe() {
         Utils.checkStringLengthNullSafe(null);
         Utils.checkStringLengthNullSafe("AllOk"); //$NON-NLS-1$
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < 65532 / 2; i++) {
             buffer.append("a");
         }

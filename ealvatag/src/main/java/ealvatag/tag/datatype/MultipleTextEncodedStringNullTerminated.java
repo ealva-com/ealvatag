@@ -20,22 +20,26 @@ import java.util.ListIterator;
  */
 public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
 
+  private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+
   /**
    * Creates a new ObjectStringSizeTerminated datatype.
    *
    * @param identifier identifies the frame type
-   * @param frameBody
    */
+  @SuppressWarnings("unused")
   public MultipleTextEncodedStringNullTerminated(String identifier, AbstractTagFrameBody frameBody) {
     super(identifier, frameBody);
     value = new MultipleTextEncodedStringNullTerminated.Values();
   }
 
+  @SuppressWarnings("unused")
   public MultipleTextEncodedStringNullTerminated(TextEncodedStringSizeTerminated object) {
     super(object);
     value = new MultipleTextEncodedStringNullTerminated.Values();
   }
 
+  @SuppressWarnings("unused")
   public MultipleTextEncodedStringNullTerminated(MultipleTextEncodedStringNullTerminated object) {
     super(object);
   }
@@ -55,16 +59,13 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
 
   /**
    * Check the value can be encoded with the specified encoding
-   *
-   * @return
    */
   public boolean canBeEncoded() {
-    for (ListIterator<String> li = ((Values)value).getList().listIterator(); li.hasNext(); ) {
-      TextEncodedStringNullTerminated next =
-          new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
-      if (!next.canBeEncoded()) {
-        return false;
-      }
+    if (null == value) return false;
+    final List<String> list = ((Values)value).getList();
+    if (list.isEmpty()) return false;
+    for (ListIterator<String> li = list.listIterator(); li.hasNext(); ) {
+      if (!new TextEncodedStringNullTerminated(identifier, frameBody, li.next()).canBeEncoded()) return false;
     }
     return true;
   }
@@ -91,14 +92,18 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
         if (next.getSize() == 0) {
           break;
         } else {
-          //Add to value
-          ((Values)value).add((String)next.getValue());
+          if (null != value) {
+            //Add to value
+            ((Values)value).add((String)next.getValue());
 
-          //Add to size calculation
-          size += next.getSize();
+            //Add to size calculation
+            size += next.getSize();
 
-          //Increment Offset to start of next datatype.
-          offset += next.getSize();
+            //Increment Offset to start of next datatype.
+            offset += next.getSize();
+          } else {
+            LOG.log(ERROR, "value is null");
+          }
         }
       } catch (InvalidDataTypeException idte) {
         break;
@@ -119,19 +124,23 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
       if (next.getSize() == 0) {
         break;
       } else {
-        //Add to value
-        ((Values)value).add((String)next.getValue());
+        if (value != null) {
+          //Add to value
+          ((Values)value).add((String)next.getValue());
 
-        //Add to size calculation
-        runningSize -= next.getSize();
+          //Add to size calculation
+          runningSize -= next.getSize();
+        } else {
+          LOG.log(ERROR, "value is null");
+        }
       }
     }
   }
 
   /**
-   * For every String write to bytebuffer
+   * For every String write to byte array
    *
-   * @return bytebuffer that should be written to file to persist this datatype.
+   * @return byte[] that should be written to file to persist this data type.
    */
   public byte[] writeByteArray() {
     LOG.log(DEBUG, "Writing MultipleTextEncodedStringNullTerminated");
@@ -139,11 +148,16 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
     int localSize = 0;
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     try {
-      for (ListIterator<String> li = ((Values)value).getList().listIterator(); li.hasNext(); ) {
-        TextEncodedStringNullTerminated next =
-            new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
-        buffer.write(next.writeByteArray());
-        localSize += next.getSize();
+      if (null != value) {
+        for (ListIterator<String> li = ((Values)value).getList().listIterator(); li.hasNext(); ) {
+          TextEncodedStringNullTerminated next =
+              new TextEncodedStringNullTerminated(identifier, frameBody, li.next());
+          buffer.write(next.writeByteArray());
+          localSize += next.getSize();
+        }
+      } else {
+        LOG.log(ERROR, "value is null");
+        return EMPTY_BYTE_ARRAY;
       }
     } catch (IOException ioe) {
       //This should never happen because the write is internal with the JVM it is not to a file
@@ -190,6 +204,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
     /**
      * @return no of values
      */
+    @SuppressWarnings("unused")
     public int getNumberOfValues() {
       return valueList.size();
     }
@@ -200,7 +215,7 @@ public class MultipleTextEncodedStringNullTerminated extends AbstractDataType {
      * @return a string representation of the value
      */
     public String toString() {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       for (ListIterator<String> li = valueList.listIterator(); li.hasNext(); ) {
         String next = li.next();
         sb.append(next);

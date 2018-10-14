@@ -1,4 +1,4 @@
-/**
+/*
  * @author : Paul Taylor
  * <p>
  * Version @version:$Id$
@@ -20,68 +20,70 @@ package ealvatag.logging;
 
 /*
  * For Formatting metadata contents of a file as simple text
-*/
+ */
 public class PlainTextTagDisplayFormatter extends AbstractTagDisplayFormatter {
-    private static volatile PlainTextTagDisplayFormatter instance;
+  private static volatile PlainTextTagDisplayFormatter instance;
 
-    StringBuffer sb = new StringBuffer();
-    StringBuffer indent = new StringBuffer();
+  private StringBuilder sb = new StringBuilder();
+  private StringBuilder indent = new StringBuilder();
 
-    public PlainTextTagDisplayFormatter() {
+  public PlainTextTagDisplayFormatter() {
 
-    }
+  }
 
-    public void openHeadingElement(String type, String value) {
-        addElement(type, value);
-        increaseLevel();
-    }
+  public void openHeadingElement(String type, String value) {
+    addElement(type, value);
+    increaseLevel();
+  }
 
-    public void openHeadingElement(String type, boolean value) {
-        openHeadingElement(type, String.valueOf(value));
-    }
+  public void openHeadingElement(String type, boolean value) {
+    openHeadingElement(type, String.valueOf(value));
+  }
 
-    public void openHeadingElement(String type, int value) {
-        openHeadingElement(type, String.valueOf(value));
-    }
+  public void openHeadingElement(String type, int value) {
+    openHeadingElement(type, String.valueOf(value));
+  }
 
-    public void closeHeadingElement(String type) {
-        decreaseLevel();
-    }
+  public void closeHeadingElement(String type) {
+    decreaseLevel();
+  }
 
-    public void increaseLevel() {
-        level++;
-        indent.append("  ");
-    }
+  @SuppressWarnings("WeakerAccess")
+  public void increaseLevel() {
+    level++;
+    indent.append("  ");
+  }
 
-    public void decreaseLevel() {
-        level--;
-        indent = new StringBuffer(indent.substring(0, indent.length() - 2));
-    }
+  @SuppressWarnings("WeakerAccess")
+  public void decreaseLevel() {
+    level--;
+    indent.setLength(Math.max(indent.length() - 2, 0));
+  }
 
-    public void addElement(String type, String value) {
-        sb.append(indent).append(type).append(":").append(value).append('\n');
-    }
+  public void addElement(String type, String value) {
+    sb.append(indent).append(type).append(":").append(value).append('\n');
+  }
 
-    public void addElement(String type, int value) {
-        addElement(type, String.valueOf(value));
-    }
+  public void addElement(String type, int value) {
+    addElement(type, String.valueOf(value));
+  }
 
-    public void addElement(String type, boolean value) {
-        addElement(type, String.valueOf(value));
-    }
+  public void addElement(String type, boolean value) {
+    addElement(type, String.valueOf(value));
+  }
 
-    public String toString() {
-        return sb.toString();
-    }
+  public String toString() {
+    return sb.toString();
+  }
 
-    public static AbstractTagDisplayFormatter getInstanceOf() {
+  public static AbstractTagDisplayFormatter getInstanceOf() {
+    if (instance == null) {
+      synchronized (PlainTextTagDisplayFormatter.class) {
         if (instance == null) {
-            synchronized (PlainTextTagDisplayFormatter.class) {
-                if (instance == null) {
-                    instance = new PlainTextTagDisplayFormatter();
-                }
-            }
+          instance = new PlainTextTagDisplayFormatter();
         }
-        return instance;
+      }
     }
+    return instance;
+  }
 }

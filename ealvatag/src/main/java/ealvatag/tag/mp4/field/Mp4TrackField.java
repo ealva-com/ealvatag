@@ -121,7 +121,7 @@ public class Mp4TrackField extends Mp4TagTextNumberField {
         numbers = databox.getNumbers();
         //Track number always hold three values, we can discard the first one, the second one is the track no
         //and the third is the total no of tracks so only use if not zero
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (numbers != null) {
             if ((numbers.size() > TRACK_NO_INDEX) && (numbers.get(TRACK_NO_INDEX) > 0)) {
                 sb.append(numbers.get(TRACK_NO_INDEX));

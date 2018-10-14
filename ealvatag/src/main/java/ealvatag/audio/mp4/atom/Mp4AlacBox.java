@@ -18,7 +18,7 @@ import java.io.IOException;
 class Mp4AlacBox extends AbstractMp4Box {
     private static final int OTHER_FLAG_LENGTH = 4;
 
-    // Some vars not used. I'm keeping as comments and let the optimizer deal with them. Yes, a few more machine cycles.
+    // Some vars not used. I'm keeping as comments and let the optimizer deal with them.
     @SuppressWarnings("unused") Mp4AlacBox(final Mp4BoxHeader alacBoxHeader,
                                            final BufferedSource bufferedSource,
                                            final Mp4AudioHeader audioHeader,
