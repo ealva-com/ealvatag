@@ -48,11 +48,11 @@ public class Mp4DataBox extends AbstractMp4Box {
   private List<Short> numbers;
 
   //Holds byte data for byte fields as is not clear for multi-byte fields exactly these should be written
-  private byte[] bytedata;
+  private byte[] byteData;
 
   /**
    * @param boxHeader parentHeader info
-   * @param raw       data of box (doesnt include parentHeader data)
+   * @param raw       data of box (doesn't include parentHeader data)
    */
   public Mp4DataBox(Mp4BoxHeader boxHeader, ByteBuffer raw) {
     header = boxHeader;
@@ -73,46 +73,39 @@ public class Mp4DataBox extends AbstractMp4Box {
       numbers = new ArrayList<>();
 
       for (int i = 0; i < ((boxHeader.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++) {
-        short
-            number =
-            Utils.getShortBE(this.dataBuffer,
-                             PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
-                             PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
-        numbers.add(number);
+        numbers.add(Utils.getShortBE(this.dataBuffer,
+                                     PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
+                                     PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1)));
       }
 
       //Make String representation  (separate values with slash)
-      StringBuilder sb = new StringBuilder();
-      ListIterator<Short> iterator = numbers.listIterator();
-      while (iterator.hasNext()) {
-        sb.append(iterator.next());
-        if (iterator.hasNext()) {
-          sb.append("/");
-        }
+      StringBuilder sb = new StringBuilder(1024);
+      final int lastIndex = numbers.size() - 1;
+      for (int i = 0; i <= lastIndex; i++) {
+        sb.append(numbers.get(i));
+        if (i < lastIndex) sb.append("/");
       }
+
       content = sb.toString();
     } else if (type == Mp4FieldType.INTEGER.getFileClassId()) {
       //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
       //Create String representation for display
-      content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, boxHeader.getDataLength() - 1) + "";
+      content = Integer.toString(Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, boxHeader.getDataLength() - 1));
 
       //But store data for safer writing back to file
-      bytedata = new byte[boxHeader.getDataLength() - PRE_DATA_LENGTH];
+      byteData = new byte[boxHeader.getDataLength() - PRE_DATA_LENGTH];
       int pos = raw.position();
       raw.position(pos + PRE_DATA_LENGTH);
-      raw.get(bytedata);
+      raw.get(byteData);
       raw.position(pos);
 
       //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
       //by the Mp4TrackField atom
-      numbers = new ArrayList<Short>();
+      numbers = new ArrayList<>();
       for (int i = 0; i < ((boxHeader.getDataLength() - PRE_DATA_LENGTH) / NUMBER_LENGTH); i++) {
-        short
-            number =
-            Utils.getShortBE(this.dataBuffer,
-                             PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
-                             PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1));
-        numbers.add(number);
+        numbers.add(Utils.getShortBE(this.dataBuffer,
+                                     PRE_DATA_LENGTH + (i * NUMBER_LENGTH),
+                                     PRE_DATA_LENGTH + (i * NUMBER_LENGTH) + (NUMBER_LENGTH - 1)));
       }
 
     } else if (type == Mp4FieldType.COVERART_JPEG.getFileClassId()) {
@@ -121,7 +114,7 @@ public class Mp4DataBox extends AbstractMp4Box {
   }
 
   /**
-   * This box is used within both normal metadat boxes and ---- boxes to hold the actual data.
+   * This box is used within both normal metadata boxes and ---- boxes to hold the actual data.
    * <p>
    * <p>Format is as follows:
    * Mp4BoxHeader [
@@ -155,25 +148,24 @@ public class Mp4DataBox extends AbstractMp4Box {
       }
 
       //Make String representation  (separate values with slash)
-      StringBuilder sb = new StringBuilder();
-      ListIterator<Short> iterator = numbers.listIterator();
-      while (iterator.hasNext()) {
-        sb.append(iterator.next());
-        if (iterator.hasNext()) {
-          sb.append("/");
-        }
+      StringBuilder sb = new StringBuilder(1024);
+      final int lastIndex = numbers.size() - 1;
+      for (int i = 0; i <= lastIndex; i++) {
+        sb.append(numbers.get(i));
+        if (i < lastIndex) sb.append("/");
       }
+
       content = sb.toString();
     } else if (type == Mp4FieldType.INTEGER.getFileClassId()) {
       //TODO byte data length seems to be 1 for pgap and cpil but 2 for tmpo ?
-      bytedata = buffer.readByteArray(header.getDataLength() - 1);
+      byteData = buffer.readByteArray(header.getDataLength() - 1);
 
       //Create String representation for display
-      content = Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1) + "";
+      content = Integer.toString(Utils.getIntBE(this.dataBuffer, PRE_DATA_LENGTH, header.getDataLength() - 1));
 
       //Songbird uses this type for trkn atom (normally implicit type) is used so just added this code so can be used
       //by the Mp4TrackField atom
-      numbers = new ArrayList<Short>();
+      numbers = new ArrayList<>();
       for (int i = 0; i < ((remainingDataSize) / NUMBER_LENGTH); i++) {
         short
             number =
@@ -202,18 +194,18 @@ public class Mp4DataBox extends AbstractMp4Box {
    *
    * @return numbers
    */
-  //TODO this is only applicable for numeric databoxes, should we subclass dont know type until start
+  //TODO this is only applicable for numeric datab oxes, should we subclass don't know type until start
   //constructing and we also have Mp4tagTextNumericField class as well
   public List<Short> getNumbers() {
     return numbers;
   }
 
   /**
-   * Return raw byte data only vaid for byte fields
+   * Return raw byte data only valid for byte fields
    *
    * @return byte data
    */
   public byte[] getByteData() {
-    return bytedata;
+    return byteData;
   }
 }
