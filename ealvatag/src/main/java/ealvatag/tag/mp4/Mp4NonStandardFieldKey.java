@@ -7,53 +7,48 @@ import ealvatag.tag.reference.Tagger;
  * be created by applications other than iTunes, as we regard iTunes as the defacto standard for Mp4 files (but
  * certainly not any other format such as mp3 !).
  */
-public enum Mp4NonStandardFieldKey
-{
-    AAPR("AApr", "MM3 Album Art Attributes", Tagger.MEDIA_MONKEY),
-    ALFN("Alfn", "MM3 Album Art Unknown", Tagger.MEDIA_MONKEY),
-    AMIM("AMIM", "MM3 Album Art MimeType", Tagger.MEDIA_MONKEY),
-    ADCP("Adcp", "MM3 Album Art Description", Tagger.MEDIA_MONKEY),
-    APTY("Apty", "MM3 Album Art ID3 Picture Type", Tagger.MEDIA_MONKEY);
+@SuppressWarnings("SpellCheckingInspection")
+public enum Mp4NonStandardFieldKey {
+  AAPR("AApr", "MM3 Album Art Attributes", Tagger.MEDIA_MONKEY),
+  ALFN("Alfn", "MM3 Album Art Unknown", Tagger.MEDIA_MONKEY),
+  AMIM("AMIM", "MM3 Album Art MimeType", Tagger.MEDIA_MONKEY),
+  ADCP("Adcp", "MM3 Album Art Description", Tagger.MEDIA_MONKEY),
+  APTY("Apty", "MM3 Album Art ID3 Picture Type", Tagger.MEDIA_MONKEY);
 
-    private String fieldName;
-    private String description;
-    private Tagger tagger;
+  private String fieldName;
+  private String description;
+  private Tagger tagger;
 
-    Mp4NonStandardFieldKey(String fieldName, String description, Tagger tagger)
-    {
-        this.fieldName = fieldName;
-        this.description = description;
-        this.tagger = tagger;
+  Mp4NonStandardFieldKey(String fieldName, String description, Tagger tagger) {
+    this.fieldName = fieldName;
+    this.description = description;
+    this.tagger = tagger;
 
-    }
+  }
 
-    /**
-     * This is the value of the fieldname that is actually used to write mp4
-     *
-     * @return
-     */
-    public String getFieldName()
-    {
-        return fieldName;
-    }
+  /**
+   * This is the value of the fieldname that is actually used to write mp4
+   */
+  public String getFieldName() {
+    return fieldName;
+  }
 
-    public boolean matchesIdentifier(final String id) {
-        return fieldName.equals(id);
-    }
+  public boolean matchesIdentifier(final String id) {
+    return fieldName.equals(id);
+  }
 
-    /**
-     * @return description, human redable description of the atom
-     */
-    public String getDescription()
-    {
-        return description;
-    }
+  /**
+   * @return description, human redable description of the atom
+   */
+  public String getDescription() {
+    return description;
+  }
 
-    /**
-     * @return tagger that defined (and probably craeted) instance of field
-     */
-    public Tagger geTagger()
-    {
-        return tagger;
-    }
+  /**
+   * @return tagger that defined (and probably craeted) instance of field
+   */
+  @SuppressWarnings("unused")
+  public Tagger geTagger() {
+    return tagger;
+  }
 }

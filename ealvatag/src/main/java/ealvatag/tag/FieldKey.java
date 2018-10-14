@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * This enumeration is used by subclasses to map from the common key to their implementation key
  */
+@SuppressWarnings("SpellCheckingInspection")
 public enum FieldKey {
   ACOUSTID_FINGERPRINT("Acoustid Fingerprint"),
   ACOUSTID_ID("Acoustid"),

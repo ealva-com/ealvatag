@@ -51,7 +51,7 @@ public class NumberFixedLength extends AbstractDataType {
    */
   public NumberFixedLength(String identifier, AbstractTagFrameBody frameBody, int size) {
     super(identifier, frameBody);
-    Preconditions.checkArgument(size >= 0, "Length is less than zero: " + size);
+    Preconditions.checkArgument(size >= 0);
     this.size = size;
 
   }

@@ -1,20 +1,18 @@
 package ealvatag.tag.aiff;
 
 /**
- *   Enum for AIFF fields that don't have obvious matches in FieldKey
+ * Enum for AIFF fields that don't have obvious matches in FieldKey
  */
 public enum AiffTagFieldKey {
-    TIMESTAMP("TIMESTAMP");
+  TIMESTAMP("TIMESTAMP");
 
-    private String fieldName;
+  private String fieldName;
 
-    AiffTagFieldKey(String fieldName)
-    {
-        this.fieldName = fieldName;
-    }
+  AiffTagFieldKey(String fieldName) {
+    this.fieldName = fieldName;
+  }
 
-    public String getFieldName()
-    {
-        return fieldName;
-    }
+  public String getFieldName() {
+    return fieldName;
+  }
 }
