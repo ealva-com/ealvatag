@@ -35,18 +35,13 @@ public class WavCleaner {
     this.loggingName = path.getAbsolutePath();
   }
 
-  public void clean() throws Exception {
+  public void clean() {
     // TODO: 3/14/17 wtf?
-//    System.out.println("EndOfDataChunk:" + Hex.asHex(findEndOfDataChunk()));
 
   }
 
   /**
    * If find data chunk delete al data after it
-   *
-   * @return
-   *
-   * @throws Exception
    */
   private int findEndOfDataChunk() throws Exception {
     try (FileChannel fc = new RandomAccessFile(path, "rw").getChannel()) {

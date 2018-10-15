@@ -538,8 +538,7 @@ public class VorbisWriteTagTest {
             System.out.println(oggFileReader.readOggPageHeader(raf, 0));
             raf.seek(0);
             System.out.println("Page 2" + oggFileReader.readOggPageHeader(raf, 1));
-            //System.out.println("Page 3"+oggFileReader.readOggPageHeader(raf,2));
-            //oggFileReader.readOggPageHeader(raf,4);
+            oggFileReader.readOggPageHeader(raf,4);
             raf.close();
 
         } catch (Exception e) {

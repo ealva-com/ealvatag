@@ -34,11 +34,6 @@ public class StandardImageHandler implements ImageHandler {
 
     /**
      * Resize the image until the total size require to store the image is less than maxsize
-     *
-     * @param artwork
-     * @param maxSize
-     *
-     * @throws IOException
      */
     public void reduceQuality(Artwork artwork, int maxSize) throws IOException {
         while (artwork.getBinaryData().length > maxSize) {
@@ -51,11 +46,6 @@ public class StandardImageHandler implements ImageHandler {
 
     /**
      * Resize image using Java 2D
-     *
-     * @param artwork
-     * @param size
-     *
-     * @throws java.io.IOException
      */
     public void makeSmaller(Artwork artwork, int size) throws IOException {
         Image srcImage = (Image)artwork.getImage();
@@ -95,13 +85,6 @@ public class StandardImageHandler implements ImageHandler {
 
     /**
      * Write buffered image as required format
-     *
-     * @param bi
-     * @param mimeType
-     *
-     * @return
-     *
-     * @throws IOException
      */
     public byte[] writeImage(BufferedImage bi, String mimeType) throws IOException {
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType(mimeType);
@@ -115,40 +98,10 @@ public class StandardImageHandler implements ImageHandler {
         throw new IOException("Cannot write to this mimetype");
     }
 
-    /**
-     * @param bi
-     *
-     * @return
-     *
-     * @throws IOException
-     */
     public byte[] writeImageAsPng(BufferedImage bi) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bi, ImageFormats.MIME_TYPE_PNG, baos);
         return baos.toByteArray();
     }
 
-//    /**
-//     * Show read formats
-//     * <p>
-//     * On Windows supports png/jpeg/bmp/gif
-//     */
-//    public void showReadFormats() {
-//        String[] formats = ImageIO.getReaderMIMETypes();
-//        for (String f : formats) {
-//            System.out.println("r" + f);
-//        }
-//    }
-
-//    /**
-//     * Show write formats
-//     * <p>
-//     * On Windows supports png/jpeg/bmp
-//     */
-//    public void showWriteFormats() {
-//        String[] formats = ImageIO.getWriterMIMETypes();
-//        for (String f : formats) {
-//            System.out.println(f);
-//        }
-//    }
 }

@@ -23,8 +23,6 @@ public class IssueTrackTotalTest {
     @Test public void testIssue() throws Exception {
         Exception caught = null;
         try {
-            //System.out.println("TrackTotal Loading to Database:"+audioFile.getTagOrCreateDefault().getFirst(FieldKey.TRACK_TOTAL)+":");
-
             File orig = new File("testdata", "issue400.mp3");
             if (!orig.isFile()) {
                 System.err.println("Unable to test file - not available" + orig);

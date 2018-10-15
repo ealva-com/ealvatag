@@ -89,6 +89,5 @@ public class FlacReadTest {
 //        File testFile = AbstractTestCase.copyAudioToTmp("test154.flac", new File("test154.flac"));
 //        AudioFile f = AudioFileIO.read(testFile);
 //        MetadataBlockDataPicture mbdp = (((FlacTag)f.getTag()).getImages().get(0));
-//        System.out.println(mbdp);
 //    }
 }

@@ -36,7 +36,6 @@ public class Issue036Test {
 
     @Test public void testAllID3v24Frames() throws Exception {
         for (String frameId : ID3v24Frames.getInstanceOf().getSupportedFrames()) {
-            //System.out.println("Testing:"+frameId);
             ID3v24Frame frame1 = new ID3v24Frame(frameId);
             ID3v24Frame frame2 = new ID3v24Frame(frameId);
             Assert.assertTrue(frame1.equals(frame2));
@@ -83,7 +82,6 @@ public class Issue036Test {
 
     @Test public void testAllID3v23Frames() throws Exception {
         for (String frameId : ID3v23Frames.getInstanceOf().getSupportedFrames()) {
-            //System.out.println("Testing:"+frameId);
             ID3v23Frame frame1 = new ID3v23Frame(frameId);
             ID3v23Frame frame2 = new ID3v23Frame(frameId);
             Assert.assertTrue(frame1.equals(frame2));

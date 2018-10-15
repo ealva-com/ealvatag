@@ -93,9 +93,6 @@ public class TestAudioTagger {
         @SuppressWarnings("unused") final String title = tag.getFirst(FieldKey.TITLE);
         @SuppressWarnings("unused") final String artist = tag.getFirst(FieldKey.ARTIST);
         @SuppressWarnings("unused") final String album = tag.getFirst(FieldKey.ALBUM);
-//        System.out.println("Title:  " + title);
-//        System.out.println("Artist: " + artist);
-//        System.out.println("Album:  " + album);
       } catch (Throwable t) {
         System.err.println("Unable to read file:" + count + " path:" + (file != null ? file.getPath() : ""));
         failed++;

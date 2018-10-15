@@ -63,46 +63,4 @@ public class NetworkTest {
         Assert.assertNull(caught);
     }
 
-    /*
-    public void testDataCopySpeed() throws Exception
-    {
-        File file = new File("Z:\\Music\\Replay Music Recordings\\Beirut\\The Rip Tide\\Beirut-The Rip Tide-05-Payne's Bay.mp3");
-
-        System.out.println("start:"+new Date());
-        FileChannel fc = new FileInputStream(file).getChannel();
-        ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY,0,500000);
-        fc.close();
-        System.out.println("end:"+new Date());
-
-    }
-
-    public void testDataCopySpeed2() throws Exception
-    {
-        File file = new File("Z:\\Music\\Replay Music Recordings\\Beirut\\The Rip Tide\\Beirut-The Rip Tide-05-Payne's Bay.mp3");
-
-        System.out.println("start:"+new Date());
-        FileChannel fc = new FileInputStream(file).getChannel();
-        ByteBuffer bb = ByteBuffer.allocate(500000);
-        fc.read(bb);
-        fc.close();
-        System.out.println("end:"+new Date());
-
-    } */
-
-
-    /*public void testDataCopyBufferedStream() throws Exception
-    {
-
-        File file = new File("Z:\\Music\\Replay Music Recordings\\Beirut\\The Rip Tide\\Beirut-The Rip Tide-05-Payne's Bay.mp3");
-        Date start = new Date();
-
-        FileChannel fc = new FileInputStream(file).getChannel();
-        ByteBuffer bb = ByteBuffer.allocate(500000);
-        WritableByteChannel wbc = bb.
-        //fc.read(bb);
-        //fc.close();
-        Date end = new Date();
-        System.out.println(end.getTime() - start.getTime());
-      )
-      */
 }

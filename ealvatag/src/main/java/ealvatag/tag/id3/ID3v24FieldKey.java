@@ -253,7 +253,6 @@ public enum ID3v24FieldKey {
       builder.append(frameId)
              .append(':')
              .append(subId);
-      System.err.println(builder.length());
       Preconditions.checkState(builder.length() <= MAX_LENGTH);
       return builder.toString();
     }

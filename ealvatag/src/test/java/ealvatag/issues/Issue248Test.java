@@ -24,10 +24,7 @@ public class Issue248Test {
             threads[i] = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        //System.out.println("Output is"+mp3File.getMP3AudioHeader().getTrackLengthAsString());
-                    } catch (RuntimeException e) {
-                        e.printStackTrace();
-                        countExceptions++;
+                        mp3File.getMP3AudioHeader().getChannelCount();
                     } catch (Exception e) {
                         e.printStackTrace();
                         countExceptions++;
