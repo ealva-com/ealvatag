@@ -79,7 +79,7 @@ import java.nio.ByteBuffer;
  * @author Marc Gimpel, Horizon Wimba S.A.
  * @version $Id$
  */
-public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2ChapterFrameBody {
+public class FrameBodyCHAP extends AbstractID3v2FrameBody implements ID3v2ChapterFrameBody, ID3v24FrameBody, ID3v23FrameBody {
     /**
      * Creates a new FrameBodyCHAP datatype.
      */

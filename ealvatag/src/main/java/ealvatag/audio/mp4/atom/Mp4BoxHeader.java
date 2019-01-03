@@ -141,7 +141,7 @@ public class Mp4BoxHeader {
     this.length = dataBuffer.getInt();
     this.id = Utils.readFourBytesAsChars(dataBuffer);
 
-    LOG.log(TRACE, "Mp4BoxHeader id:%s :length:%d", id, length);
+    LOG.log(TRACE, "Mp4BoxHeader id:'%s' :length:%d", id, length);
     if (id.equals("\0\0\0\0")) {
       throw new NullBoxIdException(id);
     }

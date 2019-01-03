@@ -41,6 +41,8 @@ public class ID3v24Frames extends ID3Frames {
     public static final String FRAME_ID_AUDIO_ENCRYPTION = "AENC";
     public static final String FRAME_ID_AUDIO_SEEK_POINT_INDEX = "ASPI";
     public static final String FRAME_ID_BPM = "TBPM";
+    public static final String FRAME_ID_V3_CHAPTER = ID3v2ChapterFrames.FRAME_ID_CHAPTER;
+    public static final String FRAME_ID_V3_CHAPTER_TOC = ID3v2ChapterFrames.FRAME_ID_TABLE_OF_CONTENT;
     public static final String FRAME_ID_COMMENT = "COMM";
     public static final String FRAME_ID_COMMERCIAL_FRAME = "COMR";
     public static final String FRAME_ID_COMPOSER = "TCOM";
@@ -198,6 +200,8 @@ public class ID3v24Frames extends ID3Frames {
                .put(FRAME_ID_AUDIO_ENCRYPTION, "Audio encryption")
                .put(FRAME_ID_AUDIO_SEEK_POINT_INDEX, "Audio seek point index")
                .put(FRAME_ID_BPM, "Text: BPM (Beats Per Minute)")
+               .put(FRAME_ID_V3_CHAPTER, "Chapter")
+               .put(FRAME_ID_V3_CHAPTER_TOC, "Chapter TOC")
                .put(FRAME_ID_COMMENT, "Comments")
                .put(FRAME_ID_COMMERCIAL_FRAME, "Commercial Frame")
                .put(FRAME_ID_COMPOSER, "Text: Composer")
@@ -490,6 +494,8 @@ public class ID3v24Frames extends ID3Frames {
                                FRAME_ID_AUDIO_ENCRYPTION,
                                FRAME_ID_AUDIO_SEEK_POINT_INDEX,
                                FRAME_ID_BPM,
+                               FRAME_ID_V3_CHAPTER,
+                               FRAME_ID_V3_CHAPTER_TOC,
                                FRAME_ID_COMMENT,
                                FRAME_ID_COMMERCIAL_FRAME,
                                FRAME_ID_COMPOSER,
