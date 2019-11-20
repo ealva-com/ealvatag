@@ -5,6 +5,7 @@ import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.TRACE;
 import static com.ealva.ealvalog.LogLevel.WARN;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
@@ -22,7 +23,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

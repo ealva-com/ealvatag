@@ -31,7 +31,7 @@ import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 

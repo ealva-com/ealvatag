@@ -14,7 +14,7 @@ import static com.ealva.ealvalog.LogLevel.ERROR;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 
 /**
  * Stores basic only metadata but only exists as part of a LIST chunk, doesn't have its own size field

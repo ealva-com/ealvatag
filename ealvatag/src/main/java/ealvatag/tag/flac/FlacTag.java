@@ -3,6 +3,7 @@ package ealvatag.tag.flac;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -26,7 +27,6 @@ import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

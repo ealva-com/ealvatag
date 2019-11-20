@@ -1,7 +1,7 @@
 package ealvatag.audio.ogg.util;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 
 /**
  * Defines variables common to all vorbis headers

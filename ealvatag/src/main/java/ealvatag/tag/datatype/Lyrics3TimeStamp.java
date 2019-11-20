@@ -20,12 +20,12 @@
  */
 package ealvatag.tag.datatype;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
 import okio.Buffer;
 
 import java.io.EOFException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Lyrics3TimeStamp extends AbstractDataType {

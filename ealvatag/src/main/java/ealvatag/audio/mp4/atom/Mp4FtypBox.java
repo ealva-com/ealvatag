@@ -3,6 +3,7 @@ package ealvatag.audio.mp4.atom;
 import com.google.common.base.MoreObjects;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.logging.EalvaTagLog;
 import okio.BufferedSource;
@@ -16,7 +17,6 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

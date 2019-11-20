@@ -26,8 +26,8 @@ import okio.Buffer;
 
 import static com.ealva.ealvalog.LogLevel.ERROR;
 import static com.ealva.ealvalog.LogLevel.TRACE;
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.charset.StandardCharsets.US_ASCII;
+import static ealvatag.utils.StandardCharsets.ISO_8859_1;
+import static ealvatag.utils.StandardCharsets.US_ASCII;
 
 import java.io.DataInput;
 import java.io.File;

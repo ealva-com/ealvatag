@@ -23,6 +23,7 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.AbstractTag;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.tag.FieldDataInvalidException;
@@ -54,7 +55,6 @@ import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

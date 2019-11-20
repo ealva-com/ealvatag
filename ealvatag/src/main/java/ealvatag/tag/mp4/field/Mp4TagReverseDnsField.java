@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 
 /**
  * Represents reverse dns field, used for custom information

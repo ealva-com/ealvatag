@@ -1,11 +1,11 @@
 package ealvatag.tag.id3;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * This class encapsulates the name and content of a tag entry in id3 fields

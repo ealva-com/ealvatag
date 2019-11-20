@@ -6,7 +6,7 @@ import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
 
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 
 /**
  * Vorbis Setup header

@@ -1,11 +1,11 @@
 package ealvatag.audio.asf.data;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.asf.util.Utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 

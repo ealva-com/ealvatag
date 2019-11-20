@@ -20,10 +20,10 @@ package ealvatag.audio.mp3;
 
 import ealvatag.audio.Utils;
 import ealvatag.utils.ArrayUtil;
+import ealvatag.utils.StandardCharsets;
 import okio.Buffer;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * The first frame can sometimes contain a LAME frame at the end of the Xing frame

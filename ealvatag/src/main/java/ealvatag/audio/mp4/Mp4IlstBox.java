@@ -20,6 +20,7 @@ package ealvatag.audio.mp4;
 import com.google.common.base.Preconditions;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
@@ -50,7 +51,6 @@ import static com.ealva.ealvalog.LogLevel.WARN;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Represents an mp4 trak box

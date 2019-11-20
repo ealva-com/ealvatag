@@ -5,10 +5,10 @@ import ealvatag.audio.aiff.AiffUtil;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
+import ealvatag.utils.StandardCharsets;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**

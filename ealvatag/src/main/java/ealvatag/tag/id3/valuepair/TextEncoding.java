@@ -20,7 +20,9 @@
 package ealvatag.tag.id3.valuepair;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+
+import ealvatag.utils.StandardCharsets;
+
 import java.util.NoSuchElementException;
 
 

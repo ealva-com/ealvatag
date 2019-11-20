@@ -19,6 +19,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.EmptyFrameException;
@@ -43,7 +44,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
 /**

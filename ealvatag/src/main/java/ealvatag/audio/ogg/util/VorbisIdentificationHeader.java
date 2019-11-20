@@ -20,12 +20,11 @@ package ealvatag.audio.ogg.util;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.ogg.VorbisVersion;
 import ealvatag.logging.EalvaTagLog;
 
 import static com.ealva.ealvalog.LogLevel.DEBUG;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * Vorbis Identification header

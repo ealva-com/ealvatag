@@ -20,6 +20,7 @@ package ealvatag.tag.id3.framebody;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.logging.ErrorMessage;
 import ealvatag.logging.EalvaTagLog;
 import ealvatag.tag.InvalidTagException;
@@ -35,7 +36,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Abstract super class of all URL Frames

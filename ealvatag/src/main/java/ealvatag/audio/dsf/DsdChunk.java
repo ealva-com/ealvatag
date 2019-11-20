@@ -1,11 +1,11 @@
 package ealvatag.audio.dsf;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.IffHeaderChunk;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * DSD Chunk

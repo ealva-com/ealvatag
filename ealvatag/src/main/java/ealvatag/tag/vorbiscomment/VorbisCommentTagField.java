@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.vorbiscomment;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
 
@@ -32,7 +33,6 @@ import static ealvatag.tag.vorbiscomment.VorbisCommentFieldKey.TRACKNUMBER;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * This class represents the name and content of a tag entry in ogg-files.

@@ -18,6 +18,7 @@ package ealvatag.tag.id3;
 import com.google.common.base.Strings;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.mp3.MP3File;
 import ealvatag.logging.Hex;
 import ealvatag.logging.EalvaTagLog;
@@ -44,7 +45,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
 /**
