@@ -28,4 +28,8 @@ public class InvalidTagHeaderException extends TagException {
     public InvalidTagHeaderException(final String message) {
         super(message);
     }
+
+    public InvalidTagHeaderException(Throwable cause) {
+      super(cause);
+    }
 }

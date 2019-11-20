@@ -71,6 +71,7 @@ import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -770,54 +771,58 @@ public class ID3v24Tag extends AbstractID3v2Tag {
   }
 
   private int readExtendedHeader(Buffer buffer) throws InvalidTagException {
-    int extendedHeaderSize = buffer.readInt();
+    try {
+      int extendedHeaderSize = buffer.readInt();
 
-    // the extended header must be at least 6 bytes
-    if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH) {
-      throw new InvalidTagException(String.format(Locale.getDefault(),
-                                                  ID3_EXTENDED_HEADER_SIZE_TOO_SMALL,
-                                                  loggingFilename,
-                                                  extendedHeaderSize));
-    }
-
-    //Number of bytes
-    buffer.readByte();
-
-    // Read the extended flag bytes
-    byte extFlag = buffer.readByte();
-    updateTag = (extFlag & MASK_V24_TAG_UPDATE) != 0;
-    crcDataFlag = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
-    tagRestriction = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
-
-    // read the length byte if the flag is set
-    // this tag should always be zero but just in case
-    // read this information.
-    if (updateTag) {
-      buffer.readByte();
-    }
-
-    //CRC-32
-    if (crcDataFlag) {
-      // the CRC has a variable length
-      buffer.readByte();
-      crcData = 0;
-      for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++) {
-        crcData <<= 8;
-        crcData += buffer.readByte();
+      // the extended header must be at least 6 bytes
+      if (extendedHeaderSize <= TAG_EXT_HEADER_LENGTH) {
+        throw new InvalidTagException(String.format(Locale.getDefault(),
+                                                    ID3_EXTENDED_HEADER_SIZE_TOO_SMALL,
+                                                    loggingFilename,
+                                                    extendedHeaderSize));
       }
-    }
 
-    //Tag Restriction
-    if (tagRestriction) {
+      //Number of bytes
       buffer.readByte();
-      byte flags = buffer.readByte();
-      tagSizeRestriction = (byte)((flags & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
-      textEncodingRestriction = (byte)((flags & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
-      textFieldSizeRestriction = (byte)((flags & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
-      imageEncodingRestriction = (byte)((flags & MASK_V24_IMAGE_ENCODING) >> 2);
-      imageSizeRestriction = (byte)(flags & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
+
+      // Read the extended flag bytes
+      byte extFlag = buffer.readByte();
+      updateTag = (extFlag & MASK_V24_TAG_UPDATE) != 0;
+      crcDataFlag = (extFlag & MASK_V24_CRC_DATA_PRESENT) != 0;
+      tagRestriction = (extFlag & MASK_V24_TAG_RESTRICTIONS) != 0;
+
+      // read the length byte if the flag is set
+      // this tag should always be zero but just in case
+      // read this information.
+      if (updateTag) {
+        buffer.readByte();
+      }
+
+      //CRC-32
+      if (crcDataFlag) {
+        // the CRC has a variable length
+        buffer.readByte();
+        crcData = 0;
+        for (int i = 0; i < TAG_EXT_HEADER_CRC_DATA_LENGTH; i++) {
+          crcData <<= 8;
+          crcData += buffer.readByte();
+        }
+      }
+
+      //Tag Restriction
+      if (tagRestriction) {
+        buffer.readByte();
+        byte flags = buffer.readByte();
+        tagSizeRestriction = (byte)((flags & MASK_V24_TAG_SIZE_RESTRICTIONS) >> 6);
+        textEncodingRestriction = (byte)((flags & MASK_V24_TEXT_ENCODING_RESTRICTIONS) >> 5);
+        textFieldSizeRestriction = (byte)((flags & MASK_V24_TEXT_FIELD_SIZE_RESTRICTIONS) >> 3);
+        imageEncodingRestriction = (byte)((flags & MASK_V24_IMAGE_ENCODING) >> 2);
+        imageSizeRestriction = (byte)(flags & MASK_V24_IMAGE_SIZE_RESTRICTIONS);
+      }
+      return extendedHeaderSize;
+    } catch (EOFException e) {
+      throw new InvalidTagException(e);
     }
-    return extendedHeaderSize;
   }
 
   public void read(ByteBuffer byteBuffer) throws TagException {
@@ -934,7 +939,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
         this.invalidFrames++;
         //Don't try and find any more frames
         break;
-      } catch (InvalidDataTypeException idete) {
+      } catch (InvalidTagException idete) {
         //Failed reading frame but may just have invalid data but correct length so lets carry on
         //in case we can read the next frame
         LOG.log(WARN, "%s:Corrupt Frame", loggingFilename, idete);
@@ -942,10 +947,8 @@ public class ID3v24Tag extends AbstractID3v2Tag {
       } catch (IOException e) {
         LOG.log(WARN, "Unexpectedly reached end of frame", e);
         this.invalidFrames++;
-      } catch (@SuppressWarnings("TryWithIdenticalCatches") InvalidTagException e) {  // TODO: 1/25/17 get exceptions straightened out
-        LOG.log(WARN, "%s:Corrupt Frame", loggingFilename, e);
-        this.invalidFrames++;
-      }
+      } // TODO: 1/25/17 get exceptions straightened out
+
     }
   }
 
@@ -972,7 +975,7 @@ public class ID3v24Tag extends AbstractID3v2Tag {
    *
    * @return ByteBuffer
    */
-  private ByteBuffer writeHeaderToBuffer(int padding, int size) throws IOException {
+  private ByteBuffer writeHeaderToBuffer(int padding, int size) {
     //This would only be set if every frame in tag has been unsynchronized, I only unsychronize frames
     //that need it, in any case I have been advised not to set it even then.
     unsynchronization = false;

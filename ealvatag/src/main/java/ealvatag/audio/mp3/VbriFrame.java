@@ -77,7 +77,7 @@ public class VbriFrame {
     setFrameCount(header);
   }
 
-  private void setAudioSize(Buffer header) {
+  private void setAudioSize(Buffer header) throws EOFException {
     byte frameSizeBuffer[] = new byte[VBRI_AUDIOSIZE_BUFFER_SIZE];
     for (int i = 0; i < frameSizeBuffer.length; i++) {
       frameSizeBuffer[i] = header.readByte();
@@ -86,7 +86,7 @@ public class VbriFrame {
         (frameSizeBuffer[BYTE_3] << 8) & 0x0000FF00 | frameSizeBuffer[BYTE_4] & 0x000000FF;
   }
 
-  private void setFrameCount(Buffer header) {
+  private void setFrameCount(Buffer header) throws EOFException {
     byte frameCountBuffer[] = new byte[VBRI_FRAMECOUNT_BUFFER_SIZE];
     for (int i = 0; i < frameCountBuffer.length; i++) {
       frameCountBuffer[i] = header.readByte();

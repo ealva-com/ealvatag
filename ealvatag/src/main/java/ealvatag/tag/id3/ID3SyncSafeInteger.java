@@ -2,6 +2,7 @@ package ealvatag.tag.id3;
 
 import okio.Buffer;
 
+import java.io.EOFException;
 import java.nio.ByteBuffer;
 
 /**
@@ -46,7 +47,7 @@ public class ID3SyncSafeInteger {
         return ((buffer[0] & 0xff) << 21) + ((buffer[1] & 0xff) << 14) + ((buffer[2] & 0xff) << 7) + ((buffer[3]) & 0xff);
     }
 
-    public static int bufferToValue(Buffer buffer) {
+    public static int bufferToValue(Buffer buffer) throws EOFException {
         return ((buffer.readByte() & 0xff) << 21) +
                 ((buffer.readByte() & 0xff) << 14) +
                 ((buffer.readByte() & 0xff) << 7) +

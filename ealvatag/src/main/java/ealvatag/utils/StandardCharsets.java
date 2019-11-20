@@ -6,8 +6,8 @@ import java.nio.charset.Charset;
 /**
  * StandardCharsets backport.
  */
+@SuppressWarnings("CharsetObjectCanBeUsed")
 public class StandardCharsets {
-
     /**
      * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the
      * Unicode character set

@@ -63,6 +63,7 @@ import static ealvatag.utils.Check.checkArgNotNull;
 import static ealvatag.utils.Check.checkArgNotNullOrEmpty;
 import static ealvatag.utils.Check.checkVarArg0NotNull;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -782,53 +783,57 @@ public class ID3v23Tag extends AbstractID3v2Tag {
   }
 
   private int readExtendedHeader(Buffer buffer) throws InvalidTagHeaderException {
-    // Int is 4 bytes.
-    int extendedHeaderSize = buffer.readInt();
-    // Extended header without CRC Data
-    if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH) {
-      //Flag should not be setField , if is log a warning
-      byte extFlag = buffer.readByte();
-      crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
-      if (crcDataFlag) {
-        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
-      }
-      //2nd Flag Byte (not used)
-      buffer.readByte();
+    try {
+      // Int is 4 bytes.
+      int extendedHeaderSize = buffer.readInt();
+      // Extended header without CRC Data
+      if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH) {
+        //Flag should not be setField , if is log a warning
+        byte extFlag = buffer.readByte();
+        crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
+        if (crcDataFlag) {
+          LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        }
+        //2nd Flag Byte (not used)
+        buffer.readByte();
 
-      //Take padding and ext header size off the size to be read
-      paddingSize = buffer.readInt();
-      if (paddingSize > 0) {
-        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
-      }
-    } else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH) {
-      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC, loggingFilename);
+        //Take padding and ext header size off the size to be read
+        paddingSize = buffer.readInt();
+        if (paddingSize > 0) {
+          LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        }
+      } else if (extendedHeaderSize == TAG_EXT_HEADER_DATA_LENGTH + TAG_EXT_HEADER_CRC_LENGTH) {
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC, loggingFilename);
 
-      //Flag should be setField, if nor just act as if it is
-      byte extFlag = buffer.readByte();
-      crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
-      if (!crcDataFlag) {
-        LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        //Flag should be setField, if nor just act as if it is
+        byte extFlag = buffer.readByte();
+        crcDataFlag = (extFlag & MASK_V23_CRC_DATA_PRESENT) != 0;
+        if (!crcDataFlag) {
+          LOG.log(WARN, ErrorMessage.ID3_TAG_CRC_FLAG_SET_INCORRECTLY, loggingFilename);
+        }
+        //2nd Flag Byte (not used)
+        buffer.readByte();
+        //Take padding size of size to be read
+        paddingSize = buffer.readInt();
+        if (paddingSize > 0) {
+          LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
+        }
+        //CRC Data
+        crc32 = buffer.readInt();
+        LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
+      } else {
+        //Extended header size is only allowed to be six or ten bytes so this is invalid but instead
+        //of giving up lets guess its six bytes and carry on and see if we can read file ok
+        LOG.log(WARN, ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
+        throw new InvalidTagHeaderException(String.format(Locale.getDefault(),
+                                                          ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID,
+                                                          loggingFilename,
+                                                          extendedHeaderSize));
       }
-      //2nd Flag Byte (not used)
-      buffer.readByte();
-      //Take padding size of size to be read
-      paddingSize = buffer.readInt();
-      if (paddingSize > 0) {
-        LOG.log(DEBUG, ErrorMessage.ID3_TAG_PADDING_SIZE, loggingFilename, paddingSize);
-      }
-      //CRC Data
-      crc32 = buffer.readInt();
-      LOG.log(DEBUG, ErrorMessage.ID3_TAG_CRC_SIZE, loggingFilename, crc32);
-    } else {
-      //Extended header size is only allowed to be six or ten bytes so this is invalid but instead
-      //of giving up lets guess its six bytes and carry on and see if we can read file ok
-      LOG.log(WARN, ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID, loggingFilename, extendedHeaderSize);
-      throw new InvalidTagHeaderException(String.format(Locale.getDefault(),
-                                                        ErrorMessage.ID3_EXTENDED_HEADER_SIZE_INVALID,
-                                                        loggingFilename,
-                                                        extendedHeaderSize));
+      return extendedHeaderSize;
+    } catch (EOFException e) {
+      throw new InvalidTagHeaderException(e);
     }
-    return extendedHeaderSize;
   }
 
   public void read(ByteBuffer buffer) throws TagException {

@@ -6,7 +6,7 @@ tasks.withType(Javadoc) {
 
 description = 'ealvatag'
 dependencies {
-    compile 'com.github.ealva-com:okio:45350ad'
+    compile 'com.squareup.okio:okio:2.4.1'
     compile 'com.google.guava:guava:20.0'
     compile 'com.ealva:ealvalog:0.5.1-SNAPSHOT'
     compile 'com.ealva:ealvalog-core:0.5.1-SNAPSHOT'

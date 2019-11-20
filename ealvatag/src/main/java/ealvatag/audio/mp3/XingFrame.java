@@ -78,7 +78,7 @@ public class XingFrame {
   private int audioSize = -1;
   private LameFrame lameFrame;
 
-  private XingFrame(final Buffer buffer) {
+  private XingFrame(final Buffer buffer) throws EOFException {
     final byte[] tempBuf = new byte[TEMP_BUF_SIZE];
 
     int skipLess = setVbr(buffer, tempBuf);
@@ -126,7 +126,8 @@ public class XingFrame {
     return XING_IDENTIFIER_BUFFER_SIZE;
   }
 
-  private int setFrameCount(final Buffer header, final byte[] frameCountBuffer) {
+  private int setFrameCount(final Buffer header, final byte[] frameCountBuffer)
+    throws EOFException {
     frameCount = header.readInt();
     isFrameCountEnabled = true;
 //        ArrayUtil.fill(frameCountBuffer, ArrayUtil.ZERO, XING_FRAMECOUNT_BUFFER_SIZE);
@@ -151,7 +152,7 @@ public class XingFrame {
     return frameCount;
   }
 
-  private int setAudioSize(final Buffer header, final byte[] frameSizeBuffer) {
+  private int setAudioSize(final Buffer header, final byte[] frameSizeBuffer) throws EOFException {
     audioSize = header.readInt();
     isAudioSizeEnabled = true;
 //        ArrayUtil.fill(frameSizeBuffer, ArrayUtil.ZERO, XING_AUDIOSIZE_BUFFER_SIZE);
@@ -176,7 +177,8 @@ public class XingFrame {
     return audioSize;
   }
 
-  static XingFrame parseXingFrame(final Buffer buffer) throws InvalidAudioFrameException {
+  static XingFrame parseXingFrame(final Buffer buffer)
+    throws InvalidAudioFrameException, EOFException {
     return new XingFrame(buffer);
   }
 

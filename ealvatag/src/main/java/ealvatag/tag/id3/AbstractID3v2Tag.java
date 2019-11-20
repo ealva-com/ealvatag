@@ -1508,7 +1508,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     return byteBuffer.get() == getRevision();
   }
 
-  public boolean seek(Buffer buffer) {
+  public boolean seek(Buffer buffer) throws EOFException {
     byte[] tagIdentifier = new byte[FIELD_TAGID_LENGTH];
     buffer.read(tagIdentifier, 0, FIELD_TAGID_LENGTH);
     if (!(Arrays.equals(tagIdentifier, TAG_ID))) {
