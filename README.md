@@ -60,7 +60,7 @@ Add eAlvaTag to your project
 ----------------------------
 Gradle:
 ```gradle
-compile 'com.ealva:ealvatag:0.4.2'
+compile 'com.ealva:ealvatag:0.4.3'
 ```
 
 Maven:
@@ -68,19 +68,20 @@ Maven:
 <dependency>
     <groupId>com.ealva</groupId>
     <artifactId>ealvatag</artifactId>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
 </dependency>
 ```
 
 Ensure you have the most recent version by checking [here](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ealva%22%20AND%20a%3A%22ealvatag%22)
 
+For the latest SNAPSHOT check [here](https://oss.sonatype.org/content/repositories/snapshots/com/ealva/ealvatag/)
+
 Dependencies
 ------------
  [Square's Okio](https://github.com/square/okio)
-    Used for reading mp3 and mp4 files and will be further integrated. The segment pooling, along with our customizations (if you choose 
-    to use them), dramatically increased read performance over Jdk stream/file IO.
+    Used for reading mp3 and mp4 files and will be further integrated. The segment pooling dramatically increased read performance over Jdk stream/file IO.
     
-    implementation 'com.squareup.okio:okio:1.11.0'
+    implementation 'com.squareup.okio:okio:2.4.1'
 
  [Google's Guava](https://github.com/google/guava)
     Used for Optional<>, Immutable collections, and general utilities
@@ -92,7 +93,10 @@ Dependencies
     Logger and Android logging. It should be very easy to write a facade implementation for another logging framework if it's not already
     provided.
     
-    implementation 'com.ealva:ealvalog:0.0.19'
+    implementation 'com.ealva:ealvalog:0.5.1-SNAPSHOT'
+    implementation 'com.ealva:ealvalog-core:0.5.1-SNAPSHOT'
+    implementation 'com.ealva:ealvalog-java:0.5.1-SNAPSHOT'
+
 
 Android
 -------
