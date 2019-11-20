@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.mp4.field;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.tag.TagField;
 import ealvatag.tag.TagTextField;
@@ -27,7 +28,6 @@ import ealvatag.tag.mp4.atom.Mp4DataBox;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Represents a single text field

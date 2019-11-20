@@ -1,6 +1,7 @@
 package ealvatag.tag.datatype;
 
 import com.google.common.annotations.VisibleForTesting;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.exceptions.IllegalCharsetException;
@@ -21,7 +22,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Represents a String whose size is determined by finding of a null character at the end of the String.

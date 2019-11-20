@@ -22,6 +22,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.AbstractTag;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 import ealvatag.audio.ogg.util.VorbisHeader;
@@ -47,7 +48,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

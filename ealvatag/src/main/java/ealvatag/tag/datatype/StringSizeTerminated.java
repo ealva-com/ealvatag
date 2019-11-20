@@ -31,7 +31,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 
 import java.nio.charset.Charset;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static ealvatag.utils.StandardCharsets.ISO_8859_1;
 
 /**
  * Represents a String which is not delimited by null character with fixed text encoding.

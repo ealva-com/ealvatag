@@ -1,5 +1,6 @@
 package ealvatag.audio.aiff.chunk;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.aiff.AiffAudioHeader;
 import ealvatag.audio.Utils;
 import ealvatag.audio.iff.Chunk;
@@ -7,7 +8,6 @@ import ealvatag.audio.iff.ChunkHeader;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Provides common functionality for textual chunks like {@link NameChunk}, {@link AuthorChunk},

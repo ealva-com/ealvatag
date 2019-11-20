@@ -21,6 +21,7 @@ package ealvatag.audio.mp4.atom;
 import com.ealva.ealvalog.LogLevel;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.InvalidBoxHeaderException;
 import ealvatag.audio.exceptions.NullBoxIdException;
@@ -36,7 +37,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Everything in MP4s are held in boxes (aka atoms). They are held as a hierarchical tree within the MP4.

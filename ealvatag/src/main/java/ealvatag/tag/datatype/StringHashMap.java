@@ -25,7 +25,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 import ealvatag.tag.reference.Languages;
 import ealvatag.tag.reference.SimpleStringStringMap;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static ealvatag.utils.StandardCharsets.ISO_8859_1;
 
 import java.nio.charset.Charset;
 

@@ -20,6 +20,7 @@ package ealvatag.audio.wav;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.Utils;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.exceptions.CannotWriteException;
@@ -49,7 +50,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;

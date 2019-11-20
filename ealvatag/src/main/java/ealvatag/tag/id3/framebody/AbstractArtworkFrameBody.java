@@ -17,12 +17,12 @@
 
 package ealvatag.tag.id3.framebody;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.InvalidTagException;
 import ealvatag.tag.datatype.DataTypes;
 import okio.Buffer;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Base class for PIC and APIC frame body.

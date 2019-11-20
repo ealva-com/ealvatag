@@ -29,7 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static ealvatag.utils.StandardCharsets.UTF_8;
 
 /**
  * Create the raw packet data for a Vorbis Comment Tag

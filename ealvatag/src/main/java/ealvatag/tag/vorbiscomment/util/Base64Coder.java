@@ -1,6 +1,6 @@
 package ealvatag.tag.vorbiscomment.util;
 
-import java.nio.charset.StandardCharsets;
+import ealvatag.utils.StandardCharsets;
 
 /**
  * Base64Coder

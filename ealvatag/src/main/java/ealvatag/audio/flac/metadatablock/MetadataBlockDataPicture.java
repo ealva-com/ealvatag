@@ -5,6 +5,7 @@ import com.ealva.ealvalog.java.JLoggers;
 
 import static com.ealva.ealvalog.LogLevel.TRACE;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.AbstractTag;
 import ealvatag.audio.Utils;
 import ealvatag.logging.EalvaTagLog;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Picture Block

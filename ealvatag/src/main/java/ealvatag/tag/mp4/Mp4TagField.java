@@ -20,6 +20,7 @@ package ealvatag.tag.mp4;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.logging.EalvaTagLog;
@@ -33,7 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * This abstract class represents a link between piece of data, and how it is stored as an mp4 atom

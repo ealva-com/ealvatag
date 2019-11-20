@@ -27,7 +27,7 @@ import ealvatag.tag.id3.AbstractTagFrameBody;
 
 import java.nio.charset.Charset;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static ealvatag.utils.StandardCharsets.ISO_8859_1;
 
 /**
  * Represents a String whose size is determined by finding of a null character at the end of the String with fixed text encoding.

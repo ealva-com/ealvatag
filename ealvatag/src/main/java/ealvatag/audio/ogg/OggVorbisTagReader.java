@@ -21,6 +21,7 @@ package ealvatag.audio.ogg;
 
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.ogg.util.OggPageHeader;
 import ealvatag.audio.ogg.util.VorbisHeader;
@@ -37,7 +38,6 @@ import static com.ealva.ealvalog.LogLevel.DEBUG;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

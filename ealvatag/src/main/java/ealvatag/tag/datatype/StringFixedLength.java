@@ -20,6 +20,7 @@
  */
 package ealvatag.tag.datatype;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.tag.InvalidDataTypeException;
 import ealvatag.tag.exceptions.IllegalCharsetException;
 import ealvatag.tag.id3.AbstractTagFrameBody;
@@ -37,7 +38,6 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
-import java.nio.charset.StandardCharsets;
 
 
 /**

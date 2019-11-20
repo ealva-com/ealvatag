@@ -18,6 +18,7 @@
  */
 package ealvatag.tag.mp4;
 
+import ealvatag.utils.StandardCharsets;
 import ealvatag.audio.AbstractTagCreator;
 import ealvatag.audio.Utils;
 import ealvatag.audio.mp4.Mp4AtomIdentifier;
@@ -31,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 /**
