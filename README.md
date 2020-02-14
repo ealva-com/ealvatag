@@ -22,6 +22,7 @@ Quick Start
 ```java
  class Test {
   public void test() {
+      TagOptionSingleton.getInstance().isAndroid = true;  // Android - put in Application.onCreate()
       File inputFile = new File("MyFavoriteSong.mp3");
       AudioFile audioFile = AudioFileIO.read(inputFile);
     
