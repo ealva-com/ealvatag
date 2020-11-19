@@ -6,14 +6,14 @@ tasks.withType(Javadoc) {
 
 description = 'ealvatag'
 dependencies {
-    compile 'com.squareup.okio:okio:2.4.1'
+    compile 'com.squareup.okio:okio:2.9.0'
     compile 'com.google.guava:guava:20.0'
-    compile 'com.ealva:ealvalog:0.5.1-SNAPSHOT'
-    compile 'com.ealva:ealvalog-core:0.5.1-SNAPSHOT'
-    compile 'com.ealva:ealvalog-java:0.5.1-SNAPSHOT'
+    compile 'com.ealva:ealvalog:0.5.4'
+    compile 'com.ealva:ealvalog-core:0.5.4'
+    compile 'com.ealva:ealvalog-java:0.5.4'
 
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.mockito:mockito-core:2.6.4'
+    testCompile 'junit:junit:4.13.1'
+    testCompile 'org.mockito:mockito-core:3.6.0'
     testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
 }
 
