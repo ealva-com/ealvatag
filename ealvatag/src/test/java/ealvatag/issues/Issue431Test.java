@@ -26,6 +26,7 @@ import java.nio.channels.FileChannel;
 /**
  * Trackno/DiscNo Position
  */
+@SuppressWarnings("resource")
 public class Issue431Test {
     @Before
     public void setup() throws Exception {
@@ -256,7 +257,7 @@ public class Issue431Test {
         Assert.assertEquals("1", tag.getFirst(FieldKey.TRACK));
     }
 
-    @Test public void testSetPrePaddedTrackNo() throws Exception {
+	@Test public void testSetPrePaddedTrackNo() throws Exception {
         TagOptionSingleton.getInstance().setPadNumbers(false);
         File testFile = TestUtil.copyAudioToTmp("testV25.mp3");
         AudioFile f = AudioFileIO.read(testFile);
