@@ -34,7 +34,7 @@ public class Issue387Test {
             af.getTagOrSetNewDefault();
             af.save();
 
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
         } catch (Exception e) {
             caught = e;

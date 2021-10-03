@@ -37,8 +37,7 @@ public class Issue255Test {
         try {
             testFile = TestUtil.copyAudioToTmp("test35.m4a");
 
-            //Read File
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
 
             //Print Out Tree
 
@@ -50,8 +49,7 @@ public class Issue255Test {
         Assert.assertNull(exceptionCaught);
 
         try {
-            //Now just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;
@@ -74,7 +72,7 @@ public class Issue255Test {
         try {
             File testFile = TestUtil.copyAudioToTmp("test28.m4p", new File("WriteFileWithInvalidFreeAtom.m4p"));
 
-            AudioFile f = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

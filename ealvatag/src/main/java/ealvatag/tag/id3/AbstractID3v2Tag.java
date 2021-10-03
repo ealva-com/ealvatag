@@ -583,7 +583,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     //whereas it.next() works correctly
     try {
       while (true) {
-        TagField next = it.next();
+        it.next();
         count++;
       }
     } catch (NoSuchElementException nse) {

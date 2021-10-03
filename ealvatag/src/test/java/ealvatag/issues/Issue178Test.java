@@ -1,7 +1,6 @@
 package ealvatag.issues;
 
 import ealvatag.TestUtil;
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import org.junit.After;
@@ -30,11 +29,9 @@ public class Issue178Test {
     }
 
     File testFile = null;
-    Exception exceptionCaught = null;
-    Date startDate = new Date();
+    new Date();
     testFile = TestUtil.copyAudioToTmp("test36.ogg");
 
-    //Read File
-    AudioFile af = AudioFileIO.read(testFile);
+    AudioFileIO.read(testFile);
   }
 }

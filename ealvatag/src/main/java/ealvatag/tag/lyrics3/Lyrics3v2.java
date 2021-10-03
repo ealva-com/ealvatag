@@ -232,7 +232,6 @@ public class Lyrics3v2 extends AbstractLyrics3
 
     public void read(ByteBuffer byteBuffer) throws TagException
     {
-        long filePointer;
         int lyricSize;
 
         if (seek(byteBuffer))
@@ -246,7 +245,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         // reset file pointer to the beginning of the tag;
         seek(byteBuffer);
-        filePointer = byteBuffer.position();
+        byteBuffer.position();
 
         fieldMap = new HashMap<String, Lyrics3v2Field>();
 

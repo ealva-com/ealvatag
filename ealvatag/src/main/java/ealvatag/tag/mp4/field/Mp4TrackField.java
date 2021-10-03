@@ -20,11 +20,8 @@ import java.util.ArrayList;
  * playtitlenameReserved:0 bytes
  */
 public class Mp4TrackField extends Mp4TagTextNumberField {
-    private static final int NONE_VALUE_INDEX = 0;
     private static final int TRACK_NO_INDEX = 1;
     private static final int TRACK_TOTAL_INDEX = 2;
-    private static final int NONE_END_VALUE_INDEX = 3;
-
     /**
      * Create new Track Field parsing the String for the trackno/total
      *

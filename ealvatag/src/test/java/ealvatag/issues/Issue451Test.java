@@ -31,8 +31,7 @@ public class Issue451Test {
 
         File testFile = TestUtil.copyAudioToTmp("test109.m4a");
         try {
-            //Now just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         } catch (Exception e) {
             e.printStackTrace();
         }

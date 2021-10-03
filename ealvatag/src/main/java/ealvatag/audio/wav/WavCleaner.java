@@ -3,7 +3,6 @@ package ealvatag.audio.wav;
 import com.ealva.ealvalog.java.JLogger;
 import com.ealva.ealvalog.java.JLoggers;
 import ealvatag.audio.exceptions.CannotReadException;
-import ealvatag.audio.iff.Chunk;
 import ealvatag.audio.iff.ChunkHeader;
 import ealvatag.audio.iff.IffHeaderChunk;
 import ealvatag.logging.Hex;
@@ -43,8 +42,9 @@ public class WavCleaner {
   /**
    * If find data chunk delete al data after it
    */
-  private int findEndOfDataChunk() throws Exception {
-    try (FileChannel fc = new RandomAccessFile(path, "rw").getChannel()) {
+  public int findEndOfDataChunk() throws Exception {
+    try (RandomAccessFile raf = new RandomAccessFile(path, "rw")) {
+      FileChannel fc = raf.getChannel();
       if (WavRIFFHeader.isValidHeader(fc)) {
         while (fc.position() < fc.size()) {
           int endOfChunk = readChunk(fc);
@@ -67,7 +67,6 @@ public class WavCleaner {
    * @throws CannotReadException
    */
   private int readChunk(FileChannel fc) throws IOException, CannotReadException {
-    Chunk chunk;
     ChunkHeader chunkHeader = new ChunkHeader(ByteOrder.LITTLE_ENDIAN);
     if (!chunkHeader.readHeader(fc)) {
       return 0;

@@ -1600,7 +1600,7 @@ public class M4aWriteTagTest {
         try {
 
             File testFile = TestUtil.copyAudioToTmp("test4.m4a", new File("testWriteNewMetadata.m4a"));
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);

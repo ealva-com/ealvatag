@@ -29,9 +29,7 @@ public class Mp4FtypBox extends AbstractMp4Box {
   private int majorBrandVersion;
   private List<String> compatibleBrands = new ArrayList<String>();
 
-  private static final int MAJOR_BRAND_POS = 0;
   private static final int MAJOR_BRAND_LENGTH = 4;
-  private static final int MAJOR_BRAND_VERSION_POS = 4;
   private static final int MAJOR_BRAND_VERSION_LENGTH = 4;
   private static final int COMPATIBLE_BRAND_LENGTH = 4; //Can be multiple of these
 

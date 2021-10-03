@@ -42,8 +42,6 @@ public class Issue294Test {
         File testPix = TestUtil.copyAudioToTmp("test70.jpg");
 
 
-        File originalFileBackup = null;
-
         Exception exceptionCaught = null;
         try {
             TagOptionSingleton.getInstance().setUnsyncTags(false);

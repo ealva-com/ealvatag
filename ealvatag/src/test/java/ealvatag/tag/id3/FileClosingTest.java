@@ -29,7 +29,7 @@ public class FileClosingTest {
     public void testClosingFileAfterFailedRead() throws Exception {
         File testFile = TestUtil.copyAudioToTmp("corrupt.mp3");
         try {
-            MP3File mp3File = new MP3File(testFile);
+            new MP3File(testFile);
         } catch (InvalidAudioFrameException ignored) {
         } catch (IOException | TagException | CannotReadException e) {
             fail("Should be InvalidAudioFrameException");
@@ -45,7 +45,7 @@ public class FileClosingTest {
     @Test
     public void testClosingFileAfterSuccessfulRead() throws Exception {
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3");
-        MP3File mp3File = new MP3File(testFile);
+        new MP3File(testFile);
 
         //Should be able to deleteField
         Assert.assertTrue(testFile.delete());

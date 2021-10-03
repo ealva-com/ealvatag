@@ -1,7 +1,6 @@
 package ealvatag.issues;
 
 import ealvatag.TestUtil;
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import org.junit.After;
 import org.junit.Assert;
@@ -29,7 +28,7 @@ public class Issue309Test {
         Exception e = null;
         try {
             final File testFile = TestUtil.copyAudioToTmp("test73.m4a");
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
 
         } catch (Exception ex) {
             e = ex;

@@ -20,7 +20,6 @@ public class Issue453Test {
     }
 
     @Test public void testMpeg3layer3_32bit() throws Exception {
-        Exception ex = null;
         File orig = new File("testdata", "test113.mp3");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available" + orig);

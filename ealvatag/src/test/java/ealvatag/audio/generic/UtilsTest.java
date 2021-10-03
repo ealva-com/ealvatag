@@ -140,7 +140,7 @@ public class UtilsTest {
         byte[] bytes = new byte[]{(byte)0xFF, (byte)0xFF};
         bb.put(bytes);
         bb.rewind();
-        short val = Utils.getShortBE(bb, 1, 2);
+        Utils.getShortBE(bb, 1, 2);
     }
 
 }

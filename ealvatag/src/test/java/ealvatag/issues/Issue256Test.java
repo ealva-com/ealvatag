@@ -31,7 +31,7 @@ public class Issue256Test {
             testFile = TestUtil.copyAudioToTmp("test74.mp3");
             AudioFile af = AudioFileIO.read(testFile);
             Tag tag = af.getTag().or(NullTag.INSTANCE);
-            String value = tag.getFirst(FieldKey.TRACK);
+            tag.getFirst(FieldKey.TRACK);
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

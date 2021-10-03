@@ -28,15 +28,15 @@ public class RealFileReader extends AudioFileReader
         {
             final long maxBitRate = Utils.readUint32(dis) / 1000;
             final long avgBitRate = Utils.readUint32(dis) / 1000;
-            final long maxPacketSize = Utils.readUint32(dis);
-            final long avgPacketSize = Utils.readUint32(dis);
-            final long packetCnt = Utils.readUint32(dis);
+            Utils.readUint32(dis);
+            Utils.readUint32(dis);
+            Utils.readUint32(dis);
             final int duration = (int)Utils.readUint32(dis) / 1000;
-            final long preroll = Utils.readUint32(dis);
-            final long indexOffset = Utils.readUint32(dis);
-            final long dataOffset = Utils.readUint32(dis);
-            final int numStreams = Utils.readUint16(dis);
-            final int flags = Utils.readUint16(dis);
+            Utils.readUint32(dis);
+            Utils.readUint32(dis);
+            Utils.readUint32(dis);
+            Utils.readUint16(dis);
+            Utils.readUint16(dis);
             rv.setBitRate((int) avgBitRate);
             rv.setPreciseLength(duration);
             rv.setVariableBitRate(maxBitRate != avgBitRate);
@@ -46,15 +46,15 @@ public class RealFileReader extends AudioFileReader
 
     private RealChunk findPropChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
-        final RealChunk rmf = RealChunk.readChunk(raf);
+        RealChunk.readChunk(raf);
         final RealChunk prop = RealChunk.readChunk(raf);
         return prop;
     }
 
     private RealChunk findContChunk(RandomAccessFile raf) throws IOException, CannotReadException
     {
-        final RealChunk rmf = RealChunk.readChunk(raf);
-        final RealChunk prop = RealChunk.readChunk(raf);
+        RealChunk.readChunk(raf);
+        RealChunk.readChunk(raf);
         RealChunk rv = RealChunk.readChunk(raf);
         while (!rv.isCONT()) rv = RealChunk.readChunk(raf);
         return rv;

@@ -124,7 +124,6 @@ public class NewInterfaceTest {
     }
 
     @Test public void testNewInterfaceBasicReadandWriteID3v1() throws Exception {
-        Exception e = null;
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v1.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
@@ -173,7 +172,6 @@ public class NewInterfaceTest {
     }
 
     @Test public void testNewInterfaceBasicReadandWriteID3v24() throws Exception {
-        Exception e = null;
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v24.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
@@ -517,7 +515,6 @@ public class NewInterfaceTest {
        }
     */
     @Test public void testNewInterfaceBasicReadandWriteID3v23() throws Exception {
-        Exception e = null;
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v23.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
@@ -756,7 +753,6 @@ public class NewInterfaceTest {
     }
 
     @Test public void testNewInterfaceBasicReadandWriteID3v22() throws Exception {
-        Exception e = null;
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testnewIntId3v22.mp3"));
         MP3File mp3File = new MP3File(testFile);
 
@@ -995,7 +991,6 @@ public class NewInterfaceTest {
      * @throws Exception
      */
     @Test public void testSettingMultipleFramesofSameType() throws Exception {
-        Exception e = null;
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testSetMultiple.mp3"));
         AudioFile af = AudioFileIO.read(testFile);
         MP3File mp3File = (MP3File)af;

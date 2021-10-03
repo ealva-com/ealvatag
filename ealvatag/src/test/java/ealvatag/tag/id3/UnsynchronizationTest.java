@@ -8,7 +8,6 @@ import ealvatag.logging.Hex;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
 import ealvatag.tag.TagOptionSingleton;
-import ealvatag.tag.id3.framebody.FrameBodyAPIC;
 import ealvatag.tag.images.Artwork;
 import ealvatag.tag.images.ArtworkFactory;
 import ealvatag.tag.reference.ID3V2Version;
@@ -17,7 +16,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 
@@ -25,8 +23,6 @@ import java.io.File;
  * Test Itunes problems
  */
 public class UnsynchronizationTest {
-    private static final int FRAME_SIZE = 2049;
-
     @After public void tearDown() {
         TestUtil.deleteTestDataTemp();
     }
@@ -51,7 +47,7 @@ public class UnsynchronizationTest {
         ID3v24Frame v24Imageframe = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
         Assert.assertNotNull(v24Imageframe);
         Assert.assertTrue(((ID3v24Frame.EncodingFlags)v24Imageframe.getEncodingFlags()).isUnsynchronised());
-        FrameBodyAPIC fb = (FrameBodyAPIC)v24Imageframe.getBody();
+        v24Imageframe.getBody();
 
         //Write mp3 back to file ,
         TagOptionSingleton.getInstance().setUnsyncTags(false);
@@ -69,7 +65,7 @@ public class UnsynchronizationTest {
 
         v24Imageframe = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
         Assert.assertNotNull(v24Imageframe);
-        fb = (FrameBodyAPIC)v24Imageframe.getBody();
+        v24Imageframe.getBody();
         Assert.assertFalse(((ID3v24Frame.EncodingFlags)v24Imageframe.getEncodingFlags()).isUnsynchronised());
 
         //Enable unsynchronization and write mp3 back to file , only APIC requires unsynchronization
@@ -87,7 +83,7 @@ public class UnsynchronizationTest {
 
         v24Imageframe = (ID3v24Frame)v24tag.getFrame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
         Assert.assertNotNull(v24Imageframe);
-        fb = (FrameBodyAPIC)v24Imageframe.getBody();
+        v24Imageframe.getBody();
         Assert.assertTrue(((ID3v24Frame.EncodingFlags)v24Imageframe.getEncodingFlags()).isUnsynchronised());
     }
 
@@ -219,7 +215,6 @@ public class UnsynchronizationTest {
             Assert.assertEquals(1, unsyncedTag.getArtworkList().size());
             artworkUnsynced = unsyncedTag.getArtworkList().get(0);
 
-            int count = 0;
             Assert.assertEquals(114425, artworkUnsynced.getBinaryData().length);
             Assert.assertEquals(114425, artworkNotsynced.getBinaryData().length);
 
@@ -237,8 +232,8 @@ public class UnsynchronizationTest {
                 }
             }
             Assert.assertTrue(matches);
-            BufferedImage bi = ImageIO.read(new ByteArrayInputStream(artworkNotsynced.getBinaryData()));
-            bi = ImageIO.read(new ByteArrayInputStream(artworkUnsynced.getBinaryData()));
+            ImageIO.read(new ByteArrayInputStream(artworkNotsynced.getBinaryData()));
+            ImageIO.read(new ByteArrayInputStream(artworkUnsynced.getBinaryData()));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

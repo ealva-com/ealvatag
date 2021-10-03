@@ -1,7 +1,6 @@
 package ealvatag.issues;
 
 import ealvatag.TestUtil;
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.exceptions.CannotReadException;
 import org.junit.After;
@@ -33,8 +32,7 @@ public class Issue257Test {
         try {
             testFile = TestUtil.copyAudioToTmp("test37.m4a");
 
-            //Read File
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
 
             //Print Out Tree
 

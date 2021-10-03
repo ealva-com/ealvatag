@@ -26,12 +26,10 @@ public enum Tagger
     MUSICHI(15, "Musichi"),
     ;
 
-    private int compatability;
     private String desc;
 
     Tagger(int compatability,String desc)
     {
-        this.compatability=compatability;
         this.desc=desc;
     }
 

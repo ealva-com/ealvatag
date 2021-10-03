@@ -31,7 +31,7 @@ public class Issue081Test {
         File file = TestUtil.copyAudioToTmp("test142.wav", new File("test142SaveInfo.wav"));
 
         AudioFile audioFile = AudioFileIO.read(file);
-        WavTag tag = (WavTag)audioFile.getTag().or(NullTag.INSTANCE);
+        audioFile.getTag().or(NullTag.INSTANCE);
     }
 
     @Test public void testId3TagFile() throws Exception {

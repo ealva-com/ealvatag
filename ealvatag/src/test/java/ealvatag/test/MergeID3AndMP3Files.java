@@ -187,7 +187,7 @@ public class MergeID3AndMP3Files
     public static File copyAudioToTmp(File toDir, File tagFile, File mp3File)
     {
         File outputFile = new File(toDir.getPath(), tagFile.getName());
-        boolean result = append(tagFile, mp3File, outputFile);
+        append(tagFile, mp3File, outputFile);
         return outputFile;
     }
 

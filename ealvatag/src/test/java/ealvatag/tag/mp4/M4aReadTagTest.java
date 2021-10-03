@@ -54,7 +54,7 @@ public class M4aReadTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
 
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
           System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -757,7 +757,7 @@ public class M4aReadTagTest {
         Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test7.mp4");
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
           AudioFileIO.read(testFile);
 
@@ -781,9 +781,9 @@ public class M4aReadTagTest {
         Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test86.mp4");
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
-          AudioFile f = AudioFileIO.read(testFile);
+          AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -806,9 +806,9 @@ public class M4aReadTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test87.mp4");
 
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
-          AudioFile f = AudioFileIO.read(testFile);
+          AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -1218,7 +1218,6 @@ public class M4aReadTagTest {
             return;
         }
 
-        Exception exceptionCaught = null;
         try {
             Assert.assertTrue(Mp4GenreField.isValidGenre("Rock"));
 
@@ -1229,7 +1228,6 @@ public class M4aReadTagTest {
             Assert.assertEquals("Rock", tagReader.getFirst(FieldKey.GENRE));
         } catch (IOException e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
     }
 
@@ -1299,14 +1297,12 @@ public class M4aReadTagTest {
             return;
         }
 
-      Exception exceptionCaught = null;
-        try {
+      try {
             File testFile = TestUtil.copyAudioToTmp("test147.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag().or(NullTag.INSTANCE);
+            f.getTag().or(NullTag.INSTANCE);
         } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
         //assertNull(exceptionCaught);
 

@@ -27,8 +27,7 @@ public class M4aWriteDataBeforeMoovTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test15.m4a", new File("testWriteWhenMDatAtStart1.m4a"));
 
-            //First lets just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
@@ -42,8 +41,7 @@ public class M4aWriteDataBeforeMoovTagTest {
             tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
-            //See tree again
-            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Ease of use methods for common fields
             Assert.assertEquals("AUTHOR", tag.getFirst(FieldKey.ARTIST));
@@ -64,8 +62,7 @@ public class M4aWriteDataBeforeMoovTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test15.m4a", new File("testWriteWhenMDatAtStart2.m4a"));
 
-            //First lets just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
@@ -82,8 +79,7 @@ public class M4aWriteDataBeforeMoovTagTest {
             tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
-            //See tree again
-            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Ease of use methods for common fields
             Assert.assertEquals("AR", tag.getFirst(FieldKey.ARTIST));
@@ -105,8 +101,7 @@ public class M4aWriteDataBeforeMoovTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test15.m4a", new File("testWriteWhenMDatAtStart3.m4a"));
 
-            //First lets just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Now we try to make some changes
             AudioFile f = AudioFileIO.read(testFile);
@@ -120,8 +115,7 @@ public class M4aWriteDataBeforeMoovTagTest {
             tag = f.getTag().or(NullTag.INSTANCE);
             System.out.println(tag);
 
-            //See tree again
-            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Ease of use methods for common fields
             Assert.assertEquals("AR", tag.getFirst(FieldKey.ARTIST));
@@ -145,8 +139,7 @@ public class M4aWriteDataBeforeMoovTagTest {
             File testFile = TestUtil.copyAudioToTmp("test15.m4a", new File("testWriteWhenMDatAtStart8.m4a"));
             AudioFile f = AudioFileIO.read(testFile);
 
-            //First lets just createField tree
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           Tag tag = f.getTag().or(NullTag.INSTANCE);
 
@@ -177,7 +170,7 @@ public class M4aWriteDataBeforeMoovTagTest {
             //Save changes and reread from disk
             f.save();
 
-            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           f = AudioFileIO.read(testFile);
             tag = f.getTag().or(NullTag.INSTANCE);

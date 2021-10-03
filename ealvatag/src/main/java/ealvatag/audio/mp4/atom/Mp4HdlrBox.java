@@ -41,9 +41,7 @@ public class Mp4HdlrBox extends AbstractMp4Box
         NAME_LENGTH;
 
 
-    private int             reserved;        // 32 bit
     private String          handlerType;     // 4 bytes;
-    private String          name;            // Variable length but 4 bytes in existing files
     private MediaDataType   mediaDataType;
 
     private static Map<String, MediaDataType> mediaDataTypeMap;

@@ -1,7 +1,6 @@
 package ealvatag.issues;
 
 import ealvatag.TestUtil;
-import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import org.junit.After;
 import org.junit.Assert;
@@ -28,7 +27,7 @@ public class Issue367Test {
 
             File testFile = TestUtil.copyAudioToTmp("test93.mp3");
             long startTime = System.nanoTime();
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
             long endTime = System.nanoTime();
             double totalTime = (endTime - startTime) / 1000000.0;
             System.out.println("Time:" + totalTime + ":ms");

@@ -166,8 +166,6 @@ public class Lyrics3v2Field extends AbstractTagFrame
     public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {
         byte[] buffer = new byte[6];
-        // lets scan for a non-zero byte;
-        long filePointer;
         byte b;
         do
         {

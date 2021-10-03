@@ -98,11 +98,11 @@ public class DsfAudioFileTest {
         try {
             AudioFile f = AudioFileIO.read(testFile);
             f.getTag().or(NullTag.INSTANCE).addField(FieldKey.ARTIST, "fred");
-            Tag tag = f.getTag().or(NullTag.INSTANCE);
+            f.getTag().or(NullTag.INSTANCE);
             f.deleteFileTag();
 
             f = AudioFileIO.read(testFile);
-            tag = f.getTag().or(NullTag.INSTANCE);
+            f.getTag().or(NullTag.INSTANCE);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,11 +188,11 @@ public class DsfAudioFileTest {
         AudioFile f = AudioFileIO.read(testFile);
         Assert.assertNull(f.getTag().orNull());
         f.getTagOrSetNewDefault().addField(FieldKey.ARTIST, "fred");
-        Tag tag = f.getTag().or(NullTag.INSTANCE);
+        f.getTag().or(NullTag.INSTANCE);
         f.deleteFileTag();
 
         f = AudioFileIO.read(testFile);
-        tag = f.getTag().or(NullTag.INSTANCE);
+        f.getTag().or(NullTag.INSTANCE);
     }
 
     @Test public void testCreateDefaultTag() throws Exception {

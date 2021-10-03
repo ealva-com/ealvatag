@@ -20,18 +20,6 @@ public class FramePICAndAPICTest {
         TestUtil.deleteTestDataTemp();
     }
 
-    private static String cmp(byte[] a, byte[] b) {
-        if (a.length != b.length) {
-            return "length of byte arrays differ (" + a.length + "!=" + b.length + ")";
-        }
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] != b[i]) {
-                return "byte arrays differ at offset " + i + " (" + a[i] + "!=" + b[i] + ")";
-            }
-        }
-        return null;
-    }
-
     public static ID3v24Frame getV24InitialisedFrame() {
         ID3v24Frame frame = new ID3v24Frame(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE);
         FrameBodyAPIC fb = FrameBodyAPICTest.getInitialisedBody();
