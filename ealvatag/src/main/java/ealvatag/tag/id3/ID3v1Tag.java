@@ -566,6 +566,7 @@ public class ID3v1Tag extends AbstractID3v1Tag implements TagFieldContainer {
       case COMMENT:
         setComment(field.toString());
         break;
+      default:
     }
   }
 

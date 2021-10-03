@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.util.Date;
 
 /**
  * Basic Vorbis tests

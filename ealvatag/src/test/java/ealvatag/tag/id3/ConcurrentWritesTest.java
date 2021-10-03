@@ -1,7 +1,6 @@
 package ealvatag.tag.id3;
 
 import ealvatag.tag.NullTag;
-import junit.framework.TestCase;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;

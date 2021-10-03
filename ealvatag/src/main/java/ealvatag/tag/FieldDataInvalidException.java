@@ -7,7 +7,12 @@ package ealvatag.tag;
  * then this exception will be thrown
  */
 public class FieldDataInvalidException extends TagException {
-    public FieldDataInvalidException(String msg) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5061583471450126765L;
+
+	public FieldDataInvalidException(String msg) {
         super(msg);
     }
 

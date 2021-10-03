@@ -29,6 +29,11 @@ package ealvatag.tag;
  */
 public class InvalidFrameIdentifierException extends InvalidFrameException {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3310494480528422495L;
+
+	/**
      * Creates a new InvalidFrameIdentifierException datatype.
      *
      * @param msg the detail message.

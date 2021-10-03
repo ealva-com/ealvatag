@@ -1,6 +1,5 @@
 package ealvatag.audio.mp3;
 
-import junit.framework.TestCase;
 import ealvatag.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;

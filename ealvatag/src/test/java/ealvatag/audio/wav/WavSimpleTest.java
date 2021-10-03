@@ -4,7 +4,6 @@ import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.Utils;
-import ealvatag.logging.Hex;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.wav.WavTag;
 import org.junit.After;

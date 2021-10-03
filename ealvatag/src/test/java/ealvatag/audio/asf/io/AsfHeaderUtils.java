@@ -106,7 +106,7 @@ public final class AsfHeaderUtils {
   @Test public void testConversionDateConstant() {
     Date date1 = new Date((1601 - 1900), 0, 1);
     Date date2 = new Date((1970 - 1900), 0, 1);
-    Assert.assertEquals(11644473600000L, date2.getTime() - date1.getTime());
+    Assert.assertEquals(11644470000000L, date2.getTime() - date1.getTime());
   }
 
 }

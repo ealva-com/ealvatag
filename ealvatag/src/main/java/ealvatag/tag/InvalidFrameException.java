@@ -28,7 +28,12 @@ package ealvatag.tag;
  * @version $Revision$
  */
 public class InvalidFrameException extends InvalidTagException {
-    public InvalidFrameException(String msg) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8320071301919327216L;
+
+	public InvalidFrameException(String msg) {
         super(msg);
     }
 

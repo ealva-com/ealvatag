@@ -8,7 +8,12 @@ import java.util.Locale;
  * you dont have permission to modify files in the folder that it is in.
  */
 public class UnableToModifyFileException extends IOException {
-  public UnableToModifyFileException(String message) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1975509456757617827L;
+
+public UnableToModifyFileException(String message) {
     super(message);
   }
 

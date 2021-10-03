@@ -32,13 +32,17 @@ import java.util.EventObject;
  * @author Scott Violet
  * @version 1.35 03/23/10
  */
-public class TreeModelEvent extends EventObject {
-  /** Path to the parent of the nodes that have changed. */
-  protected TreePath path;
+public class TreeModelEvent<T> extends EventObject {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4688836448726219327L;
+/** Path to the parent of the nodes that have changed. */
+    protected TreePath<T>	path;
   /** Indices identifying the position of where the children were. */
   protected int[] childIndices;
   /** Children that have been removed. */
-  protected Object[] children;
+    protected TreeNode<T>[]  children;
 
   /**
    * Used to create an event when nodes have been changed, inserted, or
@@ -108,10 +112,11 @@ public class TreeModelEvent extends EventObject {
    *
    * @see TreePath
    */
-  public TreeModelEvent(Object source, Object[] path, int[] childIndices,
-                        Object[] children) {
-    this(source, new TreePath(path), childIndices, children);
-  }
+    public TreeModelEvent(Object source, TreeNode<T>[] path, int[] childIndices,
+    		TreeNode<T>[] children)
+    {
+	this(source, new TreePath<>(path), childIndices, children);
+    }
 
   /**
    * Used to create an event when nodes have been changed, inserted, or
@@ -132,8 +137,9 @@ public class TreeModelEvent extends EventObject {
    *
    * @see #TreeModelEvent(Object, Object[], int[], Object[])
    */
-  public TreeModelEvent(Object source, TreePath path, int[] childIndices,
-                        Object[] children) {
+    public TreeModelEvent(Object source, TreePath<T> path, int[] childIndices,
+    		TreeNode<T>[] children)
+    {
     super(source);
     this.path = path;
     this.childIndices = childIndices;
@@ -163,9 +169,10 @@ public class TreeModelEvent extends EventObject {
    *
    * @see TreePath
    */
-  public TreeModelEvent(Object source, Object[] path) {
-    this(source, new TreePath(path));
-  }
+    public TreeModelEvent(Object source, TreeNode<T>[] path)
+    {
+	this(source, new TreePath<>(path));
+    }
 
   /**
    * Used to create an event when the node structure has changed in some way,
@@ -184,7 +191,8 @@ public class TreeModelEvent extends EventObject {
    *
    * @see #TreeModelEvent(Object, Object[])
    */
-  public TreeModelEvent(Object source, TreePath path) {
+    public TreeModelEvent(Object source, TreePath<T> path)
+    {
     super(source);
     this.path = path;
     this.childIndices = new int[0];
@@ -206,7 +214,7 @@ public class TreeModelEvent extends EventObject {
    *
    * @see TreePath#getLastPathComponent
    */
-  public TreePath getTreePath() { return path; }
+    public TreePath<T> getTreePath() { return path; }
 
   /**
    * Convenience method to get the array of objects from the TreePath
@@ -216,10 +224,11 @@ public class TreeModelEvent extends EventObject {
    * stored at the root and the last object is the one
    * stored at the node identified by the path
    */
-  public Object[] getPath() {
-    if (path != null) { return path.getPath(); }
-    return null;
-  }
+    public TreeNode<T>[] getPath() {
+	if(path != null)
+	    return path.getPath();
+	return null;
+    }
 
   /**
    * Returns the objects that are children of the node identified by
@@ -233,16 +242,17 @@ public class TreeModelEvent extends EventObject {
    * @see #getPath
    * @see #getChildIndices
    */
-  public Object[] getChildren() {
-    if (children != null) {
-      int cCount = children.length;
-      Object[] retChildren = new Object[cCount];
+    public TreeNode<T>[] getChildren() {
+	if(children != null) {
+	    int            cCount = children.length;
+	    @SuppressWarnings("unchecked")
+		TreeNode<T>[]       retChildren = new TreeNode[cCount];
 
-      System.arraycopy(children, 0, retChildren, 0, cCount);
-      return retChildren;
+	    System.arraycopy(children, 0, retChildren, 0, cCount);
+	    return retChildren;
+	}
+	return null;
     }
-    return null;
-  }
 
   /**
    * Returns the values of the child indexes. If this is a removal event
@@ -271,27 +281,25 @@ public class TreeModelEvent extends EventObject {
    *
    * @return a String representation of this object
    */
-  public String toString() {
-    StringBuilder retBuffer = new StringBuilder();
+    public String toString() {
+	StringBuffer   retBuffer = new StringBuffer();
 
-    retBuffer.append(getClass().getName()).append(" ").append(Integer.toString(hashCode()));
-    if (path != null) { retBuffer.append(" path ").append(path); }
-    if (childIndices != null) {
-      retBuffer.append(" indices [ ");
-      for (int counter = 0; counter < childIndices.length; counter++) {
-        retBuffer.append(childIndices[counter])
-                 .append(" ");
-      }
-      retBuffer.append("]");
+	retBuffer.append(getClass().getName() + " " +
+			 Integer.toString(hashCode()));
+	if(path != null)
+	    retBuffer.append(" path " + path);
+	if(childIndices != null) {
+	    retBuffer.append(" indices [ ");
+	    for(int counter = 0; counter < childIndices.length; counter++)
+		retBuffer.append(Integer.toString(childIndices[counter])+ " ");
+	    retBuffer.append("]");
+	}
+	if(children != null) {
+	    retBuffer.append(" children [ ");
+	    for(int counter = 0; counter < children.length; counter++)
+		retBuffer.append(children[counter] + " ");
+	    retBuffer.append("]");
+	}
+	return retBuffer.toString();
     }
-    if (children != null) {
-      retBuffer.append(" children [ ");
-      for (int counter = 0; counter < children.length; counter++) {
-        retBuffer.append(children[counter])
-                 .append(" ");
-      }
-      retBuffer.append("]");
-    }
-    return retBuffer.toString();
-  }
 }

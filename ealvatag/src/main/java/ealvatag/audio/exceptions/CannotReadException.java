@@ -27,7 +27,12 @@ import java.util.Locale;
  * @author Raphaël Slinckx
  */
 public class CannotReadException extends Exception {
-  public CannotReadException() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5227343006975412147L;
+
+public CannotReadException() {
     super();
   }
 

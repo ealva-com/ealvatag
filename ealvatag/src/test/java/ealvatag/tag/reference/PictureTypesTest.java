@@ -22,8 +22,6 @@ import ealvatag.utils.InclusiveIntegerRange;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Test {@link PictureTypes} is configured properly
  *

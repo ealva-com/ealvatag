@@ -25,9 +25,7 @@ import ealvatag.audio.ogg.util.OggInfoReader;
 import ealvatag.audio.ogg.util.OggPageHeader;
 import ealvatag.tag.TagFieldContainer;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.RandomAccessFile;
 
 /**

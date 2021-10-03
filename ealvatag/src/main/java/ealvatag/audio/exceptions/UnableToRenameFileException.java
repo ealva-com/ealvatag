@@ -8,7 +8,12 @@ import java.util.Locale;
  * because you do not have Special Permission 'Delete' set to Denied.
  */
 public class UnableToRenameFileException extends IOException {
-  public UnableToRenameFileException(String message) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5613809571849043924L;
+
+public UnableToRenameFileException(String message) {
     super(message);
   }
 

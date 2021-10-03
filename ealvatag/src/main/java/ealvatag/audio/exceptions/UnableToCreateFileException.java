@@ -8,7 +8,12 @@ import java.util.Locale;
  * you dont have permission to write to the folder that it is in.
  */
 public class UnableToCreateFileException extends IOException {
-  public UnableToCreateFileException(final String message) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2033271750336981668L;
+
+public UnableToCreateFileException(final String message) {
     super(message);
   }
 

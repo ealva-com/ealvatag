@@ -22,8 +22,6 @@ import ealvatag.audio.exceptions.CannotReadException;
 import ealvatag.audio.mp4.atom.Mp4BoxHeader;
 import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.audio.mp4.atom.Mp4StsdBox;
-import ealvatag.logging.ErrorMessage;
-import okio.Buffer;
 import okio.BufferedSource;
 
 import java.io.IOException;

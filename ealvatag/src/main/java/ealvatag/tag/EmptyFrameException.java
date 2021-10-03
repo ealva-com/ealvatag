@@ -28,6 +28,11 @@ package ealvatag.tag;
  */
 public class EmptyFrameException extends InvalidFrameException {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5318352215226022014L;
+
+	/**
      * Creates a new EmptyFrameException datatype.
      *
      * @param msg the detail message.

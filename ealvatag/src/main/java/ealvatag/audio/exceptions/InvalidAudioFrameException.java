@@ -13,7 +13,12 @@ import java.util.Locale;
  * Thrown if portion of file thought to be an AudioFrame is found to not be.
  */
 public class InvalidAudioFrameException extends Exception {
-  public InvalidAudioFrameException(String message) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5124739587065544399L;
+
+public InvalidAudioFrameException(String message) {
     super(message);
   }
 

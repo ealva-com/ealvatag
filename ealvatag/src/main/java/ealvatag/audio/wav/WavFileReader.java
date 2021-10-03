@@ -54,6 +54,7 @@ public class WavFileReader extends AudioFileReader2
             case READ_INFO_ONLY_AND_SYNC:
             case READ_INFO_UNLESS_ONLY_ID3_AND_SYNC:
                 tag.syncTagsAfterRead();
+            default:
         }
         return tag;
     }

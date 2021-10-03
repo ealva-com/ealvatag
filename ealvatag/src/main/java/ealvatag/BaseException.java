@@ -26,7 +26,12 @@ import java.util.Locale;
  */
 @SuppressWarnings("unused")
 public class BaseException extends RuntimeException {
-  public BaseException(final String msg, final Object... formatArgs) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7854594514422418517L;
+
+public BaseException(final String msg, final Object... formatArgs) {
       super(String.format(Locale.getDefault(), msg, formatArgs));
   }
 

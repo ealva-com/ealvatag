@@ -508,6 +508,7 @@ public class Mp4Tag extends AbstractTag {
             return new Mp4DiscNoField(number);
           case DISC_TOTAL:
             return new Mp4DiscNoField(0, number);
+          default:
         }
       } catch (NumberFormatException nfe) {
         //If not number we want to convert to an expected exception (which is not a RuntimeException)

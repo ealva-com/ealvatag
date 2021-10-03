@@ -5,7 +5,12 @@ package ealvatag.audio.exceptions;
  * Normally an error, but if occurs at end of file we allow it
  */
 public class NullBoxIdException extends RuntimeException {
-  public NullBoxIdException(String message) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7114685230539495823L;
+
+public NullBoxIdException(String message) {
     super(message);
   }
 }

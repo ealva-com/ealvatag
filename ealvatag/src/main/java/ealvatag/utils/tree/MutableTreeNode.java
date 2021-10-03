@@ -20,13 +20,13 @@ package ealvatag.utils.tree;
  * @author Scott Violet
  */
 
-public interface MutableTreeNode extends TreeNode
+public interface MutableTreeNode<T> extends TreeNode<T>
 {
     /**
      * Adds <code>child</code> to the receiver at <code>index</code>.
      * <code>child</code> will be messaged with <code>setParent</code>.
      */
-    void insert(MutableTreeNode child, int index);
+    void insert(MutableTreeNode<T> child, int index);
 
     /**
      * Removes the child at <code>index</code> from the receiver.
@@ -37,12 +37,12 @@ public interface MutableTreeNode extends TreeNode
      * Removes <code>node</code> from the receiver. <code>setParent</code>
      * will be messaged on <code>node</code>.
      */
-    void remove(MutableTreeNode node);
+    void remove(MutableTreeNode<T> node);
 
     /**
      * Resets the user object of the receiver to <code>object</code>.
      */
-    void setUserObject(Object object);
+    void setUserObject(T object);
 
     /**
      * Removes the receiver from its parent.
@@ -52,5 +52,5 @@ public interface MutableTreeNode extends TreeNode
     /**
      * Sets the parent of the receiver to <code>newParent</code>.
      */
-    void setParent(MutableTreeNode newParent);
+    void setParent(MutableTreeNode<T> newParent);
 }

@@ -2,7 +2,6 @@ package ealvatag.audio.asf;
 
 import ealvatag.tag.Tag;
 import ealvatag.tag.images.Artwork;
-import junit.framework.TestCase;
 import ealvatag.audio.asf.data.AsfHeader;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.asf.AsfFieldKey;
