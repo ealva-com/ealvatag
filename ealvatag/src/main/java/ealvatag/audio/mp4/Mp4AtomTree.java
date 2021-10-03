@@ -48,7 +48,7 @@ public class Mp4AtomTree {
   private DefaultMutableTreeNode<Mp4BoxHeader> tagsNode;
   private DefaultMutableTreeNode<Mp4BoxHeader> udtaNode;
   @SuppressWarnings("unused")
-private DefaultMutableTreeNode<Mp4BoxHeader> hdlrWithinMdiaNode;
+  private DefaultMutableTreeNode<Mp4BoxHeader> hdlrWithinMdiaNode;
   private DefaultMutableTreeNode<Mp4BoxHeader> hdlrWithinMetaNode;
   private List<DefaultMutableTreeNode<Mp4BoxHeader>> stcoNodes = new ArrayList<>();
   private List<DefaultMutableTreeNode<Mp4BoxHeader>> freeNodes = new ArrayList<>();
@@ -100,7 +100,10 @@ private DefaultMutableTreeNode<Mp4BoxHeader> hdlrWithinMdiaNode;
    * @throws ealvatag.audio.exceptions.CannotReadException
    */
   public DefaultTreeModel<Mp4BoxHeader> buildTree(RandomAccessFile raf, boolean closeExit) throws IOException, CannotReadException {
-    try (FileChannel fc = raf.getChannel()) {
+    FileChannel fc = null;
+    try {
+      fc = raf.getChannel();
+
       //make sure at start of file
       fc.position(0);
 
@@ -184,6 +187,10 @@ private DefaultMutableTreeNode<Mp4BoxHeader> hdlrWithinMdiaNode;
       //now rather than later when try and write to it.
       if (mdatNode == null) {
         throw new CannotReadException(ErrorMessage.MP4_CANNOT_FIND_AUDIO);
+      }
+
+      if (closeExit) {
+        fc.close();
       }
     }
   }
