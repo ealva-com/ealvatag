@@ -28,39 +28,40 @@ public class Issue327Test {
         f.getID3v2Tag().addField(FieldKey.ALBUM_ARTIST, "Ϟ");
         f.save();
         ByteBuffer bb = ByteBuffer.allocate(40);
-        FileChannel fc = new RandomAccessFile(testFile, "r").getChannel();
-        fc.read(bb);
-        Assert.assertEquals('T', bb.get(10) & 0xFF);
-        Assert.assertEquals('P', bb.get(11) & 0xFF);
-        Assert.assertEquals('E', bb.get(12) & 0xFF);
-        Assert.assertEquals('2', bb.get(13) & 0xFF);
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(testFile, "r")) {
+			FileChannel fc = randomAccessFile.getChannel();
+			fc.read(bb);
+			Assert.assertEquals('T', bb.get(10) & 0xFF);
+			Assert.assertEquals('P', bb.get(11) & 0xFF);
+			Assert.assertEquals('E', bb.get(12) & 0xFF);
+			Assert.assertEquals('2', bb.get(13) & 0xFF);
 
-        //BOM for first String
-        Assert.assertEquals(0xFF, bb.get(21) & 0xFF);
-        Assert.assertEquals(0xFE, bb.get(22) & 0xFF);
-        //First String char
-        Assert.assertEquals(0xDE, bb.get(23) & 0xFF);
-        Assert.assertEquals(0x03, bb.get(24) & 0xFF);
-        //Null Separator (2 bytes because of encoding
-        Assert.assertEquals(0x00, bb.get(25) & 0xFF);
-        Assert.assertEquals(0x00, bb.get(26) & 0xFF);
+			//BOM for first String
+			Assert.assertEquals(0xFF, bb.get(21) & 0xFF);
+			Assert.assertEquals(0xFE, bb.get(22) & 0xFF);
+			//First String char
+			Assert.assertEquals(0xDE, bb.get(23) & 0xFF);
+			Assert.assertEquals(0x03, bb.get(24) & 0xFF);
+			//Null Separator (2 bytes because of encoding
+			Assert.assertEquals(0x00, bb.get(25) & 0xFF);
+			Assert.assertEquals(0x00, bb.get(26) & 0xFF);
 
-        //BOM for second String
-        Assert.assertEquals(0xFF, bb.get(27) & 0xFF);
-        Assert.assertEquals(0xFE, bb.get(28) & 0xFF);
-        //Second String char
-        Assert.assertEquals(0xDE, bb.get(29) & 0xFF);
-        Assert.assertEquals(0x03, bb.get(30) & 0xFF);
+			//BOM for second String
+			Assert.assertEquals(0xFF, bb.get(27) & 0xFF);
+			Assert.assertEquals(0xFE, bb.get(28) & 0xFF);
+			//Second String char
+			Assert.assertEquals(0xDE, bb.get(29) & 0xFF);
+			Assert.assertEquals(0x03, bb.get(30) & 0xFF);
 
-        //Next Frame
-        Assert.assertEquals(0x54, bb.get(31) & 0xFF);
-        Assert.assertEquals(0x58, bb.get(32) & 0xFF);
-        Assert.assertEquals(0x58, bb.get(33) & 0xFF);
-        Assert.assertEquals(0x58, bb.get(34) & 0xFF);
+			//Next Frame
+			Assert.assertEquals(0x54, bb.get(31) & 0xFF);
+			Assert.assertEquals(0x58, bb.get(32) & 0xFF);
+			Assert.assertEquals(0x58, bb.get(33) & 0xFF);
+			Assert.assertEquals(0x58, bb.get(34) & 0xFF);
 
-        fc.close();
-
-        //What does ealvatag read the values back as
+			fc.close();
+		}
+		//What does ealvatag read the values back as
         f = (MP3File)AudioFileIO.read(testFile);
         Assert.assertEquals("Ϟ", f.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ALBUM_ARTIST));
         Assert.assertEquals("Ϟ", f.getTag().or(NullTag.INSTANCE).getFieldAt(FieldKey.ALBUM_ARTIST, 0));

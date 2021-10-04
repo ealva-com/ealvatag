@@ -387,10 +387,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         String str;
         Lyrics3v2Field field;
         Iterator<Lyrics3v2Field> iterator;
-        ID3v1Tag id3v1tag;
         new ID3v1Tag();
-
-        id3v1tag = null;
 
         delete(file);
         file.seek(file.length());
@@ -461,11 +458,6 @@ public class Lyrics3v2 extends AbstractLyrics3
         offset += str.length();
 
         file.write(buffer, 0, offset);
-
-        if (id3v1tag != null)
-        {
-            id3v1tag.write(file);
-        }
     }
 
     /**
