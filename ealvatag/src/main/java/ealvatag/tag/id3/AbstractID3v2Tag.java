@@ -903,12 +903,6 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
    */
   @SuppressWarnings("unchecked")
   public Iterator<TagField> getFields() {
-    //Iterator of each different frameId in this tag
-    final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
-
-    //Iterator used by hasNext() so doesn't effect next()
-    final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
-    
     List<TagField> allFields = new ArrayList<>();
     
 	for (Object fieldContainer : frameMap.values()) {

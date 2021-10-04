@@ -129,7 +129,7 @@ public interface TreeModel<T>
      * @param   l       the listener to add
      * @see     #removeTreeModelListener
      */
-    void addTreeModelListener(TreeModelListener l);
+    void addTreeModelListener(TreeModelListener<T> l);
 
     /**
      * Removes a listener previously added with
@@ -138,6 +138,6 @@ public interface TreeModel<T>
      * @see     #addTreeModelListener
      * @param   l       the listener to remove
      */
-    void removeTreeModelListener(TreeModelListener l);
+    void removeTreeModelListener(TreeModelListener<T> l);
 
 }

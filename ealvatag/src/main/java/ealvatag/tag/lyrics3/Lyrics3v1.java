@@ -27,7 +27,6 @@ import ealvatag.tag.TagException;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3Tags;
-import ealvatag.tag.id3.ID3v1Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

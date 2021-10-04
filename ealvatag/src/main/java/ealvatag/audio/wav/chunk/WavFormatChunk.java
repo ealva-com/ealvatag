@@ -45,7 +45,8 @@ public class WavFormatChunk extends Chunk
     private static final int   EXTENSIBLE_DATA_SIZE = 22;
     private boolean isValid = false;
 
-    private int blockAlign,  channelMask;
+    @SuppressWarnings("unused")
+	private int blockAlign,  channelMask;
     private WavSubFormat wsf;
     private GenericAudioHeader info;
 

@@ -382,7 +382,6 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
      * @return an array of TreeNodes giving the path from the root to the
      *         specified node
      */
-    @SuppressWarnings("unchecked")
 	protected TreeNode<T>[] getPathToRoot(TreeNode<T> aNode, int depth) {
         TreeNode<T>[]              retNodes;
 	// This method recurses, traversing towards the root in order
@@ -391,16 +390,18 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
 
         /* Check for null, in case someone passed in a null node, or
            they passed in an element that isn't rooted at root. */
-        if(aNode == null) {
+        @SuppressWarnings("unchecked")
+		TreeNode<T>[] treeNodes = new TreeNode[depth];
+		if(aNode == null) {
             if(depth == 0)
                 return null;
             else
-                retNodes = new TreeNode[depth];
+                retNodes = treeNodes;
         }
         else {
             depth++;
             if(aNode == root)
-                retNodes = new TreeNode[depth];
+                retNodes = treeNodes;
             else
                 retNodes = getPathToRoot(aNode.getParent(), depth);
             retNodes[retNodes.length - depth] = aNode;
@@ -418,7 +419,7 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
      * @see     #removeTreeModelListener
      * @param   l       the listener to add
      */
-    public void addTreeModelListener(TreeModelListener l) {
+    public void addTreeModelListener(TreeModelListener<T> l) {
         listenerList.add(TreeModelListener.class, l);
     }
 
@@ -428,7 +429,7 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
      * @see     #addTreeModelListener
      * @param   l       the listener to remove
      */
-    public void removeTreeModelListener(TreeModelListener l) {
+    public void removeTreeModelListener(TreeModelListener<T> l) {
         listenerList.remove(TreeModelListener.class, l);
     }
 
@@ -445,9 +446,11 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
      *
      * @since 1.4
      */
-    public TreeModelListener[] getTreeModelListeners() {
-        return (TreeModelListener[])listenerList.getListeners(
+	public TreeModelListener<T>[] getTreeModelListeners() {
+        @SuppressWarnings("unchecked")
+		TreeModelListener<T>[] listeners = (TreeModelListener<T>[])listenerList.getListeners(
                 TreeModelListener.class);
+		return listeners;
     }
 
     /**
@@ -462,7 +465,7 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
      * @param children the changed elements
      * @see EventListenerList
      */
-    protected void fireTreeNodesChanged(Object source, TreeNode<T>[] path, 
+	protected void fireTreeNodesChanged(Object source, TreeNode<T>[] path, 
                                         int[] childIndices, 
                                         TreeNode<T>[] children) {
         // Guaranteed to return a non-null array
@@ -476,7 +479,9 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
                 if (e == null)
                     e = new TreeModelEvent<>(source, path, 
                                            childIndices, children);
-                ((TreeModelListener)listeners[i+1]).treeNodesChanged(e);
+                @SuppressWarnings("unchecked")
+				TreeModelListener<T> treeModelListener = (TreeModelListener<T>)listeners[i+1];
+				treeModelListener.treeNodesChanged(e);
             }
         }
     }
@@ -507,7 +512,9 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
                 if (e == null)
                     e = new TreeModelEvent<>(source, path, 
                                            childIndices, children);
-                ((TreeModelListener)listeners[i+1]).treeNodesInserted(e);
+                @SuppressWarnings("unchecked")
+				TreeModelListener<T> treeModelListener = (TreeModelListener<T>)listeners[i+1];
+				treeModelListener.treeNodesInserted(e);
             }
         }
     }
@@ -538,7 +545,9 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
                 if (e == null)
                     e = new TreeModelEvent<>(source, path, 
                                            childIndices, children);
-                ((TreeModelListener)listeners[i+1]).treeNodesRemoved(e);
+                @SuppressWarnings("unchecked")
+				TreeModelListener<T> treeModelListener = (TreeModelListener<T>)listeners[i+1];
+				treeModelListener.treeNodesRemoved(e);
             }
         }
     }
@@ -569,7 +578,9 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
                 if (e == null)
                     e = new TreeModelEvent<>(source, path, 
                                            childIndices, children);
-                ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+                @SuppressWarnings("unchecked")
+				TreeModelListener<T> treeModelListener = (TreeModelListener<T>)listeners[i+1];
+				treeModelListener.treeStructureChanged(e);
             }
         }
     }
@@ -595,7 +606,9 @@ public class DefaultTreeModel<T> implements Serializable, TreeModel<T> {
                 // Lazily create the event:
                 if (e == null)
                     e = new TreeModelEvent<>(source, path);
-                ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+                @SuppressWarnings("unchecked")
+				TreeModelListener<T> treeModelListener = (TreeModelListener<T>)listeners[i+1];
+				treeModelListener.treeStructureChanged(e);
             }
         }
     }
