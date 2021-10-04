@@ -104,8 +104,11 @@ public final class AsfHeaderUtils {
    * Test to show the calculation done to derive the DIFF_BETWEEN_ASF_DATE_AND_JAVA_DATE constant
    */
   @Test public void testConversionDateConstant() {
-    Date date1 = new Date((1601 - 1900), 0, 1);
-    Date date2 = new Date((1970 - 1900), 0, 1);
+  	Calendar cal = Calendar.getInstance();
+  	cal.set(1601, 0, 1);
+      Date date1 = cal.getTime();
+  	cal.set(1970, 0, 1);
+      Date date2 = cal.getTime();
     Assert.assertEquals(11644470000000L, date2.getTime() - date1.getTime());
   }
 

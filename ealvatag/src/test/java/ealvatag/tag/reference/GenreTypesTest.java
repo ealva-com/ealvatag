@@ -17,13 +17,16 @@
 
 package ealvatag.tag.reference;
 
-import ealvatag.tag.id3.valuepair.BaseSimpleIntStringMapTypeTest;
-import ealvatag.utils.InclusiveIntegerRange;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import ealvatag.tag.id3.valuepair.BaseSimpleIntStringMapTypeTest;
+import ealvatag.utils.InclusiveIntegerRange;
 
 /**
  * Ensure GenreTypes configured properly

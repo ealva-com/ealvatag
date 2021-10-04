@@ -131,6 +131,9 @@ public class Mp4AtomTree {
             break;
           } else {
             //File appears invalid
+        	  if(closeExit) {
+        		  fc.close();
+        	  }
             throw ne;
           }
         }
