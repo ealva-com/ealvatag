@@ -13,8 +13,9 @@ hs_err_pid*
 *.ipr
 *.iws
 
-/.gradle/3.2.1/taskArtifacts/*
 /build/ivy.xml
 
 .project
 .settings/
+.gradle/
+

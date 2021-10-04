@@ -125,7 +125,7 @@ public class Mp4AtomTree {
           //If we only get this error after all the expected data has been found we allow it
           if (moovNode != null & mdatNode != null) {
             NullPadding np = new NullPadding(fc.position() - Mp4BoxHeader.HEADER_LENGTH, fc.size());
-            DefaultMutableTreeNode<Mp4BoxHeader> trailingPaddingNode = new DefaultMutableTreeNode<>(np);
+            DefaultMutableTreeNode<Mp4BoxHeader> trailingPaddingNode = new DefaultMutableTreeNode<Mp4BoxHeader>(np);
             rootNode.add(trailingPaddingNode);
             LOG.log(WARN, ErrorMessage.NULL_PADDING_FOUND_AT_END_OF_MP4, np.getFilePos());
             break;
