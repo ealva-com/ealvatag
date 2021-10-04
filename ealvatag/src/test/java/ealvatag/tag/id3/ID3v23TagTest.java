@@ -45,6 +45,7 @@ import java.util.List;
 /**
  *
  */
+@SuppressWarnings("deprecation")
 public class ID3v23TagTest {
     @After public void tearDown() {
         TestUtil.deleteTestDataTemp();

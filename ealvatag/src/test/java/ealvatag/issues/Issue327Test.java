@@ -19,6 +19,7 @@ import java.nio.channels.FileChannel;
  * for all strings not just the first one
  */
 public class Issue327Test {
+    @SuppressWarnings("deprecation")
     @Test public void testUTF16BOMMultipleFieldSeperators() throws Exception {
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testUTF16BOMMultipleFieldSeperators.mp3"));
         MP3File f = (MP3File)AudioFileIO.read(testFile);

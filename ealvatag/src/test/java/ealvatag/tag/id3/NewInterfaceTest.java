@@ -45,6 +45,7 @@ import java.util.NoSuchElementException;
 /**
  * Testing retrofitting of entagged interfaces
  */
+@SuppressWarnings("deprecation")
 public class NewInterfaceTest {
     public static final String ALBUM_TEST_STRING = "mellow gold";
     public static final String ALBUM_TEST_STRING2 = "odelay";
@@ -388,7 +389,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("musicip_id", ((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFirst(ID3v24FieldKey.MUSICIP_ID));
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
@@ -399,7 +400,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(3, ((List)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(3, ((List<?>)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("releaseid", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
         Assert.assertEquals("releaseid", ((TagTextField)af.getTag().or(NullTag.INSTANCE)
@@ -415,7 +416,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v24Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.AMAZON_ID).size());
         Assert.assertEquals(9, af.getTag().or(NullTag.INSTANCE).getFieldCount());
@@ -688,7 +689,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("musicip_id", ((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFirst(ID3v23FieldKey.MUSICIP_ID));
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
@@ -703,7 +704,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(3, ((List)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(3, ((List<?>)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("releaseid", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
         Assert.assertEquals("asin123456" + "\u01ff", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.AMAZON_ID));
@@ -716,7 +717,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v23Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXXX")).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.AMAZON_ID).size());
         Assert.assertEquals(8, af.getTag().or(NullTag.INSTANCE).getFieldCount());
@@ -927,7 +928,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICIP_ID, "musicip_id");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("musicip_id", ((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFirst(ID3v22FieldKey.MUSICIP_ID));
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
@@ -938,7 +939,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_RELEASEID, "releaseid");
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(3, ((List)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
+        Assert.assertEquals(3, ((List<?>)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
         Assert.assertEquals("musicip_id", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICIP_ID));
         Assert.assertEquals("releaseid", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.MUSICBRAINZ_RELEASEID));
         Assert.assertEquals("asin123456" + "\u01ff", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.AMAZON_ID));
@@ -951,7 +952,7 @@ public class NewInterfaceTest {
         af.getTag().or(NullTag.INSTANCE).deleteField(FieldKey.MUSICBRAINZ_RELEASEID);
         af.save();
         af = AudioFileIO.read(testFile);
-        Assert.assertEquals(2, ((List)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
+        Assert.assertEquals(2, ((List<?>)((ID3v22Tag)af.getTag().or(NullTag.INSTANCE)).getFrame("TXX")).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.MUSICIP_ID).size());
         Assert.assertEquals(1, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.AMAZON_ID).size());
         Assert.assertEquals(8, af.getTag().or(NullTag.INSTANCE).getFieldCount());
@@ -1057,10 +1058,10 @@ public class NewInterfaceTest {
             fb.setDescription("test");
             //Because has different description the following setField will addField another txxx rather than overwriting the first one
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_ARTISTID, "abcdef-ghijklmn");
-            Assert.assertEquals(2, ((List)tag.getFrame("TXXX")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("TXXX")).size());
             //Now adding TXXX with same id so gets overwritten
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_ARTISTID, "abcfffff");
-            Assert.assertEquals(2, ((List)tag.getFrame("TXXX")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("TXXX")).size());
 
             //Try deleting some of these
             tag.removeFrameOfType("TXXX");
@@ -1084,10 +1085,10 @@ public class NewInterfaceTest {
 
             //Because has different owner the following setField will addField another ufid rather than overwriting the first one
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcdef-ghijklmn");
-            Assert.assertEquals(2, ((List)tag.getFrame("UFID")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("UFID")).size());
             //Now adding UFID with same owner so gets overwritten
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.MUSICBRAINZ_TRACK_ID, "abcfffff");
-            Assert.assertEquals(2, ((List)tag.getFrame("UFID")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("UFID")).size());
 
             //Try deleting some of these
             tag.removeFrame("UFID");
@@ -1106,13 +1107,13 @@ public class NewInterfaceTest {
 
             //Because has different desc the following setField will addField another uslt rather than overwriting the first one
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.LYRICS, "abcdef-ghijklmn");
-            Assert.assertEquals(2, ((List)tag.getFrame("USLT")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("USLT")).size());
             Assert.assertEquals(2, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.LYRICS).size());
-            frame = (ID3v24Frame)((List)tag.getFrame("USLT")).get(1);
+            frame = (ID3v24Frame)((List<?>)tag.getFrame("USLT")).get(1);
             Assert.assertEquals("", ((FrameBodyUSLT)frame.getBody()).getDescription());
             //Now adding USLT with same description so gets overwritten
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.LYRICS, "abcfffff");
-            Assert.assertEquals(2, ((List)tag.getFrame("USLT")).size());
+            Assert.assertEquals(2, ((List<?>)tag.getFrame("USLT")).size());
             Assert.assertEquals(2, af.getTag().or(NullTag.INSTANCE).getFields(FieldKey.LYRICS).size());
 
         }
@@ -1176,7 +1177,7 @@ public class NewInterfaceTest {
 
         //Empty frame map and force adding of empty list
         mp3File.getID3v2Tag().frameMap.clear();
-        mp3File.getID3v2Tag().frameMap.put("TXXX", new ArrayList());
+        mp3File.getID3v2Tag().frameMap.put("TXXX", new ArrayList<>());
         Assert.assertEquals(0, mp3File.getID3v2Tag().getFieldCount());
 
         //Issue #236

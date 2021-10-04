@@ -19,6 +19,7 @@ import java.io.File;
  * Mp3s can handle writing multiple fields which actually map to a single field using generic interface
  * but retrieval shows them as just one field, contrast with Flac
  */
+@SuppressWarnings("deprecation")
 public class Issue411Test {
     @Before
     public void setup() throws Exception {
@@ -29,8 +30,7 @@ public class Issue411Test {
     public void tearDown() {
         TestUtil.deleteTestDataTemp();
     }
-
-
+    
     @Test public void testIssue() throws Exception {
         TagOptionSingleton.getInstance().setWriteMp3GenresAsText(false);
         Exception caught = null;

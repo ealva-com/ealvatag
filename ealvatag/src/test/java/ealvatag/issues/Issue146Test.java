@@ -19,6 +19,7 @@ public class Issue146Test {
         TestUtil.deleteTestDataTemp();
     }
 
+    @SuppressWarnings("deprecation")
     @Test public void testIssue146() throws Exception {
         File orig = new File("testdata", "test158.mp3");
         if (!orig.isFile()) {

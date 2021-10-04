@@ -14,13 +14,14 @@ import org.junit.Test;
 import java.io.File;
 
 
+@SuppressWarnings("deprecation")
 public class FrameBodyTMCLTest {
     /**
      * Uses TMCL frame
      *
      * @throws Exception
      */
-    @Test public void testWritePerformersIDv24() throws Exception {
+	@Test public void testWritePerformersIDv24() throws Exception {
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testWritePerformersv24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);
         Assert.assertNull(f.getTag().orNull());
