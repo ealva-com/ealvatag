@@ -3,7 +3,6 @@ package ealvatag.issues;
 import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
-import ealvatag.audio.AudioHeader;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.Tag;
@@ -38,7 +37,7 @@ public class Issue66Test {
 
             Tag tag = af.getTag().or(NullTag.INSTANCE);
             if (tag != null) {
-                AudioHeader head = af.getAudioHeader();
+                af.getAudioHeader();
             }
         } catch (Exception e) {
             caught = e;

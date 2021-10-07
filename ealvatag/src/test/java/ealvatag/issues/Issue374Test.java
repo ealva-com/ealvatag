@@ -15,8 +15,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 

@@ -25,6 +25,11 @@ package ealvatag.audio.exceptions;
 public class NoReadPermissionsException extends CannotReadException
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2758840965404356078L;
+
+	/**
      * Creates an instance.
      */
     public NoReadPermissionsException()

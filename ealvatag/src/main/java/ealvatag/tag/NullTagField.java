@@ -17,8 +17,6 @@
 
 package ealvatag.tag;
 
-import com.google.common.base.Optional;
-
 import java.io.UnsupportedEncodingException;
 
 /**

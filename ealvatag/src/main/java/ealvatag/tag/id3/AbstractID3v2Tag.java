@@ -583,7 +583,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
     //whereas it.next() works correctly
     try {
       while (true) {
-        TagField next = it.next();
+        it.next();
         count++;
       }
     } catch (NoSuchElementException nse) {
@@ -901,89 +901,19 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements TagFiel
   /**
    * @return iterator of all fields, multiple values for the same Id (e.g multiple TXXX frames) count as separate fields
    */
+  @SuppressWarnings("unchecked")
   public Iterator<TagField> getFields() {
-    //Iterator of each different frameId in this tag
-    final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
+    List<TagField> allFields = new ArrayList<>();
+    
+	for (Object fieldContainer : frameMap.values()) {
+		if (fieldContainer instanceof List) {
+			allFields.addAll((List<TagField>) fieldContainer);
+		} else {
+			allFields.add((TagField) fieldContainer);
+		}
+	}
 
-    //Iterator used by hasNext() so doesn't effect next()
-    final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
-
-
-    return new Iterator<TagField>() {
-      Map.Entry<String, Object> latestEntry = null;
-
-      //this iterates through frames through for a particular frameId
-      private Iterator<TagField> fieldsIt;
-
-      //TODO assumes if have entry its valid, but what if empty list but very different to check this
-      //without causing a side effect on next() so leaving for now
-      public boolean hasNext() {
-        //Check Current frameId, does it contain more values
-        if (fieldsIt != null) {
-          if (fieldsIt.hasNext()) {
-            return true;
-          }
-        }
-
-        //No remaining entries return false
-        if (!itHasNext.hasNext()) {
-          return false;
-        }
-
-        //Issue #236
-        //TODO assumes if have entry its valid, but what if empty list but very different to check this
-        //without causing a side effect on next() so leaving for now
-        return itHasNext.hasNext();
-      }
-
-      public TagField next() {
-        //Hasn't been initialized yet
-        if (fieldsIt == null) {
-          changeIt();
-        }
-
-        if (fieldsIt != null) {
-          //Go to the end of the run
-          if (!fieldsIt.hasNext()) {
-            changeIt();
-          }
-        }
-
-        if (fieldsIt == null) {
-          throw new NoSuchElementException();
-        }
-        return fieldsIt.next();
-      }
-
-      private void changeIt() {
-        if (!it.hasNext()) {
-          return;
-        }
-
-        while (it.hasNext()) {
-          Map.Entry<String, Object> e = it.next();
-          latestEntry = itHasNext.next();
-          if (e.getValue() instanceof List) {
-            List<TagField> l = (List<TagField>)e.getValue();
-            //If list is empty (which it shouldn't be) we skip over this entry
-            if (l.size() != 0) {
-              fieldsIt = l.iterator();
-              break;
-            }
-          } else {
-            //TODO must be a better way
-            List<TagField> l = new ArrayList<>();
-            l.add((TagField)e.getValue());
-            fieldsIt = l.iterator();
-            break;
-          }
-        }
-      }
-
-      public void remove() {
-        fieldsIt.remove();
-      }
-    };
+	return allFields.iterator();
   }
 
   public ImmutableList<TagField> getFields(String id) {

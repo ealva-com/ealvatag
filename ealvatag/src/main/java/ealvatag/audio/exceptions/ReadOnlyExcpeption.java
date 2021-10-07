@@ -27,6 +27,11 @@ package ealvatag.audio.exceptions;
 public class ReadOnlyExcpeption extends RuntimeException
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8159235342508381197L;
+
+	/**
      * Creates a new ReadOnlyException datatype.
      */
     public ReadOnlyExcpeption()

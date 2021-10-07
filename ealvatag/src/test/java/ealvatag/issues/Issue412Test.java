@@ -20,6 +20,7 @@ import java.io.File;
 /**
  *
  */
+@SuppressWarnings("deprecation")
 public class Issue412Test {
     @Before
     public void setup() throws Exception {

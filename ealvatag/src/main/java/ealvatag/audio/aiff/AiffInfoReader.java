@@ -39,7 +39,7 @@ public class AiffInfoReader extends AiffChunkReader {
     LOG.log(TRACE, "$1%s Reading AIFF file size:$2%d 0x$2%x", fileName, fc.size());
     AiffAudioHeader aiffAudioHeader = new AiffAudioHeader();
     final AiffFileHeader fileHeader = new AiffFileHeader();
-    long noOfBytes = fileHeader.readHeader(fc, aiffAudioHeader, fileName);
+    fileHeader.readHeader(fc, aiffAudioHeader, fileName);
     while (fc.position() < fc.size()) {
       if (!readChunk(fc, aiffAudioHeader, fileName)) {
         LOG.log(ERROR, "%s UnableToReadProcessChunk", fileName);

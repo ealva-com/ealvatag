@@ -7,7 +7,6 @@ import ealvatag.audio.mp3.MP3File;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.TagOptionSingleton;
-import ealvatag.tag.id3.AbstractID3v2Frame;
 import ealvatag.tag.id3.ID3v22Tag;
 import ealvatag.tag.id3.ID3v23Frames;
 import ealvatag.tag.id3.ID3v23Tag;
@@ -129,7 +128,7 @@ public class Issue271Test {
             ID3v23Tag id3v23Tag = (ID3v23Tag)af.getTag().or(NullTag.INSTANCE);
             Assert.assertEquals(0, id3v23Tag.getPaddingSize());
 
-            AbstractID3v2Frame frame = (AbstractID3v2Frame)id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
+            id3v23Tag.getFrame(ID3v23Frames.FRAME_ID_V3_ENCODEDBY);
 
 
             af.getTag().or(NullTag.INSTANCE).setField(FieldKey.ALBUM, "FRED");

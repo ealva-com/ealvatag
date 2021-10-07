@@ -55,9 +55,6 @@ public class XingFrame {
       MPEG_VERSION_1_MODE_STEREO_OFFSET + XING_HEADER_BUFFER_SIZE + LameFrame.LAME_HEADER_BUFFER_SIZE;
 
 
-  private static final int BYTE_1 = 0;
-  private static final int BYTE_2 = 1;
-  private static final int BYTE_3 = 2;
   private static final int BYTE_4 = 3;
 
   /**

@@ -17,7 +17,6 @@
 
 package ealvatag.tag.images;
 
-import com.google.common.base.Optional;
 import ealvatag.audio.flac.metadatablock.MetadataBlockDataPicture;
 
 import java.io.File;

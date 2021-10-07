@@ -44,7 +44,7 @@ public final class Buffers {
                                     final Charset charset) throws IOException {
         bufferedSource.require(offset + count);
         byte[] bytes = new byte[count];
-        final Buffer buffer = bufferedSource.buffer();
+        final Buffer buffer = bufferedSource.getBuffer();
         for (int i = 0; i < count; i++) {
             bytes[i] = buffer.getByte(offset + i);
         }
@@ -67,7 +67,7 @@ public final class Buffers {
 
     public static int peek3ByteInt(final BufferedSource bufferedSource, final int offset) throws IOException {
         bufferedSource.require(offset + 3);
-        final Buffer buffer = bufferedSource.buffer();
+        final Buffer buffer = bufferedSource.getBuffer();
         return (buffer.getByte(offset) & 0xff) << 16
                 | (buffer.getByte(offset + 1) & 0xff) << 8
                 | (buffer.getByte(offset + 2) & 0xff);

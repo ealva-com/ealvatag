@@ -12,6 +12,7 @@ import ealvatag.audio.mp4.atom.Mp4StcoBox;
 import ealvatag.tag.FieldKey;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.TagException;
+import ealvatag.tag.TagField;
 import ealvatag.tag.TagOptionSingleton;
 import ealvatag.tag.mp4.field.Mp4FieldType;
 import ealvatag.tag.mp4.field.Mp4TagCoverField;
@@ -56,8 +57,8 @@ public class Mp4StemWriteTagTest {
         // verify that all five tracks were recognized
         Assert.assertEquals(5, beforeStcos.size());
         int freeSpace = 0;
-        for (final DefaultMutableTreeNode node : treeBefore.getFreeNodes()) {
-            freeSpace += ((Mp4BoxHeader)node.getUserObject()).getDataLength();
+        for (final DefaultMutableTreeNode<Mp4BoxHeader> node : treeBefore.getFreeNodes()) {
+            freeSpace += node.getUserObject().getDataLength();
         }
         System.out.println("Available free space: " + freeSpace);
 
@@ -136,12 +137,12 @@ public class Mp4StemWriteTagTest {
             Assert.assertEquals("stem_test_track", tag.getFirst(Mp4FieldKey.TITLE));
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/1", tag.getFirst(Mp4FieldKey.TRACK));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
 
-            List coverart = tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> coverart = tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
             Assert.assertEquals(1, coverart.size());
 

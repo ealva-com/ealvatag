@@ -26,7 +26,12 @@ import java.util.Locale;
  * @author Rapha�l Slinckx
  */
 public class CannotWriteException extends Exception {
-  public CannotWriteException() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3481365546544721861L;
+
+public CannotWriteException() {
     super();
   }
 

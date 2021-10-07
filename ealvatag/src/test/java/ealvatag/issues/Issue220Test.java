@@ -62,7 +62,7 @@ public class Issue220Test {
         try {
             testFile = TestUtil.copyAudioToTmp("test41.m4a");
 
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           //Read File okay
             AudioFile af = AudioFileIO.read(testFile);
@@ -78,7 +78,7 @@ public class Issue220Test {
 
             //Read file again okay
 
-            atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
 
           af = AudioFileIO.read(testFile);
             Assert.assertEquals("FREDDYCOUGAR", af.getTag().or(NullTag.INSTANCE).getFirst(FieldKey.ARTIST));

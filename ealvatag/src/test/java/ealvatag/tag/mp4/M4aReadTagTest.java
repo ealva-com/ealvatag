@@ -54,7 +54,7 @@ public class M4aReadTagTest {
             AudioFile f = AudioFileIO.read(testFile);
             Tag tag = f.getTag().or(NullTag.INSTANCE);
 
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
           System.out.println(f.getAudioHeader());
             System.out.println(tag);
@@ -123,21 +123,21 @@ public class M4aReadTagTest {
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.TRACK));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
-            Assert.assertEquals(new Short("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
-            Assert.assertEquals(new Short("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
 
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
-            Assert.assertEquals(new Short("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
-            Assert.assertEquals(new Short("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
 
             Assert.assertEquals("composer", mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             Assert.assertEquals("Sortartist", mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
@@ -174,7 +174,7 @@ public class M4aReadTagTest {
             Assert.assertEquals("Genre", mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             Assert.assertEquals(String.valueOf(Mp4RatingValue.EXPLICIT.getId()), mp4tag.getFirst(Mp4FieldKey.RATING));
             Assert.assertEquals(String.valueOf(Mp4ContentTypeValue.BOOKLET.getId()), mp4tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
-            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
             Assert.assertEquals(1, coverart.size());
 
@@ -272,21 +272,21 @@ public class M4aReadTagTest {
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.TRACK));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
-            Assert.assertEquals(new Short("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
-            Assert.assertEquals(new Short("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
 
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
-            Assert.assertEquals(new Short("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
-            Assert.assertEquals(new Short("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
 
             Assert.assertEquals("composer", mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             Assert.assertEquals("Sortartist", mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
@@ -321,7 +321,7 @@ public class M4aReadTagTest {
             Assert.assertEquals("sortshow", mp4tag.getFirst(Mp4FieldKey.SHOW_SORT));
             Assert.assertEquals("show", mp4tag.getFirst(Mp4FieldKey.SHOW));
             Assert.assertEquals("genre", mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
-            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be three image
             Assert.assertEquals(3, coverart.size());
 
@@ -498,17 +498,17 @@ public class M4aReadTagTest {
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.TRACK));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
 
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getNumbers().get(2));
 
             Assert.assertEquals("composer", mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             Assert.assertEquals("Sortartist", mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
@@ -539,7 +539,7 @@ public class M4aReadTagTest {
                     " 00000000 00000840 000000E4 0000000000A29EDC 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000",
                     mp4tag.getFirst(Mp4FieldKey.ITUNES_SMPB));
 
-            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
             //Should be one image
             Assert.assertEquals(3, coverart.size());
 
@@ -668,21 +668,21 @@ public class M4aReadTagTest {
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.TRACK));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
-            Assert.assertEquals(new Short("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
-            Assert.assertEquals(new Short("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.TRACK).get(0)).getNumbers().get(3));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TrackField)mp4tag.getFirstField(Mp4FieldKey.TRACK)).getTrackTotal());
 
             //Not sure why there are 4 values, only understand 2nd and third
             Assert.assertEquals("1/10", mp4tag.getFirst(Mp4FieldKey.DISCNUMBER));
             Assert.assertEquals("1/10", ((Mp4TagTextNumberField)mp4tag.get(Mp4FieldKey.DISCNUMBER).get(0)).getContent());
-            Assert.assertEquals(new Short("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
-            Assert.assertEquals(new Short("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
-            Assert.assertEquals(new Short("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
-            Assert.assertEquals(new Short("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
-            Assert.assertEquals(new Short("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
+            Assert.assertEquals(Short.valueOf("0"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(0));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(1));
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4TagTextNumberField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getNumbers().get(2));
+            Assert.assertEquals(Short.valueOf("1"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscNo());
+            Assert.assertEquals(Short.valueOf("10"), ((Mp4DiscNoField)mp4tag.getFirstField(Mp4FieldKey.DISCNUMBER)).getDiscTotal());
 
             Assert.assertEquals("composer", mp4tag.getFirst(Mp4FieldKey.COMPOSER));
             Assert.assertEquals("Sortartist", mp4tag.getFirst(Mp4FieldKey.ARTIST_SORT));
@@ -719,7 +719,7 @@ public class M4aReadTagTest {
             Assert.assertEquals("Genre", mp4tag.getFirst(Mp4FieldKey.GENRE_CUSTOM));
             Assert.assertEquals(String.valueOf(Mp4RatingValue.EXPLICIT.getId()), mp4tag.getFirst(Mp4FieldKey.RATING));
             Assert.assertEquals(String.valueOf(Mp4ContentTypeValue.BOOKLET.getId()), mp4tag.getFirst(Mp4FieldKey.CONTENT_TYPE));
-            List coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> coverart = mp4tag.get(Mp4FieldKey.ARTWORK);
 
             //Should be one image
             Assert.assertEquals(1, coverart.size());
@@ -757,7 +757,7 @@ public class M4aReadTagTest {
         Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test7.mp4");
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
           AudioFileIO.read(testFile);
 
@@ -781,9 +781,9 @@ public class M4aReadTagTest {
         Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test86.mp4");
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
-          AudioFile f = AudioFileIO.read(testFile);
+          AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -806,9 +806,9 @@ public class M4aReadTagTest {
         try {
             File testFile = TestUtil.copyAudioToTmp("test87.mp4");
 
-            Mp4AtomTree tree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"), false);
 
-          AudioFile f = AudioFileIO.read(testFile);
+          AudioFileIO.read(testFile);
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -1124,7 +1124,7 @@ public class M4aReadTagTest {
             Assert.assertEquals("Es Wird Morgen", tag.getFirst(FieldKey.ALBUM));
             Assert.assertEquals("2raumwohnung", tag.getFirst(FieldKey.ARTIST));
 
-            List pictures = tag.get(Mp4FieldKey.ARTWORK);
+            List<TagField> pictures = tag.get(Mp4FieldKey.ARTWORK);
             Assert.assertEquals(1, pictures.size());
             Mp4TagCoverField artwork = (Mp4TagCoverField)pictures.get(0);
             Assert.assertEquals(Mp4FieldType.COVERART_PNG, artwork.getFieldType());
@@ -1218,7 +1218,6 @@ public class M4aReadTagTest {
             return;
         }
 
-        Exception exceptionCaught = null;
         try {
             Assert.assertTrue(Mp4GenreField.isValidGenre("Rock"));
 
@@ -1229,7 +1228,6 @@ public class M4aReadTagTest {
             Assert.assertEquals("Rock", tagReader.getFirst(FieldKey.GENRE));
         } catch (IOException e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
     }
 
@@ -1299,14 +1297,12 @@ public class M4aReadTagTest {
             return;
         }
 
-      Exception exceptionCaught = null;
-        try {
+      try {
             File testFile = TestUtil.copyAudioToTmp("test147.m4a");
             AudioFile f = AudioFileIO.read(testFile);
-            Tag tag = f.getTag().or(NullTag.INSTANCE);
+            f.getTag().or(NullTag.INSTANCE);
         } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
         //assertNull(exceptionCaught);
 

@@ -27,7 +27,6 @@ import ealvatag.tag.TagException;
 import ealvatag.tag.TagNotFoundException;
 import ealvatag.tag.id3.BaseID3Tag;
 import ealvatag.tag.id3.ID3Tags;
-import ealvatag.tag.id3.ID3v1Tag;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -274,9 +273,6 @@ public class Lyrics3v1 extends AbstractLyrics3
         String str;
         int offset;
         byte[] buffer;
-        ID3v1Tag id3v1tag;
-
-        id3v1tag = null;
 
         delete(file);
         file.seek(file.length());
@@ -311,11 +307,6 @@ public class Lyrics3v1 extends AbstractLyrics3
         offset += str.length();
 
         file.write(buffer, 0, offset);
-
-        if (id3v1tag != null)
-        {
-            id3v1tag.write(file);
-        }
     }
 
 }

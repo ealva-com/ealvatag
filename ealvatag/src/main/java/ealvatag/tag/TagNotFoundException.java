@@ -35,6 +35,11 @@ package ealvatag.tag;
 public class TagNotFoundException extends TagException {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 258430244268642300L;
+
+	/**
      * Creates a new TagNotFoundException datatype.
      *
      * @param msg the detail message.

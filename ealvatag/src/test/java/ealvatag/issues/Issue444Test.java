@@ -174,7 +174,7 @@ public class Issue444Test {
         Exception e = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test106.mp3");
-            AudioFile af = AudioFileIO.read(testFile);
+            AudioFileIO.read(testFile);
 
         } catch (Exception ex) {
             ex.printStackTrace();

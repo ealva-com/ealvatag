@@ -13,7 +13,7 @@ public class ExtractID3TagFromFile
 
     public static void main(final String[] args)
     {
-        ExtractID3TagFromFile test = new ExtractID3TagFromFile();
+        new ExtractID3TagFromFile();
 
         if (args.length != 2)
         {

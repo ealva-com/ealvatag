@@ -7,6 +7,11 @@ package ealvatag.audio.exceptions;
 public class CannotReadVideoException extends CannotReadException
 {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5031784427255883755L;
+
+	/**
      * Creates an instance.
      */
     public CannotReadVideoException()

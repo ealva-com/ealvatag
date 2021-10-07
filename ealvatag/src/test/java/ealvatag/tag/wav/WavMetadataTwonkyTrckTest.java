@@ -1414,7 +1414,6 @@ public class WavMetadataTwonkyTrckTest {
         TagOptionSingleton.getInstance().setWavOptions(WavOptions.READ_ID3_UNLESS_ONLY_INFO);
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
 
-        Exception exceptionCaught = null;
         File testFile = TestUtil.copyAudioToTmp("test504.wav", new File("test504clean.wav"));
         try {
 
@@ -1422,7 +1421,6 @@ public class WavMetadataTwonkyTrckTest {
             System.out.println(f.getAudioHeader());
         } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
 
         Exception exceptionCaught2 = null;
@@ -1456,7 +1454,6 @@ public class WavMetadataTwonkyTrckTest {
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.ID3_THEN_INFO);
         TagOptionSingleton.getInstance().setWriteWavForTwonky(true);
 
-        Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test505.wav");
             AudioFile f = AudioFileIO.read(testFile);
@@ -1467,7 +1464,6 @@ public class WavMetadataTwonkyTrckTest {
 
         } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
     }
 
@@ -1528,7 +1524,6 @@ public class WavMetadataTwonkyTrckTest {
         TagOptionSingleton.getInstance().setWavSaveOrder(WavSaveOrder.INFO_THEN_ID3);
         TagOptionSingleton.getInstance().setWriteWavForTwonky(true);
 
-        Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("GreenLight.wav");
             AudioFile f = AudioFileIO.read(testFile);
@@ -1542,7 +1537,6 @@ public class WavMetadataTwonkyTrckTest {
             System.out.println(f.getTag().or(NullTag.INSTANCE));
         } catch (Exception e) {
             e.printStackTrace();
-            exceptionCaught = e;
         }
     }
 

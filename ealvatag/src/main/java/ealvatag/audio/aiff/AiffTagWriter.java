@@ -231,7 +231,7 @@ public class AiffTagWriter {
    *
    * @throws IOException if something goes wrong
    */
-  private void deleteTagChunkUsingChannelTransfer(final AiffTag existingTag,
+  public void deleteTagChunkUsingChannelTransfer(final AiffTag existingTag,
                                                   final FileChannel channel,
                                                   final long newLength)
       throws IOException {

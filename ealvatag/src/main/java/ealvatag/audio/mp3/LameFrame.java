@@ -19,7 +19,6 @@
 package ealvatag.audio.mp3;
 
 import ealvatag.audio.Utils;
-import ealvatag.utils.ArrayUtil;
 import ealvatag.utils.StandardCharsets;
 import okio.Buffer;
 

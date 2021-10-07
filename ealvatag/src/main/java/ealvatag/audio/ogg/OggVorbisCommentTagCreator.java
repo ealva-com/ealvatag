@@ -20,7 +20,6 @@ package ealvatag.audio.ogg;
 
 import ealvatag.audio.ogg.util.VorbisHeader;
 import ealvatag.audio.ogg.util.VorbisPacketType;
-import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 import ealvatag.tag.vorbiscomment.VorbisCommentCreator;
 

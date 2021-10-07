@@ -22,7 +22,6 @@
 package ealvatag.tag.id3;
 
 import com.google.common.base.Objects;
-import ealvatag.utils.EqualsUtil;
 
 /**
  * A frame contains meta-information of a particular type. A frame contains a header and a body

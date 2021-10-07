@@ -41,7 +41,7 @@ package ealvatag.utils.tree;
  * @author Rob Davis
  * @author Ray Ryan
  */
-public interface TreeModel
+public interface TreeModel<T>
 {
 
     /**
@@ -50,7 +50,7 @@ public interface TreeModel
      *
      * @return  the root of the tree
      */
-    public Object getRoot();
+    public TreeNode<T> getRoot();
 
 
     /**
@@ -65,7 +65,7 @@ public interface TreeModel
      * @param   parent  a node in the tree, obtained from this data source
      * @return  the child of <code>parent</code> at index <code>index</code>
      */
-    public Object getChild(Object parent, int index);
+    public TreeNode<T> getChild(TreeNode<T> parent, int index);
 
 
     /**
@@ -77,7 +77,7 @@ public interface TreeModel
      * @param   parent  a node in the tree, obtained from this data source
      * @return  the number of children of the node <code>parent</code>
      */
-    public int getChildCount(Object parent);
+    public int getChildCount(TreeNode<T> parent);
 
 
     /**
@@ -91,7 +91,7 @@ public interface TreeModel
      * @param   node  a node in the tree, obtained from this data source
      * @return  true if <code>node</code> is a leaf
      */
-    public boolean isLeaf(Object node);
+    public boolean isLeaf(TreeNode<T> node);
 
     /**
       * Messaged when the user has altered the value for the item identified
@@ -102,7 +102,7 @@ public interface TreeModel
       * @param path path to the node that the user has altered
       * @param newValue the new value from the TreeCellEditor
       */
-    public void valueForPathChanged(TreePath path, Object newValue);
+    public void valueForPathChanged(TreePath<T> path, T newValue);
 
     /**
      * Returns the index of child in parent.  If either <code>parent</code>
@@ -116,7 +116,7 @@ public interface TreeModel
      *    <code>child</code> or <code>parent</code> are <code>null</code>
      *    or don't belong to this tree model
      */
-    public int getIndexOfChild(Object parent, Object child);
+    public int getIndexOfChild(TreeNode<T> parent, TreeNode<T> child);
 
 //
 //  Change Events
@@ -129,7 +129,7 @@ public interface TreeModel
      * @param   l       the listener to add
      * @see     #removeTreeModelListener
      */
-    void addTreeModelListener(TreeModelListener l);
+    void addTreeModelListener(TreeModelListener<T> l);
 
     /**
      * Removes a listener previously added with
@@ -138,6 +138,6 @@ public interface TreeModel
      * @see     #addTreeModelListener
      * @param   l       the listener to remove
      */
-    void removeTreeModelListener(TreeModelListener l);
+    void removeTreeModelListener(TreeModelListener<T> l);
 
 }

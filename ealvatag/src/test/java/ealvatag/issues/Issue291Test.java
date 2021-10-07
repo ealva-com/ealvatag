@@ -60,7 +60,7 @@ public class Issue291Test {
         Exception exceptionCaught = null;
         try {
             testFile = TestUtil.copyAudioToTmp("test83.mp4");
-            Mp4AtomTree atomTree = new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
+            new Mp4AtomTree(new RandomAccessFile(testFile, "r"));
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

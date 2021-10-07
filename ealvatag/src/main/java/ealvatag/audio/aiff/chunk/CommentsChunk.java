@@ -49,10 +49,6 @@ import java.util.Date;
  */
 public class CommentsChunk extends Chunk
 {
-    private static final int TIMESTAMP_LENGTH = 4;
-    private static final int MARKERID_LENGTH = 2;
-    private static final int COUNT_LENGTH = 2;
-
     private AiffAudioHeader aiffHeader;
 
     /**
@@ -81,7 +77,7 @@ public class CommentsChunk extends Chunk
         {
             final long timestamp  = Utils.convertUnsignedIntToLong(chunkData.getInt());
             final Date jTimestamp = AiffUtil.timestampToDate(timestamp);
-            final int marker      = Utils.convertUnsignedShortToInt(chunkData.getShort());
+            Utils.convertUnsignedShortToInt(chunkData.getShort());
             final int count       = Utils.convertUnsignedShortToInt(chunkData.getShort());
             // Append a timestamp to the comment
             final String text = Utils.getString(chunkData, 0, count, StandardCharsets.ISO_8859_1) + " " + AiffUtil.formatDate(jTimestamp);

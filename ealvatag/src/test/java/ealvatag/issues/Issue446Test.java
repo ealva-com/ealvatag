@@ -23,7 +23,6 @@ public class Issue446Test {
         boolean isMatchedPeak = false;
         boolean isMatchedGain = false;
 
-        Exception ex = null;
         File orig = new File("testdata", "test110.mp3");
         if (!orig.isFile()) {
             System.err.println("Unable to test file - not available" + orig);

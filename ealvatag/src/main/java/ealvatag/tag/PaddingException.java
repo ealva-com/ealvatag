@@ -24,6 +24,11 @@ package ealvatag.tag;
 
 public class PaddingException extends InvalidFrameIdentifierException {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2626462337090782276L;
+
+	/**
      * Creates a new PaddingException datatype.
      *
      * @param msg the detail message.

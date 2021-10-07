@@ -80,12 +80,12 @@ public class DumpHeap {
         if (inputFile.exists()) {
             AudioFile audioFile = AudioFileIO.read(inputFile);
             final AudioHeader audioHeader = audioFile.getAudioHeader();
-            final int channels = audioHeader.getChannelCount();
-            final long bitRate = audioHeader.getBitRate();
-            final String encodingType = audioHeader.getEncodingType();
+            audioHeader.getChannelCount();
+            audioHeader.getBitRate();
+            audioHeader.getEncodingType();
             final Tag tag = audioFile.getTag().or(NullTag.INSTANCE);
             if (tag.hasField(FieldKey.TITLE)) {
-                final String title = tag.getFirst(FieldKey.TITLE);
+                tag.getFirst(FieldKey.TITLE);
             }
             final ImmutableSet<FieldKey> supportedFields = tag.getSupportedFields();
             if (supportedFields.contains(FieldKey.COVER_ART)) {

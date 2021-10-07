@@ -1,10 +1,8 @@
 package ealvatag.audio.mp3;
 
-import junit.framework.TestCase;
 import ealvatag.TestUtil;
 import org.junit.Assert;
 import org.junit.Test;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,7 +36,7 @@ public class LoggingTest {
 
         File testFile2 = TestUtil.copyAudioToTmp("Issue96-1.id3", "testV1.mp3");
         MP3File mp3File2 = new MP3File(testFile2);
-        Document d2 = DocumentBuilderFactory.newInstance()
+        DocumentBuilderFactory.newInstance()
                                             .newDocumentBuilder().parse(new InputSource(new StringReader(mp3File2.displayStructureAsXML())));
         Assert.assertEquals("TIT2", xpath1.evaluate(new InputSource(new StringReader(mp3File2.displayStructureAsXML()))));
     }
@@ -99,7 +97,7 @@ public class LoggingTest {
                          //Must be synced fo rtest to reliably pass
                          synchronized(timeInFormat)
                          {
-                            Date timeIn = timeInFormat.parse(String.valueOf(-28.05122222d));
+                            timeInFormat.parse(String.valueOf(-28.05122222d));
                          }
 
                     }

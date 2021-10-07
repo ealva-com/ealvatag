@@ -25,7 +25,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 
@@ -64,8 +63,7 @@ public class TextEncodingTest extends BaseSimpleIntStringMapTypeTest {
 
     @Test(expected = NoSuchElementException.class)
     public void getIdForBadCharset() throws Exception {
-        //noinspection unused
-        final byte idForCharset = encoding.getIdForCharset(StandardCharsets.US_ASCII);
+        encoding.getIdForCharset(StandardCharsets.US_ASCII);
         fail();
     }
 
@@ -79,16 +77,14 @@ public class TextEncodingTest extends BaseSimpleIntStringMapTypeTest {
 
     @Test(expected = NoSuchElementException.class)
     public void getCharsetForIdTooLow() throws Exception {
-        //noinspection unused
-        final Charset charsetForId = encoding.getCharsetForId(-1);
+        encoding.getCharsetForId(-1);
         fail();
     }
 
 
     @Test(expected = NoSuchElementException.class)
     public void getCharsetForIdTooHigh() throws Exception {
-        //noinspection unused
-        final Charset charsetForId = encoding.getCharsetForId(TextEncoding.MAX_TEXT_ENCODING_ID + 1);
+        encoding.getCharsetForId(TextEncoding.MAX_TEXT_ENCODING_ID + 1);
         fail();
     }
 }

@@ -18,7 +18,6 @@
 package ealvatag.tag.id3.framebody;
 
 import ealvatag.tag.InvalidFrameException;
-import ealvatag.tag.InvalidFrameIdentifierException;
 import ealvatag.tag.InvalidTagException;
 import okio.Buffer;
 

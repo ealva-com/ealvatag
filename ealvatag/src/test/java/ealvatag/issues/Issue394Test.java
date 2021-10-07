@@ -17,7 +17,7 @@ public class Issue394Test {
             tag.setField(FieldKey.COMMENT, "COMMENT1");
             tag.addField(FieldKey.COMMENT, "COMMENT2");
 
-            Tag v1Tag = new ID3v1Tag((BaseID3Tag)tag);
+            new ID3v1Tag((BaseID3Tag)tag);
         } catch (Exception e) {
             caught = e;
             e.printStackTrace();

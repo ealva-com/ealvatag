@@ -39,6 +39,7 @@ import java.util.Random;
  * <p>
  * Created by eric on 1/6/17.
  */
+@SuppressWarnings("resource")
 public final class FileOperatorTest {
     @Rule public final TemporaryFolder tempDir = new TemporaryFolder();
 
@@ -67,7 +68,7 @@ public final class FileOperatorTest {
         assertEquals("o, Wo", buffer.readUtf8());
     }
 
-    @Test public void write() throws Exception {
+	@Test public void write() throws Exception {
         FileOperator operator = new FileOperator(randomAccessFile.getChannel());
 
         Buffer buffer1 = new Buffer().writeUtf8("Hello, World");

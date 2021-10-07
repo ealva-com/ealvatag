@@ -44,8 +44,7 @@ public class WmaSimpleTest {
         Exception exceptionCaught = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("test2.wma");
-            AudioFile f = AudioFileIO.read(testFile);
-            //Now
+            AudioFileIO.read(testFile);
         } catch (Exception e) {
             e.printStackTrace();
             exceptionCaught = e;

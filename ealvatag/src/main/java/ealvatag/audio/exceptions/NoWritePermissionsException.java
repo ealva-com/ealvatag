@@ -6,7 +6,12 @@ package ealvatag.audio.exceptions;
  */
 public class NoWritePermissionsException extends CannotWriteException {
 
-  public NoWritePermissionsException(Throwable ex) {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2545172702325599944L;
+
+public NoWritePermissionsException(Throwable ex) {
     super(ex);
   }
 

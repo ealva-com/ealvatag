@@ -16,7 +16,6 @@
  */
 package ealvatag.audio;
 
-import ealvatag.tag.Tag;
 import ealvatag.tag.TagFieldContainer;
 
 import java.io.UnsupportedEncodingException;

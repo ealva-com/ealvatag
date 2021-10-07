@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.util.Date;
 
 /**
  * Basic Vorbis tests
@@ -22,9 +21,8 @@ public class OggPageTest {
     @Test public void testReadOggPagesNew() {
         Exception exceptionCaught = null;
         int count = 0;
-        try {
-            File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testReadAllOggPages.ogg"));
-            RandomAccessFile raf = new RandomAccessFile(testFile, "r");
+        File testFile = TestUtil.copyAudioToTmp("test.ogg", new File("testReadAllOggPages.ogg"));
+        try (RandomAccessFile raf = new RandomAccessFile(testFile, "r")) {
             OggPageHeader lastPageHeader = null;
             ByteBuffer bb = ByteBuffer.allocate((int)(raf.length()));
             raf.getChannel().read(bb);
@@ -122,10 +120,8 @@ public class OggPageTest {
     @Test public void testReadAllOggPagesLargeFileNew() {
         Exception exceptionCaught = null;
         int count = 0;
-        try {
-
-            File testFile = TestUtil.copyAudioToTmp("testlargeimage.ogg", new File("testReadAllOggPagesLargeFile.ogg"));
-            RandomAccessFile raf = new RandomAccessFile(testFile, "r");
+        File testFile = TestUtil.copyAudioToTmp("testlargeimage.ogg", new File("testReadAllOggPagesLargeFile.ogg"));
+        try (RandomAccessFile raf = new RandomAccessFile(testFile, "r")) {
             ByteBuffer bb = ByteBuffer.allocate((int)(raf.length()));
             raf.getChannel().read(bb);
             bb.rewind();

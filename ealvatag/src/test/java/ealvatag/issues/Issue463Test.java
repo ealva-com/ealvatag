@@ -33,7 +33,7 @@ public class Issue463Test {
 
             File testFile = TestUtil.copyAudioToTmp("test116.m4a");
             RandomAccessFile raf = new RandomAccessFile(testFile, "r");
-            Mp4AtomTree tree = new Mp4AtomTree(raf, false);
+            new Mp4AtomTree(raf, false);
           raf.close();
 
             AudioFile af = AudioFileIO.read(testFile);
@@ -45,7 +45,7 @@ public class Issue463Test {
             af.save();
 
             raf = new RandomAccessFile(testFile, "r");
-            tree = new Mp4AtomTree(raf, false);
+            new Mp4AtomTree(raf, false);
           raf.close();
 
             af = AudioFileIO.read(testFile);

@@ -33,8 +33,7 @@ public class Issue289Test {
         try {
             testFile = TestUtil.copyAudioToTmp("test58.ogg");
 
-            OggFileReader ofr = new OggFileReader();
-            //ofr.shortSummarizeOggPageHeaders(testFile);
+            new OggFileReader();
 
             AudioFile af = AudioFileIO.read(testFile);
             System.out.println(af.getTag().or(NullTag.INSTANCE).toString());

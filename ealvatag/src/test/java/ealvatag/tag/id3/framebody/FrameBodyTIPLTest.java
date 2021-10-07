@@ -118,6 +118,7 @@ public class FrameBodyTIPLTest {
      *
      * @throws Exception
      */
+    @SuppressWarnings("deprecation")
     @Test public void testMultiArrangerIDv24() throws Exception {
         File testFile = TestUtil.copyAudioToTmp("testV1.mp3", new File("testWriteArrangerv24.mp3"));
         AudioFile f = AudioFileIO.read(testFile);

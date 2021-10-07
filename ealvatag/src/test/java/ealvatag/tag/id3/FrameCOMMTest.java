@@ -20,7 +20,7 @@ public class FrameCOMMTest {
         Exception e = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("Issue77.id3", "testV1.mp3");
-            MP3File mp3File = new MP3File(testFile);
+            new MP3File(testFile);
         } catch (Exception ie) {
             e = ie;
         }
@@ -35,7 +35,7 @@ public class FrameCOMMTest {
         Exception e = null;
         try {
             File testFile = TestUtil.copyAudioToTmp("Issue80.id3", "testV1.mp3");
-            MP3File mp3File = new MP3File(testFile);
+            new MP3File(testFile);
         } catch (Exception ie) {
             e = ie;
         }

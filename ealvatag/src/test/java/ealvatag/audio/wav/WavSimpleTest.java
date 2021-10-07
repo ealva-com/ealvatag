@@ -4,7 +4,6 @@ import ealvatag.TestUtil;
 import ealvatag.audio.AudioFile;
 import ealvatag.audio.AudioFileIO;
 import ealvatag.audio.Utils;
-import ealvatag.logging.Hex;
 import ealvatag.tag.NullTag;
 import ealvatag.tag.wav.WavTag;
 import org.junit.After;
@@ -80,9 +79,10 @@ public class WavSimpleTest {
         headerBuffer.put((byte)0xFE);
         headerBuffer.put((byte)0xFF);
         headerBuffer.position(0);
-        int format = headerBuffer.get() & 0xff + (headerBuffer.get() & 0xff) * 256;
+        headerBuffer.get();
+		headerBuffer.get();
         headerBuffer.position(0);
-        int formatNew = headerBuffer.getShort() & 0xffff;
+        headerBuffer.getShort();
     }
 
     @Test public void testRead8bitStereoFile() {

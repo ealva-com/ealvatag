@@ -27,13 +27,13 @@ import java.util.Enumeration;
  * @author Scott Violet
  */
 
-public interface TreeNode
+public interface TreeNode<T>
 {
     /**
      * Returns the child <code>TreeNode</code> at index
      * <code>childIndex</code>.
      */
-    TreeNode getChildAt(int childIndex);
+    TreeNode<T> getChildAt(int childIndex);
 
     /**
      * Returns the number of children <code>TreeNode</code>s the receiver
@@ -44,14 +44,14 @@ public interface TreeNode
     /**
      * Returns the parent <code>TreeNode</code> of the receiver.
      */
-    TreeNode getParent();
+    TreeNode<T> getParent();
 
     /**
      * Returns the index of <code>node</code> in the receivers children.
      * If the receiver does not contain <code>node</code>, -1 will be
      * returned.
      */
-    int getIndex(TreeNode node);
+    int getIndex(TreeNode<T> node);
 
     /**
      * Returns true if the receiver allows children.
@@ -66,5 +66,7 @@ public interface TreeNode
     /**
      * Returns the children of the receiver as an <code>Enumeration</code>.
      */
-    Enumeration children();
+    Enumeration<TreeNode<T>> children();
+    
+    public T getUserObject();
 }

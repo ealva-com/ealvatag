@@ -42,16 +42,11 @@ import java.nio.ByteBuffer;
 */
 public class WavFormatChunk extends Chunk
 {
-    private static final int   STANDARD_DATA_SIZE = 18;
     private static final int   EXTENSIBLE_DATA_SIZE = 22;
-    private static final int   EXTENSIBLE_DATA_SIZE_WE_NEED = 10;
-
-    private static final String WAV_RIFF_ENCODING_PREPEND = "WAV-RIFF ";
-
-
     private boolean isValid = false;
 
-    private int blockAlign,  channelMask;
+    @SuppressWarnings("unused")
+	private int blockAlign,  channelMask;
     private WavSubFormat wsf;
     private GenericAudioHeader info;
 
